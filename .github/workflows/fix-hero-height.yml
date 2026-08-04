@@ -21,85 +21,85 @@ jobs:
           set -euo pipefail
 
           cat >> style.css <<'CSS'
+          
+          /* Laptop hero correction — 2026-08-05 */
+          .hero-cover {
+            height: clamp(540px, 64vh, 610px);
+            min-height: 540px;
+          }
 
-/* Laptop hero correction — 2026-08-05 */
-.hero-cover {
-  height: clamp(560px, 68vh, 640px);
-  min-height: 560px;
-}
+          .hero-cover-media {
+            z-index: 0;
+          }
 
-.hero-cover-media {
-  z-index: 0;
-}
+          .hero-cover-overlay {
+            z-index: 1;
+            pointer-events: none;
+          }
 
-.hero-cover-overlay {
-  z-index: 1;
-  pointer-events: none;
-}
+          .hero-cover-inner {
+            position: relative;
+            z-index: 2;
+            min-height: 100%;
+            padding: 28px 0 34px;
+          }
 
-.hero-cover-inner {
-  position: relative;
-  z-index: 2;
-  min-height: 100%;
-  padding: 34px 0 40px;
-}
+          @media (max-height: 760px) and (min-width: 761px) {
+            .hero-cover {
+              height: 500px;
+              min-height: 500px;
+            }
 
-@media (max-height: 760px) and (min-width: 761px) {
-  .hero-cover {
-    height: 520px;
-    min-height: 520px;
-  }
+            .hero-cover-inner {
+              padding: 20px 0 24px;
+            }
 
-  .hero-cover-inner {
-    padding: 24px 0 28px;
-  }
+            .hero-cover-brand {
+              margin-bottom: 8px;
+            }
 
-  .hero-cover-brand {
-    margin-bottom: 10px;
-  }
+            .hero-cover-brand img {
+              width: 50px;
+              height: 50px;
+              border-radius: 15px;
+            }
 
-  .hero-cover-brand img {
-    width: 54px;
-    height: 54px;
-    border-radius: 16px;
-  }
+            .hero-cover h1 {
+              font-size: clamp(34px, 3.8vw, 48px);
+            }
 
-  .hero-cover h1 {
-    font-size: clamp(36px, 4vw, 52px);
-  }
+            .hero-cover-lead {
+              margin-top: 10px;
+              font-size: 18px;
+            }
 
-  .hero-cover-lead {
-    margin-top: 12px;
-    font-size: 19px;
-  }
+            .hero-cover-support,
+            .hero-cover-popular {
+              display: none;
+            }
 
-  .hero-cover-support,
-  .hero-cover-popular {
-    display: none;
-  }
+            .hero-cover-search {
+              margin-top: 14px;
+            }
 
-  .hero-cover-search {
-    margin-top: 17px;
-  }
+            .hero-cover-actions {
+              margin-top: 11px;
+            }
+          }
 
-  .hero-cover-actions {
-    margin-top: 13px;
-  }
-}
+          @media (max-width: 760px) {
+            .hero-cover {
+              height: auto;
+              min-height: auto;
+            }
 
-@media (max-width: 760px) {
-  .hero-cover {
-    height: auto;
-    min-height: auto;
-  }
+            .hero-cover-inner {
+              min-height: 650px;
+            }
+          }
+          CSS
 
-  .hero-cover-inner {
-    min-height: 650px;
-  }
-}
-CSS
-
-          version='20260805-0200'
+          version='20260805-0205'
           for file in *.html; do
             sed -i -E "s#href=\"style\.css(\?[^\"]*)?\"#href=\"style.css?v=${version}\"#g" "$file"
             sed -i -E "s#src=\"script\.js(\?[^\"]*)?\"#src=\"script.js?v=${version}\"#g" "$file"
