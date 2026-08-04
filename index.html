@@ -1,670 +1,596 @@
-(() => {
-  "use strict";
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  const DB_NAME = "popitaiMediaDB";
-  const DB_VERSION = 1;
-  const STORE_NAME = "media";
-  const DEFAULT_WIDTHS = [480, 960, 1600];
-  const DEFAULT_QUALITY = 0.82;
-  const ALLOWED_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
-  const states = new Map();
-  const liveObjectUrls = new Set();
+  <title>Попитай.Лом | Препоръки, услуги и полезна информация за Лом</title>
+  <meta name="description" content="Местната общност на Лом за препоръки, услуги и полезна информация. Намери майстор, лекар, магазин, заведение или задай въпрос.">
+  <meta name="theme-color" content="#0b5fd7">
 
-  function formatBytes(bytes) {
-    if (!Number.isFinite(bytes) || bytes <= 0) return "0 KB";
-    if (bytes < 1024) return `${Math.round(bytes)} B`;
-    if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
-    return `${(bytes / (1024 * 1024)).toFixed(bytes >= 10 * 1024 * 1024 ? 1 : 2)} MB`;
-  }
+  <link rel="stylesheet" href="style.css">
+</head>
 
-  function uid(prefix = "img") {
-    if (globalThis.crypto?.randomUUID) return `${prefix}-${crypto.randomUUID()}`;
-    return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-  }
+<body>
+  <a class="skip-link" href="#main-content">Към основното съдържание</a>
 
-  function openDatabase() {
-    return new Promise((resolve, reject) => {
-      const request = indexedDB.open(DB_NAME, DB_VERSION);
-      request.onupgradeneeded = () => {
-        const db = request.result;
-        if (!db.objectStoreNames.contains(STORE_NAME)) {
-          const store = db.createObjectStore(STORE_NAME, { keyPath: "key" });
-          store.createIndex("entityId", "entityId", { unique: false });
-        }
-      };
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = () => reject(request.error || new Error("Базата за снимки не може да се отвори."));
-    });
-  }
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" role="img">
+            <path d="M14 12h36a8 8 0 0 1 8 8v22a8 8 0 0 1-8 8H31l-13 9v-9h-4a8 8 0 0 1-8-8V20a8 8 0 0 1 8-8Z"/>
+            <path d="M22 26h20M22 36h13"/>
+          </svg>
+        </span>
 
-  async function putRecord(record) {
-    const db = await openDatabase();
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE_NAME, "readwrite");
-      tx.objectStore(STORE_NAME).put(record);
-      tx.oncomplete = () => {
-        db.close();
-        resolve();
-      };
-      tx.onerror = () => {
-        db.close();
-        reject(tx.error || new Error("Снимката не може да се запази."));
-      };
-    });
-  }
+        <span class="brand-text">
+          <strong>Попитай<span>.Лом</span></strong>
+          <small>Попитай. Намери. Препоръчай.</small>
+        </span>
+      </a>
 
-  async function getRecord(key) {
-    const db = await openDatabase();
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE_NAME, "readonly");
-      const request = tx.objectStore(STORE_NAME).get(key);
-      request.onsuccess = () => resolve(request.result || null);
-      request.onerror = () => reject(request.error || new Error("Снимката не може да се прочете."));
-      tx.oncomplete = () => db.close();
-    });
-  }
+      <nav class="main-nav" id="main-nav" aria-label="Главна навигация">
+        <a class="active" href="index.html">Начало</a>
+        <a href="kategorii.html">Категории</a>
+        <a href="firmi.html">Фирми</a>
+        <a href="vaprosi.html">Въпроси</a>
+        <a href="statii.html">Статии</a>
+      </nav>
 
-  async function deleteEntity(entityId) {
-    if (!entityId) return;
-    const db = await openDatabase();
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE_NAME, "readwrite");
-      const store = tx.objectStore(STORE_NAME);
-      const index = store.index("entityId");
-      const request = index.openCursor(IDBKeyRange.only(String(entityId)));
-      request.onsuccess = () => {
-        const cursor = request.result;
-        if (cursor) {
-          cursor.delete();
-          cursor.continue();
-        }
-      };
-      tx.oncomplete = () => {
-        db.close();
-        resolve();
-      };
-      tx.onerror = () => {
-        db.close();
-        reject(tx.error || new Error("Снимките не могат да се изтрият."));
-      };
-    });
-  }
+      <div class="header-actions">
+        <a class="login-link" href="vhod.html">Вход</a>
+        <a class="ask-button" href="nov-vapros.html">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+          Задай въпрос
+        </a>
 
-  function createObjectUrl(blob) {
-    const url = URL.createObjectURL(blob);
-    liveObjectUrls.add(url);
-    return url;
-  }
-
-  function revokeObjectUrl(url) {
-    if (!url) return;
-    URL.revokeObjectURL(url);
-    liveObjectUrls.delete(url);
-  }
-
-  window.addEventListener("pagehide", () => {
-    liveObjectUrls.forEach(url => URL.revokeObjectURL(url));
-    liveObjectUrls.clear();
-  });
-
-  async function loadImageSource(file) {
-    if ("createImageBitmap" in window) {
-      try {
-        return await createImageBitmap(file, { imageOrientation: "from-image" });
-      } catch {
-        // Продължава към резервния вариант.
-      }
-    }
-
-    return new Promise((resolve, reject) => {
-      const url = URL.createObjectURL(file);
-      const image = new Image();
-      image.onload = () => {
-        URL.revokeObjectURL(url);
-        resolve(image);
-      };
-      image.onerror = () => {
-        URL.revokeObjectURL(url);
-        reject(new Error("Снимката не може да се отвори."));
-      };
-      image.src = url;
-    });
-  }
-
-  function sourceDimensions(source) {
-    return {
-      width: source.naturalWidth || source.width,
-      height: source.naturalHeight || source.height
-    };
-  }
-
-  function canvasToBlob(canvas, quality) {
-    return new Promise((resolve, reject) => {
-      canvas.toBlob(blob => {
-        if (blob) {
-          resolve(blob);
-          return;
-        }
-        canvas.toBlob(fallback => {
-          if (fallback) resolve(fallback);
-          else reject(new Error("Снимката не може да се компресира."));
-        }, "image/jpeg", quality);
-      }, "image/webp", quality);
-    });
-  }
-
-  async function resizeSource(source, originalWidth, originalHeight, targetWidth, quality) {
-    const width = Math.max(1, Math.min(targetWidth, originalWidth));
-    const height = Math.max(1, Math.round(originalHeight * (width / originalWidth)));
-    const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    const context = canvas.getContext("2d", { alpha: false });
-    if (!context) throw new Error("Браузърът не може да обработи снимката.");
-
-    context.imageSmoothingEnabled = true;
-    context.imageSmoothingQuality = "high";
-    context.fillStyle = "#ffffff";
-    context.fillRect(0, 0, width, height);
-    context.drawImage(source, 0, 0, width, height);
-
-    const blob = await canvasToBlob(canvas, quality);
-    return {
-      blob,
-      width,
-      height,
-      bytes: blob.size,
-      mime: blob.type || "image/webp"
-    };
-  }
-
-  function requestedWidths(root) {
-    const values = String(root.dataset.widths || "")
-      .split(",")
-      .map(value => Number.parseInt(value.trim(), 10))
-      .filter(value => Number.isFinite(value) && value > 0);
-    return values.length ? values : DEFAULT_WIDTHS;
-  }
-
-  function createVariantMap(generated, widths, originalWidth) {
-    const widthFor = target => Math.min(target, originalWidth);
-    const byWidth = new Map(generated.map(item => [item.width, item]));
-    const first = byWidth.get(widthFor(widths[0])) || generated[0];
-    const middleTarget = widths[Math.min(1, widths.length - 1)];
-    const lastTarget = widths[widths.length - 1];
-    const middle = byWidth.get(widthFor(middleTarget)) || generated.at(-1);
-    const last = byWidth.get(widthFor(lastTarget)) || generated.at(-1);
-    return { thumb: first, medium: middle, large: last };
-  }
-
-  function getElements(root) {
-    return {
-      input: root.querySelector('input[type="file"]'),
-      dropzone: root.querySelector("[data-image-dropzone]"),
-      preview: root.querySelector("[data-image-preview]"),
-      status: root.querySelector("[data-image-status]"),
-      count: root.querySelector("[data-image-count]")
-    };
-  }
-
-  function setStatus(state, message, kind = "") {
-    const { status } = state.elements;
-    if (!status) return;
-    status.textContent = message;
-    status.className = `image-upload-status${kind ? ` ${kind}` : ""}`;
-  }
-
-  function updateCount(state) {
-    const active = state.items.filter(item => !item.removed).length;
-    if (state.elements.count) {
-      state.elements.count.textContent = `${active} / ${state.maxFiles}`;
-    }
-  }
-
-  function renderProcessingCard(state, item) {
-    const card = document.createElement("article");
-    card.className = "image-preview-card is-processing";
-    card.dataset.imageId = item.id;
-    card.innerHTML = `
-      <div class="image-preview-placeholder" aria-hidden="true">
-        <span class="image-spinner"></span>
+        <button class="menu-button" id="menu-button" type="button"
+                aria-label="Отвори менюто"
+                aria-expanded="false"
+                aria-controls="main-nav">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
-      <div class="image-preview-info">
-        <strong>${escapeText(item.file.name)}</strong>
-        <span>Обработване…</span>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="hero-section">
+      <div class="hero-decoration hero-decoration-left" aria-hidden="true"></div>
+      <div class="hero-decoration hero-decoration-right" aria-hidden="true"></div>
+
+      <div class="hero-inner">
+        <div class="trust-label">
+          <span class="trust-dot" aria-hidden="true"></span>
+          Местната общност на Лом
+        </div>
+
+        <h1>Намери това, което търсиш в Лом</h1>
+
+        <p class="hero-text">
+          Търсиш майстор, лекар, магазин, заведение или полезен съвет?
+          Попитай тук – хората знаят.
+        </p>
+
+        <form class="search-form" id="search-form" role="search">
+          <label class="visually-hidden" for="main-search">Търси в Попитай.Лом</label>
+
+          <div class="search-field-wrap">
+            <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m20 20-4-4"></path>
+            </svg>
+
+            <input
+              id="main-search"
+              name="q"
+              type="search"
+              autocomplete="off"
+              placeholder="Какво търсиш в Лом?"
+              aria-describedby="search-help"
+              aria-controls="search-suggestions"
+              aria-autocomplete="list"
+            >
+
+            <button class="clear-search" id="clear-search" type="button" aria-label="Изчисти търсенето">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 6l12 12M18 6 6 18"></path>
+              </svg>
+            </button>
+
+            <button class="search-button" type="submit">Търси</button>
+          </div>
+
+          <div class="search-suggestions" id="search-suggestions" role="listbox" hidden></div>
+          <p id="search-help">Можеш да търсиш въпроси, фирми, услуги и категории.</p>
+        </form>
+
+        <div class="popular-searches" aria-label="Популярни търсения">
+          <span>Популярни:</span>
+          <button type="button" data-search="майстор за баня">Майстор за баня</button>
+          <button type="button" data-search="зъболекар">Зъболекар</button>
+          <button type="button" data-search="автосервиз">Автосервиз</button>
+          <button type="button" data-search="аптека">Аптека</button>
+          <button type="button" data-search="работа">Работа</button>
+        </div>
+
+        <div class="hero-actions">
+          <a class="secondary-action" href="kategorii.html">Разгледай категориите</a>
+          <a class="text-action" href="nov-vapros.html">
+            Не намираш отговор? Задай въпрос
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6"/>
+            </svg>
+          </a>
+        </div>
       </div>
-      <button class="image-remove-button" type="button" aria-label="Премахни снимката">Премахни</button>
-    `;
-    card.querySelector(".image-remove-button").addEventListener("click", () => removeItem(state, item.id));
-    state.elements.preview?.append(card);
-    item.card = card;
-  }
+    </section>
 
-  function escapeText(value) {
-    return String(value || "").replace(/[&<>"']/g, character => ({
-      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
-    }[character]));
-  }
+    <section class="categories-section" id="categories" aria-labelledby="categories-title">
+      <div class="section-container">
+        <div class="section-heading">
+          <div>
+            <span class="section-kicker">Бърза ориентация</span>
+            <h2 id="categories-title">Избери категория</h2>
+            <p>
+              Подредихме най-търсената информация ясно, за да стигнеш до нея
+              без лутане.
+            </p>
+          </div>
 
-  function renderReadyCard(state, item) {
-    if (item.removed || !item.card) return;
-    const variants = item.variants;
-    const uniqueVariants = [...new Map(
-      Object.values(variants).map(variant => [variant.width, variant])
-    ).values()];
-    const totalOptimized = uniqueVariants.reduce((sum, variant) => sum + variant.bytes, 0);
-    const details = uniqueVariants
-      .map(variant => `${variant.width}px: ${formatBytes(variant.bytes)}`)
-      .join(" · ");
+          <a class="all-categories-link" href="kategorii.html">
+            Всички категории
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6"/>
+            </svg>
+          </a>
+        </div>
 
-    item.previewUrl = createObjectUrl(variants.thumb.blob);
-    item.card.className = "image-preview-card";
-    item.card.innerHTML = `
-      <img src="${item.previewUrl}" width="${variants.thumb.width}" height="${variants.thumb.height}" alt="">
-      <div class="image-preview-info">
-        <strong>${escapeText(item.file.name)}</strong>
-        <span>${item.originalWidth} × ${item.originalHeight}px · ${formatBytes(item.file.size)} оригинал</span>
-        <span>${formatBytes(totalOptimized)} общо за размерите</span>
-        <small>${details}</small>
-        <small>При показване се зарежда само подходящият размер.</small>
-        <label>
-          Описание на снимката
-          <input type="text" maxlength="120" value="${escapeText(item.caption)}" data-image-caption placeholder="Например: Окачен таван от гипсокартон">
-        </label>
+        <div class="category-grid">
+          <article class="category-card">
+            <a class="category-main-link" href="maistori.html">
+              <span class="category-icon category-icon-blue" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M14.7 6.3a4 4 0 0 0-5-5L7.4 3.6l3 3 2.3-2.3a4 4 0 0 0 2 2Z"/>
+                  <path d="m5 10 9 9a2.1 2.1 0 0 0 3-3l-9-9"/>
+                  <path d="m3 21 5.5-5.5"/>
+                </svg>
+              </span>
+              <span class="category-copy">
+                <strong>Майстори и ремонти</strong>
+                <small>Намери подходящ човек за дома и имота.</small>
+              </span>
+              <svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </a>
+            <div class="category-sub-links">
+              <a href="kategorii.html#remonti">Ремонти</a>
+              <a href="kategorii.html#vik">ВиК</a>
+              <a href="kategorii.html#elektro">Електро</a>
+            </div>
+          </article>
+
+          <article class="category-card">
+            <a class="category-main-link" href="zdrave.html">
+              <span class="category-icon category-icon-green" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M8 3v5a4 4 0 0 0 8 0V3"/>
+                  <path d="M6 3h4M14 3h4"/>
+                  <path d="M12 12v2a5 5 0 0 0 10 0v-1"/>
+                  <circle cx="20" cy="10" r="2"/>
+                </svg>
+              </span>
+              <span class="category-copy">
+                <strong>Здраве и лекари</strong>
+                <small>Лекари, стоматолози, аптеки и грижа.</small>
+              </span>
+              <svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </a>
+            <div class="category-sub-links">
+              <a href="kategorii.html#lekari">Лекари</a>
+              <a href="kategorii.html#zabolekari">Зъболекари</a>
+              <a href="kategorii.html#apteki">Аптеки</a>
+            </div>
+          </article>
+
+          <article class="category-card">
+            <a class="category-main-link" href="avtomobili.html">
+              <span class="category-icon category-icon-slate" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="m5 16-1-4 2-5h12l2 5-1 4"/>
+                  <path d="M3 16h18v3H3z"/>
+                  <circle cx="7" cy="16" r="1.5"/>
+                  <circle cx="17" cy="16" r="1.5"/>
+                </svg>
+              </span>
+              <span class="category-copy">
+                <strong>Автомобили</strong>
+                <small>Сервизи, гуми, части и пътна помощ.</small>
+              </span>
+              <svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </a>
+            <div class="category-sub-links">
+              <a href="kategorii.html#servizi">Сервизи</a>
+              <a href="kategorii.html#gumi">Гуми</a>
+              <a href="kategorii.html#avtochasti">Авточасти</a>
+            </div>
+          </article>
+
+          <article class="category-card">
+            <a class="category-main-link" href="magazini.html">
+              <span class="category-icon category-icon-amber" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M6 8h12l1 13H5L6 8Z"/>
+                  <path d="M9 9V6a3 3 0 0 1 6 0v3"/>
+                </svg>
+              </span>
+              <span class="category-copy">
+                <strong>Магазини и покупки</strong>
+                <small>Открий местни магазини и полезни покупки.</small>
+              </span>
+              <svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </a>
+            <div class="category-sub-links">
+              <a href="kategorii.html#hranitelni">Хранителни</a>
+              <a href="kategorii.html#stroitelni">Строителни</a>
+              <a href="kategorii.html#tehnika">Техника</a>
+            </div>
+          </article>
+
+          <article class="category-card">
+            <a class="category-main-link" href="zavedenia.html">
+              <span class="category-icon category-icon-red" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M7 3v8M4 3v5a3 3 0 0 0 6 0V3M7 11v10"/>
+                  <path d="M16 3v18M16 3c3 2 4 5 4 8h-4"/>
+                </svg>
+              </span>
+              <span class="category-copy">
+                <strong>Заведения</strong>
+                <small>Ресторанти, кафенета и места за срещи.</small>
+              </span>
+              <svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </a>
+            <div class="category-sub-links">
+              <a href="kategorii.html#restoranti">Ресторанти</a>
+              <a href="kategorii.html#kafeneta">Кафенета</a>
+              <a href="kategorii.html#dostavka">Доставка</a>
+            </div>
+          </article>
+
+          <article class="category-card">
+            <a class="category-main-link" href="rabota.html">
+              <span class="category-icon category-icon-purple" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <rect x="3" y="7" width="18" height="13" rx="2"/>
+                  <path d="M8 7V4h8v3M3 12h18M10 12v2h4v-2"/>
+                </svg>
+              </span>
+              <span class="category-copy">
+                <strong>Работа и услуги</strong>
+                <small>Свободни места и услуги от местни хора.</small>
+              </span>
+              <svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </a>
+            <div class="category-sub-links">
+              <a href="kategorii.html#predlagam-rabota">Предлагам работа</a>
+              <a href="kategorii.html#tarsya-rabota">Търся работа</a>
+            </div>
+          </article>
+
+          <article class="category-card">
+            <a class="category-main-link" href="obyavi.html">
+              <span class="category-icon category-icon-cyan" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M4 5h10l6 6-9 9-7-7V5Z"/>
+                  <circle cx="9" cy="10" r="1.5"/>
+                </svg>
+              </span>
+              <span class="category-copy">
+                <strong>Обяви</strong>
+                <small>Купува, продава, подарява и търси.</small>
+              </span>
+              <svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </a>
+            <div class="category-sub-links">
+              <a href="kategorii.html#prodavam">Продавам</a>
+              <a href="kategorii.html#kupuvam">Купувам</a>
+              <a href="kategorii.html#podaryavam">Подарявам</a>
+            </div>
+          </article>
+
+          <article class="category-card">
+            <a class="category-main-link" href="sabitiya.html">
+              <span class="category-icon category-icon-navy" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <rect x="3" y="5" width="18" height="16" rx="2"/>
+                  <path d="M8 3v4M16 3v4M3 10h18"/>
+                  <path d="M8 14h3M13 14h3M8 17h3"/>
+                </svg>
+              </span>
+              <span class="category-copy">
+                <strong>Събития и град</strong>
+                <small>Какво се случва в Лом и полезна информация.</small>
+              </span>
+              <svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </a>
+            <div class="category-sub-links">
+              <a href="kategorii.html#predstoyashti">Предстоящи</a>
+              <a href="kategorii.html#institucii">Институции</a>
+              <a href="kategorii.html#polezno">Полезно</a>
+            </div>
+          </article>
+        </div>
       </div>
-      <button class="image-remove-button" type="button" aria-label="Премахни снимката">Премахни</button>
-    `;
-    item.card.querySelector("[data-image-caption]").addEventListener("input", event => {
-      item.caption = event.target.value.trim();
-    });
-    item.card.querySelector(".image-remove-button").addEventListener("click", () => removeItem(state, item.id));
-  }
+    </section>
 
-  function renderErrorCard(state, item, message) {
-    if (item.removed || !item.card) return;
-    item.card.className = "image-preview-card has-error";
-    item.card.innerHTML = `
-      <div class="image-preview-placeholder" aria-hidden="true">!</div>
-      <div class="image-preview-info">
-        <strong>${escapeText(item.file.name)}</strong>
-        <span>${escapeText(message)}</span>
+    <section class="popular-section" aria-labelledby="popular-title">
+      <div class="section-container popular-layout">
+        <div class="popular-copy">
+          <span class="section-kicker">Най-чести нужди</span>
+          <h2 id="popular-title">Често търсено в Лом</h2>
+          <p>
+            Избери готово търсене или напиши собствен въпрос в търсачката.
+          </p>
+
+          <a class="ask-community-button" href="nov-vapros.html">
+            Задай въпрос на общността
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="popular-list">
+          <button type="button" data-search="добър майстор за баня">
+            <span>01</span>
+            Добър майстор за баня
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6"/>
+            </svg>
+          </button>
+
+          <button type="button" data-search="добър зъболекар в Лом">
+            <span>02</span>
+            Добър зъболекар в Лом
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6"/>
+            </svg>
+          </button>
+
+          <button type="button" data-search="автосервиз в Лом">
+            <span>03</span>
+            Автосервиз в Лом
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6"/>
+            </svg>
+          </button>
+
+          <button type="button" data-search="работа в Лом">
+            <span>04</span>
+            Работа в Лом
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6"/>
+            </svg>
+          </button>
+
+          <button type="button" data-search="денонощна аптека">
+            <span>05</span>
+            Денонощна аптека
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6"/>
+            </svg>
+          </button>
+        </div>
       </div>
-      <button class="image-remove-button" type="button">Премахни</button>
-    `;
-    item.card.querySelector(".image-remove-button").addEventListener("click", () => removeItem(state, item.id));
-  }
+    </section>
 
-  function removeItem(state, id) {
-    const item = state.items.find(candidate => candidate.id === id);
-    if (!item) return;
-    item.removed = true;
-    revokeObjectUrl(item.previewUrl);
-    item.card?.remove();
-    updateCount(state);
-    setStatus(state, "Снимката е премахната.");
-  }
+    <section class="questions-section" aria-labelledby="latest-questions-title">
+      <div class="section-container">
+        <div class="section-heading">
+          <div>
+            <span class="section-kicker">Ново от общността</span>
+            <h2 id="latest-questions-title">Последни въпроси</h2>
+            <p>Тук ще се показват реално публикуваните въпроси.</p>
+          </div>
+          <a class="all-categories-link" href="vaprosi.html">
+            Виж всички въпроси
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
 
-  async function processItem(state, item) {
-    if (item.removed) return;
-    try {
-      const source = await loadImageSource(item.file);
-      const { width: originalWidth, height: originalHeight } = sourceDimensions(source);
-      if (!originalWidth || !originalHeight) throw new Error("Невалидни размери на снимката.");
+        <div class="questions-grid" id="home-questions">
+          <article class="empty-card empty-card-wide">
+            <h3>Все още няма публикувани въпроси</h3>
+            <p>Първият реален въпрос ще се появи тук.</p>
+            <a class="primary-link-button" href="nov-vapros.html">Задай първия въпрос</a>
+          </article>
+        </div>
+      </div>
+    </section>
 
-      item.originalWidth = originalWidth;
-      item.originalHeight = originalHeight;
+    <section class="firms-section" aria-labelledby="verified-firms-title">
+      <div class="section-container">
+        <div class="section-heading">
+          <div>
+            <span class="section-kicker">Местен бизнес</span>
+            <h2 id="verified-firms-title">Местни фирми</h2>
+            <p>Показват се само добавени профили. Няма измислени оценки или знак „Проверена“.</p>
+          </div>
+          <a class="all-categories-link" href="firmi.html">
+            Виж фирмите
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+        </div>
 
-      const actualWidths = [...new Set(
-        state.widths.map(width => Math.min(width, originalWidth))
-      )].sort((a, b) => a - b);
+        <div class="firms-grid" id="home-businesses">
+          <article class="empty-card empty-card-wide">
+            <h3>Все още няма добавени фирми</h3>
+            <p>След добавяне и преглед фирмените профили ще се появяват тук.</p>
+            <a class="primary-link-button" href="dobavi-firma.html">Добави фирма</a>
+          </article>
+        </div>
+      </div>
+    </section>
 
-      const generated = [];
-      for (const width of actualWidths) {
-        if (item.removed) break;
-        generated.push(await resizeSource(
-          source,
-          originalWidth,
-          originalHeight,
-          width,
-          state.quality
-        ));
-      }
 
-      if (typeof source.close === "function") source.close();
-      if (item.removed) return;
+    <section class="articles-section" aria-labelledby="articles-title">
+      <div class="section-container">
+        <div class="section-heading">
+          <div>
+            <span class="section-kicker">Полезно за теб</span>
+            <h2 id="articles-title">Полезни статии</h2>
+            <p>Кратки и практични материали за ежедневни решения.</p>
+          </div>
 
-      item.variants = createVariantMap(generated, state.widths, originalWidth);
-      item.ready = true;
-      renderReadyCard(state, item);
-      setStatus(state, "Снимките са готови за публикуване.", "is-success");
-    } catch (error) {
-      item.error = error instanceof Error ? error.message : "Неуспешна обработка.";
-      renderErrorCard(state, item, item.error);
-      setStatus(state, item.error, "is-error");
-    } finally {
-      updateCount(state);
-    }
-  }
+          <a class="all-categories-link" href="statii.html">
+            Всички статии
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6"/>
+            </svg>
+          </a>
+        </div>
 
-  function validateFile(state, file) {
-    if (!ALLOWED_TYPES.has(file.type)) {
-      return "Позволени са JPG, PNG и WebP.";
-    }
-    if (file.size > state.maxBytes) {
-      return `Файлът е над позволените ${state.maxMb} MB.`;
-    }
-    return "";
-  }
+        <div class="articles-grid">
+          <article class="article-card article-featured">
+            <div class="article-visual" aria-hidden="true">
+              <svg viewBox="0 0 64 64"><path d="M11 31 32 12l21 19v22H11V31Z"/><path d="M24 53V35h16v18M18 26V14h9"/></svg>
+            </div>
+            <div class="article-content">
+              <span>Дом и ремонт</span>
+              <h3><a href="statii.html">Как да избереш майстор и да избегнеш неприятни изненади</a></h3>
+              <p>Проверки, въпроси и ясни условия преди започване на ремонта.</p>
+              <a class="read-more" href="statii.html">Прочети статията</a>
+            </div>
+          </article>
 
-  function addFiles(state, fileList) {
-    const files = [...fileList];
-    if (!files.length) return;
+          <article class="article-card">
+            <div class="article-visual" aria-hidden="true">
+              <svg viewBox="0 0 64 64"><path d="M17 10h30v44H17z"/><path d="M24 20h16M24 29h16M24 38h10"/></svg>
+            </div>
+            <div class="article-content">
+              <span>Полезно</span>
+              <h3><a href="statii.html">Кои документи да поискаш при наемане на услуга</a></h3>
+              <p>Кратък списък, който помага да защитиш интереса си.</p>
+              <a class="read-more" href="statii.html">Прочети статията</a>
+            </div>
+          </article>
 
-    const currentCount = state.items.filter(item => !item.removed).length;
-    const remaining = Math.max(0, state.maxFiles - currentCount);
-    const accepted = files.slice(0, remaining);
+          <article class="article-card">
+            <div class="article-visual" aria-hidden="true">
+              <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="21"/><path d="M32 18v15l10 6"/></svg>
+            </div>
+            <div class="article-content">
+              <span>Град и услуги</span>
+              <h3><a href="statii.html">Как бързо да намериш работно време и телефон</a></h3>
+              <p>Практичен начин за проверка на местни услуги и институции.</p>
+              <a class="read-more" href="statii.html">Прочети статията</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
 
-    if (files.length > remaining) {
-      setStatus(state, `Можеш да добавиш най-много ${state.maxFiles} снимки.`, "is-error");
-    }
+  </main>
 
-    accepted.forEach(file => {
-      const validationMessage = validateFile(state, file);
-      const item = {
-        id: uid("upload"),
-        file,
-        caption: file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " ").trim(),
-        ready: false,
-        removed: false,
-        error: ""
-      };
-      state.items.push(item);
-      renderProcessingCard(state, item);
+  <footer class="site-footer">
+    <div class="section-container footer-main">
+      <div class="footer-brand">
+        <a class="brand footer-logo" href="index.html" aria-label="Попитай Лом – начало">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 64 64">
+              <path d="M14 12h36a8 8 0 0 1 8 8v22a8 8 0 0 1-8 8H31l-13 9v-9h-4a8 8 0 0 1-8-8V20a8 8 0 0 1 8-8Z"/>
+              <path d="M22 26h20M22 36h13"/>
+            </svg>
+          </span>
+          <span class="brand-text">
+            <strong>Попитай<span>.Лом</span></strong>
+            <small>Попитай. Намери. Препоръчай.</small>
+          </span>
+        </a>
 
-      if (validationMessage) {
-        item.error = validationMessage;
-        renderErrorCard(state, item, validationMessage);
-        return;
-      }
+        <p>Местната общност на Лом за препоръки, услуги и полезна информация.</p>
+      </div>
 
-      state.queue = state.queue.then(() => processItem(state, item));
-    });
+      <div class="footer-column">
+        <h2>Разгледай</h2>
+        <a href="kategorii.html">Категории</a>
+        <a href="vaprosi.html">Въпроси</a>
+        <a href="firmi.html">Фирми</a>
+        <a href="statii.html">Статии</a>
+      </div>
 
-    updateCount(state);
-    if (state.elements.input) state.elements.input.value = "";
-  }
+      <div class="footer-column">
+        <h2>За общността</h2>
+        <a href="za-nas.html">За сайта</a>
+        <a href="pravila.html">Правила</a>
+        <a href="kontakti.html">Контакти</a>
+        <a href="signal.html">Подай сигнал</a>
+      </div>
 
-  function initUploader(root) {
-    if (!root.id || states.has(root.id)) return;
-    const elements = getElements(root);
-    if (!elements.input) return;
+      <div class="footer-column">
+        <h2>Правна информация</h2>
+        <a href="poveritelnost.html">Поверителност</a>
+        <a href="uslovia.html">Условия за ползване</a>
+        <a href="biskvitki.html">Бисквитки</a>
+      </div>
+    </div>
 
-    const maxFiles = Number.parseInt(root.dataset.maxFiles || "6", 10);
-    const maxMb = Number.parseFloat(root.dataset.maxMb || "10");
-    const quality = Number.parseFloat(root.dataset.quality || String(DEFAULT_QUALITY));
-    const state = {
-      root,
-      elements,
-      items: [],
-      maxFiles: Number.isFinite(maxFiles) ? maxFiles : 6,
-      maxMb: Number.isFinite(maxMb) ? maxMb : 10,
-      maxBytes: (Number.isFinite(maxMb) ? maxMb : 10) * 1024 * 1024,
-      quality: Number.isFinite(quality) ? Math.min(0.95, Math.max(0.65, quality)) : DEFAULT_QUALITY,
-      widths: requestedWidths(root),
-      queue: Promise.resolve()
-    };
-    states.set(root.id, state);
+    <div class="section-container footer-bottom">
+      <p>© <span id="current-year">2026</span> Попитай.Лом. Всички права запазени.</p>
+      <p>Създадено за хората от Лом.</p>
+    </div>
+  </footer>
 
-    elements.input.addEventListener("change", () => addFiles(state, elements.input.files || []));
+  <nav class="mobile-bottom-nav" aria-label="Мобилна навигация">
+    <a class="active" href="index.html">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg>
+      <span>Начало</span>
+    </a>
+    <a href="kategorii.html">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span>Категории</span>
+    </a>
+    <a class="mobile-ask" href="nov-vapros.html" aria-label="Задай въпрос">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      <span>Въпрос</span>
+    </a>
+    <a href="vaprosi.html">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg>
+      <span>Въпроси</span>
+    </a>
+    <a href="vhod.html">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+      <span>Профил</span>
+    </a>
+  </nav>
 
-    if (elements.dropzone) {
-      ["dragenter", "dragover"].forEach(type => {
-        elements.dropzone.addEventListener(type, event => {
-          event.preventDefault();
-          elements.dropzone.classList.add("is-dragging");
-        });
-      });
-      ["dragleave", "drop"].forEach(type => {
-        elements.dropzone.addEventListener(type, event => {
-          event.preventDefault();
-          elements.dropzone.classList.remove("is-dragging");
-        });
-      });
-      elements.dropzone.addEventListener("drop", event => {
-        addFiles(state, event.dataTransfer?.files || []);
-      });
-    }
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="Към началото">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
+  </button>
 
-    updateCount(state);
-  }
 
-  async function commit(rootId, entityType, entityId) {
-    const state = states.get(rootId);
-    if (!state) return [];
-    await state.queue;
-
-    const failed = state.items.filter(item => !item.removed && item.error);
-    if (failed.length) throw new Error("Премахни неуспешните снимки преди публикуване.");
-
-    const readyItems = state.items.filter(item => !item.removed && item.ready);
-    const result = [];
-
-    for (const item of readyItems) {
-      const storedByWidth = new Map();
-      const metadataVariants = {};
-
-      for (const [variantName, variant] of Object.entries(item.variants)) {
-        let stored = storedByWidth.get(variant.width);
-        if (!stored) {
-          const extension = variant.mime.includes("webp") ? "webp" : "jpg";
-          const key = `media/${entityType}/${entityId}/${item.id}-${variant.width}.${extension}`;
-          stored = {
-            key,
-            width: variant.width,
-            height: variant.height,
-            bytes: variant.bytes,
-            mime: variant.mime
-          };
-          await putRecord({
-            ...stored,
-            entityType: String(entityType),
-            entityId: String(entityId),
-            imageId: item.id,
-            blob: variant.blob,
-            createdAt: new Date().toISOString()
-          });
-          storedByWidth.set(variant.width, stored);
-        }
-        metadataVariants[variantName] = stored;
-      }
-
-      result.push({
-        id: item.id,
-        role: state.root.dataset.role || "gallery",
-        originalName: item.file.name,
-        originalWidth: item.originalWidth,
-        originalHeight: item.originalHeight,
-        originalBytes: item.file.size,
-        caption: item.caption || "",
-        variants: metadataVariants
-      });
-    }
-
-    return result;
-  }
-
-  async function recordToUrl(meta) {
-    if (!meta?.key) return null;
-    const record = await getRecord(meta.key);
-    if (!record?.blob) return null;
-    return {
-      url: createObjectUrl(record.blob),
-      width: record.width || meta.width,
-      height: record.height || meta.height,
-      bytes: record.bytes || meta.bytes,
-      mime: record.mime || meta.mime
-    };
-  }
-
-  async function renderMediaSlots(root = document) {
-    const slots = [...root.querySelectorAll("[data-media-key]:not([data-media-rendered])")];
-    await Promise.all(slots.map(async slot => {
-      slot.dataset.mediaRendered = "true";
-      const record = await getRecord(slot.dataset.mediaKey);
-      if (!record?.blob) {
-        slot.remove();
-        return;
-      }
-      const url = createObjectUrl(record.blob);
-      const image = document.createElement("img");
-      image.src = url;
-      image.width = record.width || Number(slot.dataset.mediaWidth) || 480;
-      image.height = record.height || Number(slot.dataset.mediaHeight) || 360;
-      image.loading = slot.dataset.mediaEager === "true" ? "eager" : "lazy";
-      image.decoding = "async";
-      image.alt = slot.dataset.mediaAlt || "";
-      slot.append(image);
-    }));
-  }
-
-  function ensureLightbox() {
-    let lightbox = document.querySelector("#media-lightbox");
-    if (lightbox) return lightbox;
-
-    lightbox = document.createElement("div");
-    lightbox.id = "media-lightbox";
-    lightbox.className = "media-lightbox";
-    lightbox.hidden = true;
-    lightbox.innerHTML = `
-      <button class="media-lightbox-close" type="button" aria-label="Затвори">×</button>
-      <figure>
-        <img alt="">
-        <figcaption></figcaption>
-      </figure>
-    `;
-    document.body.append(lightbox);
-
-    const close = () => {
-      lightbox.hidden = true;
-      document.body.classList.remove("lightbox-open");
-    };
-    lightbox.addEventListener("click", event => {
-      if (event.target === lightbox || event.target.closest(".media-lightbox-close")) close();
-    });
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape" && !lightbox.hidden) close();
-    });
-
-    return lightbox;
-  }
-
-  function openLightbox(url, alt, caption) {
-    const lightbox = ensureLightbox();
-    const image = lightbox.querySelector("img");
-    const figcaption = lightbox.querySelector("figcaption");
-    image.src = url;
-    image.alt = alt || "";
-    figcaption.textContent = caption || "";
-    lightbox.hidden = false;
-    document.body.classList.add("lightbox-open");
-    lightbox.querySelector(".media-lightbox-close").focus();
-  }
-
-  async function renderGallery(container, images, options = {}) {
-    if (!container) return;
-    if (!Array.isArray(images) || !images.length) {
-      container.hidden = true;
-      container.innerHTML = "";
-      return;
-    }
-
-    container.hidden = false;
-    container.innerHTML = "";
-    const altPrefix = options.altPrefix || "Качена снимка";
-
-    for (const [index, imageMeta] of images.entries()) {
-      const [thumb, medium, large] = await Promise.all([
-        recordToUrl(imageMeta.variants?.thumb),
-        recordToUrl(imageMeta.variants?.medium),
-        recordToUrl(imageMeta.variants?.large)
-      ]);
-      const selected = medium || large || thumb;
-      if (!selected) continue;
-
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "media-gallery-item";
-      if (index === 0) button.classList.add("is-featured");
-
-      const img = document.createElement("img");
-      img.src = selected.url;
-      const candidates = [thumb, medium, large]
-        .filter(Boolean)
-        .filter((item, position, array) => array.findIndex(candidate => candidate.width === item.width) === position)
-        .sort((a, b) => a.width - b.width);
-
-      if (candidates.length > 1) {
-        img.srcset = candidates.map(candidate => `${candidate.url} ${candidate.width}w`).join(", ");
-        img.sizes = index === 0
-          ? "(max-width: 760px) 100vw, 720px"
-          : "(max-width: 760px) 50vw, 360px";
-      }
-      img.width = selected.width;
-      img.height = selected.height;
-      img.loading = index === 0 ? "eager" : "lazy";
-      img.fetchPriority = index === 0 ? "high" : "auto";
-      img.decoding = "async";
-      img.alt = imageMeta.caption || `${altPrefix} ${index + 1}`;
-
-      button.append(img);
-      const full = large || medium || thumb;
-      button.addEventListener("click", () => openLightbox(
-        full.url,
-        img.alt,
-        imageMeta.caption || ""
-      ));
-      container.append(button);
-    }
-  }
-
-  async function renderLogo(container, imageMeta, fallbackText = "Ф") {
-    if (!container || !imageMeta) return false;
-    const selected = await recordToUrl(
-      imageMeta.variants?.medium ||
-      imageMeta.variants?.thumb ||
-      imageMeta.variants?.large
-    );
-    if (!selected) return false;
-
-    const image = document.createElement("img");
-    image.src = selected.url;
-    image.width = selected.width;
-    image.height = selected.height;
-    image.alt = imageMeta.caption || `Лого на ${fallbackText}`;
-    image.decoding = "async";
-    container.innerHTML = "";
-    container.append(image);
-    container.hidden = false;
-    return true;
-  }
-
-  function initAll() {
-    document.querySelectorAll(".image-uploader[id]").forEach(initUploader);
-  }
-
-  window.PopitaiImages = {
-    commit,
-    deleteEntity,
-    formatBytes,
-    initAll,
-    renderGallery,
-    renderLogo,
-    renderMediaSlots
-  };
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initAll, { once: true });
-  } else {
-    initAll();
-  }
-})();
+  <script src="image-upload.js" defer></script>
+  <script src="script.js" defer></script>
+</body>
+</html>

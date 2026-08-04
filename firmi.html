@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Иванов Ремонти | Попитай.Лом</title>
-  <meta name="description" content="Профил на фирма в Попитай.Лом.">
+  <title>Фирми | Попитай.Лом</title>
+  <meta name="description" content="Местни фирми и услуги в Лом.">
   <meta name="theme-color" content="#0b5fd7">
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="assets/favicon-96.png" type="image/png">
 </head>
 <body class="">
 
@@ -17,7 +16,10 @@
       
       <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
         <span class="brand-mark" aria-hidden="true">
-          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
+          <svg viewBox="0 0 64 64">
+            <path d="M14 12h36a8 8 0 0 1 8 8v22a8 8 0 0 1-8 8H31l-13 9v-9h-4a8 8 0 0 1-8-8V20a8 8 0 0 1 8-8Z"/>
+            <path d="M22 26h20M22 36h13"/>
+          </svg>
         </span>
         <span class="brand-text">
           <strong>Попитай<span>.Лом</span></strong>
@@ -41,45 +43,28 @@
 
 <main id="main-content">
 
-<section class="page-hero" id="business-page-hero">
+<section class="page-hero">
   <div class="section-container">
-    <span class="section-kicker">Фирмен профил</span>
-    <h1 id="business-detail-name">Зареждане…</h1>
-    <p id="business-detail-summary"></p>
+    <span class="section-kicker">Местен бизнес</span>
+    <h1>Фирми</h1>
+    <p>Тук се показват само реално добавените фирмени профили.</p>
+    <a class="primary-link-button" href="dobavi-firma.html">Добави фирма</a>
   </div>
 </section>
 
 <section class="content-section">
   <div class="section-container two-column-layout">
-    <div>
-      <article class="company-profile" id="business-detail-card">
-        <div class="company-summary">
-          <div class="business-logo-wrap">
-            <div class="firm-logo large" id="business-detail-logo">Ф</div>
-            <div class="business-logo-image" id="business-detail-logo-image" hidden></div>
-          </div>
-          <div>
-            <span class="pending-badge" id="business-detail-status">Чака преглед</span>
-            <p id="business-detail-category"></p>
-          </div>
-        </div>
-        <h2>За фирмата</h2>
-        <p id="business-detail-description"></p>
-        <div class="media-gallery business-gallery" id="business-gallery" hidden aria-label="Снимки на фирмата"></div>
-      </article>
-
-      <article class="empty-card" id="business-not-found" hidden>
-        <h2>Фирмата не е намерена</h2>
-        <p>Профилът може да е изтрит или адресът да е непълен.</p>
-        <a class="primary-link-button" href="firmi.html">Към фирмите</a>
+    <div class="stack-list" id="businesses-list">
+      <article class="empty-card">
+        <h2>Все още няма добавени фирми</h2>
+        <p>Няма измислени профили, оценки или мнения.</p>
+        <a class="primary-link-button" href="dobavi-firma.html">Добави първата фирма</a>
       </article>
     </div>
-
-    <aside class="side-panel contact-panel" id="business-contact-panel">
-      <h2>Контакти</h2>
-      <p><strong>Телефон</strong><br><a id="business-detail-phone" href="#"></a></p>
-      <p><strong>Статус</strong><br>Чака административен преглед</p>
-      <a class="secondary-link-button full" href="signal.html">Подай сигнал</a>
+    <aside class="side-panel">
+      <h2>Важно</h2>
+      <p>Новите фирми се записват със статус „Чака преглед“. Знак за проверка няма да се показва без реална проверка.</p>
+      <a href="dobavi-firma.html">Добави фирмен профил</a>
     </aside>
   </div>
 </section>
@@ -92,7 +77,10 @@
         
       <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
         <span class="brand-mark" aria-hidden="true">
-          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
+          <svg viewBox="0 0 64 64">
+            <path d="M14 12h36a8 8 0 0 1 8 8v22a8 8 0 0 1-8 8H31l-13 9v-9h-4a8 8 0 0 1-8-8V20a8 8 0 0 1 8-8Z"/>
+            <path d="M22 26h20M22 36h13"/>
+          </svg>
         </span>
         <span class="brand-text">
           <strong>Попитай<span>.Лом</span></strong>

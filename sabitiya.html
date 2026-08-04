@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Регистрация | Попитай.Лом</title>
-  <meta name="description" content="Регистрация в Попитай.Лом.">
+  <title>Събития и град | Попитай.Лом</title>
+  <meta name="description" content="Събития, институции, полезни телефони и градска информация.">
   <meta name="theme-color" content="#0b5fd7">
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="assets/favicon-96.png" type="image/png">
 </head>
 <body class="">
 
@@ -17,7 +16,10 @@
       
       <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
         <span class="brand-mark" aria-hidden="true">
-          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
+          <svg viewBox="0 0 64 64">
+            <path d="M14 12h36a8 8 0 0 1 8 8v22a8 8 0 0 1-8 8H31l-13 9v-9h-4a8 8 0 0 1-8-8V20a8 8 0 0 1 8-8Z"/>
+            <path d="M22 26h20M22 36h13"/>
+          </svg>
         </span>
         <span class="brand-text">
           <strong>Попитай<span>.Лом</span></strong>
@@ -25,7 +27,7 @@
         </span>
       </a>
     
-      <nav class="main-nav" id="main-nav" aria-label="Главна навигация"><a class="" href="index.html">Начало</a><a class="" href="kategorii.html">Категории</a><a class="" href="firmi.html">Фирми</a><a class="" href="vaprosi.html">Въпроси</a><a class="" href="statii.html">Статии</a></nav>
+      <nav class="main-nav" id="main-nav" aria-label="Главна навигация"><a class="" href="index.html">Начало</a><a class="active" href="kategorii.html">Категории</a><a class="" href="firmi.html">Фирми</a><a class="" href="vaprosi.html">Въпроси</a><a class="" href="statii.html">Статии</a></nav>
       <div class="header-actions">
         <a class="login-link" href="vhod.html">Вход</a>
         <a class="ask-button" href="nov-vapros.html">
@@ -42,23 +44,36 @@
 <main id="main-content">
 <section class="page-hero">
   <div class="section-container">
-    <span class="section-kicker">Стани част от общността</span>
-    <h1>Регистрация</h1>
-    <p>Създай безплатен профил за по-малко от минута.</p>
-    
+    <span class="section-kicker">Категория</span>
+    <div class="page-hero-title-row"><span class="category-symbol category-symbol--blue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 2v4M16 2v4"/><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 14h3M8 18h8"/></svg></span><h1>Събития и град</h1></div>
+    <p>Събития, институции, полезни телефони и градска информация.</p>
+    <a class="primary-link-button" href="nov-vapros.html?category=sabitiya">Задай въпрос</a>
   </div>
 </section>
 
 <section class="content-section">
-  <div class="section-container auth-wrap">
-    <form class="content-form auth-form" id="register-form">
-      <label for="register-name">Име</label><input id="register-name" required minlength="2">
-      <label for="register-email">Електронна поща</label><input id="register-email" type="email" required>
-      <label for="register-password">Парола</label><input id="register-password" type="password" required minlength="6">
-      <label class="check-row"><input type="checkbox" required> Приемам <a href="uslovia.html">условията</a> и <a href="poveritelnost.html">политиката за поверителност</a>.</label>
-      <button class="form-submit" type="submit">Създай профил</button>
-      <p class="form-message" id="register-message"></p>
-    </form>
+  <div class="section-container two-column-layout">
+    <div>
+      <div class="block-heading"><h2>Подраздели</h2></div>
+      <div class="subcategory-grid"><a class="subcategory-card" href="tarsene.html?q=Предстоящи събития"><strong>Предстоящи събития</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Институции"><strong>Институции</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Полезни телефони"><strong>Полезни телефони</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Култура"><strong>Култура</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Спорт"><strong>Спорт</strong><span>Въпроси и фирми</span></a></div>
+      <div class="block-heading spaced"><h2>Последни въпроси</h2><a href="vaprosi.html">Всички въпроси</a></div>
+      <div class="stack-list category-question-list" data-question-category="Събития и град">
+        <article class="empty-card">
+          <p>Все още няма публикувани въпроси в тази категория.</p>
+          <a class="primary-link-button" href="nov-vapros.html?category=sabitiya">Задай въпрос</a>
+        </article>
+      </div>
+    </div>
+    <aside class="side-panel">
+      <h2>Търси в категорията</h2>
+      <form class="side-search" action="tarsene.html">
+        <input type="search" name="q" placeholder="Какво търсиш?">
+        <button type="submit">Търси</button>
+      </form>
+      <h2>Полезно</h2>
+      <a href="pravila.html">Как да разпознаеш надеждна препоръка</a>
+      <a href="signal.html">Подай сигнал за нередност</a>
+    </aside>
   </div>
 </section>
 </main>
@@ -69,7 +84,10 @@
         
       <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
         <span class="brand-mark" aria-hidden="true">
-          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
+          <svg viewBox="0 0 64 64">
+            <path d="M14 12h36a8 8 0 0 1 8 8v22a8 8 0 0 1-8 8H31l-13 9v-9h-4a8 8 0 0 1-8-8V20a8 8 0 0 1 8-8Z"/>
+            <path d="M22 26h20M22 36h13"/>
+          </svg>
         </span>
         <span class="brand-text">
           <strong>Попитай<span>.Лом</span></strong>
@@ -100,7 +118,7 @@
       <p>Създадено за хората от Лом.</p>
     </div>
   </footer>
-  <nav class="mobile-bottom-nav" aria-label="Мобилна навигация"><a class="" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>Начало</span></a><a class="" href="kategorii.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Категории</span></a><a class="mobile-ask" href="nov-vapros.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Въпрос</span></a><a class="" href="vaprosi.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg><span>Въпроси</span></a><a class="" href="profil.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профил</span></a></nav>
+  <nav class="mobile-bottom-nav" aria-label="Мобилна навигация"><a class="" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>Начало</span></a><a class="active" href="kategorii.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Категории</span></a><a class="mobile-ask" href="nov-vapros.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Въпрос</span></a><a class="" href="vaprosi.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg><span>Въпроси</span></a><a class="" href="profil.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профил</span></a></nav>
   <button class="back-to-top" id="back-to-top" type="button" aria-label="Към началото">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
   </button>
