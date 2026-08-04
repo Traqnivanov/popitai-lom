@@ -1,0 +1,66 @@
+name: Repair Popitai Lom site
+
+on:
+  push:
+    paths:
+      - '.github/workflows/repair-site.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Restore latest intact site version
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          GOOD_COMMIT=""
+          for commit in $(git rev-list HEAD~1); do
+            index_start="$(git show "${commit}:index.html" 2>/dev/null | head -c 30 || true)"
+            css_start="$(git show "${commit}:style.css" 2>/dev/null | head -c 30 || true)"
+            js_start="$(git show "${commit}:script.js" 2>/dev/null | head -c 30 || true)"
+
+            if [[ "$index_start" == '<!DOCTYPE html>'* ]] && \
+               [[ "$css_start" != '<!DOCTYPE html>'* ]] && \
+               [[ "$js_start" != '<!DOCTYPE html>'* ]] && \
+               [[ -n "$css_start" ]] && [[ -n "$js_start" ]]; then
+              GOOD_COMMIT="$commit"
+              break
+            fi
+          done
+
+          if [[ -z "$GOOD_COMMIT" ]]; then
+            echo "No intact site commit found."
+            exit 1
+          fi
+
+          echo "Restoring site files from $GOOD_COMMIT"
+
+          cp .github/workflows/repair-site.yml /tmp/repair-site.yml
+          git checkout "$GOOD_COMMIT" -- .
+          mkdir -p .github/workflows
+          cp /tmp/repair-site.yml .github/workflows/repair-site.yml
+
+          # Remove the temporary docs copy created during manual recovery attempts.
+          rm -rf docs
+
+          git config user.name "Popitai Lom Repair"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "Nothing to repair."
+            exit 0
+          fi
+
+          git commit -m "Възстановяване на работещата версия на сайта"
+          git push origin HEAD:main
