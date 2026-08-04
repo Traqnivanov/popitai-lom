@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Въпрос | Попитай.Лом</title>
+  <meta name="description" content="Въпрос и отговори от общността.">
+  <meta name="theme-color" content="#0b5fd7">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="assets/favicon-96.png" type="image/png">
+</head>
+<body class="">
+
+  <a class="skip-link" href="#main-content">Към основното съдържание</a>
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      
+      <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
+        <span class="brand-mark" aria-hidden="true">
+          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
+        </span>
+        <span class="brand-text">
+          <strong>Попитай<span>.Лом</span></strong>
+          <small>Попитай. Намери. Препоръчай.</small>
+        </span>
+      </a>
+    
+      <nav class="main-nav" id="main-nav" aria-label="Главна навигация"><a class="" href="index.html">Начало</a><a class="" href="kategorii.html">Категории</a><a class="" href="firmi.html">Фирми</a><a class="active" href="vaprosi.html">Въпроси</a><a class="" href="statii.html">Статии</a></nav>
+      <div class="header-actions">
+        <a class="login-link" href="vhod.html">Вход</a>
+        <a class="ask-button" href="nov-vapros.html">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          Задай въпрос
+        </a>
+        <button class="menu-button" id="menu-button" type="button" aria-label="Отвори менюто" aria-expanded="false" aria-controls="main-nav">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+<main id="main-content">
+
+<section class="page-hero question-page-hero" id="question-page-hero">
+  <div class="section-container">
+    <div class="question-hero-category" id="question-hero-category"></div>
+    <h1 id="question-detail-title">Зареждане на въпроса…</h1>
+    <p id="question-detail-summary"></p>
+  </div>
+</section>
+
+<section class="content-section">
+  <div class="section-container two-column-layout">
+    <div>
+      <article class="question-detail" id="question-detail-card">
+        <div class="author-row">
+          <div class="avatar" id="question-author-avatar">?</div>
+          <div>
+            <strong id="question-author-name">Потребител</strong>
+            <span id="question-created-at"></span>
+          </div>
+        </div>
+        <p id="question-detail-description"></p>
+        <div class="media-gallery" id="question-gallery" hidden aria-label="Снимки към въпроса"></div>
+        <div class="question-actions">
+          <button type="button" id="question-helpful-button">Полезно</button>
+          <button type="button" id="question-share-button">Сподели</button>
+          <a href="signal.html">Докладвай</a>
+        </div>
+      </article>
+
+      <article class="empty-card" id="question-not-found" hidden>
+        <h2>Въпросът не е намерен</h2>
+        <p>Възможно е да е изтрит или адресът да е непълен.</p>
+        <a class="primary-link-button" href="vaprosi.html">Към всички въпроси</a>
+      </article>
+
+      <div id="question-answer-area">
+        <div class="block-heading spaced">
+          <h2>Отговори</h2>
+          <span id="answers-count">0 отговора</span>
+        </div>
+        <div class="stack-list" id="answers-list">
+          <article class="empty-card"><p>Все още няма отговори.</p></article>
+        </div>
+
+        <form class="content-form" id="answer-form">
+          <h2>Добави отговор</h2>
+          <label for="answer-text">Твоят отговор</label>
+          <textarea id="answer-text" rows="5" required minlength="3" placeholder="Сподели личен опит или полезен съвет"></textarea>
+          <button class="form-submit" type="submit">Публикувай отговор</button>
+          <p class="form-message" id="answer-message"></p>
+        </form>
+      </div>
+    </div>
+
+    <aside class="side-panel">
+      <h2>Категория</h2>
+      <a id="question-category-link" href="kategorii.html">Виж категорията</a>
+      <h2>Други въпроси</h2>
+      <a href="vaprosi.html">Разгледай всички въпроси</a>
+      <a href="nov-vapros.html">Задай нов въпрос</a>
+    </aside>
+  </div>
+</section>
+
+</main>
+
+  <footer class="site-footer">
+    <div class="section-container footer-main">
+      <div class="footer-brand">
+        
+      <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
+        <span class="brand-mark" aria-hidden="true">
+          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
+        </span>
+        <span class="brand-text">
+          <strong>Попитай<span>.Лом</span></strong>
+          <small>Попитай. Намери. Препоръчай.</small>
+        </span>
+      </a>
+    
+        <p>Местната общност на Лом за препоръки, услуги и полезна информация.</p>
+      </div>
+      <div class="footer-column">
+        <h2>Разгледай</h2>
+        <a href="kategorii.html">Категории</a><a href="vaprosi.html">Въпроси</a>
+        <a href="firmi.html">Фирми</a><a href="statii.html">Статии</a>
+      </div>
+      <div class="footer-column">
+        <h2>За общността</h2>
+        <a href="za-nas.html">За сайта</a><a href="pravila.html">Правила</a>
+        <a href="kontakti.html">Контакти</a><a href="signal.html">Подай сигнал</a>
+      </div>
+      <div class="footer-column">
+        <h2>Правна информация</h2>
+        <a href="poveritelnost.html">Поверителност</a><a href="uslovia.html">Условия за ползване</a>
+        <a href="biskvitki.html">Бисквитки</a>
+      </div>
+    </div>
+    <div class="section-container footer-bottom">
+      <p>© <span id="current-year">2026</span> Попитай.Лом. Всички права запазени.</p>
+      <p>Създадено за хората от Лом.</p>
+    </div>
+  </footer>
+  <nav class="mobile-bottom-nav" aria-label="Мобилна навигация"><a class="" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>Начало</span></a><a class="" href="kategorii.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Категории</span></a><a class="mobile-ask" href="nov-vapros.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Въпрос</span></a><a class="active" href="vaprosi.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg><span>Въпроси</span></a><a class="" href="profil.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профил</span></a></nav>
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="Към началото">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
+  </button>
+
+<script src="image-upload.js" defer></script>
+  <script src="script.js" defer></script>
+</body>
+</html>
