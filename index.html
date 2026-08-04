@@ -6,9 +6,17 @@
 
   <title>Попитай.Лом | Препоръки, услуги и полезна информация за Лом</title>
   <meta name="description" content="Местната общност на Лом за препоръки, услуги и полезна информация. Намери майстор, лекар, магазин, заведение или задай въпрос.">
-  <meta name="theme-color" content="#0b5fd7">
+  <meta name="theme-color" content="#061a38">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Попитай.Лом — Попитай. Намери. Препоръчай.">
+  <meta property="og:description" content="Местната общност на Лом за препоръки, услуги и полезна информация.">
+  <meta property="og:image" content="assets/lom-cover-share-1200x630.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="assets/lom-cover-desktop-1536.webp" as="image" type="image/webp" media="(min-width: 761px)">
+  <link rel="preload" href="assets/lom-cover-mobile-720.webp" as="image" type="image/webp" media="(max-width: 760px)">
 
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="assets/favicon-96.png" type="image/png">
 </head>
 
 <body>
@@ -18,10 +26,7 @@
     <div class="header-inner">
       <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
         <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 64 64" role="img">
-            <path d="M14 12h36a8 8 0 0 1 8 8v22a8 8 0 0 1-8 8H31l-13 9v-9h-4a8 8 0 0 1-8-8V20a8 8 0 0 1 8-8Z"/>
-            <path d="M22 26h20M22 36h13"/>
-          </svg>
+          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
         </span>
 
         <span class="brand-text">
@@ -60,73 +65,88 @@
   </header>
 
   <main id="main-content">
-    <section class="hero-section">
-      <div class="hero-decoration hero-decoration-left" aria-hidden="true"></div>
-      <div class="hero-decoration hero-decoration-right" aria-hidden="true"></div>
+    <section class="hero-section hero-cover" aria-labelledby="hero-title">
+      <picture class="hero-cover-media" aria-hidden="true">
+        <source media="(max-width: 760px)" srcset="assets/lom-cover-mobile-720.webp">
+        <img
+          src="assets/lom-cover-desktop-1536.webp"
+          width="1536"
+          height="864"
+          alt=""
+          fetchpriority="high"
+          decoding="async"
+        >
+      </picture>
+      <div class="hero-cover-overlay" aria-hidden="true"></div>
 
-      <div class="hero-inner">
-        <div class="trust-label">
-          <span class="trust-dot" aria-hidden="true"></span>
-          Местната общност на Лом
-        </div>
-
-        <h1>Намери това, което търсиш в Лом</h1>
-
-        <p class="hero-text">
-          Търсиш майстор, лекар, магазин, заведение или полезен съвет?
-          Попитай тук – хората знаят.
-        </p>
-
-        <form class="search-form" id="search-form" role="search">
-          <label class="visually-hidden" for="main-search">Търси в Попитай.Лом</label>
-
-          <div class="search-field-wrap">
-            <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
-              <circle cx="11" cy="11" r="7"></circle>
-              <path d="m20 20-4-4"></path>
-            </svg>
-
-            <input
-              id="main-search"
-              name="q"
-              type="search"
-              autocomplete="off"
-              placeholder="Какво търсиш в Лом?"
-              aria-describedby="search-help"
-              aria-controls="search-suggestions"
-              aria-autocomplete="list"
+      <div class="hero-cover-inner">
+        <div class="hero-cover-content">
+          <div class="hero-cover-brand">
+            <img
+              src="assets/popitai-lom-logo-mark-256.webp"
+              width="92"
+              height="92"
+              alt=""
+              aria-hidden="true"
             >
-
-            <button class="clear-search" id="clear-search" type="button" aria-label="Изчисти търсенето">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M6 6l12 12M18 6 6 18"></path>
-              </svg>
-            </button>
-
-            <button class="search-button" type="submit">Търси</button>
+            <span>Местната общност на Лом</span>
           </div>
 
-          <div class="search-suggestions" id="search-suggestions" role="listbox" hidden></div>
-          <p id="search-help">Можеш да търсиш въпроси, фирми, услуги и категории.</p>
-        </form>
+          <h1 id="hero-title">Попитай. Намери. Препоръчай.</h1>
 
-        <div class="popular-searches" aria-label="Популярни търсения">
-          <span>Популярни:</span>
-          <button type="button" data-search="майстор за баня">Майстор за баня</button>
-          <button type="button" data-search="зъболекар">Зъболекар</button>
-          <button type="button" data-search="автосервиз">Автосервиз</button>
-          <button type="button" data-search="аптека">Аптека</button>
-          <button type="button" data-search="работа">Работа</button>
-        </div>
+          <p class="hero-cover-lead">
+            Препоръки, местни услуги и полезна информация от хората в Лом.
+          </p>
 
-        <div class="hero-actions">
-          <a class="secondary-action" href="kategorii.html">Разгледай категориите</a>
-          <a class="text-action" href="nov-vapros.html">
-            Не намираш отговор? Задай въпрос
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M5 12h14M13 6l6 6-6 6"/>
-            </svg>
-          </a>
+          <p class="hero-cover-support">
+            Търсиш майстор, лекар, магазин или съвет? Питай тук – хората помагат.
+          </p>
+
+          <form class="search-form hero-cover-search" id="search-form" role="search">
+            <label class="visually-hidden" for="main-search">Търси в Попитай.Лом</label>
+
+            <div class="search-field-wrap">
+              <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m20 20-4-4"></path>
+              </svg>
+
+              <input
+                id="main-search"
+                name="q"
+                type="search"
+                autocomplete="off"
+                placeholder="Какво търсиш в Лом?"
+                aria-describedby="search-help"
+                aria-controls="search-suggestions"
+                aria-autocomplete="list"
+              >
+
+              <button class="clear-search" id="clear-search" type="button" aria-label="Изчисти търсенето">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M6 6l12 12M18 6 6 18"></path>
+                </svg>
+              </button>
+
+              <button class="search-button" type="submit">Търси</button>
+            </div>
+
+            <div class="search-suggestions" id="search-suggestions" role="listbox" hidden></div>
+            <p id="search-help">Търси въпроси, фирми, услуги и категории.</p>
+          </form>
+
+          <div class="hero-cover-actions">
+            <a class="hero-cover-primary" href="nov-vapros.html">Задай въпрос</a>
+            <a class="hero-cover-secondary" href="kategorii.html">Разгледай категориите</a>
+          </div>
+
+          <div class="popular-searches hero-cover-popular" aria-label="Популярни търсения">
+            <span>Популярни:</span>
+            <button type="button" data-search="майстор за баня">Майстор за баня</button>
+            <button type="button" data-search="зъболекар">Зъболекар</button>
+            <button type="button" data-search="автосервиз">Автосервиз</button>
+            <button type="button" data-search="работа">Работа</button>
+          </div>
         </div>
       </div>
     </section>
@@ -518,11 +538,8 @@
       <div class="footer-brand">
         <a class="brand footer-logo" href="index.html" aria-label="Попитай Лом – начало">
           <span class="brand-mark" aria-hidden="true">
-            <svg viewBox="0 0 64 64">
-              <path d="M14 12h36a8 8 0 0 1 8 8v22a8 8 0 0 1-8 8H31l-13 9v-9h-4a8 8 0 0 1-8-8V20a8 8 0 0 1 8-8Z"/>
-              <path d="M22 26h20M22 36h13"/>
-            </svg>
-          </span>
+          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
+        </span>
           <span class="brand-text">
             <strong>Попитай<span>.Лом</span></strong>
             <small>Попитай. Намери. Препоръчай.</small>
