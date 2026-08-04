@@ -42,62 +42,33 @@
   </header>
 
 <main id="main-content">
+
 <section class="page-hero">
   <div class="section-container">
     <span class="section-kicker">Местен бизнес</span>
     <h1>Фирми</h1>
-    <p>Открий местни фирми, услуги, телефони и реални мнения.</p>
+    <p>Тук се показват само реално добавените фирмени профили.</p>
     <a class="primary-link-button" href="dobavi-firma.html">Добави фирма</a>
   </div>
 </section>
 
 <section class="content-section">
   <div class="section-container two-column-layout">
-    <div class="stack-list">
-    <article class="business-list-card">
-      <div class="firm-logo">ИР</div>
-      <div class="business-main">
-        <div class="firm-title-row"><h2><a href="firma.html">Иванов Ремонти</a></h2><span class="verified-badge">Проверена</span></div>
-        <span class="question-category">Майстори и ремонти</span>
-        <p>Цялостни ремонти, бани, боядисване и довършителни работи.</p>
-        <div class="firm-footer"><span class="rating"><strong>4.9</strong><span>★★★★★</span><small>18 мнения</small></span><a href="firma.html">Виж профила</a></div>
-      </div>
-    </article>
-    <article class="business-list-card">
-      <div class="firm-logo">АС</div>
-      <div class="business-main">
-        <div class="firm-title-row"><h2><a href="firma.html">Автосервиз Север</a></h2><span class="verified-badge">Проверена</span></div>
-        <span class="question-category">Автомобили</span>
-        <p>Диагностика, ходова част, масла и сезонно обслужване.</p>
-        <div class="firm-footer"><span class="rating"><strong>4.8</strong><span>★★★★★</span><small>27 мнения</small></span><a href="firma.html">Виж профила</a></div>
-      </div>
-    </article>
-    <article class="business-list-card">
-      <div class="firm-logo">ДС</div>
-      <div class="business-main">
-        <div class="firm-title-row"><h2><a href="firma.html">Дентално студио Лом</a></h2><span class="verified-badge">Проверена</span></div>
-        <span class="question-category">Здраве и лекари</span>
-        <p>Профилактика, лечение и детска стоматология.</p>
-        <div class="firm-footer"><span class="rating"><strong>4.9</strong><span>★★★★★</span><small>34 мнения</small></span><a href="firma.html">Виж профила</a></div>
-      </div>
-    </article>
-    <article class="business-list-card">
-      <div class="firm-logo">ДС</div>
-      <div class="business-main">
-        <div class="firm-title-row"><h2><a href="firma.html">Дом и Стил</a></h2><span class="verified-badge">Проверена</span></div>
-        <span class="question-category">Магазини и покупки</span>
-        <p>Материали за ремонт, инструменти и домашни потреби.</p>
-        <div class="firm-footer"><span class="rating"><strong>4.7</strong><span>★★★★★</span><small>16 мнения</small></span><a href="firma.html">Виж профила</a></div>
-      </div>
-    </article></div>
+    <div class="stack-list" id="businesses-list">
+      <article class="empty-card">
+        <h2>Все още няма добавени фирми</h2>
+        <p>Няма измислени профили, оценки или мнения.</p>
+        <a class="primary-link-button" href="dobavi-firma.html">Добави първата фирма</a>
+      </article>
+    </div>
     <aside class="side-panel">
-      <h2>Филтри</h2>
-      <label>Категория<select><option>Всички категории</option><option value="Майстори и ремонти">Майстори и ремонти</option><option value="Здраве и лекари">Здраве и лекари</option><option value="Автомобили">Автомобили</option><option value="Магазини и покупки">Магазини и покупки</option><option value="Заведения">Заведения</option><option value="Работа и услуги">Работа и услуги</option><option value="Обяви">Обяви</option><option value="Събития и град">Събития и град</option></select></label>
-      <label>Подреждане<select><option>Най-висока оценка</option><option>Най-много мнения</option></select></label>
-      <button class="form-submit" type="button">Приложи</button>
+      <h2>Важно</h2>
+      <p>Новите фирми се записват със статус „Чака преглед“. Знак за проверка няма да се показва без реална проверка.</p>
+      <a href="dobavi-firma.html">Добави фирмен профил</a>
     </aside>
   </div>
 </section>
+
 </main>
 
   <footer class="site-footer">
@@ -145,6 +116,7 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
   </button>
 
-<script src="script.js"></script>
+<script src="image-upload.js" defer></script>
+  <script src="script.js" defer></script>
 </body>
 </html>

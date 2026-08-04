@@ -45,7 +45,7 @@
 <section class="page-hero">
   <div class="section-container">
     <span class="section-kicker">Категория</span>
-    <h1>Обяви</h1>
+    <div class="page-hero-title-row"><span class="category-symbol category-symbol--teal" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 11v2M7 9.5v5"/><path d="M7 10l10-4v12l-10-4Z"/><path d="M7 14l2.2 5"/></svg></span><h1>Обяви</h1></div>
     <p>Купува, продава, подарява, наема и търси.</p>
     <a class="primary-link-button" href="nov-vapros.html?category=obyavi">Задай въпрос</a>
   </div>
@@ -57,12 +57,12 @@
       <div class="block-heading"><h2>Подраздели</h2></div>
       <div class="subcategory-grid"><a class="subcategory-card" href="tarsene.html?q=Продавам"><strong>Продавам</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Купувам"><strong>Купувам</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Подарявам"><strong>Подарявам</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Наеми"><strong>Наеми</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Имоти"><strong>Имоти</strong><span>Въпроси и фирми</span></a></div>
       <div class="block-heading spaced"><h2>Последни въпроси</h2><a href="vaprosi.html">Всички въпроси</a></div>
-      <div class="stack-list">
+      <div class="stack-list category-question-list" data-question-category="Обяви">
         <article class="empty-card">
-          <h3>Все още няма публикувани въпроси</h3>
-          <p>Бъди първият, който ще зададе въпрос в тази категория.</p>
-          <a class="primary-link-button" href="nov-vapros.html">Задай въпрос</a>
-        </article></div>
+          <p>Все още няма публикувани въпроси в тази категория.</p>
+          <a class="primary-link-button" href="nov-vapros.html?category=obyavi">Задай въпрос</a>
+        </article>
+      </div>
     </div>
     <aside class="side-panel">
       <h2>Търси в категорията</h2>
@@ -123,6 +123,7 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
   </button>
 
-<script src="script.js"></script>
+<script src="image-upload.js" defer></script>
+  <script src="script.js" defer></script>
 </body>
 </html>

@@ -42,11 +42,12 @@
   </header>
 
 <main id="main-content">
+
 <section class="page-hero">
   <div class="section-container">
     <span class="section-kicker">Разговори от общността</span>
     <h1>Въпроси</h1>
-    <p>Разгледай последните въпроси или публикувай свой.</p>
+    <p>Разгледай реално публикуваните въпроси или задай свой.</p>
     <a class="primary-link-button" href="nov-vapros.html">Задай въпрос</a>
   </div>
 </section>
@@ -55,59 +56,16 @@
   <div class="section-container two-column-layout">
     <div>
       <div class="filter-bar">
-        <button class="filter-chip active" type="button">Последни</button>
-        <button class="filter-chip" type="button">Популярни</button>
-        <button class="filter-chip" type="button">Без отговор</button>
+        <button class="filter-chip active" type="button" data-question-filter="all">Всички</button>
+        <button class="filter-chip" type="button" data-question-filter="unanswered">Без отговор</button>
+        <button class="filter-chip" type="button" data-question-filter="answered">С отговор</button>
       </div>
       <div class="stack-list" id="questions-list">
-    <article class="list-card question-list-card">
-      <div>
-        <span class="question-category">Майстори и ремонти</span>
-        <h2><a href="vapros.html">Кой препоръчва добър майстор за ремонт на баня?</a></h2>
-        <p>Търся човек за цялостен ремонт на малка баня в Лом.</p>
+        <article class="empty-card">
+          <h2>Все още няма публикувани въпроси</h2>
+          <p>Използвай бутона „Задай въпрос“, за да провериш публикуването.</p>
+        </article>
       </div>
-      <div class="list-card-meta"><strong>8</strong><span>отговора</span></div>
-    </article>
-    <article class="list-card question-list-card">
-      <div>
-        <span class="question-category">Здраве и лекари</span>
-        <h2><a href="vapros.html">Кой зъболекар в Лом работи добре с деца?</a></h2>
-        <p>Търся внимателен специалист за първо посещение на дете.</p>
-      </div>
-      <div class="list-card-meta"><strong>3</strong><span>отговора</span></div>
-    </article>
-    <article class="list-card question-list-card">
-      <div>
-        <span class="question-category">Автомобили</span>
-        <h2><a href="vapros.html">Къде правят качествена диагностика на автомобил?</a></h2>
-        <p>Търся сервиз с добра диагностика и коректно отношение.</p>
-      </div>
-      <div class="list-card-meta"><strong>6</strong><span>отговора</span></div>
-    </article>
-    <article class="list-card question-list-card">
-      <div>
-        <span class="question-category">Работа и услуги</span>
-        <h2><a href="vapros.html">Има ли свободни места за продавач-консултант?</a></h2>
-        <p>Интересувам се от работа на пълен ден в Лом.</p>
-      </div>
-      <div class="list-card-meta"><strong>2</strong><span>отговора</span></div>
-    </article>
-    <article class="list-card question-list-card">
-      <div>
-        <span class="question-category">Магазини и покупки</span>
-        <h2><a href="vapros.html">Къде има добри строителни материали на нормални цени?</a></h2>
-        <p>Търся плочки, лепила и санитария.</p>
-      </div>
-      <div class="list-card-meta"><strong>5</strong><span>отговора</span></div>
-    </article>
-    <article class="list-card question-list-card">
-      <div>
-        <span class="question-category">Заведения</span>
-        <h2><a href="vapros.html">Кое заведение е подходящо за семеен празник?</a></h2>
-        <p>Търся спокойно място за около 15 души.</p>
-      </div>
-      <div class="list-card-meta"><strong>4</strong><span>отговора</span></div>
-    </article></div>
     </div>
     <aside class="side-panel">
       <h2>Намери въпрос</h2>
@@ -115,12 +73,13 @@
         <input type="search" name="q" placeholder="Търси въпрос">
         <button type="submit">Търси</button>
       </form>
-      <h2>Правила</h2>
-      <p>Пиши ясно, без обиди и без лични данни.</p>
-      <a href="pravila.html">Прочети правилата</a>
+      <h2>Тест на функциите</h2>
+      <p>Тестови записи могат да се добавят само от административната страница и се пазят само на твоето устройство.</p>
+      <a href="admin.html">Отвори тестовия панел</a>
     </aside>
   </div>
 </section>
+
 </main>
 
   <footer class="site-footer">
@@ -168,6 +127,7 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
   </button>
 
-<script src="script.js"></script>
+<script src="image-upload.js" defer></script>
+  <script src="script.js" defer></script>
 </body>
 </html>

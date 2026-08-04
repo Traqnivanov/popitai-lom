@@ -91,7 +91,7 @@
               name="q"
               type="search"
               autocomplete="off"
-              placeholder="Например: добър майстор за баня"
+              placeholder="Какво търсиш в Лом?"
               aria-describedby="search-help"
               aria-controls="search-suggestions"
               aria-autocomplete="list"
@@ -411,89 +411,20 @@
           <div>
             <span class="section-kicker">Ново от общността</span>
             <h2 id="latest-questions-title">Последни въпроси</h2>
-            <p>Реални въпроси от хора в Лом, подредени ясно и лесно за преглед.</p>
+            <p>Тук ще се показват реално публикуваните въпроси.</p>
           </div>
-
           <a class="all-categories-link" href="vaprosi.html">
             Виж всички въпроси
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M5 12h14M13 6l6 6-6 6"/>
-            </svg>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
         </div>
 
-        <div class="questions-grid">
-          <article class="question-card">
-            <div class="question-card-top">
-              <span class="question-category">Майстори и ремонти</span>
-              <span class="question-status answered">Има отговор</span>
-            </div>
-            <h3><a href="vapros.html">Кой препоръчва добър майстор за ремонт на баня?</a></h3>
-            <p>Търся човек за цялостен ремонт на малка баня в Лом. Интересуват ме реални препоръки.</p>
-            <div class="question-meta">
-              <span>
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg>
-                8 отговора
-              </span>
-              <span>преди 18 минути</span>
-            </div>
+        <div class="questions-grid" id="home-questions">
+          <article class="empty-card empty-card-wide">
+            <h3>Все още няма публикувани въпроси</h3>
+            <p>Първият реален въпрос ще се появи тук.</p>
+            <a class="primary-link-button" href="nov-vapros.html">Задай първия въпрос</a>
           </article>
-
-          <article class="question-card">
-            <div class="question-card-top">
-              <span class="question-category">Здраве и лекари</span>
-              <span class="question-status new">Нов въпрос</span>
-            </div>
-            <h3><a href="vapros.html">Кой зъболекар в Лом работи добре с деца?</a></h3>
-            <p>Търся спокоен и внимателен специалист за първо посещение на дете.</p>
-            <div class="question-meta">
-              <span>
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg>
-                3 отговора
-              </span>
-              <span>преди 42 минути</span>
-            </div>
-          </article>
-
-          <article class="question-card">
-            <div class="question-card-top">
-              <span class="question-category">Автомобили</span>
-              <span class="question-status answered">Има отговор</span>
-            </div>
-            <h3><a href="vapros.html">Къде правят качествена диагностика на автомобил?</a></h3>
-            <p>Търся сервиз с добра диагностика и коректно отношение към клиента.</p>
-            <div class="question-meta">
-              <span>
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg>
-                6 отговора
-              </span>
-              <span>преди 1 час</span>
-            </div>
-          </article>
-
-          <article class="question-card">
-            <div class="question-card-top">
-              <span class="question-category">Работа и услуги</span>
-              <span class="question-status new">Нов въпрос</span>
-            </div>
-            <h3><a href="vapros.html">Има ли свободни места за продавач-консултант?</a></h3>
-            <p>Интересувам се от работа на пълен ден в Лом и района.</p>
-            <div class="question-meta">
-              <span>
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg>
-                2 отговора
-              </span>
-              <span>преди 2 часа</span>
-            </div>
-          </article>
-        </div>
-
-        <div class="questions-cta">
-          <div>
-            <strong>Не намираш отговор?</strong>
-            <span>Задай въпрос и местната общност ще ти помогне.</span>
-          </div>
-          <a href="nov-vapros.html">Задай въпрос</a>
         </div>
       </div>
     </section>
@@ -503,96 +434,25 @@
         <div class="section-heading">
           <div>
             <span class="section-kicker">Местен бизнес</span>
-            <h2 id="verified-firms-title">Проверени фирми</h2>
-            <p>Профили с потвърдени данни, ясни услуги и реални мнения.</p>
+            <h2 id="verified-firms-title">Местни фирми</h2>
+            <p>Показват се само добавени профили. Няма измислени оценки или знак „Проверена“.</p>
           </div>
-
           <a class="all-categories-link" href="firmi.html">
-            Виж всички фирми
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M5 12h14M13 6l6 6-6 6"/>
-            </svg>
+            Виж фирмите
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
         </div>
 
-        <div class="firms-grid">
-          <article class="firm-card">
-            <div class="firm-logo">ИР</div>
-            <div class="firm-content">
-              <div class="firm-title-row">
-                <h3><a href="firma.html">Иванов Ремонти</a></h3>
-                <span class="verified-badge" title="Проверена фирма">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 12 2 2 4-5"/><circle cx="12" cy="12" r="9"/></svg>
-                  Проверена
-                </span>
-              </div>
-              <p>Цялостни ремонти, бани, боядисване и довършителни работи.</p>
-              <div class="firm-tags">
-                <span>Ремонти</span><span>Бани</span><span>Боядисване</span>
-              </div>
-              <div class="firm-footer">
-                <span class="rating" aria-label="Оценка 4.9 от 5">
-                  <strong>4.9</strong>
-                  <span aria-hidden="true">★★★★★</span>
-                  <small>18 мнения</small>
-                </span>
-                <a href="firma.html">Виж профила</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="firm-card">
-            <div class="firm-logo">АС</div>
-            <div class="firm-content">
-              <div class="firm-title-row">
-                <h3><a href="firma.html">Автосервиз Север</a></h3>
-                <span class="verified-badge" title="Проверена фирма">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 12 2 2 4-5"/><circle cx="12" cy="12" r="9"/></svg>
-                  Проверена
-                </span>
-              </div>
-              <p>Диагностика, ходова част, масла и сезонно обслужване.</p>
-              <div class="firm-tags">
-                <span>Диагностика</span><span>Сервиз</span><span>Гуми</span>
-              </div>
-              <div class="firm-footer">
-                <span class="rating" aria-label="Оценка 4.8 от 5">
-                  <strong>4.8</strong>
-                  <span aria-hidden="true">★★★★★</span>
-                  <small>27 мнения</small>
-                </span>
-                <a href="firma.html">Виж профила</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="firm-card">
-            <div class="firm-logo">ДС</div>
-            <div class="firm-content">
-              <div class="firm-title-row">
-                <h3><a href="firma.html">Дентално студио Лом</a></h3>
-                <span class="verified-badge" title="Проверена фирма">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 12 2 2 4-5"/><circle cx="12" cy="12" r="9"/></svg>
-                  Проверена
-                </span>
-              </div>
-              <p>Профилактика, лечение и детска стоматология.</p>
-              <div class="firm-tags">
-                <span>Зъболекар</span><span>Деца</span><span>Профилактика</span>
-              </div>
-              <div class="firm-footer">
-                <span class="rating" aria-label="Оценка 4.9 от 5">
-                  <strong>4.9</strong>
-                  <span aria-hidden="true">★★★★★</span>
-                  <small>34 мнения</small>
-                </span>
-                <a href="firma.html">Виж профила</a>
-              </div>
-            </div>
+        <div class="firms-grid" id="home-businesses">
+          <article class="empty-card empty-card-wide">
+            <h3>Все още няма добавени фирми</h3>
+            <p>След добавяне и преглед фирмените профили ще се появяват тук.</p>
+            <a class="primary-link-button" href="dobavi-firma.html">Добави фирма</a>
           </article>
         </div>
       </div>
     </section>
+
 
     <section class="articles-section" aria-labelledby="articles-title">
       <div class="section-container">
@@ -730,6 +590,7 @@
   </button>
 
 
-  <script src="script.js"></script>
+  <script src="image-upload.js" defer></script>
+  <script src="script.js" defer></script>
 </body>
 </html>

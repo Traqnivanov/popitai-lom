@@ -65,6 +65,27 @@
       <label for="question-description">Описание</label>
       <textarea id="question-description" name="description" rows="8" required minlength="20" placeholder="Добави подробности, за да получиш по-точен отговор"></textarea>
 
+
+      <section class="image-uploader" id="question-image-uploader" data-max-files="6" data-max-mb="10" data-quality="0.82" data-widths="480,960,1600" data-role="gallery">
+        <div class="image-uploader-heading">
+          <div>
+            <h2>Снимки към въпроса (по желание)</h2>
+            <p>До 6 снимки. Създават се версии 480, 960 и 1600 px, без уголемяване на малките снимки.</p>
+          </div>
+          <span data-image-count>0 / 6</span>
+        </div>
+        <label class="image-dropzone" data-image-dropzone>
+          <input type="file" accept="image/jpeg,image/png,image/webp" multiple>
+          <span class="image-dropzone-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg>
+          </span>
+          <strong>Избери снимки</strong>
+          <small>или ги плъзни тук · JPG, PNG или WebP · до 10 MB всяка</small>
+        </label>
+        <p class="image-upload-status" data-image-status aria-live="polite"></p>
+        <div class="image-preview-grid" data-image-preview></div>
+      </section>
+
       <label class="check-row"><input type="checkbox" required> Прочетох и приемам <a href="pravila.html">правилата на общността</a>.</label>
       <button class="form-submit" type="submit">Публикувай въпроса</button>
       <p class="form-message" id="new-question-message"></p>
@@ -118,6 +139,7 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
   </button>
 
-<script src="script.js"></script>
+<script src="image-upload.js" defer></script>
+  <script src="script.js" defer></script>
 </body>
 </html>

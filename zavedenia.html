@@ -45,7 +45,7 @@
 <section class="page-hero">
   <div class="section-container">
     <span class="section-kicker">Категория</span>
-    <h1>Заведения</h1>
+    <div class="page-hero-title-row"><span class="category-symbol category-symbol--rose" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3v8M8 3v8M5 7h3M6.5 11v10"/><path d="M14 3v18M14 3c2.5 0 4 2 4 4s-1.5 4-4 4"/></svg></span><h1>Заведения</h1></div>
     <p>Ресторанти, кафенета, пицарии, сладкарници и доставки.</p>
     <a class="primary-link-button" href="nov-vapros.html?category=zavedenia">Задай въпрос</a>
   </div>
@@ -57,13 +57,12 @@
       <div class="block-heading"><h2>Подраздели</h2></div>
       <div class="subcategory-grid"><a class="subcategory-card" href="tarsene.html?q=Ресторанти"><strong>Ресторанти</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Кафенета"><strong>Кафенета</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Пицарии"><strong>Пицарии</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Сладкарници"><strong>Сладкарници</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Доставка на храна"><strong>Доставка на храна</strong><span>Въпроси и фирми</span></a></div>
       <div class="block-heading spaced"><h2>Последни въпроси</h2><a href="vaprosi.html">Всички въпроси</a></div>
-      <div class="stack-list">
-        <article class="compact-card">
-          <span class="question-category">Заведения</span>
-          <h3><a href="vapros.html">Кое заведение е подходящо за семеен празник?</a></h3>
-          <p>Търся спокойно място за около 15 души.</p>
-          <small>4 отговора</small>
-        </article></div>
+      <div class="stack-list category-question-list" data-question-category="Заведения">
+        <article class="empty-card">
+          <p>Все още няма публикувани въпроси в тази категория.</p>
+          <a class="primary-link-button" href="nov-vapros.html?category=zavedenia">Задай въпрос</a>
+        </article>
+      </div>
     </div>
     <aside class="side-panel">
       <h2>Търси в категорията</h2>
@@ -124,6 +123,7 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
   </button>
 
-<script src="script.js"></script>
+<script src="image-upload.js" defer></script>
+  <script src="script.js" defer></script>
 </body>
 </html>

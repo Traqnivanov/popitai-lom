@@ -45,7 +45,7 @@
 <section class="page-hero">
   <div class="section-container">
     <span class="section-kicker">Категория</span>
-    <h1>Магазини и покупки</h1>
+    <div class="page-hero-title-row"><span class="category-symbol category-symbol--sand" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 7h12l-1 12H7L6 7Z"/><path d="M9 7a3 3 0 1 1 6 0"/></svg></span><h1>Магазини и покупки</h1></div>
     <p>Местни магазини, материали, техника, мебели и ежедневни покупки.</p>
     <a class="primary-link-button" href="nov-vapros.html?category=magazini">Задай въпрос</a>
   </div>
@@ -57,13 +57,12 @@
       <div class="block-heading"><h2>Подраздели</h2></div>
       <div class="subcategory-grid"><a class="subcategory-card" href="tarsene.html?q=Хранителни"><strong>Хранителни</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Строителни"><strong>Строителни</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Техника"><strong>Техника</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Мебели"><strong>Мебели</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Облекло"><strong>Облекло</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Домашни потреби"><strong>Домашни потреби</strong><span>Въпроси и фирми</span></a></div>
       <div class="block-heading spaced"><h2>Последни въпроси</h2><a href="vaprosi.html">Всички въпроси</a></div>
-      <div class="stack-list">
-        <article class="compact-card">
-          <span class="question-category">Магазини и покупки</span>
-          <h3><a href="vapros.html">Къде има добри строителни материали на нормални цени?</a></h3>
-          <p>Търся плочки, лепила и санитария.</p>
-          <small>5 отговора</small>
-        </article></div>
+      <div class="stack-list category-question-list" data-question-category="Магазини и покупки">
+        <article class="empty-card">
+          <p>Все още няма публикувани въпроси в тази категория.</p>
+          <a class="primary-link-button" href="nov-vapros.html?category=magazini">Задай въпрос</a>
+        </article>
+      </div>
     </div>
     <aside class="side-panel">
       <h2>Търси в категорията</h2>
@@ -124,6 +123,7 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
   </button>
 
-<script src="script.js"></script>
+<script src="image-upload.js" defer></script>
+  <script src="script.js" defer></script>
 </body>
 </html>

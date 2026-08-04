@@ -42,43 +42,50 @@
   </header>
 
 <main id="main-content">
-<section class="page-hero">
+
+<section class="page-hero" id="business-page-hero">
   <div class="section-container">
-    <span class="section-kicker">Проверена фирма</span>
-    <h1>Иванов Ремонти</h1>
-    <p>Цялостни ремонти, бани, боядисване и довършителни работи в Лом и района.</p>
-    <a class="primary-link-button" href="tel:+359000000000">Обади се</a>
+    <span class="section-kicker">Фирмен профил</span>
+    <h1 id="business-detail-name">Зареждане…</h1>
+    <p id="business-detail-summary"></p>
   </div>
 </section>
 
 <section class="content-section">
   <div class="section-container two-column-layout">
     <div>
-      <article class="company-profile">
+      <article class="company-profile" id="business-detail-card">
         <div class="company-summary">
-          <div class="firm-logo large">ИР</div>
-          <div><span class="verified-badge">Проверена фирма</span><div class="rating company-rating"><strong>4.9</strong><span>★★★★★</span><small>18 мнения</small></div></div>
+          <div class="business-logo-wrap">
+            <div class="firm-logo large" id="business-detail-logo">Ф</div>
+            <div class="business-logo-image" id="business-detail-logo-image" hidden></div>
+          </div>
+          <div>
+            <span class="pending-badge" id="business-detail-status">Чака преглед</span>
+            <p id="business-detail-category"></p>
+          </div>
         </div>
         <h2>За фирмата</h2>
-        <p>Извършваме цялостни ремонти на жилища, бани, кухни, боядисване, шпакловка и довършителни дейности.</p>
-        <h2>Услуги</h2>
-        <div class="service-grid"><span>Цялостни ремонти</span><span>Бани</span><span>Боядисване</span><span>Шпакловка</span><span>Плочки</span><span>Довършителни работи</span></div>
-        <h2>Снимки</h2>
-        <div class="photo-placeholder-grid"><div>Снимка 1</div><div>Снимка 2</div><div>Снимка 3</div></div>
-        <h2>Мнения</h2>
-        <article class="answer-card"><div class="author-row"><div class="avatar">М</div><div><strong>Мария П.</strong><span>Оценка 5/5</span></div></div><p>Коректна работа и добра комуникация. Срокът беше спазен.</p></article>
+        <p id="business-detail-description"></p>
+        <div class="media-gallery business-gallery" id="business-gallery" hidden aria-label="Снимки на фирмата"></div>
+      </article>
+
+      <article class="empty-card" id="business-not-found" hidden>
+        <h2>Фирмата не е намерена</h2>
+        <p>Профилът може да е изтрит или адресът да е непълен.</p>
+        <a class="primary-link-button" href="firmi.html">Към фирмите</a>
       </article>
     </div>
-    <aside class="side-panel contact-panel">
+
+    <aside class="side-panel contact-panel" id="business-contact-panel">
       <h2>Контакти</h2>
-      <p><strong>Телефон</strong><br><a href="tel:+359000000000">+359 00 000 0000</a></p>
-      <p><strong>Работно време</strong><br>Понеделник – Събота<br>08:00 – 18:00</p>
-      <p><strong>Обслужван район</strong><br>Лом и околността</p>
-      <a class="primary-link-button full" href="tel:+359000000000">Обади се</a>
-      <a class="secondary-link-button full" href="kontakti.html">Изпрати запитване</a>
+      <p><strong>Телефон</strong><br><a id="business-detail-phone" href="#"></a></p>
+      <p><strong>Статус</strong><br>Чака административен преглед</p>
+      <a class="secondary-link-button full" href="signal.html">Подай сигнал</a>
     </aside>
   </div>
 </section>
+
 </main>
 
   <footer class="site-footer">
@@ -126,6 +133,7 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
   </button>
 
-<script src="script.js"></script>
+<script src="image-upload.js" defer></script>
+  <script src="script.js" defer></script>
 </body>
 </html>

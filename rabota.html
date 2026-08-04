@@ -45,7 +45,7 @@
 <section class="page-hero">
   <div class="section-container">
     <span class="section-kicker">Категория</span>
-    <h1>Работа и услуги</h1>
+    <div class="page-hero-title-row"><span class="category-symbol category-symbol--violet" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 8h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8Z"/><path d="M9 8V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M3 13h18"/></svg></span><h1>Работа и услуги</h1></div>
     <p>Обяви за работа и услуги, предлагани от местни хора.</p>
     <a class="primary-link-button" href="nov-vapros.html?category=rabota">Задай въпрос</a>
   </div>
@@ -57,13 +57,12 @@
       <div class="block-heading"><h2>Подраздели</h2></div>
       <div class="subcategory-grid"><a class="subcategory-card" href="tarsene.html?q=Предлагам работа"><strong>Предлагам работа</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Търся работа"><strong>Търся работа</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Почасова работа"><strong>Почасова работа</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Домашни услуги"><strong>Домашни услуги</strong><span>Въпроси и фирми</span></a></div>
       <div class="block-heading spaced"><h2>Последни въпроси</h2><a href="vaprosi.html">Всички въпроси</a></div>
-      <div class="stack-list">
-        <article class="compact-card">
-          <span class="question-category">Работа и услуги</span>
-          <h3><a href="vapros.html">Има ли свободни места за продавач-консултант?</a></h3>
-          <p>Интересувам се от работа на пълен ден в Лом.</p>
-          <small>2 отговора</small>
-        </article></div>
+      <div class="stack-list category-question-list" data-question-category="Работа и услуги">
+        <article class="empty-card">
+          <p>Все още няма публикувани въпроси в тази категория.</p>
+          <a class="primary-link-button" href="nov-vapros.html?category=rabota">Задай въпрос</a>
+        </article>
+      </div>
     </div>
     <aside class="side-panel">
       <h2>Търси в категорията</h2>
@@ -124,6 +123,7 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
   </button>
 
-<script src="script.js"></script>
+<script src="image-upload.js" defer></script>
+  <script src="script.js" defer></script>
 </body>
 </html>

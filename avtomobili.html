@@ -45,7 +45,7 @@
 <section class="page-hero">
   <div class="section-container">
     <span class="section-kicker">Категория</span>
-    <h1>Автомобили</h1>
+    <div class="page-hero-title-row"><span class="category-symbol category-symbol--slate" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 14h18"/><path d="M5 14l1.5-4.5A2 2 0 0 1 8.4 8h7.2a2 2 0 0 1 1.9 1.5L19 14"/><path d="M6 18h.01M18 18h.01"/><path d="M4 14v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg></span><h1>Автомобили</h1></div>
     <p>Сервизи, гуми, части, автомивки и пътна помощ.</p>
     <a class="primary-link-button" href="nov-vapros.html?category=avtomobili">Задай въпрос</a>
   </div>
@@ -57,13 +57,12 @@
       <div class="block-heading"><h2>Подраздели</h2></div>
       <div class="subcategory-grid"><a class="subcategory-card" href="tarsene.html?q=Автосервизи"><strong>Автосервизи</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Диагностика"><strong>Диагностика</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Гуми"><strong>Гуми</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Авточасти"><strong>Авточасти</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Автомивки"><strong>Автомивки</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Пътна помощ"><strong>Пътна помощ</strong><span>Въпроси и фирми</span></a></div>
       <div class="block-heading spaced"><h2>Последни въпроси</h2><a href="vaprosi.html">Всички въпроси</a></div>
-      <div class="stack-list">
-        <article class="compact-card">
-          <span class="question-category">Автомобили</span>
-          <h3><a href="vapros.html">Къде правят качествена диагностика на автомобил?</a></h3>
-          <p>Търся сервиз с добра диагностика и коректно отношение.</p>
-          <small>6 отговора</small>
-        </article></div>
+      <div class="stack-list category-question-list" data-question-category="Автомобили">
+        <article class="empty-card">
+          <p>Все още няма публикувани въпроси в тази категория.</p>
+          <a class="primary-link-button" href="nov-vapros.html?category=avtomobili">Задай въпрос</a>
+        </article>
+      </div>
     </div>
     <aside class="side-panel">
       <h2>Търси в категорията</h2>
@@ -124,6 +123,7 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
   </button>
 
-<script src="script.js"></script>
+<script src="image-upload.js" defer></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
