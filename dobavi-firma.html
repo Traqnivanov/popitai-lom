@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Добави фирма | Попитай.Лом</title>
-  <meta name="description" content="Добавяне на фирмен профил.">
+  <title>Бисквитки | Попитай.Лом</title>
+  <meta name="description" content="Информация за използваните бисквитки.">
   <meta name="theme-color" content="#0b5fd7">
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="assets/favicon-96.png" type="image/png">
 </head>
 <body class="">
 
@@ -16,10 +17,7 @@
       
       <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
         <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 64 64">
-            <path d="M14 12h36a8 8 0 0 1 8 8v22a8 8 0 0 1-8 8H31l-13 9v-9h-4a8 8 0 0 1-8-8V20a8 8 0 0 1 8-8Z"/>
-            <path d="M22 26h20M22 36h13"/>
-          </svg>
+          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
         </span>
         <span class="brand-text">
           <strong>Попитай<span>.Лом</span></strong>
@@ -27,7 +25,7 @@
         </span>
       </a>
     
-      <nav class="main-nav" id="main-nav" aria-label="Главна навигация"><a class="" href="index.html">Начало</a><a class="" href="kategorii.html">Категории</a><a class="active" href="firmi.html">Фирми</a><a class="" href="vaprosi.html">Въпроси</a><a class="" href="statii.html">Статии</a></nav>
+      <nav class="main-nav" id="main-nav" aria-label="Главна навигация"><a class="" href="index.html">Начало</a><a class="" href="kategorii.html">Категории</a><a class="" href="firmi.html">Фирми</a><a class="" href="vaprosi.html">Въпроси</a><a class="" href="statii.html">Статии</a></nav>
       <div class="header-actions">
         <a class="login-link" href="vhod.html">Вход</a>
         <a class="ask-button" href="nov-vapros.html">
@@ -44,66 +42,14 @@
 <main id="main-content">
 <section class="page-hero">
   <div class="section-container">
-    <span class="section-kicker">Местен бизнес</span>
-    <h1>Добави фирма</h1>
-    <p>Създай безплатен основен профил. Данните ще бъдат прегледани преди публикуване.</p>
+    <span class="section-kicker">Информация</span>
+    <h1>Бисквитки</h1>
+    <p>Информация за използваните бисквитки.</p>
     
   </div>
 </section>
 
-<section class="content-section">
-  <div class="section-container form-page">
-    <form class="content-form large-form" id="company-form">
-      <label for="company-name">Име на фирмата</label><input id="company-name" required>
-      <label for="company-category">Категория</label><select id="company-category" required><option value="">Избери</option><option value="Майстори и ремонти">Майстори и ремонти</option><option value="Здраве и лекари">Здраве и лекари</option><option value="Автомобили">Автомобили</option><option value="Магазини и покупки">Магазини и покупки</option><option value="Заведения">Заведения</option><option value="Работа и услуги">Работа и услуги</option><option value="Обяви">Обяви</option><option value="Събития и град">Събития и град</option></select>
-      <label for="company-phone">Телефон</label><input id="company-phone" type="tel" required>
-      <label for="company-description">Описание</label><textarea id="company-description" rows="7" required></textarea>
-
-      <section class="image-uploader" id="company-logo-uploader" data-max-files="1" data-max-mb="10" data-quality="0.82" data-widths="256,512,1024" data-role="logo">
-        <div class="image-uploader-heading">
-          <div>
-            <h2>Лого (по желание)</h2>
-            <p>Една снимка. За най-добър резултат използвай квадратно лого.</p>
-          </div>
-          <span data-image-count>0 / 1</span>
-        </div>
-        <label class="image-dropzone" data-image-dropzone>
-          <input type="file" accept="image/jpeg,image/png,image/webp">
-          <span class="image-dropzone-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg>
-          </span>
-          <strong>Избери снимки</strong>
-          <small>или ги плъзни тук · JPG, PNG или WebP · до 10 MB всяка</small>
-        </label>
-        <p class="image-upload-status" data-image-status aria-live="polite"></p>
-        <div class="image-preview-grid" data-image-preview></div>
-      </section>
-
-      <section class="image-uploader" id="company-gallery-uploader" data-max-files="15" data-max-mb="10" data-quality="0.82" data-widths="480,960,1600" data-role="gallery">
-        <div class="image-uploader-heading">
-          <div>
-            <h2>Снимки на обекти и услуги</h2>
-            <p>До 15 снимки. Миниатюрите се зареждат първо, а големият размер — само при отваряне.</p>
-          </div>
-          <span data-image-count>0 / 15</span>
-        </div>
-        <label class="image-dropzone" data-image-dropzone>
-          <input type="file" accept="image/jpeg,image/png,image/webp" multiple>
-          <span class="image-dropzone-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg>
-          </span>
-          <strong>Избери снимки</strong>
-          <small>или ги плъзни тук · JPG, PNG или WebP · до 10 MB всяка</small>
-        </label>
-        <p class="image-upload-status" data-image-status aria-live="polite"></p>
-        <div class="image-preview-grid" data-image-preview></div>
-      </section>
-
-      <button class="form-submit" type="submit">Изпрати за преглед</button>
-      <p class="form-message" id="company-message"></p>
-    </form>
-  </div>
-</section>
+<section class="content-section"><div class="section-container article-page"><article><p class="lead">В първата местна версия не се използват рекламни бисквитки.</p></article></div></section>
 </main>
 
   <footer class="site-footer">
@@ -112,10 +58,7 @@
         
       <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
         <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 64 64">
-            <path d="M14 12h36a8 8 0 0 1 8 8v22a8 8 0 0 1-8 8H31l-13 9v-9h-4a8 8 0 0 1-8-8V20a8 8 0 0 1 8-8Z"/>
-            <path d="M22 26h20M22 36h13"/>
-          </svg>
+          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
         </span>
         <span class="brand-text">
           <strong>Попитай<span>.Лом</span></strong>

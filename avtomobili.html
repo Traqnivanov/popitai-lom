@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Автомобили | Попитай.Лом</title>
-  <meta name="description" content="Сервизи, гуми, части, автомивки и пътна помощ.">
+  <title>Административен панел | Попитай.Лом</title>
+  <meta name="description" content="Административен панел.">
   <meta name="theme-color" content="#0b5fd7">
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="assets/favicon-96.png" type="image/png">
 </head>
 <body class="">
 
@@ -16,10 +17,7 @@
       
       <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
         <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 64 64">
-            <path d="M14 12h36a8 8 0 0 1 8 8v22a8 8 0 0 1-8 8H31l-13 9v-9h-4a8 8 0 0 1-8-8V20a8 8 0 0 1 8-8Z"/>
-            <path d="M22 26h20M22 36h13"/>
-          </svg>
+          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
         </span>
         <span class="brand-text">
           <strong>Попитай<span>.Лом</span></strong>
@@ -27,7 +25,7 @@
         </span>
       </a>
     
-      <nav class="main-nav" id="main-nav" aria-label="Главна навигация"><a class="" href="index.html">Начало</a><a class="active" href="kategorii.html">Категории</a><a class="" href="firmi.html">Фирми</a><a class="" href="vaprosi.html">Въпроси</a><a class="" href="statii.html">Статии</a></nav>
+      <nav class="main-nav" id="main-nav" aria-label="Главна навигация"><a class="" href="index.html">Начало</a><a class="" href="kategorii.html">Категории</a><a class="" href="firmi.html">Фирми</a><a class="" href="vaprosi.html">Въпроси</a><a class="" href="statii.html">Статии</a></nav>
       <div class="header-actions">
         <a class="login-link" href="vhod.html">Вход</a>
         <a class="ask-button" href="nov-vapros.html">
@@ -44,36 +42,48 @@
 <main id="main-content">
 <section class="page-hero">
   <div class="section-container">
-    <span class="section-kicker">Категория</span>
-    <div class="page-hero-title-row"><span class="category-symbol category-symbol--slate" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 14h18"/><path d="M5 14l1.5-4.5A2 2 0 0 1 8.4 8h7.2a2 2 0 0 1 1.9 1.5L19 14"/><path d="M6 18h.01M18 18h.01"/><path d="M4 14v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg></span><h1>Автомобили</h1></div>
-    <p>Сервизи, гуми, части, автомивки и пътна помощ.</p>
-    <a class="primary-link-button" href="nov-vapros.html?category=avtomobili">Задай въпрос</a>
+    <span class="section-kicker">Управление</span>
+    <h1>Административен панел</h1>
+    <p>Преглед на въпроси, потребители, фирми и сигнали.</p>
+    
   </div>
 </section>
 
 <section class="content-section">
-  <div class="section-container two-column-layout">
-    <div>
-      <div class="block-heading"><h2>Подраздели</h2></div>
-      <div class="subcategory-grid"><a class="subcategory-card" href="tarsene.html?q=Автосервизи"><strong>Автосервизи</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Диагностика"><strong>Диагностика</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Гуми"><strong>Гуми</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Авточасти"><strong>Авточасти</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Автомивки"><strong>Автомивки</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Пътна помощ"><strong>Пътна помощ</strong><span>Въпроси и фирми</span></a></div>
-      <div class="block-heading spaced"><h2>Последни въпроси</h2><a href="vaprosi.html">Всички въпроси</a></div>
-      <div class="stack-list category-question-list" data-question-category="Автомобили">
-        <article class="empty-card">
-          <p>Все още няма публикувани въпроси в тази категория.</p>
-          <a class="primary-link-button" href="nov-vapros.html?category=avtomobili">Задай въпрос</a>
-        </article>
+  <div class="section-container">
+    
+    <section class="admin-test-tools">
+      <div>
+        <span class="section-kicker">Само за тест на това устройство</span>
+        <h2>Тестови данни</h2>
+        <p>Тези записи се пазят в браузъра ти и не се публикуват за всички посетители.</p>
+      </div>
+      <div class="admin-test-actions">
+        <button class="form-submit" id="seed-test-data" type="button">Добави тестови записи</button>
+        <button class="secondary-link-button" id="clear-test-data" type="button">Изчисти тестовите записи</button>
+      </div>
+      <p class="form-message" id="test-data-message"></p>
+    </section>
+
+    <div class="admin-stats">
+      <article><strong id="admin-users-count">0</strong><span>Потребители</span></article>
+      <article><strong id="admin-questions-count">0</strong><span>Нови въпроси</span></article>
+      <article><strong>4</strong><span>Фирми</span></article>
+      <article><strong>0</strong><span>Сигнали</span></article>
+    </div>
+    <div class="admin-layout">
+      <aside class="admin-menu">
+        <button class="active" type="button">Обобщение</button>
+        <button type="button">Въпроси</button>
+        <button type="button">Фирми</button>
+        <button type="button">Потребители</button>
+        <button type="button">Сигнали</button>
+      </aside>
+      <div class="admin-content">
+        <div class="block-heading"><h2>Нови въпроси</h2></div>
+        <div id="admin-questions" class="stack-list"><article class="empty-card"><p>Няма нови въпроси.</p></article></div>
       </div>
     </div>
-    <aside class="side-panel">
-      <h2>Търси в категорията</h2>
-      <form class="side-search" action="tarsene.html">
-        <input type="search" name="q" placeholder="Какво търсиш?">
-        <button type="submit">Търси</button>
-      </form>
-      <h2>Полезно</h2>
-      <a href="pravila.html">Как да разпознаеш надеждна препоръка</a>
-      <a href="signal.html">Подай сигнал за нередност</a>
-    </aside>
   </div>
 </section>
 </main>
@@ -84,10 +94,7 @@
         
       <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
         <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 64 64">
-            <path d="M14 12h36a8 8 0 0 1 8 8v22a8 8 0 0 1-8 8H31l-13 9v-9h-4a8 8 0 0 1-8-8V20a8 8 0 0 1 8-8Z"/>
-            <path d="M22 26h20M22 36h13"/>
-          </svg>
+          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
         </span>
         <span class="brand-text">
           <strong>Попитай<span>.Лом</span></strong>
@@ -118,7 +125,7 @@
       <p>Създадено за хората от Лом.</p>
     </div>
   </footer>
-  <nav class="mobile-bottom-nav" aria-label="Мобилна навигация"><a class="" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>Начало</span></a><a class="active" href="kategorii.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Категории</span></a><a class="mobile-ask" href="nov-vapros.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Въпрос</span></a><a class="" href="vaprosi.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg><span>Въпроси</span></a><a class="" href="profil.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профил</span></a></nav>
+  <nav class="mobile-bottom-nav" aria-label="Мобилна навигация"><a class="" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>Начало</span></a><a class="" href="kategorii.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Категории</span></a><a class="mobile-ask" href="nov-vapros.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Въпрос</span></a><a class="" href="vaprosi.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg><span>Въпроси</span></a><a class="" href="profil.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профил</span></a></nav>
   <button class="back-to-top" id="back-to-top" type="button" aria-label="Към началото">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
   </button>
