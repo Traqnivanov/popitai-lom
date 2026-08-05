@@ -4177,3 +4177,53 @@ svg {
     min-height: 650px;
   }
 }
+
+/* FINAL CATEGORY ICON SYSTEM 2026-08-05 */
+
+.category-icon,
+.directory-icon,
+.category-symbol {
+  background: #fffaf0 !important;
+  color: #061a38 !important;
+  border: 2px solid #123b6d !important;
+  border-radius: 50% !important;
+  box-shadow: 0 7px 18px rgba(6, 26, 56, 0.10) !important;
+}
+
+.category-icon svg,
+.directory-icon svg,
+.category-symbol svg,
+.brand-category-svg {
+  fill: none !important;
+  stroke: #123b6d !important;
+  stroke-width: 1.8 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+}
+
+.category-icon .icon-accent,
+.directory-icon .icon-accent,
+.category-symbol .icon-accent,
+.brand-category-svg .icon-accent {
+  stroke: #d49a13 !important;
+}
+
+.category-icon .icon-heart,
+.directory-icon .icon-heart,
+.category-symbol .icon-heart {
+  fill: rgba(212, 154, 19, 0.10) !important;
+}
+
+.category-copy strong,
+.directory-card h2,
+.page-hero-title-row h1 {
+  color: #061a38 !important;
+}
+
+.category-card:hover .category-icon,
+.directory-card:hover .directory-icon {
+  background: #fff5d8 !important;
+  border-color: #d49a13 !important;
+  transform: translateY(-2px);
+}
+
