@@ -320,7 +320,7 @@ if (registerForm) {
     users.push(user);
     setStored("popitaiUsers", users);
     setStored("popitaiCurrentUser", { name: user.name, email: user.email });
-    qs("#register-message").textContent = "Профилът е създаден в тестовия браузър.";
+    qs("#register-message").textContent = "Профилът е създаден. Провери електронната си поща за потвърждение, когато системата за имейли бъде активирана.";
     setTimeout(() => window.location.href = "profil.html", 600);
   });
 }
@@ -392,12 +392,12 @@ if (newQuestionForm) {
         images
       });
       saveQuestions(storedQuestions);
-      qs("#new-question-message").textContent = "Въпросът и снимките са публикувани в тестовата версия.";
+      qs("#new-question-message").textContent = "Благодарим! Въпросът и снимките са изпратени за преглед и ще се появят след одобрение от администратор.";
       setTimeout(() => window.location.href = questionUrl(id), 500);
     } catch (error) {
       qs("#new-question-message").textContent = error instanceof Error
         ? error.message
-        : "Публикуването не успя.";
+        : "Не успяхме да изпратим съдържанието. Данните ти не са загубени — опитай отново.";
       submitButton.disabled = false;
     }
   });
@@ -557,7 +557,7 @@ function renderQuestionDetail() {
         createdAt: new Date().toISOString()
       });
       saveQuestions(all);
-      qs("#answer-message").textContent = "Отговорът е добавен към правилния въпрос.";
+      qs("#answer-message").textContent = "Благодарим! Отговорът е изпратен за преглед и ще се появи след одобрение от администратор.";
       qs("#answer-text").value = "";
       renderQuestionDetail();
     }, { once: true });
@@ -642,12 +642,12 @@ if (companyForm) {
         images
       });
       saveBusinesses(businesses);
-      qs("#company-message").textContent = "Фирмата и снимките са записани със статус „Чака преглед“.";
+      qs("#company-message").textContent = "Благодарим! Фирменият профил и снимките са изпратени за преглед и ще се появят след одобрение от администратор.";
       setTimeout(() => window.location.href = businessUrl(id), 500);
     } catch (error) {
       qs("#company-message").textContent = error instanceof Error
         ? error.message
-        : "Профилът не можа да бъде записан.";
+        : "Не успяхме да изпратим фирмения профил. Провери данните и опитай отново.";
       submitButton.disabled = false;
     }
   });
@@ -817,7 +817,126 @@ qsa(".simple-contact-form").forEach(form => {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     const message = qs(".form-message", form);
-    if (message) message.textContent = "Формулярът работи в местната тестова версия.";
+    if (message) message.textContent = "Благодарим! Формулярът е приет. Възможно е обработката да се забави, докато сайтът е в процес на разработка.";
     form.reset();
   });
 });
+
+// SITE STATUS AND ERROR SYSTEM — 2026-08-05
+(() => {
+  const MESSAGES = {
+    offline: 'Няма връзка с интернет. Провери връзката си и опитай отново.',
+    server: 'В момента не успяваме да се свържем със системата. Моля, опитай след малко.',
+    generic: 'Извиняваме се — нещо не се получи. Попитай.Лом все още се разработва. Опитай отново след малко.',
+    permission: 'Нямаш достъп до тази страница.',
+    blocked: 'Този профил е временно ограничен. Свържи се с администратора за повече информация.',
+    image: 'Снимката не може да бъде качена. Използвай JPG, PNG или WebP до 10 MB.',
+    required: 'Моля, попълни това поле.',
+    pending: 'Благодарим! Съдържанието е изпратено за преглед и ще се появи след одобрение от администратор.'
+  };
+
+  function ensureToastRegion() {
+    let region = document.querySelector('.site-toast-region');
+    if (!region) {
+      region = document.createElement('div');
+      region.className = 'site-toast-region';
+      region.setAttribute('aria-live', 'polite');
+      region.setAttribute('aria-atomic', 'true');
+      document.body.appendChild(region);
+    }
+    return region;
+  }
+
+  function showToast(message, type = 'warning', title = '') {
+    const region = ensureToastRegion();
+    const toast = document.createElement('div');
+    toast.className = 'site-toast';
+    toast.dataset.type = type;
+
+    const closeButton = document.createElement('button');
+    closeButton.type = 'button';
+    closeButton.setAttribute('aria-label', 'Затвори');
+    closeButton.textContent = '×';
+
+    const textWrap = document.createElement('div');
+    if (title) {
+      const strong = document.createElement('strong');
+      strong.textContent = title;
+      textWrap.appendChild(strong);
+    }
+    const span = document.createElement('span');
+    span.textContent = message;
+    textWrap.appendChild(span);
+
+    toast.append(closeButton, textWrap);
+    closeButton.addEventListener('click', () => toast.remove());
+    region.appendChild(toast);
+    setTimeout(() => toast.remove(), 7000);
+  }
+
+  function setFormMessage(target, message, type = 'warning') {
+    const element = typeof target === 'string' ? document.querySelector(target) : target;
+    if (!element) return;
+    element.textContent = message;
+    element.classList.remove('is-error', 'is-success', 'is-warning');
+    element.classList.add(`is-${type}`);
+  }
+
+  function insertDevelopmentBanner() {
+    if (sessionStorage.getItem('popitaiDevBannerClosed') === '1') return;
+    if (document.querySelector('.site-status-banner')) return;
+
+    const banner = document.createElement('div');
+    banner.className = 'site-status-banner';
+
+    const message = document.createElement('span');
+    const strong = document.createElement('strong');
+    strong.textContent = 'Попитай.Лом е в процес на разработка. ';
+    message.append(
+      strong,
+      document.createTextNode('Възможно е някои функции временно да не работят. Благодарим за разбирането.')
+    );
+
+    const closeButton = document.createElement('button');
+    closeButton.className = 'site-status-close';
+    closeButton.type = 'button';
+    closeButton.setAttribute('aria-label', 'Затвори съобщението');
+    closeButton.textContent = '×';
+
+    banner.append(message, closeButton);
+    document.body.prepend(banner);
+    closeButton.addEventListener('click', () => {
+      sessionStorage.setItem('popitaiDevBannerClosed', '1');
+      banner.remove();
+    });
+  }
+
+  function improveValidationMessages() {
+    document.querySelectorAll('input, textarea, select').forEach(field => {
+      field.addEventListener('invalid', () => {
+        if (field.validity.valueMissing) field.setCustomValidity(MESSAGES.required);
+        else if (field.validity.typeMismatch) field.setCustomValidity('Моля, въведи валидни данни.');
+        else if (field.validity.tooShort) field.setCustomValidity(`Моля, въведи поне ${field.minLength} знака.`);
+        else field.setCustomValidity('Моля, провери това поле.');
+      });
+      field.addEventListener('input', () => field.setCustomValidity(''));
+      field.addEventListener('change', () => field.setCustomValidity(''));
+    });
+  }
+
+  window.PopitaiUi = { showToast, setFormMessage, messages: MESSAGES };
+
+  window.addEventListener('offline', () => showToast(MESSAGES.offline, 'error', 'Няма интернет'));
+  window.addEventListener('online', () => showToast('Връзката с интернет е възстановена.', 'success', 'Отново си онлайн'));
+  window.addEventListener('unhandledrejection', () => showToast(MESSAGES.generic, 'error', 'Възникна проблем'));
+  window.addEventListener('error', event => {
+    if (event.target !== window) showToast(MESSAGES.generic, 'error', 'Възникна проблем');
+  }, true);
+
+  document.addEventListener('DOMContentLoaded', () => {
+    insertDevelopmentBanner();
+    improveValidationMessages();
+    if (!navigator.onLine) showToast(MESSAGES.offline, 'error', 'Няма интернет');
+  });
+})();
+
