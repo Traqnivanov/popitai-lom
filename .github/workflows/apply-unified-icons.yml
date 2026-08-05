@@ -148,3 +148,5 @@ jobs:
           git add -A
           git commit -m "Уеднаквяване на всички икони в тъмносиньо и златно"
           git push origin HEAD:main
+
+# Triggered again through a reviewed merge so GitHub Actions applies the change.
