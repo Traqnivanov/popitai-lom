@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">Попитай.Лом</title>
+  <desc id="desc">Златна котва в бял балон за разговор върху тъмносин фон</desc>
+  <defs>
+    <linearGradient id="navy" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#061a38"/>
+      <stop offset="1" stop-color="#0b2f61"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd86a"/>
+      <stop offset="1" stop-color="#d89b00"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#navy)"/>
+  <path d="M27 24h74a13 13 0 0 1 13 13v47a13 13 0 0 1-13 13H59L33 114l5-17H27A13 13 0 0 1 14 84V37A13 13 0 0 1 27 24Z"
+        fill="none" stroke="#fff" stroke-width="7" stroke-linejoin="round"/>
+  <g fill="none" stroke="url(#gold)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="64" cy="43" r="10"/>
+    <path d="M64 53v35M45 61h38"/>
+    <path d="M39 72c1 17 11 27 25 31 14-4 24-14 25-31"/>
+    <path d="m39 72-7 8M89 72l7 8"/>
+  </g>
+  <path d="M47 91c6 4 12 4 17 0 6 4 12 4 18 0M50 99c5 3 10 3 14 0 5 3 10 3 15 0"
+        fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+</svg>
