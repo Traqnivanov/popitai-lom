@@ -53,10 +53,20 @@
     return href.startsWith("tel:") ? href : "";
   }
 
+  const ICONS = {
+    call: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true" style="width:17px;height:17px;flex-shrink:0"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.64 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.55 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`,
+    viber: `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:17px;height:17px;flex-shrink:0"><path d="M12.013 2C7.313 2 3.013 5.8 3.013 10.8c0 2.8 1.3 5.3 3.4 7l-.4 3.1 3.1-1c.9.3 1.9.5 2.9.5 4.7 0 9-3.8 9-8.8S16.713 2 12.013 2zm2.8 12.1c-.3.8-1.5 1.5-2.1 1.5-.1 0-.3 0-.4-.1-.4-.1-1-.4-2.5-1.8-1.3-1.2-2.1-2.6-2.3-3.1-.2-.4-.1-.7.1-.9l.6-.7c.2-.2.2-.4.1-.6l-.9-2.1c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.7.7-.9 1.6-.5 2.6.8 2.2 2.3 4.1 4.2 5.4 1 .7 2.4 1.4 3.4 1.4.4 0 1.2-.1 1.8-.8.3-.3.4-.7.3-1z"/></svg>`,
+    site: `<svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" aria-hidden="true" style="width:17px;height:17px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`
+  };
+
   function addAction(container, label, href, className, options = {}) {
     if (!container || !href) return null;
-    const link = element("a", className, label);
+    const link = document.createElement("a");
     link.href = href;
+    link.className = className;
+    const icon = options.icon ? (ICONS[options.icon] || "") : "";
+    const arrow = className === "expanded-action-site" ? `<span style="font-size:13px;color:#888">↗</span>` : "";
+    link.innerHTML = `${icon}<span>${label}</span>${arrow}`;
     if (options.external) {
       link.target = "_blank";
       link.rel = "noopener noreferrer";
@@ -85,16 +95,23 @@
   function syncGalleryAndCover() {
     const gallery = document.querySelector("#business-gallery");
     const galleryHeading = document.querySelector("#expanded-gallery-heading");
-    const firstImage = gallery?.querySelector("img");
+    const allImages = gallery?.querySelectorAll("img");
+    const firstImage = allImages?.[0];
     const hasGallery = Boolean(firstImage?.src) && !gallery.hidden;
 
     if (galleryHeading) galleryHeading.hidden = !hasGallery;
     if (!hasGallery) return;
 
-    gallery.querySelectorAll("img").forEach(image => {
-      image.loading = "lazy";
-      image.decoding = "async";
-      image.removeAttribute("fetchpriority");
+    // Първата снимка е cover — скриваме я от галерията
+    allImages.forEach((img, i) => {
+      img.loading = i === 0 ? "eager" : "lazy";
+      img.decoding = "async";
+      img.removeAttribute("fetchpriority");
+      if (i === 0) {
+        img.closest("li, .gallery-item, figure, div") 
+          ? img.closest("li, .gallery-item, figure")?.style.setProperty("display", "none")
+          : img.style.display = "none";
+      }
     });
 
     const heroContainer = document.querySelector("#business-page-hero .section-container");
@@ -110,7 +127,9 @@
     }
 
     const coverImage = cover.querySelector("img");
-    const source = firstImage.currentSrc || firstImage.src;
+    // Ползваме 960px версията за cover
+    let source = firstImage.currentSrc || firstImage.src;
+    source = source.replace(/-1600\.(webp|jpg)/, "-960.$1").replace(/-480\.(webp|jpg)/, "-960.$1");
     if (coverImage && coverImage.src !== source) {
       coverImage.src = source;
       coverImage.alt = "";
@@ -128,9 +147,9 @@
     actions.id = "expanded-business-actions";
     actions.setAttribute("aria-label", "Действия за фирмата");
 
-    addAction(actions, "Обади се", currentPhoneHref(), "expanded-action-primary");
-    addAction(actions, "Поискай оферта", "#expanded-contact", "expanded-action-secondary");
-    addAction(actions, "Сайт", validWebsite(data.website), "expanded-action-secondary", { external: true });
+    addAction(actions, "Обади се", currentPhoneHref(), "expanded-action-primary", { icon: "call" });
+    addAction(actions, "Запитване", "viber://chat?number=359876936184", "expanded-action-secondary", { icon: "viber" });
+    addAction(actions, "Сайт", validWebsite(data.website), "expanded-action-site", { external: true, icon: "site" });
 
     if (actions.children.length) heroContainer.append(actions);
   }

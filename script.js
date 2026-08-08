@@ -5,25 +5,70 @@ const CATEGORY_META = {"Майстори и ремонти": {"slug": "maistori"
 const IVANOV_REMONTI = {
   id: "ivanov-remonti",
   type: "Фирма",
-  title: "Ivanov-Remonti",
-  name: "Ivanov-Remonti",
+  title: "Иванов Ремонти Лом",
+  name: "Иванов Ремонти Лом",
   category: "Майстори и ремонти",
-  desc: "Строителни и ремонтни услуги в Лом.",
-  description: "Строителни и ремонтни услуги в Лом.",
+  desc: "Довършителни работи, шпакловка, гипсокартон, боядисване, ВиК, електро и ремонти в Лом.",
+  description: "Довършителни работи, шпакловка, гипсокартон, боядисване, ВиК, електро и ремонти в Лом.",
   phone: "",
   status: "promoted",
   promoted: true,
-  url: "firma.html?id=ivanov-remonti"
+  url: "firma.html?id=d48cae4e-ea29-46fc-8bc0-24ebed828054"
 };
 
 const CONSTRUCTION_SEARCH_STEMS = [
-  "строит", "ремонт", "майстор", "баня", "бани", "плоч", "фаянс",
-  "теракот", "гранитогрес", "вик", "водопровод", "канализац",
-  "електро", "електрик", "покрив", "дограма", "боядис", "боядж",
-  "шпакл", "мазил", "гипсокартон", "изолац", "фасад", "зидар",
-  "бетон", "къртен", "събар", "настил", "ламинат", "паркет",
-  "замазк", "кофраж", "арматур", "тухл", "комин", "тенекедж",
-  "цимент", "вар", "пясък", "лепило", "санитария", "фугиран"
+  // Общо ремонти — BG
+  "строит", "ремонт", "майстор", "довършит", "баня", "бани",
+  // Общо ремонти — Latin
+  "stroит", "remont", "maistor", "dovarshit", "banya",
+  // Плочки/фаянс — BG
+  "плоч", "фаянс", "теракот", "гранитогрес", "фугир",
+  // Плочки/фаянс — Latin
+  "ploch", "fayans", "terakot", "fugi",
+  // ВиК — BG
+  "вик", "водопровод", "канализац", "мивк", "сифон", "кран",
+  "смесител", "тоалет", "душ", "вана", "бойлер", "тръб", "теч",
+  // ВиК — Latin
+  "vik", "vodoprovod", "kanalizac", "mivk", "sifon", "kran",
+  "smesitel", "toalet", "dush", "vana", "boyler", "trub", "tech",
+  // Електро — BG
+  "електро", "електрик", "контакт", "ключ", "табло", "кабел",
+  "осветлен", "лампа", "инсталац", "прекъсв",
+  // Електро — Latin
+  "elektro", "elektrik", "kontakt", "kliuch", "tablo", "kabel",
+  "osvetlen", "lampa", "instalac", "prekusv",
+  // Боядисване — BG
+  "боядис", "боядж", "боя", "латекс", "грунд", "тапет", "акрил",
+  // Боядисване — Latin
+  "boyadis", "boya", "lateks", "grund", "tapet", "akril",
+  // Шпакловка/мазилка — BG
+  "шпакл", "мазил", "декоратив", "стукатур", "релеф",
+  // Шпакловка/мазилка — Latin
+  "shpakl", "mazil", "dekorativ", "stukatur",
+  // Гипсокартон/GK — BG
+  "гипсокартон", "окачен", "преграда", "звукоизол", "минерална",
+  // Гипсокартон/GK — Latin + съкращения
+  "gipsokarton", "gk", "гк", "okachen", "pregrada", "zvukoizol",
+  // Обръщане/первази — BG
+  "обръщ", "перваз", "рамк", "дограм", "прозорец", "врат", "каса",
+  // Обръщане/первази — Latin
+  "obrush", "pervaz", "ramk", "dograma", "prozorec", "vrat", "kasa",
+  // Настилки — BG
+  "настил", "ламинат", "паркет", "замазк",
+  // Настилки — Latin
+  "nastil", "laminat", "parket", "zamазk",
+  // Покриви/фасади — BG
+  "покрив", "фасад", "изолац", "тенекедж",
+  // Покриви/фасади — Latin
+  "pokriv", "fasad", "izolac", "tenekedzh",
+  // Зидария/бетон — BG
+  "зидар", "бетон", "тухл", "цимент", "вар",
+  // Зидария/бетон — Latin
+  "zidar", "beton", "tuhл", "ciment",
+  // Санитария — BG
+  "санитар", "фугиран",
+  // Санитария — Latin
+  "sanitar"
 ];
 
 function normalizeSearchText(value) {
@@ -219,7 +264,7 @@ function renderSuggestions(value) {
     <button class="suggestion-item ${item.promoted ? "promoted-suggestion" : ""}" type="button" data-url="${escapeHtml(item.url)}">
       <span>
         <strong>${escapeHtml(item.title)}</strong>
-        <small>${item.promoted ? "Промотиран профил" : escapeHtml(item.type)}</small>
+        <small>${escapeHtml(item.type)}</small>
       </span>
     </button>
   `).join("");
@@ -279,11 +324,11 @@ function renderSearchResults(query) {
 
   resultsContainer.innerHTML = results.length
     ? results.map(item => `
-      <article class="search-result-card ${item.promoted ? "promoted-search-result" : ""}">
-        <span>${item.promoted ? "Промотиран профил" : escapeHtml(item.type)}</span>
+      <article class="search-result-card">
+        <span>${escapeHtml(item.type)}</span>
         <h2><a href="${escapeHtml(item.url)}">${escapeHtml(item.title)}</a></h2>
         <p>${escapeHtml(item.desc)}</p>
-        ${item.promoted ? '<small class="promotion-note">Показва се с приоритет при търсене на строителни и ремонтни услуги.</small>' : ""}
+        
       </article>`).join("")
     : `<article class="empty-card"><h2>Няма намерени резултати</h2><p>Опитай с по-кратка или различна дума.</p></article>`;
 }
@@ -708,7 +753,7 @@ qsa(".category-question-list").forEach(container => {
 });
 
 const profileQuestions = qs("#profile-questions");
-if (profileQuestions && !document.querySelector('script[src*="supabase-content"]')) {
+if (profileQuestions && !qs('script[src*="supabase-content"]')) {
   const own = currentUser ? getQuestions().filter(item => item.author === currentUser.name) : [];
   renderQuestionContainer(profileQuestions, own, false);
 }

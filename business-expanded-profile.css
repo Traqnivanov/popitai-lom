@@ -13,11 +13,11 @@
   position: relative;
   overflow: hidden;
   width: 100%;
-  min-height: 210px;
+  height: 220px;
+  max-height: 220px;
   margin: 0 0 24px;
-  aspect-ratio: 16 / 7;
   background: #e7edf5;
-  border-radius: 20px;
+  border-radius: 16px;
 }
 
 .expanded-business-cover::after {
@@ -54,15 +54,52 @@
 }
 
 .expanded-action-primary {
-  color: #fff;
-  background: #0b5fd7;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #16a34a;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  transition: background .15s;
 }
+.expanded-action-primary:hover { background: #15803d; }
 
 .expanded-action-secondary {
-  color: #0b3977;
-  background: #fff;
-  border: 1px solid #b8c9df;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #7360f2;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  transition: background .15s;
 }
+.expanded-action-secondary:hover { background: #5b4ad4; }
+
+.expanded-action-site {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  color: #444;
+  padding: 11px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1.5px solid #d1d5db;
+  transition: border-color .15s, color .15s;
+}
+.expanded-action-site:hover { border-color: #888; color: #111; }
 
 .expanded-profile-card > h2,
 .expanded-profile-card .expanded-gallery-heading,

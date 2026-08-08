@@ -15,7 +15,7 @@
   <a class="skip-link" href="#main-content">Към основното съдържание</a>
   <header class="site-header" id="site-header">
     <div class="header-inner">
-      <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
+      <a class="brand" href="index.html" aria-label="Попитай.Лом – начало">
         <span class="brand-mark" aria-hidden="true">
           <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
         </span>
@@ -56,11 +56,9 @@
             <div class="firm-logo large" id="business-detail-logo">Ф</div>
             <div class="business-logo-image" id="business-detail-logo-image" hidden></div>
           </div>
-          <div>
-            <span class="pending-badge" id="business-detail-status">Чака преглед</span>
-            <p id="business-detail-category"></p>
-          </div>
+          <span class="category-tag" id="business-detail-category-tag"></span>
         </div>
+        <div class="business-action-buttons" id="business-action-buttons"></div>
         <h2>За фирмата</h2>
         <p id="business-detail-description"></p>
         <div class="media-gallery business-gallery" id="business-gallery" hidden aria-label="Снимки на фирмата"></div>
@@ -76,7 +74,9 @@
     <aside class="side-panel contact-panel" id="business-contact-panel">
       <h2>Контакти</h2>
       <p><strong>Телефон</strong><br><a id="business-detail-phone" href="#"></a></p>
-      <p><strong>Статус</strong><br>Чака административен преглед</p>
+      <p id="business-detail-city-row" hidden><strong>Град</strong><br><span id="business-detail-city"></span></p>
+      <p id="business-detail-address-row" hidden><strong>Адрес</strong><br><span id="business-detail-address"></span></p>
+      <p id="business-detail-hours-row" hidden><strong>Работно време</strong><br><span id="business-detail-hours"></span></p>
       <a class="secondary-link-button full" href="signal.html">Подай сигнал</a>
     </aside>
   </div>
@@ -86,7 +86,7 @@
   <footer class="site-footer">
     <div class="section-container footer-main">
       <div class="footer-brand">
-        <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
+        <a class="brand" href="index.html" aria-label="Попитай.Лом – начало">
           <span class="brand-mark" aria-hidden="true">
             <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
           </span>
