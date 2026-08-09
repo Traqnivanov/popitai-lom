@@ -208,12 +208,14 @@
         return;
       }
 
+      const isAdmin = authProfile?.role === "admin" && authProfile?.is_blocked !== true;
+
       const payload = {
         author_id: authUser.id,
         title: qs("#question-title")?.value.trim(),
         category: qs("#question-category")?.value,
         description: qs("#question-description")?.value.trim(),
-        status: "pending"
+        status: isAdmin ? "approved" : "pending"
       };
 
       const { error } = await supabase.from("questions").insert(payload);
@@ -224,7 +226,9 @@
       }
 
       form.reset();
-      setMessage("#new-question-message", "Готово. Въпросът е изпратен и чака одобрение от администратор.", "success");
+      setMessage("#new-question-message", isAdmin
+        ? "Готово. Въпросът е публикуван."
+        : "Готово. Въпросът е изпратен и чака одобрение от администратор.", "success");
       submitButton.disabled = false;
     }, true);
   }

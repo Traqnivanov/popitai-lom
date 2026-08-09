@@ -657,43 +657,6 @@ if (newQuestionForm) {
   const categoryFromUrl = new URLSearchParams(window.location.search).get("category");
   const categoryFromSlug = Object.entries(CATEGORY_META).find(([, meta]) => meta.slug === categoryFromUrl);
   if (categoryFromSlug && qs("#question-category")) qs("#question-category").value = categoryFromSlug[0];
-
-  newQuestionForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const submitButton = newQuestionForm.querySelector('[type="submit"]');
-    submitButton.disabled = true;
-    qs("#new-question-message").textContent = "Подготовяне на публикацията…";
-
-    try {
-      const storedQuestions = getQuestions();
-      const user = (currentUser || { name: "Гост" });
-      const id = `q-${Date.now()}`;
-      const images = window.PopitaiImages
-        ? await window.PopitaiImages.commit("question-image-uploader", "question", id)
-        : [];
-
-      storedQuestions.unshift({
-        id,
-        title: qs("#question-title").value.trim(),
-        category: qs("#question-category").value,
-        description: qs("#question-description").value.trim(),
-        author: user.name,
-        createdAt: new Date().toISOString(),
-        answers: [],
-        helpful: 0,
-        isTest: false,
-        images
-      });
-      saveQuestions(storedQuestions);
-      qs("#new-question-message").textContent = "Благодарим! Въпросът и снимките са изпратени за преглед и ще се появят след одобрение от администратор.";
-      setTimeout(() => window.location.href = questionUrl(id), 500);
-    } catch (error) {
-      qs("#new-question-message").textContent = error instanceof Error
-        ? error.message
-        : "Не успяхме да изпратим съдържанието. Данните ти не са загубени — опитай отново.";
-      submitButton.disabled = false;
-    }
-  });
 }
 
 function questionCard(item, compact = false) {

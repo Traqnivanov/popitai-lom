@@ -64,9 +64,16 @@
     const link = document.createElement("a");
     link.href = href;
     link.className = className;
-    const icon = options.icon ? (ICONS[options.icon] || "") : "";
-    const arrow = className === "expanded-action-site" ? `<span style="font-size:13px;color:#888">↗</span>` : "";
-    link.innerHTML = `${icon}<span>${label}</span>${arrow}`;
+    const isMobileBtn = className === "expanded-mobile-call" || className === "expanded-mobile-inquiry";
+    if (isMobileBtn && options.mobileIcon) {
+      link.innerHTML = options.mobileIcon;
+      link.setAttribute("aria-label", label);
+      link.title = label;
+    } else {
+      const icon = options.icon ? (ICONS[options.icon] || "") : "";
+      const arrow = className === "expanded-action-site" ? `<span style="font-size:13px;color:#888">↗</span>` : "";
+      link.innerHTML = `${icon}<span>${label}</span>${arrow}`;
+    }
     if (options.external) {
       link.target = "_blank";
       link.rel = "noopener noreferrer";
@@ -167,8 +174,13 @@
     actions.id = "expanded-mobile-actions";
     actions.setAttribute("aria-label", "Бързи действия");
 
-    addAction(actions, "Обади се", currentPhoneHref(), "expanded-mobile-call");
-    addAction(actions, "Запитване", "#expanded-contact", "expanded-mobile-inquiry");
+    addAction(actions, "Обади се", currentPhoneHref(), "expanded-mobile-call", {
+      icon: "call",
+      mobileIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>`
+    });
+    addAction(actions, "Запитване", "#expanded-contact", "expanded-mobile-inquiry", {
+      mobileIcon: `<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`
+    });
 
     if (!actions.children.length) return;
     const mobileNav = document.querySelector(".mobile-bottom-nav");

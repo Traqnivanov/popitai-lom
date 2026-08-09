@@ -1,4 +1,9 @@
 /* Попитай.Лом — разширен фирмен профил, без тежки външни зависимости */
+
+.has-expanded-business-profile {
+  padding-bottom: 100px;
+}
+
 .has-expanded-business-profile .expanded-business-hero {
   position: relative;
   overflow: hidden;
@@ -36,10 +41,7 @@
 }
 
 .expanded-profile-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 20px;
+  display: none;
 }
 
 .expanded-profile-actions a {
@@ -164,8 +166,43 @@
 }
 
 .expanded-mobile-actions {
-  display: none;
+  position: fixed;
+  right: 16px;
+  bottom: 90px;
+  z-index: 45;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  left: auto;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
 }
+
+.expanded-mobile-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(12,31,59,.22);
+  font-size: 0;
+}
+
+.expanded-mobile-call {
+  color: #fff;
+  background: #16a34a;
+}
+
+.expanded-mobile-inquiry {
+  color: #fff;
+  background: #7c3aed;
 
 @media (max-width: 760px) {
   .has-expanded-business-profile {
@@ -194,20 +231,16 @@
   }
 
   .expanded-mobile-actions {
-    position: fixed;
-    right: 10px;
     bottom: calc(72px + env(safe-area-inset-bottom));
-    left: 10px;
-    z-index: 45;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    padding: 8px;
-    background: rgba(255, 255, 255, .96);
-    border: 1px solid #d8e0eb;
-    border-radius: 16px;
-    box-shadow: 0 12px 32px rgba(12, 31, 59, .18);
-    backdrop-filter: blur(8px);
+  }
+
+  .expanded-mobile-actions a {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding-inline: 10px;
   }
 
   .expanded-mobile-actions a {
