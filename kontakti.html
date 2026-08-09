@@ -51,9 +51,9 @@
 
 <section class="content-section"><div class="section-container article-page"><article><p class="lead">За въпроси и предложения използвай формата или електронната поща.</p>
         <form class="content-form large-form simple-contact-form">
-          <label>Име</label><input required>
-          <label>Електронна поща</label><input type="email" required>
-          <label>Съобщение</label><textarea rows="7" required></textarea>
+          <label for="contact-name">Име</label><input id="contact-name" type="text" required>
+          <label for="contact-email">Електронна поща</label><input id="contact-email" type="email" required>
+          <label for="contact-message">Съобщение</label><textarea id="contact-message" rows="7" required></textarea>
           <button class="form-submit" type="submit">Изпрати</button>
           <p class="form-message"></p>
         </form></article></div></section>
@@ -104,6 +104,48 @@
 <script src="image-upload.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="supabase-config.js?v=20260805-2312" defer></script>
+  <script src="supabase-content.js?v=20260809-2300" defer></script>
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.querySelector(".simple-contact-form");
+    if (!form) return;
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = form.querySelector('[type="submit"]');
+      const msg = form.querySelector(".form-message");
+      btn.disabled = true;
+      msg.textContent = "Изпращаме съобщението…";
+      msg.className = "form-message warning";
+      const name = document.querySelector("#contact-name")?.value.trim() || "";
+      const email = document.querySelector("#contact-email")?.value.trim() || "";
+      const message = document.querySelector("#contact-message")?.value.trim() || "";
+      try {
+        await new Promise(resolve => {
+          if (window.PopitaiSupabase) return resolve();
+          const check = setInterval(() => { if (window.PopitaiSupabase) { clearInterval(check); resolve(); } }, 50);
+        });
+        const client = window.PopitaiSupabase;
+
+        const { data: sessionData } = await client.auth.getUser();
+        if (!sessionData?.user) {
+          msg.textContent = "Трябва да влезеш в профила си, преди да изпратиш съобщение.";
+          msg.className = "form-message error";
+          btn.disabled = false;
+          return;
+        }
+        const { error } = await client.from("contact_messages").insert({ name, email, message });
+        if (error) throw error;
+        form.reset();
+        msg.textContent = "Благодарим! Съобщението е получено.";
+        msg.className = "form-message success";
+      } catch (err) {
+        msg.textContent = "Не успяхме да изпратим. Опитай отново.";
+        msg.className = "form-message error";
+        btn.disabled = false;
+      }
+    });
+  });
+  </script>
   <script src="script.js?v=20260805-2312" defer></script>
 </body>
 </html>

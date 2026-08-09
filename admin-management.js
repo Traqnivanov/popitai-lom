@@ -107,8 +107,10 @@
         <button class="active" type="button" data-admin-view="pending">Чакащи <span class="admin-badge" id="admin-menu-badge" hidden>0</span></button>
         <button type="button" data-admin-view="questions">Публикувани въпроси</button>
         <button type="button" data-admin-view="answers">Публикувани отговори</button>
+        <button type="button" data-admin-view="listings">Обяви</button>
         <button type="button" data-admin-view="hidden">Скрити/отказани</button>
-        <button type="button" data-admin-view="users">Потребители</button>`;
+        <button type="button" data-admin-view="users">Потребители</button>
+        <button type="button" data-admin-view="contacts">Съобщения</button>`;
     }
 
     const content = $(".admin-content");
@@ -164,19 +166,44 @@
   }
 
   function recordCard(item, type, mode) {
+    const isListing = type === "listing";
     const isQuestion = type === "question";
-    const title = isQuestion ? item.title : `Отговор към въпрос ${item.question_id}`;
-    const text = isQuestion ? item.description : item.body;
+
+    const title = isListing
+      ? `${item.listing_type || ""} · ${item.title}`
+      : isQuestion ? item.title : `Отговор към въпрос ${item.question_id}`;
+    const text = isListing
+      ? `${item.category || ""}${item.city ? " · " + item.city : ""}${item.phone ? " · " + item.phone : ""}`
+      : isQuestion ? item.description : item.body;
+
     const viewLink = isQuestion && item.status === "approved"
       ? `<a class="admin-action-secondary" href="vapros.html?id=${encodeURIComponent(item.id)}" target="_blank" rel="noopener">Отвори</a>`
+      : isListing && item.status === "approved"
+      ? `<a class="admin-action-secondary" href="obqva.html?id=${encodeURIComponent(item.id)}" target="_blank" rel="noopener">Отвори</a>`
       : "";
+
+    const extendedChecks = isListing && mode === "pending" ? `
+      <div style="margin:10px 0;padding:10px;background:#f4f6fa;border-radius:8px;display:flex;flex-wrap:wrap;gap:10px">
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;cursor:pointer"><input type="checkbox" class="listing-ext-check" data-ext="is_urgent" data-id="${escapeHtml(item.id)}"> Спешно</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;cursor:pointer"><input type="checkbox" class="listing-ext-check" data-ext="is_reduced" data-id="${escapeHtml(item.id)}"> Намалено</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;cursor:pointer"><input type="checkbox" class="listing-ext-check" data-ext="is_boosted" data-id="${escapeHtml(item.id)}"> Горно позициониране</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;cursor:pointer"><input type="checkbox" class="listing-ext-check" data-ext="is_highlighted" data-id="${escapeHtml(item.id)}"> Highlighted</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;cursor:pointer"><input type="checkbox" class="listing-ext-check" data-ext="show_stats" data-id="${escapeHtml(item.id)}"> Статистики</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;cursor:pointer"><input type="checkbox" class="listing-ext-check" data-ext="show_contact_buttons" data-id="${escapeHtml(item.id)}"> Плаващи бутони</label>
+      </div>` : "";
+
+    const extendedPublished = isListing && mode === "published" ? `
+      <div style="margin:8px 0;font-size:12px;color:#59657a">
+        ${item.is_urgent ? "🔴 Спешно " : ""}${item.is_boosted ? "⬆ Горно " : ""}${item.is_highlighted ? "✨ Highlighted " : ""}${item.show_contact_buttons ? "📞 Бутони " : ""}
+      </div>` : "";
 
     let actions = "";
     if (mode === "pending") {
       actions = `
         <button class="admin-action-approve" data-admin-action="approve" data-type="${type}" data-id="${escapeHtml(item.id)}">Одобри</button>
         <button class="admin-action-hide" data-admin-action="changes" data-type="${type}" data-id="${escapeHtml(item.id)}">Върни за корекция</button>
-        <button class="admin-action-delete" data-admin-action="reject" data-type="${type}" data-id="${escapeHtml(item.id)}">Откажи</button>`;
+        <button class="admin-action-delete" data-admin-action="reject" data-type="${type}" data-id="${escapeHtml(item.id)}">Откажи</button>
+        <button class="admin-action-delete" data-admin-action="delete" data-type="${type}" data-id="${escapeHtml(item.id)}">Изтрий</button>`;
     } else if (mode === "published") {
       actions = `${viewLink}
         <button class="admin-action-hide" data-admin-action="hide" data-type="${type}" data-id="${escapeHtml(item.id)}">Скрий</button>
@@ -187,30 +214,36 @@
         <button class="admin-action-delete" data-admin-action="delete" data-type="${type}" data-id="${escapeHtml(item.id)}">Изтрий окончателно</button>`;
     }
 
+    const typeLabel = isListing ? "Обява" : isQuestion ? "Въпрос" : "Отговор";
+
     return `<article class="admin-record">
-      <div class="admin-record-meta">${statusBadge(item.status)}<span>${formatDate(item.created_at)}</span><span>${isQuestion ? "Въпрос" : "Отговор"}</span></div>
+      <div class="admin-record-meta">${statusBadge(item.status)}<span>${formatDate(item.created_at)}</span><span>${typeLabel}</span></div>
       <h3>${escapeHtml(title)}</h3>
       <p>${escapeHtml(text)}</p>
       ${item.moderation_note ? `<p><strong>Бележка:</strong> ${escapeHtml(item.moderation_note)}</p>` : ""}
+      ${extendedChecks}
+      ${extendedPublished}
       <div class="admin-record-actions">${actions}</div>
     </article>`;
   }
 
   async function loadPending() {
-    const [qResult, aResult] = await Promise.all([
+    const [qResult, aResult, lResult] = await Promise.all([
       client.from("questions").select("id, title, description, status, moderation_note, created_at").eq("status", "pending").order("created_at", { ascending: false }),
-      client.from("answers").select("id, question_id, body, status, moderation_note, created_at").eq("status", "pending").order("created_at", { ascending: false })
+      client.from("answers").select("id, question_id, body, status, moderation_note, created_at").eq("status", "pending").order("created_at", { ascending: false }),
+      client.from("listings").select("id, title, description, category, listing_type, phone, city, status, moderation_note, created_at, owner_id").eq("status", "pending").order("created_at", { ascending: false })
     ]);
-    if (qResult.error || aResult.error) throw qResult.error || aResult.error;
+    if (qResult.error || aResult.error || lResult.error) throw qResult.error || aResult.error || lResult.error;
 
     const queue = [
       ...(qResult.data || []).map((item) => ({ ...item, _type: "question" })),
-      ...(aResult.data || []).map((item) => ({ ...item, _type: "answer" }))
+      ...(aResult.data || []).map((item) => ({ ...item, _type: "answer" })),
+      ...(lResult.data || []).map((item) => ({ ...item, _type: "listing" }))
     ].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
     return queue.length
       ? queue.map((item) => recordCard(item, item._type, "pending")).join("")
-      : '<article class="empty-card"><h3>Няма съдържание за преглед</h3><p>Всички нови въпроси и отговори са обработени.</p></article>';
+      : '<article class="empty-card"><h3>Няма съдържание за преглед</h3><p>Всички нови въпроси, отговори и обяви са обработени.</p></article>';
   }
 
   async function loadPublished(type) {
@@ -225,15 +258,28 @@
       : `<article class="empty-card"><p>Няма публикувани ${type === "question" ? "въпроси" : "отговори"}.</p></article>`;
   }
 
+  async function loadListingsAdmin(statusFilter = "approved") {
+    const { data, error } = await client.from("listings")
+      .select("id, title, category, listing_type, phone, city, status, moderation_note, created_at, owner_id, is_urgent, is_reduced, is_boosted, is_highlighted, show_stats, show_contact_buttons, expires_at")
+      .eq("status", statusFilter)
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    const items = data || [];
+    if (!items.length) return `<article class="empty-card"><p>Няма обяви.</p></article>`;
+    return items.map(item => recordCard({ ...item, _type: "listing" }, "listing", statusFilter === "approved" ? "published" : "hidden")).join("");
+  }
+
   async function loadHidden() {
-    const [qResult, aResult] = await Promise.all([
+    const [qResult, aResult, lResult] = await Promise.all([
       client.from("questions").select("id, title, description, status, moderation_note, created_at").in("status", ["rejected", "needs_changes"]).order("created_at", { ascending: false }),
-      client.from("answers").select("id, question_id, body, status, moderation_note, created_at").in("status", ["rejected", "needs_changes"]).order("created_at", { ascending: false })
+      client.from("answers").select("id, question_id, body, status, moderation_note, created_at").in("status", ["rejected", "needs_changes"]).order("created_at", { ascending: false }),
+      client.from("listings").select("id, title, category, listing_type, status, moderation_note, created_at").in("status", ["rejected", "needs_changes"]).order("created_at", { ascending: false })
     ]);
-    if (qResult.error || aResult.error) throw qResult.error || aResult.error;
+    if (qResult.error || aResult.error || lResult.error) throw qResult.error || aResult.error || lResult.error;
     const records = [
       ...(qResult.data || []).map((item) => ({ ...item, _type: "question" })),
-      ...(aResult.data || []).map((item) => ({ ...item, _type: "answer" }))
+      ...(aResult.data || []).map((item) => ({ ...item, _type: "answer" })),
+      ...(lResult.data || []).map((item) => ({ ...item, _type: "listing" }))
     ].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     return records.length
       ? records.map((item) => recordCard(item, item._type, "hidden")).join("")
@@ -264,8 +310,10 @@
       pending: "Чакащи за одобрение",
       questions: "Публикувани въпроси",
       answers: "Публикувани отговори",
+      listings: "Обяви",
       hidden: "Скрити и отказани",
-      users: "Потребители"
+      users: "Потребители",
+      contacts: "Съобщения от контактната форма"
     };
     title.textContent = titles[view] || titles.pending;
     container.innerHTML = '<article class="empty-card"><p>Зареждане…</p></article>';
@@ -275,33 +323,71 @@
       if (view === "pending") container.innerHTML = await loadPending();
       else if (view === "questions") container.innerHTML = await loadPublished("question");
       else if (view === "answers") container.innerHTML = await loadPublished("answer");
+      else if (view === "listings") container.innerHTML = await loadListingsAdmin();
       else if (view === "hidden") container.innerHTML = await loadHidden();
       else if (view === "users") container.innerHTML = await loadUsers();
+      else if (view === "contacts") container.innerHTML = await loadContacts();
     } catch (error) {
       container.innerHTML = '<article class="empty-card"><p>Данните не могат да се заредят.</p></article>';
       setMessage(errorText(error), true);
     }
   }
 
-  async function updateStatus(type, id, status, note = "") {
-    const table = type === "question" ? "questions" : "answers";
-    return client.from(table).update({
+  async function loadContacts() {
+    const { data, error } = await client
+      .from("contact_messages")
+      .select("id, name, email, message, created_at, is_read")
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    const items = data || [];
+    if (!items.length) return '<article class="empty-card"><p>Няма получени съобщения.</p></article>';
+    return items.map(item => `
+      <article class="db-profile-item" style="border-left:3px solid ${item.is_read ? "#d7deea" : "#0b5fd7"}">
+        <div class="db-moderation-meta">
+          <span style="font-weight:800">${escapeHtml(item.name)}</span>
+          <a href="mailto:${escapeHtml(item.email)}">${escapeHtml(item.email)}</a>
+          <span>${formatDate(item.created_at)}</span>
+        </div>
+        <p style="margin:8px 0 0;white-space:pre-wrap">${escapeHtml(item.message)}</p>
+        ${!item.is_read ? `<button type="button" style="margin-top:10px;padding:6px 14px;border:1px solid #d7deea;border-radius:8px;background:#fff;cursor:pointer;font-weight:800" onclick="markContactRead('${item.id}', this)">Маркирай като прочетено</button>` : ""}
+      </article>`).join("");
+  }
+
+  window.markContactRead = async (id, btn) => {
+    await client.from("contact_messages").update({ is_read: true }).eq("id", id);
+    btn.closest("article").style.borderLeftColor = "#d7deea";
+    btn.remove();
+  };
+
+  async function updateStatus(type, id, status, note = "", extFeatures = {}) {
+    const table = type === "listing" ? "listings" : type === "question" ? "questions" : "answers";
+    const updateData = {
       status,
       moderation_note: note,
       reviewed_by: currentUser.id,
-      reviewed_at: new Date().toISOString()
-    }).eq("id", id);
+      reviewed_at: new Date().toISOString(),
+      ...extFeatures
+    };
+    return client.from(table).update(updateData).eq("id", id);
+  }
+
+  function getExtendedFeatures(id) {
+    const checks = document.querySelectorAll(`.listing-ext-check[data-id="${id}"]`);
+    const features = {};
+    checks.forEach(c => { features[c.dataset.ext] = c.checked; });
+    return features;
   }
 
   async function performAction(button) {
     const action = button.dataset.adminAction;
     const type = button.dataset.type;
     const id = button.dataset.id;
-    const table = type === "question" ? "questions" : "answers";
+    const table = type === "listing" ? "listings" : type === "question" ? "questions" : "answers";
     let result;
 
     if (action === "approve" || action === "restore") {
-      result = await updateStatus(type, id, "approved", "");
+      const extFeatures = type === "listing" ? getExtendedFeatures(id) : {};
+      result = await updateStatus(type, id, "approved", "", extFeatures);
     } else if (action === "changes") {
       const note = window.prompt("Какво трябва да се коригира?")?.trim();
       if (!note) return;

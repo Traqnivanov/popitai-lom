@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Обяви | Попитай.Лом</title>
-  <meta name="description" content="Местни обяви в Лом — продава, купува, търси, услуги, работа, имоти.">
+  <title>Обява | Попитай.Лом</title>
+  <meta name="description" content="Детайли на обявата.">
   <meta name="theme-color" content="#0b5fd7">
   <link rel="stylesheet" href="style.css?v=20260805-0736">
+  <link rel="stylesheet" href="business-expanded-profile.css?v=20260809-2300">
   <link rel="icon" href="assets/favicon-96.png" type="image/png">
 </head>
 <body class="">
@@ -38,67 +39,22 @@
   </header>
 
 <main id="main-content">
+  <section class="content-section">
+    <div class="section-container two-column-layout">
 
-<section class="page-hero">
-  <div class="section-container">
-    <span class="section-kicker">Местни обяви</span>
-    <h1>Обяви</h1>
-    <p>Продава, купува, търси, услуги, работа и имоти в Лом и региона.</p>
-    <a class="primary-link-button" href="dobavi-obqva.html">Добави обява</a>
-  </div>
-</section>
-
-<section class="content-section">
-  <div class="section-container">
-
-    <div class="listing-categories" id="listing-categories">
-      <button class="listing-cat-btn active" type="button" data-cat="">Всички</button>
-      <button class="listing-cat-btn" type="button" data-cat="Електроника">Електроника</button>
-      <button class="listing-cat-btn" type="button" data-cat="Дом и градина">Дом и градина</button>
-      <button class="listing-cat-btn" type="button" data-cat="Дрехи и обувки">Дрехи и обувки</button>
-      <button class="listing-cat-btn" type="button" data-cat="Деца и бебета">Деца и бебета</button>
-      <button class="listing-cat-btn" type="button" data-cat="Спорт и хоби">Спорт и хоби</button>
-      <button class="listing-cat-btn" type="button" data-cat="Автомобили и МПС">Автомобили и МПС</button>
-      <button class="listing-cat-btn" type="button" data-cat="Животни">Животни</button>
-      <button class="listing-cat-btn" type="button" data-cat="Работа">Работа</button>
-      <button class="listing-cat-btn" type="button" data-cat="Имоти">Имоти</button>
-      <button class="listing-cat-btn" type="button" data-cat="Услуги">Услуги</button>
-      <button class="listing-cat-btn" type="button" data-cat="Друго">Друго</button>
-    </div>
-
-    <div class="listings-filters" id="listings-filters">
-      <input type="search" id="listings-search" placeholder="Търси обява…" autocomplete="off">
-      <div class="listings-sort-row" id="listings-subtype-row" hidden>
-      <select id="listings-subtype-filter">
-        <option value="">Всички</option>
-      </select>
-    </div>
-
-    <div class="listings-sort-row" id="listings-type-row">
-        <select id="listings-type-filter">
-          <option value="">Всички типове</option>
-          <option value="Продава">Продава</option>
-          <option value="Купува">Купува</option>
-          <option value="Търси">Търси</option>
-          <option value="Дава">Дава</option>
-        </select>
-        <select id="listings-sort">
-          <option value="newest">Най-нова</option>
-          <option value="price_asc">Най-ниска цена</option>
-          <option value="price_desc">Най-висока цена</option>
-        </select>
+      <div id="listing-detail">
+        <article class="empty-card"><p>Зареждане…</p></article>
       </div>
+
+      <aside class="side-panel contact-panel" id="listing-contact-panel" hidden>
+        <h2>Контакт</h2>
+        <p><strong>Телефон</strong><br><a id="listing-detail-phone" href="#"></a></p>
+        <p id="listing-detail-city" style="margin:0;color:#59657a;font-size:14px"></p>
+        <a id="listing-call-btn" href="#" class="primary-link-button" style="display:block;margin-top:12px">Обади се</a>
+      </aside>
+
     </div>
-
-    <div class="listings-grid" id="listings-list">
-      <article class="empty-card">
-        <p>Зареждане на обявите…</p>
-      </article>
-    </div>
-
-  </div>
-</section>
-
+  </section>
 </main>
 
   <footer class="site-footer">

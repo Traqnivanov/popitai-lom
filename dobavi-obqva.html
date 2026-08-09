@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Добави обява | Попитай.Лом</title>
+  <meta name="description" content="Публикувай обява в Попитай.Лом.">
+  <meta name="theme-color" content="#0b5fd7">
+  <link rel="stylesheet" href="style.css?v=20260805-0736">
+  <link rel="icon" href="assets/favicon-96.png" type="image/png">
+</head>
+<body class="">
+
+  <a class="skip-link" href="#main-content">Към основното съдържание</a>
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
+        <span class="brand-mark" aria-hidden="true">
+          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
+        </span>
+        <span class="brand-text">
+          <strong>Попитай<span>.Лом</span></strong>
+          <small>Попитай. Намери. Препоръчай.</small>
+        </span>
+      </a>
+      <nav class="main-nav" id="main-nav" aria-label="Главна навигация"><a class="" href="index.html">Начало</a><a class="" href="kategorii.html">Категории</a><a class="" href="firmi.html">Фирми</a><a class="" href="vaprosi.html">Въпроси</a><a class="" href="obyavi.html">Обяви</a><a class="" href="statii.html">Статии</a></nav>
+      <div class="header-actions">
+        <a class="login-link" href="vhod.html">Вход</a>
+        <a class="ask-button" href="nov-vapros.html">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          Задай въпрос
+        </a>
+        <button class="menu-button" id="menu-button" type="button" aria-label="Отвори менюто" aria-expanded="false" aria-controls="main-nav">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+<main id="main-content">
+<section class="page-hero">
+  <div class="section-container">
+    <span class="section-kicker">Публикувай</span>
+    <h1>Добави обява</h1>
+    <p>Попълни формата — обявата ще бъде прегледана и публикувана.</p>
+  </div>
+</section>
+
+<section class="content-section">
+  <div class="section-container form-page">
+    <form class="content-form large-form" id="listing-form" novalidate>
+
+      <label for="listing-title">Заглавие</label>
+      <input id="listing-title" type="text" required minlength="5" maxlength="120" placeholder="Например: Продавам телевизор Samsung 55 инча">
+      <p class="listing-duplicate-warning" id="listing-duplicate-warning" hidden style="color:#b45309;font-weight:800;margin:-8px 0 8px"></p>
+
+      <label for="listing-category">Категория</label>
+      <select id="listing-category" required>
+        <option value="">Избери категория</option>
+        <option value="Електроника">Електроника</option>
+        <option value="Дом и градина">Дом и градина</option>
+        <option value="Дрехи и обувки">Дрехи и обувки</option>
+        <option value="Деца и бебета">Деца и бебета</option>
+        <option value="Спорт и хоби">Спорт и хоби</option>
+        <option value="Автомобили и МПС">Автомобили и МПС</option>
+        <option value="Животни">Животни</option>
+        <option value="Работа">Работа</option>
+        <option value="Имоти">Имоти</option>
+        <option value="Услуги">Услуги</option>
+        <option value="Друго">Друго</option>
+      </select>
+
+      <label for="listing-subcategory">Подкатегория <small style="color:#888;font-weight:400">(по желание)</small></label>
+      <input id="listing-subcategory" type="text" placeholder="Например: Телефони, Мебели, Апартаменти…">
+
+      <label for="listing-type" id="listing-type-label">Тип обява</label>
+      <select id="listing-type" required>
+        <option value="">Избери тип</option>
+        <option value="Продава">Продава</option>
+        <option value="Купува">Купува</option>
+        <option value="Търси">Търси</option>
+        <option value="Дава">Дава</option>
+      </select>
+
+      <div id="listing-type-rabota" hidden>
+        <label for="listing-type-rabota-select">Тип обява</label>
+        <select id="listing-type-rabota-select">
+          <option value="Предлага работа">Предлага работа</option>
+          <option value="Търси работа">Търси работа</option>
+        </select>
+      </div>
+
+      <div id="listing-type-imoti" hidden>
+        <label for="listing-type-imoti-select">Тип обява</label>
+        <select id="listing-type-imoti-select">
+          <option value="Продава имот">Продава</option>
+          <option value="Отдава под наем">Отдава под наем</option>
+          <option value="Търси под наем">Търси под наем</option>
+          <option value="Търси за купуване">Търси за купуване</option>
+        </select>
+      </div>
+
+      <label for="listing-description">Описание <small style="color:#888;font-weight:400">(минимум 20 символа)</small></label>
+      <textarea id="listing-description" rows="8" required minlength="20" placeholder="Опиши обявата подробно — състояние, размери, причина за продажба и т.н."></textarea>
+
+      <label for="listing-price">Цена в евро</label>
+      <input id="listing-price" type="number" min="0" step="0.01" placeholder="0.00">
+      <p id="listing-price-bgn" style="margin:-4px 0 8px;font-size:13px;color:#59657a;font-weight:700"></p>
+      <label class="check-row" style="margin-top:4px">
+        <input id="listing-price-negotiable" type="checkbox"> Договаряне
+      </label>
+      <label class="check-row" style="margin-top:4px">
+        <input id="listing-price-free" type="checkbox"> Подарява (безплатно)
+      </label>
+
+      <label for="listing-phone">Телефон</label>
+      <input id="listing-phone" type="tel" required placeholder="0876 123 456" pattern="[0-9+\s\-\(\)]{6,20}">
+
+      <label for="listing-city">Град / район</label>
+      <input id="listing-city" type="text" placeholder="Лом">
+
+      <label for="listing-street">Улица <small style="color:#888;font-weight:400">(по желание)</small></label>
+      <input id="listing-street" type="text" placeholder="ул. Васил Левски 5">
+
+      <section class="image-uploader" id="listing-image-uploader" data-max-files="20" data-max-mb="10" data-quality="0.82" data-widths="480,960,1600" data-role="gallery">
+        <div class="image-uploader-heading">
+          <div>
+            <h2>Снимки</h2>
+            <p>Първата снимка е главна. До 20 снимки.</p>
+          </div>
+          <span data-image-count>0 / 20</span>
+        </div>
+        <label class="image-dropzone" data-image-dropzone>
+          <input type="file" accept="image/jpeg,image/png,image/webp" multiple>
+          <span class="image-dropzone-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/></svg>
+          </span>
+          <strong>Избери снимки</strong>
+          <small>или ги плъзни тук · JPG, PNG или WebP · до 10 MB всяка</small>
+        </label>
+        <p class="image-upload-status" data-image-status aria-live="polite"></p>
+        <div class="image-preview-grid" data-image-preview></div>
+      </section>
+
+      <label class="check-row"><input type="checkbox" required> Прочетох и приемам <a href="pravila.html">правилата на общността</a>.</label>
+
+      <div id="listing-admin-extended" hidden style="margin-top:16px;padding:16px;background:#f4f6fa;border-radius:12px;border:1px solid #dce3ee">
+        <p style="margin:0 0 12px;font-weight:800;font-size:15px">Разширени функции</p>
+        <div style="display:flex;flex-wrap:wrap;gap:12px">
+          <label style="display:flex;align-items:center;gap:8px;font-weight:700;cursor:pointer"><input type="checkbox" id="ext-is-urgent"> Спешно</label>
+          <label style="display:flex;align-items:center;gap:8px;font-weight:700;cursor:pointer"><input type="checkbox" id="ext-is-reduced"> Намалено</label>
+          <label style="display:flex;align-items:center;gap:8px;font-weight:700;cursor:pointer"><input type="checkbox" id="ext-is-boosted"> Горно позициониране</label>
+          <label style="display:flex;align-items:center;gap:8px;font-weight:700;cursor:pointer"><input type="checkbox" id="ext-is-highlighted"> Highlighted</label>
+          <label style="display:flex;align-items:center;gap:8px;font-weight:700;cursor:pointer"><input type="checkbox" id="ext-show-stats"> Статистики</label>
+          <label style="display:flex;align-items:center;gap:8px;font-weight:700;cursor:pointer"><input type="checkbox" id="ext-show-contact-buttons"> Плаващи бутони</label>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-start">
+        <button class="form-submit" type="submit" id="listing-submit">Публикувай обявата</button>
+        <p class="form-message" id="listing-message" style="margin:0"></p>
+      </div>
+    </form>
+  </div>
+</section>
+</main>
+
+  <footer class="site-footer">
+    <div class="section-container footer-main">
+      <div class="footer-brand">
+        <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
+          </span>
+          <span class="brand-text">
+            <strong>Попитай<span>.Лом</span></strong>
+            <small>Попитай. Намери. Препоръчай.</small>
+          </span>
+        </a>
+        <p>Местната общност на Лом за препоръки, услуги и полезна информация.</p>
+      </div>
+      <div class="footer-column">
+        <h2>Разгледай</h2>
+        <a href="kategorii.html">Категории</a><a href="vaprosi.html">Въпроси</a>
+        <a href="firmi.html">Фирми</a><a href="statii.html">Статии</a>
+      </div>
+      <div class="footer-column">
+        <h2>За общността</h2>
+        <a href="za-nas.html">За сайта</a><a href="pravila.html">Правила</a>
+        <a href="kontakti.html">Контакти</a><a href="signal.html">Подай сигнал</a>
+      </div>
+      <div class="footer-column">
+        <h2>Правна информация</h2>
+        <a href="poveritelnost.html">Поверителност</a><a href="uslovia.html">Условия за ползване</a>
+        <a href="biskvitki.html">Бисквитки</a>
+      </div>
+    </div>
+    <div class="section-container footer-bottom">
+      <p>© <span id="current-year">2026</span> Попитай.Лом. Всички права запазени.</p>
+      <p>Създадено за хората от Лом.</p>
+    </div>
+  </footer>
+  <nav class="mobile-bottom-nav" aria-label="Мобилна навигация"><a class="" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>Начало</span></a><a class="" href="kategorii.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Категории</span></a><a class="mobile-ask active" href="dobavi-obqva.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Обява</span></a><a class="" href="obyavi.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg><span>Обяви</span></a><a class="" href="profil.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профил</span></a></nav>
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="Към началото">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
+  </button>
+
+  <script src="image-upload.js?v=20260806-0208" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="supabase-config.js?v=20260805-2312" defer></script>
+  <script src="listing-form-validation.js?v=20260809-2300" defer></script>
+  <script src="supabase-listings.js?v=20260809-2300" defer></script>
+  <script src="script.js?v=20260805-2312" defer></script>
+</body>
+</html>

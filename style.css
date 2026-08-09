@@ -4446,3 +4446,224 @@ svg {
   .site-status-banner { align-items: flex-start; text-align: left; }
   .site-toast-region { right: 12px; bottom: 76px; width: calc(100vw - 24px); }
 }
+
+/* ═══════════════════════════════════════════════════
+   ОБЯВИ — listings
+═══════════════════════════════════════════════════ */
+
+.listings-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.listings-filters input[type="search"] {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #d7deea;
+  border-radius: 10px;
+  font-size: 15px;
+  background: #fff;
+}
+
+.listing-categories {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  margin-bottom: 4px;
+}
+
+.listing-cat-btn {
+  padding: 9px 8px;
+  border-radius: 9px;
+  border: 1px solid #d7deea;
+  background: #f4f6fa;
+  color: #26344d;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: background .15s, border-color .15s, color .15s;
+}
+
+.listing-cat-btn:hover {
+  border-color: #0b5fd7;
+  color: #0b5fd7;
+  background: #eef4ff;
+}
+
+.listing-cat-btn.active {
+  background: #0b5fd7;
+  color: #fff;
+  border-color: #0b5fd7;
+}
+
+.listings-sort-row {
+  display: flex;
+  gap: 8px;
+}
+
+.listings-sort-row select {
+  flex: 1;
+  padding: 9px 12px;
+  border: 1px solid #d7deea;
+  border-radius: 10px;
+  font-size: 14px;
+  background: #fff;
+  color: #26344d;
+}
+
+.listings-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.listing-card {
+  background: #fff;
+  border: 1px solid #d7deea;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.listing-card--highlighted {
+  border-color: #0b5fd7;
+  box-shadow: 0 0 0 3px #eef4ff;
+}
+
+.listing-card-cover {
+  display: block;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  background: #eef2f7;
+}
+
+.listing-card-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.listing-card-body {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.listing-card-body h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.listing-card-body h3 a {
+  color: #172033;
+  text-decoration: none;
+}
+
+.listing-card-body h3 a:hover { color: #0b5fd7; }
+
+.listing-category {
+  margin: 0;
+  font-size: 13px;
+  color: #59657a;
+}
+
+.listing-price {
+  margin: 4px 0 0;
+  font-size: 17px;
+  font-weight: 900;
+  color: #172033;
+}
+
+.listing-price s {
+  color: #9aa3b0;
+  font-weight: 400;
+  font-size: 14px;
+  margin-right: 4px;
+}
+
+.listing-location, .listing-date {
+  margin: 0;
+  font-size: 13px;
+  color: #59657a;
+}
+
+.listing-type-badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  background: #eef2f7;
+  color: #26344d;
+  margin-bottom: 4px;
+  width: fit-content;
+}
+
+.listing-badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  margin-right: 4px;
+  margin-bottom: 4px;
+}
+
+.listing-badge.urgent { background: #fef3c7; color: #92400e; }
+.listing-badge.highlighted { background: #dbeafe; color: #1e40af; }
+.listing-badge.reduced { background: #dcfce7; color: #166534; }
+
+@media (min-width: 600px) {
+  .listings-filters {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .listings-filters input[type="search"] {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .listing-categories {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+
+  .listings-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1000px) {
+  .listings-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .listing-categories {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+/* Валидация на формата за обяви */
+#listing-form .field-error {
+  color: #b91c1c;
+  font-size: 13px;
+  font-weight: 700;
+  margin: -8px 0 8px;
+}
+
+#listing-form input:invalid.touched,
+#listing-form select:invalid.touched,
+#listing-form textarea:invalid.touched {
+  border-color: #ef4444;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(239,68,68,.15);
+}
