@@ -124,6 +124,24 @@
 
     let listings = data || [];
 
+    // Зареждаме cover снимките
+    if (listings.length) {
+      const ids = listings.map(l => l.id);
+      const { data: mediaData } = await client.from("media")
+        .select("entity_id, storage_path")
+        .eq("entity_type", "listing")
+        .in("entity_id", ids)
+        .eq("status", "approved")
+        .order("created_at", { ascending: true });
+
+      const coverMap = {};
+      (mediaData || []).forEach(m => {
+        if (!coverMap[m.entity_id]) coverMap[m.entity_id] = m.storage_path;
+      });
+
+      listings = listings.map(l => ({ ...l, _coverUrl: coverMap[l.id] ? publicUrl(coverMap[l.id]) : "" }));
+    }
+
     // Admin обявите на Иванов Ремонти винаги първи
     listings.sort((a, b) => {
       if (a.owner_id === ADMIN_ID && b.owner_id !== ADMIN_ID) return -1;
@@ -145,7 +163,7 @@
       container.innerHTML = '<article class="empty-card"><p>Няма намерени обяви.</p></article>';
       return;
     }
-    container.innerHTML = listings.map(item => listingCard(item)).join("");
+    container.innerHTML = listings.map(item => listingCard(item, item._coverUrl || "")).join("");
   }
 
   function initFilters(allListings) {
@@ -225,7 +243,17 @@
 
     // Show image uploader
     const uploader = $("#listing-image-uploader");
-    if (uploader) uploader.hidden = false;
+    if (uploader) {
+      uploader.hidden = false;
+      uploader.dataset.maxFiles = isAdmin ? "20" : "6";
+    }
+
+    // Изчакваме PopitaiImages да се зареди
+    await new Promise(resolve => {
+      if (window.PopitaiImages) return resolve();
+      const t = setInterval(() => { if (window.PopitaiImages) { clearInterval(t); resolve(); } }, 50);
+      setTimeout(resolve, 3000);
+    });
     if (window.PopitaiImages?.init) window.PopitaiImages.init();
 
     await getAuth();
@@ -269,11 +297,58 @@
     catSelect?.addEventListener("change", updateTypeField);
     updateTypeField();
 
+    // Edit mode
+    const editId = new URLSearchParams(window.location.search).get("edit");
+    let editMode = false;
+    let editData = null;
+
+    if (editId) {
+      const { data } = await client.from("listings").select("*").eq("id", editId).maybeSingle();
+      if (data && (data.owner_id === authUser?.id || data.author_id === authUser?.id || isAdmin)) {
+        editMode = true;
+        editData = data;
+        const set = (id, val) => { const el = $(id); if (el) el.value = val ?? ""; };
+        set("#listing-title", data.title);
+        set("#listing-subcategory", data.subcategory);
+        set("#listing-description", data.description);
+        set("#listing-price", data.price);
+        set("#listing-phone", data.phone);
+        set("#listing-city", data.city);
+        set("#listing-street", data.street);
+        if (catSelect) { catSelect.value = data.category; catSelect.dispatchEvent(new Event("change")); }
+        window.setTimeout(() => {
+          if (data.category === "Работа") { const el = $("#listing-type-rabota-select"); if (el) el.value = data.listing_type; }
+          else if (data.category === "Имоти") { const el = $("#listing-type-imoti-select"); if (el) el.value = data.listing_type; }
+          else { const el = $("#listing-type"); if (el) el.value = data.listing_type; }
+        }, 100);
+        if ($("#listing-price-negotiable")) $("#listing-price-negotiable").checked = data.price_negotiable;
+        if ($("#listing-price-free")) $("#listing-price-free").checked = data.price_free;
+        if (data.price) { const bgn = $("#listing-price-bgn"); if (bgn) bgn.textContent = `≈ ${(data.price * 1.95583).toFixed(2)} лв.`; }
+        const hero = document.querySelector(".page-hero h1");
+        if (hero) hero.textContent = "Редактирай обява";
+        const heroP = document.querySelector(".page-hero p");
+        if (heroP) heroP.textContent = "Промените ще бъдат прегледани преди публикуване.";
+      }
+    }
+
     if (isAdmin) {
       const btn = $("#listing-submit");
-      if (btn) btn.textContent = "Публикувай обявата";
+      if (btn) btn.textContent = editMode ? "Запази промените" : "Публикувай обявата";
       const extSection = $("#listing-admin-extended");
-      if (extSection) extSection.hidden = false;
+      if (extSection) {
+        extSection.hidden = false;
+        if (editData) {
+          if ($("#ext-is-urgent")) $("#ext-is-urgent").checked = editData.is_urgent;
+          if ($("#ext-is-reduced")) $("#ext-is-reduced").checked = editData.is_reduced;
+          if ($("#ext-is-boosted")) $("#ext-is-boosted").checked = editData.is_boosted;
+          if ($("#ext-is-highlighted")) $("#ext-is-highlighted").checked = editData.is_highlighted;
+          if ($("#ext-show-stats")) $("#ext-show-stats").checked = editData.show_stats;
+          if ($("#ext-show-contact-buttons")) $("#ext-show-contact-buttons").checked = editData.show_contact_buttons;
+        }
+      }
+    } else if (editMode) {
+      const btn = $("#listing-submit");
+      if (btn) btn.textContent = "Изпрати за преглед";
     }
 
     // Live duplicate check
@@ -328,10 +403,10 @@
         listingType = $("#listing-type")?.value || "";
       }
 
+      const editIdSubmit = new URLSearchParams(window.location.search).get("edit");
+
       const priceVal = $("#listing-price")?.value;
       const payload = {
-        owner_id: user.id,
-        author_id: user.id,
         currency: "евро",
         title: $("#listing-title")?.value.trim(),
         category: $("#listing-category")?.value,
@@ -345,7 +420,6 @@
         city: $("#listing-city")?.value.trim(),
         street: $("#listing-street")?.value.trim() || "",
         status: admin ? "approved" : "pending",
-        is_owner_admin: admin,
         is_urgent: admin ? ($("#ext-is-urgent")?.checked || false) : false,
         is_reduced: admin ? ($("#ext-is-reduced")?.checked || false) : false,
         is_boosted: admin ? ($("#ext-is-boosted")?.checked || false) : false,
@@ -354,7 +428,22 @@
         show_contact_buttons: admin ? ($("#ext-show-contact-buttons")?.checked || false) : false
       };
 
-      const { data: listing, error } = await client.from("listings").insert(payload).select("id").single();
+      let listing, error;
+
+      if (editIdSubmit) {
+        // UPDATE
+        const { data, error: upErr } = await client.from("listings")
+          .update(payload)
+          .eq("id", editIdSubmit)
+          .select("id").single();
+        listing = data; error = upErr;
+      } else {
+        // INSERT
+        const insertPayload = { ...payload, owner_id: user.id, author_id: user.id, is_owner_admin: admin };
+        const { data, error: inErr } = await client.from("listings")
+          .insert(insertPayload).select("id").single();
+        listing = data; error = inErr;
+      }
       if (error || !listing) {
         setMessage(humanError(error, "Обявата не беше записана. Провери данните."), "error");
         btn.disabled = false;
@@ -386,7 +475,12 @@
         }
         form.reset();
         btn.textContent = "Публикувай обявата";
-        setMessage(admin ? "Обявата е публикувана." : "Обявата е изпратена и чака одобрение.", "success");
+        setMessage(
+          editIdSubmit
+            ? (admin ? "Промените са запазени." : "Промените са изпратени и чакат одобрение.")
+            : (admin ? "Обявата е публикувана." : "Обявата е изпратена и чака одобрение."),
+          "success"
+        );
       } catch (imgErr) {
         setMessage("Обявата е записана, но снимките не се качиха.", "error");
       }
@@ -508,6 +602,24 @@
 
     const days = item.expires_at ? daysLeft(item.expires_at) : null;
 
+    // Снимки
+    const { data: mediaData } = await client.from("media")
+      .select("storage_path")
+      .eq("entity_type", "listing")
+      .eq("entity_id", id)
+      .eq("status", "approved")
+      .order("created_at", { ascending: true });
+
+    const images = (mediaData || []).map(m => publicUrl(m.storage_path)).filter(Boolean);
+
+    const galleryHtml = images.length ? `
+      <div style="margin-bottom:20px">
+        ${images.length > 0 ? `<img src="${escHtml(images[0])}" alt="${escHtml(item.title)}" style="width:100%;max-height:420px;object-fit:cover;border-radius:12px;margin-bottom:10px">` : ""}
+        ${images.length > 1 ? `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px">
+          ${images.slice(1).map(url => `<img src="${escHtml(url)}" alt="" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px">`).join("")}
+        </div>` : ""}
+      </div>` : "";
+
     container.innerHTML = `
       <article>
         <div style="margin-bottom:12px">
@@ -519,6 +631,7 @@
         <p style="margin:0 0 8px;color:#59657a;font-size:14px">${escHtml(item.category)}${item.subcategory ? " › " + escHtml(item.subcategory) : ""}</p>
         ${price ? `<p style="font-size:20px;font-weight:900;margin:0 0 12px">${item.price_old && item.is_reduced ? `<s style="color:#9aa3b0;font-weight:400;font-size:15px">${Number(item.price_old).toLocaleString("bg-BG")} евро</s> ` : ""}${escHtml(price)}</p>` : ""}
         <p style="margin:0 0 16px;color:#59657a;font-size:13px">${formatDate(item.created_at)}${item.city ? " · " + escHtml(item.city) : ""}${item.street ? ", " + escHtml(item.street) : ""}${days !== null ? " · Изтича след " + days + " дни" : ""}</p>
+        ${galleryHtml}
         <div style="white-space:pre-wrap;line-height:1.7;margin-bottom:24px">${escHtml(item.description)}</div>
         <a href="obyavi.html" style="color:#0b5fd7;font-size:14px">← Всички обяви</a>
       </article>`;
