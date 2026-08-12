@@ -3,124 +3,142 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Здраве и лекари | Попитай.Лом</title>
-  <meta name="description" content="Лекари, стоматолози, аптеки и здравни услуги в Лом.">
+  <title>Здраве в Лом — лекари, аптеки, болница | Попитай.Лом</title>
+  <meta name="description" content="Лекари, стоматолози, аптеки, болница и спешна помощ в Лом. Телефони, адреси и работно време.">
   <meta name="theme-color" content="#0b5fd7">
   <link rel="stylesheet" href="style.css?v=20260805-0736">
   <link rel="icon" href="assets/favicon-96.png" type="image/png">
+  <style>
+    .info-hero{background:#172033;color:#fff;padding:32px 20px 28px}
+    .info-hero .kicker{color:#c9a35a;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:8px}
+    .info-hero h1{font-size:28px;font-weight:900;margin:0 0 8px}
+    .info-hero p{color:#8a9bb0;font-size:14px;margin:0}
+    .anchor-nav{background:#fff;border-bottom:1px solid #dce3ee;padding:0 16px;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;display:flex}
+    .anchor-nav a{display:inline-block;padding:14px 14px;font-size:13px;font-weight:700;color:#59657a;text-decoration:none;border-bottom:2.5px solid transparent;flex-shrink:0}
+    .anchor-nav a:hover{color:#0b5fd7;border-bottom-color:#0b5fd7}
+    .info-section{padding:28px 16px;max-width:960px;margin:0 auto}
+    .info-section-title{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+    .info-section-title h2{font-size:19px;font-weight:900;margin:0}
+    .info-divider{border:0;border-top:1px solid #dce3ee;margin:4px 0}
+    .info-empty{color:#59657a;font-size:14px;padding:8px 0}
+    .info-loading{color:#59657a;font-size:14px;padding:8px 0}
+
+    /* Карти */
+    .info-cards{display:grid;grid-template-columns:1fr;gap:12px}
+    @media(min-width:600px){.info-cards{grid-template-columns:1fr 1fr}}
+    @media(min-width:900px){.info-cards{grid-template-columns:1fr 1fr 1fr}}
+
+    .info-card{background:#fff;border:1px solid #dce3ee;border-radius:14px;padding:18px}
+    .info-card--institution{border-left:4px solid #0b5fd7}
+    .info-card--department{border-left:4px solid #7c3aed;background:#faf9ff}
+    .info-card--doctor{border-left:4px solid #16a34a}
+    .info-card--pharmacy{border-left:4px solid #c9a35a}
+    .info-card--dentist{border-left:4px solid #0891b2}
+    .info-card--vet{border-left:4px solid #9333ea}
+    .info-card--vet-pharmacy{border-left:4px solid #b45309}
+    .info-card--laboratory{border-left:4px solid #dc2626}
+
+    .info-card-type{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:#9aa3b0;margin-bottom:6px}
+    .info-card-name{font-size:16px;font-weight:900;color:#172033;margin:0 0 8px}
+    .info-card-specialty{font-size:13px;font-weight:700;color:#0b5fd7;margin:0 0 6px}
+    .info-card-meta{font-size:13px;color:#59657a;margin:0 0 4px;display:flex;align-items:flex-start;gap:6px}
+    .info-card-meta svg{width:14px;height:14px;flex-shrink:0;margin-top:1px;stroke:#9aa3b0;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .info-card-phone{margin:10px 0 6px}
+    .info-card-phone a{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;background:#16a34a;color:#fff;border-radius:999px;font-size:14px;font-weight:800;text-decoration:none}
+    .info-card-phone a svg{width:15px;height:15px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .info-card-confirmed{font-size:11px;color:#9aa3b0;margin:8px 0 0}
+    .info-card-secondary{font-size:11px;color:#b45309;font-style:italic;margin:4px 0 0}
+    .info-card-nzok{display:inline-block;margin-top:6px;padding:2px 10px;background:#dcfce7;color:#166534;border-radius:999px;font-size:11px;font-weight:800}
+
+    /* Бутони */
+    .info-section-actions{margin-top:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+    .add-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border:1.5px dashed #0b5fd7;border-radius:10px;color:#0b5fd7;font-size:13px;font-weight:700;background:none;cursor:pointer}
+    .add-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5}
+    .signal-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border:1.5px solid #d7deea;border-radius:10px;color:#59657a;font-size:13px;font-weight:700;background:none;cursor:pointer}
+
+    /* Обща зона за сигнал */
+    .info-signal-zone{background:#fff8f0;border:1px solid #fed7aa;border-radius:12px;padding:16px 20px;margin:28px 16px;max-width:960px;margin-left:auto;margin-right:auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+    .info-signal-zone p{margin:0;font-size:14px;color:#9a3412;font-weight:700;flex:1}
+    .info-signal-zone button{padding:9px 20px;background:#ea580c;color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:800;cursor:pointer}
+  </style>
 </head>
 <body class="">
 
   <a class="skip-link" href="#main-content">Към основното съдържание</a>
   <header class="site-header" id="site-header">
     <div class="header-inner">
-      
       <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
-        <span class="brand-mark" aria-hidden="true">
-          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
-        </span>
-        <span class="brand-text">
-          <strong>Попитай<span>.Лом</span></strong>
-          <small>Попитай. Намери. Препоръчай.</small>
-        </span>
+        <span class="brand-mark" aria-hidden="true"><img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt=""></span>
+        <span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span>
       </a>
-    
-      <nav class="main-nav" id="main-nav" aria-label="Главна навигация"><a class="" href="index.html">Начало</a><a class="active" href="kategorii.html">Категории</a><a class="" href="firmi.html">Фирми</a><a class="" href="vaprosi.html">Въпроси</a><a class="" href="statii.html">Статии</a></nav>
+      <nav class="main-nav" id="main-nav" aria-label="Главна навигация">
+        <a href="index.html">Начало</a><a href="kategorii.html">Категории</a><a href="firmi.html">Фирми</a><a href="vaprosi.html">Въпроси</a><a href="obyavi.html">Обяви</a><a href="statii.html">Статии</a>
+      </nav>
       <div class="header-actions">
         <a class="login-link" href="vhod.html">Вход</a>
-        <a class="ask-button" href="nov-vapros.html">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-          Задай въпрос
-        </a>
-        <button class="menu-button" id="menu-button" type="button" aria-label="Отвори менюто" aria-expanded="false" aria-controls="main-nav">
-          <span></span><span></span><span></span>
-        </button>
+        <a class="ask-button" href="nov-vapros.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Задай въпрос</a>
+        <button class="menu-button" id="menu-button" type="button" aria-label="Отвори менюто" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span></button>
       </div>
     </div>
   </header>
 
 <main id="main-content">
-<section class="page-hero">
-  <div class="section-container">
-    <span class="section-kicker">Категория</span>
-    <div class="page-hero-title-row"><span class="category-symbol category-symbol--mint" aria-hidden="true"><svg class="brand-category-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3v5a5 5 0 0 0 10 0V3"/><path d="M4 3h2M16 3h2"/><path d="M11 13v2a5 5 0 0 0 10 0v-1"/><circle class="icon-accent" cx="21" cy="12" r="2"/></svg></span><h1>Здраве и лекари</h1></div>
-    <p>Лекари, стоматолози, аптеки и здравни услуги в Лом.</p>
-    <a class="primary-link-button" href="nov-vapros.html?category=zdrave">Задай въпрос</a>
-  </div>
-</section>
 
-<section class="content-section">
-  <div class="section-container two-column-layout">
-    <div>
-      <div class="block-heading"><h2>Подраздели</h2></div>
-      <div class="subcategory-grid"><a class="subcategory-card" href="tarsene.html?q=Лични лекари"><strong>Лични лекари</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Зъболекари"><strong>Зъболекари</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Педиатри"><strong>Педиатри</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Специалисти"><strong>Специалисти</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Аптеки"><strong>Аптеки</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Лаборатории"><strong>Лаборатории</strong><span>Въпроси и фирми</span></a></div>
-      <div class="block-heading spaced"><h2>Последни въпроси</h2><a href="vaprosi.html">Всички въпроси</a></div>
-      <div class="stack-list category-question-list" data-question-category="Здраве и лекари">
-        <article class="empty-card">
-          <p>Все още няма публикувани въпроси в тази категория.</p>
-          <a class="primary-link-button" href="nov-vapros.html?category=zdrave">Задай въпрос</a>
-        </article>
-      </div>
-    </div>
-    <aside class="side-panel">
-      <h2>Търси в категорията</h2>
-      <form class="side-search" action="tarsene.html">
-        <input type="search" name="q" placeholder="Какво търсиш?">
-        <button type="submit">Търси</button>
-      </form>
-      <h2>Полезно</h2>
-      <a href="pravila.html">Как да разпознаеш надеждна препоръка</a>
-      <a href="signal.html">Подай сигнал за нередност</a>
-    </aside>
+  <div class="info-hero">
+    <span class="kicker">Информация за Лом</span>
+    <h1>Здраве в Лом</h1>
+    <p>Болници, медицински центрове, лекари, аптеки, стоматолози и ветеринари в Лом.</p>
   </div>
-</section>
+
+  <nav class="anchor-nav" aria-label="Секции">
+    <a href="#bolnica">🏥 Болница и МЦ</a>
+    <a href="#lekari">👤 Лекари</a>
+    <a href="#apteki">💊 Аптеки</a>
+    <a href="#stomatolozi">🦷 Стоматолози</a>
+    <a href="#veterinari">🐾 Ветеринари</a>
+    <a href="#vet-apteki">🏪 Вет. аптеки</a>
+    <a href="#laboratorii">🔬 Лаборатории</a>
+  </nav>
+
+  <div id="info-zdrave-container">
+    <div class="info-section"><p class="info-loading">Зареждане…</p></div>
+  </div>
+
+  <div class="info-signal-zone">
+    <p>⚠️ Виждате грешна или остаряла информация?</p>
+    <button onclick="openSignalForm()">Сигнализирай за грешка</button>
+  </div>
+
 </main>
 
   <footer class="site-footer">
     <div class="section-container footer-main">
       <div class="footer-brand">
-        
-      <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
-        <span class="brand-mark" aria-hidden="true">
-          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
-        </span>
-        <span class="brand-text">
-          <strong>Попитай<span>.Лом</span></strong>
-          <small>Попитай. Намери. Препоръчай.</small>
-        </span>
-      </a>
-    
+        <a class="brand" href="index.html"><span class="brand-mark"><img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt=""></span><span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span></a>
         <p>Местната общност на Лом за препоръки, услуги и полезна информация.</p>
       </div>
-      <div class="footer-column">
-        <h2>Разгледай</h2>
-        <a href="kategorii.html">Категории</a><a href="vaprosi.html">Въпроси</a>
-        <a href="firmi.html">Фирми</a><a href="statii.html">Статии</a>
-      </div>
-      <div class="footer-column">
-        <h2>За общността</h2>
-        <a href="za-nas.html">За сайта</a><a href="pravila.html">Правила</a>
-        <a href="kontakti.html">Контакти</a><a href="signal.html">Подай сигнал</a>
-      </div>
-      <div class="footer-column">
-        <h2>Правна информация</h2>
-        <a href="poveritelnost.html">Поверителност</a><a href="uslovia.html">Условия за ползване</a>
-        <a href="biskvitki.html">Бисквитки</a>
-      </div>
+      <div class="footer-column"><h2>Разгледай</h2><a href="kategorii.html">Категории</a><a href="vaprosi.html">Въпроси</a><a href="firmi.html">Фирми</a><a href="statii.html">Статии</a></div>
+      <div class="footer-column"><h2>За общността</h2><a href="za-nas.html">За сайта</a><a href="pravila.html">Правила</a><a href="kontakti.html">Контакти</a><a href="signal.html">Подай сигнал</a></div>
+      <div class="footer-column"><h2>Правна информация</h2><a href="poveritelnost.html">Поверителност</a><a href="uslovia.html">Условия за ползване</a><a href="biskvitki.html">Бисквитки</a></div>
     </div>
     <div class="section-container footer-bottom">
       <p>© <span id="current-year">2026</span> Попитай.Лом. Всички права запазени.</p>
       <p>Създадено за хората от Лом.</p>
     </div>
   </footer>
-  <nav class="mobile-bottom-nav" aria-label="Мобилна навигация"><a class="" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>Начало</span></a><a class="active" href="kategorii.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Категории</span></a><a class="mobile-ask" href="nov-vapros.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Въпрос</span></a><a class="" href="vaprosi.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg><span>Въпроси</span></a><a class="" href="profil.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профил</span></a></nav>
-  <button class="back-to-top" id="back-to-top" type="button" aria-label="Към началото">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
-  </button>
 
-<script src="image-upload.js" defer></script>
+  <nav class="mobile-bottom-nav" aria-label="Мобилна навигация">
+    <a href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>Начало</span></a>
+    <a href="kategorii.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Категории</span></a>
+    <a class="mobile-ask" href="nov-vapros.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Въпрос</span></a>
+    <a href="vaprosi.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg><span>Въпроси</span></a>
+    <a href="profil.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профил</span></a>
+  </nav>
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="Към началото"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg></button>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="supabase-config.js?v=20260805-2312" defer></script>
+  <script src="supabase-info.js?v=20260812-1000" defer></script>
   <script src="script.js?v=20260805-2312" defer></script>
 </body>
 </html>

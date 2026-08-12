@@ -124,24 +124,6 @@
 
     let listings = data || [];
 
-    // Зареждаме cover снимките
-    if (listings.length) {
-      const ids = listings.map(l => l.id);
-      const { data: mediaData } = await client.from("media")
-        .select("entity_id, storage_path")
-        .eq("entity_type", "listing")
-        .in("entity_id", ids)
-        .eq("status", "approved")
-        .order("created_at", { ascending: true });
-
-      const coverMap = {};
-      (mediaData || []).forEach(m => {
-        if (!coverMap[m.entity_id]) coverMap[m.entity_id] = m.storage_path;
-      });
-
-      listings = listings.map(l => ({ ...l, _coverUrl: coverMap[l.id] ? publicUrl(coverMap[l.id]) : "" }));
-    }
-
     // Admin обявите на Иванов Ремонти винаги първи
     listings.sort((a, b) => {
       if (a.owner_id === ADMIN_ID && b.owner_id !== ADMIN_ID) return -1;
@@ -163,7 +145,7 @@
       container.innerHTML = '<article class="empty-card"><p>Няма намерени обяви.</p></article>';
       return;
     }
-    container.innerHTML = listings.map(item => listingCard(item, item._coverUrl || "")).join("");
+    container.innerHTML = listings.map(item => listingCard(item)).join("");
   }
 
   function initFilters(allListings) {
@@ -243,17 +225,7 @@
 
     // Show image uploader
     const uploader = $("#listing-image-uploader");
-    if (uploader) {
-      uploader.hidden = false;
-      uploader.dataset.maxFiles = isAdmin ? "20" : "6";
-    }
-
-    // Изчакваме PopitaiImages да се зареди
-    await new Promise(resolve => {
-      if (window.PopitaiImages) return resolve();
-      const t = setInterval(() => { if (window.PopitaiImages) { clearInterval(t); resolve(); } }, 50);
-      setTimeout(resolve, 3000);
-    });
+    if (uploader) uploader.hidden = false;
     if (window.PopitaiImages?.init) window.PopitaiImages.init();
 
     await getAuth();
@@ -297,58 +269,11 @@
     catSelect?.addEventListener("change", updateTypeField);
     updateTypeField();
 
-    // Edit mode
-    const editId = new URLSearchParams(window.location.search).get("edit");
-    let editMode = false;
-    let editData = null;
-
-    if (editId) {
-      const { data } = await client.from("listings").select("*").eq("id", editId).maybeSingle();
-      if (data && (data.owner_id === authUser?.id || data.author_id === authUser?.id || isAdmin)) {
-        editMode = true;
-        editData = data;
-        const set = (id, val) => { const el = $(id); if (el) el.value = val ?? ""; };
-        set("#listing-title", data.title);
-        set("#listing-subcategory", data.subcategory);
-        set("#listing-description", data.description);
-        set("#listing-price", data.price);
-        set("#listing-phone", data.phone);
-        set("#listing-city", data.city);
-        set("#listing-street", data.street);
-        if (catSelect) { catSelect.value = data.category; catSelect.dispatchEvent(new Event("change")); }
-        window.setTimeout(() => {
-          if (data.category === "Работа") { const el = $("#listing-type-rabota-select"); if (el) el.value = data.listing_type; }
-          else if (data.category === "Имоти") { const el = $("#listing-type-imoti-select"); if (el) el.value = data.listing_type; }
-          else { const el = $("#listing-type"); if (el) el.value = data.listing_type; }
-        }, 100);
-        if ($("#listing-price-negotiable")) $("#listing-price-negotiable").checked = data.price_negotiable;
-        if ($("#listing-price-free")) $("#listing-price-free").checked = data.price_free;
-        if (data.price) { const bgn = $("#listing-price-bgn"); if (bgn) bgn.textContent = `≈ ${(data.price * 1.95583).toFixed(2)} лв.`; }
-        const hero = document.querySelector(".page-hero h1");
-        if (hero) hero.textContent = "Редактирай обява";
-        const heroP = document.querySelector(".page-hero p");
-        if (heroP) heroP.textContent = "Промените ще бъдат прегледани преди публикуване.";
-      }
-    }
-
     if (isAdmin) {
       const btn = $("#listing-submit");
-      if (btn) btn.textContent = editMode ? "Запази промените" : "Публикувай обявата";
+      if (btn) btn.textContent = "Публикувай обявата";
       const extSection = $("#listing-admin-extended");
-      if (extSection) {
-        extSection.hidden = false;
-        if (editData) {
-          if ($("#ext-is-urgent")) $("#ext-is-urgent").checked = editData.is_urgent;
-          if ($("#ext-is-reduced")) $("#ext-is-reduced").checked = editData.is_reduced;
-          if ($("#ext-is-boosted")) $("#ext-is-boosted").checked = editData.is_boosted;
-          if ($("#ext-is-highlighted")) $("#ext-is-highlighted").checked = editData.is_highlighted;
-          if ($("#ext-show-stats")) $("#ext-show-stats").checked = editData.show_stats;
-          if ($("#ext-show-contact-buttons")) $("#ext-show-contact-buttons").checked = editData.show_contact_buttons;
-        }
-      }
-    } else if (editMode) {
-      const btn = $("#listing-submit");
-      if (btn) btn.textContent = "Изпрати за преглед";
+      if (extSection) extSection.hidden = false;
     }
 
     // Live duplicate check
@@ -403,10 +328,10 @@
         listingType = $("#listing-type")?.value || "";
       }
 
-      const editIdSubmit = new URLSearchParams(window.location.search).get("edit");
-
       const priceVal = $("#listing-price")?.value;
       const payload = {
+        owner_id: user.id,
+        author_id: user.id,
         currency: "евро",
         title: $("#listing-title")?.value.trim(),
         category: $("#listing-category")?.value,
@@ -420,6 +345,7 @@
         city: $("#listing-city")?.value.trim(),
         street: $("#listing-street")?.value.trim() || "",
         status: admin ? "approved" : "pending",
+        is_owner_admin: admin,
         is_urgent: admin ? ($("#ext-is-urgent")?.checked || false) : false,
         is_reduced: admin ? ($("#ext-is-reduced")?.checked || false) : false,
         is_boosted: admin ? ($("#ext-is-boosted")?.checked || false) : false,
@@ -428,22 +354,7 @@
         show_contact_buttons: admin ? ($("#ext-show-contact-buttons")?.checked || false) : false
       };
 
-      let listing, error;
-
-      if (editIdSubmit) {
-        // UPDATE
-        const { data, error: upErr } = await client.from("listings")
-          .update(payload)
-          .eq("id", editIdSubmit)
-          .select("id").single();
-        listing = data; error = upErr;
-      } else {
-        // INSERT
-        const insertPayload = { ...payload, owner_id: user.id, author_id: user.id, is_owner_admin: admin };
-        const { data, error: inErr } = await client.from("listings")
-          .insert(insertPayload).select("id").single();
-        listing = data; error = inErr;
-      }
+      const { data: listing, error } = await client.from("listings").insert(payload).select("id").single();
       if (error || !listing) {
         setMessage(humanError(error, "Обявата не беше записана. Провери данните."), "error");
         btn.disabled = false;
@@ -475,12 +386,7 @@
         }
         form.reset();
         btn.textContent = "Публикувай обявата";
-        setMessage(
-          editIdSubmit
-            ? (admin ? "Промените са запазени." : "Промените са изпратени и чакат одобрение.")
-            : (admin ? "Обявата е публикувана." : "Обявата е изпратена и чака одобрение."),
-          "success"
-        );
+        setMessage(admin ? "Обявата е публикувана." : "Обявата е изпратена и чака одобрение.", "success");
       } catch (imgErr) {
         setMessage("Обявата е записана, но снимките не се качиха.", "error");
       }
@@ -556,26 +462,48 @@
     container.innerHTML = `
       <p style="margin:0 0 12px;font-size:13px;color:#59657a;font-weight:700">${activeCount} активни от ${MAX_LISTINGS} позволени</p>
       ${items.map(item => {
+        const isExpired = item.expires_at && daysLeft(item.expires_at) === 0;
         const days = item.expires_at ? daysLeft(item.expires_at) : null;
         const statusLabels = { approved: "Активна", pending: "Чака одобрение", rejected: "Отказана", needs_changes: "Върната за корекция" };
         const statusColors = { approved: "#16a34a", pending: "#9a6700", rejected: "#b91c1c", needs_changes: "#1d4ed8" };
         const price = formatPrice(item);
         return `<article class="db-profile-item">
           <div class="db-moderation-meta">
-            <span style="color:${statusColors[item.status] || "#59657a"};font-weight:800">${statusLabels[item.status] || item.status}</span>
+            <span style="color:${isExpired ? "#b91c1c" : statusColors[item.status] || "#59657a"};font-weight:800">${isExpired ? "Изтекла" : statusLabels[item.status] || item.status}</span>
             <span>${formatDate(item.created_at)}</span>
-            ${days !== null ? `<span style="color:${days < 7 ? "#b91c1c" : "#59657a"}">Изтича след ${days} дни</span>` : ""}
+            ${days !== null && !isExpired ? `<span style="color:${days < 7 ? "#b91c1c" : "#59657a"}">Изтича след ${days} дни</span>` : ""}
           </div>
           <h3 style="margin:4px 0"><a href="obqva.html?id=${escHtml(item.id)}">${escHtml(item.title)}</a></h3>
           <p style="margin:0;font-size:13px;color:#59657a">${escHtml(item.category)} · ${escHtml(item.listing_type || "")}${price ? " · " + escHtml(price) : ""}</p>
           ${item.moderation_note ? `<p style="margin:6px 0 0;font-size:13px;color:#b91c1c"><strong>Бележка:</strong> ${escHtml(item.moderation_note)}</p>` : ""}
           <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
             <a href="obqva.html?id=${escHtml(item.id)}" style="padding:6px 14px;border:1px solid #d7deea;border-radius:8px;font-size:13px;font-weight:700;color:#26344d;text-decoration:none">Преглед</a>
-            ${item.status === "approved" || item.status === "needs_changes" ? `<a href="dobavi-obqva.html?edit=${escHtml(item.id)}" style="padding:6px 14px;border:1px solid #d7deea;border-radius:8px;font-size:13px;font-weight:700;color:#26344d;text-decoration:none">Редактирай</a>` : ""}
+            ${!isExpired && (item.status === "approved" || item.status === "needs_changes") ? `<a href="dobavi-obqva.html?edit=${escHtml(item.id)}" style="padding:6px 14px;border:1px solid #d7deea;border-radius:8px;font-size:13px;font-weight:700;color:#26344d;text-decoration:none">Редактирай</a>` : ""}
+            ${isExpired ? `<button onclick="renewListing('${escHtml(item.id)}', this)" style="padding:6px 14px;border:1px solid #0b5fd7;border-radius:8px;font-size:13px;font-weight:700;color:#0b5fd7;background:#fff;cursor:pointer">Поднови</button>` : ""}
           </div>
         </article>`;
       }).join("")}`;
   }
+
+  window.renewListing = async (id, btn) => {
+    btn.disabled = true;
+    btn.textContent = "Изпращане…";
+    const newExpiry = new Date();
+    newExpiry.setDate(newExpiry.getDate() + 60);
+    const { error } = await client.from("listings").update({
+      status: "pending",
+      expires_at: newExpiry.toISOString(),
+      moderation_note: ""
+    }).eq("id", id);
+    if (error) {
+      btn.textContent = "Грешка";
+      btn.disabled = false;
+    } else {
+      btn.textContent = "Изпратена за преглед";
+      btn.style.color = "#16a34a";
+      btn.style.borderColor = "#16a34a";
+    }
+  };
 
   async function loadListingDetail() {
     const container = $("#listing-detail");
@@ -585,7 +513,7 @@
     if (!id) { container.innerHTML = '<article class="empty-card"><p>Обявата не е намерена.</p></article>'; return; }
 
     const { data: item, error } = await client.from("listings")
-      .select("id, owner_id, title, category, subcategory, listing_type, description, price, price_negotiable, price_free, price_old, currency, phone, city, street, is_urgent, is_highlighted, is_reduced, is_owner_admin, created_at, expires_at")
+      .select("id, owner_id, title, category, subcategory, listing_type, description, price, price_negotiable, price_free, price_old, currency, phone, city, street, is_urgent, is_highlighted, is_reduced, is_owner_admin, show_stats, view_count, created_at, expires_at, show_contact_buttons")
       .eq("id", id)
       .maybeSingle();
 
@@ -594,6 +522,9 @@
       return;
     }
 
+    // Увеличаваме брояча на прегледи
+    client.rpc("increment_listing_views", { p_id: id });
+
     const price = formatPrice(item);
     const badges = [
       item.is_urgent ? '<span class="listing-badge urgent">Спешно</span>' : "",
@@ -601,24 +532,6 @@
     ].filter(Boolean).join("");
 
     const days = item.expires_at ? daysLeft(item.expires_at) : null;
-
-    // Снимки
-    const { data: mediaData } = await client.from("media")
-      .select("storage_path")
-      .eq("entity_type", "listing")
-      .eq("entity_id", id)
-      .eq("status", "approved")
-      .order("created_at", { ascending: true });
-
-    const images = (mediaData || []).map(m => publicUrl(m.storage_path)).filter(Boolean);
-
-    const galleryHtml = images.length ? `
-      <div style="margin-bottom:20px">
-        ${images.length > 0 ? `<img src="${escHtml(images[0])}" alt="${escHtml(item.title)}" style="width:100%;max-height:420px;object-fit:cover;border-radius:12px;margin-bottom:10px">` : ""}
-        ${images.length > 1 ? `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px">
-          ${images.slice(1).map(url => `<img src="${escHtml(url)}" alt="" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px">`).join("")}
-        </div>` : ""}
-      </div>` : "";
 
     container.innerHTML = `
       <article>
@@ -630,8 +543,7 @@
         <h1 style="margin:8px 0 4px;font-size:24px">${escHtml(item.title)}</h1>
         <p style="margin:0 0 8px;color:#59657a;font-size:14px">${escHtml(item.category)}${item.subcategory ? " › " + escHtml(item.subcategory) : ""}</p>
         ${price ? `<p style="font-size:20px;font-weight:900;margin:0 0 12px">${item.price_old && item.is_reduced ? `<s style="color:#9aa3b0;font-weight:400;font-size:15px">${Number(item.price_old).toLocaleString("bg-BG")} евро</s> ` : ""}${escHtml(price)}</p>` : ""}
-        <p style="margin:0 0 16px;color:#59657a;font-size:13px">${formatDate(item.created_at)}${item.city ? " · " + escHtml(item.city) : ""}${item.street ? ", " + escHtml(item.street) : ""}${days !== null ? " · Изтича след " + days + " дни" : ""}</p>
-        ${galleryHtml}
+        <p style="margin:0 0 16px;color:#59657a;font-size:13px">${formatDate(item.created_at)}${item.city ? " · " + escHtml(item.city) : ""}${item.street ? ", " + escHtml(item.street) : ""}${days !== null ? " · Изтича след " + days + " дни" : ""}${item.show_stats && item.view_count ? " · 👁 " + item.view_count + " прегледа" : ""}</p>
         <div style="white-space:pre-wrap;line-height:1.7;margin-bottom:24px">${escHtml(item.description)}</div>
         <a href="obyavi.html" style="color:#0b5fd7;font-size:14px">← Всички обяви</a>
       </article>`;

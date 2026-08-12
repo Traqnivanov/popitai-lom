@@ -2827,6 +2827,21 @@ svg {
 .directory-icon--rose { background: #fbeef1; color: #b24e66; }
 .directory-icon--violet { background: #f3ecfb; color: #7e59c9; }
 .directory-icon--teal { background: #eaf8f7; color: #1f8f86; }
+.directory-icon--gold {
+  background: transparent;
+  border-radius: 0 !important;
+  border: none !important;
+  padding: 0;
+  width: 72px !important;
+  height: 72px !important;
+}
+.directory-icon--gold > svg,
+.directory-card .directory-icon--gold > svg {
+  width: 72px !important;
+  height: 72px !important;
+  fill: none !important;
+  stroke: none !important;
+}
 
 @media (max-width: 760px) {
   .directory-card > a {
@@ -4666,4 +4681,37 @@ svg {
   border-color: #ef4444;
   outline: none;
   box-shadow: 0 0 0 2px rgba(239,68,68,.15);
+}
+
+/* FIX 2026-08-11 — Категории: ясни, контрастни SVG икони */
+.directory-icon--gold {
+  width: 76px !important;
+  height: 76px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+.directory-icon--gold > .category-badge-svg,
+.directory-card .directory-icon--gold > .category-badge-svg {
+  width: 76px !important;
+  height: 76px !important;
+  display: block;
+  overflow: visible;
+  opacity: 1 !important;
+  filter: drop-shadow(0 8px 15px rgba(6, 37, 91, .10));
+  shape-rendering: geometricPrecision;
+}
+
+.directory-card:hover .directory-icon--gold {
+  background: transparent !important;
+  border: 0 !important;
+  transform: translateY(-2px);
+}
+
+.directory-card:hover .category-badge-svg {
+  filter: drop-shadow(0 10px 18px rgba(6, 37, 91, .16));
 }
