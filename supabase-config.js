@@ -27,6 +27,10 @@
   }
 
   window.addEventListener("DOMContentLoaded", () => {
+    if (document.querySelector("#info-lom-home-v1")) {
+      appendScript("info-home-links.js?v=20260814-0223", "popitai-info-home-links");
+    }
+
     if (document.querySelector(".profile-actions")) {
       appendScript("profile-access.js?v=20260806-0105", "popitai-profile-access");
     }
