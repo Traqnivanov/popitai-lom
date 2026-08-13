@@ -17,6 +17,529 @@
 
   <link rel="stylesheet" href="style.css?v=20260805-0736">
   <link rel="icon" href="assets/favicon-96.png" type="image/png">
+
+  <!-- INFO LOM HOME — TEST V1 -->
+  <style id="info-lom-home-v1-style">
+    #info-lom-home-v1{
+      --il-navy:#071d3d;
+      --il-blue:#126ed8;
+      --il-gold:#a87900;
+      --il-border:#dfe6ef;
+      --il-soft:#f5f8fc;
+      --il-text:#162033;
+      --il-muted:#687386;
+      padding:24px 0 12px;
+      background:#fff;
+    }
+    #info-lom-home-v1 *{box-sizing:border-box}
+    #info-lom-home-v1 .info-lom-wrap{
+      width:min(1120px,calc(100% - 34px));
+      margin:0 auto;
+    }
+    #info-lom-home-v1 .info-lom-panel{
+      border:1px solid var(--il-border);
+      border-radius:20px;
+      background:
+        radial-gradient(circle at 100% 0%,rgba(18,110,216,.10),transparent 34%),
+        linear-gradient(135deg,#fff 0%,var(--il-soft) 100%);
+      box-shadow:0 10px 30px rgba(7,29,61,.07);
+      padding:20px;
+    }
+    #info-lom-home-v1 .info-lom-top{
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:16px;
+    }
+    #info-lom-home-v1 .info-lom-kicker{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      margin-bottom:6px;
+      color:var(--il-gold);
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+    #info-lom-home-v1 .info-lom-kicker svg,
+    #info-lom-home-v1 .info-lom-badge svg,
+    #info-lom-home-v1 .info-lom-note svg{
+      width:16px;
+      height:16px;
+      fill:none;
+      stroke:currentColor;
+      stroke-width:1.9;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+    #info-lom-home-v1 h2{
+      margin:0;
+      color:var(--il-text);
+      font-size:30px;
+      line-height:1.08;
+    }
+    #info-lom-home-v1 .info-lom-lead{
+      margin:7px 0 0;
+      color:var(--il-muted);
+      font-size:14px;
+      line-height:1.45;
+    }
+    #info-lom-home-v1 .info-lom-badge{
+      align-self:flex-start;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:8px 10px;
+      border:1px solid rgba(7,29,61,.10);
+      border-radius:999px;
+      background:#fff;
+      color:var(--il-navy);
+      font-size:12px;
+      font-weight:800;
+      white-space:nowrap;
+    }
+    #info-lom-home-v1 .info-lom-badge svg{color:var(--il-blue)}
+    #info-lom-home-v1 .info-lom-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:9px;
+    }
+    #info-lom-home-v1 .info-lom-item{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-height:66px;
+      padding:11px 12px;
+      border:1px solid var(--il-border);
+      border-radius:14px;
+      background:rgba(255,255,255,.94);
+      color:var(--il-text);
+      text-align:left;
+      box-shadow:0 3px 10px rgba(7,29,61,.035);
+    }
+    #info-lom-home-v1 .info-lom-icon{
+      flex:0 0 36px;
+      width:36px;
+      height:36px;
+      display:grid;
+      place-items:center;
+      border-radius:11px;
+      background:#edf5ff;
+      color:var(--il-blue);
+    }
+    #info-lom-home-v1 .info-lom-icon svg{
+      width:20px;
+      height:20px;
+      fill:none;
+      stroke:currentColor;
+      stroke-width:1.8;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+    #info-lom-home-v1 .info-lom-copy{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      min-width:0;
+    }
+    #info-lom-home-v1 .info-lom-copy strong{
+      font-size:15.5px;
+      line-height:1.25;
+      font-weight:700;
+    }
+    #info-lom-home-v1 .info-lom-copy small{
+      color:var(--il-muted);
+      font-size:12px;
+      line-height:1.3;
+    }
+    #info-lom-home-v1 .info-lom-note{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      margin:12px 1px 0;
+      color:var(--il-muted);
+      font-size:11px;
+    }
+    #info-lom-home-v1 .info-lom-note svg{color:var(--il-gold)}
+    @media(max-width:760px){
+      #info-lom-home-v1{padding:20px 0 12px}
+      #info-lom-home-v1 .info-lom-panel{padding:16px;border-radius:18px}
+      #info-lom-home-v1 .info-lom-badge{display:none}
+      #info-lom-home-v1 h2{font-size:27px}
+      #info-lom-home-v1 .info-lom-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:8px;
+      }
+      #info-lom-home-v1 .info-lom-item{
+        min-height:72px;
+        align-items:flex-start;
+        padding:10px;
+      }
+      #info-lom-home-v1 .info-lom-icon{
+        flex-basis:32px;
+        width:32px;
+        height:32px;
+        border-radius:9px;
+      }
+      #info-lom-home-v1 .info-lom-icon svg{width:18px;height:18px}
+      #info-lom-home-v1 .info-lom-copy strong{font-size:13.5px}
+      #info-lom-home-v1 .info-lom-copy small{font-size:10.5px}
+    }
+    @media(max-width:380px){
+      #info-lom-home-v1 .info-lom-grid{grid-template-columns:1fr}
+      #info-lom-home-v1 .info-lom-item{min-height:58px;align-items:center}
+    }
+  </style>
+
+
+
+  <!-- MOBILE NAVIGATION — TEST V2 -->
+  <style id="mobile-navigation-test-v2">
+    .main-nav .nav-info-lom svg{display:none}
+    .main-nav .nav-primary-group,
+    .main-nav .nav-secondary-group{display:contents}
+
+    @media (min-width:761px){
+      .main-nav .nav-secondary-group{display:none}
+      .main-nav .nav-info-lom{
+        display:inline-flex;
+        align-items:center;
+      }
+      .main-nav .nav-info-lom svg{display:none}
+    }
+
+    @media (max-width:760px){
+      .main-nav{background:#fff}
+
+      .main-nav .nav-primary-group,
+      .main-nav .nav-secondary-group{
+        display:flex;
+        flex-direction:column;
+        width:100%;
+      }
+
+      .main-nav .nav-primary-group{gap:4px}
+
+      .main-nav .nav-secondary-group{
+        margin-top:10px;
+        padding-top:10px;
+        border-top:1px solid #e4e9f0;
+        gap:2px;
+      }
+
+      .main-nav a{width:100%}
+
+      .main-nav .nav-primary-group > a{
+        padding:12px 16px;
+        border-radius:12px;
+        font-weight:700;
+      }
+
+      .main-nav .nav-info-lom{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap:10px;
+        color:#071d3d;
+        background:linear-gradient(90deg,#f6f9fd 0%,#edf5ff 100%);
+        border:1px solid #d8e4f2;
+        font-weight:800;
+      }
+
+      .main-nav .nav-info-lom svg{
+        display:block;
+        width:20px;
+        height:20px;
+        flex:0 0 20px;
+        fill:none;
+        stroke:#126ed8;
+        stroke-width:1.9;
+        stroke-linecap:round;
+        stroke-linejoin:round;
+      }
+
+      .main-nav .nav-secondary-group a{
+        padding:7px 16px;
+        font-size:.84em;
+        line-height:1.25;
+        font-weight:600;
+        color:#6b7482;
+      }
+
+      body:has(#main-nav.open){
+        overflow:hidden;
+      }
+
+      body:has(#main-nav.open)::before{
+        content:"";
+        position:fixed;
+        inset:0;
+        background:rgba(4,18,38,.58);
+        backdrop-filter:blur(1.5px);
+        -webkit-backdrop-filter:blur(1.5px);
+        z-index:900;
+      }
+
+      body:has(#main-nav.open) .site-header{
+        z-index:1000;
+      }
+
+      body:has(#main-nav.open) .mobile-bottom-nav{
+        opacity:0;
+        visibility:hidden;
+        pointer-events:none;
+      }
+    }
+  </style>
+
+
+
+  <!-- DESKTOP NAVIGATION — TEST V1 -->
+  <style id="desktop-navigation-test-v1">
+    .nav-mobile-group{display:none}
+    .nav-desktop-group{
+      display:flex;
+      align-items:center;
+      gap:2px;
+    }
+
+    .nav-desktop-group a{
+      white-space:nowrap;
+    }
+
+    .nav-desktop-group .nav-info-lom-desktop{
+      position:relative;
+      font-weight:800;
+      color:#0b5fd7;
+    }
+
+    .nav-desktop-group .nav-info-lom-desktop::after{
+      content:"";
+      position:absolute;
+      left:50%;
+      bottom:2px;
+      width:18px;
+      height:2px;
+      border-radius:999px;
+      background:#b28a16;
+      transform:translateX(-50%);
+      opacity:.9;
+    }
+
+    @media (max-width:760px){
+      .nav-desktop-group{display:none}
+      .nav-mobile-group{display:block;width:100%}
+    }
+  </style>
+
+
+  <!-- DESKTOP NAVIGATION — TEST V1.1 -->
+  <style id="desktop-navigation-test-v1-1">
+    @media (min-width:761px){
+      .header-inner{
+        gap:14px;
+      }
+
+      .main-nav{
+        flex:1 1 auto;
+        min-width:0;
+      }
+
+      .nav-desktop-group{
+        gap:0;
+        justify-content:center;
+        flex-wrap:nowrap;
+      }
+
+      .nav-desktop-group a{
+        padding-left:12px;
+        padding-right:12px;
+        font-size:.95rem;
+        white-space:nowrap;
+      }
+
+      .header-actions{
+        flex:0 0 auto;
+        gap:12px;
+      }
+
+      .login-link{
+        white-space:nowrap;
+      }
+
+      .ask-button{
+        white-space:nowrap;
+        min-width:max-content;
+        padding-left:16px;
+        padding-right:16px;
+      }
+
+      .site-header.scrolled{
+        background:rgba(255,255,255,.96);
+        border-bottom:1px solid #e6ebf2;
+        box-shadow:0 8px 22px rgba(7,29,61,.08);
+        backdrop-filter:blur(8px);
+        -webkit-backdrop-filter:blur(8px);
+      }
+}
+  </style>
+
+
+  <!-- INTERNAL TEST: DESKTOP HEADER STICKY/FIT FIX -->
+  <style id="desktop-header-sticky-fit-fix">
+    @media (min-width:761px){
+      .site-header{
+        position:sticky !important;
+        top:0 !important;
+        z-index:1000 !important;
+      }
+
+      .header-inner{
+        width:calc(100% - 24px);
+        max-width:1440px;
+        gap:10px;
+      }
+
+      .main-nav{
+        min-width:0;
+      }
+
+      .nav-desktop-group{
+        gap:0;
+      }
+
+      .nav-desktop-group a{
+        padding-left:9px;
+        padding-right:9px;
+        font-size:14px;
+        white-space:nowrap;
+      }
+
+      .header-actions{
+        gap:8px;
+      }
+
+      .login-link,
+      .ask-button{
+        white-space:nowrap;
+      }
+
+      .ask-button{
+        padding-left:14px;
+        padding-right:14px;
+      }
+
+      .site-header.scrolled{
+        background:rgba(255,255,255,.97);
+        border-bottom:1px solid #e6ebf2;
+        box-shadow:0 8px 22px rgba(7,29,61,.10);
+        backdrop-filter:blur(8px);
+        -webkit-backdrop-filter:blur(8px);
+      }
+    }
+  </style>
+
+
+  <!-- INTERNAL TEST: DESKTOP INFO LOM ACCENT -->
+  <style id="desktop-info-lom-accent">
+    @media (min-width:761px){
+      .nav-desktop-group .nav-info-lom-desktop{
+        display:inline-flex;
+        align-items:center;
+        gap:7px;
+        padding:9px 12px;
+        color:#0b5fd7;
+        background:#edf5ff;
+        border:1px solid #cfe0f5;
+        border-radius:999px;
+        font-weight:800;
+      }
+
+      .nav-desktop-group .nav-info-lom-desktop::before{
+        content:"i";
+        display:grid;
+        place-items:center;
+        width:18px;
+        height:18px;
+        border:1.8px solid #0b5fd7;
+        border-radius:50%;
+        font-size:12px;
+        line-height:1;
+        font-weight:800;
+      }
+
+      .nav-desktop-group .nav-info-lom-desktop::after{
+        display:none;
+      }
+
+      .nav-desktop-group .nav-info-lom-desktop:hover,
+      .nav-desktop-group .nav-info-lom-desktop:focus-visible{
+        color:#084cae;
+        background:#e4efff;
+        border-color:#b9d2f1;
+      }
+    }
+  </style>
+
+
+  <!-- INTERNAL TEST: WHOLE DESKTOP HEADER SEPARATION -->
+  <style id="whole-desktop-header-separation">
+    @media (min-width:761px){
+      .site-header{
+        background:#f7faff !important;
+        border-bottom:1px solid #cfd9e8 !important;
+        box-shadow:0 4px 14px rgba(7,29,61,.08);
+      }
+
+      .site-header.scrolled{
+        background:#f4f8fd !important;
+        border-bottom:1px solid #bfcddd !important;
+        box-shadow:0 10px 26px rgba(7,29,61,.14) !important;
+        backdrop-filter:blur(10px);
+        -webkit-backdrop-filter:blur(10px);
+      }
+    }
+  </style>
+
+
+  <!-- INTERNAL TEST: INFO LOM / CATEGORIES SPACING -->
+  <style id="info-lom-categories-spacing">
+    #info-lom-home-v1{
+      padding-bottom:8px;
+    }
+
+    #categories.categories-section{
+      padding-top:34px;
+    }
+
+    @media (max-width:760px){
+      #info-lom-home-v1{
+        padding-bottom:8px;
+      }
+
+      #categories.categories-section{
+        padding-top:26px;
+      }
+    }
+  </style>
+
+
+  <!-- INTERNAL TEST: INFO LOM MOBILE TITLE REFINEMENT -->
+  <style id="info-lom-mobile-title-refinement">
+    @media (max-width:760px){
+      #info-lom-home-v1 .info-lom-copy strong{
+        font-size:12.75px;
+        line-height:1.22;
+      }
+
+      #info-lom-home-v1 .info-lom-copy small{
+        font-size:10.25px;
+        line-height:1.28;
+      }
+    }
+  </style>
+
 </head>
 
 <body>
@@ -36,11 +559,37 @@
       </a>
 
       <nav class="main-nav" id="main-nav" aria-label="Главна навигация">
-        <a class="active" href="index.html">Начало</a>
-        <a href="kategorii.html">Категории</a>
-        <a href="firmi.html">Фирми</a>
-        <a href="vaprosi.html">Въпроси</a>
-        <a href="statii.html">Статии</a>
+        <div class="nav-desktop-group">
+          <a class="active" href="index.html">Начало</a>
+          <a class="nav-info-lom-desktop" href="#info-lom-home-v1">Инфо Лом</a>
+          <a href="kategorii.html">Категории</a>
+          <a href="firmi.html">Фирми</a>
+          <a href="obyavi.html">Обяви</a>
+          <a href="vaprosi.html">Въпроси</a>
+          <a href="statii.html">Статии</a>
+          <a href="sabitiya.html">Събития</a>
+        </div>
+
+        <div class="nav-mobile-group">
+          <div class="nav-primary-group">
+            <a class="nav-info-lom" href="#info-lom-home-v1">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M12 10v6M12 7h.01"></path>
+              </svg>
+              <span>Инфо Лом</span>
+            </a>
+            <a href="firmi.html">Фирми</a>
+            <a href="obyavi.html">Обяви</a>
+            <a href="statii.html">Статии</a>
+          </div>
+
+          <div class="nav-secondary-group" aria-label="Още">
+            <a href="za-nas.html">За сайта</a>
+            <a href="kontakti.html">Контакти</a>
+            <a href="pravila.html">Правила</a>
+          </div>
+        </div>
       </nav>
 
       <div class="header-actions">
@@ -146,6 +695,107 @@
             <button type="button" data-search="зъболекар">Зъболекар</button>
             <button type="button" data-search="автосервиз">Автосервиз</button>
             <button type="button" data-search="работа">Работа</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- INFO LOM HOME — TEST V1 -->
+    <section id="info-lom-home-v1" aria-labelledby="info-lom-home-v1-title">
+      <div class="info-lom-wrap">
+        <div class="info-lom-panel">
+          <div class="info-lom-top">
+            <div>
+              <span class="info-lom-kicker">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z"/>
+                  <path d="M12 10v6M12 7h.01"/>
+                </svg>
+                Полезно за града
+              </span>
+              <h2 id="info-lom-home-v1-title">Инфо Лом</h2>
+              <p class="info-lom-lead">Проверени контакти и полезна информация, когато ти трябва точен отговор бързо.</p>
+            </div>
+            <span class="info-lom-badge">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m9 12 2 2 4-4"/>
+                <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z"/>
+              </svg>
+              Проверена информация
+            </span>
+          </div>
+
+          <div class="info-lom-grid">
+            <div class="info-lom-item">
+              <span class="info-lom-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></svg>
+              </span>
+              <span class="info-lom-copy">
+                <strong>Здраве</strong>
+                <small>Болница, лекари, аптеки</small>
+              </span>
+            </div>
+
+            <div class="info-lom-item">
+              <span class="info-lom-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M3 9h18M5 9v9M9 9v9M15 9v9M19 9v9M3 18h18M12 3l9 4H3l9-4Z"/>
+                </svg>
+              </span>
+              <span class="info-lom-copy">
+                <strong>Институции</strong>
+                <small>Община, полиция и държавни служби</small>
+              </span>
+            </div>
+
+            <div class="info-lom-item">
+              <span class="info-lom-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <rect x="5" y="3" width="14" height="16" rx="3"/>
+                  <path d="M8 19v2M16 19v2M8 7h8M8 14h.01M16 14h.01"/>
+                </svg>
+              </span>
+              <span class="info-lom-copy">
+                <strong>Транспорт</strong>
+                <small>Автобуси, БДЖ, таксита</small>
+              </span>
+            </div>
+
+            <div class="info-lom-item">
+              <span class="info-lom-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="m3 10 9-5 9 5-9 5-9-5Z"/>
+                  <path d="M7 12.5V17c3 2 7 2 10 0v-4.5M21 10v6"/>
+                </svg>
+              </span>
+              <span class="info-lom-copy">
+                <strong>Образование и култура</strong>
+                <small>Училища и културни места</small>
+              </span>
+            </div>
+
+            <div class="info-lom-item">
+              <span class="info-lom-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M3 9h18M5 9v9M9 9v9M15 9v9M19 9v9M3 18h18M12 3l8 4H4l8-4Z"/>
+                </svg>
+              </span>
+              <span class="info-lom-copy">
+                <strong>Банки и банкомати</strong>
+                <small>Банки, ATM и услуги</small>
+              </span>
+            </div>
+
+            <div class="info-lom-item">
+              <span class="info-lom-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="m13 2-8 12h7l-1 8 8-12h-7l1-8Z"/></svg>
+              </span>
+              <span class="info-lom-copy">
+                <strong>Битови услуги</strong>
+                <small>Вода, ток, куриери, интернет</small>
+              </span>
+            </div>
           </div>
         </div>
       </div>
