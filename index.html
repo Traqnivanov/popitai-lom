@@ -652,6 +652,94 @@
     }
   </style>
 
+
+  <!-- HOME FLOW COMPACTION — TEST V1 -->
+  <style id="home-flow-compaction-test-v1">
+    /* Обяви: при 1–2 реални карти секцията остава компактна,
+       вместо да разтяга малко съдържание върху цял широк ред. */
+    .home-listings-section:has(#home-listings-list > .listing-card:only-child){
+      padding-top:44px;
+      padding-bottom:48px;
+    }
+
+    .home-listings-section:has(#home-listings-list > .listing-card:only-child)
+    #home-listings-list{
+      grid-template-columns:minmax(0,410px);
+      justify-content:start;
+    }
+
+    .home-listings-section:has(#home-listings-list > .listing-card:nth-child(2):last-child){
+      padding-top:48px;
+      padding-bottom:52px;
+    }
+
+    .home-listings-section:has(#home-listings-list > .listing-card:nth-child(2):last-child)
+    #home-listings-list{
+      grid-template-columns:repeat(2,minmax(0,410px));
+      justify-content:start;
+    }
+
+    /* Последни въпроси: празното състояние се свива,
+       без да променяме секцията когато вече има реални въпроси. */
+    .questions-section:has(#home-questions > .empty-card){
+      padding-top:48px;
+      padding-bottom:54px;
+    }
+
+    .questions-section:has(#home-questions > .empty-card)
+    .section-heading{
+      margin-bottom:20px;
+    }
+
+    .questions-section:has(#home-questions > .empty-card)
+    #home-questions{
+      min-height:0;
+    }
+
+    .questions-section:has(#home-questions > .empty-card)
+    #home-questions > .empty-card{
+      max-width:760px;
+      padding:26px 28px;
+    }
+
+    .questions-section:has(#home-questions > .empty-card)
+    #home-questions > .empty-card h3{
+      margin-top:0;
+      margin-bottom:10px;
+    }
+
+    .questions-section:has(#home-questions > .empty-card)
+    #home-questions > .empty-card p{
+      margin-bottom:18px;
+    }
+
+    @media(max-width:760px){
+      .home-listings-section:has(#home-listings-list > .listing-card:only-child),
+      .home-listings-section:has(#home-listings-list > .listing-card:nth-child(2):last-child){
+        padding-top:38px;
+        padding-bottom:42px;
+      }
+
+      .home-listings-section:has(#home-listings-list > .listing-card:only-child)
+      #home-listings-list,
+      .home-listings-section:has(#home-listings-list > .listing-card:nth-child(2):last-child)
+      #home-listings-list{
+        grid-template-columns:1fr;
+      }
+
+      .questions-section:has(#home-questions > .empty-card){
+        padding-top:38px;
+        padding-bottom:42px;
+      }
+
+      .questions-section:has(#home-questions > .empty-card)
+      #home-questions > .empty-card{
+        max-width:none;
+        padding:22px 20px;
+      }
+    }
+  </style>
+
 </head>
 
 <body>
