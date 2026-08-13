@@ -540,6 +540,118 @@
     }
   </style>
 
+
+  <!-- HOME LISTINGS — TEST V1 -->
+  <style id="home-listings-test-v1">
+    .home-listings-section{
+      padding:68px 0 72px;
+      background:#f7f9fc;
+      border-top:1px solid #e5ebf3;
+      border-bottom:1px solid #e5ebf3;
+    }
+
+    .home-listings-heading{
+      margin-bottom:24px;
+    }
+
+    .home-listings-actions{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .home-listings-add{
+      min-height:42px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:0 15px;
+      color:#fff;
+      background:#0b5fd7;
+      border-radius:11px;
+      text-decoration:none;
+      font-size:13px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .home-listings-add:hover,
+    .home-listings-add:focus-visible{
+      background:#084cae;
+    }
+
+    .home-listings-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:16px;
+    }
+
+    .home-listings-grid .listing-card{
+      min-width:0;
+      height:100%;
+      box-shadow:0 8px 24px rgba(20,45,85,.055);
+    }
+
+    .home-listings-grid .listing-card-body{
+      height:100%;
+    }
+
+    .home-listings-grid .listing-card-body h3{
+      font-size:15px;
+    }
+
+    .home-listings-grid .listing-category,
+    .home-listings-grid .listing-location,
+    .home-listings-grid .listing-date{
+      font-size:12px;
+    }
+
+    .home-listings-grid .listing-price{
+      margin-top:auto;
+      padding-top:5px;
+      font-size:15px;
+    }
+
+    .home-listings-loading{
+      grid-column:1/-1;
+      text-align:center;
+    }
+
+    @media(max-width:1000px){
+      .home-listings-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+    }
+
+    @media(max-width:760px){
+      .home-listings-section{
+        padding:46px 0 52px;
+      }
+
+      .home-listings-heading{
+        align-items:flex-start;
+        margin-bottom:18px;
+      }
+
+      .home-listings-actions{
+        width:100%;
+        justify-content:flex-start;
+        gap:10px;
+      }
+
+      .home-listings-grid{
+        grid-template-columns:1fr;
+        gap:12px;
+      }
+
+      .home-listings-grid .listing-card-body{
+        padding:14px 15px;
+      }
+    }
+  </style>
+
 </head>
 
 <body>
@@ -984,63 +1096,30 @@
       </div>
     </section>
 
-    <section class="popular-section" aria-labelledby="popular-title">
-      <div class="section-container popular-layout">
-        <div class="popular-copy">
-          <span class="section-kicker">Най-чести нужди</span>
-          <h2 id="popular-title">Често търсено в Лом</h2>
-          <p>
-            Избери готово търсене или напиши собствен въпрос в търсачката.
-          </p>
+    <section class="home-listings-section" aria-labelledby="home-listings-title">
+      <div class="section-container">
+        <div class="section-heading home-listings-heading">
+          <div>
+            <span class="section-kicker">Местни обяви</span>
+            <h2 id="home-listings-title">Обяви в Лом</h2>
+            <p>Последни активни обяви от Лом и региона.</p>
+          </div>
 
-          <a class="ask-community-button" href="nov-vapros.html">
-            Задай въпрос на общността
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M5 12h14M13 6l6 6-6 6"/>
-            </svg>
-          </a>
+          <div class="home-listings-actions">
+            <a class="all-categories-link" href="obyavi.html">
+              Всички обяви
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </a>
+            <a class="home-listings-add" href="dobavi-obqva.html">+ Добави обява</a>
+          </div>
         </div>
 
-        <div class="popular-list">
-          <button type="button" data-search="добър майстор за баня">
-            <span>01</span>
-            Добър майстор за баня
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M5 12h14M13 6l6 6-6 6"/>
-            </svg>
-          </button>
-
-          <button type="button" data-search="добър зъболекар в Лом">
-            <span>02</span>
-            Добър зъболекар в Лом
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M5 12h14M13 6l6 6-6 6"/>
-            </svg>
-          </button>
-
-          <button type="button" data-search="автосервиз в Лом">
-            <span>03</span>
-            Автосервиз в Лом
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M5 12h14M13 6l6 6-6 6"/>
-            </svg>
-          </button>
-
-          <button type="button" data-search="работа в Лом">
-            <span>04</span>
-            Работа в Лом
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M5 12h14M13 6l6 6-6 6"/>
-            </svg>
-          </button>
-
-          <button type="button" data-search="денонощна аптека">
-            <span>05</span>
-            Денонощна аптека
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M5 12h14M13 6l6 6-6 6"/>
-            </svg>
-          </button>
+        <div class="home-listings-grid" id="home-listings-list" aria-live="polite">
+          <article class="empty-card home-listings-loading">
+            <p>Зареждане на обявите…</p>
+          </article>
         </div>
       </div>
     </section>
@@ -1230,6 +1309,120 @@
   <script src="image-upload.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="supabase-config.js?v=20260805-2312" defer></script>
+
+  <script>
+  (() => {
+    const ADMIN_ID = "598d6626-25ed-450f-87a9-e83f34f641c4";
+
+    const esc = (value) => String(value ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;");
+
+    const formatDate = (iso) => {
+      if (!iso) return "";
+      return new Date(iso).toLocaleDateString("bg-BG", {
+        day:"numeric", month:"short", year:"numeric"
+      });
+    };
+
+    const formatPrice = (item) => {
+      if (item.price_free) return "Подарява";
+      if (item.price_negotiable) return "Договаряне";
+      if (item.price == null) return "";
+      const eur = Number(item.price).toLocaleString("bg-BG") + " евро";
+      const bgn = (Number(item.price) * 1.95583).toFixed(2).replace(".", ",") + " лв.";
+      return `${eur} / ${bgn}`;
+    };
+
+    const card = (item) => {
+      const price = formatPrice(item);
+      const badges = [
+        item.is_urgent ? '<span class="listing-badge urgent">Спешно</span>' : "",
+        item.is_reduced && item.price_old ? '<span class="listing-badge reduced">Намалено</span>' : ""
+      ].filter(Boolean).join("");
+
+      return `<article class="listing-card${item.is_highlighted ? " listing-card--highlighted" : ""}">
+        <div class="listing-card-body">
+          ${badges}
+          <span class="listing-type-badge">${esc(item.listing_type || "")}</span>
+          <h3><a href="obqva.html?id=${esc(item.id)}">${esc(item.title)}</a></h3>
+          <p class="listing-category">${esc(item.category)}${item.subcategory ? " › " + esc(item.subcategory) : ""}</p>
+          ${item.city ? `<p class="listing-location">📍 ${esc(item.city)}</p>` : ""}
+          <p class="listing-date">${formatDate(item.created_at)}</p>
+          ${price ? `<p class="listing-price">${item.price_old && item.is_reduced ? `<s>${Number(item.price_old).toLocaleString("bg-BG")} евро</s> ` : ""}${esc(price)}</p>` : ""}
+        </div>
+      </article>`;
+    };
+
+    const waitForClient = () => new Promise(resolve => {
+      if (window.PopitaiSupabase) return resolve(window.PopitaiSupabase);
+      const timer = setInterval(() => {
+        if (window.PopitaiSupabase) {
+          clearInterval(timer);
+          resolve(window.PopitaiSupabase);
+        }
+      }, 50);
+    });
+
+    async function loadHomeListings() {
+      const container = document.querySelector("#home-listings-list");
+      if (!container) return;
+
+      const client = await waitForClient();
+      const now = new Date().toISOString();
+
+      const { data, error } = await client
+        .from("listings")
+        .select("id, owner_id, title, category, subcategory, listing_type, price, price_negotiable, price_free, price_old, city, is_urgent, is_highlighted, is_reduced, is_boosted, is_owner_admin, created_at")
+        .eq("status", "approved")
+        .or("expires_at.is.null,expires_at.gt." + now)
+        .order("is_owner_admin", { ascending:false })
+        .order("created_at", { ascending:false })
+        .limit(30);
+
+      if (error) {
+        container.innerHTML = '<article class="empty-card home-listings-loading"><p>Обявите не могат да се заредят в момента.</p><a href="obyavi.html">Разгледай всички обяви</a></article>';
+        return;
+      }
+
+      const items = [...(data || [])];
+
+      // PROTECTED PROJECT LOGIC:
+      // 1) Всички admin обяви са преди останалите.
+      // 2) Между admin обявите: най-новата е първа.
+      // 3) Между останалите: boosted първо, после най-новите.
+      items.sort((a, b) => {
+        const aAdmin = a.owner_id === ADMIN_ID || a.is_owner_admin === true;
+        const bAdmin = b.owner_id === ADMIN_ID || b.is_owner_admin === true;
+
+        if (aAdmin !== bAdmin) return aAdmin ? -1 : 1;
+        if (aAdmin && bAdmin) return new Date(b.created_at) - new Date(a.created_at);
+
+        if (!!a.is_boosted !== !!b.is_boosted) return a.is_boosted ? -1 : 1;
+        return new Date(b.created_at) - new Date(a.created_at);
+      });
+
+      const visible = items.slice(0, 4);
+
+      if (!visible.length) {
+        container.innerHTML = '<article class="empty-card home-listings-loading"><p>Все още няма активни обяви.</p><a href="dobavi-obqva.html">Добави първата обява</a></article>';
+        return;
+      }
+
+      container.innerHTML = visible.map(card).join("");
+    }
+
+    loadHomeListings().catch(() => {
+      const container = document.querySelector("#home-listings-list");
+      if (container) {
+        container.innerHTML = '<article class="empty-card home-listings-loading"><p>Обявите не могат да се заредят в момента.</p></article>';
+      }
+    });
+  })();
+  </script>
+
   <script src="supabase-businesses.js?v=20260807-1725" data-popitai-businesses defer></script>
   <script src="script.js?v=20260805-2312" defer></script>
 </body>
