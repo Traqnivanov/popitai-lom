@@ -740,6 +740,79 @@
     }
   </style>
 
+
+  <!-- HOME BUSINESSES — VISUAL TEST V1 -->
+  <style id="home-businesses-visual-test-v1">
+    #home-businesses .business-list-card{
+      align-items:flex-start;
+    }
+
+    #home-businesses .home-business-description{
+      display:-webkit-box;
+      -webkit-box-orient:vertical;
+      -webkit-line-clamp:3;
+      overflow:hidden;
+      margin-bottom:10px;
+    }
+
+    #home-businesses .home-business-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:12px;
+    }
+
+    #home-businesses .home-business-profile-link,
+    #home-businesses .home-business-call-link{
+      min-height:38px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:0 13px;
+      border-radius:10px;
+      text-decoration:none;
+      font-size:12px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    #home-businesses .home-business-profile-link{
+      color:#0b5fd7;
+      background:#fff;
+      border:1px solid #bfd0ea;
+    }
+
+    #home-businesses .home-business-call-link{
+      color:#fff;
+      background:#0b5fd7;
+      border:1px solid #0b5fd7;
+    }
+
+    #home-businesses .home-business-admin-card{
+      border-color:#c8d8ee;
+      box-shadow:0 10px 28px rgba(20,45,85,.075);
+    }
+
+    @media(max-width:760px){
+      #home-businesses .business-list-card{
+        padding:18px;
+      }
+
+      #home-businesses .business-main{
+        min-width:0;
+      }
+
+      #home-businesses .home-business-description{
+        -webkit-line-clamp:3;
+        line-height:1.5;
+      }
+
+      #home-businesses .home-business-actions{
+        margin-top:10px;
+      }
+    }
+  </style>
+
 </head>
 
 <body>
@@ -1513,5 +1586,105 @@
 
   <script src="supabase-businesses.js?v=20260807-1725" data-popitai-businesses defer></script>
   <script src="script.js?v=20260805-2312" defer></script>
+
+  <script>
+  (() => {
+    const ADMIN_ID = "598d6626-25ed-450f-87a9-e83f34f641c4";
+
+    const waitForSupabase = () => new Promise(resolve => {
+      if (window.PopitaiSupabase) return resolve(window.PopitaiSupabase);
+      const timer = setInterval(() => {
+        if (window.PopitaiSupabase) {
+          clearInterval(timer);
+          resolve(window.PopitaiSupabase);
+        }
+      }, 50);
+    });
+
+    function decorateBasicCard(card) {
+      if (!card || card.dataset.homeBusinessDecorated === "1") return;
+
+      const main = card.querySelector(".business-main");
+      if (!main) return;
+
+      const paragraphs = [...main.querySelectorAll(":scope > p")];
+      const description = paragraphs.find(p => !p.querySelector("strong"));
+      if (description) description.classList.add("home-business-description");
+
+      const id = card.dataset.businessId || "";
+      if (!id) return;
+
+      const actions = document.createElement("div");
+      actions.className = "home-business-actions";
+      actions.innerHTML = `
+        <a class="home-business-profile-link" href="firma.html?id=${encodeURIComponent(id)}">
+          Виж профила
+        </a>`;
+
+      main.appendChild(actions);
+      card.dataset.homeBusinessDecorated = "1";
+    }
+
+    function decorateVisibleCards() {
+      document.querySelectorAll("#home-businesses .business-list-card").forEach(decorateBasicCard);
+    }
+
+    async function markAdminCards() {
+      const container = document.querySelector("#home-businesses");
+      if (!container) return;
+
+      const client = await waitForSupabase();
+
+      const { data, error } = await client
+        .from("businesses")
+        .select("id, owner_id, phone")
+        .eq("status", "approved");
+
+      if (error || !data) return;
+
+      const byId = new Map(data.map(item => [String(item.id), item]));
+
+      container.querySelectorAll(".business-list-card").forEach(card => {
+        const item = byId.get(String(card.dataset.businessId || ""));
+        if (!item || item.owner_id !== ADMIN_ID) return;
+
+        card.classList.add("home-business-admin-card");
+
+        const actions = card.querySelector(".home-business-actions");
+        if (!actions || actions.querySelector(".home-business-call-link")) return;
+
+        if (item.phone) {
+          const phone = String(item.phone).replace(/\s+/g, "");
+          const call = document.createElement("a");
+          call.className = "home-business-call-link";
+          call.href = `tel:${phone}`;
+          call.textContent = "Обади се";
+          actions.prepend(call);
+        }
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const container = document.querySelector("#home-businesses");
+      if (!container) return;
+
+      decorateVisibleCards();
+
+      const observer = new MutationObserver(() => {
+        decorateVisibleCards();
+        clearTimeout(window.__homeBusinessesAdminTimer);
+        window.__homeBusinessesAdminTimer = setTimeout(markAdminCards, 120);
+      });
+
+      observer.observe(container, { childList:true, subtree:true });
+
+      setTimeout(() => {
+        decorateVisibleCards();
+        markAdminCards();
+      }, 250);
+    });
+  })();
+  </script>
+
 </body>
 </html>
