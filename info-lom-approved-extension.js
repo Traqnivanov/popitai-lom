@@ -5,6 +5,7 @@
   const tel = v => `tel:${String(v).replace(/[^+\d]/g, "")}`;
   const fmt = v => v ? new Date(v).toLocaleDateString("bg-BG", {day:"numeric", month:"long", year:"numeric"}) : "";
   const slug = v => String(v || "").toLowerCase().replace(/[^a-z0-9а-я]+/gi, "-").replace(/^-+|-+$/g, "");
+  const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
   async function client() {
     if (window.PopitaiSupabase) return window.PopitaiSupabase;
@@ -16,6 +17,16 @@
         }
       }, 50);
     });
+  }
+
+  async function waitForCanonicalRender() {
+    for (let i = 0; i < 80; i += 1) {
+      const utilitiesReady = document.querySelector('[data-info-category-root="komunalni"] .info-utility-grid');
+      const institutionsReady = document.querySelector('[data-info-category-root="institucii"] .info-institution-directory');
+      if (utilitiesReady && institutionsReady) return true;
+      await sleep(100);
+    }
+    return false;
   }
 
   function addMeta(card, key, icon, label, value, isLink = false) {
@@ -150,6 +161,7 @@
 
   async function initApprovedExtension() {
     if (!document.body?.dataset.infoPage) return;
+    await waitForCanonicalRender();
     const c = await client();
     const [er, ar] = await Promise.all([
       c.from("info_entries").select("id,category,subcategory,entry_type,name,data,confirmed_at,confirmed_source,reliability_status").eq("publication_status", "published").order("category").order("created_at"),
@@ -163,5 +175,5 @@
     if (location.hash) setTimeout(() => document.getElementById(location.hash.slice(1))?.scrollIntoView({behavior:"smooth", block:"start"}), 80);
   }
 
-  window.addEventListener("DOMContentLoaded", () => setTimeout(initApprovedExtension, 900), {once:true});
+  window.addEventListener("DOMContentLoaded", initApprovedExtension, {once:true});
 })();
