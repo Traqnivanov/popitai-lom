@@ -1,0 +1,16 @@
+[data-info-category-page="zdrave"] .info-health-departments{margin-top:0;border-top:1px solid #e1e7ef;background:#f6f9fc}
+[data-info-category-page="zdrave"] .info-health-departments>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px;font-size:14px;font-weight:850;color:#27384b}
+[data-info-category-page="zdrave"] .info-health-departments>summary::-webkit-details-marker{display:none}
+[data-info-category-page="zdrave"] .info-health-departments>summary strong{display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 8px;border-radius:999px;background:#fff;border:1px solid #dce3ee;color:#607086;font-size:12px}
+[data-info-category-page="zdrave"] .info-health-departments[open]>summary{background:#eef4fa}
+[data-info-category-page="zdrave"] .info-health-departments .info-health-children{border-top:1px solid #e1e7ef}
+[data-info-category-page="zdrave"] .info-health-status{display:inline-flex;align-items:center;margin-top:8px;padding:4px 8px;border-radius:999px;background:#f2f6fa;border:1px solid #dfe6ee;color:#5d6c80;font-size:11.5px;font-weight:750}
+[data-info-category-page="zdrave"] .info-health-status--secondary{background:#fff8e8;border-color:#f1dfad;color:#775b16}
+[data-info-category-page="zdrave"] .info-health-status--warn{background:#fff3f2;border-color:#efc5c1;color:#9b3028}
+[data-info-category-page="zdrave"] .info-health-secondary-note{margin-top:7px;color:#6d7785;font-size:11.5px;line-height:1.4}
+[data-info-category-page="zdrave"] .info-card-note{font-size:12px;line-height:1.45}
+[data-info-category-page="zdrave"] .info-card-confirmed,[data-info-category-page="zdrave"] .info-enhance-trust{font-size:11.5px;line-height:1.4}
+[data-info-category-page="zdrave"] .info-card--compact .info-card-type{font-size:10.5px}
+[data-info-category-page="zdrave"] .info-card--compact .info-card-meta{font-size:12px;line-height:1.4}
+[data-info-category-page="zdrave"] .info-wide-actions{margin-bottom:12px}
+@media(max-width:620px){[data-info-category-page="zdrave"] .info-health-departments>summary{font-size:13.5px;padding:12px}[data-info-category-page="zdrave"] .info-card-note,[data-info-category-page="zdrave"] .info-card-confirmed,[data-info-category-page="zdrave"] .info-enhance-trust,[data-info-category-page="zdrave"] .info-health-secondary-note{font-size:11.5px}[data-info-category-page="zdrave"] .info-card--compact .info-card-type{font-size:10.5px}[data-info-category-page="zdrave"] .info-card--compact .info-card-meta{font-size:12px}}
