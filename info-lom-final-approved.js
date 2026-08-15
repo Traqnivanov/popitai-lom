@@ -26,5 +26,5 @@ async function groupInstitutions(){
  const post=rest.find(e=>e.subcategory==='poshta');const postCard=document.getElementById('institucii-poshta');if(post?.data?.ems&&postCard&&!postCard.querySelector('[data-approved-ems]')){const row=document.createElement('div');row.className='info-card-meta';row.dataset.approvedEms='true';row.innerHTML=`<span>•</span><span>EMS: ${esc(post.data.ems)}</span>`;const actions=postCard.querySelector('.info-card-actions');actions?actions.before(row):postCard.appendChild(row)}
 }
 async function init(){const cat=document.body.dataset.infoCategoryPage;if(!cat)return;if(cat==='zdrave'){await waitFor('#zdrave-lekari');healthLinks()}else if(cat==='institucii'){await groupInstitutions()}else if(cat==='obrazovanie'){await waitFor('#obrazovanie-uchilishta');addEducationFilters()}}
-window.addEventListener('DOMContentLoaded',()=>setTimeout(init,250),{once:true});
+const start=()=>setTimeout(init,250);if(document.readyState==='loading')window.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
