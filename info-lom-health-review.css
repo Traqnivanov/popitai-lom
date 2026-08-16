@@ -1,0 +1,2044 @@
+/* Local Health review — mobile-first, no content loss */
+
+.health-review-units{
+  margin-top:18px;
+  border:1px solid #d9e1ea;
+  border-radius:18px;
+  background:#fff;
+  overflow:hidden;
+}
+.health-review-units > summary{
+  list-style:none;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:18px 20px;
+  font-size:22px;
+  font-weight:800;
+  color:#1f2937;
+}
+.health-review-units > summary::-webkit-details-marker{ display:none; }
+.health-review-units > summary::after{
+  content:"＋";
+  font-size:26px;
+  line-height:1;
+  color:#1769c2;
+  margin-left:auto;
+}
+.health-review-units[open] > summary::after{ content:"−"; }
+.health-review-units > summary strong{
+  font-size:16px;
+  color:#64748b;
+  white-space:nowrap;
+}
+.health-review-units[open] > summary{
+  border-bottom:1px solid #e5e7eb;
+}
+
+.health-review-phone-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:10px;
+}
+.health-review-phone-row a{
+  display:inline-flex;
+  align-items:center;
+  min-height:48px;
+  padding:0 16px;
+  border-radius:14px;
+  background:#138a3f;
+  color:#fff !important;
+  text-decoration:none;
+  font-weight:800;
+  font-size:18px;
+}
+
+.health-review-ramus{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:10px;
+  margin:12px 0;
+}
+.health-review-meta{
+  font-size:17px;
+  line-height:1.45;
+  color:#596579;
+}
+.health-review-call{
+  display:inline-flex;
+  align-items:center;
+  min-height:48px;
+  padding:0 16px;
+  border-radius:14px;
+  background:#138a3f;
+  color:#fff !important;
+  text-decoration:none;
+  font-weight:800;
+  font-size:18px;
+}
+
+.health-review-secondary-note{
+  margin-top:10px;
+  font-size:14px;
+  line-height:1.4;
+  color:#7a5a1d;
+}
+
+.health-review-conflict{
+  border-color:#e4b44d !important;
+}
+.health-review-conflict::before{
+  content:"За проверка";
+  display:inline-flex;
+  margin:12px 12px 0;
+  padding:5px 9px;
+  border-radius:999px;
+  background:#fff8e8;
+  border:1px solid #e4b44d;
+  color:#8a5a00;
+  font-size:12px;
+  font-weight:800;
+}
+
+@media (max-width: 620px){
+  .info-card,
+  .info-health-card{
+    border-radius:16px;
+  }
+
+  .info-card p,
+  .info-card li,
+  .info-health-card p,
+  .info-health-card li,
+  .info-card-note,
+  .info-health-note{
+    font-size:16px !important;
+    line-height:1.45 !important;
+  }
+
+  .info-card-confirmed,
+  .info-health-confirmed,
+  .info-card-footer{
+    font-size:13px !important;
+    line-height:1.4 !important;
+  }
+
+  .health-review-units > summary{
+    padding:16px;
+    font-size:19px;
+  }
+
+  .health-review-phone-row a,
+  .health-review-call{
+    width:100%;
+    justify-content:center;
+    font-size:17px;
+  }
+}
+
+
+/* Priority block: hospital admission */
+.health-review-admission{
+  margin:18px 0 20px;
+  padding:18px;
+  border:1px solid #cdd9e8;
+  border-radius:18px;
+  background:#fff;
+  box-shadow:0 8px 24px rgba(15, 35, 65, .06);
+}
+.health-review-admission-kicker{
+  display:block;
+  margin-bottom:5px;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.08em;
+  color:#8a6500;
+}
+.health-review-admission h3{
+  margin:0;
+  font-size:24px;
+  line-height:1.2;
+  color:#172033;
+}
+.health-review-admission-quick{
+  display:grid;
+  gap:10px;
+  margin:16px 0;
+}
+.health-review-admission-quick > div{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  padding:11px 12px;
+  border-radius:12px;
+  background:#f5f8fc;
+  color:#4c596b;
+  font-size:16px;
+  line-height:1.45;
+}
+.health-review-admission-quick strong{
+  flex:0 0 auto;
+  color:#1769c2;
+}
+.health-review-admission-call{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:50px;
+  padding:0 16px;
+  border-radius:14px;
+  background:#138a3f;
+  color:#fff !important;
+  text-decoration:none;
+  font-size:17px;
+  font-weight:800;
+}
+.health-review-admission-details{
+  margin-top:12px;
+  border:1px solid #d9e1ea;
+  border-radius:14px;
+  overflow:hidden;
+  background:#fff;
+}
+.health-review-admission-details > summary{
+  cursor:pointer;
+  list-style:none;
+  padding:14px 15px;
+  color:#1769c2;
+  font-size:16px;
+  font-weight:800;
+}
+.health-review-admission-details > summary::-webkit-details-marker{display:none}
+.health-review-admission-details > summary::after{
+  content:"＋";
+  float:right;
+  font-size:20px;
+}
+.health-review-admission-details[open] > summary::after{content:"−"}
+.health-review-admission-details-body{
+  padding:0 15px 15px;
+  border-top:1px solid #e5e7eb;
+}
+.health-review-admission-details-body p{
+  margin:13px 0 0;
+  color:#4f5d70;
+  font-size:15px;
+  line-height:1.55;
+}
+.health-review-admission-official{
+  display:inline-flex;
+  margin-top:14px;
+  color:#1769c2 !important;
+  font-weight:800;
+  text-decoration:none;
+}
+
+@media (max-width:620px){
+  .health-review-admission{
+    padding:16px;
+    margin:16px 0 18px;
+  }
+  .health-review-admission h3{
+    font-size:22px;
+  }
+  .health-review-admission-quick > div{
+    font-size:16px;
+  }
+}
+
+
+/* v3 — compact patient path and 3 priority departments */
+.health-review-admission{
+  margin:14px 0 16px;
+  padding:14px;
+  border-radius:16px;
+}
+.health-review-admission-topline{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.health-review-admission-kicker{
+  margin-bottom:2px;
+  font-size:10px;
+}
+.health-review-admission h3{
+  margin:0;
+  font-size:20px;
+}
+.health-review-admission-call{
+  flex:0 0 auto;
+  min-height:40px;
+  padding:0 12px;
+  border-radius:12px;
+  font-size:14px;
+}
+.health-review-admission-quick{
+  display:grid;
+  gap:6px;
+  margin:11px 0 8px;
+}
+.health-review-admission-quick > div{
+  display:grid;
+  grid-template-columns:118px 1fr;
+  gap:8px;
+  padding:8px 10px;
+  border-radius:10px;
+  font-size:14px !important;
+  line-height:1.35 !important;
+}
+.health-review-admission-quick > div strong{
+  color:#1f2937;
+  font-size:13px;
+}
+.health-review-admission-quick > div.is-urgent{
+  background:#fff4f2;
+  border:1px solid #f0cbc4;
+}
+.health-review-admission-quick > div.is-urgent strong{
+  color:#a23b2a;
+}
+.health-review-admission-details{
+  margin-top:7px;
+  border-radius:11px;
+}
+.health-review-admission-details > summary{
+  padding:10px 12px;
+  font-size:14px;
+}
+.health-review-admission-details > summary::after{
+  font-size:17px;
+}
+.health-review-admission-details-body{
+  padding:0 12px 12px;
+}
+.health-review-admission-details-body p{
+  font-size:14px !important;
+  line-height:1.5 !important;
+}
+
+.health-review-priority-units{
+  margin-top:16px;
+}
+.health-review-priority-units-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:9px;
+}
+.health-review-priority-units-title h3{
+  margin:0;
+  font-size:21px;
+}
+.health-review-priority-units-title span{
+  flex:0 0 auto;
+  padding:5px 8px;
+  border-radius:999px;
+  background:#eef4fa;
+  color:#607085;
+  font-size:12px;
+  font-weight:700;
+}
+.health-review-priority-units-list{
+  border:1px solid #d9e1ea;
+  border-radius:15px;
+  overflow:hidden;
+  background:#fff;
+}
+.health-review-priority-units-list > *{
+  margin:0 !important;
+  border-radius:0 !important;
+  border-left:0 !important;
+  border-right:0 !important;
+}
+.health-review-units{
+  margin-top:9px;
+  border-radius:14px;
+}
+.health-review-units > summary{
+  padding:13px 14px;
+  font-size:16px;
+}
+.health-review-units > summary strong{
+  font-size:14px;
+}
+
+@media (max-width:620px){
+  .health-review-admission{
+    padding:13px;
+    margin:12px 0 14px;
+  }
+  .health-review-admission-topline{
+    align-items:flex-start;
+  }
+  .health-review-admission h3{
+    font-size:19px;
+  }
+  .health-review-admission-call{
+    min-height:38px;
+    font-size:13px;
+    padding:0 10px;
+  }
+  .health-review-admission-quick > div{
+    grid-template-columns:105px 1fr;
+    padding:7px 8px;
+    font-size:13px !important;
+  }
+  .health-review-priority-units-title h3{
+    font-size:20px;
+  }
+}
+
+.health-other-frame{margin:20px 0 8px;padding:12px;border:1px solid #cbd9e8;border-radius:19px;background:#f7faff;box-shadow:0 8px 22px rgba(21,46,78,.05)}
+.health-other-frame-head{padding:2px 3px 11px;border-bottom:1px solid #dce5ef}
+.health-other-frame-head>span{display:block;color:#6a7c91;font-size:10px;font-weight:850;letter-spacing:.08em}
+.health-other-frame-head h3{margin:3px 0;color:#172033;font-size:21px}
+.health-other-frame-head p{margin:0;color:#66768a;font-size:12.5px}
+.health-other-list{display:grid;gap:10px;margin-top:11px}
+.health-center-card{position:relative;overflow:hidden;padding:13px;border:1px solid #dce4ed;border-radius:15px;background:#fff}
+.health-center-card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:#7a91aa}
+.health-center-card--priority:before{background:#1769c2}
+.health-center-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.health-center-type{display:block;color:#7a8797;font-size:9px;font-weight:850;letter-spacing:.05em}
+.health-center-top h4{margin:3px 0 0;color:#172033;font-size:18px}
+.health-center-status{flex:0 0 auto;padding:4px 7px;border:1px solid #d4e5da;border-radius:999px;background:#f3fbf6;color:#39734d;font-size:9px;font-weight:800}
+.health-center-status--dated{border-color:#eadfbf;background:#fffaf0;color:#87651a}
+.health-center-essentials{display:flex;flex-wrap:wrap;gap:7px 14px;margin-top:10px;color:#59687b;font-size:14px}
+.health-center-essentials a{color:#13743a;font-weight:850;text-decoration:none}
+.health-center-highlight{display:flex;flex-wrap:wrap;gap:5px 7px;margin-top:9px;padding:8px 9px;border-radius:10px;background:#f3f7fb;color:#59687b;font-size:12px}
+.health-center-highlight strong{color:#2d425c}
+.health-center-specialties{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}
+.health-center-specialties>div{padding:8px 9px;border:1px solid #e3e8ef;border-radius:10px;background:#fbfcfe}
+.health-center-specialties span,.health-center-specialties strong,.health-center-specialties a{display:block}
+.health-center-specialties span{color:#6b7b8f;font-size:9.5px;font-weight:800;text-transform:uppercase}
+.health-center-specialties strong{margin-top:2px;color:#26384e;font-size:13px}
+.health-center-specialties a{margin-top:5px;color:#13743a;font-size:13px;font-weight:850;text-decoration:none}
+.health-center-more{margin-top:8px;border-top:1px solid #edf1f5}
+.health-center-more>summary{cursor:pointer;list-style:none;padding:9px 0 0;color:#1769c2;font-size:13px;font-weight:850}
+.health-center-more>summary::-webkit-details-marker{display:none}
+.health-center-more>summary:after{content:"＋";float:right}.health-center-more[open]>summary:after{content:"−"}
+.health-center-more>div{padding-top:6px}
+.health-center-more p{margin:6px 0;color:#5d6c7f;font-size:12.5px!important;line-height:1.45!important}
+.health-source-note{padding-top:5px;border-top:1px dashed #e0e6ed;color:#7b8797!important;font-size:11px!important}
+@media(max-width:620px){
+  .health-other-frame{padding:9px;border-radius:17px}
+  .health-other-frame-head h3{font-size:19px}
+  .health-center-card{padding:11px;border-radius:13px}
+  .health-center-top h4{font-size:17px}
+  .health-center-status{max-width:100px;text-align:center;white-space:normal;line-height:1.15}
+  .health-center-essentials{display:grid;gap:5px}
+  .health-center-specialties{grid-template-columns:1fr}
+}
+
+
+/* v5 — full Health UX: clear entry point, strong section separation, mobile-first */
+
+/* HERO + finder */
+.info-category-page .info-page-hero{
+  padding-bottom:18px;
+}
+.health-finder{
+  padding:0 14px 10px;
+  background:linear-gradient(180deg,#fff 0,#f7fafe 100%);
+}
+.health-finder-inner{
+  max-width:1120px;
+  margin:0 auto;
+  padding:16px;
+  border:1px solid #d8e2ee;
+  border-radius:22px;
+  background:#fff;
+  box-shadow:0 10px 28px rgba(20,45,80,.06);
+}
+.health-finder-head>span{
+  display:block;
+  margin-bottom:3px;
+  color:#6d7e92;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.09em;
+}
+.health-finder-head h2{
+  margin:0;
+  color:#172033;
+  font-size:24px;
+  line-height:1.15;
+}
+.health-finder-head p{
+  margin:5px 0 0;
+  color:#69788b;
+  font-size:13px;
+  line-height:1.45;
+}
+.health-finder-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:9px;
+  margin-top:14px;
+}
+.health-finder-item{
+  --tile:#1769c2;
+  display:grid;
+  grid-template-columns:42px 1fr auto;
+  align-items:center;
+  gap:10px;
+  min-height:76px;
+  padding:11px 12px;
+  border:1px solid #dfe6ef;
+  border-radius:15px;
+  background:#fbfdff;
+  color:#172033;
+  text-decoration:none;
+  transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease;
+}
+.health-finder-item:active{
+  transform:scale(.985);
+}
+.health-finder-item--hospital{--tile:#1769c2}
+.health-finder-item--doctor{--tile:#276b9f}
+.health-finder-item--pharmacy{--tile:#23824c}
+.health-finder-item--dentist{--tile:#4976a8}
+.health-finder-item--vet{--tile:#6b6f9b}
+.health-finder-item--lab{--tile:#6a6f86}
+.health-finder-icon{
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:color-mix(in srgb,var(--tile) 9%,white);
+  font-size:22px;
+}
+.health-finder-copy{
+  min-width:0;
+}
+.health-finder-copy strong{
+  display:block;
+  color:#1f2a3a;
+  font-size:15px;
+  line-height:1.2;
+}
+.health-finder-copy small{
+  display:block;
+  margin-top:3px;
+  color:#6a798b;
+  font-size:11.5px;
+  line-height:1.25;
+}
+.health-finder-arrow{
+  color:var(--tile);
+  font-size:24px;
+  line-height:1;
+  font-weight:700;
+}
+.health-finder-minor{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:9px;
+  padding:9px 11px;
+  border-radius:12px;
+  background:#f6f8fb;
+  color:#52657a;
+  text-decoration:none;
+  font-size:12.5px;
+  font-weight:800;
+}
+
+/* sticky nav becomes secondary navigation */
+.info-page-tools{
+  box-shadow:0 5px 18px rgba(20,45,80,.04);
+}
+.health-sticky-nav{
+  min-width:0;
+  width:100%;
+}
+.info-page-subnav a{
+  border-radius:999px;
+}
+.info-page-subnav a:focus-visible{
+  outline:2px solid #1769c2;
+  outline-offset:2px;
+}
+
+/* strong visual section separation */
+[data-info-category-root="zdrave"]{
+  display:grid;
+  gap:18px;
+}
+.health-section-shell{
+  --section-accent:#5f7892;
+  position:relative;
+  margin:0 !important;
+  padding:15px;
+  border:1px solid #d6e0eb;
+  border-radius:22px;
+  background:linear-gradient(180deg,#fbfdff 0,#f7fafe 100%);
+  box-shadow:0 8px 22px rgba(20,45,80,.045);
+  overflow:hidden;
+}
+.health-section-shell::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  width:5px;
+  height:100%;
+  background:var(--section-accent);
+}
+.health-section-shell--bolnica{--section-accent:#1769c2}
+.health-section-shell--lekari{--section-accent:#2a6b9e}
+.health-section-shell--apteki{--section-accent:#2a8550}
+.health-section-shell--stomatolozi{--section-accent:#4c77a8}
+.health-section-shell--veterinari{--section-accent:#6c6f9d}
+.health-section-shell--vet-apteki{--section-accent:#707796}
+.health-section-shell--laboratorii{--section-accent:#5f6a7d}
+
+.health-section-title{
+  margin:-2px 0 13px !important;
+  padding:0 0 11px !important;
+  border-bottom:1px solid #dde5ee;
+}
+.health-section-kicker{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:5px 10px;
+  margin-bottom:6px;
+}
+.health-section-kicker strong{
+  color:var(--section-accent);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+.health-section-kicker span{
+  color:#748296;
+  font-size:11px;
+}
+.health-section-title h2,
+.health-section-title h3{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:0 !important;
+  color:#172033;
+  font-size:22px !important;
+}
+.health-section-title-icon{
+  width:34px;
+  height:34px;
+  flex:0 0 34px;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  background:#fff;
+  border:1px solid #dce4ed;
+  font-size:18px;
+}
+
+/* search becomes an obvious tool, not a stray input */
+.health-search-box{
+  margin:0 0 12px;
+  padding:10px;
+  border:1px solid #dce5ee;
+  border-radius:14px;
+  background:#fff;
+}
+.health-search-box label{
+  display:grid;
+  gap:6px;
+  color:#3a4c62;
+  font-size:12px;
+  font-weight:850;
+}
+.health-search-box .info-local-filter{
+  margin:0;
+  min-height:46px;
+  border-color:#cfd9e5;
+  background:#fbfcfe;
+  font-size:14px;
+}
+
+/* make lists feel contained within their section */
+.health-section-shell .info-directory-grid,
+.health-section-shell .info-cards,
+.health-section-shell .info-cards--dense{
+  margin-top:0;
+}
+.health-section-shell .info-actions-row{
+  margin-top:12px;
+  padding-top:11px;
+  border-top:1px solid #e1e7ef;
+}
+
+/* reinforce the other medical facilities frame within Hospital without over-weighting it */
+.health-section-shell--bolnica .health-other-frame{
+  margin-top:18px;
+  border-color:#c8d7e7;
+  background:#f8fbff;
+}
+
+/* mobile: first screen should communicate choices immediately */
+@media(max-width:700px){
+  .info-category-page .info-page-hero{
+    padding-bottom:12px;
+  }
+  .health-finder{
+    padding:0 10px 8px;
+  }
+  .health-finder-inner{
+    padding:12px;
+    border-radius:18px;
+  }
+  .health-finder-head h2{
+    font-size:21px;
+  }
+  .health-finder-head p{
+    font-size:12px;
+  }
+  .health-finder-grid{
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+    margin-top:11px;
+  }
+  .health-finder-item{
+    grid-template-columns:34px 1fr;
+    grid-template-rows:auto;
+    min-height:68px;
+    padding:9px;
+    gap:8px;
+    border-radius:13px;
+  }
+  .health-finder-icon{
+    width:34px;
+    height:34px;
+    border-radius:10px;
+    font-size:18px;
+  }
+  .health-finder-copy strong{
+    font-size:14px;
+  }
+  .health-finder-copy small{
+    margin-top:2px;
+    font-size:10.5px;
+  }
+  .health-finder-arrow{
+    display:none;
+  }
+  .health-finder-minor{
+    padding:8px 9px;
+    font-size:12px;
+  }
+
+  [data-info-category-root="zdrave"]{
+    gap:14px;
+  }
+  .health-section-shell{
+    padding:11px;
+    border-radius:18px;
+  }
+  .health-section-title{
+    margin-bottom:10px !important;
+    padding-bottom:9px !important;
+  }
+  .health-section-kicker{
+    display:grid;
+    gap:2px;
+    margin-bottom:5px;
+  }
+  .health-section-kicker span{
+    font-size:10.5px;
+  }
+  .health-section-title h2,
+  .health-section-title h3{
+    font-size:19px !important;
+  }
+  .health-section-title-icon{
+    width:31px;
+    height:31px;
+    flex-basis:31px;
+    font-size:16px;
+  }
+  .health-search-box{
+    padding:8px;
+    margin-bottom:10px;
+  }
+}
+
+/* small phones */
+@media(max-width:380px){
+  .health-finder-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+
+/* v6 — ясна граница между Болница и Други лечебни заведения */
+.health-section-shell--bolnica{
+  margin-bottom:0 !important;
+}
+
+.health-other-frame{
+  position:relative;
+  margin:14px 0 0 !important;
+  padding:12px !important;
+  border:1px solid #cfd9e5 !important;
+  border-radius:20px !important;
+  background:linear-gradient(180deg,#ffffff 0,#f8fafc 100%) !important;
+  box-shadow:0 8px 22px rgba(20,45,80,.045) !important;
+  overflow:hidden;
+}
+
+.health-other-frame::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:5px;
+  background:#6f8195;
+}
+
+.health-other-frame-head{
+  padding:3px 5px 12px 9px !important;
+  border-bottom:1px solid #dce4ed !important;
+}
+
+.health-other-list{
+  padding-left:4px;
+}
+
+.health-other-frame + .health-section-shell{
+  margin-top:0 !important;
+}
+
+@media(max-width:700px){
+  .health-other-frame{
+    margin-top:12px !important;
+    padding:10px !important;
+    border-radius:18px !important;
+  }
+
+  .health-other-frame-head{
+    padding-left:8px !important;
+  }
+}
+
+
+/* v7 — пълна синя рамка около целия блок "Болница" */
+.health-section-shell--bolnica{
+  border:2px solid #1769c2 !important;
+  border-radius:22px !important;
+  overflow:hidden;
+}
+
+/* махаме отделната синя вертикална линия, защото вече има цяла рамка */
+.health-section-shell--bolnica::before{
+  display:none !important;
+}
+
+/* малко въздух отвътре, за да не опира съдържанието в синята рамка */
+.health-section-shell--bolnica{
+  padding:14px !important;
+}
+
+@media(max-width:700px){
+  .health-section-shell--bolnica{
+    border-width:2px !important;
+    border-radius:19px !important;
+    padding:11px !important;
+  }
+}
+
+
+/* v8 — пълна цветна рамка за ВСЕКИ основен раздел в "Здраве" */
+.health-section-shell{
+  border:2px solid var(--section-accent) !important;
+  border-radius:22px !important;
+  overflow:hidden;
+  padding:14px !important;
+}
+
+/* премахваме старите само-леви акцентни линии */
+.health-section-shell::before{
+  display:none !important;
+}
+
+/* "Други лечебни заведения" също е самостоятелна пълна рамка */
+.health-other-frame{
+  border:2px solid #6f8195 !important;
+  border-radius:20px !important;
+  overflow:hidden;
+}
+.health-other-frame::before{
+  display:none !important;
+}
+
+/* запазваме различен акцент по секции */
+.health-section-shell--bolnica{--section-accent:#1769c2}
+.health-section-shell--lekari{--section-accent:#2a6b9e}
+.health-section-shell--apteki{--section-accent:#2a8550}
+.health-section-shell--stomatolozi{--section-accent:#4c77a8}
+.health-section-shell--veterinari{--section-accent:#6c6f9d}
+.health-section-shell--vet-apteki{--section-accent:#707796}
+.health-section-shell--laboratorii{--section-accent:#5f6a7d}
+
+@media(max-width:700px){
+  .health-section-shell{
+    border-width:2px !important;
+    border-radius:19px !important;
+    padding:11px !important;
+  }
+  .health-other-frame{
+    border-width:2px !important;
+    border-radius:18px !important;
+  }
+}
+
+
+/* v9 — Болница и Други лечебни заведения са ДВА отделни блока */
+.health-section-shell--bolnica{
+  margin-bottom:0 !important;
+}
+
+.health-other-frame--separate{
+  display:block !important;
+  width:auto !important;
+  margin:16px 0 0 !important;
+  padding:14px !important;
+  border:2px solid #6f8195 !important;
+  border-radius:22px !important;
+  background:linear-gradient(180deg,#fff 0,#f8fafc 100%) !important;
+  box-shadow:0 8px 22px rgba(20,45,80,.045) !important;
+  overflow:hidden !important;
+}
+
+.health-other-frame--separate::before{
+  display:none !important;
+}
+
+.health-other-frame--separate .health-other-frame-head{
+  padding:2px 3px 12px !important;
+  border-bottom:1px solid #dce5ef !important;
+}
+
+.health-other-frame--separate .health-other-frame-head > span{
+  color:#6f8195 !important;
+}
+
+.health-other-original-grid{
+  margin-top:12px;
+}
+
+.health-other-original-grid > .info-directory-grid{
+  display:grid;
+  gap:10px;
+}
+
+.health-other-frame--separate .info-card{
+  margin:0 !important;
+  border:1px solid #d8e0e9 !important;
+  border-radius:15px !important;
+  background:#fff !important;
+  box-shadow:none !important;
+}
+
+.health-other-frame--separate + .health-section-shell{
+  margin-top:16px !important;
+}
+
+@media(max-width:700px){
+  .health-other-frame--separate{
+    margin-top:14px !important;
+    padding:11px !important;
+    border-radius:19px !important;
+  }
+  .health-other-frame--separate + .health-section-shell{
+    margin-top:14px !important;
+  }
+}
+
+
+/* v10 — всеки медицински център е самостоятелен ясно отделен обект */
+.health-other-frame--separate .health-other-list,
+.health-other-frame--separate .health-other-original-grid > .info-directory-grid{
+  display:grid !important;
+  gap:18px !important;
+}
+
+/* custom cards from the enhanced local view */
+.health-other-frame--separate .health-center-card{
+  position:relative !important;
+  margin:0 !important;
+  padding:15px !important;
+  border:2px solid #cfd8e3 !important;
+  border-radius:18px !important;
+  background:#fff !important;
+  box-shadow:0 7px 18px rgba(20,45,80,.055) !important;
+  overflow:hidden !important;
+}
+
+/* old/original cards, if that renderer is present */
+.health-other-frame--separate .info-card{
+  position:relative !important;
+  margin:0 !important;
+  padding:15px !important;
+  border:2px solid #cfd8e3 !important;
+  border-radius:18px !important;
+  background:#fff !important;
+  box-shadow:0 7px 18px rgba(20,45,80,.055) !important;
+  overflow:hidden !important;
+}
+
+/* Individual accent edge inside EACH facility card */
+.health-other-frame--separate .health-center-card::before,
+.health-other-frame--separate .info-card::before{
+  content:"" !important;
+  display:block !important;
+  position:absolute !important;
+  left:0 !important;
+  top:0 !important;
+  bottom:0 !important;
+  width:5px !important;
+  background:#7b8fa5 !important;
+}
+
+/* first/priority DKC gets stronger blue identity */
+.health-other-frame--separate .health-center-card--priority{
+  border-color:#b9cce0 !important;
+}
+.health-other-frame--separate .health-center-card--priority::before{
+  background:#1769c2 !important;
+}
+
+/* Enough whitespace so two centres never read as one continuous card */
+.health-other-frame--separate .health-center-card + .health-center-card,
+.health-other-frame--separate .info-card + .info-card{
+  margin-top:0 !important;
+}
+
+/* section heading clearly separated from first facility */
+.health-other-frame--separate .health-other-frame-head{
+  margin-bottom:15px !important;
+}
+
+/* each card title is visually the start of a new entity */
+.health-other-frame--separate .health-center-top,
+.health-other-frame--separate .info-card-name{
+  position:relative;
+  z-index:1;
+}
+
+@media(max-width:700px){
+  .health-other-frame--separate .health-other-list,
+  .health-other-frame--separate .health-other-original-grid > .info-directory-grid{
+    gap:15px !important;
+  }
+
+  .health-other-frame--separate .health-center-card,
+  .health-other-frame--separate .info-card{
+    padding:13px !important;
+    border-radius:16px !important;
+    border-width:2px !important;
+  }
+
+  .health-other-frame--separate .health-other-frame-head{
+    margin-bottom:13px !important;
+  }
+}
+
+
+/* v11 — по-силно визуално отделяне на всеки отделен лечебен център */
+.health-other-frame--separate .health-other-list,
+.health-other-frame--separate .health-other-original-grid > .info-directory-grid{
+  gap:22px !important;
+}
+
+.health-other-frame--separate .health-center-card,
+.health-other-frame--separate .info-card{
+  border:3px solid #aebdcd !important;
+  border-radius:20px !important;
+  padding:16px !important;
+  background:#fff !important;
+  box-shadow:
+    0 10px 24px rgba(20,45,80,.07),
+    0 1px 0 rgba(255,255,255,.9) inset !important;
+}
+
+/* ясно цветно начало на всяка отделна карта */
+.health-other-frame--separate .health-center-card::before,
+.health-other-frame--separate .info-card::before{
+  width:7px !important;
+  background:#7f93a8 !important;
+}
+
+/* ДКЦ 1 остава с по-силен син акцент */
+.health-other-frame--separate .health-center-card--priority{
+  border-color:#8fb3d7 !important;
+}
+.health-other-frame--separate .health-center-card--priority::before{
+  background:#1769c2 !important;
+}
+
+/* по-ясна вътрешна граница преди "Виж..." */
+.health-other-frame--separate .health-center-more{
+  margin-top:12px !important;
+  padding-top:10px !important;
+  border-top:2px solid #e2e8ef !important;
+}
+
+/* не допускаме картите да изглеждат като слети редове */
+.health-other-frame--separate .health-center-card + .health-center-card,
+.health-other-frame--separate .info-card + .info-card{
+  margin-top:0 !important;
+}
+
+/* малко повече въздух между заглавие и съдържание */
+.health-other-frame--separate .health-center-top{
+  margin-bottom:3px !important;
+}
+
+@media(max-width:700px){
+  .health-other-frame--separate .health-other-list,
+  .health-other-frame--separate .health-other-original-grid > .info-directory-grid{
+    gap:18px !important;
+  }
+
+  .health-other-frame--separate .health-center-card,
+  .health-other-frame--separate .info-card{
+    border-width:3px !important;
+    border-radius:18px !important;
+    padding:14px !important;
+  }
+
+  .health-other-frame--separate .health-center-card::before,
+  .health-other-frame--separate .info-card::before{
+    width:6px !important;
+  }
+}
+
+
+/* v12 — силно и недвусмислено отделяне на всеки отделен лечебен център */
+
+/* повече въздух между отделните центрове */
+.health-other-frame .health-other-list,
+.health-other-frame .health-other-original-grid > .info-directory-grid,
+.health-other-frame--separate .health-other-list,
+.health-other-frame--separate .health-other-original-grid > .info-directory-grid{
+  display:grid !important;
+  gap:26px !important;
+}
+
+/* всеки център = собствена самостоятелна пълна рамка */
+.health-other-frame .health-center-card,
+.health-other-frame .info-card,
+.health-other-frame--separate .health-center-card,
+.health-other-frame--separate .info-card{
+  position:relative !important;
+  margin:0 !important;
+  padding:16px !important;
+  border:3px solid #66788c !important;
+  border-radius:20px !important;
+  background:#ffffff !important;
+  box-shadow:0 10px 24px rgba(27,45,68,.10) !important;
+  overflow:hidden !important;
+}
+
+/* махаме всички тънки вертикални линии вътре в картите */
+.health-other-frame .health-center-card::before,
+.health-other-frame .info-card::before,
+.health-other-frame--separate .health-center-card::before,
+.health-other-frame--separate .info-card::before{
+  display:none !important;
+  content:none !important;
+}
+
+/* ДКЦ 1 — синя пълна рамка, но пак отделна карта */
+.health-other-frame .health-center-card--priority,
+.health-other-frame--separate .health-center-card--priority{
+  border-color:#1769c2 !important;
+}
+
+/* Хипократ и Здраве Лом — пълна отделна рамка */
+.health-other-frame .health-center-card:not(.health-center-card--priority),
+.health-other-frame--separate .health-center-card:not(.health-center-card--priority){
+  border-color:#6f8195 !important;
+}
+
+/* ясно светло поле между рамката и съдържанието */
+.health-other-frame .health-center-top,
+.health-other-frame--separate .health-center-top{
+  padding-bottom:10px !important;
+  margin-bottom:8px !important;
+  border-bottom:1px solid #e3e8ee !important;
+}
+
+/* долният ред "Виж..." е ясно отделен вътре в собствената карта */
+.health-other-frame .health-center-more,
+.health-other-frame--separate .health-center-more{
+  margin-top:13px !important;
+  padding-top:11px !important;
+  border-top:2px solid #e0e6ed !important;
+}
+
+/* външният контейнер не трябва визуално да се конкурира с отделните центрове */
+.health-other-frame--separate{
+  border:2px solid #aab6c3 !important;
+  background:#f4f7fa !important;
+  padding:14px !important;
+}
+
+/* на телефон разликата трябва да се вижда веднага */
+@media(max-width:700px){
+  .health-other-frame .health-other-list,
+  .health-other-frame .health-other-original-grid > .info-directory-grid,
+  .health-other-frame--separate .health-other-list,
+  .health-other-frame--separate .health-other-original-grid > .info-directory-grid{
+    gap:22px !important;
+  }
+
+  .health-other-frame .health-center-card,
+  .health-other-frame .info-card,
+  .health-other-frame--separate .health-center-card,
+  .health-other-frame--separate .info-card{
+    border-width:3px !important;
+    border-radius:18px !important;
+    padding:14px !important;
+    box-shadow:0 8px 20px rgba(27,45,68,.11) !important;
+  }
+}
+
+
+/* v13 — богата, но компактна карта за МЦ „Хипократ 53“ */
+.health-center-card--hipokrat .hipokrat-front{
+  margin-top:12px;
+  padding:12px;
+  border:1px solid #dbe3eb;
+  border-radius:14px;
+  background:#f8fafc;
+}
+
+.hipokrat-front-title{
+  margin-bottom:8px;
+  font-size:.78rem;
+  font-weight:800;
+  letter-spacing:.035em;
+  text-transform:uppercase;
+  color:#526579;
+}
+
+.hipokrat-chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+}
+
+.hipokrat-chips span{
+  display:inline-flex;
+  align-items:center;
+  min-height:30px;
+  padding:5px 9px;
+  border:1px solid #c9d7e5;
+  border-radius:999px;
+  background:#fff;
+  font-size:.86rem;
+  font-weight:700;
+  color:#243a50;
+}
+
+.hipokrat-diagnostics{
+  display:grid;
+  gap:6px;
+  margin-top:10px;
+}
+
+.hipokrat-diagnostics span{
+  position:relative;
+  padding-left:15px;
+  font-size:.87rem;
+  font-weight:650;
+  color:#394f63;
+}
+
+.hipokrat-diagnostics span::before{
+  content:"";
+  position:absolute;
+  left:2px;
+  top:.58em;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#1769c2;
+}
+
+.hipokrat-detail-body{
+  padding-top:4px;
+}
+
+.hipokrat-doctor-list{
+  display:grid;
+  gap:9px;
+  margin-top:10px;
+}
+
+.hipokrat-doctor-list > div{
+  display:grid;
+  gap:2px;
+  padding:10px 11px;
+  border:1px solid #dce4ec;
+  border-radius:12px;
+  background:#fff;
+}
+
+.hipokrat-doctor-list strong{
+  font-size:.93rem;
+  color:#20364b;
+}
+
+.hipokrat-doctor-list span{
+  font-size:.82rem;
+  color:#66778a;
+}
+
+.hipokrat-service-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;
+  margin-top:7px;
+}
+
+.hipokrat-service-grid span{
+  padding:8px 9px;
+  border:1px solid #dce4ec;
+  border-radius:10px;
+  background:#fff;
+  font-size:.82rem;
+  font-weight:650;
+  line-height:1.25;
+  color:#31485d;
+}
+
+.hipokrat-caution{
+  margin:10px 0 0 !important;
+  padding:10px 11px;
+  border-radius:11px;
+  background:#fff7e8;
+  border:1px solid #ead8ad;
+  font-size:.82rem !important;
+  line-height:1.45 !important;
+  color:#5b4b2c;
+}
+
+.health-center-card--hipokrat .health-center-more + .health-center-more{
+  margin-top:9px !important;
+}
+
+@media(max-width:700px){
+  .health-center-card--hipokrat .hipokrat-front{
+    padding:10px;
+  }
+
+  .hipokrat-chips span{
+    min-height:28px;
+    padding:5px 8px;
+    font-size:.81rem;
+  }
+
+  .hipokrat-service-grid{
+    grid-template-columns:1fr;
+    gap:6px;
+  }
+
+  .hipokrat-doctor-list > div{
+    padding:9px 10px;
+  }
+}
+
+
+/* v14 — финална публична карта за МЦ „Хипократ 53“ */
+.health-center-card--hipokrat .health-center-essentials a,
+.health-center-card--hipokrat .hipokrat-contact-note a{
+  color:#0f5fae;
+  font-weight:800;
+  text-decoration:none;
+}
+
+.health-center-card--hipokrat .health-center-essentials a:hover,
+.health-center-card--hipokrat .hipokrat-contact-note a:hover{
+  text-decoration:underline;
+}
+
+.hipokrat-front-title--secondary{
+  margin-top:12px;
+}
+
+.hipokrat-contact-note{
+  margin:10px 0 0 !important;
+  padding:9px 10px;
+  border:1px solid #d6e1eb;
+  border-radius:10px;
+  background:#f8fafc;
+  font-size:.84rem !important;
+  line-height:1.4 !important;
+}
+
+.hipokrat-source-compact{
+  display:grid;
+  gap:5px;
+}
+
+.hipokrat-source-compact p{
+  margin:0 !important;
+  font-size:.82rem !important;
+  line-height:1.4 !important;
+}
+
+.hipokrat-star-note{
+  color:#66778a;
+}
+
+/* internal/editorial warning boxes from earlier review versions are not public */
+.health-center-card--hipokrat .hipokrat-caution{
+  display:none !important;
+}
+
+
+/* v15 — финални публични карти за ДКЦ 1 и МЦ „Здраве“ */
+.health-center-card--dkc .health-center-essentials a,
+.health-center-card--zdrave .health-center-essentials a,
+.health-center-card--dkc .dkc-service-feature a,
+.health-center-card--dkc .dkc-simple-note a,
+.health-center-card--zdrave .zdrave-doctor a{
+  color:#0f5fae;
+  font-weight:800;
+  text-decoration:none;
+}
+
+.health-center-card--dkc .health-center-essentials a:hover,
+.health-center-card--zdrave .zdrave-doctor a:hover,
+.health-center-card--dkc .dkc-service-feature a:hover,
+.health-center-card--dkc .dkc-simple-note a:hover{
+  text-decoration:underline;
+}
+
+.dkc-front,
+.zdrave-front{
+  margin-top:12px;
+  padding:12px;
+  border:1px solid #dbe3eb;
+  border-radius:14px;
+  background:#f8fafc;
+}
+
+.dkc-front-title,
+.zdrave-front-title{
+  margin-bottom:9px;
+  font-size:.78rem;
+  font-weight:800;
+  letter-spacing:.035em;
+  text-transform:uppercase;
+  color:#526579;
+}
+
+.dkc-service-feature{
+  display:grid;
+  gap:4px;
+  padding:10px 11px;
+  border:1px solid #cddceb;
+  border-radius:12px;
+  background:#fff;
+}
+
+.dkc-service-feature strong{
+  color:#213a52;
+  font-size:.93rem;
+}
+
+.dkc-service-feature span{
+  font-size:.84rem;
+  color:#5d7083;
+}
+
+.dkc-lkk-grid,
+.zdrave-service-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;
+  margin-top:7px;
+}
+
+.dkc-lkk-grid span,
+.zdrave-service-grid span{
+  padding:8px 9px;
+  border:1px solid #dce4ec;
+  border-radius:10px;
+  background:#fff;
+  font-size:.82rem;
+  font-weight:650;
+  line-height:1.25;
+  color:#31485d;
+}
+
+.dkc-simple-note{
+  margin:10px 0 0 !important;
+  font-size:.84rem !important;
+}
+
+.dkc-source-compact,
+.zdrave-source-compact{
+  display:grid;
+  gap:5px;
+}
+
+.dkc-source-compact p,
+.zdrave-source-compact p{
+  margin:0 !important;
+  font-size:.82rem !important;
+  line-height:1.4 !important;
+}
+
+.zdrave-front{
+  display:grid;
+  gap:10px;
+}
+
+.zdrave-front-title{
+  margin-bottom:0;
+}
+
+.zdrave-doctor{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:11px;
+  border:1px solid #d6e0ea;
+  border-radius:12px;
+  background:#fff;
+}
+
+.zdrave-doctor > div{
+  display:grid;
+  gap:2px;
+  min-width:0;
+}
+
+.zdrave-doctor span{
+  font-size:.76rem;
+  font-weight:800;
+  color:#60758a;
+  text-transform:uppercase;
+  letter-spacing:.025em;
+}
+
+.zdrave-doctor strong{
+  color:#20364b;
+  font-size:.93rem;
+}
+
+.zdrave-doctor a{
+  flex:0 0 auto;
+  white-space:nowrap;
+  font-size:.86rem;
+}
+
+/* финалните публични карти не показват вътрешни статуси за одит */
+.health-center-card--dkc .health-center-status,
+.health-center-card--zdrave .health-center-status{
+  display:none !important;
+}
+
+@media(max-width:700px){
+  .dkc-front,
+  .zdrave-front{
+    padding:10px;
+  }
+
+  .dkc-lkk-grid,
+  .zdrave-service-grid{
+    grid-template-columns:1fr;
+    gap:6px;
+  }
+
+  .zdrave-doctor{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:7px;
+    padding:10px;
+  }
+
+  .zdrave-doctor a{
+    font-size:.9rem;
+  }
+}
+
+
+/* v16 — FINAL HEALTH ARCHITECTURE / mobile-first */
+
+.health-final-architecture .health-duplicate-heading{
+  display:none !important;
+}
+
+.health-entry-final{
+  margin:12px auto 18px;
+  padding:14px;
+  border:2px solid #d7e0ea;
+  border-radius:20px;
+  background:#fff;
+  box-shadow:0 8px 24px rgba(25,48,76,.055);
+}
+
+.health-entry-final-head span,
+.health-main-final-head span,
+.health-other-final .health-other-frame-head > span{
+  display:block;
+  margin-bottom:3px;
+  font-size:.72rem;
+  font-weight:850;
+  letter-spacing:.08em;
+  color:#64788e;
+}
+
+.health-entry-final-head h2{
+  margin:0;
+  font-size:1.28rem;
+  line-height:1.15;
+  color:#142c45;
+}
+
+.health-entry-final-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;
+  margin-top:12px;
+}
+
+.health-entry-final-grid a{
+  display:grid;
+  align-content:start;
+  min-height:82px;
+  padding:11px;
+  border:1px solid #d8e1ea;
+  border-radius:14px;
+  background:#f8fafc;
+  text-decoration:none;
+}
+
+.health-entry-final-grid strong{
+  font-size:.95rem;
+  color:#17334f;
+}
+
+.health-entry-final-grid small{
+  margin-top:4px;
+  font-size:.76rem;
+  line-height:1.28;
+  color:#66788a;
+}
+
+.health-entry-final-minor{
+  display:inline-block;
+  margin-top:10px;
+  font-size:.83rem;
+  font-weight:750;
+  color:#385d7f;
+  text-decoration:none;
+}
+
+.health-main-section--final,
+.health-other-final{
+  scroll-margin-top:90px;
+  margin:16px 0 0 !important;
+}
+
+.health-main-final-head{
+  margin-bottom:12px;
+  padding-bottom:11px;
+  border-bottom:1px solid #dce4ec;
+}
+
+.health-main-final-head h2,
+.health-other-final .health-other-frame-head h2{
+  margin:0;
+  font-size:1.22rem;
+  line-height:1.15;
+  color:#17314b;
+}
+
+.health-main-final-head p,
+.health-other-final .health-other-frame-head p{
+  margin:4px 0 0;
+  font-size:.82rem;
+  line-height:1.35;
+  color:#67798b;
+}
+
+.health-generated-heading-hidden{
+  display:none !important;
+}
+
+.health-secondary-nav{
+  opacity:.92;
+}
+
+/* Main sections are unmistakable independent containers */
+.health-main-section--final{
+  padding:12px !important;
+  border:2px solid var(--section-accent,#75879a) !important;
+  border-radius:20px !important;
+  background:#fff !important;
+  overflow:hidden;
+}
+
+.health-other-final{
+  padding:12px !important;
+  border:2px solid #8b9aac !important;
+  border-radius:20px !important;
+  background:#f6f8fa !important;
+}
+
+/* The "other centers" cards are peers, never visually one center */
+.health-other-final .health-other-list,
+.health-other-final .health-other-original-grid > .info-directory-grid{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:18px !important;
+}
+
+.health-other-final .health-center-card,
+.health-other-final .info-card{
+  border:2px solid #6f8195 !important;
+  border-radius:18px !important;
+  background:#fff !important;
+  box-shadow:0 7px 18px rgba(26,46,69,.065) !important;
+}
+
+/* Hospital stays visually strongest */
+#zdrave-bolnica{
+  --section-accent:#1769c2;
+}
+
+/* Slightly calmer accents for the remaining sections */
+#zdrave-lekari{--section-accent:#3f739f}
+#zdrave-apteki{--section-accent:#3f855c}
+#zdrave-stomatolozi{--section-accent:#657fa2}
+#zdrave-veterinari{--section-accent:#6f749b}
+#zdrave-vet-apteki{--section-accent:#7a8296}
+#zdrave-laboratorii{--section-accent:#677485}
+
+/* Mobile first: avoid duplicate visual chrome */
+@media(max-width:700px){
+  .health-entry-final{
+    margin-top:10px;
+    padding:12px;
+    border-radius:18px;
+  }
+
+  .health-entry-final-grid{
+    gap:8px;
+  }
+
+  .health-entry-final-grid a{
+    min-height:76px;
+    padding:10px;
+    border-radius:13px;
+  }
+
+  .health-main-section--final,
+  .health-other-final{
+    margin-top:14px !important;
+    padding:11px !important;
+    border-radius:18px !important;
+  }
+
+  .health-main-final-head h2,
+  .health-other-final .health-other-frame-head h2{
+    font-size:1.15rem;
+  }
+
+  .health-other-final .health-other-list,
+  .health-other-final .health-other-original-grid > .info-directory-grid{
+    gap:16px !important;
+  }
+}
+
+/* Desktop: richer scanability, same hierarchy */
+@media(min-width:900px){
+  .health-entry-final{
+    padding:18px;
+  }
+
+  .health-entry-final-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:12px;
+  }
+
+  .health-entry-final-grid a{
+    min-height:92px;
+    padding:14px;
+  }
+
+  .health-main-section--final,
+  .health-other-final{
+    padding:18px !important;
+    margin-top:22px !important;
+  }
+
+  .health-main-final-head{
+    display:grid;
+    grid-template-columns:auto 1fr;
+    column-gap:16px;
+    align-items:end;
+  }
+
+  .health-main-final-head span{
+    grid-column:1 / -1;
+  }
+
+  .health-main-final-head h2{
+    font-size:1.42rem;
+  }
+
+  .health-main-final-head p{
+    margin:0 0 2px;
+    text-align:right;
+  }
+
+  .health-other-final .health-other-list,
+  .health-other-final .health-other-original-grid > .info-directory-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:16px !important;
+    align-items:start;
+  }
+}
+
+
+/* v17 — navigation simplification: one entry, one secondary nav */
+body[data-health-navigation="v17"] .health-entry-final{
+  display:block !important;
+}
+
+body[data-health-navigation="v17"] .health-secondary-nav--v17{
+  margin-top:8px !important;
+  padding-top:0 !important;
+  border-top:0 !important;
+  background:#fff;
+  box-shadow:none !important;
+}
+
+/* Make the secondary nav visually weaker than the single main chooser */
+body[data-health-navigation="v17"] .health-secondary-nav--v17 a,
+body[data-health-navigation="v17"] .health-secondary-nav--v17 button{
+  font-size:.82rem !important;
+  min-height:38px !important;
+  padding:7px 10px !important;
+}
+
+/* Prevent duplicate "What are you looking for?" blocks from taking space */
+body[data-health-navigation="v17"] .health-finder,
+body[data-health-navigation="v17"] .health-quick-access,
+body[data-health-navigation="v17"] .health-entry-point{
+  display:none !important;
+}
+
+/* The single quick chooser stays compact on mobile */
+@media(max-width:700px){
+  body[data-health-navigation="v17"] .health-entry-final{
+    margin:8px 12px 10px !important;
+    padding:11px !important;
+  }
+
+  body[data-health-navigation="v17"] .health-entry-final-grid{
+    gap:7px !important;
+  }
+
+  body[data-health-navigation="v17"] .health-entry-final-grid a{
+    min-height:70px !important;
+    padding:9px !important;
+  }
+
+  body[data-health-navigation="v17"] .health-secondary-nav--v17{
+    position:sticky;
+    top:0;
+    z-index:20;
+  }
+}
+
+
+/* V20 — Health actions: guided, light, mobile-first */
+.health-section-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:14px;
+  padding-top:12px;
+  border-top:1px solid #e1e8f1;
+}
+.health-facility-correction{
+  margin-top:16px;
+}
+.health-correction-btn{
+  min-height:42px;
+  padding:9px 13px;
+  border:1px solid #b9c9dd;
+  background:#fff;
+  color:#17365f;
+  font-weight:800;
+}
+.health-correction-btn:hover,
+.health-correction-btn:focus-visible{
+  border-color:#6f91b9;
+  background:#f7faff;
+}
+.health-action-form{
+  display:grid;
+  gap:12px;
+}
+.health-action-fields{
+  display:grid;
+  gap:10px;
+}
+.health-action-field{
+  display:grid;
+  gap:6px;
+  font-weight:750;
+  color:#1b2a3d;
+}
+.health-action-field input,
+.health-action-field select,
+.health-action-field textarea{
+  width:100%;
+  min-height:44px;
+  border:1px solid #cbd6e4;
+  border-radius:10px;
+  padding:10px 11px;
+  background:#fff;
+  color:#172235;
+  font:inherit;
+  font-weight:500;
+}
+.health-action-field textarea{
+  resize:vertical;
+}
+.health-action-target{
+  display:grid;
+  gap:3px;
+  padding:11px 12px;
+  border:1px solid #d8e2ee;
+  border-radius:11px;
+  background:#f7faff;
+}
+.health-action-target small{
+  color:#68768a;
+  font-size:12px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+.health-action-target strong{
+  color:#0b2a50;
+}
+.health-action-target span{
+  color:#5d6d82;
+  font-size:13px;
+}
+.health-action-dynamic{
+  display:grid;
+  gap:10px;
+}
+.health-action-dynamic[hidden]{
+  display:none !important;
+}
+.health-action-more{
+  border:1px solid #e0e7f0;
+  border-radius:10px;
+  background:#fbfcfe;
+}
+.health-action-more summary{
+  cursor:pointer;
+  padding:10px 12px;
+  font-weight:800;
+  color:#36506f;
+}
+.health-action-more-body{
+  display:grid;
+  gap:10px;
+  padding:0 12px 12px;
+}
+.health-action-status{
+  min-height:20px;
+  font-size:13px;
+  font-weight:750;
+}
+.health-action-status.ok{color:#1d6b3a}
+.health-action-status.error{color:#a52a2a}
+.health-action-submit{
+  width:100%;
+  min-height:46px;
+}
+.health-action-login{
+  display:grid;
+  gap:12px;
+}
+@media(max-width:700px){
+  .health-section-actions{
+    gap:7px;
+  }
+  .health-section-actions .info-btn{
+    width:100%;
+    justify-content:center;
+  }
+}
+
+
+/* V21 — approved official Health lookups */
+.health-official-actions{
+  margin:12px 0 14px;
+  padding:11px;
+  border:1px solid #d7e1ed;
+  border-radius:12px;
+  background:#f8fbff;
+}
+.health-official-actions-title{
+  margin-bottom:8px;
+  color:#52657c;
+  font-size:12px;
+  font-weight:850;
+  letter-spacing:.035em;
+  text-transform:uppercase;
+}
+.health-official-actions-links{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.health-official-link{
+  min-height:40px;
+  padding:8px 11px;
+  border:1px solid #b8cae0;
+  background:#fff;
+  color:#173f70;
+  font-size:13px;
+  font-weight:800;
+  text-decoration:none;
+}
+@media(max-width:700px){
+  .health-official-actions-links{
+    display:grid;
+    grid-template-columns:1fr;
+  }
+  .health-official-link{
+    width:100%;
+    justify-content:flex-start;
+    text-align:left;
+  }
+}
