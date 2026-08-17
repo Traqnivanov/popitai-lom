@@ -1,0 +1,154 @@
+/* Банки и банкомати v5 — premium light, без тежки зависимости */
+.bank-v5-shell{display:grid;gap:18px}
+.bank-v5-panel[hidden]{display:none!important}
+.bank-v5-panel{display:grid;gap:16px}
+
+/* Hero */
+.bank-v5-hero{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:end;background:
+linear-gradient(135deg,rgba(10,45,84,.98),rgba(17,66,115,.97));border-radius:22px;padding:22px;color:#fff;box-shadow:0 12px 30px rgba(16,45,79,.14)}
+.bank-v5-hero::after{content:"";position:absolute;right:-42px;top:-58px;width:180px;height:180px;border:1px solid rgba(255,255,255,.10);border-radius:50%;box-shadow:0 0 0 28px rgba(255,255,255,.025)}
+.bank-v5-hero--office{background:linear-gradient(135deg,#18263a,#2f3f56)}
+.bank-v5-hero-copy{position:relative;z-index:1}
+.bank-v5-eyebrow{display:inline-flex;border:1px solid rgba(227,187,79,.38);background:rgba(227,187,79,.12);color:#f1cf72;border-radius:999px;padding:6px 9px;font-size:10.5px;font-weight:900;letter-spacing:.08em}
+.bank-v5-hero h2{margin:11px 0 6px;font-size:27px;line-height:1.12}
+.bank-v5-hero p{margin:0;max-width:590px;color:rgba(255,255,255,.77);font-size:13.5px;line-height:1.5}
+.bank-v5-statline{position:relative;z-index:1;display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:12px 14px;backdrop-filter:blur(2px)}
+.bank-v5-statline div{text-align:center;min-width:62px}
+.bank-v5-statline strong{display:block;color:#fff;font-size:22px;line-height:1}
+.bank-v5-statline span{display:block;margin-top:4px;color:rgba(255,255,255,.72);font-size:10.5px;font-weight:800}
+.bank-v5-statline i{width:1px;height:28px;background:rgba(255,255,255,.15)}
+.bank-v5-statline--single{min-width:95px}
+
+/* Filter */
+.bank-v5-filterbar{display:flex;align-items:center;gap:10px;min-width:0}
+.bank-v5-filterbar>span{flex:0 0 auto;color:#66778b;font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+.bank-v5-filters{display:flex;gap:8px;overflow:auto;padding:2px 1px 4px;scrollbar-width:none}
+.bank-v5-filters::-webkit-scrollbar{display:none}
+.bank-v5-filters button{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;border:1px solid #dde5ee;background:#fff;border-radius:999px;padding:9px 12px;font:inherit;color:#4f6278;font-size:12.5px;font-weight:800;cursor:pointer}
+.bank-v5-filters button b{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:#f1f4f8;color:#6e7e92;font-size:10px}
+.bank-v5-filters button.active{background:#12375f;color:#fff;border-color:#12375f;box-shadow:0 5px 14px rgba(18,55,95,.14)}
+.bank-v5-filters button.active b{background:rgba(255,255,255,.14);color:#fff}
+
+/* Cards */
+.bank-v5-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.bank-v5-card{position:relative;overflow:hidden;background:#fff;border:1px solid #e1e7ef;border-radius:19px;padding:17px;box-shadow:0 7px 20px rgba(17,38,67,.055);min-width:0}
+.bank-v5-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:#1969ba}
+.bank-v5-card--office::before{background:#b8922e}
+.bank-v5-card[hidden]{display:none!important}
+.bank-v5-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.bank-v5-kind{display:flex;align-items:center;gap:10px;min-width:0}
+.bank-v5-kind-icon{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:12px;background:#edf5ff;color:#1465b4;flex:0 0 auto}
+.bank-v5-card--office .bank-v5-kind-icon{background:#fbf6e8;color:#9b7922}
+.bank-v5-kind-icon svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.bank-v5-kind small{display:block;color:#8794a5;font-size:9.5px;font-weight:900;letter-spacing:.08em}
+.bank-v5-kind strong{display:block;margin-top:2px;color:#10233f;font-size:14px;line-height:1.25;white-space:normal}
+.bank-v5-count{flex:0 0 auto;max-width:43%;text-align:right;background:#f4f6f9;color:#6b7a8c;border-radius:999px;padding:6px 8px;font-size:10.5px;font-weight:850}
+.bank-v5-address{display:flex;gap:8px;align-items:flex-start;margin-top:17px}
+.bank-v5-pin{color:#c99724;font-size:17px;line-height:1.2}
+.bank-v5-address h3{margin:0;color:#10233f;font-size:18px;line-height:1.3}
+.bank-v5-place{margin:6px 0 0 25px;color:#7a8798;font-size:12.5px;line-height:1.35}
+.bank-v5-tags{display:flex;flex-wrap:wrap;gap:6px;margin:13px 0 0 25px}
+.bank-v5-tags span{background:#f2f5f8;color:#5e6f84;border-radius:999px;padding:5px 8px;font-size:10.5px;font-weight:850}
+.bank-v5-tags .bank-v5-tag--good{background:#e9f6ee;color:#287348}
+.bank-v5-link{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:15px;border-top:1px solid #edf1f5;padding-top:13px;text-decoration:none;color:#285276;font-size:12.5px;font-weight:850}
+.bank-v5-link strong{font-size:14px;color:#9b7922}
+.bank-v5-office-meta{display:grid;gap:5px;margin:12px 0 0 25px;color:#66778b;font-size:12.5px}
+.bank-v5-note{margin:12px 0 0 25px;background:#f8fafc;border-radius:11px;padding:10px 11px;color:#607086;font-size:12px;line-height:1.4}
+.bank-v5-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:15px}
+.bank-v5-call{display:flex;align-items:center;justify-content:center;min-height:42px;border-radius:11px;background:#1468c4;color:#fff;text-decoration:none;font-size:12.5px;font-weight:850}
+.bank-v5-actions .bank-v5-link{margin:0;border:1px solid #dde5ee;border-top:1px solid #dde5ee;border-radius:11px;padding:10px 12px}
+
+/* Trust */
+.bank-v5-trust{display:flex;align-items:flex-start;gap:10px;background:#f8fafc;border:1px solid #e4eaf1;border-radius:14px;padding:12px 14px}
+.bank-v5-trust>span{display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#e7f5ec;color:#2a7a4d;font-weight:900;flex:0 0 auto}
+.bank-v5-trust p{margin:0;color:#657488;font-size:12.5px;line-height:1.45}
+.bank-v5-trust strong{color:#30455f}
+
+/* Keep the existing page subnav as the only section switch */
+body[data-info-category-page="banki"] .info-page-subnav a.active,
+body[data-info-category-page="banki"] .info-page-subnav a[aria-current="page"]{color:#0b5fd7;border-color:#0b5fd7;background:#eef6ff}
+
+@media(max-width:760px){
+  .bank-v5-hero{grid-template-columns:1fr;padding:17px;border-radius:18px}
+  .bank-v5-hero h2{font-size:23px}
+  .bank-v5-statline{width:100%;justify-content:space-around}
+  .bank-v5-grid{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .bank-v5-hero{padding:15px}
+  .bank-v5-hero h2{font-size:22px}
+  .bank-v5-hero p{font-size:12.8px}
+  .bank-v5-statline{padding:11px 9px;gap:8px}
+  .bank-v5-statline strong{font-size:20px}
+  .bank-v5-statline span{font-size:9.8px}
+  .bank-v5-filterbar{display:grid;gap:7px}
+  .bank-v5-card{padding:15px;border-radius:17px}
+  .bank-v5-address h3{font-size:17px}
+  .bank-v5-actions{grid-template-columns:1fr}
+  .bank-v5-actions .bank-v5-link{min-height:42px}
+}
+
+
+/* v6 FIXED — лек визуален подпис по банка.
+   ВАЖНО: базовите bank-v5-* класове се запазват, защото JS markup ги използва. */
+.bank-v5-card{
+  --bank-accent:#1969ba;
+  --bank-soft:#edf5ff;
+  --bank-deep:#10233f;
+}
+.bank-v5-card::before{background:var(--bank-accent)}
+.bank-v5-card .bank-v5-kind-icon{background:var(--bank-soft);color:var(--bank-accent)}
+.bank-v5-card .bank-v5-kind strong{color:var(--bank-deep)}
+.bank-v5-card .bank-v5-link strong{color:var(--bank-accent)}
+
+/* ОББ */
+.bank-v6-theme--ubb{
+  --bank-accent:#159447;
+  --bank-soft:#edf8f1;
+  --bank-deep:#113d26;
+  background:linear-gradient(180deg,#f7fcf9 0,#fff 28%);
+}
+
+/* Банка ДСК */
+.bank-v6-theme--dsk{
+  --bank-accent:#007a4d;
+  --bank-soft:#eaf6f1;
+  --bank-deep:#0c3a2b;
+  background:linear-gradient(180deg,#f4fbf8 0,#fff 28%);
+}
+
+/* УниКредит */
+.bank-v6-theme--unicredit{
+  --bank-accent:#d3132a;
+  --bank-soft:#fff0f2;
+  --bank-deep:#4d1720;
+  background:linear-gradient(180deg,#fff8f8 0,#fff 28%);
+}
+
+/* Пощенска банка */
+.bank-v6-theme--postbank{
+  --bank-accent:#165aa8;
+  --bank-soft:#eef5fc;
+  --bank-deep:#173b66;
+  background:linear-gradient(180deg,#f7faff 0,#fff 28%);
+}
+
+/* ЦКБ */
+.bank-v6-theme--ccb{
+  --bank-accent:#203f78;
+  --bank-soft:#f0f3f9;
+  --bank-deep:#1c3157;
+  background:linear-gradient(180deg,#f8f9fc 0,#fff 28%);
+}
+
+/* International Asset Bank */
+.bank-v6-theme--iab{
+  --bank-accent:#8f2533;
+  --bank-soft:#fbf0f2;
+  --bank-deep:#4b2027;
+  background:linear-gradient(180deg,#fff8f9 0,#fff 28%);
+}
+
+/* При офисите използваме същия банков акцент само като лек подпис */
+.bank-v5-card--office::before{background:var(--bank-accent)}
+.bank-v5-card--office .bank-v5-kind-icon{background:var(--bank-soft);color:var(--bank-accent)}
