@@ -1,0 +1,92 @@
+
+/* SINGLE OWNER UI — Образование и култура */
+[data-info-education-root]{display:grid;gap:26px}
+.edu-section{scroll-margin-top:120px}
+.edu-section-head{display:flex;align-items:end;justify-content:space-between;gap:14px;margin-bottom:12px}
+.edu-section-head h2{margin:0;color:#10233f;font-size:24px;line-height:1.15}
+.edu-section-head span{color:#7a8797;font-size:12px;font-weight:800;white-space:nowrap}
+.edu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.edu-card{position:relative;overflow:hidden;background:#fff;border:1px solid #e3e9ef;border-radius:18px;padding:16px;box-shadow:0 7px 22px rgba(17,38,67,.05)}
+.edu-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:#1d5f98}
+.edu-card--kindergarten::before{background:#8b67b8}
+.edu-card--community::before{background:#6d7f48}
+.edu-card--library::before{background:#3a719d}
+.edu-card--museum::before{background:#a07126}
+.edu-card--course::before{background:#8a5f90}
+.edu-card-top{display:flex;align-items:flex-start;gap:11px}
+.edu-icon{width:40px;height:40px;border-radius:12px;background:#f0f5fa;display:flex;align-items:center;justify-content:center;flex:0 0 auto;color:#1b537e;font-weight:900}
+.edu-title-wrap{min-width:0;flex:1}
+.edu-kicker{font-size:9px;font-weight:900;letter-spacing:.09em;color:#66798d}
+.edu-title-wrap h3{margin:4px 0 0;color:#10233f;font-size:18px;line-height:1.25}
+.edu-parent{margin:3px 0 0;color:#778596;font-size:12px}
+.edu-new{border-radius:999px;background:#edf7f0;color:#26733d;padding:5px 8px;font-size:9px;font-weight:900}
+.edu-meta{display:grid;gap:7px;margin-top:14px}
+.edu-meta>div{display:grid;grid-template-columns:22px 1fr;gap:6px;color:#53667a;font-size:13px;line-height:1.4}
+.edu-meta strong{color:#263e58}
+.edu-meta a,.edu-phone{color:#155f9e;text-decoration:none;font-weight:800}
+.edu-phone-list{display:flex;flex-wrap:wrap;gap:5px 10px}
+.edu-extra{margin:13px 0 0;color:#637489;font-size:13px;line-height:1.45}
+.edu-note{margin-top:12px;background:#f7f8fa;border:1px solid #eceff3;border-radius:11px;padding:10px;color:#667587;font-size:12px;line-height:1.4}
+.edu-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.edu-action{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:43px;padding:9px 12px;border:1px solid #dbe4ed;border-radius:11px;text-decoration:none;color:#294b6d;background:#fff;font-size:12.5px;font-weight:850}
+.edu-action small{font-size:9.5px;color:#7a8897;font-weight:800}
+.edu-action--primary{background:#145f9f;border-color:#145f9f;color:#fff}
+.edu-action--primary small{color:rgba(255,255,255,.75)}
+@media(max-width:760px){.edu-grid{grid-template-columns:1fr}.edu-section-head h2{font-size:21px}}
+@media(max-width:520px){[data-info-education-root]{gap:22px}.edu-card{padding:14px;border-radius:16px}.edu-actions{display:grid}.edu-action{width:100%}}
+
+
+/* Исторически акцент — НЧ „Постоянство-1856“ */
+.edu-card--historic{
+  border-color:#dfc98d;
+  background:
+    linear-gradient(135deg,rgba(250,245,229,.92) 0%,rgba(255,255,255,1) 48%);
+  box-shadow:0 10px 28px rgba(104,78,25,.10);
+}
+.edu-card--historic::before{
+  width:5px;
+  background:linear-gradient(180deg,#b8892e,#dcc47b);
+}
+.edu-card--historic .edu-icon{
+  background:#f7edd0;
+  color:#8a641d;
+}
+.edu-card--historic .edu-kicker{color:#8a641d}
+.edu-historic{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:12px;
+  align-items:center;
+  margin-top:14px;
+  padding:12px 13px;
+  border:1px solid #ead8a5;
+  border-radius:13px;
+  background:rgba(255,251,239,.92);
+}
+.edu-historic-year{
+  min-width:60px;
+  padding:9px 8px;
+  border-radius:10px;
+  background:#fff;
+  border:1px solid #e7d39a;
+  color:#7d5c1b;
+  font-size:17px;
+  font-weight:950;
+  text-align:center;
+  letter-spacing:.02em;
+}
+.edu-historic-copy{display:grid;gap:3px}
+.edu-historic-copy strong{
+  color:#624916;
+  font-size:13px;
+  line-height:1.25;
+}
+.edu-historic-copy span{
+  color:#756545;
+  font-size:11.5px;
+  line-height:1.45;
+}
+@media(max-width:520px){
+  .edu-historic{grid-template-columns:1fr}
+  .edu-historic-year{width:max-content;min-width:0}
+}
