@@ -3,11 +3,7 @@
 
   /*
     Финален публичен слой за секция „Лекари“.
-    Данните за лекарите идват от Supabase чрез каноничния renderer.
-    Този файл НЕ съдържа hardcoded списък с лекари и НЕ замества Supabase.
-
-    Вътрешните audit_note / reliability_status / конфликтни бележки остават
-    административни данни в Supabase и не се показват публично от този слой.
+    Данните идват от Supabase. Тук има само UX подреждане и публично почистване.
   */
 
   const q = (sel, root = document) => root.querySelector(sel);
@@ -39,6 +35,16 @@
     const style = document.createElement("style");
     style.id = "health-doctors-final-style";
     style.textContent = `
+      #zdrave-bolnica,
+      #zdrave-lekari,
+      #zdrave-apteki,
+      #zdrave-stomatolozi,
+      #zdrave-veterinari,
+      #zdrave-vet-apteki,
+      #zdrave-laboratorii{
+        scroll-margin-top:205px;
+      }
+
       #zdrave-lekari .health-doctors-final{
         margin-top:14px;
       }
@@ -128,20 +134,22 @@
       #zdrave-lekari .health-doctor-practice{
         display:flex;
         gap:8px;
-        margin-top:6px;
+        margin-top:7px;
         color:#536a7c;
         font-size:.86rem;
         line-height:1.4;
       }
-      #zdrave-lekari .health-doctors-empty{
-        grid-column:1/-1;
-        margin:0;
-        padding:14px;
-        border-radius:12px;
-        background:#fff;
-        color:#6b7d8d;
-      }
+
       @media(max-width:760px){
+        #zdrave-bolnica,
+        #zdrave-lekari,
+        #zdrave-apteki,
+        #zdrave-stomatolozi,
+        #zdrave-veterinari,
+        #zdrave-vet-apteki,
+        #zdrave-laboratorii{
+          scroll-margin-top:155px;
+        }
         #zdrave-lekari .health-doctors-toolbar{
           padding:10px;
         }
@@ -161,9 +169,17 @@
     document.head.appendChild(style);
   }
 
+  async function waitForClient(maxMs = 8000) {
+    const start = Date.now();
+    while (!window.PopitaiSupabase && Date.now() - start < maxMs) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    return window.PopitaiSupabase || null;
+  }
+
   async function fetchDoctorPractices() {
-    const client = window.PopitaiSupabase;
-    if (!client) return new Map();
+    const client = await waitForClient();
+    if (!client) return null;
 
     try {
       const { data, error } = await client
@@ -174,7 +190,7 @@
         .eq("entry_type", "doctor")
         .eq("publication_status", "published");
 
-      if (error || !Array.isArray(data)) return new Map();
+      if (error || !Array.isArray(data)) return null;
 
       return new Map(
         data
@@ -182,7 +198,7 @@
           .filter(([, practice]) => practice)
       );
     } catch {
-      return new Map();
+      return null;
     }
   }
 
@@ -191,11 +207,31 @@
 
     const row = document.createElement("div");
     row.className = "health-doctor-practice";
-    row.innerHTML = `<span>🏥</span><span></span>`;
-    row.lastElementChild.textContent = practice;
+
+    const icon = document.createElement("span");
+    icon.textContent = "🏥";
+
+    const text = document.createElement("span");
+    text.textContent = practice;
+
+    row.append(icon, text);
 
     const actions = q(".info-card-actions", card);
     card.insertBefore(row, actions || null);
+  }
+
+  function cleanPublicHealthNotes() {
+    qa('[data-info-category-root="zdrave"] .info-card-confirmed').forEach(el => {
+      const original = el.textContent || "";
+      const cleaned = original
+        .replace(/\s*[—-]\s*финален одит\b/gi, "")
+        .replace(/\s{2,}/g, " ")
+        .trim();
+
+      if (cleaned !== original.trim()) {
+        el.textContent = cleaned;
+      }
+    });
   }
 
   function makeGroup(type, title, description, cards) {
@@ -223,6 +259,7 @@
 
   function applyFilter(wrapper, query, tab) {
     const needle = norm(query);
+
     qa(".health-doctor-group", wrapper).forEach(group => {
       const groupType = group.dataset.doctorGroup;
       const allowedByTab = tab === "all" || tab === groupType;
@@ -236,6 +273,7 @@
       });
 
       group.hidden = !allowedByTab || visible === 0;
+
       const count = q(".health-doctor-group-count", group);
       if (count) count.textContent = String(visible);
     });
@@ -251,10 +289,14 @@
     const cards = qa(".info-card", source);
     if (!cards.length) return false;
 
-    section.dataset.healthDoctorsFinal = "1";
-    ensureDoctorStyles();
-
+    /*
+      Важно: първо изчакваме Supabase и практиките.
+      Предишната версия можеше да подреди картите преди клиентът да е готов
+      и после да не направи втори опит за практиките.
+    */
     const practices = await fetchDoctorPractices();
+    if (practices === null) return false;
+
     cards.forEach(card => {
       const practice = practices.get(norm(doctorName(card)));
       if (practice) addPractice(card, practice);
@@ -301,6 +343,7 @@
     );
 
     source.replaceWith(wrapper);
+    section.dataset.healthDoctorsFinal = "1";
 
     const search = q(".health-doctors-search", wrapper);
     let activeTab = "all";
@@ -312,24 +355,36 @@
     qa("[data-doctor-tab]", wrapper).forEach(button => {
       button.addEventListener("click", () => {
         activeTab = button.dataset.doctorTab || "all";
+
         qa("[data-doctor-tab]", wrapper).forEach(b => {
           b.classList.toggle("is-active", b === button);
         });
+
         applyFilter(wrapper, search?.value || "", activeTab);
       });
     });
 
     applyFilter(wrapper, "", "all");
+    cleanPublicHealthNotes();
     return true;
   }
 
   function runUntilReady() {
+    ensureDoctorStyles();
+
     let rounds = 0;
     const attempt = async () => {
+      cleanPublicHealthNotes();
       const done = await organizeDoctors();
       rounds += 1;
-      if (!done && rounds < 30) setTimeout(attempt, 350);
+
+      if (!done && rounds < 30) {
+        setTimeout(attempt, 350);
+      } else {
+        cleanPublicHealthNotes();
+      }
     };
+
     attempt();
   }
 
