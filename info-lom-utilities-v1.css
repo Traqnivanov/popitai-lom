@@ -1,0 +1,732 @@
+
+
+/* Плащания и каси — priority-first UX */
+.payments-section{margin-top:24px}
+.payments-hero{display:flex;justify-content:space-between;gap:16px;margin-bottom:14px;padding:16px 18px;border-radius:18px;background:linear-gradient(135deg,rgba(13,75,150,.07),rgba(232,173,28,.06))}
+.payments-kicker{text-transform:uppercase;letter-spacing:.08em;font-size:.72rem;font-weight:900;color:#0b5aa5;margin-bottom:4px}
+.payments-hero h3{margin:0;font-size:1.28rem}
+.payments-hero p{margin:5px 0 0;color:#667085}
+.pay-switcher{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.pay-switch{position:relative;display:flex;align-items:center;gap:11px;border:1px solid rgba(15,23,42,.10);background:#fff;border-radius:17px;padding:12px 13px;text-align:left;cursor:pointer;min-height:72px}
+.pay-switch.active{border-color:#76a7ef;background:#f6f9ff;box-shadow:0 0 0 1px rgba(15,95,232,.06) inset}
+.pay-brand-slot{width:46px;height:46px;flex:0 0 46px;display:grid;place-items:center;border-radius:13px}
+.pay-brand-slot img{width:46px;height:46px;object-fit:contain}
+.pay-brand-slot--icon{background:rgba(15,39,71,.055);font-size:1.25rem}
+.pay-switch-copy{display:flex;flex-direction:column;gap:2px;min-width:0}
+.pay-switch-copy strong{font-size:1rem}
+.pay-switch-copy small{font-size:.8rem;color:#667085}
+.pay-switch-status{margin-left:auto;font-size:.76rem;font-weight:900;color:#667085}
+.pay-switch.active .pay-switch-status{background:#e8f1ff;color:#0b5aa5;padding:4px 7px;border-radius:999px}
+.pay-results{border:1px solid rgba(15,23,42,.08);border-radius:18px;background:#fff;overflow:clip;scroll-margin-top:118px}
+.pay-results-sticky{position:sticky;top:118px;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 13px;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-bottom:1px solid rgba(15,23,42,.08)}
+.pay-results-identity{display:flex;align-items:center;gap:9px}
+.pay-results-identity img{width:32px;height:32px;object-fit:contain}
+.pay-results-identity>div{display:flex;flex-direction:column;line-height:1.15}
+.pay-results-identity strong{font-size:.98rem}
+.pay-results-identity small{font-size:.74rem;color:#667085;margin-top:2px}
+.pay-results-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:10px;background:rgba(15,39,71,.055)}
+.pay-easypay-search{width:min(280px,42%);margin:0;padding:9px 10px;min-height:40px}
+.pay-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;padding:0 14px}
+.pay-place{padding:13px 4px;border-bottom:1px solid rgba(15,23,42,.075)}
+.pay-place:nth-last-child(-n+2){border-bottom:0}
+.pay-place:nth-child(odd){padding-right:16px}
+.pay-place:nth-child(even){padding-left:16px;border-left:1px solid rgba(15,23,42,.06)}
+.pay-place-top{display:flex;align-items:flex-start;gap:10px}
+.pay-place-index{flex:0 0 28px;height:28px;border-radius:9px;background:#f2f5f9;color:#52657d;display:grid;place-items:center;font-size:.7rem;font-weight:900}
+.pay-place-main{min-width:0;flex:1}
+.pay-place-main strong{display:block;font-size:.93rem;line-height:1.25}
+.pay-place-meta{display:flex;gap:5px;margin-top:4px;color:#556273;font-size:.79rem;line-height:1.35}
+.pay-place-main small{display:block;margin-top:4px;color:#667085;font-size:.75rem;line-height:1.3}
+.pay-own{white-space:nowrap;font-size:.65rem;font-weight:900;padding:3px 6px;border-radius:999px;background:#e8f1ff;color:#0b5aa5}
+.payments-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
+.payments-links a{display:flex;justify-content:space-between;gap:10px;padding:11px 12px;border-radius:12px;background:#f6f8fb;text-decoration:none;font-weight:800}
+.payments-links a span{color:#667085;font-weight:700}
+.payment-submit-form .info-field{margin-bottom:10px}
+
+@media(max-width:900px){
+  .pay-list{grid-template-columns:1fr}
+  .pay-place:nth-child(n){padding:12px 4px;border-left:0;border-bottom:1px solid rgba(15,23,42,.075)}
+  .pay-place:last-child{border-bottom:0}
+}
+@media(max-width:760px){
+  .payments-hero{padding:14px}
+  .payments-hero h3{font-size:1.12rem}
+  .pay-switcher{grid-template-columns:1fr}
+  .pay-switch{min-height:66px;padding:10px 11px}
+  .pay-brand-slot{width:42px;height:42px;flex-basis:42px}
+  .pay-brand-slot img{width:42px;height:42px}
+  .pay-results{border-radius:16px}
+  .pay-results-sticky{top:118px;padding:9px 11px}
+  .pay-easypay-search{width:48%;min-width:140px}
+  .pay-list{padding:0 11px}
+  .pay-place{padding:11px 2px}
+  .pay-place-index{width:26px;height:26px;flex-basis:26px}
+  .payments-links{grid-template-columns:1fr}
+}
+@media(max-width:460px){
+  .pay-results-sticky{align-items:stretch;flex-direction:column}
+  .pay-easypay-search{width:100%;min-width:0}
+}
+
+/* v11: без търсачка; по-компактен sticky header и по-ясна йерархия */
+.pay-results-sticky{padding:8px 11px}
+.pay-results-identity img{width:30px;height:30px}
+.pay-results-identity strong{font-size:.94rem}
+.pay-results-identity small{font-size:.71rem}
+.pay-place-main strong{font-size:.97rem;font-weight:800;color:#172033}
+.pay-place-meta{color:#77808d;font-size:.76rem}
+.pay-own{align-self:flex-start}
+@media(max-width:760px){
+  .pay-results-sticky{top:112px}
+  .pay-place-top{gap:8px}
+  .pay-place-main strong{font-size:.95rem}
+  .pay-place-meta{font-size:.75rem}
+}
+@media(max-width:520px){
+  .pay-place-top{display:grid;grid-template-columns:26px 1fr}
+  .pay-own{grid-column:2;margin-top:2px;justify-self:start}
+}
+
+.pay-easypay-search{display:none!important}
+
+/* v12: реално работещ sticky контекст при скрол */
+.pay-results{
+  overflow:visible;
+}
+.pay-results-sticky{
+  position:sticky;
+  top:calc(var(--site-header-height, 64px) + 8px);
+  z-index:40;
+  background:rgba(255,255,255,.98);
+  border:1px solid rgba(15,23,42,.09);
+  border-radius:13px;
+  margin:6px 8px 0;
+  box-shadow:0 5px 16px rgba(15,23,42,.08);
+  backdrop-filter:blur(10px);
+}
+@media(max-width:760px){
+  .pay-results-sticky{
+    top:calc(var(--site-header-height, 58px) + 6px);
+    margin:5px 6px 0;
+  }
+}
+
+/* v13: фиксиран контекст при скрол — не зависи от sticky/overflow родители */
+.pay-results-sticky{
+  position:relative!important;
+  top:auto!important;
+  z-index:2;
+  margin:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}
+.pay-scroll-context{
+  position:fixed;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(620px,calc(100vw - 28px));
+  z-index:70;
+  pointer-events:none;
+}
+.pay-scroll-context[hidden]{display:none!important}
+.pay-scroll-context-inner{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:8px 11px;
+  background:rgba(255,255,255,.98);
+  border:1px solid rgba(15,95,232,.24);
+  border-radius:14px;
+  box-shadow:0 8px 24px rgba(15,23,42,.14);
+  backdrop-filter:blur(10px);
+}
+.pay-scroll-context-brand{
+  width:32px;height:32px;flex:0 0 32px;
+  display:grid;place-items:center;border-radius:9px;
+}
+.pay-scroll-context-brand img{width:30px;height:30px;object-fit:contain;display:block}
+.pay-scroll-context-brand.is-icon{background:#f2f5f9;font-size:1.05rem}
+.pay-scroll-context-inner>div{display:flex;flex-direction:column;line-height:1.12}
+.pay-scroll-context-inner strong{font-size:.92rem;color:#172033}
+.pay-scroll-context-inner small{font-size:.7rem;color:#667085;margin-top:2px}
+
+/* Премахнати са вътрешните кръстосани връзки към Данъци/Банки. */
+.payments-links{display:none!important}
+
+/* Застраховки — неутрална карта, без непотвърден брандов цвят/лого */
+.insurance-section{margin-top:24px}
+.insurance-head{margin-bottom:12px}
+.insurance-kicker{display:block;margin-bottom:4px;font-size:.72rem;font-weight:900;letter-spacing:.07em;text-transform:uppercase;color:#52657d}
+.insurance-head h3{margin:0;font-size:1.28rem;color:#172033}
+.insurance-head p{margin:5px 0 0;color:#667085}
+.insurance-card{border:1px solid rgba(15,23,42,.10);border-radius:18px;background:#fff;overflow:hidden}
+.insurance-card-top{padding:15px 16px 11px}
+.insurance-confirmed{display:inline-flex;padding:4px 8px;border-radius:999px;background:#f2f5f9;color:#41546b;font-size:.7rem;font-weight:900}
+.insurance-card h4{margin:8px 0 2px;font-size:1.15rem;color:#172033}
+.insurance-role{margin:0;color:#667085;font-size:.84rem}
+.insurance-facts{display:grid;grid-template-columns:2fr 1fr;border-top:1px solid rgba(15,23,42,.07);border-bottom:1px solid rgba(15,23,42,.07)}
+.insurance-fact{padding:11px 16px}
+.insurance-fact+.insurance-fact{border-left:1px solid rgba(15,23,42,.07)}
+.insurance-label{display:block;margin-bottom:3px;font-size:.7rem;font-weight:800;color:#7a8594;text-transform:uppercase;letter-spacing:.04em}
+.insurance-fact strong{font-size:.92rem;color:#172033}
+.insurance-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:12px}
+.insurance-action{display:flex;flex-direction:column;gap:2px;padding:10px 11px;border:1px solid rgba(15,23,42,.09);border-radius:12px;text-decoration:none;background:#fff}
+.insurance-action--primary{border-color:rgba(15,95,232,.24);background:#f7faff}
+.insurance-action span{font-size:.9rem;font-weight:900;color:#172033}
+.insurance-action small{font-size:.72rem;color:#667085}
+.insurance-source{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;background:#f7f8fa;border-top:1px solid rgba(15,23,42,.06);font-size:.74rem;color:#667085}
+.insurance-source a{font-weight:800;text-decoration:none;white-space:nowrap}
+.insurance-submit-form .info-field{margin-bottom:10px}
+@media(max-width:760px){
+  .insurance-actions{grid-template-columns:1fr}
+  .insurance-facts{grid-template-columns:1fr}
+  .insurance-fact+.insurance-fact{border-left:0;border-top:1px solid rgba(15,23,42,.07)}
+  .insurance-source{align-items:flex-start;flex-direction:column}
+}
+
+/* v15 — Застраховки: 3 локални офиса с адрес + телефон */
+.insurance-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.insurance-count{white-space:nowrap;padding:5px 9px;border-radius:999px;background:#f2f5f9;color:#52657d;font-size:.72rem;font-weight:900}
+.insurance-office-list{display:grid;gap:10px}
+.insurance-office{border:1px solid rgba(15,23,42,.10);border-radius:16px;background:#fff;overflow:hidden}
+.insurance-office-head{display:flex;align-items:flex-start;gap:10px;padding:13px 14px 10px}
+.insurance-number{width:30px;height:30px;flex:0 0 30px;display:grid;place-items:center;border-radius:9px;background:#f2f5f9;color:#52657d;font-size:.7rem;font-weight:900}
+.insurance-office-title{min-width:0;flex:1}
+.insurance-office-title h4{margin:0;font-size:1rem;color:#172033}
+.insurance-office-title p{margin:2px 0 0;color:#667085;font-size:.76rem}
+.insurance-status{white-space:nowrap;padding:3px 6px;border-radius:999px;background:#f5f7fa;color:#52657d;font-size:.64rem;font-weight:900}
+.insurance-office-body{display:grid;grid-template-columns:1.25fr 1fr;border-top:1px solid rgba(15,23,42,.06);border-bottom:1px solid rgba(15,23,42,.06)}
+.insurance-detail{padding:10px 14px}
+.insurance-detail+.insurance-detail{border-left:1px solid rgba(15,23,42,.06)}
+.insurance-detail-label{display:block;margin-bottom:3px;color:#7a8594;font-size:.66rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+.insurance-detail strong{font-size:.86rem;color:#172033;line-height:1.3}
+.insurance-office-actions{display:flex;gap:8px;flex-wrap:wrap;padding:10px 12px}
+.insurance-call{display:flex;flex-direction:column;gap:1px;min-width:180px;padding:9px 10px;border:1px solid rgba(15,23,42,.09);border-radius:11px;text-decoration:none;background:#fff}
+.insurance-call--primary{border-color:rgba(15,95,232,.23);background:#f7faff}
+.insurance-call span{font-size:.88rem;font-weight:900;color:#172033}
+.insurance-call small{font-size:.68rem;color:#667085}
+.insurance-office-source{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 12px;background:#fafbfc;border-top:1px solid rgba(15,23,42,.05);font-size:.68rem;color:#7a8594}
+.insurance-office-source a{font-weight:800;text-decoration:none}
+@media(max-width:760px){
+  .insurance-head{align-items:flex-start}
+  .insurance-office-body{grid-template-columns:1fr}
+  .insurance-detail+.insurance-detail{border-left:0;border-top:1px solid rgba(15,23,42,.06)}
+  .insurance-office-actions{display:grid;grid-template-columns:1fr}
+  .insurance-call{min-width:0}
+  .insurance-office-source{align-items:flex-start;flex-direction:column}
+}
+@media(max-width:460px){
+  .insurance-office-head{display:grid;grid-template-columns:30px 1fr}
+  .insurance-status{grid-column:2;justify-self:start}
+}
+
+/* v17 — ГЛОБАЛНО правило за ясни граници в „Инфо Лом“.
+   Не променя структурата; само прави отделните карти/блокове по-ясно разграничими. */
+[data-info-page]{
+  --info-frame: rgba(55, 76, 104, .22);
+  --info-frame-soft: rgba(55, 76, 104, .14);
+  --info-card-shadow: 0 1px 2px rgba(15,23,42,.035);
+}
+
+/* Основни публични карти и интерактивни блокове */
+[data-info-page] .info-subsection,
+[data-info-page] .info-card,
+[data-info-page] .info-utility-card,
+[data-info-page] .courier-card,
+[data-info-page] .internet-provider-card,
+[data-info-page] .pay-results,
+[data-info-page] .pay-switch,
+[data-info-page] .insurance-office,
+[data-info-page] .insurance-card{
+  border-color: var(--info-frame) !important;
+  box-shadow: var(--info-card-shadow);
+}
+
+/* Вътрешните редове остават по-тихи, но видими */
+[data-info-page] .pay-place,
+[data-info-page] .insurance-detail,
+[data-info-page] .insurance-office-source,
+[data-info-page] .insurance-office-body,
+[data-info-page] .info-row,
+[data-info-page] .info-fact{
+  border-color: var(--info-frame-soft) !important;
+}
+
+/* Активните/избрани блокове трябва да се различават отчетливо */
+[data-info-page] .pay-switch.active{
+  border-color:#5f97e8 !important;
+  box-shadow:0 0 0 1px rgba(15,95,232,.09), 0 2px 6px rgba(15,23,42,.04);
+}
+
+/* Застраховките конкретно: ясно отделени карти на mobile */
+[data-info-page] .insurance-office{
+  border-width:1.5px;
+}
+@media(max-width:760px){
+  [data-info-page] .insurance-office{
+    border-width:1.5px;
+    box-shadow:0 2px 7px rgba(15,23,42,.045);
+  }
+}
+
+/* v18 — ЯСНО РАЗДЕЛЯНЕ НА ВСЕКИ ОТДЕЛЕН ОБЕКТ
+   Всеки отделен офис/карта/запис трябва да се разпознава веднага като самостоятелен блок. */
+[data-info-page]{
+  --info-object-border:#aab7c7;
+  --info-object-shadow:0 3px 10px rgba(15,23,42,.07);
+  --info-object-gap:16px;
+}
+
+/* Отделни обекти */
+[data-info-page] .insurance-office,
+[data-info-page] .info-card,
+[data-info-page] .courier-card,
+[data-info-page] .internet-provider-card,
+[data-info-page] .pay-switch{
+  border:2px solid var(--info-object-border) !important;
+  border-radius:18px !important;
+  background:#fff !important;
+  box-shadow:var(--info-object-shadow) !important;
+}
+
+/* Реално видимо разстояние между отделни записи */
+[data-info-page] .insurance-office-list,
+[data-info-page] .info-cards,
+[data-info-page] .courier-grid,
+[data-info-page] .internet-provider-grid{
+  gap:var(--info-object-gap) !important;
+}
+
+/* Застраховки: всеки брокер е самостоятелна карта */
+[data-info-page] .insurance-office{
+  margin:0 !important;
+  overflow:hidden;
+}
+[data-info-page] .insurance-office + .insurance-office{
+  margin-top:0 !important;
+}
+
+/* Вътрешните части не трябва да изглеждат като нова външна карта */
+[data-info-page] .insurance-office-body,
+[data-info-page] .insurance-detail,
+[data-info-page] .insurance-office-source{
+  border-color:rgba(55,76,104,.16) !important;
+  box-shadow:none !important;
+}
+
+/* Телефонът е действие, но не трябва да конкурира външната граница на брокера */
+[data-info-page] .insurance-call{
+  border:1px solid rgba(70,100,140,.24) !important;
+  box-shadow:none !important;
+}
+
+@media(max-width:760px){
+  [data-info-page] .insurance-office,
+  [data-info-page] .info-card,
+  [data-info-page] .courier-card,
+  [data-info-page] .internet-provider-card,
+  [data-info-page] .pay-switch{
+    border-width:2px !important;
+    box-shadow:0 3px 12px rgba(15,23,42,.08) !important;
+  }
+
+  [data-info-page] .insurance-office-list,
+  [data-info-page] .info-cards,
+  [data-info-page] .courier-grid,
+  [data-info-page] .internet-provider-grid{
+    gap:18px !important;
+  }
+}
+
+/* v19 — ясна визуална смяна между "Плащания" и "Застраховки" */
+.insurance-section{
+  position:relative;
+  margin-top:34px !important;
+  padding-top:0 !important;
+  border:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+}
+
+.insurance-section-break{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:0 0 12px;
+  color:#6a7788;
+  font-size:.68rem;
+  font-weight:900;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+}
+.insurance-section-break::before,
+.insurance-section-break::after{
+  content:"";
+  height:1px;
+  background:#b9c4d1;
+  flex:1;
+}
+
+.insurance-head{
+  padding:16px 17px !important;
+  margin:0 0 16px !important;
+  border:2px solid #8fa4bb !important;
+  border-radius:18px !important;
+  background:linear-gradient(135deg,#f4f7fa 0%,#ffffff 72%) !important;
+  box-shadow:0 3px 10px rgba(15,23,42,.06) !important;
+}
+
+.insurance-kicker{
+  color:#445a73 !important;
+  font-size:.72rem !important;
+  letter-spacing:.09em !important;
+}
+
+.insurance-head h3{
+  margin-top:4px !important;
+  font-size:1.35rem !important;
+  line-height:1.15 !important;
+}
+
+.insurance-head p{
+  margin-top:7px !important;
+  max-width:560px;
+  color:#5f6b7a !important;
+  font-size:.88rem !important;
+}
+
+.insurance-count{
+  border:1px solid #c3ccd7 !important;
+  background:#fff !important;
+  color:#445a73 !important;
+}
+
+@media(max-width:760px){
+  .insurance-section{
+    margin-top:30px !important;
+  }
+  .insurance-section-break{
+    margin-bottom:10px;
+  }
+  .insurance-head{
+    padding:15px !important;
+    border-width:2px !important;
+  }
+  .insurance-head h3{
+    font-size:1.25rem !important;
+  }
+  .insurance-head p{
+    font-size:.84rem !important;
+  }
+}
+
+/* v20 — чисто и ясно заглавие за "Застраховки", без сив служебен блок */
+.insurance-section-break{display:none!important}
+
+.insurance-head{
+  position:relative;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:14px!important;
+  padding:6px 2px 14px 14px!important;
+  margin:0 0 16px!important;
+  border:0!important;
+  border-left:4px solid #0b5aa5!important;
+  border-radius:0!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+
+.insurance-head::after{
+  content:"";
+  position:absolute;
+  left:14px;
+  right:0;
+  bottom:0;
+  height:1px;
+  background:rgba(15,23,42,.12);
+}
+
+.insurance-head-main{min-width:0}
+
+.insurance-kicker{
+  display:block!important;
+  margin:0 0 3px!important;
+  color:#b07a00!important;
+  font-size:.72rem!important;
+  font-weight:900!important;
+  letter-spacing:.06em!important;
+  text-transform:uppercase!important;
+}
+
+.insurance-head h3{
+  margin:0!important;
+  color:#0e223d!important;
+  font-size:1.34rem!important;
+  line-height:1.15!important;
+  font-weight:900!important;
+}
+
+.insurance-head p{
+  margin:5px 0 0!important;
+  color:#596777!important;
+  font-size:.84rem!important;
+  line-height:1.35!important;
+}
+
+.insurance-count{
+  flex:0 0 auto!important;
+  padding:5px 9px!important;
+  border:1px solid rgba(11,90,165,.18)!important;
+  border-radius:999px!important;
+  background:#f7faff!important;
+  color:#0b5aa5!important;
+  font-size:.72rem!important;
+  font-weight:900!important;
+}
+
+@media(max-width:760px){
+  .insurance-head{
+    align-items:flex-start!important;
+    padding:5px 0 13px 12px!important;
+  }
+  .insurance-head h3{
+    font-size:1.22rem!important;
+  }
+  .insurance-head p{
+    font-size:.81rem!important;
+  }
+}
+
+/* v21 — ясно разграничаване на ВСЕКИ основен раздел в „Битови услуги“
+   Без промяна на одобрената структура и съдържание. */
+[data-info-page]{
+  --section-frame:#9fb0c3;
+  --section-frame-soft:#c7d1dc;
+  --section-shadow:0 4px 14px rgba(15,23,42,.06);
+  --section-gap:28px;
+}
+
+/* Всеки основен раздел е отделен визуален блок */
+[data-info-page] #komunalni-vik,
+[data-info-page] #komunalni-tok,
+[data-info-page] #komunalni-kurieri,
+[data-info-page] #komunalni-internet-tv,
+[data-info-page] #komunalni-plashtania,
+[data-info-page] #komunalni-zastrahovki{
+  position:relative;
+  margin-top:var(--section-gap)!important;
+}
+
+/* Вода и ток */
+[data-info-page] .info-service-panel{
+  border:2px solid var(--section-frame)!important;
+  border-radius:20px!important;
+  box-shadow:var(--section-shadow)!important;
+  background:#fff!important;
+  overflow:hidden;
+}
+
+/* Куриери, Интернет, Плащания — външна секция */
+[data-info-page] #komunalni-kurieri,
+[data-info-page] #komunalni-internet-tv,
+[data-info-page] #komunalni-plashtania{
+  border:2px solid var(--section-frame)!important;
+  border-radius:22px!important;
+  background:#fff!important;
+  box-shadow:var(--section-shadow)!important;
+  padding:16px!important;
+}
+
+/* Не допускай вътрешните карти да изглеждат като същото ниво като секцията */
+[data-info-page] #komunalni-kurieri .info-courier,
+[data-info-page] #komunalni-internet-tv .internet-provider,
+[data-info-page] #komunalni-internet-tv .internet-provider-card,
+[data-info-page] #komunalni-plashtania .pay-switch,
+[data-info-page] #komunalni-plashtania .pay-results{
+  border-color:var(--section-frame-soft)!important;
+  box-shadow:none!important;
+}
+
+/* Заглавията на основните секции да се виждат като начало на нов раздел */
+[data-info-page] #komunalni-kurieri > .info-subsection-title,
+[data-info-page] #komunalni-internet-tv > .info-subsection-title{
+  margin:-4px -2px 14px!important;
+  padding:4px 2px 12px!important;
+  border-bottom:2px solid rgba(55,76,104,.12)!important;
+}
+
+[data-info-page] #komunalni-kurieri > .info-subsection-title h3,
+[data-info-page] #komunalni-internet-tv > .info-subsection-title h3{
+  color:#0e223d!important;
+  font-weight:900!important;
+}
+
+/* Плащания — hero е заглавието на отделната секция, не отделна карта */
+[data-info-page] #komunalni-plashtania .payments-hero{
+  margin:-2px -2px 16px!important;
+  border:0!important;
+  border-bottom:2px solid rgba(55,76,104,.12)!important;
+  border-radius:0!important;
+  padding:6px 4px 14px!important;
+  background:linear-gradient(90deg,rgba(11,90,165,.055),rgba(176,122,0,.035))!important;
+  box-shadow:none!important;
+}
+
+/* Застраховки — същото ниво като другите основни секции */
+[data-info-page] #komunalni-zastrahovki{
+  border:2px solid var(--section-frame)!important;
+  border-radius:22px!important;
+  background:#fff!important;
+  box-shadow:var(--section-shadow)!important;
+  padding:16px!important;
+}
+
+[data-info-page] #komunalni-zastrahovki .insurance-head{
+  margin:-2px -2px 16px!important;
+  padding:6px 4px 14px 14px!important;
+  border:0!important;
+  border-left:4px solid #0b5aa5!important;
+  border-bottom:2px solid rgba(55,76,104,.12)!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+
+/* По-ясно разстояние между основните секции */
+[data-info-page] .info-utility-grid{
+  gap:18px!important;
+}
+[data-info-page] #komunalni-kurieri + #komunalni-internet-tv,
+[data-info-page] #komunalni-internet-tv + #komunalni-plashtania,
+[data-info-page] #komunalni-plashtania + #komunalni-zastrahovki{
+  margin-top:30px!important;
+}
+
+@media(max-width:760px){
+  [data-info-page]{
+    --section-gap:24px;
+  }
+
+  [data-info-page] #komunalni-kurieri,
+  [data-info-page] #komunalni-internet-tv,
+  [data-info-page] #komunalni-plashtania,
+  [data-info-page] #komunalni-zastrahovki{
+    padding:14px!important;
+    border-width:2px!important;
+    border-radius:20px!important;
+    box-shadow:0 4px 14px rgba(15,23,42,.075)!important;
+  }
+
+  [data-info-page] .info-service-panel{
+    border-width:2px!important;
+    border-radius:18px!important;
+  }
+}
+
+/* v22 — Заглавията на основните секции следват чистия стил на "Застраховки":
+   бял фон, син ляв акцент, тъмносиньо заглавие, без сив служебен блок. */
+
+/* Общ стил за стандартните заглавия */
+[data-info-page] #komunalni-kurieri > .info-subsection-title,
+[data-info-page] #komunalni-internet-tv > .info-subsection-title{
+  position:relative;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:12px!important;
+  margin:0 0 16px!important;
+  padding:6px 4px 14px 14px!important;
+  border:0!important;
+  border-left:4px solid #0b5aa5!important;
+  border-bottom:2px solid rgba(55,76,104,.12)!important;
+  border-radius:0!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+
+[data-info-page] #komunalni-kurieri > .info-subsection-title h3,
+[data-info-page] #komunalni-internet-tv > .info-subsection-title h3{
+  margin:0!important;
+  color:#0e223d!important;
+  font-size:1.34rem!important;
+  line-height:1.15!important;
+  font-weight:900!important;
+}
+
+/* Плащания — същият header език, без сив/жълт голям блок */
+[data-info-page] #komunalni-plashtania .payments-hero{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:14px!important;
+  margin:0 0 16px!important;
+  padding:6px 4px 14px 14px!important;
+  border:0!important;
+  border-left:4px solid #0b5aa5!important;
+  border-bottom:2px solid rgba(55,76,104,.12)!important;
+  border-radius:0!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+
+[data-info-page] #komunalni-plashtania .payments-kicker{
+  margin:0 0 3px!important;
+  color:#b07a00!important;
+  font-size:.72rem!important;
+  font-weight:900!important;
+  letter-spacing:.06em!important;
+  text-transform:uppercase!important;
+}
+
+[data-info-page] #komunalni-plashtania .payments-hero h3{
+  margin:0!important;
+  color:#0e223d!important;
+  font-size:1.34rem!important;
+  line-height:1.15!important;
+  font-weight:900!important;
+}
+
+[data-info-page] #komunalni-plashtania .payments-hero p{
+  margin:5px 0 0!important;
+  color:#596777!important;
+  font-size:.84rem!important;
+  line-height:1.35!important;
+}
+
+/* Ако ВиК/Ток имат стандартно subsection заглавие, прилагаме същия стил само на заглавния wrapper,
+   без да пипаме специалните им вътрешни карти и действия. */
+[data-info-page] #komunalni-vik > .info-subsection-title,
+[data-info-page] #komunalni-tok > .info-subsection-title{
+  margin:0 0 16px!important;
+  padding:6px 4px 14px 14px!important;
+  border:0!important;
+  border-left:4px solid #0b5aa5!important;
+  border-bottom:2px solid rgba(55,76,104,.12)!important;
+  border-radius:0!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+
+[data-info-page] #komunalni-vik > .info-subsection-title h3,
+[data-info-page] #komunalni-tok > .info-subsection-title h3{
+  margin:0!important;
+  color:#0e223d!important;
+  font-size:1.34rem!important;
+  line-height:1.15!important;
+  font-weight:900!important;
+}
+
+@media(max-width:760px){
+  [data-info-page] #komunalni-kurieri > .info-subsection-title h3,
+  [data-info-page] #komunalni-internet-tv > .info-subsection-title h3,
+  [data-info-page] #komunalni-plashtania .payments-hero h3,
+  [data-info-page] #komunalni-vik > .info-subsection-title h3,
+  [data-info-page] #komunalni-tok > .info-subsection-title h3{
+    font-size:1.22rem!important;
+  }
+
+  [data-info-page] #komunalni-plashtania .payments-hero p{
+    font-size:.81rem!important;
+  }
+}
