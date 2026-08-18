@@ -2,15 +2,656 @@
 <html lang="bg">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Здраве и лекари в Лом | Категории | Попитай.Лом</title>
-  <meta name="description" content="Намери лекари, медицински практики, стоматолози и ветеринари в Лом. Въпроси, фирми и препоръки от местната общност.">
+  <meta name="description" content="Намери директно личен лекар, специалист, стоматолог или ветеринар в Лом.">
   <meta name="theme-color" content="#0b5fd7">
   <link rel="canonical" href="https://traqnivanov.github.io/popitai-lom/zdrave-i-lekari.html">
   <link rel="stylesheet" href="style.css?v=20260805-0736">
   <link rel="icon" href="assets/favicon-96.png" type="image/png">
+
+  <style>
+    .health-category-page{
+      --hc-blue:#0b5fd7;
+      --hc-blue-soft:#eef5ff;
+      --hc-text:#142033;
+      --hc-muted:#647489;
+      --hc-line:#dce4ee;
+      --hc-bg:#f5f7fa;
+      background:var(--hc-bg);
+      color:var(--hc-text);
+    }
+
+    .health-category-page .page-hero{
+      background:linear-gradient(180deg,#fff 0%,#f8fbff 100%);
+      padding-bottom:18px;
+    }
+
+    .health-category-page .page-hero .section-container,
+    .health-shell{
+      max-width:1040px;
+      margin-inline:auto;
+    }
+
+    .health-category-page .page-hero h1{margin-bottom:8px}
+    .health-category-page .page-hero p{
+      margin-bottom:0;
+      max-width:760px;
+      color:var(--hc-muted);
+    }
+
+    .health-main{padding:0 0 30px}
+
+    .health-filter-bar{
+      display:flex;
+      gap:8px;
+      overflow-x:auto;
+      padding:4px 0 10px;
+      scrollbar-width:thin;
+      -webkit-overflow-scrolling:touch;
+    }
+
+    .health-filter{
+      flex:0 0 auto;
+      min-height:44px;
+      border:1px solid #cbd9ea;
+      border-radius:999px;
+      padding:0 16px;
+      background:#f7fbff;
+      color:#27496f;
+      font:inherit;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .health-filter[aria-selected="true"]{
+      border-color:var(--hc-blue);
+      background:var(--hc-blue);
+      color:#fff;
+    }
+
+    .health-toolbar{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      gap:10px;
+      align-items:center;
+      margin-bottom:10px;
+    }
+
+    .health-result-title{
+      display:flex;
+      align-items:baseline;
+      gap:8px;
+      min-width:0;
+    }
+
+    .health-result-title h2{
+      margin:0;
+      font-size:1.12rem;
+    }
+
+    .health-result-count{
+      color:var(--hc-muted);
+      font-size:.92rem;
+      white-space:nowrap;
+    }
+
+    .health-mini-search{
+      width:min(330px,100%);
+      height:42px;
+      border:1px solid #ccd7e3;
+      border-radius:12px;
+      padding:0 12px;
+      background:#fff;
+      color:var(--hc-text);
+      font:inherit;
+      outline:none;
+    }
+
+    .health-mini-search:focus{
+      border-color:var(--hc-blue);
+      box-shadow:0 0 0 3px rgba(11,95,215,.08);
+    }
+
+    .health-results{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+      min-height:90px;
+    }
+
+    .health-card{
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      min-width:0;
+      padding:15px;
+      border:1px solid var(--hc-line);
+      border-radius:17px;
+      background:#fff;
+      box-shadow:0 7px 18px rgba(25,45,75,.035);
+    }
+
+    .health-card-top{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+    }
+
+    .health-card-name{
+      margin:0;
+      font-size:1.03rem;
+      line-height:1.3;
+      overflow-wrap:anywhere;
+    }
+
+    .health-card-badge{
+      flex:0 0 auto;
+      padding:4px 8px;
+      border-radius:999px;
+      background:var(--hc-blue-soft);
+      color:var(--hc-blue);
+      font-size:.78rem;
+      font-weight:800;
+    }
+
+    .health-card-specialty{
+      margin:0;
+      color:#33445a;
+      font-weight:750;
+      line-height:1.4;
+    }
+
+    .health-card-meta{
+      display:grid;
+      gap:5px;
+      color:var(--hc-muted);
+      font-size:.91rem;
+      line-height:1.4;
+    }
+
+    .health-card-meta div{
+      overflow-wrap:anywhere;
+    }
+
+    .health-card-note{
+      margin:0;
+      color:var(--hc-muted);
+      font-size:.86rem;
+      line-height:1.4;
+    }
+
+    .health-card-actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:auto;
+      padding-top:3px;
+    }
+
+    .health-card-actions a{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:40px;
+      padding:0 12px;
+      border-radius:11px;
+      text-decoration:none;
+      font-weight:800;
+    }
+
+    .health-call{
+      background:var(--hc-blue);
+      color:#fff;
+    }
+
+    .health-info-link{
+      border:1px solid #c9d7e9;
+      background:#fff;
+      color:var(--hc-blue);
+    }
+
+    .health-status{
+      grid-column:1/-1;
+      padding:22px 16px;
+      border:1px dashed #cbd5e1;
+      border-radius:16px;
+      background:#fff;
+      color:var(--hc-muted);
+      text-align:center;
+    }
+
+    .health-secondary{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .health-secondary-item{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      align-items:center;
+      gap:12px;
+      min-height:76px;
+      padding:13px 14px;
+      border:1px solid var(--hc-line);
+      border-radius:16px;
+      background:#fff;
+    }
+
+    .health-secondary-copy strong{
+      display:block;
+      margin-bottom:2px;
+      font-size:.96rem;
+    }
+
+    .health-secondary-copy span{
+      color:var(--hc-muted);
+      font-size:.9rem;
+      line-height:1.35;
+    }
+
+    .health-secondary-link,
+    .health-pro-toggle{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:40px;
+      padding:0 13px;
+      border-radius:11px;
+      white-space:nowrap;
+      font:inherit;
+      font-weight:800;
+      text-decoration:none;
+    }
+
+    .health-secondary-link{
+      border:1px solid #c8d8ef;
+      background:var(--hc-blue-soft);
+      color:var(--hc-blue);
+    }
+
+    .health-pro-toggle{
+      border:1px solid var(--hc-blue);
+      background:#fff;
+      color:var(--hc-blue);
+      cursor:pointer;
+    }
+
+    .health-pro-panel{
+      margin-top:10px;
+      border:1px solid #d8e2ef;
+      border-radius:17px;
+      background:#fff;
+      padding:16px;
+    }
+
+    .health-form-lead{
+      margin:0 0 12px;
+      color:var(--hc-muted);
+      line-height:1.45;
+    }
+
+    .health-type-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:8px;
+      margin-bottom:12px;
+    }
+
+    .health-type-option{position:relative}
+    .health-type-option input{position:absolute;opacity:0;pointer-events:none}
+
+    .health-type-option label{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:44px;
+      padding:8px 10px;
+      border:1px solid var(--hc-line);
+      border-radius:12px;
+      background:#fff;
+      font-weight:800;
+      text-align:center;
+      cursor:pointer;
+    }
+
+    .health-type-option input:checked + label{
+      border-color:var(--hc-blue);
+      background:var(--hc-blue-soft);
+      color:var(--hc-blue);
+    }
+
+    .health-form-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .health-field{
+      display:flex;
+      flex-direction:column;
+      gap:5px;
+    }
+
+    .health-field--full{grid-column:1/-1}
+
+    .health-field label{
+      font-size:.9rem;
+      font-weight:800;
+    }
+
+    .health-field input,
+    .health-field textarea{
+      width:100%;
+      border:1px solid #cfd8e4;
+      border-radius:12px;
+      padding:11px 12px;
+      font:inherit;
+      background:#fff;
+    }
+
+    .health-field textarea{
+      min-height:82px;
+      resize:vertical;
+    }
+
+    .health-form-note{
+      margin:10px 0 0;
+      color:var(--hc-muted);
+      font-size:.87rem;
+      line-height:1.4;
+    }
+
+    .health-form-actions{
+      display:flex;
+      gap:8px;
+      margin-top:12px;
+    }
+
+    .health-form-actions button{
+      min-height:42px;
+      border-radius:11px;
+      padding:0 14px;
+      font:inherit;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .health-form-preview{
+      border:0;
+      background:var(--hc-blue);
+      color:#fff;
+    }
+
+    .health-form-close{
+      border:1px solid var(--hc-line);
+      background:#fff;
+      color:var(--hc-text);
+    }
+
+
+    .health-hero-add{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:40px;
+      margin-top:14px;
+      padding:0 13px;
+      border:1px solid #c8d8ef;
+      border-radius:11px;
+      background:#fff;
+      color:var(--hc-blue);
+      font:inherit;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .health-bottom-tools{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-top:14px;
+      padding-top:12px;
+      border-top:1px solid var(--hc-line);
+    }
+
+    .health-signal-toggle{
+      min-height:40px;
+      padding:0 13px;
+      border:1px solid var(--hc-line);
+      border-radius:11px;
+      background:#fff;
+      color:var(--hc-text);
+      font:inherit;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .health-signal-panel{
+      margin-top:10px;
+      border:1px solid #d8e2ef;
+      border-radius:17px;
+      background:#fff;
+      padding:16px;
+    }
+
+
+    .health-filter-sticky{
+      position:relative;
+      z-index:20;
+    }
+
+    @media(max-width:650px){
+      .health-filter-sticky{
+        position:sticky;
+        top:var(--health-sticky-top, 0px);
+        z-index:70;
+        margin-inline:-10px;
+        padding:7px 10px 8px;
+        background:rgba(245,247,250,.97);
+        -webkit-backdrop-filter:saturate(130%) blur(8px);
+        backdrop-filter:saturate(130%) blur(8px);
+        border-bottom:1px solid #cbd9e6;
+        box-shadow:0 7px 16px rgba(21,36,58,.07);
+      }
+
+      .health-filter-bar{
+        display:grid;
+        grid-template-columns:repeat(6,minmax(0,1fr));
+        gap:7px;
+        overflow:visible;
+        padding:0;
+      }
+
+      .health-filter{
+        width:100%;
+        min-width:0;
+        min-height:40px;
+        padding:6px 8px;
+        border-radius:12px;
+        line-height:1.15;
+        white-space:normal;
+        text-align:center;
+      }
+
+      .health-filter:nth-child(1),
+      .health-filter:nth-child(2),
+      .health-filter:nth-child(3){
+        grid-column:span 2;
+      }
+
+      .health-filter:nth-child(4),
+      .health-filter:nth-child(5){
+        grid-column:span 3;
+      }
+    }
+
+
+    .health-bottom-tools{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-top:14px;
+      padding-top:14px;
+      border-top:1px solid var(--hc-line);
+    }
+
+    .health-signal-toggle{
+      min-height:40px;
+      padding:0 13px;
+      border:1px solid #cad7e7;
+      border-radius:11px;
+      background:#fff;
+      color:#314a68;
+      font:inherit;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .health-modal-layer{
+      position:fixed !important;
+      inset:0 !important;
+      z-index:500 !important;
+      margin:0 !important;
+      padding:18px !important;
+      background:rgba(11,24,42,.56) !important;
+      overflow-y:auto !important;
+      overscroll-behavior:contain;
+    }
+
+    .health-modal-layer[hidden]{
+      display:none !important;
+    }
+
+    .health-modal-card{
+      width:min(720px,100%);
+      max-height:calc(100dvh - 36px);
+      margin:auto;
+      overflow-y:auto;
+      background:#fff;
+      border:1px solid #d8e2ef;
+      border-radius:20px;
+      padding:18px;
+      box-shadow:0 24px 70px rgba(8,20,38,.25);
+    }
+
+    .health-modal-head{
+      position:sticky;
+      top:-18px;
+      z-index:2;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      margin:-18px -18px 14px;
+      padding:16px 18px 13px;
+      background:#fff;
+      border-bottom:1px solid var(--hc-line);
+      border-radius:20px 20px 0 0;
+    }
+
+    .health-modal-kicker{
+      display:block;
+      margin-bottom:3px;
+      color:#8b6500;
+      font-size:.77rem;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
+
+    .health-modal-head h2{
+      margin:0;
+      font-size:1.25rem;
+    }
+
+    .health-modal-x{
+      flex:0 0 42px;
+      width:42px;
+      height:42px;
+      border:1px solid var(--hc-line);
+      border-radius:12px;
+      background:#fff;
+      color:var(--hc-text);
+      font:700 28px/1 sans-serif;
+      cursor:pointer;
+    }
+
+    body.health-modal-open{
+      overflow:hidden !important;
+    }
+
+    @media(max-width:650px){
+      .health-bottom-tools{
+        flex-direction:column;
+        align-items:stretch;
+      }
+
+      .health-bottom-tools .health-secondary-link,
+      .health-signal-toggle{
+        width:100%;
+      }
+
+      .health-modal-layer{
+        padding:0 !important;
+        align-items:stretch;
+      }
+
+      .health-modal-card{
+        width:100%;
+        min-height:100dvh;
+        max-height:none;
+        margin:0;
+        border:0;
+        border-radius:0;
+        padding:18px;
+      }
+
+      .health-modal-head{
+        top:-18px;
+        border-radius:0;
+      }
+    }
+
+
+    .health-submit-status{
+      min-height:0;
+      margin:12px 0 0;
+      font-size:.92rem;
+      font-weight:700;
+      line-height:1.4;
+    }
+    .health-submit-status:empty{display:none}
+    .health-submit-status.is-error{color:#a12222}
+    .health-submit-status.is-success{color:#08713d}
+    .health-submit-status a{color:var(--hc-blue);font-weight:800}
+    .health-form-actions button[disabled]{opacity:.62;cursor:wait}
+
+    @media(max-width:800px){
+      .health-results{grid-template-columns:1fr}
+      .health-secondary{grid-template-columns:1fr}
+      .health-bottom-tools{align-items:stretch;flex-direction:column}
+      .health-bottom-tools .health-secondary-link,.health-signal-toggle{width:100%}
+    }
+
+    @media(max-width:650px){
+      .health-toolbar{grid-template-columns:1fr}
+      .health-mini-search{width:100%}
+      .health-secondary-item{grid-template-columns:1fr}
+      .health-secondary-link,.health-pro-toggle{width:100%}
+      .health-type-grid,.health-form-grid{grid-template-columns:1fr}
+      .health-field--full{grid-column:auto}
+    }
+  </style>
 </head>
-<body>
+
+<body class="health-category-page">
   <a class="skip-link" href="#main-content">Към основното съдържание</a>
 
   <header class="site-header" id="site-header">
@@ -24,15 +665,18 @@
           <small>Попитай. Намери. Препоръчай.</small>
         </span>
       </a>
+
       <nav class="main-nav" id="main-nav" aria-label="Главна навигация">
-        <a href="index.html">Начало</a><a class="active" href="kategorii.html">Категории</a><a href="firmi.html">Фирми</a><a href="vaprosi.html">Въпроси</a><a href="statii.html">Статии</a>
+        <a href="index.html">Начало</a>
+        <a class="active" href="kategorii.html">Категории</a>
+        <a href="firmi.html">Фирми</a>
+        <a href="vaprosi.html">Въпроси</a>
+        <a href="statii.html">Статии</a>
       </nav>
+
       <div class="header-actions">
         <a class="login-link" href="vhod.html">Вход</a>
-        <a class="ask-button" href="nov-vapros.html?category=zdrave">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-          Задай въпрос
-        </a>
+        <a class="ask-button" href="nov-vapros.html?category=zdrave">Задай въпрос</a>
         <button class="menu-button" id="menu-button" type="button" aria-label="Отвори менюто" aria-expanded="false" aria-controls="main-nav">
           <span></span><span></span><span></span>
         </button>
@@ -43,47 +687,154 @@
   <main id="main-content">
     <section class="page-hero">
       <div class="section-container">
-        <span class="section-kicker">Категория</span>
-        <h1>Здраве и лекари</h1>
-        <p>Намери местен специалист или практика, разгледай въпроси и потърси препоръки от хората в Лом.</p>
-        <a class="primary-link-button" href="nov-vapros.html?category=zdrave">Задай въпрос</a>
+        <span class="section-kicker">Здраве и лекари</span>
+        <h1>Намери лекар или здравна услуга в Лом</h1>
+        <p>Лични лекари, специалисти, стоматолози и ветеринари — с адрес, телефон и информация за практиката, когато е потвърдена.</p>
+        <button class="health-hero-add" type="button" aria-expanded="false" aria-controls="health-pro-panel">＋ Добави лекар или здравна услуга</button>
       </div>
     </section>
 
-    <section class="content-section">
-      <div class="section-container two-column-layout">
-        <div>
-          <div class="block-heading"><h2>Подраздели</h2></div>
-          <div class="subcategory-grid">
-            <a class="subcategory-card" href="tarsene.html?q=Лекари"><strong>Лекари и медицински практики</strong><span>Въпроси и фирми</span></a>
-            <a class="subcategory-card" href="tarsene.html?q=Стоматолози"><strong>Стоматолози</strong><span>Въпроси и фирми</span></a>
-            <a class="subcategory-card" href="tarsene.html?q=Ветеринари"><strong>Ветеринари</strong><span>Въпроси и фирми</span></a>
-          </div>
-
-          <div class="block-heading spaced"><h2>Последни въпроси</h2><a href="vaprosi.html">Всички въпроси</a></div>
-          <div class="stack-list category-question-list" data-question-category="Здраве и лекари">
-            <article class="empty-card">
-              <p>Все още няма публикувани въпроси в тази категория.</p>
-              <a class="primary-link-button" href="nov-vapros.html?category=zdrave">Задай въпрос</a>
-            </article>
+    <section class="health-main">
+      <div class="section-container health-shell">
+        <div class="health-filter-sticky">
+          <div class="health-filter-bar" role="tablist" aria-label="Здравни категории">
+            <button class="health-filter" type="button" role="tab" data-health-filter="doctors" aria-selected="true">Лекари</button>
+            <button class="health-filter" type="button" role="tab" data-health-filter="gp" aria-selected="false">Лични лекари</button>
+            <button class="health-filter" type="button" role="tab" data-health-filter="specialists" aria-selected="false">Специалисти</button>
+            <button class="health-filter" type="button" role="tab" data-health-filter="dentists" aria-selected="false">Стоматолози</button>
+            <button class="health-filter" type="button" role="tab" data-health-filter="vets" aria-selected="false">Ветеринари</button>
           </div>
         </div>
 
-        <aside class="side-panel">
-          <h2>Търси в категорията</h2>
-          <form class="side-search" action="tarsene.html">
-            <input type="search" name="q" placeholder="Какво търсиш?">
-            <button type="submit">Търси</button>
+        <div class="health-toolbar">
+          <div class="health-result-title">
+            <h2 id="health-result-heading">Лекари</h2>
+            <span class="health-result-count" id="health-result-count"></span>
+          </div>
+
+          <input
+            class="health-mini-search"
+            id="health-mini-search"
+            type="search"
+            placeholder="Филтрирай по име или специалност"
+            aria-label="Филтрирай видимите резултати">
+        </div>
+
+        <div class="health-results" id="health-results" aria-live="polite">
+          <div class="health-status">Зареждане на проверените записи…</div>
+        </div>
+
+        <div class="health-bottom-tools">
+          <button class="health-signal-toggle" type="button" aria-expanded="false" aria-controls="health-signal-panel">Сигнализирай грешка</button>
+          <a class="health-secondary-link" href="zdrave.html">Инфо Лом → Здраве</a>
+        </div>
+
+        <div class="health-pro-panel health-modal-layer" id="health-pro-panel" hidden>
+          <div class="health-modal-card" role="dialog" aria-modal="true" aria-labelledby="health-add-title">
+            <div class="health-modal-head">
+              <div>
+                <span class="health-modal-kicker">Здраве и лекари</span>
+                <h2 id="health-add-title">Добави лекар или здравна услуга</h2>
+              </div>
+              <button class="health-modal-x" type="button" data-health-close-add aria-label="Затвори">×</button>
+            </div>
+          <p class="health-form-lead">Избери какво добавяш и попълни основната информация. Записът ще бъде изпратен за админ преглед преди публикуване.</p>
+
+          <div class="health-type-grid" role="radiogroup" aria-label="Тип здравна услуга">
+            <div class="health-type-option">
+              <input type="radio" id="health-type-doctor" name="health_type" value="doctor" checked>
+              <label for="health-type-doctor">Лекар / медицинска практика</label>
+            </div>
+            <div class="health-type-option">
+              <input type="radio" id="health-type-dentist" name="health_type" value="dentist">
+              <label for="health-type-dentist">Стоматолог / дентална практика</label>
+            </div>
+            <div class="health-type-option">
+              <input type="radio" id="health-type-vet" name="health_type" value="vet">
+              <label for="health-type-vet">Ветеринар / кабинет</label>
+            </div>
+          </div>
+
+          <form id="health-service-form" novalidate>
+            <div class="health-form-grid">
+              <div class="health-field">
+                <label for="health-name">Име на лекар / практика</label>
+                <input id="health-name" name="name" type="text" required>
+              </div>
+              <div class="health-field">
+                <label for="health-specialty">Специалност / основна услуга</label>
+                <input id="health-specialty" name="specialty" type="text" required>
+              </div>
+              <div class="health-field">
+                <label for="health-phone">Телефон</label>
+                <input id="health-phone" name="phone" type="tel">
+              </div>
+              <div class="health-field">
+                <label for="health-address">Адрес в Лом</label>
+                <input id="health-address" name="address" type="text">
+              </div>
+              <div class="health-field health-field--full">
+                <label for="health-description">Кратко описание</label>
+                <textarea id="health-description" name="description"></textarea>
+              </div>
+            </div>
+
+            <p class="health-form-note">Само влезли потребители могат да изпращат. Новият запис не се публикува директно — минава през админ одобрение.</p>
+
+            <p class="health-submit-status" id="health-add-status" role="status" aria-live="polite"></p>
+            <div class="health-form-actions">
+              <button class="health-form-preview" type="submit" id="health-submit-button">Изпрати за одобрение</button>
+              <button class="health-form-close" type="button" id="health-close-button">Затвори</button>
+            </div>
           </form>
 
-          <h2>Проверена здравна информация</h2>
-          <p>Търсиш болница, прием, аптека, лаборатория или друга проверена справочна информация?</p>
-          <a href="zdrave.html">Инфо Лом → Здраве</a>
+          </div>
+        </div>
 
-          <h2>Полезно</h2>
-          <a href="pravila.html">Как да разпознаеш надеждна препоръка</a>
-          <a href="signal.html">Подай сигнал за нередност</a>
-        </aside>
+        <div class="health-signal-panel health-modal-layer" id="health-signal-panel" hidden>
+          <div class="health-modal-card" role="dialog" aria-modal="true" aria-labelledby="health-signal-title">
+            <div class="health-modal-head">
+              <div>
+                <span class="health-modal-kicker">Здраве и лекари</span>
+                <h2 id="health-signal-title">Сигнализирай грешка</h2>
+              </div>
+              <button class="health-modal-x" type="button" data-health-close-signal aria-label="Затвори">×</button>
+            </div>
+
+            <p class="health-form-lead">Посочи какво е написано сега, как трябва да бъде и откъде може да се провери.</p>
+
+            <div class="health-form-grid">
+              <div class="health-field health-field--full">
+                <label for="health-signal-entry">За кой запис е сигналът?</label>
+                <input id="health-signal-entry" type="text" placeholder="Напр. д-р Иван Иванов">
+              </div>
+
+              <div class="health-field health-field--full">
+                <label for="health-signal-current">Какво е написано сега?</label>
+                <textarea id="health-signal-current"></textarea>
+              </div>
+
+              <div class="health-field health-field--full">
+                <label for="health-signal-correct">Какво трябва да бъде?</label>
+                <textarea id="health-signal-correct"></textarea>
+              </div>
+
+              <div class="health-field health-field--full">
+                <label for="health-signal-source">Източник / линк</label>
+                <input id="health-signal-source" type="url" placeholder="Официален сайт, регистър или друг източник">
+              </div>
+            </div>
+
+            <p class="health-form-note">Само влезли потребители могат да изпращат сигнал. Данните не се променят директно — сигналът минава през админ преглед.</p>
+
+            <p class="health-submit-status" id="health-signal-status" role="status" aria-live="polite"></p>
+            <div class="health-form-actions">
+              <button class="health-form-preview" type="button" id="health-signal-submit">Изпрати сигнал</button>
+              <button class="health-form-close" type="button" data-health-close-signal>Затвори</button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
   </main>
@@ -92,24 +843,113 @@
     <div class="section-container footer-main">
       <div class="footer-brand">
         <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
-          <span class="brand-mark" aria-hidden="true"><img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt=""></span>
-          <span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span>
+          <span class="brand-mark" aria-hidden="true">
+            <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
+          </span>
+          <span class="brand-text">
+            <strong>Попитай<span>.Лом</span></strong>
+            <small>Попитай. Намери. Препоръчай.</small>
+          </span>
         </a>
-        <p>Местната общност на Лом за препоръки, услуги и полезна информация.</p>
       </div>
-      <div class="footer-column"><h2>Разгледай</h2><a href="kategorii.html">Категории</a><a href="vaprosi.html">Въпроси</a><a href="firmi.html">Фирми</a><a href="statii.html">Статии</a></div>
-      <div class="footer-column"><h2>За общността</h2><a href="za-nas.html">За сайта</a><a href="pravila.html">Правила</a><a href="kontakti.html">Контакти</a><a href="signal.html">Подай сигнал</a></div>
-      <div class="footer-column"><h2>Правна информация</h2><a href="poveritelnost.html">Поверителност</a><a href="uslovia.html">Условия за ползване</a><a href="biskvitki.html">Бисквитки</a></div>
     </div>
-    <div class="section-container footer-bottom"><p>© <span id="current-year">2026</span> Попитай.Лом. Всички права запазени.</p><p>Създадено за хората от Лом.</p></div>
+    <div class="section-container footer-bottom">
+      <p>© <span id="current-year">2026</span> Попитай.Лом.</p>
+    </div>
   </footer>
 
-  <nav class="mobile-bottom-nav" aria-label="Мобилна навигация"><a href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>Начало</span></a><a class="active" href="kategorii.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Категории</span></a><a class="mobile-ask" href="nov-vapros.html?category=zdrave"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Въпрос</span></a><a href="vaprosi.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg><span>Въпроси</span></a><a href="profil.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профил</span></a></nav>
-  <button class="back-to-top" id="back-to-top" type="button" aria-label="Към началото"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg></button>
-
-  <script src="image-upload.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="supabase-config.js?v=20260805-2312" defer></script>
+  <script src="health-catalog-v2.js?v=20260818-2308" defer></script>
+  <script src="health-submissions-v1.js?v=20260818-2315" defer></script>
   <script src="script.js?v=20260805-2312" defer></script>
+
+  <script>
+    (function(){
+      const root = document.documentElement;
+      const header = document.querySelector('.site-header');
+
+      function updateHealthStickyTop(){
+        if (!window.matchMedia('(max-width:650px)').matches){
+          root.style.removeProperty('--health-sticky-top');
+          return;
+        }
+
+        if (!header){
+          root.style.setProperty('--health-sticky-top','0px');
+          return;
+        }
+
+        const rect = header.getBoundingClientRect();
+        const visibleBottom = Math.max(0, Math.round(rect.bottom));
+        root.style.setProperty('--health-sticky-top', visibleBottom + 'px');
+      }
+
+      window.addEventListener('scroll', updateHealthStickyTop, {passive:true});
+      window.addEventListener('resize', updateHealthStickyTop, {passive:true});
+      window.addEventListener('orientationchange', updateHealthStickyTop, {passive:true});
+
+      if ('ResizeObserver' in window && header){
+        new ResizeObserver(updateHealthStickyTop).observe(header);
+      }
+
+      updateHealthStickyTop();
+      requestAnimationFrame(updateHealthStickyTop);
+    })();
+  </script>
+
+
+  <script>
+    (function(){
+      const body = document.body;
+      const addPanel = document.getElementById('health-pro-panel');
+      const signalPanel = document.getElementById('health-signal-panel');
+      const addOpeners = document.querySelectorAll('.health-hero-add, .health-pro-toggle');
+      const signalOpeners = document.querySelectorAll('.health-signal-toggle');
+
+      function openModal(panel){
+        if (!panel) return;
+        panel.hidden = false;
+        body.classList.add('health-modal-open');
+        const focusable = panel.querySelector('input, textarea, button');
+        setTimeout(() => focusable?.focus(), 0);
+      }
+
+      function closeModal(panel){
+        if (!panel) return;
+        panel.hidden = true;
+        if (addPanel?.hidden && signalPanel?.hidden) {
+          body.classList.remove('health-modal-open');
+        }
+      }
+
+      addOpeners.forEach(btn => btn.addEventListener('click', e => {
+        e.preventDefault();
+        openModal(addPanel);
+      }));
+
+      signalOpeners.forEach(btn => btn.addEventListener('click', e => {
+        e.preventDefault();
+        openModal(signalPanel);
+      }));
+
+      document.querySelectorAll('[data-health-close-add], #health-close-button')
+        .forEach(btn => btn.addEventListener('click', () => closeModal(addPanel)));
+
+      document.querySelectorAll('[data-health-close-signal]')
+        .forEach(btn => btn.addEventListener('click', () => closeModal(signalPanel)));
+
+      [addPanel, signalPanel].forEach(panel => panel?.addEventListener('click', e => {
+        if (e.target === panel) closeModal(panel);
+      }));
+
+      document.addEventListener('keydown', e => {
+        if (e.key !== 'Escape') return;
+        if (addPanel && !addPanel.hidden) closeModal(addPanel);
+        if (signalPanel && !signalPanel.hidden) closeModal(signalPanel);
+      });
+})();
+  </script>
+
 </body>
 </html>
