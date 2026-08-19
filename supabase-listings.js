@@ -263,6 +263,9 @@
     const editId = new URLSearchParams(window.location.search).get("edit");
     const submitButton = form.querySelector('[type="submit"]');
     let editListing = null;
+    let editDraft = null;
+    let editMediaRows = [];
+    const removedEditMediaIds = new Set();
     let editReady = !editId;
 
     function setFormLocked(locked) {
@@ -333,6 +336,60 @@
       if (extSection) extSection.hidden = false;
     }
 
+    function ensureEditMediaSection() {
+      let section = $("#listing-edit-media");
+      if (section || !uploader) return section;
+      section = document.createElement("section");
+      section.id = "listing-edit-media";
+      section.hidden = true;
+      section.innerHTML = `
+        <h2 style="margin:0 0 12px">Текущи снимки</h2>
+        <div data-listing-edit-media style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px"></div>`;
+      uploader.insertAdjacentElement("beforebegin", section);
+      return section;
+    }
+
+    function renderEditMedia() {
+      const section = ensureEditMediaSection();
+      const grid = section?.querySelector("[data-listing-edit-media]");
+      if (!section || !grid) return;
+      if (!editMediaRows.length) {
+        section.hidden = true;
+        grid.innerHTML = "";
+        return;
+      }
+      grid.innerHTML = editMediaRows.map((row, index) => {
+        const removed = removedEditMediaIds.has(row.id);
+        const url = publicUrl(row.storage_path);
+        return `<figure style="margin:0;position:relative;aspect-ratio:4/3;border-radius:10px;overflow:hidden;border:1px solid #d7deea;background:#eef2f7">
+          <img src="${escHtml(url)}" alt="Снимка ${index + 1}" loading="lazy" style="width:100%;height:100%;object-fit:cover;opacity:${removed ? ".3" : "1"}">
+          <button type="button" data-remove-listing-media="${escHtml(row.id)}" style="position:absolute;right:6px;top:6px;border:0;border-radius:8px;padding:6px 9px;background:${removed ? "#176438" : "#8a2020"};color:#fff;font-weight:800;cursor:pointer">${removed ? "Отмени" : "Премахни"}</button>
+        </figure>`;
+      }).join("");
+      section.hidden = false;
+    }
+
+    async function loadEditMedia() {
+      if (!editListing || isAdmin) return;
+      const { data, error } = await client.from("media")
+        .select("id, storage_path, status, created_at")
+        .eq("entity_type", "listing")
+        .eq("entity_id", editListing.id)
+        .order("created_at", { ascending: true });
+      if (error) throw error;
+      editMediaRows = data || [];
+      renderEditMedia();
+    }
+
+    document.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-remove-listing-media]");
+      if (!button || !editId || isAdmin) return;
+      const id = button.dataset.removeListingMedia;
+      if (removedEditMediaIds.has(id)) removedEditMediaIds.delete(id);
+      else removedEditMediaIds.add(id);
+      renderEditMedia();
+    });
+
     async function loadEditListing() {
       if (!editId) return true;
 
@@ -358,26 +415,39 @@
 
       editListing = item;
 
-      if ($("#listing-title")) $("#listing-title").value = item.title || "";
-      if (catSelect) catSelect.value = item.category || "";
-      updateTypeField();
-
-      if (item.category === "Работа") {
-        if ($("#listing-type-rabota-select")) $("#listing-type-rabota-select").value = item.listing_type || "";
-      } else if (item.category === "Имоти") {
-        if ($("#listing-type-imoti-select")) $("#listing-type-imoti-select").value = item.listing_type || "";
-      } else if (typeStandard) {
-        typeStandard.value = item.listing_type || "";
+      if (!isAdmin && item.status === "approved") {
+        const { data: draft } = await client.from("user_content_edit_drafts")
+          .select("id, payload, new_media_ids, remove_media_ids, status, moderation_note")
+          .eq("entity_type", "listing")
+          .eq("entity_id", item.id)
+          .eq("owner_id", authUser.id)
+          .maybeSingle();
+        editDraft = draft || null;
+        (editDraft?.remove_media_ids || []).forEach((id) => removedEditMediaIds.add(id));
       }
 
-      if ($("#listing-subcategory")) $("#listing-subcategory").value = item.subcategory || "";
-      if ($("#listing-description")) $("#listing-description").value = item.description || "";
-      if (priceInput) priceInput.value = item.price ?? "";
-      if ($("#listing-price-negotiable")) $("#listing-price-negotiable").checked = item.price_negotiable === true;
-      if ($("#listing-price-free")) $("#listing-price-free").checked = item.price_free === true;
-      if ($("#listing-phone")) $("#listing-phone").value = item.phone || "";
-      if ($("#listing-city")) $("#listing-city").value = item.city || "";
-      if ($("#listing-street")) $("#listing-street").value = item.street || "";
+      const source = editDraft?.payload || item;
+
+      if ($("#listing-title")) $("#listing-title").value = source.title || "";
+      if (catSelect) catSelect.value = source.category || "";
+      updateTypeField();
+
+      if (source.category === "Работа") {
+        if ($("#listing-type-rabota-select")) $("#listing-type-rabota-select").value = source.listing_type || "";
+      } else if (source.category === "Имоти") {
+        if ($("#listing-type-imoti-select")) $("#listing-type-imoti-select").value = source.listing_type || "";
+      } else if (typeStandard) {
+        typeStandard.value = source.listing_type || "";
+      }
+
+      if ($("#listing-subcategory")) $("#listing-subcategory").value = source.subcategory || "";
+      if ($("#listing-description")) $("#listing-description").value = source.description || "";
+      if (priceInput) priceInput.value = source.price ?? "";
+      if ($("#listing-price-negotiable")) $("#listing-price-negotiable").checked = source.price_negotiable === true;
+      if ($("#listing-price-free")) $("#listing-price-free").checked = source.price_free === true;
+      if ($("#listing-phone")) $("#listing-phone").value = source.phone || "";
+      if ($("#listing-city")) $("#listing-city").value = source.city || "";
+      if ($("#listing-street")) $("#listing-street").value = source.street || "";
 
       if (isAdmin) {
         if ($("#ext-is-urgent")) $("#ext-is-urgent").checked = item.is_urgent === true;
@@ -389,12 +459,24 @@
       }
 
       priceInput?.dispatchEvent(new Event("input", { bubbles: true }));
+      try {
+        await loadEditMedia();
+      } catch (_) {
+        setMessage("Данните са заредени, но снимките не могат да се покажат.", "warning");
+      }
       editReady = true;
       setFormLocked(false);
       if (submitButton) {
         submitButton.textContent = isAdmin ? "Запази и публикувай" : "Изпрати редакцията";
       }
-      setMessage("Редактираш съществуваща обява.", "warning");
+      setMessage(
+        editDraft?.status === "needs_changes"
+          ? (editDraft.moderation_note ? `Редакцията е върната: ${editDraft.moderation_note}` : "Редакцията е върната за корекция.")
+          : editDraft?.status === "pending"
+          ? "Има изпратена редакция. Можеш да я коригираш и да я изпратиш отново."
+          : "Редактираш съществуваща обява.",
+        "warning"
+      );
       return true;
     }
 
@@ -523,6 +605,10 @@
 
           listing = result.data;
           error = result.error;
+        } else if (editListing.status === "approved") {
+          // Публикуваната версия остава видима; черновата се записва след снимките.
+          listing = { id: editId };
+          error = null;
         } else {
           const result = await client.rpc("resubmit_own_listing", {
             p_listing_id: editId,
@@ -560,8 +646,11 @@
       }
 
       // Снимки
+      const uploadedPaths = [];
+      const insertedMediaIds = [];
       try {
         setMessage("Качваме снимките…", "warning");
+        const replacementIds = [...removedEditMediaIds];
         if (window.PopitaiImages?.commit) {
           const imgs = await window.PopitaiImages.commit("listing-image-uploader", "listing", listing.id);
           // Upload images using business-image infrastructure
@@ -581,6 +670,7 @@
             );
 
             if (uploadError) throw uploadError;
+            uploadedPaths.push(path);
 
             const mediaResult = admin
               ? await client.from("media").insert({
@@ -596,7 +686,8 @@
                   p_listing_id: listing.id,
                   p_storage_path: path,
                   p_mime_type: mime,
-                  p_size_bytes: prepared.blob.size
+                  p_size_bytes: prepared.blob.size,
+                  p_replace_media_ids: replacementIds
                 });
 
             const mediaError = mediaResult.error;
@@ -605,8 +696,46 @@
               if (cleanupError) console.error("Listing image cleanup failed:", cleanupError);
               throw mediaError;
             }
+            if (!admin && mediaResult.data) insertedMediaIds.push(mediaResult.data);
           }
         }
+
+        if (editId && !admin && editListing.status === "approved") {
+          const removeApprovedIds = editMediaRows
+            .filter((row) => row.status === "approved" && removedEditMediaIds.has(row.id))
+            .map((row) => row.id);
+          const keptDraftMediaIds = editMediaRows
+            .filter((row) => row.status === "pending" && !removedEditMediaIds.has(row.id))
+            .map((row) => row.id);
+          const { data: draftResult, error: draftError } = await client.rpc("save_own_listing_edit_draft", {
+            p_listing_id: editId,
+            p_title: payload.title,
+            p_category: payload.category,
+            p_subcategory: payload.subcategory,
+            p_listing_type: payload.listing_type,
+            p_description: payload.description,
+            p_price: payload.price,
+            p_price_negotiable: payload.price_negotiable,
+            p_price_free: payload.price_free,
+            p_phone: payload.phone,
+            p_city: payload.city,
+            p_street: payload.street,
+            p_new_media_ids: [...keptDraftMediaIds, ...insertedMediaIds],
+            p_remove_media_ids: removeApprovedIds
+          });
+          if (draftError) throw draftError;
+          const cleanupPaths = draftResult?.cleanup_paths || [];
+          if (cleanupPaths.length) await client.storage.from(BUCKET).remove(cleanupPaths);
+        } else if (editId && !admin) {
+          for (const mediaId of removedEditMediaIds) {
+            const { data: path, error: removeError } = await client.rpc("delete_own_listing_media", {
+              p_media_id: mediaId
+            });
+            if (removeError) throw removeError;
+            if (path) await client.storage.from(BUCKET).remove([path]);
+          }
+        }
+
         const successTitle = admin
           ? (editId ? "Промените са публикувани" : "Обявата е публикувана")
           : (editId ? "Редакцията е изпратена" : "Обявата е изпратена");
@@ -617,6 +746,19 @@
         return;
       } catch (imgErr) {
         console.error("Listing image upload failed:", imgErr);
+
+        for (const mediaId of insertedMediaIds) {
+          await client.rpc("delete_own_listing_media", { p_media_id: mediaId });
+        }
+        if (uploadedPaths.length) await client.storage.from(BUCKET).remove(uploadedPaths);
+
+        if (editId && !admin && editListing.status === "approved") {
+          setMessage("Редакцията не беше изпратена. Публикуваната обява не е променена.", "error");
+          btn.disabled = false;
+          btn.textContent = "Изпрати редакцията";
+          return;
+        }
+
         showSubmissionResult(
           "Обявата е записана, но снимките не се качиха",
           "Не изпращай формата повторно. Отвори редакцията и добави снимките отново.",
@@ -711,7 +853,7 @@
           ${item.moderation_note ? `<p style="margin:6px 0 0;font-size:13px;color:#b91c1c"><strong>Бележка:</strong> ${escHtml(item.moderation_note)}</p>` : ""}
           <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
             <a href="obqva.html?id=${escHtml(item.id)}" style="padding:6px 14px;border:1px solid #d7deea;border-radius:8px;font-size:13px;font-weight:700;color:#26344d;text-decoration:none">Преглед</a>
-            ${!isExpired && (item.status === "approved" || item.status === "needs_changes") ? `<a href="dobavi-obqva.html?edit=${escHtml(item.id)}" style="padding:6px 14px;border:1px solid #d7deea;border-radius:8px;font-size:13px;font-weight:700;color:#26344d;text-decoration:none">Редактирай</a>` : ""}
+            ${!isExpired && ["approved", "pending", "needs_changes", "rejected"].includes(item.status) ? `<a href="dobavi-obqva.html?edit=${escHtml(item.id)}" style="padding:6px 14px;border:1px solid #d7deea;border-radius:8px;font-size:13px;font-weight:700;color:#26344d;text-decoration:none">Редактирай</a>` : ""}
             ${isExpired ? `<button onclick="renewListing('${escHtml(item.id)}', this)" style="padding:6px 14px;border:1px solid #0b5fd7;border-radius:8px;font-size:13px;font-weight:700;color:#0b5fd7;background:#fff;cursor:pointer">Поднови</button>` : ""}
           </div>
         </article>`;
