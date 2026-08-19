@@ -24,6 +24,7 @@
   let currentUser = null;
   let currentProfile = null;
   let currentBusiness = null;
+  let currentDraft = null;
   let mediaRows = [];
   const removedMediaIds = new Set();
 
@@ -219,7 +220,7 @@
 
     const { data, error } = await client
       .from("media")
-      .select("id, owner_id, storage_path, created_at")
+      .select("id, owner_id, storage_path, status, created_at")
       .eq("entity_type", "business")
       .eq("entity_id", currentBusiness.id)
       .order("created_at", { ascending: true });
@@ -376,13 +377,18 @@
     if (uploaded.uploadedPaths.length) await client.storage.from(BUCKET).remove(uploaded.uploadedPaths);
   }
 
-  async function removeSelectedMedia(newItems) {
+  function selectedRemovalIds(newItems) {
     const ids = new Set(removedMediaIds);
     if (newItems.some((item) => item.role === "logo")) {
       mediaRows
         .filter((row) => mediaRole(row.storage_path) === "logo")
         .forEach((row) => ids.add(row.id));
     }
+    return [...ids];
+  }
+
+  async function removeSelectedMedia(newItems) {
+    const ids = selectedRemovalIds(newItems);
 
     for (const mediaId of ids) {
       const { data: path, error } = await client.rpc("delete_own_business_media", {
@@ -403,8 +409,13 @@
     });
   }
 
-  function finishSuccess() {
-    setMessage("Готово. Фирмата отново чака преглед.", "success");
+  function finishSuccess(isDraft = false) {
+    setMessage(
+      isDraft
+        ? "Редакцията е изпратена за одобрение. Публикуваната фирма остава видима."
+        : "Готово. Фирмата отново чака преглед.",
+      "success"
+    );
     if (button) {
       button.textContent = "Изпратена";
       button.disabled = true;
@@ -447,26 +458,48 @@
       setMessage("Профилът е ограничен и не може да изпраща корекции.", "error");
       return;
     }
-    if (data.status === "pending") {
-      setMessage("Фирмата вече е изпратена и чака преглед.", "success");
-      window.setTimeout(() => { window.location.href = "profil.html"; }, 900);
+    if (["admin", "moderator"].includes(currentProfile?.role)) {
+      setMessage("Администраторската фирма не използва потребителската форма за редакции.", "error");
       return;
     }
-    if (data.status !== "needs_changes") {
-      setMessage("Тази фирма не чака корекция.", "error");
+    if (!["approved", "pending", "needs_changes", "rejected"].includes(data.status)) {
+      setMessage("Тази фирма не може да бъде редактирана.", "error");
       return;
     }
 
     currentBusiness = data;
-    fields.name.value = data.name || "";
-    fields.category.value = data.category || "";
-    fields.phone.value = data.phone || "";
-    fields.description.value = data.description || "";
+
+    if (data.status === "approved") {
+      const { data: draft } = await client
+        .from("user_content_edit_drafts")
+        .select("id, payload, new_media_ids, remove_media_ids, status, moderation_note")
+        .eq("entity_type", "business")
+        .eq("entity_id", data.id)
+        .eq("owner_id", currentUser.id)
+        .maybeSingle();
+      currentDraft = draft || null;
+      (currentDraft?.remove_media_ids || []).forEach((id) => removedMediaIds.add(id));
+    }
+
+    const source = currentDraft?.payload || data;
+    fields.name.value = source.name || "";
+    fields.category.value = source.category || "";
+    fields.phone.value = source.phone || "";
+    fields.description.value = source.description || "";
 
     refreshFieldUi();
     window.setTimeout(refreshFieldUi, 300);
     await loadBusinessMedia();
-    setMessage("");
+
+    if (currentDraft?.status === "needs_changes") {
+      setMessage(currentDraft.moderation_note
+        ? `Редакцията е върната: ${currentDraft.moderation_note}`
+        : "Редакцията е върната за корекция.", "warning");
+    } else if (currentDraft?.status === "pending") {
+      setMessage("Има изпратена редакция. Можеш да я коригираш и да я изпратиш отново.", "warning");
+    } else {
+      setMessage("");
+    }
     if (button) button.disabled = false;
   }
 
@@ -491,10 +524,37 @@
       if (limitError) throw new Error(limitError);
 
       uploaded = await uploadNewImages(newItems);
-      const { error } = await resubmitBusiness();
-      if (error) throw error;
-      await removeSelectedMedia(newItems);
-      finishSuccess();
+
+      if (currentBusiness.status === "approved") {
+        const allRemovalIds = selectedRemovalIds(newItems);
+        const removeApprovedIds = mediaRows
+          .filter((row) => row.status === "approved" && allRemovalIds.includes(row.id))
+          .map((row) => row.id);
+        const keptDraftMediaIds = mediaRows
+          .filter((row) => row.status === "pending" && !allRemovalIds.includes(row.id))
+          .map((row) => row.id);
+        const newMediaIds = [...keptDraftMediaIds, ...uploaded.insertedIds];
+
+        const { data: draftResult, error } = await client.rpc("save_own_business_edit_draft", {
+          p_business_id: currentBusiness.id,
+          p_name: fields.name.value.trim(),
+          p_category: fields.category.value,
+          p_phone: fields.phone.value.trim(),
+          p_description: fields.description.value.trim(),
+          p_new_media_ids: newMediaIds,
+          p_remove_media_ids: removeApprovedIds
+        });
+        if (error) throw error;
+
+        const cleanupPaths = draftResult?.cleanup_paths || [];
+        if (cleanupPaths.length) await client.storage.from(BUCKET).remove(cleanupPaths);
+        finishSuccess(true);
+      } else {
+        const { error } = await resubmitBusiness();
+        if (error) throw error;
+        await removeSelectedMedia(newItems);
+        finishSuccess(false);
+      }
     } catch (error) {
       if (uploaded) await rollbackNewImages(uploaded);
       const exactMessage = String(error?.message || "");
