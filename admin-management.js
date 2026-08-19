@@ -60,6 +60,7 @@
     .admin-action-hide{background:#d49a13;color:#061a38}
     .admin-action-delete{background:#9f2d2d;color:#fff}
     .admin-action-secondary{background:#e9eef5;color:#173d75}
+    .admin-action-preview{background:#173d75;color:#fff;border:1px solid #173d75}
     .admin-user-row{display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:center}
     .admin-user-row small{display:block;color:#52627a;margin-top:.25rem}
     .admin-listing-description{padding:.75rem;background:#f8fafc;border-radius:10px;color:#26344d;line-height:1.55}
@@ -214,7 +215,7 @@
     const viewLink = isQuestion && item.status === "approved"
       ? `<a class="admin-action-secondary" href="vapros.html?id=${encodeURIComponent(item.id)}" target="_blank" rel="noopener">Отвори</a>`
       : isListing
-      ? `<a class="admin-action-secondary" href="obqva.html?id=${encodeURIComponent(item.id)}" target="_blank" rel="noopener">Преглед</a>`
+      ? `<a class="admin-action-preview" href="obqva.html?id=${encodeURIComponent(item.id)}" target="_blank" rel="noopener">Преглед на обявата</a>`
       : "";
 
     const listingDescription = isListing && item.description
