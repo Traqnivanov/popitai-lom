@@ -833,6 +833,16 @@
     }
 
     const activeCount = items.filter(i => i.status === "approved").length;
+    let draftsByListing = new Map();
+
+    if (!isAdmin) {
+      const { data: drafts } = await client.from("user_content_edit_drafts")
+        .select("entity_id, status, moderation_note")
+        .eq("entity_type", "listing")
+        .in("entity_id", items.map((item) => item.id))
+        .in("status", ["pending", "needs_changes"]);
+      draftsByListing = new Map((drafts || []).map((draft) => [draft.entity_id, draft]));
+    }
 
     container.innerHTML = `
       <p style="margin:0 0 12px;font-size:13px;color:#59657a;font-weight:700">${activeCount} активни от ${MAX_LISTINGS} позволени</p>
@@ -842,6 +852,12 @@
         const statusLabels = { approved: "Активна", pending: "Чака одобрение", rejected: "Отказана", needs_changes: "Върната за корекция" };
         const statusColors = { approved: "#16a34a", pending: "#9a6700", rejected: "#b91c1c", needs_changes: "#1d4ed8" };
         const price = formatPrice(item);
+        const editDraft = draftsByListing.get(item.id);
+        const draftNotice = editDraft?.status === "pending"
+          ? '<p style="margin:6px 0 0;font-size:13px;color:#9a6700;font-weight:800">Редакцията чака одобрение. Публикуваната обява остава видима.</p>'
+          : editDraft?.status === "needs_changes"
+          ? `<p style="margin:6px 0 0;font-size:13px;color:#b91c1c;font-weight:800">Редакцията е върната${editDraft.moderation_note ? ": " + escHtml(editDraft.moderation_note) : " за корекция."}</p>`
+          : "";
         return `<article class="db-profile-item">
           <div class="db-moderation-meta">
             <span style="color:${isExpired ? "#b91c1c" : statusColors[item.status] || "#59657a"};font-weight:800">${isExpired ? "Изтекла" : statusLabels[item.status] || item.status}</span>
@@ -851,6 +867,7 @@
           <h3 style="margin:4px 0"><a href="obqva.html?id=${escHtml(item.id)}">${escHtml(item.title)}</a></h3>
           <p style="margin:0;font-size:13px;color:#59657a">${escHtml(item.category)} · ${escHtml(item.listing_type || "")}${price ? " · " + escHtml(price) : ""}</p>
           ${item.moderation_note ? `<p style="margin:6px 0 0;font-size:13px;color:#b91c1c"><strong>Бележка:</strong> ${escHtml(item.moderation_note)}</p>` : ""}
+          ${draftNotice}
           <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
             <a href="obqva.html?id=${escHtml(item.id)}" style="padding:6px 14px;border:1px solid #d7deea;border-radius:8px;font-size:13px;font-weight:700;color:#26344d;text-decoration:none">Преглед</a>
             ${!isExpired && ["approved", "pending", "needs_changes", "rejected"].includes(item.status) ? `<a href="dobavi-obqva.html?edit=${escHtml(item.id)}" style="padding:6px 14px;border:1px solid #d7deea;border-radius:8px;font-size:13px;font-weight:700;color:#26344d;text-decoration:none">Редактирай</a>` : ""}
