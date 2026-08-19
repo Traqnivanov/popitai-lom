@@ -249,7 +249,7 @@
 
     let actions = "";
     if (mode === "pending") {
-      actions = `
+      actions = `${viewLink}
         <button class="admin-action-approve" data-admin-action="approve" data-type="${type}" data-id="${escapeHtml(item.id)}">Одобри</button>
         <button class="admin-action-hide" data-admin-action="changes" data-type="${type}" data-id="${escapeHtml(item.id)}">Върни за корекция</button>
         <button class="admin-action-delete" data-admin-action="reject" data-type="${type}" data-id="${escapeHtml(item.id)}">Откажи</button>
