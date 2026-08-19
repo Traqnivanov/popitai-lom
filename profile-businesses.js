@@ -189,11 +189,19 @@
     return container;
   }
 
-  function businessCard(item) {
+  function businessCard(item, isStaff = false, draft = null) {
     const note = item.moderation_note?.trim();
     const needsAttention = ["needs_changes", "rejected"].includes(item.status);
     const expandedEditLink = item.is_expanded === true
       ? `<a class="profile-business-link" href="razshiren-profil.html?id=${encodeURIComponent(item.id)}">Редактирай разширения профил</a>`
+      : "";
+    const basicEditLink = !isStaff
+      ? `<a class="profile-business-link" href="dobavi-firma.html?edit=${encodeURIComponent(item.id)}">Редактирай фирмата</a>`
+      : "";
+    const draftStatus = draft?.status === "pending"
+      ? '<p style="color:#9a6700;font-weight:800">Редакцията чака одобрение. Публикуваната версия остава видима.</p>'
+      : draft?.status === "needs_changes"
+      ? `<p style="color:#b91c1c;font-weight:800">Редакцията е върната за корекция${draft.moderation_note ? ": " + escapeHtml(draft.moderation_note) : "."}</p>`
       : "";
     const safeStatus = ["pending", "approved", "rejected", "needs_changes"].includes(item.status)
       ? item.status
@@ -209,7 +217,9 @@
       ${needsAttention && note ? `<div class="profile-business-note"><strong>Бележка от администратора:</strong><br>${escapeHtml(note)}</div>` : ""}
       ${item.status === "pending" ? '<p>Профилът чака административен преглед.</p>' : ""}
       ${item.status === "approved" ? '<p>Профилът е публикуван.</p>' : ""}
+      ${draftStatus}
       <div class="profile-business-actions">
+        ${basicEditLink}
         ${expandedEditLink}
         <a class="profile-business-link" href="firma.html?id=${encodeURIComponent(item.id)}">Преглед</a>
       </div>
@@ -230,20 +240,43 @@
       return;
     }
 
-    const { data, error } = await client
-      .from("businesses")
-      .select("id, name, category, status, moderation_note, created_at, updated_at, is_expanded")
-      .eq("owner_id", user.id)
-      .order("created_at", { ascending: false });
+    const [businessResult, profileResult] = await Promise.all([
+      client
+        .from("businesses")
+        .select("id, name, category, status, moderation_note, created_at, updated_at, is_expanded")
+        .eq("owner_id", user.id)
+        .order("created_at", { ascending: false }),
+      client
+        .from("profiles")
+        .select("role, is_blocked")
+        .eq("id", user.id)
+        .maybeSingle()
+    ]);
 
-    if (error) {
+    if (businessResult.error) {
       container.innerHTML = '<article class="empty-card"><p>Фирмените профили не могат да се заредят.</p></article>';
       return;
     }
 
-    const items = data || [];
+    const items = businessResult.data || [];
+    const isStaff = Boolean(
+      ["admin", "moderator"].includes(profileResult.data?.role) &&
+      profileResult.data?.is_blocked !== true
+    );
+    let draftsByBusiness = new Map();
+
+    if (!isStaff && items.length) {
+      const { data: drafts } = await client
+        .from("user_content_edit_drafts")
+        .select("entity_id, status, moderation_note")
+        .eq("entity_type", "business")
+        .in("entity_id", items.map((item) => item.id))
+        .in("status", ["pending", "needs_changes"]);
+      draftsByBusiness = new Map((drafts || []).map((draft) => [draft.entity_id, draft]));
+    }
+
     container.innerHTML = items.length
-      ? items.map(businessCard).join("")
+      ? items.map((item) => businessCard(item, isStaff, draftsByBusiness.get(item.id))).join("")
       : '<article class="empty-card"><p>Все още нямаш добавени фирми.</p><a class="primary-link-button" href="dobavi-firma.html">Добави фирма</a></article>';
   }
 
