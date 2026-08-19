@@ -272,12 +272,16 @@
       if (submitButton) submitButton.textContent = "Зареждане…";
     }
 
-    // Show image uploader
+    // Show the uploader with the correct role-specific limit.
+    // Regular users: 6 images. Admin: the existing 20-image limit.
     const uploader = $("#listing-image-uploader");
     if (uploader) uploader.hidden = false;
-    if (window.PopitaiImages?.init) window.PopitaiImages.init();
 
     await getAuth();
+
+    if (window.PopitaiImages?.setMaxFiles) {
+      window.PopitaiImages.setMaxFiles("listing-image-uploader", isAdmin ? 20 : 6);
+    }
 
     // Live EUR → BGN калкулатор
     const priceInput = $("#listing-price");
