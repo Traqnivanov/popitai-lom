@@ -122,13 +122,13 @@
       <label for="listing-street">Улица <small style="color:#888;font-weight:400">(по желание)</small></label>
       <input id="listing-street" type="text" placeholder="ул. Васил Левски 5">
 
-      <section class="image-uploader" id="listing-image-uploader" data-max-files="20" data-max-mb="10" data-quality="0.82" data-widths="480,960,1600" data-role="gallery">
+      <section class="image-uploader" id="listing-image-uploader" data-max-files="6" data-max-mb="10" data-quality="0.82" data-widths="480,960,1600" data-role="gallery">
         <div class="image-uploader-heading">
           <div>
             <h2>Снимки</h2>
-            <p>Първата снимка е главна. До 20 снимки.</p>
+            <p data-image-limit>Първата снимка е главна. До 6 снимки.</p>
           </div>
-          <span data-image-count>0 / 20</span>
+          <span data-image-count>0 / 6</span>
         </div>
         <label class="image-dropzone" data-image-dropzone>
           <input type="file" accept="image/jpeg,image/png,image/webp" multiple>
@@ -205,12 +205,12 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
   </button>
 
-  <script src="image-upload.js?v=20260806-0208" defer></script>
+  <script src="image-upload.js?v=20260820-0310" defer></script>
   <script src="business-image-bootstrap.js?v=20260806-0430" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="supabase-config.js?v=20260805-2312" defer></script>
   <script src="listing-form-validation.js?v=20260809-2300" defer></script>
-  <script src="supabase-listings.js?v=20260820-0240" defer></script>
+  <script src="supabase-listings.js?v=20260820-0310" defer></script>
   <script src="script.js?v=20260805-2312" defer></script>
 </body>
 </html>
