@@ -40,6 +40,29 @@
     return data?.publicUrl || "";
   }
 
+  async function attachListingMedia(items) {
+    if (!items.length) return items;
+    const ids = items.map((item) => item.id);
+    const { data, error } = await client.from("media")
+      .select("entity_id, storage_path, status, created_at")
+      .eq("entity_type", "listing")
+      .in("entity_id", ids)
+      .order("created_at", { ascending: true });
+
+    if (error) throw error;
+
+    const grouped = new Map();
+    (data || []).forEach((media) => {
+      if (!grouped.has(media.entity_id)) grouped.set(media.entity_id, []);
+      grouped.get(media.entity_id).push(media);
+    });
+
+    return items.map((item) => ({
+      ...item,
+      _media: grouped.get(item.id) || []
+    }));
+  }
+
   function humanError(err, fallback) {
     if (!err) return fallback;
     const m = err.message || "";
@@ -122,7 +145,12 @@
       return;
     }
 
-    let listings = data || [];
+    let listings;
+    try {
+      listings = await attachListingMedia(data || []);
+    } catch (_) {
+      listings = data || [];
+    }
 
     // Admin обявите на Иванов Ремонти винаги първи
     listings.sort((a, b) => {
@@ -145,7 +173,12 @@
       container.innerHTML = '<article class="empty-card"><p>Няма намерени обяви.</p></article>';
       return;
     }
-    container.innerHTML = listings.map(item => listingCard(item)).join("");
+    container.innerHTML = listings.map((item) => {
+      const cover = item._media?.[0]?.storage_path
+        ? publicUrl(item._media[0].storage_path)
+        : "";
+      return listingCard(item, cover);
+    }).join("");
   }
 
   function initFilters(allListings) {
@@ -677,7 +710,7 @@
     if (!id) { container.innerHTML = '<article class="empty-card"><p>Обявата не е намерена.</p></article>'; return; }
 
     const { data: item, error } = await client.from("listings")
-      .select("id, owner_id, title, category, subcategory, listing_type, description, price, price_negotiable, price_free, price_old, currency, phone, city, street, is_urgent, is_highlighted, is_reduced, is_owner_admin, show_stats, view_count, created_at, expires_at, show_contact_buttons")
+      .select("id, owner_id, title, category, subcategory, listing_type, description, price, price_negotiable, price_free, price_old, currency, phone, city, street, status, is_urgent, is_highlighted, is_reduced, is_owner_admin, show_stats, view_count, created_at, expires_at, show_contact_buttons")
       .eq("id", id)
       .maybeSingle();
 
@@ -686,8 +719,18 @@
       return;
     }
 
-    // Увеличаваме брояча на прегледи
-    client.rpc("increment_listing_views", { p_id: id });
+    let listingMedia = [];
+    try {
+      const [itemWithMedia] = await attachListingMedia([item]);
+      listingMedia = itemWithMedia?._media || [];
+    } catch (_) {
+      listingMedia = [];
+    }
+
+    // Увеличаваме брояча само за публикувани обяви
+    if (item.status === "approved") {
+      client.rpc("increment_listing_views", { p_id: id });
+    }
 
     const price = formatPrice(item);
     const badges = [
@@ -696,18 +739,34 @@
     ].filter(Boolean).join("");
 
     const days = item.expires_at ? daysLeft(item.expires_at) : null;
+    const gallery = listingMedia.length
+      ? `<section aria-label="Снимки към обявата" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:18px 0 24px">
+          ${listingMedia.map((media, index) => {
+            const url = publicUrl(media.storage_path);
+            return `<a href="${escHtml(url)}" target="_blank" rel="noopener" style="display:block;aspect-ratio:4/3;border-radius:12px;overflow:hidden;background:#eef2f7;border:1px solid #d7deea">
+              <img src="${escHtml(url)}" alt="${escHtml(item.title)} – снимка ${index + 1}" loading="${index === 0 ? "eager" : "lazy"}" style="width:100%;height:100%;object-fit:cover;display:block">
+            </a>`;
+          }).join("")}
+        </section>`
+      : "";
+
+    const previewNotice = item.status !== "approved"
+      ? `<p style="margin:0 0 14px;padding:10px 12px;border-radius:10px;background:#fff3cd;border:1px solid #efd37b;color:#6b4b00;font-weight:800">Административен преглед: ${item.status === "pending" ? "чака одобрение" : item.status === "needs_changes" ? "върната за корекция" : "скрита/отказана"}.</p>`
+      : "";
 
     container.innerHTML = `
       <article>
         <div style="margin-bottom:12px">
           <a href="obyavi.html" style="color:#59657a;font-size:13px">← Назад към обявите</a>
         </div>
+        ${previewNotice}
         ${badges}
         <span class="listing-type-badge">${escHtml(item.listing_type || "")}</span>
         <h1 style="margin:8px 0 4px;font-size:24px">${escHtml(item.title)}</h1>
         <p style="margin:0 0 8px;color:#59657a;font-size:14px">${escHtml(item.category)}${item.subcategory ? " › " + escHtml(item.subcategory) : ""}</p>
         ${price ? `<p style="font-size:20px;font-weight:900;margin:0 0 12px">${item.price_old && item.is_reduced ? `<s style="color:#9aa3b0;font-weight:400;font-size:15px">${Number(item.price_old).toLocaleString("bg-BG")} евро</s> ` : ""}${escHtml(price)}</p>` : ""}
         <p style="margin:0 0 16px;color:#59657a;font-size:13px">${formatDate(item.created_at)}${item.city ? " · " + escHtml(item.city) : ""}${item.street ? ", " + escHtml(item.street) : ""}${days !== null ? " · Изтича след " + days + " дни" : ""}${item.show_stats && item.view_count ? " · 👁 " + item.view_count + " прегледа" : ""}</p>
+        ${gallery}
         <div style="white-space:pre-wrap;line-height:1.7;margin-bottom:24px">${escHtml(item.description)}</div>
         <a href="obyavi.html" style="color:#0b5fd7;font-size:14px">← Всички обяви</a>
       </article>`;
