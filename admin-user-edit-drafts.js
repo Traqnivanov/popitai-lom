@@ -214,6 +214,9 @@
     if (menu) observer.observe(menu, { childList: true });
 
     document.addEventListener("click", async (event) => {
+      const menuButton = event.target.closest(".admin-menu button");
+      if (menuButton && !menuButton.matches("[data-user-edits-view]")) active = false;
+
       const view = event.target.closest("[data-user-edits-view]");
       if (view) {
         event.preventDefault();
