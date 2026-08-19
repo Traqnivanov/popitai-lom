@@ -448,34 +448,45 @@
       let error;
 
       if (editId) {
-        const updatePayload = { ...payload };
-        delete updatePayload.owner_id;
-        delete updatePayload.author_id;
-        delete updatePayload.is_owner_admin;
+        if (admin) {
+          const updatePayload = { ...payload };
+          delete updatePayload.owner_id;
+          delete updatePayload.author_id;
+          delete updatePayload.is_owner_admin;
 
-        if (!admin) {
-          delete updatePayload.is_urgent;
-          delete updatePayload.is_reduced;
-          delete updatePayload.is_boosted;
-          delete updatePayload.is_highlighted;
-          delete updatePayload.show_stats;
-          delete updatePayload.show_contact_buttons;
+          updatePayload.status = "approved";
+          updatePayload.moderation_note = "";
+          updatePayload.reviewed_by = null;
+          updatePayload.reviewed_at = null;
+
+          const result = await client.from("listings")
+            .update(updatePayload)
+            .eq("id", editId)
+            .eq("owner_id", user.id)
+            .select("id")
+            .single();
+
+          listing = result.data;
+          error = result.error;
+        } else {
+          const result = await client.rpc("resubmit_own_listing", {
+            p_listing_id: editId,
+            p_title: payload.title,
+            p_category: payload.category,
+            p_subcategory: payload.subcategory,
+            p_listing_type: payload.listing_type,
+            p_description: payload.description,
+            p_price: payload.price,
+            p_price_negotiable: payload.price_negotiable,
+            p_price_free: payload.price_free,
+            p_phone: payload.phone,
+            p_city: payload.city,
+            p_street: payload.street
+          });
+
+          listing = result.data ? { id: result.data } : null;
+          error = result.error;
         }
-
-        updatePayload.status = admin ? "approved" : "pending";
-        updatePayload.moderation_note = "";
-        updatePayload.reviewed_by = null;
-        updatePayload.reviewed_at = null;
-
-        const result = await client.from("listings")
-          .update(updatePayload)
-          .eq("id", editId)
-          .eq("owner_id", user.id)
-          .select("id")
-          .single();
-
-        listing = result.data;
-        error = result.error;
       } else {
         const result = await client.from("listings").insert(payload).select("id").single();
         listing = result.data;
