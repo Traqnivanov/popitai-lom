@@ -392,6 +392,20 @@
 
     if (editId && !(await loadEditListing())) return;
 
+    function showSubmissionResult(title, text, listingId, isError = false) {
+      form.innerHTML = `
+        <section style="padding:24px;border:1px solid ${isError ? "#efb2b2" : "#abd9ba"};border-radius:16px;background:${isError ? "#fff5f5" : "#f2fbf5"}">
+          <h2 style="margin:0 0 10px;color:${isError ? "#8a2020" : "#176438"}">${escHtml(title)}</h2>
+          <p style="margin:0 0 18px;line-height:1.6">${escHtml(text)}</p>
+          <div style="display:flex;flex-wrap:wrap;gap:10px">
+            <a href="profil.html" style="padding:10px 16px;border-radius:10px;background:#061a38;color:#fff;text-decoration:none;font-weight:800">Моите обяви</a>
+            <a href="obqva.html?id=${escHtml(listingId)}" style="padding:10px 16px;border-radius:10px;border:1px solid #b8c5d8;color:#173d75;text-decoration:none;font-weight:800">Преглед</a>
+            ${isError ? `<a href="dobavi-obqva.html?edit=${escHtml(listingId)}" style="padding:10px 16px;border-radius:10px;border:1px solid #b8c5d8;color:#173d75;text-decoration:none;font-weight:800">Добави снимките отново</a>` : ""}
+          </div>
+        </section>`;
+      form.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
     // Live duplicate check
     const titleInput = $("#listing-title");
     let dupTimer;
@@ -560,16 +574,24 @@
 
             if (uploadError) throw uploadError;
 
-            const { error: mediaError } = await client.from("media").insert({
-              owner_id: user.id,
-              entity_type: "listing",
-              entity_id: listing.id,
-              storage_path: path,
-              mime_type: mime,
-              size_bytes: prepared.blob.size,
-              status: admin ? "approved" : "pending"
-            });
+            const mediaResult = admin
+              ? await client.from("media").insert({
+                  owner_id: user.id,
+                  entity_type: "listing",
+                  entity_id: listing.id,
+                  storage_path: path,
+                  mime_type: mime,
+                  size_bytes: prepared.blob.size,
+                  status: "approved"
+                })
+              : await client.rpc("submit_own_listing_media", {
+                  p_listing_id: listing.id,
+                  p_storage_path: path,
+                  p_mime_type: mime,
+                  p_size_bytes: prepared.blob.size
+                });
 
+            const mediaError = mediaResult.error;
             if (mediaError) {
               const { error: cleanupError } = await client.storage.from(BUCKET).remove([path]);
               if (cleanupError) console.error("Listing image cleanup failed:", cleanupError);
@@ -577,18 +599,24 @@
             }
           }
         }
-        if (!editId) form.reset();
-        btn.textContent = editId
-          ? (admin ? "Запази и публикувай" : "Изпрати редакцията")
-          : "Публикувай обявата";
-        setMessage(editId
-          ? (admin ? "Промените са запазени и публикувани." : "Промените са изпратени и чакат одобрение.")
-          : (admin ? "Обявата е публикувана." : "Обявата е изпратена и чака одобрение."), "success");
+        const successTitle = admin
+          ? (editId ? "Промените са публикувани" : "Обявата е публикувана")
+          : (editId ? "Редакцията е изпратена" : "Обявата е изпратена");
+        const successText = admin
+          ? "Записът е публикуван успешно."
+          : "Записът чака преглед и одобрение от администратор.";
+        showSubmissionResult(successTitle, successText, listing.id);
+        return;
       } catch (imgErr) {
-        setMessage("Обявата е записана, но снимките не се качиха.", "error");
+        console.error("Listing image upload failed:", imgErr);
+        showSubmissionResult(
+          "Обявата е записана, но снимките не се качиха",
+          "Не изпращай формата повторно. Отвори редакцията и добави снимките отново.",
+          listing.id,
+          true
+        );
+        return;
       }
-
-      btn.disabled = false;
     }, true);
   }
 
