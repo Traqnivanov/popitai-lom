@@ -3,6 +3,7 @@
   const client = window.PopitaiSupabase;
   if (!client) return;
 
+  const BUCKET = "business-media";
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
   const escapeHtml = (value) => String(value ?? "")
@@ -61,7 +62,11 @@
     .admin-action-secondary{background:#e9eef5;color:#173d75}
     .admin-user-row{display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:center}
     .admin-user-row small{display:block;color:#52627a;margin-top:.25rem}
-    @media(max-width:720px){.admin-user-row{grid-template-columns:1fr}.admin-record-actions>*{flex:1;justify-content:center}}
+    .admin-listing-description{padding:.75rem;background:#f8fafc;border-radius:10px;color:#26344d;line-height:1.55}
+    .admin-listing-media{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:.6rem}
+    .admin-listing-media a{display:block;aspect-ratio:1/1;border-radius:10px;overflow:hidden;border:1px solid #d9e2ef;background:#eef2f7}
+    .admin-listing-media img{width:100%;height:100%;object-fit:cover;display:block}
+    @media(max-width:720px){.admin-user-row{grid-template-columns:1fr}.admin-record-actions>*{flex:1;justify-content:center}.admin-listing-media{grid-template-columns:repeat(3,1fr)}}
   `;
   document.head.appendChild(styles);
 
@@ -86,6 +91,36 @@
 
   function statusBadge(status) {
     return `<span class="admin-status ${escapeHtml(status)}">${escapeHtml(statusLabels[status] || status)}</span>`;
+  }
+
+  function mediaPublicUrl(path) {
+    if (!path) return "";
+    const { data } = client.storage.from(BUCKET).getPublicUrl(path);
+    return data?.publicUrl || "";
+  }
+
+  async function attachListingMedia(items) {
+    if (!items.length) return items;
+    const ids = items.map((item) => item.id);
+    const { data, error } = await client
+      .from("media")
+      .select("entity_id, storage_path, status, created_at")
+      .eq("entity_type", "listing")
+      .in("entity_id", ids)
+      .order("created_at", { ascending: true });
+
+    if (error) throw error;
+
+    const grouped = new Map();
+    (data || []).forEach((media) => {
+      if (!grouped.has(media.entity_id)) grouped.set(media.entity_id, []);
+      grouped.get(media.entity_id).push(media);
+    });
+
+    return items.map((item) => ({
+      ...item,
+      _media: grouped.get(item.id) || []
+    }));
   }
 
   function setupLayout() {
@@ -178,8 +213,23 @@
 
     const viewLink = isQuestion && item.status === "approved"
       ? `<a class="admin-action-secondary" href="vapros.html?id=${encodeURIComponent(item.id)}" target="_blank" rel="noopener">Отвори</a>`
-      : isListing && item.status === "approved"
-      ? `<a class="admin-action-secondary" href="obqva.html?id=${encodeURIComponent(item.id)}" target="_blank" rel="noopener">Отвори</a>`
+      : isListing
+      ? `<a class="admin-action-secondary" href="obqva.html?id=${encodeURIComponent(item.id)}" target="_blank" rel="noopener">Преглед</a>`
+      : "";
+
+    const listingDescription = isListing && item.description
+      ? `<p class="admin-listing-description"><strong>Описание:</strong><br>${escapeHtml(item.description)}</p>`
+      : "";
+
+    const listingMedia = isListing && item._media?.length
+      ? `<div class="admin-listing-media">${item._media.map((media) => {
+          const url = mediaPublicUrl(media.storage_path);
+          return url
+            ? `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" title="Отвори снимката"><img src="${escapeHtml(url)}" alt="${escapeHtml(item.title)}" loading="lazy"></a>`
+            : "";
+        }).join("")}</div>`
+      : isListing
+      ? '<p style="color:#8a2020;font-weight:700">Няма записани снимки към тази обява.</p>'
       : "";
 
     const extendedChecks = isListing && mode === "pending" ? `
@@ -220,6 +270,8 @@
       <div class="admin-record-meta">${statusBadge(item.status)}<span>${formatDate(item.created_at)}</span><span>${typeLabel}</span></div>
       <h3>${escapeHtml(title)}</h3>
       <p>${escapeHtml(text)}</p>
+      ${listingDescription}
+      ${listingMedia}
       ${item.moderation_note ? `<p><strong>Бележка:</strong> ${escapeHtml(item.moderation_note)}</p>` : ""}
       ${extendedChecks}
       ${extendedPublished}
@@ -235,10 +287,11 @@
     ]);
     if (qResult.error || aResult.error || lResult.error) throw qResult.error || aResult.error || lResult.error;
 
+    const listingItems = await attachListingMedia(lResult.data || []);
     const queue = [
       ...(qResult.data || []).map((item) => ({ ...item, _type: "question" })),
       ...(aResult.data || []).map((item) => ({ ...item, _type: "answer" })),
-      ...(lResult.data || []).map((item) => ({ ...item, _type: "listing" }))
+      ...listingItems.map((item) => ({ ...item, _type: "listing" }))
     ].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
     return queue.length
@@ -260,11 +313,11 @@
 
   async function loadListingsAdmin(statusFilter = "approved") {
     const { data, error } = await client.from("listings")
-      .select("id, title, category, listing_type, phone, city, status, moderation_note, created_at, owner_id, is_urgent, is_reduced, is_boosted, is_highlighted, show_stats, show_contact_buttons, expires_at")
+      .select("id, title, description, category, listing_type, phone, city, status, moderation_note, created_at, owner_id, is_urgent, is_reduced, is_boosted, is_highlighted, show_stats, show_contact_buttons, expires_at")
       .eq("status", statusFilter)
       .order("created_at", { ascending: false });
     if (error) throw error;
-    const items = data || [];
+    const items = await attachListingMedia(data || []);
     if (!items.length) return `<article class="empty-card"><p>Няма обяви.</p></article>`;
     return items.map(item => recordCard({ ...item, _type: "listing" }, "listing", statusFilter === "approved" ? "published" : "hidden")).join("");
   }
@@ -273,13 +326,14 @@
     const [qResult, aResult, lResult] = await Promise.all([
       client.from("questions").select("id, title, description, status, moderation_note, created_at").in("status", ["rejected", "needs_changes"]).order("created_at", { ascending: false }),
       client.from("answers").select("id, question_id, body, status, moderation_note, created_at").in("status", ["rejected", "needs_changes"]).order("created_at", { ascending: false }),
-      client.from("listings").select("id, title, category, listing_type, status, moderation_note, created_at").in("status", ["rejected", "needs_changes"]).order("created_at", { ascending: false })
+      client.from("listings").select("id, title, description, category, listing_type, phone, city, status, moderation_note, created_at").in("status", ["rejected", "needs_changes"]).order("created_at", { ascending: false })
     ]);
     if (qResult.error || aResult.error || lResult.error) throw qResult.error || aResult.error || lResult.error;
+    const hiddenListings = await attachListingMedia(lResult.data || []);
     const records = [
       ...(qResult.data || []).map((item) => ({ ...item, _type: "question" })),
       ...(aResult.data || []).map((item) => ({ ...item, _type: "answer" })),
-      ...(lResult.data || []).map((item) => ({ ...item, _type: "listing" }))
+      ...hiddenListings.map((item) => ({ ...item, _type: "listing" }))
     ].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     return records.length
       ? records.map((item) => recordCard(item, item._type, "hidden")).join("")
