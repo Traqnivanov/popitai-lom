@@ -802,6 +802,25 @@
     return true;
   }
 
+  function setMaxFiles(rootId, maxFiles) {
+    const root = document.getElementById(rootId);
+    const normalized = Number.parseInt(String(maxFiles), 10);
+    if (!root || !Number.isFinite(normalized) || normalized < 1) return false;
+
+    root.dataset.maxFiles = String(normalized);
+    const state = states.get(rootId);
+    if (state) {
+      state.maxFiles = normalized;
+      updateCount(state);
+    }
+
+    const limitText = root.querySelector("[data-image-limit]");
+    if (limitText) {
+      limitText.textContent = `Първата снимка е главна. До ${normalized} снимки.`;
+    }
+    return true;
+  }
+
   function initAll() {
     document.querySelectorAll(".image-uploader[id]").forEach(initUploader);
   }
@@ -814,7 +833,8 @@
     renderGallery,
     renderRemoteGallery,
     renderLogo,
-    renderMediaSlots
+    renderMediaSlots,
+    setMaxFiles
   };
 
   if (document.readyState === "loading") {
