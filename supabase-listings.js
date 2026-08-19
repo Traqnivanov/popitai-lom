@@ -232,17 +232,21 @@
         return true;
       });
 
-      if (sortVal === "price_asc") filtered.sort((a, b) => (a.price ?? 999999) - (b.price ?? 999999));
-      else if (sortVal === "price_desc") filtered.sort((a, b) => (b.price ?? -1) - (a.price ?? -1));
-      else {
-        filtered.sort((a, b) => {
-          if (a.owner_id === ADMIN_ID && b.owner_id !== ADMIN_ID) return -1;
-          if (b.owner_id === ADMIN_ID && a.owner_id !== ADMIN_ID) return 1;
-          if (a.is_boosted && !b.is_boosted) return -1;
-          if (b.is_boosted && !a.is_boosted) return 1;
-          return new Date(b.created_at) - new Date(a.created_at);
-        });
-      }
+      filtered.sort((a, b) => {
+        // Admin listings always stay first, regardless of the selected sort.
+        if (a.owner_id === ADMIN_ID && b.owner_id !== ADMIN_ID) return -1;
+        if (b.owner_id === ADMIN_ID && a.owner_id !== ADMIN_ID) return 1;
+
+        if (sortVal === "price_asc") {
+          return (a.price ?? 999999) - (b.price ?? 999999);
+        }
+        if (sortVal === "price_desc") {
+          return (b.price ?? -1) - (a.price ?? -1);
+        }
+        if (a.is_boosted && !b.is_boosted) return -1;
+        if (b.is_boosted && !a.is_boosted) return 1;
+        return new Date(b.created_at) - new Date(a.created_at);
+      });
 
       renderListings(filtered);
     }
