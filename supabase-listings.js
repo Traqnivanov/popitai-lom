@@ -223,6 +223,22 @@
     const form = $("#listing-form");
     if (!form) return;
 
+    const editId = new URLSearchParams(window.location.search).get("edit");
+    const submitButton = form.querySelector('[type="submit"]');
+    let editListing = null;
+    let editReady = !editId;
+
+    function setFormLocked(locked) {
+      form.querySelectorAll("input, select, textarea, button").forEach((control) => {
+        control.disabled = locked;
+      });
+    }
+
+    if (editId) {
+      setFormLocked(true);
+      if (submitButton) submitButton.textContent = "Зареждане…";
+    }
+
     // Show image uploader
     const uploader = $("#listing-image-uploader");
     if (uploader) uploader.hidden = false;
@@ -276,6 +292,73 @@
       if (extSection) extSection.hidden = false;
     }
 
+    async function loadEditListing() {
+      if (!editId) return true;
+
+      if (!authUser) {
+        setMessage("Трябва да влезеш в профила си, за да редактираш обявата.", "error");
+        return false;
+      }
+
+      const { data: item, error } = await client.from("listings")
+        .select("id, owner_id, author_id, title, category, subcategory, listing_type, description, price, price_negotiable, price_free, phone, city, street, status, is_owner_admin, is_urgent, is_reduced, is_boosted, is_highlighted, show_stats, show_contact_buttons")
+        .eq("id", editId)
+        .maybeSingle();
+
+      if (error || !item) {
+        setMessage("Обявата не може да се зареди. Формата остава заключена.", "error");
+        return false;
+      }
+
+      if (item.owner_id !== authUser.id) {
+        setMessage("Нямаш право да редактираш тази обява.", "error");
+        return false;
+      }
+
+      editListing = item;
+
+      if ($("#listing-title")) $("#listing-title").value = item.title || "";
+      if (catSelect) catSelect.value = item.category || "";
+      updateTypeField();
+
+      if (item.category === "Работа") {
+        if ($("#listing-type-rabota-select")) $("#listing-type-rabota-select").value = item.listing_type || "";
+      } else if (item.category === "Имоти") {
+        if ($("#listing-type-imoti-select")) $("#listing-type-imoti-select").value = item.listing_type || "";
+      } else if (typeStandard) {
+        typeStandard.value = item.listing_type || "";
+      }
+
+      if ($("#listing-subcategory")) $("#listing-subcategory").value = item.subcategory || "";
+      if ($("#listing-description")) $("#listing-description").value = item.description || "";
+      if (priceInput) priceInput.value = item.price ?? "";
+      if ($("#listing-price-negotiable")) $("#listing-price-negotiable").checked = item.price_negotiable === true;
+      if ($("#listing-price-free")) $("#listing-price-free").checked = item.price_free === true;
+      if ($("#listing-phone")) $("#listing-phone").value = item.phone || "";
+      if ($("#listing-city")) $("#listing-city").value = item.city || "";
+      if ($("#listing-street")) $("#listing-street").value = item.street || "";
+
+      if (isAdmin) {
+        if ($("#ext-is-urgent")) $("#ext-is-urgent").checked = item.is_urgent === true;
+        if ($("#ext-is-reduced")) $("#ext-is-reduced").checked = item.is_reduced === true;
+        if ($("#ext-is-boosted")) $("#ext-is-boosted").checked = item.is_boosted === true;
+        if ($("#ext-is-highlighted")) $("#ext-is-highlighted").checked = item.is_highlighted === true;
+        if ($("#ext-show-stats")) $("#ext-show-stats").checked = item.show_stats === true;
+        if ($("#ext-show-contact-buttons")) $("#ext-show-contact-buttons").checked = item.show_contact_buttons === true;
+      }
+
+      priceInput?.dispatchEvent(new Event("input", { bubbles: true }));
+      editReady = true;
+      setFormLocked(false);
+      if (submitButton) {
+        submitButton.textContent = isAdmin ? "Запази и публикувай" : "Изпрати редакцията";
+      }
+      setMessage("Редактираш съществуваща обява.", "warning");
+      return true;
+    }
+
+    if (editId && !(await loadEditListing())) return;
+
     // Live duplicate check
     const titleInput = $("#listing-title");
     let dupTimer;
@@ -289,6 +372,13 @@
       e.stopImmediatePropagation();
 
       const btn = form.querySelector('[type="submit"]');
+
+      if (editId && (!editReady || !editListing)) {
+        setFormLocked(true);
+        setMessage("Обявата не е заредена и не може да бъде записана.", "error");
+        return;
+      }
+
       btn.disabled = true;
       btn.textContent = "Изпращане…";
       setMessage("", "");
@@ -304,8 +394,8 @@
 
       const admin = user.id === ADMIN_ID;
 
-      // Лимит 5 за потребители
-      if (!admin) {
+      // Лимит 5 за потребители — не блокира редакция на съществуваща обява
+      if (!admin && !editId) {
         const { count } = await client.from("listings")
           .select("id", { count: "exact", head: true })
           .eq("owner_id", user.id)
@@ -354,11 +444,52 @@
         show_contact_buttons: admin ? ($("#ext-show-contact-buttons")?.checked || false) : false
       };
 
-      const { data: listing, error } = await client.from("listings").insert(payload).select("id").single();
+      let listing;
+      let error;
+
+      if (editId) {
+        const updatePayload = { ...payload };
+        delete updatePayload.owner_id;
+        delete updatePayload.author_id;
+        delete updatePayload.is_owner_admin;
+
+        if (!admin) {
+          delete updatePayload.is_urgent;
+          delete updatePayload.is_reduced;
+          delete updatePayload.is_boosted;
+          delete updatePayload.is_highlighted;
+          delete updatePayload.show_stats;
+          delete updatePayload.show_contact_buttons;
+        }
+
+        updatePayload.status = admin ? "approved" : "pending";
+        updatePayload.moderation_note = "";
+        updatePayload.reviewed_by = null;
+        updatePayload.reviewed_at = null;
+
+        const result = await client.from("listings")
+          .update(updatePayload)
+          .eq("id", editId)
+          .eq("owner_id", user.id)
+          .select("id")
+          .single();
+
+        listing = result.data;
+        error = result.error;
+      } else {
+        const result = await client.from("listings").insert(payload).select("id").single();
+        listing = result.data;
+        error = result.error;
+      }
+
       if (error || !listing) {
-        setMessage(humanError(error, "Обявата не беше записана. Провери данните."), "error");
+        setMessage(humanError(error, editId
+          ? "Промените не бяха записани. Съществуващата обява не е дублирана."
+          : "Обявата не беше записана. Провери данните."), "error");
         btn.disabled = false;
-        btn.textContent = "Публикувай обявата";
+        btn.textContent = editId
+          ? (admin ? "Запази и публикувай" : "Изпрати редакцията")
+          : "Публикувай обявата";
         return;
       }
 
@@ -384,9 +515,13 @@
             });
           }
         }
-        form.reset();
-        btn.textContent = "Публикувай обявата";
-        setMessage(admin ? "Обявата е публикувана." : "Обявата е изпратена и чака одобрение.", "success");
+        if (!editId) form.reset();
+        btn.textContent = editId
+          ? (admin ? "Запази и публикувай" : "Изпрати редакцията")
+          : "Публикувай обявата";
+        setMessage(editId
+          ? (admin ? "Промените са запазени и публикувани." : "Промените са изпратени и чакат одобрение.")
+          : (admin ? "Обявата е публикувана." : "Обявата е изпратена и чака одобрение."), "success");
       } catch (imgErr) {
         setMessage("Обявата е записана, но снимките не се качиха.", "error");
       }
