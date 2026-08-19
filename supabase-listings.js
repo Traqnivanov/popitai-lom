@@ -519,11 +519,29 @@
             const mime = prepared.mime || prepared.blob.type || "image/webp";
             const ext = mime === "image/png" ? "png" : mime === "image/jpeg" ? "jpg" : "webp";
             const path = `${user.id}/${listing.id}/gallery/${item.id}.${ext}`;
-            await client.storage.from(BUCKET).upload(path, prepared.blob, { cacheControl: "3600", contentType: mime, upsert: false });
-            await client.from("media").insert({
-              owner_id: user.id, entity_type: "listing", entity_id: listing.id,
-              storage_path: path, mime_type: mime, size_bytes: prepared.blob.size, status: "approved"
+            const { error: uploadError } = await client.storage.from(BUCKET).upload(
+              path,
+              prepared.blob,
+              { cacheControl: "3600", contentType: mime, upsert: false }
+            );
+
+            if (uploadError) throw uploadError;
+
+            const { error: mediaError } = await client.from("media").insert({
+              owner_id: user.id,
+              entity_type: "listing",
+              entity_id: listing.id,
+              storage_path: path,
+              mime_type: mime,
+              size_bytes: prepared.blob.size,
+              status: admin ? "approved" : "pending"
             });
+
+            if (mediaError) {
+              const { error: cleanupError } = await client.storage.from(BUCKET).remove([path]);
+              if (cleanupError) console.error("Listing image cleanup failed:", cleanupError);
+              throw mediaError;
+            }
           }
         }
         if (!editId) form.reset();
