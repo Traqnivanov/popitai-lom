@@ -39,6 +39,48 @@
   let currentProfile = null;
   let activeView = "pending";
 
+  function isAdminProfile() {
+    return currentProfile?.role === "admin" && currentProfile?.is_blocked !== true;
+  }
+
+  function roleLabel(role) {
+    return {
+      admin: "Главен администратор",
+      moderator: "Модератор",
+      user: "Потребител"
+    }[role] || "Потребител";
+  }
+
+  function userManagementActions(profile) {
+    const isSelf = profile.id === currentUser?.id;
+    const admin = isAdminProfile();
+
+    if (isSelf) {
+      return '<span class="admin-status approved">Твоят профил</span>';
+    }
+
+    if (profile.role === "admin") {
+      return '<span class="admin-status approved">Защитен администратор</span>';
+    }
+
+    const actions = [];
+
+    if (admin) {
+      if (profile.role === "moderator") {
+        actions.push(`<button class="admin-action-hide" data-admin-action="remove-moderator" data-id="${escapeHtml(profile.id)}">Премахни модератор</button>`);
+      } else if (profile.role === "user" && !profile.is_blocked) {
+        actions.push(`<button class="admin-action-secondary" data-admin-action="appoint-moderator" data-id="${escapeHtml(profile.id)}">Назначи за модератор</button>`);
+      }
+    }
+
+    const canManageBlockedState = admin || profile.role === "user";
+    if (canManageBlockedState) {
+      actions.push(`<button class="${profile.is_blocked ? "admin-action-approve" : "admin-action-delete"}" data-admin-action="${profile.is_blocked ? "unblock" : "block"}" data-id="${escapeHtml(profile.id)}">${profile.is_blocked ? "Разблокирай" : "Блокирай"}</button>`);
+    }
+
+    return actions.join("") || `<span class="admin-status">${escapeHtml(roleLabel(profile.role))}</span>`;
+  }
+
   const styles = document.createElement("style");
   styles.textContent = `
     .admin-menu button{display:flex;align-items:center;justify-content:space-between;gap:.6rem;width:100%}
@@ -125,6 +167,17 @@
   }
 
   function setupLayout() {
+    const admin = isAdminProfile();
+    const heroTitle = $(".page-hero h1");
+    const heroText = $(".page-hero p");
+    if (heroTitle) heroTitle.textContent = admin ? "Административен панел" : "Модераторски панел";
+    if (heroText) {
+      heroText.textContent = admin
+        ? "Одобрявай ново съдържание, управлявай публикуваното и следи потребителите."
+        : "Одобрявай съдържание и управлявай потока в рамките на модераторските права.";
+    }
+    document.title = `${admin ? "Административен" : "Модераторски"} панел | Попитай.Лом`;
+
     const testTools = $(".admin-test-tools");
     if (testTools) testTools.hidden = true;
 
@@ -146,7 +199,7 @@
         <button type="button" data-admin-view="listings">Обяви</button>
         <button type="button" data-admin-view="hidden">Скрити/отказани</button>
         <button type="button" data-admin-view="users">Потребители</button>
-        <button type="button" data-admin-view="contacts">Съобщения</button>`;
+        ${admin ? '<button type="button" data-admin-view="contacts">Съобщения</button>' : ""}`;
     }
 
     const content = $(".admin-content");
@@ -344,15 +397,15 @@
   async function loadUsers() {
     const { data, error } = await client.from("profiles").select("id, display_name, role, is_blocked, created_at").order("created_at", { ascending: false });
     if (error) throw error;
-    return (data || []).map((profile) => {
-      const isSelf = profile.id === currentUser.id;
-      return `<article class="admin-record admin-user-row">
-        <div><h3>${escapeHtml(profile.display_name)}</h3><small>Роля: ${escapeHtml(profile.role)} · Регистрация: ${formatDate(profile.created_at)}</small></div>
-        <div class="admin-record-actions">
-          ${isSelf ? '<span class="admin-status approved">Твоят профил</span>' : `<button class="${profile.is_blocked ? "admin-action-approve" : "admin-action-delete"}" data-admin-action="${profile.is_blocked ? "unblock" : "block"}" data-id="${escapeHtml(profile.id)}">${profile.is_blocked ? "Разблокирай" : "Блокирай"}</button>`}
+    return (data || []).map((profile) => `
+      <article class="admin-record admin-user-row">
+        <div>
+          <h3>${escapeHtml(profile.display_name)}</h3>
+          <small>Роля: ${escapeHtml(roleLabel(profile.role))} · Регистрация: ${formatDate(profile.created_at)}</small>
         </div>
-      </article>`;
-    }).join("") || '<article class="empty-card"><p>Няма потребители.</p></article>';
+        <div class="admin-record-actions">${userManagementActions(profile)}</div>
+      </article>
+    `).join("") || '<article class="empty-card"><p>Няма потребители.</p></article>';
   }
 
   async function loadView(view = activeView) {
@@ -381,7 +434,8 @@
       else if (view === "listings") container.innerHTML = await loadListingsAdmin();
       else if (view === "hidden") container.innerHTML = await loadHidden();
       else if (view === "users") container.innerHTML = await loadUsers();
-      else if (view === "contacts") container.innerHTML = await loadContacts();
+      else if (view === "contacts" && isAdminProfile()) container.innerHTML = await loadContacts();
+      else throw new Error("Нямаш достъп до този раздел.");
     } catch (error) {
       container.innerHTML = '<article class="empty-card"><p>Данните не могат да се заредят.</p></article>';
       setMessage(errorText(error), true);
@@ -459,10 +513,23 @@
       const confirmed = window.confirm("Това ще изтрие съдържанието окончателно и не може да се върне. Продължаваш ли?");
       if (!confirmed) return;
       result = await client.from(table).delete().eq("id", id);
+    } else if (action === "appoint-moderator" || action === "remove-moderator") {
+      const enabled = action === "appoint-moderator";
+      const promptText = enabled
+        ? "Да назнача ли този потребител за модератор?"
+        : "Да премахна ли модераторските права на този потребител?";
+      if (!window.confirm(promptText)) return;
+      result = await client.rpc("admin_set_moderator", {
+        p_target_id: id,
+        p_enabled: enabled
+      });
     } else if (action === "block" || action === "unblock") {
       const blocked = action === "block";
       if (blocked && !window.confirm("Да блокирам ли този потребител?")) return;
-      result = await client.from("profiles").update({ is_blocked: blocked }).eq("id", id);
+      result = await client.rpc("staff_set_user_blocked", {
+        p_target_id: id,
+        p_blocked: blocked
+      });
     } else {
       return;
     }
@@ -497,8 +564,8 @@
   }
 
   async function init() {
-    setupLayout();
     const staff = await loadAuth();
+    setupLayout();
     if (!staff) {
       $("#admin-view-content").innerHTML = '<article class="empty-card"><h3>Нямаш достъп</h3><p>Страницата е само за администратори и модератори.</p></article>';
       $$(".admin-stats, .admin-menu").forEach((element) => { element.hidden = true; });
