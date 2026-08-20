@@ -267,9 +267,10 @@
       client.from("profiles").select("id", { count: "exact", head: true }),
       client.from("questions").select("id", { count: "exact", head: true }).eq("status", "approved"),
       client.from("answers").select("id", { count: "exact", head: true }).eq("status", "approved"),
-      Promise.all(pendingSources.map((table) =>
-        client.from(table).select("id", { count: "exact", head: true }).eq("status", "pending")
-      ))
+      Promise.all(pendingSources.map((table) => {
+        const primaryKey = table === "business_expanded_profile_drafts" ? "business_id" : "id";
+        return client.from(table).select(primaryKey, { count: "exact", head: true }).eq("status", "pending");
+      }))
     ]);
 
     const pending = pendingResults.reduce((total, result) => total + (result.count || 0), 0);
@@ -585,7 +586,7 @@
     const viewButton = event.target.closest("[data-admin-view]");
     if (viewButton) {
       event.preventDefault();
-      $(".admin-menu button").forEach((item) => item.classList.toggle("active", item === viewButton));
+      $$(".admin-menu button").forEach((item) => item.classList.toggle("active", item === viewButton));
       await loadView(viewButton.dataset.adminView);
       return;
     }

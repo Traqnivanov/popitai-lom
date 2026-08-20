@@ -1,126 +1,98 @@
 <!DOCTYPE html>
 <html lang="bg">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Магазини и покупки | Попитай.Лом</title>
-  <meta name="description" content="Местни магазини, материали, техника, мебели и ежедневни покупки.">
-  <meta name="theme-color" content="#0b5fd7">
-  <link rel="stylesheet" href="style.css?v=20260805-0736">
-  <link rel="icon" href="assets/favicon-96.png" type="image/png">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Магазини и покупки в Лом | Попитай.Лом</title>
+<meta name="description" content="Намери магазин в Лом според това какво ти трябва.">
+<meta name="theme-color" content="#0b5fd7">
+<link rel="stylesheet" href="style.css?v=20260820-1930">
+<link rel="icon" href="assets/favicon-96.png" type="image/png">
+<style>
+.shops-page{--b:#0b5fd7;--g:#c6922b;--ink:#152235;--mut:#66768b;--line:#dce5ef;--bg:#f5f7fa;background:var(--bg);color:var(--ink)}
+.shops-page *{box-sizing:border-box}.shops-page .section-container{max-width:1080px;margin:auto}
+.shops-hero{padding:34px 0 22px;background:radial-gradient(circle at 88% 14%,rgba(198,146,43,.15),transparent 28%),linear-gradient(#fff,#f8fbff)}
+.kicker{display:inline-flex;gap:7px;align-items:center;color:#775a20;font-weight:850;font-size:.84rem}.kicker:before{content:"";width:22px;height:3px;border-radius:9px;background:var(--g)}
+.title-row{display:flex;gap:12px;align-items:center;margin-top:10px}.title-icon{display:grid;place-items:center;width:52px;height:52px;flex:0 0 52px;border-radius:16px;background:#fff8e8;border:1px solid #f0ddb6;color:#8b6218}
+.title-icon svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.8}.shops-hero h1{margin:0;font-size:clamp(1.8rem,4.4vw,2.6rem);letter-spacing:-.035em}.shops-hero p{max-width:760px;margin:12px 0 0;color:var(--mut);line-height:1.55}
+.shop-main{padding:14px 0 34px}.tabs{display:flex;gap:8px;overflow:auto;padding:2px 0 11px}.tab,.sub{flex:0 0 auto;min-height:42px;border:1px solid #cbd8e8;border-radius:999px;background:#fff;color:#34516f;font:inherit;font-weight:850;padding:0 14px;cursor:pointer}
+.tab[aria-selected=true]{background:var(--b);border-color:var(--b);color:#fff}.panel{overflow:hidden;border:1px solid var(--line);border-radius:22px;background:#fff;box-shadow:0 12px 28px rgba(22,41,66,.05)}
+.panel-head{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;padding:18px;background:linear-gradient(120deg,#fff 60%,#fff8e8);border-bottom:1px solid var(--line)}
+.panel-head small{display:block;color:var(--g);font-weight:900;font-size:.76rem;text-transform:uppercase;letter-spacing:.07em}.panel-head h2{margin:3px 0 0;font-size:1.3rem}.panel-head p{margin:5px 0 0;color:var(--mut);font-size:.9rem}
+.add{min-height:44px;border:0;border-radius:12px;background:var(--b);color:#fff;font:inherit;font-weight:850;padding:0 15px;cursor:pointer}.add[hidden]{display:none}
+.toolbar{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:13px 18px 0}.search{width:100%;height:44px;border:1px solid #ccd8e5;border-radius:12px;padding:0 13px;font:inherit}.count{color:var(--mut);font-size:.88rem;font-weight:750}
+.subs[hidden]{display:none}.subs{display:flex;gap:7px;overflow:auto;padding:11px 18px 4px}.sub{min-height:36px;font-size:.82rem;background:#f9fbfd}.sub[aria-selected=true]{background:#eef5ff;color:var(--b);border-color:#b6cae4}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;padding:14px 18px 18px}.card{display:flex;flex-direction:column;padding:15px;border:1px solid var(--line);border-radius:17px;background:#fff;box-shadow:0 7px 18px rgba(25,45,75,.035)}
+.card-top{display:flex;justify-content:space-between;gap:10px}.card h3{margin:0;font-size:1.04rem}.kind{margin:7px 0 0;font-size:.9rem;font-weight:800;color:#354b64}
+.meta{display:grid;gap:5px;margin-top:10px;color:var(--mut);font-size:.89rem}.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.tag{padding:4px 7px;border-radius:7px;background:#f3f6f9;color:#53667d;font-size:.76rem;font-weight:750}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto;padding-top:13px}.act{min-height:39px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #ccd9e8;border-radius:10px;background:#fff;color:#2e5d91;text-decoration:none;font:inherit;font-size:.84rem;font-weight:850;padding:0 11px;cursor:pointer}.act.primary{background:var(--b);border-color:var(--b);color:#fff}
+.empty{grid-column:1/-1;padding:34px 16px;text-align:center;border:1px dashed #cbd7e4;border-radius:15px;color:var(--mut);background:#fbfcfe}
+.modal[hidden]{display:none}.modal{position:fixed;inset:0;z-index:1200;display:grid;place-items:center;padding:16px}.back{position:absolute;inset:0;background:rgba(13,27,45,.56);backdrop-filter:blur(3px)}.dialog{position:relative;width:min(590px,100%);max-height:86vh;overflow:auto;border-radius:20px;background:#fff;box-shadow:0 24px 70px rgba(12,31,57,.28)}
+.mhead{display:flex;justify-content:space-between;gap:10px;padding:18px;border-bottom:1px solid var(--line)}.mhead h2{margin:0;font-size:1.18rem}.mhead p{margin:5px 0 0;color:var(--mut);font-size:.86rem}.x{width:38px;height:38px;border:0;border-radius:10px;background:#f1f4f7;font-size:1.3rem}
+.form{display:grid;gap:11px;padding:16px 18px 18px}.field{display:grid;gap:5px}.field label{font-size:.84rem;font-weight:850}.field input,.field select,.field textarea{width:100%;border:1px solid #cbd7e4;border-radius:11px;padding:10px 11px;font:inherit;background:#fff}.field textarea{min-height:88px;resize:vertical}.help{margin:0;color:var(--mut);font-size:.78rem}.status{display:none;padding:10px;border-radius:10px;background:#eef5ff;color:#305d8d;font-size:.82rem}.status.show{display:block}.factions{display:flex;justify-content:flex-end;gap:8px}.factions button{min-height:42px;border-radius:11px;padding:0 14px;font:inherit;font-weight:850}.send{border:0;background:var(--b);color:#fff}.cancel{border:1px solid #ccd7e4;background:#fff;color:#4b6077}
+.shops-page :focus-visible{outline:3px solid rgba(11,95,215,.32);outline-offset:2px}
+@media(max-width:760px){.panel{border-radius:18px}.panel-head{grid-template-columns:1fr;padding:15px}.add{width:100%}.toolbar{grid-template-columns:1fr;padding:11px 15px 0}.count{display:none}.subs{padding-inline:15px}.grid{grid-template-columns:1fr;padding:12px 15px 15px}.actions .act{flex:1 1 auto}.shops-hero{padding-top:24px}}
+</style>
 </head>
-<body class="">
-
-  <a class="skip-link" href="#main-content">Към основното съдържание</a>
-  <header class="site-header" id="site-header">
-    <div class="header-inner">
-      
-      <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
-        <span class="brand-mark" aria-hidden="true">
-          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
-        </span>
-        <span class="brand-text">
-          <strong>Попитай<span>.Лом</span></strong>
-          <small>Попитай. Намери. Препоръчай.</small>
-        </span>
-      </a>
-    
-      <nav class="main-nav" id="main-nav" aria-label="Главна навигация"><a class="" href="index.html">Начало</a><a class="active" href="kategorii.html">Категории</a><a class="" href="firmi.html">Фирми</a><a class="" href="vaprosi.html">Въпроси</a><a class="" href="statii.html">Статии</a></nav>
-      <div class="header-actions">
-        <a class="login-link" href="vhod.html">Вход</a>
-        <a class="ask-button" href="nov-vapros.html">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-          Задай въпрос
-        </a>
-        <button class="menu-button" id="menu-button" type="button" aria-label="Отвори менюто" aria-expanded="false" aria-controls="main-nav">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
-    </div>
-  </header>
+<body class="shops-page">
+<a class="skip-link" href="#main-content">Към основното съдържание</a>
+<header class="site-header" id="site-header"><div class="header-inner">
+<a class="brand" href="index.html" aria-label="Попитай Лом – начало"><span class="brand-mark" aria-hidden="true"><img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt=""></span><span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span></a>
+<nav class="main-nav" id="main-nav" aria-label="Главна навигация"><a href="index.html">Начало</a><a href="info.html">Инфо Лом</a><a class="active" href="kategorii.html">Категории</a><a href="firmi.html">Фирми</a><a href="obyavi.html">Обяви</a><a href="vaprosi.html">Въпроси</a><a href="statii.html">Статии</a></nav>
+<div class="header-actions"><a class="login-link" href="vhod.html">Вход</a><a class="ask-button" href="nov-vapros.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Задай въпрос</a><button class="menu-button" id="menu-button" type="button" aria-label="Отвори менюто" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span></button></div>
+</div></header>
 
 <main id="main-content">
-<section class="page-hero">
-  <div class="section-container">
-    <span class="section-kicker">Категория</span>
-    <div class="page-hero-title-row"><span class="category-symbol category-symbol--sand" aria-hidden="true"><svg class="brand-category-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l1 13H5L6 8Z"/><path class="icon-accent" d="M9 9V6a3 3 0 0 1 6 0v3"/></svg></span><h1>Магазини и покупки</h1></div>
-    <p>Местни магазини, материали, техника, мебели и ежедневни покупки.</p>
-    <a class="primary-link-button" href="nov-vapros.html?category=magazini">Задай въпрос</a>
-  </div>
-</section>
+<nav class="site-breadcrumbs section-container" aria-label="Навигационна пътека">
+<ol><li><a href="index.html">Начало</a></li><li><a href="kategorii.html">Категории</a></li><li><span aria-current="page">Магазини и покупки</span></li></ol>
+</nav>
+<section class="shops-hero"><div class="section-container">
+<span class="kicker">Категория</span>
+<div class="title-row"><span class="title-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 13H6L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg></span><h1>Намери магазин в Лом</h1></div>
+<p>Избери какво търсиш и намери подходящ магазин в Лом.</p>
+</div></section>
 
-<section class="content-section">
-  <div class="section-container two-column-layout">
-    <div>
-      <div class="block-heading"><h2>Подраздели</h2></div>
-      <div class="subcategory-grid"><a class="subcategory-card" href="tarsene.html?q=Хранителни"><strong>Хранителни</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Строителни"><strong>Строителни</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Техника"><strong>Техника</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Мебели"><strong>Мебели</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Облекло"><strong>Облекло</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Домашни потреби"><strong>Домашни потреби</strong><span>Въпроси и фирми</span></a></div>
-      <div class="block-heading spaced"><h2>Последни въпроси</h2><a href="vaprosi.html">Всички въпроси</a></div>
-      <div class="stack-list category-question-list" data-question-category="Магазини и покупки">
-        <article class="empty-card">
-          <p>Все още няма публикувани въпроси в тази категория.</p>
-          <a class="primary-link-button" href="nov-vapros.html?category=magazini">Задай въпрос</a>
-        </article>
-      </div>
-    </div>
-    <aside class="side-panel">
-      <h2>Търси в категорията</h2>
-      <form class="side-search" action="tarsene.html">
-        <input type="search" name="q" placeholder="Какво търсиш?">
-        <button type="submit">Търси</button>
-      </form>
-      <h2>Полезно</h2>
-      <a href="pravila.html">Как да разпознаеш надеждна препоръка</a>
-      <a href="signal.html">Подай сигнал за нередност</a>
-    </aside>
-  </div>
+<section class="shop-main"><div class="section-container">
+<div class="tabs" role="tablist">
+<button class="tab" id="tab-food" role="tab" aria-selected="true" aria-controls="shops-panel" type="button" data-cat="food">Хранителни</button><button class="tab" id="tab-construction" role="tab" aria-selected="false" aria-controls="shops-panel" type="button" data-cat="construction">Строителни</button><button class="tab" id="tab-tech" role="tab" aria-selected="false" aria-controls="shops-panel" type="button" data-cat="tech">Техника</button><button class="tab" id="tab-furniture" role="tab" aria-selected="false" aria-controls="shops-panel" type="button" data-cat="furniture">Мебели</button><button class="tab" id="tab-clothes" role="tab" aria-selected="false" aria-controls="shops-panel" type="button" data-cat="clothes">Дрехи</button><button class="tab" id="tab-home" role="tab" aria-selected="false" aria-controls="shops-panel" type="button" data-cat="home">Дом</button>
+</div>
+
+<section class="panel" id="shops-panel" role="tabpanel" aria-labelledby="tab-food">
+<div class="panel-head"><div><small id="pk">Хранителни</small><h2 id="pt">Хранителни магазини в Лом</h2><p id="pc">Супермаркети и местни хранителни магазини.</p></div><button class="add" id="addBtn" type="button" hidden>＋ Добави хранителен магазин</button></div>
+<div class="toolbar"><input class="search" id="search" type="search" aria-label="Търси магазин" placeholder="Търси име, материал или адрес…"><span class="count" id="count" aria-live="polite"></span></div>
+<div class="subs" id="subs" hidden><button class="sub" type="button" data-sub="all" aria-selected="true">Всички</button><button class="sub" type="button" data-sub="materials" aria-selected="false">Строителни материали</button><button class="sub" type="button" data-sub="metal" aria-selected="false">Метали и железария</button><button class="sub" type="button" data-sub="paint" aria-selected="false">Бои и мазилки</button><button class="sub" type="button" data-sub="bath" aria-selected="false">Бани и санитария</button></div>
+<div class="grid" id="shops-catalog-root"></div>
 </section>
+</div></section>
 </main>
 
-  <footer class="site-footer">
-    <div class="section-container footer-main">
-      <div class="footer-brand">
-        
-      <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
-        <span class="brand-mark" aria-hidden="true">
-          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
-        </span>
-        <span class="brand-text">
-          <strong>Попитай<span>.Лом</span></strong>
-          <small>Попитай. Намери. Препоръчай.</small>
-        </span>
-      </a>
-    
-        <p>Местната общност на Лом за препоръки, услуги и полезна информация.</p>
-      </div>
-      <div class="footer-column">
-        <h2>Разгледай</h2>
-        <a href="kategorii.html">Категории</a><a href="vaprosi.html">Въпроси</a>
-        <a href="firmi.html">Фирми</a><a href="statii.html">Статии</a>
-      </div>
-      <div class="footer-column">
-        <h2>За общността</h2>
-        <a href="za-nas.html">За сайта</a><a href="pravila.html">Правила</a>
-        <a href="kontakti.html">Контакти</a><a href="signal.html">Подай сигнал</a>
-      </div>
-      <div class="footer-column">
-        <h2>Правна информация</h2>
-        <a href="poveritelnost.html">Поверителност</a><a href="uslovia.html">Условия за ползване</a>
-        <a href="biskvitki.html">Бисквитки</a>
-      </div>
-    </div>
-    <div class="section-container footer-bottom">
-      <p>© <span id="current-year">2026</span> Попитай.Лом. Всички права запазени.</p>
-      <p>Създадено за хората от Лом.</p>
-    </div>
-  </footer>
-  <nav class="mobile-bottom-nav" aria-label="Мобилна навигация"><a class="" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>Начало</span></a><a class="active" href="kategorii.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Категории</span></a><a class="mobile-ask" href="nov-vapros.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Въпрос</span></a><a class="" href="vaprosi.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg><span>Въпроси</span></a><a class="" href="profil.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профил</span></a></nav>
-  <button class="back-to-top" id="back-to-top" type="button" aria-label="Към началото">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
-  </button>
+<div class="modal" id="addModal" hidden><div class="back" data-close></div><section class="dialog" role="dialog" aria-modal="true" aria-labelledby="addTitle"><div class="mhead"><div><h2 id="addTitle">Добави хранителен магазин</h2><p>Предложението първо се проверява и одобрява.</p></div><button class="x" data-close type="button" aria-label="Затвори">×</button></div>
+<form class="form" id="addForm">
+<div class="field"><label for="shopName">Име на магазина *</label><input id="shopName" name="name" maxlength="120" required></div>
+<div class="field"><label for="shopCategory">Категория *</label><select id="shopCategory" name="category" required><option value="food">Хранителни</option><option value="construction">Строителни</option><option value="tech">Техника</option><option value="furniture">Мебели</option><option value="clothes">Дрехи</option><option value="home">Дом</option></select></div>
+<div class="field"><label for="shopPhone">Телефон</label><input id="shopPhone" name="phone" type="tel" autocomplete="tel" maxlength="40"></div>
+<div class="field"><label for="shopAddress">Адрес в Лом *</label><input id="shopAddress" name="address" maxlength="200" required></div>
+<div class="field"><label for="shopHours">Работно време</label><input id="shopHours" name="working_hours" maxlength="120" placeholder="Например: Пон–Пет 08:00–18:00"></div>
+<div class="field"><label for="shopOffer">Какво предлага *</label><textarea id="shopOffer" name="offer" maxlength="500" required placeholder="Например: хранителни стоки, напитки и домашни потреби"></textarea></div>
+<div class="field"><label for="shopSource">Източник на информацията *</label><select id="shopSource" name="source_type" required><option value="">Избери</option><option value="owner">Собственик / управител</option><option value="employee">Служител</option><option value="visitor">Клиент / посетител</option><option value="public">Публичен източник</option><option value="other">Друго</option></select></div>
+<div class="field"><label for="shopSourceDetails">Уточнение за източника <small style="color:#888;font-weight:400">(по желание)</small></label><input id="shopSourceDetails" name="source_details" maxlength="300" placeholder="Например: официална Facebook страница, сайт, информация на място или от собственик"></div>
+<p class="help">Добавянето не е директно — минава през проверка и одобрение.</p>
+<div class="status" id="addStatus" role="status" aria-live="polite"></div>
+<div class="factions"><button class="cancel" data-close type="button">Отказ</button><button class="send" type="submit">Изпрати за преглед</button></div>
+</form></section></div>
 
-<script src="image-upload.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-  <script src="supabase-config.js?v=20260805-2312" defer></script>
-  <script src="script.js?v=20260805-2312" defer></script>
-</body>
-</html>
+<footer class="site-footer">
+<div class="section-container footer-main">
+<div class="footer-brand"><a class="brand" href="index.html" aria-label="Попитай Лом – начало"><span class="brand-mark" aria-hidden="true"><img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt=""></span><span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span></a><p>Местната общност на Лом за препоръки, услуги и полезна информация.</p></div>
+<div class="footer-column"><h2>Разгледай</h2><a href="kategorii.html">Категории</a><a href="vaprosi.html">Въпроси</a><a href="firmi.html">Фирми</a><a href="statii.html">Статии</a></div>
+<div class="footer-column"><h2>За общността</h2><a href="za-nas.html">За сайта</a><a href="pravila.html">Правила</a><a href="kontakti.html">Контакти</a><a href="signal.html">Подай сигнал</a></div>
+<div class="footer-column"><h2>Правна информация</h2><a href="poveritelnost.html">Поверителност</a><a href="uslovia.html">Условия за ползване</a><a href="biskvitki.html">Бисквитки</a></div>
+</div>
+<div class="section-container footer-bottom"><p>© <span id="current-year">2026</span> Попитай.Лом. Всички права запазени.</p><p>Създадено за хората от Лом.</p></div>
+</footer>
+<nav class="mobile-bottom-nav" aria-label="Мобилна навигация"><a href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>Начало</span></a><a class="active" href="kategorii.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Категории</span></a><a class="mobile-ask" href="nov-vapros.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Въпрос</span></a><a href="vaprosi.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg><span>Въпроси</span></a><a href="profil.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профил</span></a></nav>
+<button class="back-to-top" id="back-to-top" type="button" aria-label="Към началото"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg></button>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+<script src="supabase-config.js?v=20260820-1840" defer></script>
+<script src="script.js?v=20260820-1833" defer></script>
+<script src="shops-catalog-v2.js?v=20260821-0040" defer></script>
+</body></html>
