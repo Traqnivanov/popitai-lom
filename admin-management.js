@@ -84,6 +84,10 @@
   const styles = document.createElement("style");
   styles.textContent = `
     .admin-menu button{display:flex;align-items:center;justify-content:space-between;gap:.6rem;width:100%}
+    .admin-menu-group{display:grid;gap:4px;width:100%}
+    .admin-menu-group+.admin-menu-group{padding-top:10px;border-top:1px solid #d9e2ef}
+    .admin-menu-group-title{margin:0;padding:0 10px 4px;color:#687386;font-size:.72rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
+    .admin-menu-group-items{display:grid;gap:4px}
     .admin-badge{display:inline-flex;min-width:1.55rem;height:1.55rem;align-items:center;justify-content:center;border-radius:999px;background:#c62828;color:#fff;font-size:.76rem;font-weight:900;padding:0 .38rem}
     .admin-badge[hidden]{display:none}
     .admin-panel-message{padding:.85rem 1rem;border-radius:12px;background:#eef5ff;border:1px solid #c8daf5;color:#173d75;margin:0 0 1rem}
@@ -193,13 +197,28 @@
     const menu = $(".admin-menu");
     if (menu) {
       menu.innerHTML = `
-        <button class="active" type="button" data-admin-view="pending">Чакащи <span class="admin-badge" id="admin-menu-badge" hidden>0</span></button>
-        <button type="button" data-admin-view="questions">Публикувани въпроси</button>
-        <button type="button" data-admin-view="answers">Публикувани отговори</button>
-        <button type="button" data-admin-view="listings">Обяви</button>
-        <button type="button" data-admin-view="hidden">Скрити/отказани</button>
-        <button type="button" data-admin-view="users">Потребители</button>
-        ${admin ? '<button type="button" data-admin-view="contacts">Съобщения</button>' : ""}`;
+        <section class="admin-menu-group" aria-labelledby="admin-menu-review-title">
+          <h2 class="admin-menu-group-title" id="admin-menu-review-title">За преглед</h2>
+          <div class="admin-menu-group-items" data-admin-menu-group-items="review">
+            <button class="active" type="button" data-admin-view="pending">Чакащи <span class="admin-badge" id="admin-menu-badge" hidden>0</span></button>
+          </div>
+        </section>
+        <section class="admin-menu-group" aria-labelledby="admin-menu-content-title">
+          <h2 class="admin-menu-group-title" id="admin-menu-content-title">Съдържание</h2>
+          <div class="admin-menu-group-items" data-admin-menu-group-items="content">
+            <button type="button" data-admin-view="questions">Публикувани въпроси</button>
+            <button type="button" data-admin-view="answers">Публикувани отговори</button>
+            <button type="button" data-admin-view="listings">Обяви</button>
+            <button type="button" data-admin-view="hidden">Скрити/отказани</button>
+          </div>
+        </section>
+        <section class="admin-menu-group" aria-labelledby="admin-menu-management-title">
+          <h2 class="admin-menu-group-title" id="admin-menu-management-title">Управление</h2>
+          <div class="admin-menu-group-items" data-admin-menu-group-items="management">
+            <button type="button" data-admin-view="users">Потребители</button>
+            ${admin ? '<button type="button" data-admin-view="contacts">Съобщения</button>' : ""}
+          </div>
+        </section>`;
     }
 
     const content = $(".admin-content");
@@ -566,7 +585,7 @@
     const viewButton = event.target.closest("[data-admin-view]");
     if (viewButton) {
       event.preventDefault();
-      $$("[data-admin-view]").forEach((item) => item.classList.toggle("active", item === viewButton));
+      $(".admin-menu button").forEach((item) => item.classList.toggle("active", item === viewButton));
       await loadView(viewButton.dataset.adminView);
       return;
     }

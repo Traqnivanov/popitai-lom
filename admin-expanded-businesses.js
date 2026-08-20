@@ -59,7 +59,7 @@
     button.type = "button";
     button.dataset.expandedBusinessesView = "true";
     button.textContent = "Разширени профили";
-    menu.append(button);
+    (menu.querySelector('[data-admin-menu-group-items="review"]') || menu).append(button);
   }
 
   function draftDetails(draft) {
