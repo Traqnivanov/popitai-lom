@@ -95,7 +95,7 @@
       b.type = "button";
       b.dataset.infoAdmin = "1";
       b.addEventListener("click",open);
-      menu.appendChild(b);
+      (menu.querySelector('[data-admin-menu-group-items="content"]') || menu).appendChild(b);
     }
     if(!b.dataset.infoPendingLabel) b.textContent = "Инфо Лом";
   }

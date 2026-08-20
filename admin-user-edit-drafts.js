@@ -46,7 +46,7 @@
     button.type = "button";
     button.dataset.userEditsView = "true";
     button.innerHTML = 'Потребителски редакции <span class="admin-badge" data-user-edits-badge hidden>0</span>';
-    menu.append(button);
+    (menu.querySelector('[data-admin-menu-group-items="review"]') || menu).append(button);
   }
 
   function fieldRows(draft) {
