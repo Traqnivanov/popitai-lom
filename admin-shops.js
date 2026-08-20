@@ -33,8 +33,6 @@
   };
 
   let currentUser = null;
-  let shopPendingCount = 0;
-  let lastBasePending = null;
 
   const formatDate = value => {
     if (!value) return "";
@@ -84,23 +82,6 @@
     return button;
   }
 
-  function applyGlobalPendingCount() {
-    const countEl = document.getElementById("admin-pending-count");
-    const badge = document.getElementById("admin-menu-badge");
-    if (!countEl) return;
-
-    const shown = Number.parseInt(countEl.textContent || "0", 10) || 0;
-    if (lastBasePending === null || shown !== lastBasePending + shopPendingCount) {
-      lastBasePending = shown;
-    }
-    const total = (lastBasePending || 0) + shopPendingCount;
-    countEl.textContent = String(total);
-    if (badge) {
-      badge.textContent = String(total);
-      badge.hidden = total === 0;
-    }
-  }
-
   async function refreshCount() {
     const { count, error } = await client
       .from("shops")
@@ -110,14 +91,12 @@
       console.warn("Магазини: броячът не се зареди.", error);
       return;
     }
-    shopPendingCount = count || 0;
     const button = ensureButton();
     const badge = button?.querySelector("[data-shops-badge]");
     if (badge) {
-      badge.textContent = String(shopPendingCount);
-      badge.hidden = shopPendingCount === 0;
+      badge.textContent = String(count || 0);
+      badge.hidden = (count || 0) === 0;
     }
-    applyGlobalPendingCount();
   }
 
   function statusBadge(status) {
@@ -252,12 +231,6 @@
     if (!ready) return;
     ensureButton();
     await refreshCount();
-
-    // Админ панелът обновява общия брояч веднъж в минута.
-    // Тук синхронизираме само добавката от „Магазини“ със същия лек ритъм.
-    window.setInterval(() => {
-      window.setTimeout(refreshCount, 600);
-    }, 60000);
   }
 
   if (document.readyState === "loading") {
