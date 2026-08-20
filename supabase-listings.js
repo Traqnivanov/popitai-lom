@@ -1,7 +1,7 @@
 (() => {
   const ADMIN_ID = "598d6626-25ed-450f-87a9-e83f34f641c4";
   const BUCKET = "business-media";
-  const MAX_LISTINGS = 5;
+  const MONTHLY_LIMIT = 5;
 
   function $(sel) { return document.querySelector(sel); }
   function $$(sel) { return document.querySelectorAll(sel); }
@@ -66,6 +66,8 @@
   function humanError(err, fallback) {
     if (!err) return fallback;
     const m = err.message || "";
+    if (m.includes("Достигнат е месечният лимит")) return m;
+    if (m.includes("Избраната фирма не е твоя или не е одобрена")) return m;
     if (m.includes("new row violates")) return "Не отговаря на изискванията. Провери данните.";
     return fallback;
   }
@@ -94,6 +96,12 @@
     const { data } = await client.auth.getUser();
     authUser = data?.user || null;
     isAdmin = authUser?.id === ADMIN_ID;
+  }
+
+  async function getOwnListingQuota() {
+    const { data, error } = await client.rpc("get_own_listing_quota");
+    if (error) throw error;
+    return data || null;
   }
 
   // ─── Listing card ───────────────────────────────────────────────────────────
@@ -290,6 +298,45 @@
       window.PopitaiImages.setMaxFiles("listing-image-uploader", isAdmin ? 20 : 6);
     }
 
+    const publisherSection = $("#listing-publisher-section");
+    const publisherSelect = $("#listing-publisher");
+    const quotaInfo = $("#listing-quota-info");
+    let listingQuota = null;
+
+    function selectedQuota() {
+      if (!listingQuota || !publisherSelect) return null;
+      if (!publisherSelect.value) return listingQuota.personal || null;
+      return (listingQuota.businesses || []).find(
+        (business) => business.id === publisherSelect.value
+      ) || null;
+    }
+
+    function updateQuotaInfo() {
+      if (!quotaInfo || !publisherSelect || !listingQuota) return;
+      const quota = selectedQuota();
+      const label = publisherSelect.value ? "Фирмени обяви" : "Лични обяви";
+      quotaInfo.textContent = quota
+        ? `${label}: остават ${quota.remaining} от ${MONTHLY_LIMIT} за този месец.`
+        : "";
+    }
+
+    if (authUser && !isAdmin && publisherSelect && publisherSection) {
+      try {
+        listingQuota = await getOwnListingQuota();
+        publisherSelect.innerHTML = '<option value="">Лична обява</option>' +
+          (listingQuota.businesses || []).map((business) =>
+            `<option value="${escHtml(business.id)}">${escHtml(business.name)}</option>`
+          ).join("");
+        publisherSection.hidden = false;
+        publisherSelect.addEventListener("change", updateQuotaInfo);
+        updateQuotaInfo();
+      } catch (_) {
+        setMessage("Квотата за обяви не може да се зареди. Опитай отново.", "error");
+        setFormLocked(true);
+        return;
+      }
+    }
+
     // Live EUR → BGN калкулатор
     const priceInput = $("#listing-price");
     const priceBgn = $("#listing-price-bgn");
@@ -399,7 +446,7 @@
       }
 
       const { data: item, error } = await client.from("listings")
-        .select("id, owner_id, author_id, title, category, subcategory, listing_type, description, price, price_negotiable, price_free, phone, city, street, status, is_owner_admin, is_urgent, is_reduced, is_boosted, is_highlighted, show_stats, show_contact_buttons")
+        .select("id, owner_id, author_id, business_id, title, category, subcategory, listing_type, description, price, price_negotiable, price_free, phone, city, street, status, is_owner_admin, is_urgent, is_reduced, is_boosted, is_highlighted, show_stats, show_contact_buttons")
         .eq("id", editId)
         .maybeSingle();
 
@@ -427,6 +474,25 @@
       }
 
       const source = editDraft?.payload || item;
+
+      if (!isAdmin && publisherSelect) {
+        if (item.business_id &&
+            !Array.from(publisherSelect.options).some((option) => option.value === item.business_id)) {
+          const { data: business } = await client.from("businesses")
+            .select("id, name")
+            .eq("id", item.business_id)
+            .eq("owner_id", authUser.id)
+            .maybeSingle();
+          if (business) {
+            publisherSelect.insertAdjacentHTML(
+              "beforeend",
+              `<option value="${escHtml(business.id)}">${escHtml(business.name)}</option>`
+            );
+          }
+        }
+        publisherSelect.value = item.business_id || "";
+        updateQuotaInfo();
+      }
 
       if ($("#listing-title")) $("#listing-title").value = source.title || "";
       if (catSelect) catSelect.value = source.category || "";
@@ -466,6 +532,7 @@
       }
       editReady = true;
       setFormLocked(false);
+      if (publisherSelect) publisherSelect.disabled = true;
       if (submitButton) {
         submitButton.textContent = isAdmin ? "Запази и публикувай" : "Изпрати редакцията";
       }
@@ -531,14 +598,17 @@
 
       const admin = user.id === ADMIN_ID;
 
-      // Лимит 5 за потребители — не блокира редакция на съществуваща обява
+      // Редакциите не използват месечна квота. Новите обяви се
+      // проверяват окончателно от защитения trigger в Supabase.
       if (!admin && !editId) {
-        const { count } = await client.from("listings")
-          .select("id", { count: "exact", head: true })
-          .eq("owner_id", user.id)
-          .eq("status", "approved");
-        if ((count || 0) >= MAX_LISTINGS) {
-          setMessage(`Достигнат е лимитът от ${MAX_LISTINGS} активни обяви.`, "error");
+        const quota = selectedQuota();
+        if (!quota || quota.remaining <= 0) {
+          setMessage(
+            publisherSelect?.value
+              ? `Достигнат е месечният лимит от ${MONTHLY_LIMIT} обяви за тази фирма.`
+              : `Достигнат е месечният лимит от ${MONTHLY_LIMIT} лични обяви.`,
+            "error"
+          );
           btn.disabled = false;
           btn.textContent = "Публикувай обявата";
           return;
@@ -559,6 +629,7 @@
       const payload = {
         owner_id: user.id,
         author_id: user.id,
+        business_id: admin ? null : (publisherSelect?.value || null),
         currency: "евро",
         title: $("#listing-title")?.value.trim(),
         category: $("#listing-category")?.value,
@@ -589,6 +660,7 @@
           const updatePayload = { ...payload };
           delete updatePayload.owner_id;
           delete updatePayload.author_id;
+          delete updatePayload.business_id;
           delete updatePayload.is_owner_admin;
 
           updatePayload.status = "approved";
@@ -845,7 +917,7 @@
     }
 
     container.innerHTML = `
-      <p style="margin:0 0 12px;font-size:13px;color:#59657a;font-weight:700">${activeCount} активни от ${MAX_LISTINGS} позволени</p>
+      <p style="margin:0 0 12px;font-size:13px;color:#59657a;font-weight:700">${activeCount} активни обяви</p>
       ${items.map(item => {
         const isExpired = item.expires_at && daysLeft(item.expires_at) === 0;
         const days = item.expires_at ? daysLeft(item.expires_at) : null;
