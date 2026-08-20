@@ -15,24 +15,14 @@
   <header class="site-header" id="site-header">
     <div class="header-inner">
       <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
-        <span class="brand-mark" aria-hidden="true">
-          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
-        </span>
-        <span class="brand-text">
-          <strong>Попитай<span>.Лом</span></strong>
-          <small>Попитай. Намери. Препоръчай.</small>
-        </span>
+        <span class="brand-mark" aria-hidden="true"><img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt=""></span>
+        <span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span>
       </a>
       <nav class="main-nav" id="main-nav" aria-label="Главна навигация"><a class="" href="index.html">Начало</a><a class="" href="info.html">Инфо Лом</a><a class="active" href="kategorii.html">Категории</a><a class="" href="firmi.html">Фирми</a><a class="" href="obyavi.html">Обяви</a><a class="" href="vaprosi.html">Въпроси</a><a class="" href="statii.html">Статии</a></nav>
       <div class="header-actions">
         <a class="login-link" href="vhod.html">Вход</a>
-        <a class="ask-button" href="nov-vapros.html">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-          Задай въпрос
-        </a>
-        <button class="menu-button" id="menu-button" type="button" aria-label="Отвори менюто" aria-expanded="false" aria-controls="main-nav">
-          <span></span><span></span><span></span>
-        </button>
+        <a class="ask-button" href="nov-vapros.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Задай въпрос</a>
+        <button class="menu-button" id="menu-button" type="button" aria-label="Отвори менюто" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span></button>
       </div>
     </div>
   </header>
@@ -69,13 +59,16 @@
         <a class="primary-link-button" href="obyavi.html">Към Обяви</a>
       </article>
 
+      <div class="block-heading spaced"><h2>Местни фирми и услуги</h2><a href="firmi.html">Всички фирми</a></div>
+      <!-- Вътрешната фирмена категория остава непроменена, защото Фирми е LOCKED. -->
+      <div class="stack-list" data-category-businesses="Работа и услуги" data-limit="6">
+        <article class="empty-card"><p>Зареждане на фирмите…</p></article>
+      </div>
+
       <div class="block-heading spaced"><h2>Последни въпроси</h2><a href="vaprosi.html">Всички въпроси</a></div>
       <!-- Вътрешната стойност остава за compatibility със съществуващите въпроси. -->
-      <div class="stack-list category-question-list" data-question-category="Работа и услуги">
-        <article class="empty-card">
-          <p>Все още няма публикувани въпроси в тази категория.</p>
-          <a class="primary-link-button" href="nov-vapros.html?category=rabota">Задай въпрос</a>
-        </article>
+      <div class="stack-list" data-category-questions="Работа и услуги" data-limit="4">
+        <article class="empty-card"><p>Зареждане на въпросите…</p></article>
       </div>
     </div>
     <aside class="side-panel">
@@ -93,26 +86,21 @@
 </section>
 </main>
 
-  <footer class="site-footer">
-    <div class="section-container footer-main">
-      <div class="footer-brand">
-        <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
-          <span class="brand-mark" aria-hidden="true"><img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt=""></span>
-          <span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span>
-        </a>
-        <p>Местната общност на Лом за препоръки, услуги и полезна информация.</p>
-      </div>
-      <div class="footer-column"><h2>Разгледай</h2><a href="kategorii.html">Категории</a><a href="vaprosi.html">Въпроси</a><a href="firmi.html">Фирми</a><a href="statii.html">Статии</a></div>
-      <div class="footer-column"><h2>За общността</h2><a href="za-nas.html">За сайта</a><a href="pravila.html">Правила</a><a href="kontakti.html">Контакти</a><a href="signal.html">Подай сигнал</a></div>
-      <div class="footer-column"><h2>Правна информация</h2><a href="poveritelnost.html">Поверителност</a><a href="uslovia.html">Условия за ползване</a><a href="biskvitki.html">Бисквитки</a></div>
-    </div>
-    <div class="section-container footer-bottom"><p>© <span id="current-year">2026</span> Попитай.Лом. Всички права запазени.</p><p>Създадено за хората от Лом.</p></div>
-  </footer>
-  <nav class="mobile-bottom-nav" aria-label="Мобилна навигация"><a class="" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>Начало</span></a><a class="active" href="kategorii.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Категории</span></a><a class="mobile-ask" href="nov-vapros.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Въпрос</span></a><a class="" href="vaprosi.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg><span>Въпроси</span></a><a class="" href="profil.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профил</span></a></nav>
-  <button class="back-to-top" id="back-to-top" type="button" aria-label="Към началото"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg></button>
+<footer class="site-footer">
+  <div class="section-container footer-main">
+    <div class="footer-brand"><a class="brand" href="index.html" aria-label="Попитай Лом – начало"><span class="brand-mark"><img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt=""></span><span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span></a><p>Местната общност на Лом за препоръки, услуги и полезна информация.</p></div>
+    <div class="footer-column"><h2>Разгледай</h2><a href="kategorii.html">Категории</a><a href="vaprosi.html">Въпроси</a><a href="firmi.html">Фирми</a><a href="statii.html">Статии</a></div>
+    <div class="footer-column"><h2>За общността</h2><a href="za-nas.html">За сайта</a><a href="pravila.html">Правила</a><a href="kontakti.html">Контакти</a><a href="signal.html">Подай сигнал</a></div>
+    <div class="footer-column"><h2>Правна информация</h2><a href="poveritelnost.html">Поверителност</a><a href="uslovia.html">Условия за ползване</a><a href="biskvitki.html">Бисквитки</a></div>
+  </div>
+  <div class="section-container footer-bottom"><p>© <span id="current-year">2026</span> Попитай.Лом. Всички права запазени.</p><p>Създадено за хората от Лом.</p></div>
+</footer>
+<nav class="mobile-bottom-nav" aria-label="Мобилна навигация"><a class="" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>Начало</span></a><a class="active" href="kategorii.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Категории</span></a><a class="mobile-ask" href="nov-vapros.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Въпрос</span></a><a class="" href="vaprosi.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg><span>Въпроси</span></a><a class="" href="profil.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профил</span></a></nav>
+<button class="back-to-top" id="back-to-top" type="button" aria-label="Към началото"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg></button>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-  <script src="supabase-config.js?v=20260820-1840" defer></script>
-  <script src="script.js?v=20260820-1833" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+<script src="supabase-config.js?v=20260820-1840" defer></script>
+<script src="category-hub-v1.js?v=20260821-0145" defer></script>
+<script src="script.js?v=20260820-1833" defer></script>
 </body>
 </html>
