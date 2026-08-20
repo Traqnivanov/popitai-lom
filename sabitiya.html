@@ -8,6 +8,22 @@
   <meta name="theme-color" content="#0b5fd7">
   <link rel="stylesheet" href="style.css?v=20260805-0736">
   <link rel="icon" href="assets/favicon-96.png" type="image/png">
+  <style>
+    .event-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+    .event-modal{position:fixed;inset:0;z-index:500;background:rgba(8,20,38,.58);padding:18px;overflow:auto}
+    .event-modal[hidden]{display:none}
+    .event-modal-card{width:min(680px,100%);margin:4vh auto;background:#fff;border-radius:18px;padding:18px;box-shadow:0 24px 70px rgba(8,20,38,.25)}
+    .event-modal-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}
+    .event-modal-head h2{margin:0}
+    .event-modal-close{width:42px;height:42px;border:1px solid #d7deea;border-radius:11px;background:#fff;font:700 26px/1 sans-serif;cursor:pointer}
+    .event-form{display:grid;gap:12px}
+    .event-form label{display:grid;gap:5px;font-weight:800}
+    .event-form input,.event-form textarea{width:100%;border:1px solid #cfd8e4;border-radius:11px;padding:11px 12px;font:inherit}
+    .event-form textarea{min-height:110px;resize:vertical}
+    .event-form-note{margin:0;color:#59657a;font-size:13px;line-height:1.45}
+    #event-add-status{margin:0;font-weight:700}
+    @media(max-width:650px){.event-modal{padding:0}.event-modal-card{min-height:100dvh;margin:0;border-radius:0}}
+  </style>
 </head>
 <body class="">
 
@@ -27,14 +43,20 @@
       <span class="section-kicker">Категория</span>
       <div class="page-hero-title-row"><span class="category-symbol category-symbol--blue" aria-hidden="true"><svg class="brand-category-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/><circle class="icon-accent" cx="8" cy="14" r=".7"/><circle class="icon-accent" cx="12" cy="14" r=".7"/><circle class="icon-accent" cx="16" cy="14" r=".7"/><circle class="icon-accent" cx="8" cy="18" r=".7"/><circle class="icon-accent" cx="12" cy="18" r=".7"/><circle class="icon-accent" cx="16" cy="18" r=".7"/></svg></span><h1>Събития</h1></div>
       <p>Предстоящи местни, културни, спортни и обществени събития в Лом.</p>
-      <a class="primary-link-button" href="nov-vapros.html?category=sabitiya">Задай въпрос</a>
+      <div class="event-actions">
+        <button class="primary-link-button" type="button" data-events-add hidden>Добави събитие</button>
+        <a class="primary-link-button" href="nov-vapros.html?category=sabitiya">Задай въпрос</a>
+      </div>
     </div>
   </section>
 
   <section class="content-section">
     <div class="section-container two-column-layout">
       <div>
-        <div class="block-heading"><h2>Какво се случва в Лом?</h2></div>
+        <div class="block-heading"><h2>Предстоящи събития</h2></div>
+        <div class="stack-list" data-events-list><article class="empty-card"><p>Зареждане на събитията…</p></article></div>
+
+        <div class="block-heading spaced"><h2>Разгледай по тема</h2></div>
         <div class="subcategory-grid">
           <a class="subcategory-card" href="tarsene.html?q=Предстоящи събития"><strong>Предстоящи събития</strong><span>Какво предстои</span></a>
           <a class="subcategory-card" href="tarsene.html?q=Културни събития"><strong>Културни събития</strong><span>Концерти, изложби и сцена</span></a>
@@ -49,10 +71,7 @@
         </article>
 
         <div class="block-heading spaced"><h2>Последни въпроси</h2><a href="vaprosi.html">Всички въпроси</a></div>
-        <!-- Вътрешната стойност остава за compatibility със съществуващите въпроси. -->
-        <div class="stack-list" data-category-questions="Събития и град" data-limit="4">
-          <article class="empty-card"><p>Зареждане на въпросите…</p></article>
-        </div>
+        <div class="stack-list" data-category-questions="Събития и град" data-limit="4"><article class="empty-card"><p>Зареждане на въпросите…</p></article></div>
       </div>
       <aside class="side-panel">
         <h2>Търси събитие</h2>
@@ -65,6 +84,21 @@
     </div>
   </section>
 </main>
+
+<div class="event-modal" id="event-add-modal" hidden>
+  <div class="event-modal-card" role="dialog" aria-modal="true" aria-labelledby="event-add-title">
+    <div class="event-modal-head"><div><span class="section-kicker">Предложи</span><h2 id="event-add-title">Добави събитие</h2></div><button class="event-modal-close" type="button" data-event-close aria-label="Затвори">×</button></div>
+    <form class="event-form" id="event-add-form" novalidate>
+      <label>Заглавие<input type="text" name="title" minlength="5" maxlength="140" required></label>
+      <label>Описание<textarea name="description" minlength="20" maxlength="4000" required></textarea></label>
+      <label>Място<input type="text" name="location" maxlength="300" placeholder="Напр. площад Свобода, Лом"></label>
+      <label>Дата и час<input type="datetime-local" name="starts_at"></label>
+      <p class="event-form-note">Събитието се изпраща за преглед и не се публикува автоматично.</p>
+      <p id="event-add-status" role="status" aria-live="polite"></p>
+      <div class="event-actions"><button class="form-submit" type="submit">Изпрати за преглед</button><button class="event-modal-close" type="button" data-event-close>Затвори</button></div>
+    </form>
+  </div>
+</div>
 
 <footer class="site-footer">
   <div class="section-container footer-main">
@@ -80,6 +114,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 <script src="supabase-config.js?v=20260820-1840" defer></script>
+<script src="events-catalog-v1.js?v=20260821-0200" defer></script>
 <script src="category-hub-v1.js?v=20260821-0145" defer></script>
 <script src="script.js?v=20260820-1833" defer></script>
 </body>
