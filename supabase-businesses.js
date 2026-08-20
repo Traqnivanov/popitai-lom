@@ -4,6 +4,7 @@
   if (!client) return;
 
   const BUCKET = "business-media";
+  const OWNER_ID = "598d6626-25ed-450f-87a9-e83f34f641c4";
   const IMAGE_DB = "popitaiMediaDB";
   const IMAGE_STORE = "media";
   const $ = (selector, root = document) => root.querySelector(selector);
@@ -341,6 +342,75 @@
     </article>`;
   }
 
+  function sortBusinesses(items, sortValue = "newest") {
+    return [...items].sort((a, b) => {
+      const aIsOwner = a.owner_id === OWNER_ID;
+      const bIsOwner = b.owner_id === OWNER_ID;
+      if (aIsOwner !== bIsOwner) return aIsOwner ? -1 : 1;
+
+      if (sortValue === "name_asc") {
+        return String(a.name || "").localeCompare(String(b.name || ""), "bg", { sensitivity: "base" });
+      }
+      return new Date(b.created_at) - new Date(a.created_at);
+    });
+  }
+
+  function renderBusinessCards(element, items, logoByBusiness, filtered = false) {
+    if (!items.length) {
+      element.innerHTML = filtered
+        ? '<article class="empty-card empty-card-wide"><h2>Няма намерени фирми</h2><p>Промени търсенето или избраната категория.</p></article>'
+        : '<article class="empty-card empty-card-wide"><h2>Все още няма одобрени фирми</h2><p>Новите профили се показват след преглед от администратор.</p><a class="primary-link-button" href="dobavi-firma.html">Добави първата фирма</a></article>';
+      return;
+    }
+
+    element.innerHTML = items
+      .map((item) => businessCard(item, logoByBusiness.get(item.id) || ""))
+      .join("");
+  }
+
+  function setupBusinessFilters(element, businesses, logoByBusiness) {
+    const search = $("#businesses-search");
+    const categoryFilter = $("#businesses-category-filter");
+    const sort = $("#businesses-sort");
+    const status = $("#businesses-filter-status");
+
+    if (!search || !categoryFilter || !sort) {
+      renderBusinessCards(element, sortBusinesses(businesses), logoByBusiness);
+      return;
+    }
+
+    const categories = [...new Set(businesses.map((item) => item.category).filter(Boolean))]
+      .sort((a, b) => String(a).localeCompare(String(b), "bg", { sensitivity: "base" }));
+    categoryFilter.innerHTML = '<option value="">Всички категории</option>' +
+      categories.map((category) =>
+        `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`
+      ).join("");
+
+    function applyFilters() {
+      const query = search.value.trim().toLocaleLowerCase("bg-BG");
+      const selectedCategory = categoryFilter.value;
+      const filtered = businesses.filter((item) => {
+        if (selectedCategory && item.category !== selectedCategory) return false;
+        if (!query) return true;
+        const searchable = `${item.name || ""} ${item.description || ""}`
+          .toLocaleLowerCase("bg-BG");
+        return searchable.includes(query);
+      });
+      const sorted = sortBusinesses(filtered, sort.value);
+      renderBusinessCards(element, sorted, logoByBusiness, true);
+      if (status) {
+        status.textContent = sorted.length === 1
+          ? "Показана е 1 фирма."
+          : `Показани са ${sorted.length} фирми.`;
+      }
+    }
+
+    search.addEventListener("input", applyFilters);
+    categoryFilter.addEventListener("change", applyFilters);
+    sort.addEventListener("change", applyFilters);
+    applyFilters();
+  }
+
   async function loadApprovedBusinesses() {
     const containers = [
       { element: $("#businesses-list"), limit: null },
@@ -362,13 +432,9 @@
       return;
     }
 
-    const OWNER_ID = "598d6626-25ed-450f-87a9-e83f34f641c4";
-
     const businesses = data || [];
-    // Фирмите на собственика винаги са на първите позиции
-    const owned = businesses.filter(b => b.owner_id === OWNER_ID);
-    const others = businesses.filter(b => b.owner_id !== OWNER_ID);
-    const sorted = [...owned, ...others];
+    // Фирмите на собственика винаги са първи при всяко сортиране.
+    const sorted = sortBusinesses(businesses, "newest");
     if (!sorted.length) {
       const message = '<article class="empty-card empty-card-wide"><h2>Все още няма одобрени фирми</h2><p>Новите профили се показват след преглед от администратор.</p><a class="primary-link-button" href="dobavi-firma.html">Добави първата фирма</a></article>';
       containers.forEach(({ element }) => { element.innerHTML = message; });
@@ -392,10 +458,11 @@
     });
 
     containers.forEach(({ element, limit }) => {
-      const visibleBusinesses = limit ? sorted.slice(0, limit) : sorted;
-      element.innerHTML = visibleBusinesses
-        .map((item) => businessCard(item, logoByBusiness.get(item.id) || ""))
-        .join("");
+      if (element.id === "businesses-list") {
+        setupBusinessFilters(element, businesses, logoByBusiness);
+        return;
+      }
+      renderBusinessCards(element, limit ? sorted.slice(0, limit) : sorted, logoByBusiness);
     });
   }
 
