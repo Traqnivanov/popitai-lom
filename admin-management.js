@@ -230,15 +230,34 @@
   }
 
   async function refreshCounts() {
-    const [users, pendingQuestions, pendingAnswers, approvedQuestions, approvedAnswers] = await Promise.all([
+    // Only sources with an existing, approved moderation flow belong here.
+    // Add shops when their admin flow is connected and approved.
+    const pendingSources = [
+      "questions",
+      "answers",
+      "businesses",
+      "listings",
+      "media",
+      "info_submissions",
+      "info_error_reports",
+      "user_content_edit_drafts",
+      "business_expanded_profile_drafts"
+    ];
+
+    const [users, approvedQuestions, approvedAnswers, pendingResults] = await Promise.all([
       client.from("profiles").select("id", { count: "exact", head: true }),
-      client.from("questions").select("id", { count: "exact", head: true }).eq("status", "pending"),
-      client.from("answers").select("id", { count: "exact", head: true }).eq("status", "pending"),
       client.from("questions").select("id", { count: "exact", head: true }).eq("status", "approved"),
-      client.from("answers").select("id", { count: "exact", head: true }).eq("status", "approved")
+      client.from("answers").select("id", { count: "exact", head: true }).eq("status", "approved"),
+      Promise.all(pendingSources.map((table) =>
+        client.from(table).select("id", { count: "exact", head: true }).eq("status", "pending")
+      ))
     ]);
 
-    const pending = (pendingQuestions.count || 0) + (pendingAnswers.count || 0);
+    const pending = pendingResults.reduce((total, result) => total + (result.count || 0), 0);
+    const failedSources = pendingSources.filter((_, index) => pendingResults[index].error);
+    if (failedSources.length) {
+      console.warn("Pending counts unavailable for:", failedSources.join(", "));
+    }
     if ($("#admin-users-count")) $("#admin-users-count").textContent = String(users.count || 0);
     if ($("#admin-pending-count")) $("#admin-pending-count").textContent = String(pending);
     if ($("#admin-approved-questions-count")) $("#admin-approved-questions-count").textContent = String(approvedQuestions.count || 0);
