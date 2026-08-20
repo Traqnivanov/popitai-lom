@@ -1361,14 +1361,12 @@ svg {
 }
 
 .question-card h3 a,
-.firm-card h3 a,
 .article-card h3 a {
   color: #172033;
   text-decoration: none;
 }
 
 .question-card h3 a:hover,
-.firm-card h3 a:hover,
 .article-card h3 a:hover {
   color: var(--primary);
 }
@@ -1446,14 +1444,6 @@ svg {
   gap: 18px;
 }
 
-.firm-card {
-  padding: 22px;
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  box-shadow: 0 8px 26px rgba(20, 45, 85, 0.06);
-}
-
 .firm-logo {
   width: 40px;
   height: 40px;
@@ -1470,11 +1460,6 @@ svg {
 
 .firm-title-row {
   align-items: flex-start;
-}
-
-.firm-card h3 {
-  margin: 0;
-  font-size: 19px;
 }
 
 .verified-badge {
@@ -1498,12 +1483,6 @@ svg {
   stroke-width: 2.1;
   stroke-linecap: round;
   stroke-linejoin: round;
-}
-
-.firm-card p {
-  margin: 13px 0 0;
-  color: var(--text-soft);
-  line-height: 1.6;
 }
 
 .firm-tags {
@@ -1665,8 +1644,7 @@ svg {
     padding-bottom: 76px;
   }
 
-  .question-card,
-  .firm-card {
+  .question-card {
     padding: 19px;
   }
 
@@ -3874,7 +3852,6 @@ svg {
 }
 
 .question-card h3 a:hover,
-.firm-card h3 a:hover,
 .article-card h3 a:hover,
 .compact-card h3 a:hover,
 .list-card h2 a:hover,
