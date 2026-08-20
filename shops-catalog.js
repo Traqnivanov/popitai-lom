@@ -58,22 +58,23 @@ const tabs=[...document.querySelectorAll(".tab")];
 const subs=document.getElementById("subs");
 const subBtns=[...document.querySelectorAll(".sub")];
 const pk=document.getElementById("pk"),pt=document.getElementById("pt"),pc=document.getElementById("pc"),addBtn=document.getElementById("addBtn");
-const addTitle=document.getElementById("addTitle");
 const STORAGE_KEY="popitai_magazini_cat";
 const allowedCats=["food","construction","tech","furniture","clothes","home"];
 const savedCat=localStorage.getItem(STORAGE_KEY);
 let cat=allowedCats.includes(savedCat)?savedCat:"food",sub="all";
 
-const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+if(addBtn) addBtn.hidden=true;
+
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;","\>":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const norm=s=>String(s||"").toLocaleLowerCase("bg-BG").trim();
 
 const meta={
-food:["Хранителни","Хранителни магазини в Лом","Супермаркети и местни хранителни магазини.","＋ Добави хранителен магазин"],
-construction:["Строителни","Строителни магазини в Лом","Материали, железария, метали, бои, санитария и обзавеждане за ремонт.","＋ Добави строителен магазин"],
-tech:["Техника","Магазини за техника в Лом","Електроника, телефони, бяла и черна техника.","＋ Добави магазин за техника"],
-furniture:["Мебели","Магазини за мебели в Лом","Мебели и обзавеждане за дома.","＋ Добави мебелен магазин"],
-clothes:["Дрехи","Магазини за дрехи в Лом","Облекло, обувки и модни стоки.","＋ Добави магазин за дрехи"],
-home:["Дом","Магазини за дома и специализирани магазини в Лом","Домашни потреби, подаръци, градина и други практични местни магазини.","＋ Добави магазин"]
+food:["Хранителни","Хранителни магазини в Лом","Супермаркети и местни хранителни магазини."],
+construction:["Строителни","Строителни магазини в Лом","Материали, железария, метали, бои, санитария и обзавеждане за ремонт."],
+tech:["Техника","Магазини за техника в Лом","Електроника, телефони, бяла и черна техника."],
+furniture:["Мебели","Магазини за мебели в Лом","Мебели и обзавеждане за дома."],
+clothes:["Дрехи","Магазини за дрехи в Лом","Облекло, обувки и модни стоки."],
+home:["Дом","Магазини за дома и специализирани магазини в Лом","Домашни потреби, подаръци, градина и други практични местни магазини."]
 };
 
 function list(){
@@ -87,8 +88,7 @@ function list(){
 
 function render(){
   const m=meta[cat];
-  pk.textContent=m[0]; pt.textContent=m[1]; pc.textContent=m[2]; addBtn.textContent=m[3];
-  addTitle.textContent=m[3].replace(/^＋\s*/, "");
+  pk.textContent=m[0]; pt.textContent=m[1]; pc.textContent=m[2];
   document.getElementById("shops-panel")?.setAttribute("aria-labelledby",`tab-${cat}`);
   subs.hidden=cat!=="construction";
   const r=list();
@@ -136,34 +136,6 @@ subBtns.forEach(b=>b.addEventListener("click",()=>{
 }));
 
 search.addEventListener("input",render);
-
-const addModal=document.getElementById("addModal");
-let lastFocus=null;
-
-function open(m){lastFocus=document.activeElement;m.hidden=false;document.body.style.overflow="hidden";m.querySelector("input")?.focus()}
-function close(m){m.hidden=true;document.body.style.overflow="";lastFocus?.focus()}
-
-addBtn.addEventListener("click",()=>{
-  const status=document.getElementById("addStatus");
-  if(status){status.textContent="";status.classList.remove("show")}
-  open(addModal);
-});
-
-document.addEventListener("click",e=>{ if(e.target.matches("[data-close]")) close(e.target.closest(".modal")); });
-
-document.addEventListener("keydown",e=>{
-  if(e.key==="Escape") document.querySelectorAll(".modal:not([hidden])").forEach(close);
-});
-
-[["addForm","addStatus"]].forEach(([f,s])=>{
-  document.getElementById(f).addEventListener("submit",e=>{
-    e.preventDefault();
-    if(!e.target.checkValidity()){e.target.reportValidity();return}
-    const x=document.getElementById(s);
-    x.textContent="Локален преглед: формата е готова, но не изпраща към базата преди одобрението ти.";
-    x.classList.add("show");
-  });
-});
 
 tabs.forEach(x=>x.setAttribute("aria-selected",x.dataset.cat===cat?"true":"false"));
 const activeTab=tabs.find(x=>x.dataset.cat===cat);
