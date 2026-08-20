@@ -969,6 +969,157 @@
     }
   };
 
+
+  function setListingActionMessage(message, type = "info") {
+    const messageEl = $("#listing-action-message");
+    if (!messageEl) return;
+    messageEl.textContent = message;
+    messageEl.style.color = type === "error" ? "#b91c1c" : type === "success" ? "#166534" : "#59657a";
+  }
+
+  async function shareListing(item) {
+    const url = window.location.href;
+    const shareData = {
+      title: item.title,
+      text: `Обява в Попитай.Лом: ${item.title}`,
+      url
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        setListingActionMessage("Обявата е споделена.", "success");
+        return;
+      }
+
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(url);
+        setListingActionMessage("Връзката е копирана.", "success");
+        return;
+      }
+
+      window.prompt("Копирай връзката към обявата:", url);
+    } catch (error) {
+      if (error?.name !== "AbortError") {
+        setListingActionMessage("Връзката не можа да бъде споделена.", "error");
+      }
+    }
+  }
+
+  function initListingDetailActions(item, id) {
+    const shareButton = $("#listing-share-btn");
+    const reportButton = $("#listing-report-toggle");
+    const reportForm = $("#listing-report-form");
+    const cancelButton = $("#listing-report-cancel");
+    const reasonInput = $("#listing-report-reason");
+    const reasonError = $("#listing-report-reason-error");
+
+    shareButton?.addEventListener("click", () => shareListing(item));
+
+    reportButton?.addEventListener("click", async () => {
+      const { data } = await client.auth.getUser();
+      if (!data?.user) {
+        const messageEl = $("#listing-action-message");
+        if (messageEl) {
+          messageEl.innerHTML = 'За да подадеш сигнал, <a href="vhod.html">влез в профила си</a>.';
+          messageEl.style.color = "#59657a";
+        }
+        return;
+      }
+
+      const shouldOpen = reportForm.hidden;
+      reportForm.hidden = !shouldOpen;
+      reportButton.setAttribute("aria-expanded", String(shouldOpen));
+      if (shouldOpen) reasonInput?.focus();
+    });
+
+    cancelButton?.addEventListener("click", () => {
+      reportForm.hidden = true;
+      reportButton?.setAttribute("aria-expanded", "false");
+      if (reasonError) reasonError.textContent = "";
+    });
+
+    reasonInput?.addEventListener("input", () => {
+      if (reasonError) reasonError.textContent = "";
+    });
+
+    reportForm?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const reason = reasonInput.value.trim();
+
+      if (reason.length < 10) {
+        reasonError.textContent = "Опиши причината с поне 10 знака.";
+        reasonInput.focus();
+        return;
+      }
+
+      const submitButton = reportForm.querySelector('button[type="submit"]');
+      submitButton.disabled = true;
+      submitButton.textContent = "Изпращане…";
+      setListingActionMessage("");
+
+      const { data: authData } = await client.auth.getUser();
+      if (!authData?.user) {
+        setListingActionMessage("Сесията е изтекла. Влез отново и опитай пак.", "error");
+        submitButton.disabled = false;
+        submitButton.textContent = "Изпрати сигнала";
+        return;
+      }
+
+      const { error } = await client.from("reports").insert({
+        reporter_id: authData.user.id,
+        target_type: "listing",
+        target_id: id,
+        reason
+      });
+
+      if (error) {
+        setListingActionMessage("Сигналът не беше изпратен. Провери профила си и опитай отново.", "error");
+        submitButton.disabled = false;
+        submitButton.textContent = "Изпрати сигнала";
+        return;
+      }
+
+      reportForm.hidden = true;
+      reportButton.disabled = true;
+      reportButton.textContent = "Сигналът е изпратен";
+      reportButton.setAttribute("aria-expanded", "false");
+      setListingActionMessage("Благодарим. Сигналът е изпратен за преглед.", "success");
+    });
+  }
+
+  async function loadSimilarListings(item, id) {
+    const section = $("#similar-listings");
+    const list = $("#similar-listings-list");
+    if (!section || !list || item.status !== "approved" || !item.category) return;
+
+    const { data, error } = await client.from("listings")
+      .select("id, owner_id, title, category, subcategory, listing_type, price, price_negotiable, price_free, price_old, currency, city, is_urgent, is_highlighted, is_reduced, is_boosted, is_owner_admin, created_at")
+      .eq("status", "approved")
+      .eq("category", item.category)
+      .neq("id", id)
+      .or("expires_at.is.null,expires_at.gt." + new Date().toISOString())
+      .order("is_owner_admin", { ascending: false })
+      .order("is_boosted", { ascending: false })
+      .order("created_at", { ascending: false })
+      .limit(3);
+
+    if (error || !data?.length) return;
+
+    let listings = data;
+    try {
+      listings = await attachListingMedia(data);
+    } catch (_) {
+      listings = data;
+    }
+
+    list.innerHTML = listings.map((similarItem) => {
+      const approvedCover = similarItem._media?.find((media) => media.status === "approved");
+      return listingCard(similarItem, approvedCover?.storage_path ? publicUrl(approvedCover.storage_path) : "");
+    }).join("");
+    section.hidden = false;
+  }
+
   async function loadListingDetail() {
     const container = $("#listing-detail");
     if (!container) return;
@@ -1035,8 +1186,32 @@
         <p style="margin:0 0 16px;color:#59657a;font-size:13px">${formatDate(item.created_at)}${item.city ? " · " + escHtml(item.city) : ""}${item.street ? ", " + escHtml(item.street) : ""}${days !== null ? " · Изтича след " + days + " дни" : ""}${item.show_stats && item.view_count ? " · 👁 " + item.view_count + " прегледа" : ""}</p>
         ${gallery}
         <div style="white-space:pre-wrap;line-height:1.7;margin-bottom:24px">${escHtml(item.description)}</div>
+        ${item.status === "approved" ? `
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin:0 0 12px">
+            <button id="listing-share-btn" type="button" style="padding:9px 16px;border:1px solid #0b5fd7;border-radius:9px;background:#fff;color:#0b5fd7;font-weight:800;cursor:pointer">Сподели</button>
+            <button id="listing-report-toggle" type="button" aria-expanded="false" aria-controls="listing-report-form" style="padding:9px 16px;border:1px solid #d7deea;border-radius:9px;background:#fff;color:#26344d;font-weight:800;cursor:pointer">Подай сигнал</button>
+          </div>
+          <p id="listing-action-message" role="status" aria-live="polite" style="min-height:20px;margin:0 0 10px;font-size:14px"></p>
+          <form id="listing-report-form" hidden novalidate style="margin:0 0 24px;padding:16px;border:1px solid #d7deea;border-radius:12px;background:#f8fafc">
+            <label for="listing-report-reason" style="display:block;margin-bottom:7px;font-weight:800">Причина за сигнала</label>
+            <textarea id="listing-report-reason" name="reason" minlength="10" maxlength="1000" required placeholder="Опиши накратко проблема с обявата." style="width:100%;min-height:110px;padding:10px 12px;border:1px solid #cbd5e1;border-radius:9px;resize:vertical;font:inherit"></textarea>
+            <p id="listing-report-reason-error" class="field-error" role="alert" style="margin:6px 0 0"></p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+              <button type="submit" class="primary-link-button" style="cursor:pointer">Изпрати сигнала</button>
+              <button id="listing-report-cancel" type="button" style="padding:9px 16px;border:1px solid #d7deea;border-radius:9px;background:#fff;color:#26344d;font-weight:800;cursor:pointer">Отказ</button>
+            </div>
+          </form>` : ""}
         <a href="obyavi.html" style="color:#0b5fd7;font-size:14px">← Всички обяви</a>
-      </article>`;
+      </article>
+      <section id="similar-listings" hidden aria-labelledby="similar-listings-title" style="margin-top:36px">
+        <h2 id="similar-listings-title" style="margin:0 0 16px">Подобни обяви</h2>
+        <div id="similar-listings-list" class="listings-grid"></div>
+      </section>`;
+
+    if (item.status === "approved") {
+      initListingDetailActions(item, id);
+      loadSimilarListings(item, id);
+    }
 
     // Контактен панел
     const panel = $("#listing-contact-panel");
