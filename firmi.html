@@ -51,7 +51,22 @@
 </section>
 
 <section class="content-section">
-  <div class="section-container two-column-layout">
+  <div class="section-container">
+    <div class="listings-filters" id="businesses-filters">
+      <input type="search" id="businesses-search" placeholder="Търси фирма…" aria-label="Търси фирма по име или описание" autocomplete="off">
+      <div class="listings-sort-row">
+        <select id="businesses-category-filter" aria-label="Филтър по категория">
+          <option value="">Всички категории</option>
+        </select>
+        <select id="businesses-sort" aria-label="Сортиране на фирмите">
+          <option value="newest">Най-нови</option>
+          <option value="name_asc">Име А–Я</option>
+        </select>
+      </div>
+    </div>
+    <p id="businesses-filter-status" aria-live="polite" style="margin:-10px 0 18px;color:#59657a;font-size:13px;font-weight:700"></p>
+
+    <div class="two-column-layout">
     <div class="stack-list" id="businesses-list">
       <article class="empty-card">
         <h2>Все още няма добавени фирми</h2>
@@ -64,6 +79,7 @@
       <p>Новите фирми се записват със статус „Чака преглед“. Знак за проверка няма да се показва без реална проверка.</p>
       <a href="dobavi-firma.html">Добави фирмен профил</a>
     </aside>
+    </div>
   </div>
 </section>
 
@@ -114,7 +130,7 @@
 <script src="image-upload.js?v=20260806-0208" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="supabase-config.js?v=20260806-0208" defer></script>
-  <script src="supabase-businesses.js?v=20260807-1725" data-popitai-businesses defer></script>
+  <script src="supabase-businesses.js?v=20260820-2118" data-popitai-businesses defer></script>
   <script src="script.js?v=20260805-2312" defer></script>
 </body>
 </html>
