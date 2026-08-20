@@ -98,31 +98,35 @@
 
     questionRoot.innerHTML = '<article class="empty-card"><p>Зареждане на въпросите…</p></article>';
 
-    const [{ data: questions, error }, { data: answers }] = await Promise.all([
-      client
-        .from("questions")
-        .select("id,title,category,description,created_at,status")
-        .eq("status", "approved")
-        .eq("category", category)
-        .order("created_at", { ascending: false })
-        .limit(limit),
-      client
-        .from("answers")
-        .select("question_id")
-        .eq("status", "approved")
-    ]);
+    const { data: questions, error } = await client
+      .from("questions")
+      .select("id,title,category,description,created_at,status")
+      .eq("status", "approved")
+      .eq("category", category)
+      .order("created_at", { ascending: false })
+      .limit(limit);
 
     if (error) {
       questionRoot.innerHTML = '<article class="empty-card"><p>Въпросите не могат да се заредят в момента.</p><a href="vaprosi.html">Виж всички въпроси</a></article>';
       return;
     }
 
-    const counts = new Map();
-    (answers || []).forEach((answer) => {
-      counts.set(answer.question_id, (counts.get(answer.question_id) || 0) + 1);
-    });
-
     const items = questions || [];
+    const counts = new Map();
+    const ids = items.map((item) => item.id);
+
+    if (ids.length) {
+      const { data: answers } = await client
+        .from("answers")
+        .select("question_id")
+        .eq("status", "approved")
+        .in("question_id", ids);
+
+      (answers || []).forEach((answer) => {
+        counts.set(answer.question_id, (counts.get(answer.question_id) || 0) + 1);
+      });
+    }
+
     questionRoot.innerHTML = items.length
       ? items.map((item) => questionCard(item, counts.get(item.id) || 0)).join("")
       : '<article class="empty-card"><h3>Все още няма одобрени въпроси</h3><p>Задай въпрос и потърси препоръка от местната общност.</p><a class="primary-link-button" href="nov-vapros.html">Задай въпрос</a></article>';
