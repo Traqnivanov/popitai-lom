@@ -192,8 +192,6 @@
     }
   </style>
 
-
-
   <!-- MOBILE NAVIGATION — TEST V2 -->
   <style id="mobile-navigation-test-v2">
     .main-nav .nav-info-lom svg{display:none}
@@ -202,617 +200,146 @@
 
     @media (min-width:761px){
       .main-nav .nav-secondary-group{display:none}
-      .main-nav .nav-info-lom{
-        display:inline-flex;
-        align-items:center;
-      }
+      .main-nav .nav-info-lom{display:inline-flex;align-items:center}
       .main-nav .nav-info-lom svg{display:none}
     }
 
     @media (max-width:760px){
       .main-nav{background:#fff}
-
       .main-nav .nav-primary-group,
-      .main-nav .nav-secondary-group{
-        display:flex;
-        flex-direction:column;
-        width:100%;
-      }
-
+      .main-nav .nav-secondary-group{display:flex;flex-direction:column;width:100%}
       .main-nav .nav-primary-group{gap:4px}
-
-      .main-nav .nav-secondary-group{
-        margin-top:10px;
-        padding-top:10px;
-        border-top:1px solid #e4e9f0;
-        gap:2px;
-      }
-
+      .main-nav .nav-secondary-group{margin-top:10px;padding-top:10px;border-top:1px solid #e4e9f0;gap:2px}
       .main-nav a{width:100%}
-
-      .main-nav .nav-primary-group > a{
-        padding:12px 16px;
-        border-radius:12px;
-        font-weight:700;
-      }
-
-      .main-nav .nav-info-lom{
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        gap:10px;
-        color:#071d3d;
-        background:linear-gradient(90deg,#f6f9fd 0%,#edf5ff 100%);
-        border:1px solid #d8e4f2;
-        font-weight:800;
-      }
-
-      .main-nav .nav-info-lom svg{
-        display:block;
-        width:20px;
-        height:20px;
-        flex:0 0 20px;
-        fill:none;
-        stroke:#126ed8;
-        stroke-width:1.9;
-        stroke-linecap:round;
-        stroke-linejoin:round;
-      }
-
-      .main-nav .nav-secondary-group a{
-        padding:7px 16px;
-        font-size:.84em;
-        line-height:1.25;
-        font-weight:600;
-        color:#6b7482;
-      }
-
-      body:has(#main-nav.open){
-        overflow:hidden;
-      }
-
-      body:has(#main-nav.open)::before{
-        content:"";
-        position:fixed;
-        inset:0;
-        background:rgba(4,18,38,.58);
-        backdrop-filter:blur(1.5px);
-        -webkit-backdrop-filter:blur(1.5px);
-        z-index:900;
-      }
-
-      body:has(#main-nav.open) .site-header{
-        z-index:1000;
-      }
-
-      body:has(#main-nav.open) .mobile-bottom-nav{
-        opacity:0;
-        visibility:hidden;
-        pointer-events:none;
-      }
+      .main-nav .nav-primary-group > a{padding:12px 16px;border-radius:12px;font-weight:700}
+      .main-nav .nav-info-lom{display:flex;align-items:center;justify-content:center;gap:10px;color:#071d3d;background:linear-gradient(90deg,#f6f9fd 0%,#edf5ff 100%);border:1px solid #d8e4f2;font-weight:800}
+      .main-nav .nav-info-lom svg{display:block;width:20px;height:20px;flex:0 0 20px;fill:none;stroke:#126ed8;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+      .main-nav .nav-secondary-group a{padding:7px 16px;font-size:.84em;line-height:1.25;font-weight:600;color:#6b7482}
+      body:has(#main-nav.open){overflow:hidden}
+      body:has(#main-nav.open)::before{content:"";position:fixed;inset:0;background:rgba(4,18,38,.58);backdrop-filter:blur(1.5px);-webkit-backdrop-filter:blur(1.5px);z-index:900}
+      body:has(#main-nav.open) .site-header{z-index:1000}
+      body:has(#main-nav.open) .mobile-bottom-nav{opacity:0;visibility:hidden;pointer-events:none}
     }
   </style>
-
-
 
   <!-- DESKTOP NAVIGATION — TEST V1 -->
   <style id="desktop-navigation-test-v1">
     .nav-mobile-group{display:none}
-    .nav-desktop-group{
-      display:flex;
-      align-items:center;
-      gap:2px;
-    }
-
-    .nav-desktop-group a{
-      white-space:nowrap;
-    }
-
-    .nav-desktop-group .nav-info-lom-desktop{
-      position:relative;
-      font-weight:800;
-      color:#0b5fd7;
-    }
-
-    .nav-desktop-group .nav-info-lom-desktop::after{
-      content:"";
-      position:absolute;
-      left:50%;
-      bottom:2px;
-      width:18px;
-      height:2px;
-      border-radius:999px;
-      background:#b28a16;
-      transform:translateX(-50%);
-      opacity:.9;
-    }
-
-    @media (max-width:760px){
-      .nav-desktop-group{display:none}
-      .nav-mobile-group{display:block;width:100%}
-    }
+    .nav-desktop-group{display:flex;align-items:center;gap:2px}
+    .nav-desktop-group a{white-space:nowrap}
+    .nav-desktop-group .nav-info-lom-desktop{position:relative;font-weight:800;color:#0b5fd7}
+    .nav-desktop-group .nav-info-lom-desktop::after{content:"";position:absolute;left:50%;bottom:2px;width:18px;height:2px;border-radius:999px;background:#b28a16;transform:translateX(-50%);opacity:.9}
+    @media (max-width:760px){.nav-desktop-group{display:none}.nav-mobile-group{display:block;width:100%}}
   </style>
-
 
   <!-- DESKTOP NAVIGATION — TEST V1.1 -->
   <style id="desktop-navigation-test-v1-1">
     @media (min-width:761px){
-      .header-inner{
-        gap:14px;
-      }
-
-      .main-nav{
-        flex:1 1 auto;
-        min-width:0;
-      }
-
-      .nav-desktop-group{
-        gap:0;
-        justify-content:center;
-        flex-wrap:nowrap;
-      }
-
-      .nav-desktop-group a{
-        padding-left:12px;
-        padding-right:12px;
-        font-size:.95rem;
-        white-space:nowrap;
-      }
-
-      .header-actions{
-        flex:0 0 auto;
-        gap:12px;
-      }
-
-      .login-link{
-        white-space:nowrap;
-      }
-
-      .ask-button{
-        white-space:nowrap;
-        min-width:max-content;
-        padding-left:16px;
-        padding-right:16px;
-      }
-
-      .site-header.scrolled{
-        background:rgba(255,255,255,.96);
-        border-bottom:1px solid #e6ebf2;
-        box-shadow:0 8px 22px rgba(7,29,61,.08);
-        backdrop-filter:blur(8px);
-        -webkit-backdrop-filter:blur(8px);
-      }
-}
+      .header-inner{gap:14px}
+      .main-nav{flex:1 1 auto;min-width:0}
+      .nav-desktop-group{gap:0;justify-content:center;flex-wrap:nowrap}
+      .nav-desktop-group a{padding-left:12px;padding-right:12px;font-size:.95rem;white-space:nowrap}
+      .header-actions{flex:0 0 auto;gap:12px}
+      .login-link{white-space:nowrap}
+      .ask-button{white-space:nowrap;min-width:max-content;padding-left:16px;padding-right:16px}
+      .site-header.scrolled{background:rgba(255,255,255,.96);border-bottom:1px solid #e6ebf2;box-shadow:0 8px 22px rgba(7,29,61,.08);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+    }
   </style>
-
 
   <!-- INTERNAL TEST: DESKTOP HEADER STICKY/FIT FIX -->
   <style id="desktop-header-sticky-fit-fix">
     @media (min-width:761px){
-      .site-header{
-        position:sticky !important;
-        top:0 !important;
-        z-index:1000 !important;
-      }
-
-      .header-inner{
-        width:calc(100% - 24px);
-        max-width:1440px;
-        gap:10px;
-      }
-
-      .main-nav{
-        min-width:0;
-      }
-
-      .nav-desktop-group{
-        gap:0;
-      }
-
-      .nav-desktop-group a{
-        padding-left:9px;
-        padding-right:9px;
-        font-size:14px;
-        white-space:nowrap;
-      }
-
-      .header-actions{
-        gap:8px;
-      }
-
-      .login-link,
-      .ask-button{
-        white-space:nowrap;
-      }
-
-      .ask-button{
-        padding-left:14px;
-        padding-right:14px;
-      }
-
-      .site-header.scrolled{
-        background:rgba(255,255,255,.97);
-        border-bottom:1px solid #e6ebf2;
-        box-shadow:0 8px 22px rgba(7,29,61,.10);
-        backdrop-filter:blur(8px);
-        -webkit-backdrop-filter:blur(8px);
-      }
+      .site-header{position:sticky !important;top:0 !important;z-index:1000 !important}
+      .header-inner{width:calc(100% - 24px);max-width:1440px;gap:10px}
+      .main-nav{min-width:0}
+      .nav-desktop-group{gap:0}
+      .nav-desktop-group a{padding-left:9px;padding-right:9px;font-size:14px;white-space:nowrap}
+      .header-actions{gap:8px}
+      .login-link,.ask-button{white-space:nowrap}
+      .ask-button{padding-left:14px;padding-right:14px}
+      .site-header.scrolled{background:rgba(255,255,255,.97);border-bottom:1px solid #e6ebf2;box-shadow:0 8px 22px rgba(7,29,61,.10);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
     }
   </style>
-
 
   <!-- INTERNAL TEST: DESKTOP INFO LOM ACCENT -->
   <style id="desktop-info-lom-accent">
     @media (min-width:761px){
-      .nav-desktop-group .nav-info-lom-desktop{
-        display:inline-flex;
-        align-items:center;
-        gap:7px;
-        padding:9px 12px;
-        color:#0b5fd7;
-        background:#edf5ff;
-        border:1px solid #cfe0f5;
-        border-radius:999px;
-        font-weight:800;
-      }
-
-      .nav-desktop-group .nav-info-lom-desktop::before{
-        content:"i";
-        display:grid;
-        place-items:center;
-        width:18px;
-        height:18px;
-        border:1.8px solid #0b5fd7;
-        border-radius:50%;
-        font-size:12px;
-        line-height:1;
-        font-weight:800;
-      }
-
-      .nav-desktop-group .nav-info-lom-desktop::after{
-        display:none;
-      }
-
-      .nav-desktop-group .nav-info-lom-desktop:hover,
-      .nav-desktop-group .nav-info-lom-desktop:focus-visible{
-        color:#084cae;
-        background:#e4efff;
-        border-color:#b9d2f1;
-      }
+      .nav-desktop-group .nav-info-lom-desktop{display:inline-flex;align-items:center;gap:7px;padding:9px 12px;color:#0b5fd7;background:#edf5ff;border:1px solid #cfe0f5;border-radius:999px;font-weight:800}
+      .nav-desktop-group .nav-info-lom-desktop::before{content:"i";display:grid;place-items:center;width:18px;height:18px;border:1.8px solid #0b5fd7;border-radius:50%;font-size:12px;line-height:1;font-weight:800}
+      .nav-desktop-group .nav-info-lom-desktop::after{display:none}
+      .nav-desktop-group .nav-info-lom-desktop:hover,.nav-desktop-group .nav-info-lom-desktop:focus-visible{color:#084cae;background:#e4efff;border-color:#b9d2f1}
     }
   </style>
-
 
   <!-- INTERNAL TEST: WHOLE DESKTOP HEADER SEPARATION -->
   <style id="whole-desktop-header-separation">
     @media (min-width:761px){
-      .site-header{
-        background:#f7faff !important;
-        border-bottom:1px solid #cfd9e8 !important;
-        box-shadow:0 4px 14px rgba(7,29,61,.08);
-      }
-
-      .site-header.scrolled{
-        background:#f4f8fd !important;
-        border-bottom:1px solid #bfcddd !important;
-        box-shadow:0 10px 26px rgba(7,29,61,.14) !important;
-        backdrop-filter:blur(10px);
-        -webkit-backdrop-filter:blur(10px);
-      }
+      .site-header{background:#f7faff !important;border-bottom:1px solid #cfd9e8 !important;box-shadow:0 4px 14px rgba(7,29,61,.08)}
+      .site-header.scrolled{background:#f4f8fd !important;border-bottom:1px solid #bfcddd !important;box-shadow:0 10px 26px rgba(7,29,61,.14) !important;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
     }
   </style>
-
 
   <!-- INTERNAL TEST: INFO LOM / CATEGORIES SPACING -->
   <style id="info-lom-categories-spacing">
-    #info-lom-home-v1{
-      padding-bottom:8px;
-    }
-
-    #categories.categories-section{
-      padding-top:34px;
-    }
-
-    @media (max-width:760px){
-      #info-lom-home-v1{
-        padding-bottom:8px;
-      }
-
-      #categories.categories-section{
-        padding-top:26px;
-      }
-    }
+    #info-lom-home-v1{padding-bottom:8px}
+    #categories.categories-section{padding-top:34px}
+    @media (max-width:760px){#info-lom-home-v1{padding-bottom:8px}#categories.categories-section{padding-top:26px}}
   </style>
-
 
   <!-- INTERNAL TEST: INFO LOM MOBILE TITLE REFINEMENT -->
   <style id="info-lom-mobile-title-refinement">
-    @media (max-width:760px){
-      #info-lom-home-v1 .info-lom-copy strong{
-        font-size:12.75px;
-        line-height:1.22;
-      }
-
-      #info-lom-home-v1 .info-lom-copy small{
-        font-size:10.25px;
-        line-height:1.28;
-      }
-    }
+    @media (max-width:760px){#info-lom-home-v1 .info-lom-copy strong{font-size:12.75px;line-height:1.22}#info-lom-home-v1 .info-lom-copy small{font-size:10.25px;line-height:1.28}}
   </style>
-
 
   <!-- HOME LISTINGS — TEST V1 -->
   <style id="home-listings-test-v1">
-    .home-listings-section{
-      padding:68px 0 72px;
-      background:#f7f9fc;
-      border-top:1px solid #e5ebf3;
-      border-bottom:1px solid #e5ebf3;
-    }
-
-    .home-listings-heading{
-      margin-bottom:24px;
-    }
-
-    .home-listings-actions{
-      display:flex;
-      align-items:center;
-      justify-content:flex-end;
-      gap:14px;
-      flex-wrap:wrap;
-    }
-
-    .home-listings-add{
-      min-height:42px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:0 15px;
-      color:#fff;
-      background:#0b5fd7;
-      border-radius:11px;
-      text-decoration:none;
-      font-size:13px;
-      font-weight:900;
-      white-space:nowrap;
-    }
-
-    .home-listings-add:hover,
-    .home-listings-add:focus-visible{
-      background:#084cae;
-    }
-
-    .home-listings-grid{
-      display:grid;
-      grid-template-columns:repeat(4,minmax(0,1fr));
-      gap:16px;
-    }
-
-    .home-listings-grid .listing-card{
-      min-width:0;
-      height:100%;
-      box-shadow:0 8px 24px rgba(20,45,85,.055);
-    }
-
-    .home-listings-grid .listing-card-body{
-      height:100%;
-    }
-
-    .home-listings-grid .listing-card-body h3{
-      font-size:15px;
-    }
-
-    .home-listings-grid .listing-category,
-    .home-listings-grid .listing-location,
-    .home-listings-grid .listing-date{
-      font-size:12px;
-    }
-
-    .home-listings-grid .listing-price{
-      margin-top:auto;
-      padding-top:5px;
-      font-size:15px;
-    }
-
-    .home-listings-loading{
-      grid-column:1/-1;
-      text-align:center;
-    }
-
-    @media(max-width:1000px){
-      .home-listings-grid{
-        grid-template-columns:repeat(2,minmax(0,1fr));
-      }
-    }
-
-    @media(max-width:760px){
-      .home-listings-section{
-        padding:46px 0 52px;
-      }
-
-      .home-listings-heading{
-        align-items:flex-start;
-        margin-bottom:18px;
-      }
-
-      .home-listings-actions{
-        width:100%;
-        justify-content:flex-start;
-        gap:10px;
-      }
-
-      .home-listings-grid{
-        grid-template-columns:1fr;
-        gap:12px;
-      }
-
-      .home-listings-grid .listing-card-body{
-        padding:14px 15px;
-      }
-    }
+    .home-listings-section{padding:68px 0 72px;background:#f7f9fc;border-top:1px solid #e5ebf3;border-bottom:1px solid #e5ebf3}
+    .home-listings-heading{margin-bottom:24px}
+    .home-listings-actions{display:flex;align-items:center;justify-content:flex-end;gap:14px;flex-wrap:wrap}
+    .home-listings-add{min-height:42px;display:inline-flex;align-items:center;justify-content:center;padding:0 15px;color:#fff;background:#0b5fd7;border-radius:11px;text-decoration:none;font-size:13px;font-weight:900;white-space:nowrap}
+    .home-listings-add:hover,.home-listings-add:focus-visible{background:#084cae}
+    .home-listings-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+    .home-listings-grid .listing-card{min-width:0;height:100%;box-shadow:0 8px 24px rgba(20,45,85,.055)}
+    .home-listings-grid .listing-card-body{height:100%}
+    .home-listings-grid .listing-card-body h3{font-size:15px}
+    .home-listings-grid .listing-category,.home-listings-grid .listing-location,.home-listings-grid .listing-date{font-size:12px}
+    .home-listings-grid .listing-price{margin-top:auto;padding-top:5px;font-size:15px}
+    .home-listings-loading{grid-column:1/-1;text-align:center}
+    @media(max-width:1000px){.home-listings-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:760px){.home-listings-section{padding:46px 0 52px}.home-listings-heading{align-items:flex-start;margin-bottom:18px}.home-listings-actions{width:100%;justify-content:flex-start;gap:10px}.home-listings-grid{grid-template-columns:1fr;gap:12px}.home-listings-grid .listing-card-body{padding:14px 15px}}
   </style>
-
 
   <!-- HOME FLOW COMPACTION — TEST V1 -->
   <style id="home-flow-compaction-test-v1">
-    /* Обяви: при 1–2 реални карти секцията остава компактна,
-       вместо да разтяга малко съдържание върху цял широк ред. */
-    .home-listings-section:has(#home-listings-list > .listing-card:only-child){
-      padding-top:44px;
-      padding-bottom:48px;
-    }
-
-    .home-listings-section:has(#home-listings-list > .listing-card:only-child)
-    #home-listings-list{
-      grid-template-columns:minmax(0,410px);
-      justify-content:start;
-    }
-
-    .home-listings-section:has(#home-listings-list > .listing-card:nth-child(2):last-child){
-      padding-top:48px;
-      padding-bottom:52px;
-    }
-
-    .home-listings-section:has(#home-listings-list > .listing-card:nth-child(2):last-child)
-    #home-listings-list{
-      grid-template-columns:repeat(2,minmax(0,410px));
-      justify-content:start;
-    }
-
-    /* Последни въпроси: празното състояние се свива,
-       без да променяме секцията когато вече има реални въпроси. */
-    .questions-section:has(#home-questions > .empty-card){
-      padding-top:48px;
-      padding-bottom:54px;
-    }
-
-    .questions-section:has(#home-questions > .empty-card)
-    .section-heading{
-      margin-bottom:20px;
-    }
-
-    .questions-section:has(#home-questions > .empty-card)
-    #home-questions{
-      min-height:0;
-    }
-
-    .questions-section:has(#home-questions > .empty-card)
-    #home-questions > .empty-card{
-      max-width:760px;
-      padding:26px 28px;
-    }
-
-    .questions-section:has(#home-questions > .empty-card)
-    #home-questions > .empty-card h3{
-      margin-top:0;
-      margin-bottom:10px;
-    }
-
-    .questions-section:has(#home-questions > .empty-card)
-    #home-questions > .empty-card p{
-      margin-bottom:18px;
-    }
-
+    .home-listings-section:has(#home-listings-list > .listing-card:only-child){padding-top:44px;padding-bottom:48px}
+    .home-listings-section:has(#home-listings-list > .listing-card:only-child) #home-listings-list{grid-template-columns:minmax(0,410px);justify-content:start}
+    .home-listings-section:has(#home-listings-list > .listing-card:nth-child(2):last-child){padding-top:48px;padding-bottom:52px}
+    .home-listings-section:has(#home-listings-list > .listing-card:nth-child(2):last-child) #home-listings-list{grid-template-columns:repeat(2,minmax(0,410px));justify-content:start}
+    .questions-section:has(#home-questions > .empty-card){padding-top:48px;padding-bottom:54px}
+    .questions-section:has(#home-questions > .empty-card) .section-heading{margin-bottom:20px}
+    .questions-section:has(#home-questions > .empty-card) #home-questions{min-height:0}
+    .questions-section:has(#home-questions > .empty-card) #home-questions > .empty-card{max-width:760px;padding:26px 28px}
+    .questions-section:has(#home-questions > .empty-card) #home-questions > .empty-card h3{margin-top:0;margin-bottom:10px}
+    .questions-section:has(#home-questions > .empty-card) #home-questions > .empty-card p{margin-bottom:18px}
     @media(max-width:760px){
-      .home-listings-section:has(#home-listings-list > .listing-card:only-child),
-      .home-listings-section:has(#home-listings-list > .listing-card:nth-child(2):last-child){
-        padding-top:38px;
-        padding-bottom:42px;
-      }
-
-      .home-listings-section:has(#home-listings-list > .listing-card:only-child)
-      #home-listings-list,
-      .home-listings-section:has(#home-listings-list > .listing-card:nth-child(2):last-child)
-      #home-listings-list{
-        grid-template-columns:1fr;
-      }
-
-      .questions-section:has(#home-questions > .empty-card){
-        padding-top:38px;
-        padding-bottom:42px;
-      }
-
-      .questions-section:has(#home-questions > .empty-card)
-      #home-questions > .empty-card{
-        max-width:none;
-        padding:22px 20px;
-      }
+      .home-listings-section:has(#home-listings-list > .listing-card:only-child),.home-listings-section:has(#home-listings-list > .listing-card:nth-child(2):last-child){padding-top:38px;padding-bottom:42px}
+      .home-listings-section:has(#home-listings-list > .listing-card:only-child) #home-listings-list,.home-listings-section:has(#home-listings-list > .listing-card:nth-child(2):last-child) #home-listings-list{grid-template-columns:1fr}
+      .questions-section:has(#home-questions > .empty-card){padding-top:38px;padding-bottom:42px}
+      .questions-section:has(#home-questions > .empty-card) #home-questions > .empty-card{max-width:none;padding:22px 20px}
     }
   </style>
-
 
   <!-- HOME BUSINESSES — VISUAL TEST V1 -->
   <style id="home-businesses-visual-test-v1">
-    #home-businesses .business-list-card{
-      align-items:flex-start;
-    }
-
-    #home-businesses .home-business-description{
-      display:-webkit-box;
-      -webkit-box-orient:vertical;
-      -webkit-line-clamp:3;
-      overflow:hidden;
-      margin-bottom:10px;
-    }
-
-    #home-businesses .home-business-actions{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:12px;
-    }
-
-    #home-businesses .home-business-profile-link,
-    #home-businesses .home-business-call-link{
-      min-height:38px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:0 13px;
-      border-radius:10px;
-      text-decoration:none;
-      font-size:12px;
-      font-weight:900;
-      white-space:nowrap;
-    }
-
-    #home-businesses .home-business-profile-link{
-      color:#0b5fd7;
-      background:#fff;
-      border:1px solid #bfd0ea;
-    }
-
-    #home-businesses .home-business-call-link{
-      color:#fff;
-      background:#0b5fd7;
-      border:1px solid #0b5fd7;
-    }
-
-    #home-businesses .home-business-admin-card{
-      border-color:#c8d8ee;
-      box-shadow:0 10px 28px rgba(20,45,85,.075);
-    }
-
-    @media(max-width:760px){
-      #home-businesses .business-list-card{
-        padding:18px;
-      }
-
-      #home-businesses .business-main{
-        min-width:0;
-      }
-
-      #home-businesses .home-business-description{
-        -webkit-line-clamp:3;
-        line-height:1.5;
-      }
-
-      #home-businesses .home-business-actions{
-        margin-top:10px;
-      }
-    }
+    #home-businesses .business-list-card{align-items:flex-start}
+    #home-businesses .home-business-description{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;margin-bottom:10px}
+    #home-businesses .home-business-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+    #home-businesses .home-business-profile-link,#home-businesses .home-business-call-link{min-height:38px;display:inline-flex;align-items:center;justify-content:center;padding:0 13px;border-radius:10px;text-decoration:none;font-size:12px;font-weight:900;white-space:nowrap}
+    #home-businesses .home-business-profile-link{color:#0b5fd7;background:#fff;border:1px solid #bfd0ea}
+    #home-businesses .home-business-call-link{color:#fff;background:#0b5fd7;border:1px solid #0b5fd7}
+    #home-businesses .home-business-admin-card{border-color:#c8d8ee;box-shadow:0 10px 28px rgba(20,45,85,.075)}
+    @media(max-width:760px){#home-businesses .business-list-card{padding:18px}#home-businesses .business-main{min-width:0}#home-businesses .home-business-description{-webkit-line-clamp:3;line-height:1.5}#home-businesses .home-business-actions{margin-top:10px}}
   </style>
-
 </head>
 
 <body>
@@ -821,732 +348,141 @@
   <header class="site-header" id="site-header">
     <div class="header-inner">
       <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
-        <span class="brand-mark" aria-hidden="true">
-          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
-        </span>
-
-        <span class="brand-text">
-          <strong>Попитай<span>.Лом</span></strong>
-          <small>Попитай. Намери. Препоръчай.</small>
-        </span>
+        <span class="brand-mark" aria-hidden="true"><img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt=""></span>
+        <span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span>
       </a>
 
       <nav class="main-nav" id="main-nav" aria-label="Главна навигация">
         <div class="nav-desktop-group">
           <a class="active" href="index.html">Начало</a>
           <a class="nav-info-lom-desktop" href="#info-lom-home-v1">Инфо Лом</a>
-          <a href="kategorii.html">Категории</a>
-          <a href="firmi.html">Фирми</a>
-          <a href="obyavi.html">Обяви</a>
-          <a href="vaprosi.html">Въпроси</a>
-          <a href="statii.html">Статии</a>
+          <a href="kategorii.html">Категории</a><a href="firmi.html">Фирми</a><a href="obyavi.html">Обяви</a><a href="vaprosi.html">Въпроси</a><a href="statii.html">Статии</a>
         </div>
-
         <div class="nav-mobile-group">
           <div class="nav-primary-group">
-            <a class="nav-info-lom" href="#info-lom-home-v1">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="12" cy="12" r="9"></circle>
-                <path d="M12 10v6M12 7h.01"></path>
-              </svg>
-              <span>Инфо Лом</span>
-            </a>
-            <a href="firmi.html">Фирми</a>
-            <a href="obyavi.html">Обяви</a>
-            <a href="statii.html">Статии</a>
+            <a class="nav-info-lom" href="#info-lom-home-v1"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 10v6M12 7h.01"></path></svg><span>Инфо Лом</span></a>
+            <a href="firmi.html">Фирми</a><a href="obyavi.html">Обяви</a><a href="statii.html">Статии</a>
           </div>
-
-          <div class="nav-secondary-group" aria-label="Още">
-            <a href="za-nas.html">За сайта</a>
-            <a href="kontakti.html">Контакти</a>
-            <a href="pravila.html">Правила</a>
-          </div>
+          <div class="nav-secondary-group" aria-label="Още"><a href="za-nas.html">За сайта</a><a href="kontakti.html">Контакти</a><a href="pravila.html">Правила</a></div>
         </div>
       </nav>
 
       <div class="header-actions">
         <a class="login-link" href="vhod.html">Вход</a>
-        <a class="ask-button" href="nov-vapros.html">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 5v14M5 12h14"/>
-          </svg>
-          Задай въпрос
-        </a>
-
-        <button class="menu-button" id="menu-button" type="button"
-                aria-label="Отвори менюто"
-                aria-expanded="false"
-                aria-controls="main-nav">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+        <a class="ask-button" href="nov-vapros.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Задай въпрос</a>
+        <button class="menu-button" id="menu-button" type="button" aria-label="Отвори менюто" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span></button>
       </div>
     </div>
   </header>
 
   <main id="main-content">
     <section class="hero-section hero-cover" aria-labelledby="hero-title">
-      <picture class="hero-cover-media" aria-hidden="true">
-        <source media="(max-width: 760px)" srcset="assets/lom-cover-mobile-720.webp">
-        <img
-          src="assets/lom-cover-desktop-1536.webp"
-          width="1536"
-          height="864"
-          alt=""
-          fetchpriority="high"
-          decoding="async"
-        >
-      </picture>
+      <picture class="hero-cover-media" aria-hidden="true"><source media="(max-width: 760px)" srcset="assets/lom-cover-mobile-720.webp"><img src="assets/lom-cover-desktop-1536.webp" width="1536" height="864" alt="" fetchpriority="high" decoding="async"></picture>
       <div class="hero-cover-overlay" aria-hidden="true"></div>
-
-      <div class="hero-cover-inner">
-        <div class="hero-cover-content">
-          <div class="hero-cover-brand">
-            <img
-              src="assets/popitai-lom-logo-mark-256.webp"
-              width="92"
-              height="92"
-              alt=""
-              aria-hidden="true"
-            >
-            <span>Местната общност на Лом</span>
+      <div class="hero-cover-inner"><div class="hero-cover-content">
+        <div class="hero-cover-brand"><img src="assets/popitai-lom-logo-mark-256.webp" width="92" height="92" alt="" aria-hidden="true"><span>Местната общност на Лом</span></div>
+        <h1 id="hero-title">Попитай. Намери. Препоръчай.</h1>
+        <p class="hero-cover-lead">Препоръки, местни услуги и полезна информация от хората в Лом.</p>
+        <p class="hero-cover-support">Търсиш майстор, лекар, магазин или съвет? Питай тук – хората помагат.</p>
+        <form class="search-form hero-cover-search" id="search-form" role="search">
+          <label class="visually-hidden" for="main-search">Търси в Попитай.Лом</label>
+          <div class="search-field-wrap">
+            <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg>
+            <input id="main-search" name="q" type="search" autocomplete="off" placeholder="Какво търсиш в Лом?" aria-describedby="search-help" aria-controls="search-suggestions" aria-autocomplete="list">
+            <button class="clear-search" id="clear-search" type="button" aria-label="Изчисти търсенето"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+            <button class="search-button" type="submit">Търси</button>
           </div>
-
-          <h1 id="hero-title">Попитай. Намери. Препоръчай.</h1>
-
-          <p class="hero-cover-lead">
-            Препоръки, местни услуги и полезна информация от хората в Лом.
-          </p>
-
-          <p class="hero-cover-support">
-            Търсиш майстор, лекар, магазин или съвет? Питай тук – хората помагат.
-          </p>
-
-          <form class="search-form hero-cover-search" id="search-form" role="search">
-            <label class="visually-hidden" for="main-search">Търси в Попитай.Лом</label>
-
-            <div class="search-field-wrap">
-              <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="11" cy="11" r="7"></circle>
-                <path d="m20 20-4-4"></path>
-              </svg>
-
-              <input
-                id="main-search"
-                name="q"
-                type="search"
-                autocomplete="off"
-                placeholder="Какво търсиш в Лом?"
-                aria-describedby="search-help"
-                aria-controls="search-suggestions"
-                aria-autocomplete="list"
-              >
-
-              <button class="clear-search" id="clear-search" type="button" aria-label="Изчисти търсенето">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M6 6l12 12M18 6 6 18"></path>
-                </svg>
-              </button>
-
-              <button class="search-button" type="submit">Търси</button>
-            </div>
-
-            <div class="search-suggestions" id="search-suggestions" role="listbox" hidden></div>
-            <p id="search-help">Търси въпроси, фирми, услуги и категории.</p>
-          </form>
-
-          <div class="hero-cover-actions">
-            <a class="hero-cover-primary" href="nov-vapros.html">Задай въпрос</a>
-            <a class="hero-cover-secondary" href="kategorii.html">Разгледай категориите</a>
-          </div>
-
-          <div class="popular-searches hero-cover-popular" aria-label="Популярни търсения">
-            <span>Популярни:</span>
-            <button type="button" data-search="майстор за баня">Майстор за баня</button>
-            <button type="button" data-search="зъболекар">Зъболекар</button>
-            <button type="button" data-search="автосервиз">Автосервиз</button>
-            <button type="button" data-search="работа">Работа</button>
-          </div>
-        </div>
-      </div>
+          <div class="search-suggestions" id="search-suggestions" role="listbox" hidden></div>
+          <p id="search-help">Търси въпроси, фирми, услуги и категории.</p>
+        </form>
+        <div class="hero-cover-actions"><a class="hero-cover-primary" href="nov-vapros.html">Задай въпрос</a><a class="hero-cover-secondary" href="kategorii.html">Разгледай категориите</a></div>
+        <div class="popular-searches hero-cover-popular" aria-label="Популярни търсения"><span>Популярни:</span><button type="button" data-search="майстор за баня">Майстор за баня</button><button type="button" data-search="зъболекар">Зъболекар</button><button type="button" data-search="автосервиз">Автосервиз</button><button type="button" data-search="работа">Работа</button></div>
+      </div></div>
     </section>
 
-
-    <!-- INFO LOM HOME — TEST V1 -->
     <section id="info-lom-home-v1" aria-labelledby="info-lom-home-v1-title">
-      <div class="info-lom-wrap">
-        <div class="info-lom-panel">
-          <div class="info-lom-top">
-            <div>
-              <span class="info-lom-kicker">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z"/>
-                  <path d="M12 10v6M12 7h.01"/>
-                </svg>
-                Полезно за града
-              </span>
-              <h2 id="info-lom-home-v1-title">Инфо Лом</h2>
-              <p class="info-lom-lead">Проверени контакти и полезна информация, когато ти трябва точен отговор бързо.</p>
-            </div>
-            <span class="info-lom-badge">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="m9 12 2 2 4-4"/>
-                <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z"/>
-              </svg>
-              Проверена информация
-            </span>
-          </div>
-
-          <div class="info-lom-grid">
-            <div class="info-lom-item">
-              <span class="info-lom-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></svg>
-              </span>
-              <span class="info-lom-copy">
-                <strong>Здраве</strong>
-                <small>Болница, лекари, аптеки</small>
-              </span>
-            </div>
-
-            <div class="info-lom-item">
-              <span class="info-lom-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M3 9h18M5 9v9M9 9v9M15 9v9M19 9v9M3 18h18M12 3l9 4H3l9-4Z"/>
-                </svg>
-              </span>
-              <span class="info-lom-copy">
-                <strong>Институции</strong>
-                <small>Община, полиция и държавни служби</small>
-              </span>
-            </div>
-
-            <div class="info-lom-item">
-              <span class="info-lom-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <rect x="5" y="3" width="14" height="16" rx="3"/>
-                  <path d="M8 19v2M16 19v2M8 7h8M8 14h.01M16 14h.01"/>
-                </svg>
-              </span>
-              <span class="info-lom-copy">
-                <strong>Транспорт</strong>
-                <small>Автобуси, БДЖ, таксита</small>
-              </span>
-            </div>
-
-            <div class="info-lom-item">
-              <span class="info-lom-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="m3 10 9-5 9 5-9 5-9-5Z"/>
-                  <path d="M7 12.5V17c3 2 7 2 10 0v-4.5M21 10v6"/>
-                </svg>
-              </span>
-              <span class="info-lom-copy">
-                <strong>Образование и култура</strong>
-                <small>Училища и културни места</small>
-              </span>
-            </div>
-
-            <div class="info-lom-item">
-              <span class="info-lom-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24">
-                  <path d="M3 9h18M5 9v9M9 9v9M15 9v9M19 9v9M3 18h18M12 3l8 4H4l8-4Z"/>
-                </svg>
-              </span>
-              <span class="info-lom-copy">
-                <strong>Банки и банкомати</strong>
-                <small>Банки, ATM и услуги</small>
-              </span>
-            </div>
-
-            <div class="info-lom-item">
-              <span class="info-lom-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path d="m13 2-8 12h7l-1 8 8-12h-7l1-8Z"/></svg>
-              </span>
-              <span class="info-lom-copy">
-                <strong>Битови услуги</strong>
-                <small>Вода, ток, куриери, интернет</small>
-              </span>
-            </div>
-          </div>
+      <div class="info-lom-wrap"><div class="info-lom-panel">
+        <div class="info-lom-top"><div><span class="info-lom-kicker"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z"/><path d="M12 10v6M12 7h.01"/></svg>Полезно за града</span><h2 id="info-lom-home-v1-title">Инфо Лом</h2><p class="info-lom-lead">Проверени контакти и полезна информация, когато ти трябва точен отговор бързо.</p></div><span class="info-lom-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 12 2 2 4-4"/><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z"/></svg>Проверена информация</span></div>
+        <div class="info-lom-grid">
+          <div class="info-lom-item"><span class="info-lom-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></svg></span><span class="info-lom-copy"><strong>Здраве</strong><small>Болница, лекари, аптеки</small></span></div>
+          <div class="info-lom-item"><span class="info-lom-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 9h18M5 9v9M9 9v9M15 9v9M19 9v9M3 18h18M12 3l9 4H3l9-4Z"/></svg></span><span class="info-lom-copy"><strong>Институции</strong><small>Община, полиция и държавни служби</small></span></div>
+          <div class="info-lom-item"><span class="info-lom-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="16" rx="3"/><path d="M8 19v2M16 19v2M8 7h8M8 14h.01M16 14h.01"/></svg></span><span class="info-lom-copy"><strong>Транспорт</strong><small>Автобуси, БДЖ, таксита</small></span></div>
+          <div class="info-lom-item"><span class="info-lom-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m3 10 9-5 9 5-9 5-9-5Z"/><path d="M7 12.5V17c3 2 7 2 10 0v-4.5M21 10v6"/></svg></span><span class="info-lom-copy"><strong>Образование и култура</strong><small>Училища и културни места</small></span></div>
+          <div class="info-lom-item"><span class="info-lom-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 9h18M5 9v9M9 9v9M15 9v9M19 9v9M3 18h18M12 3l8 4H4l8-4Z"/></svg></span><span class="info-lom-copy"><strong>Банки и банкомати</strong><small>Банки, ATM и услуги</small></span></div>
+          <div class="info-lom-item"><span class="info-lom-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m13 2-8 12h7l-1 8 8-12h-7l1-8Z"/></svg></span><span class="info-lom-copy"><strong>Битови услуги</strong><small>Вода, ток, куриери, интернет</small></span></div>
         </div>
-      </div>
+      </div></div>
     </section>
 
     <section class="categories-section" id="categories" aria-labelledby="categories-title">
       <div class="section-container">
-        <div class="section-heading">
-          <div>
-            <span class="section-kicker">Бърза ориентация</span>
-            <h2 id="categories-title">Избери категория</h2>
-            <p>
-              Подредихме най-търсената информация ясно, за да стигнеш до нея
-              без лутане.
-            </p>
-          </div>
-
-          <a class="all-categories-link" href="kategorii.html">
-            Всички категории
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M5 12h14M13 6l6 6-6 6"/>
-            </svg>
-          </a>
-        </div>
-
+        <div class="section-heading"><div><span class="section-kicker">Бърза ориентация</span><h2 id="categories-title">Избери категория</h2><p>Подредихме най-търсената информация ясно, за да я намериш бързо.</p></div><a class="all-categories-link" href="kategorii.html">Всички категории<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
         <div class="category-grid">
-          <article class="category-card">
-            <a class="category-main-link" href="maistori.html">
-              <span class="category-icon category-icon-blue" aria-hidden="true">
-                <svg class="brand-category-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4-5.4L7 3.2l3.8 3.8 2.3-2.3a4 4 0 0 0 1.6 1.6Z"/><path d="M10.8 7 3 14.8a2.1 2.1 0 0 0 3 3L13.8 10"/><path class="icon-accent" d="m4 3 3 3-1.5 1.5-3-3L4 3Zm3 3 14 14"/></svg>
-              </span>
-              <span class="category-copy">
-                <strong>Майстори и ремонти</strong>
-                <small>Намери подходящ човек за дома и имота.</small>
-              </span>
-              <svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 12h14M13 6l6 6-6 6"/>
-              </svg>
-            </a>
-            <div class="category-sub-links">
-              <a href="kategorii.html#remonti">Ремонти</a>
-              <a href="kategorii.html#vik">ВиК</a>
-              <a href="kategorii.html#elektro">Електро</a>
-            </div>
-          </article>
-
-          <article class="category-card">
-            <a class="category-main-link" href="zdrave-i-lekari.html">
-              <span class="category-icon category-icon-green" aria-hidden="true">
-                <svg class="brand-category-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3v5a5 5 0 0 0 10 0V3"/><path d="M4 3h2M16 3h2"/><path d="M11 13v2a5 5 0 0 0 10 0v-1"/><circle class="icon-accent" cx="21" cy="12" r="2"/></svg>
-              </span>
-              <span class="category-copy">
-                <strong>Здраве и лекари</strong>
-                <small>Лекари, стоматолози и ветеринари.</small>
-              </span>
-              <svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 12h14M13 6l6 6-6 6"/>
-              </svg>
-            </a>
-            <div class="category-sub-links">
-              <a href="zdrave-i-lekari.html">Лекари</a>
-              <a href="zdrave-i-lekari.html">Зъболекари</a>
-              <a href="zdrave-i-lekari.html">Ветеринари</a>
-            </div>
-          </article>
-
-          <article class="category-card">
-            <a class="category-main-link" href="avtomobili.html">
-              <span class="category-icon category-icon-slate" aria-hidden="true">
-                <svg class="brand-category-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 11 1.4-4A2 2 0 0 1 8.3 5h7.4a2 2 0 0 1 1.9 2l1.4 4"/><rect x="3" y="11" width="18" height="7" rx="2"/><path d="M6 18v2M18 18v2"/><circle class="icon-accent" cx="7.5" cy="14.5" r="1.2"/><circle class="icon-accent" cx="16.5" cy="14.5" r="1.2"/></svg>
-              </span>
-              <span class="category-copy">
-                <strong>Автомобили</strong>
-                <small>Сервизи, гуми, части и пътна помощ.</small>
-              </span>
-              <svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 12h14M13 6l6 6-6 6"/>
-              </svg>
-            </a>
-            <div class="category-sub-links">
-              <a href="kategorii.html#servizi">Сервизи</a>
-              <a href="kategorii.html#gumi">Гуми</a>
-              <a href="kategorii.html#avtochasti">Авточасти</a>
-            </div>
-          </article>
-
-          <article class="category-card">
-            <a class="category-main-link" href="magazini.html">
-              <span class="category-icon category-icon-amber" aria-hidden="true">
-                <svg class="brand-category-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l1 13H5L6 8Z"/><path class="icon-accent" d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
-              </span>
-              <span class="category-copy">
-                <strong>Магазини и покупки</strong>
-                <small>Открий местни магазини и полезни покупки.</small>
-              </span>
-              <svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 12h14M13 6l6 6-6 6"/>
-              </svg>
-            </a>
-            <div class="category-sub-links">
-              <a href="kategorii.html#hranitelni">Хранителни</a>
-              <a href="kategorii.html#stroitelni">Строителни</a>
-              <a href="kategorii.html#tehnika">Техника</a>
-            </div>
-          </article>
-
-          <article class="category-card">
-            <a class="category-main-link" href="zavedenia.html">
-              <span class="category-icon category-icon-red" aria-hidden="true">
-                <svg class="brand-category-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3v7M2.5 3v4.5A2.5 2.5 0 0 0 5 10a2.5 2.5 0 0 0 2.5-2.5V3M5 10v11"/><path class="icon-accent" d="M17 3v18M14 3v6a3 3 0 0 0 3 3"/></svg>
-              </span>
-              <span class="category-copy">
-                <strong>Заведения</strong>
-                <small>Ресторанти, кафенета и места за срещи.</small>
-              </span>
-              <svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 12h14M13 6l6 6-6 6"/>
-              </svg>
-            </a>
-            <div class="category-sub-links">
-              <a href="kategorii.html#restoranti">Ресторанти</a>
-              <a href="kategorii.html#kafeneta">Кафенета</a>
-              <a href="kategorii.html#dostavka">Доставка</a>
-            </div>
-          </article>
-
-          <article class="category-card">
-            <a class="category-main-link" href="rabota.html">
-              <span class="category-icon category-icon-purple" aria-hidden="true">
-                <svg class="brand-category-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18"/><path class="icon-accent" d="M10 12v3h4v-3"/></svg>
-              </span>
-              <span class="category-copy">
-                <strong>Услуги</strong>
-                <small>Местни хора и фирми за ежедневни и професионални услуги.</small>
-              </span>
-              <svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 12h14M13 6l6 6-6 6"/>
-              </svg>
-            </a>
-            <div class="category-sub-links">
-              <a href="rabota.html">Домашни услуги</a>
-              <a href="rabota.html">Професионални услуги</a>
-            </div>
-          </article>
-
-          <article class="category-card">
-            <a class="category-main-link" href="obyavi.html">
-              <span class="category-icon category-icon-cyan" aria-hidden="true">
-                <svg class="brand-category-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4M8 8.5v7M8 9l10-4v14L8 15Z"/><path d="m8 15 2.5 5"/><path class="icon-accent" d="M20 8.5c1 .8 1.5 2 1.5 3.5S21 14.7 20 15.5"/></svg>
-              </span>
-              <span class="category-copy">
-                <strong>Обяви</strong>
-                <small>Купува, продава, подарява и търси.</small>
-              </span>
-              <svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 12h14M13 6l6 6-6 6"/>
-              </svg>
-            </a>
-            <div class="category-sub-links">
-              <a href="kategorii.html#prodavam">Продавам</a>
-              <a href="kategorii.html#kupuvam">Купувам</a>
-              <a href="kategorii.html#podaryavam">Подарявам</a>
-            </div>
-          </article>
-
-          <article class="category-card">
-            <a class="category-main-link" href="sabitiya.html">
-              <span class="category-icon category-icon-navy" aria-hidden="true">
-                <svg class="brand-category-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/><circle class="icon-accent" cx="8" cy="14" r=".7"/><circle class="icon-accent" cx="12" cy="14" r=".7"/><circle class="icon-accent" cx="16" cy="14" r=".7"/><circle class="icon-accent" cx="8" cy="18" r=".7"/><circle class="icon-accent" cx="12" cy="18" r=".7"/><circle class="icon-accent" cx="16" cy="18" r=".7"/></svg>
-              </span>
-              <span class="category-copy">
-                <strong>Събития</strong>
-                <small>Предстоящи местни, културни и спортни събития.</small>
-              </span>
-              <svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 12h14M13 6l6 6-6 6"/>
-              </svg>
-            </a>
-            <div class="category-sub-links">
-              <a href="sabitiya.html">Предстоящи</a>
-              <a href="sabitiya.html">Културни</a>
-              <a href="sabitiya.html">Спортни</a>
-            </div>
-          </article>
+          <article class="category-card"><a class="category-main-link" href="maistori.html"><span class="category-icon category-icon-blue" aria-hidden="true"><svg class="brand-category-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.4-5.4L7 3.2l3.8 3.8 2.3-2.3a4 4 0 0 0 1.6 1.6Z"/><path d="M10.8 7 3 14.8a2.1 2.1 0 0 0 3 3L13.8 10"/><path class="icon-accent" d="m4 3 3 3-1.5 1.5-3-3L4 3Zm3 3 14 14"/></svg></span><span class="category-copy"><strong>Майстори и ремонти</strong><small>Намери подходящ човек за дома и имота.</small></span><svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><div class="category-sub-links"><a href="kategorii.html#remonti">Ремонти</a><a href="kategorii.html#vik">ВиК</a><a href="kategorii.html#elektro">Електро</a></div></article>
+          <article class="category-card"><a class="category-main-link" href="zdrave-i-lekari.html"><span class="category-icon category-icon-green" aria-hidden="true"><svg class="brand-category-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3v5a5 5 0 0 0 10 0V3"/><path d="M4 3h2M16 3h2"/><path d="M11 13v2a5 5 0 0 0 10 0v-1"/><circle class="icon-accent" cx="21" cy="12" r="2"/></svg></span><span class="category-copy"><strong>Здраве и лекари</strong><small>Лекари, стоматолози и ветеринари.</small></span><svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><div class="category-sub-links"><a href="zdrave-i-lekari.html">Лекари</a><a href="zdrave-i-lekari.html">Зъболекари</a><a href="zdrave-i-lekari.html">Ветеринари</a></div></article>
+          <article class="category-card"><a class="category-main-link" href="avtomobili.html"><span class="category-icon category-icon-slate" aria-hidden="true"><svg class="brand-category-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 11 1.4-4A2 2 0 0 1 8.3 5h7.4a2 2 0 0 1 1.9 2l1.4 4"/><rect x="3" y="11" width="18" height="7" rx="2"/><path d="M6 18v2M18 18v2"/><circle class="icon-accent" cx="7.5" cy="14.5" r="1.2"/><circle class="icon-accent" cx="16.5" cy="14.5" r="1.2"/></svg></span><span class="category-copy"><strong>Автомобили</strong><small>Сервизи, гуми, части и пътна помощ.</small></span><svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><div class="category-sub-links"><a href="kategorii.html#servizi">Сервизи</a><a href="kategorii.html#gumi">Гуми</a><a href="kategorii.html#avtochasti">Авточасти</a></div></article>
+          <article class="category-card"><a class="category-main-link" href="magazini.html"><span class="category-icon category-icon-amber" aria-hidden="true"><svg class="brand-category-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8h12l1 13H5L6 8Z"/><path class="icon-accent" d="M9 9V6a3 3 0 0 1 6 0v3"/></svg></span><span class="category-copy"><strong>Магазини и покупки</strong><small>Открий местни магазини и полезни покупки.</small></span><svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><div class="category-sub-links"><a href="kategorii.html#hranitelni">Хранителни</a><a href="kategorii.html#stroitelni">Строителни</a><a href="kategorii.html#tehnika">Техника</a></div></article>
+          <article class="category-card"><a class="category-main-link" href="zavedenia.html"><span class="category-icon category-icon-red" aria-hidden="true"><svg class="brand-category-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3v7M2.5 3v4.5A2.5 2.5 0 0 0 5 10a2.5 2.5 0 0 0 2.5-2.5V3M5 10v11"/><path class="icon-accent" d="M17 3v18M14 3v6a3 3 0 0 0 3 3"/></svg></span><span class="category-copy"><strong>Заведения</strong><small>Ресторанти, кафенета и места за срещи.</small></span><svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><div class="category-sub-links"><a href="kategorii.html#restoranti">Ресторанти</a><a href="kategorii.html#kafeneta">Кафенета</a><a href="kategorii.html#dostavka">Доставка</a></div></article>
+          <article class="category-card"><a class="category-main-link" href="rabota.html"><span class="category-icon category-icon-purple" aria-hidden="true"><svg class="brand-category-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18"/><path class="icon-accent" d="M10 12v3h4v-3"/></svg></span><span class="category-copy"><strong>Услуги</strong><small>Местни хора и фирми за ежедневни и професионални услуги.</small></span><svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><div class="category-sub-links"><a href="rabota.html">Домашни услуги</a><a href="rabota.html">Професионални услуги</a></div></article>
+          <article class="category-card"><a class="category-main-link" href="obyavi.html"><span class="category-icon category-icon-cyan" aria-hidden="true"><svg class="brand-category-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4M8 8.5v7M8 9l10-4v14L8 15Z"/><path d="m8 15 2.5 5"/><path class="icon-accent" d="M20 8.5c1 .8 1.5 2 1.5 3.5S21 14.7 20 15.5"/></svg></span><span class="category-copy"><strong>Обяви</strong><small>Купува, продава, подарява и търси.</small></span><svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><div class="category-sub-links"><a href="kategorii.html#prodavam">Продавам</a><a href="kategorii.html#kupuvam">Купувам</a><a href="kategorii.html#podaryavam">Подарявам</a></div></article>
+          <article class="category-card"><a class="category-main-link" href="sabitiya.html"><span class="category-icon category-icon-navy" aria-hidden="true"><svg class="brand-category-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/><circle class="icon-accent" cx="8" cy="14" r=".7"/><circle class="icon-accent" cx="12" cy="14" r=".7"/><circle class="icon-accent" cx="16" cy="14" r=".7"/><circle class="icon-accent" cx="8" cy="18" r=".7"/><circle class="icon-accent" cx="12" cy="18" r=".7"/><circle class="icon-accent" cx="16" cy="18" r=".7"/></svg></span><span class="category-copy"><strong>Събития</strong><small>Предстоящи местни, културни и спортни събития.</small></span><svg class="category-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><div class="category-sub-links"><a href="sabitiya.html">Предстоящи</a><a href="sabitiya.html">Културни</a><a href="sabitiya.html">Спортни</a></div></article>
         </div>
       </div>
     </section>
 
     <section class="home-listings-section" aria-labelledby="home-listings-title">
       <div class="section-container">
-        <div class="section-heading home-listings-heading">
-          <div>
-            <span class="section-kicker">Местни обяви</span>
-            <h2 id="home-listings-title">Обяви в Лом</h2>
-            <p>Последни активни обяви от Лом и региона.</p>
-          </div>
-
-          <div class="home-listings-actions">
-            <a class="all-categories-link" href="obyavi.html">
-              Всички обяви
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M5 12h14M13 6l6 6-6 6"/>
-              </svg>
-            </a>
-            <a class="home-listings-add" href="dobavi-obqva.html">+ Добави обява</a>
-          </div>
-        </div>
-
-        <div class="home-listings-grid" id="home-listings-list" aria-live="polite">
-          <article class="empty-card home-listings-loading">
-            <p>Зареждане на обявите…</p>
-          </article>
-        </div>
+        <div class="section-heading home-listings-heading"><div><span class="section-kicker">Местни обяви</span><h2 id="home-listings-title">Обяви в Лом</h2><p>Последни активни обяви от Лом и региона.</p></div><div class="home-listings-actions"><a class="all-categories-link" href="obyavi.html">Всички обяви<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="home-listings-add" href="dobavi-obqva.html">+ Добави обява</a></div></div>
+        <div class="home-listings-grid" id="home-listings-list" aria-live="polite"><article class="empty-card home-listings-loading"><p>Зареждане на обявите…</p></article></div>
       </div>
     </section>
 
-    <section class="questions-section" aria-labelledby="latest-questions-title">
-      <div class="section-container">
-        <div class="section-heading">
-          <div>
-            <span class="section-kicker">Ново от общността</span>
-            <h2 id="latest-questions-title">Последни въпроси</h2>
-            <p>Тук ще се показват реално публикуваните въпроси.</p>
-          </div>
-          <a class="all-categories-link" href="vaprosi.html">
-            Виж всички въпроси
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
+    <section class="questions-section" aria-labelledby="latest-questions-title"><div class="section-container"><div class="section-heading"><div><span class="section-kicker">Ново от общността</span><h2 id="latest-questions-title">Последни въпроси</h2><p>Тук ще се показват реално публикуваните въпроси.</p></div><a class="all-categories-link" href="vaprosi.html">Виж всички въпроси<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div><div class="questions-grid" id="home-questions"><article class="empty-card empty-card-wide"><h3>Все още няма публикувани въпроси</h3><p>Първият реален въпрос ще се появи тук.</p><a class="primary-link-button" href="nov-vapros.html">Задай първия въпрос</a></article></div></div></section>
 
-        <div class="questions-grid" id="home-questions">
-          <article class="empty-card empty-card-wide">
-            <h3>Все още няма публикувани въпроси</h3>
-            <p>Първият реален въпрос ще се появи тук.</p>
-            <a class="primary-link-button" href="nov-vapros.html">Задай първия въпрос</a>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="firms-section" aria-labelledby="verified-firms-title">
-      <div class="section-container">
-        <div class="section-heading">
-          <div>
-            <span class="section-kicker">Местен бизнес</span>
-            <h2 id="verified-firms-title">Местни фирми</h2>
-            <p>Показват се само добавени профили. Няма измислени оценки или знак „Проверена“.</p>
-          </div>
-          <a class="all-categories-link" href="firmi.html">
-            Виж фирмите
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-        </div>
-
-        <div class="firms-grid" id="home-businesses">
-          <article class="empty-card empty-card-wide">
-            <h3>Все още няма добавени фирми</h3>
-            <p>След добавяне и преглед фирмените профили ще се появяват тук.</p>
-            <a class="primary-link-button" href="dobavi-firma.html">Добави фирма</a>
-          </article>
-        </div>
-      </div>
-    </section>
-
+    <section class="firms-section" aria-labelledby="verified-firms-title"><div class="section-container"><div class="section-heading"><div><span class="section-kicker">Местен бизнес</span><h2 id="verified-firms-title">Местни фирми</h2><p>Показват се само добавени профили. Няма измислени оценки или знак „Проверена“.</p></div><a class="all-categories-link" href="firmi.html">Виж фирмите<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div><div class="firms-grid" id="home-businesses"><article class="empty-card empty-card-wide"><h3>Все още няма добавени фирми</h3><p>След добавяне и преглед фирмените профили ще се появяват тук.</p><a class="primary-link-button" href="dobavi-firma.html">Добави фирма</a></article></div></div></section>
 
     <section class="articles-section" aria-labelledby="articles-title">
       <div class="section-container">
-        <div class="section-heading">
-          <div>
-            <span class="section-kicker">Полезно за теб</span>
-            <h2 id="articles-title">Полезни статии</h2>
-            <p>Кратки и практични материали за ежедневни решения.</p>
-          </div>
-
-          <a class="all-categories-link" href="statii.html">
-            Всички статии
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M5 12h14M13 6l6 6-6 6"/>
-            </svg>
-          </a>
-        </div>
-
+        <div class="section-heading"><div><span class="section-kicker">Полезно за теб</span><h2 id="articles-title">Полезни статии</h2><p>Кратки и практични материали за ежедневни решения.</p></div><a class="all-categories-link" href="statii.html">Всички статии<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
         <div class="articles-grid">
           <article class="article-card article-featured">
-            <div class="article-visual" aria-hidden="true">
-              <svg viewBox="0 0 64 64"><path d="M11 31 32 12l21 19v22H11V31Z"/><path d="M24 53V35h16v18M18 26V14h9"/></svg>
-            </div>
-            <div class="article-content">
-              <span>Дом и ремонт</span>
-              <h3><a href="statii.html">Как да избереш майстор и да избегнеш неприятни изненади</a></h3>
-              <p>Проверки, въпроси и ясни условия преди започване на ремонта.</p>
-              <a class="read-more" href="statii.html">Прочети статията</a>
-            </div>
-          </article>
-
-          <article class="article-card">
-            <div class="article-visual" aria-hidden="true">
-              <svg viewBox="0 0 64 64"><path d="M17 10h30v44H17z"/><path d="M24 20h16M24 29h16M24 38h10"/></svg>
-            </div>
-            <div class="article-content">
-              <span>Полезно</span>
-              <h3><a href="statii.html">Кои документи да поискаш при наемане на услуга</a></h3>
-              <p>Кратък списък, който помага да защитиш интереса си.</p>
-              <a class="read-more" href="statii.html">Прочети статията</a>
-            </div>
-          </article>
-
-          <article class="article-card">
-            <div class="article-visual" aria-hidden="true">
-              <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="21"/><path d="M32 18v15l10 6"/></svg>
-            </div>
-            <div class="article-content">
-              <span>Град и услуги</span>
-              <h3><a href="statii.html">Как бързо да намериш работно време и телефон</a></h3>
-              <p>Практичен начин за проверка на местни услуги и институции.</p>
-              <a class="read-more" href="statii.html">Прочети статията</a>
-            </div>
+            <div class="article-visual" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M11 31 32 12l21 19v22H11V31Z"/><path d="M24 53V35h16v18M18 26V14h9"/></svg></div>
+            <div class="article-content"><span>Дом и ремонт</span><h3><a href="statia.html">Как да избереш майстор и да избегнеш неприятни изненади</a></h3><p>Проверки, въпроси и ясни условия преди започване на ремонта.</p><a class="read-more" href="statia.html">Прочети статията</a></div>
           </article>
         </div>
       </div>
     </section>
-
   </main>
 
   <footer class="site-footer">
     <div class="section-container footer-main">
-      <div class="footer-brand">
-        <a class="brand footer-logo" href="index.html" aria-label="Попитай Лом – начало">
-          <span class="brand-mark" aria-hidden="true">
-          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
-        </span>
-          <span class="brand-text">
-            <strong>Попитай<span>.Лом</span></strong>
-            <small>Попитай. Намери. Препоръчай.</small>
-          </span>
-        </a>
-
-        <p>Местната общност на Лом за препоръки, услуги и полезна информация.</p>
-      </div>
-
-      <div class="footer-column">
-        <h2>Разгледай</h2>
-        <a href="kategorii.html">Категории</a>
-        <a href="vaprosi.html">Въпроси</a>
-        <a href="firmi.html">Фирми</a>
-        <a href="statii.html">Статии</a>
-      </div>
-
-      <div class="footer-column">
-        <h2>За общността</h2>
-        <a href="za-nas.html">За сайта</a>
-        <a href="pravila.html">Правила</a>
-        <a href="kontakti.html">Контакти</a>
-        <a href="signal.html">Подай сигнал</a>
-      </div>
-
-      <div class="footer-column">
-        <h2>Правна информация</h2>
-        <a href="poveritelnost.html">Поверителност</a>
-        <a href="uslovia.html">Условия за ползване</a>
-        <a href="biskvitki.html">Бисквитки</a>
-      </div>
+      <div class="footer-brand"><a class="brand footer-logo" href="index.html" aria-label="Попитай Лом – начало"><span class="brand-mark" aria-hidden="true"><img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt=""></span><span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span></a><p>Местната общност на Лом за препоръки, услуги и полезна информация.</p></div>
+      <div class="footer-column"><h2>Разгледай</h2><a href="kategorii.html">Категории</a><a href="vaprosi.html">Въпроси</a><a href="firmi.html">Фирми</a><a href="statii.html">Статии</a></div>
+      <div class="footer-column"><h2>За общността</h2><a href="za-nas.html">За сайта</a><a href="pravila.html">Правила</a><a href="kontakti.html">Контакти</a><a href="signal.html">Подай сигнал</a></div>
+      <div class="footer-column"><h2>Правна информация</h2><a href="poveritelnost.html">Поверителност</a><a href="uslovia.html">Условия за ползване</a><a href="biskvitki.html">Бисквитки</a></div>
     </div>
-
-    <div class="section-container footer-bottom">
-      <p>© <span id="current-year">2026</span> Попитай.Лом. Всички права запазени.</p>
-      <p>Създадено за хората от Лом.</p>
-    </div>
+    <div class="section-container footer-bottom"><p>© <span id="current-year">2026</span> Попитай.Лом. Всички права запазени.</p><p>Създадено за хората от Лом.</p></div>
   </footer>
 
-  <nav class="mobile-bottom-nav" aria-label="Мобилна навигация">
-    <a class="active" href="index.html">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg>
-      <span>Начало</span>
-    </a>
-    <a href="kategorii.html">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      <span>Категории</span>
-    </a>
-    <a class="mobile-ask" href="nov-vapros.html" aria-label="Задай въпрос">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-      <span>Въпрос</span>
-    </a>
-    <a href="vaprosi.html">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg>
-      <span>Въпроси</span>
-    </a>
-    <a href="vhod.html">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
-      <span>Профил</span>
-    </a>
-  </nav>
-
-  <button class="back-to-top" id="back-to-top" type="button" aria-label="Към началото">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
-  </button>
+  <nav class="mobile-bottom-nav" aria-label="Мобилна навигация"><a class="active" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>Начало</span></a><a href="kategorii.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Категории</span></a><a class="mobile-ask" href="nov-vapros.html" aria-label="Задай въпрос"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Въпрос</span></a><a href="vaprosi.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg><span>Въпроси</span></a><a href="vhod.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профил</span></a></nav>
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="Към началото"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg></button>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="supabase-config.js?v=20260820-1840" defer></script>
-
   <script>
   (() => {
     const ADMIN_ID = "598d6626-25ed-450f-87a9-e83f34f641c4";
-
-    const esc = (value) => String(value ?? "")
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;");
-
-    const formatDate = (iso) => {
-      if (!iso) return "";
-      return new Date(iso).toLocaleDateString("bg-BG", {
-        day:"numeric", month:"short", year:"numeric"
-      });
-    };
-
-    const formatPrice = (item) => {
-      if (item.price_free) return "Подарява";
-      if (item.price_negotiable) return "Договаряне";
-      if (item.price == null) return "";
-      const eur = Number(item.price).toLocaleString("bg-BG") + " евро";
-      const bgn = (Number(item.price) * 1.95583).toFixed(2).replace(".", ",") + " лв.";
-      return `${eur} / ${bgn}`;
-    };
-
-    const card = (item) => {
-      const price = formatPrice(item);
-      const badges = [
-        item.is_urgent ? '<span class="listing-badge urgent">Спешно</span>' : "",
-        item.is_reduced && item.price_old ? '<span class="listing-badge reduced">Намалено</span>' : ""
-      ].filter(Boolean).join("");
-
-      return `<article class="listing-card${item.is_highlighted ? " listing-card--highlighted" : ""}">
-        <div class="listing-card-body">
-          ${badges}
-          <span class="listing-type-badge">${esc(item.listing_type || "")}</span>
-          <h3><a href="obqva.html?id=${esc(item.id)}">${esc(item.title)}</a></h3>
-          <p class="listing-category">${esc(item.category)}${item.subcategory ? " › " + esc(item.subcategory) : ""}</p>
-          ${item.city ? `<p class="listing-location">📍 ${esc(item.city)}</p>` : ""}
-          <p class="listing-date">${formatDate(item.created_at)}</p>
-          ${price ? `<p class="listing-price">${item.price_old && item.is_reduced ? `<s>${Number(item.price_old).toLocaleString("bg-BG")} евро</s> ` : ""}${esc(price)}</p>` : ""}
-        </div>
-      </article>`;
-    };
-
-    const waitForClient = () => new Promise(resolve => {
-      if (window.PopitaiSupabase) return resolve(window.PopitaiSupabase);
-      const timer = setInterval(() => {
-        if (window.PopitaiSupabase) {
-          clearInterval(timer);
-          resolve(window.PopitaiSupabase);
-        }
-      }, 50);
-    });
-
+    const esc = (value) => String(value ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
+    const formatDate = (iso) => {if (!iso) return "";return new Date(iso).toLocaleDateString("bg-BG", {day:"numeric", month:"short", year:"numeric"});};
+    const formatPrice = (item) => {if (item.price_free) return "Подарява";if (item.price_negotiable) return "Договаряне";if (item.price == null) return "";const eur = Number(item.price).toLocaleString("bg-BG") + " евро";const bgn = (Number(item.price) * 1.95583).toFixed(2).replace(".", ",") + " лв.";return `${eur} / ${bgn}`;};
+    const card = (item) => {const price = formatPrice(item);const badges = [item.is_urgent ? '<span class="listing-badge urgent">Спешно</span>' : "",item.is_reduced && item.price_old ? '<span class="listing-badge reduced">Намалено</span>' : ""].filter(Boolean).join("");return `<article class="listing-card${item.is_highlighted ? " listing-card--highlighted" : ""}"><div class="listing-card-body">${badges}<span class="listing-type-badge">${esc(item.listing_type || "")}</span><h3><a href="obqva.html?id=${esc(item.id)}">${esc(item.title)}</a></h3><p class="listing-category">${esc(item.category)}${item.subcategory ? " › " + esc(item.subcategory) : ""}</p>${item.city ? `<p class="listing-location">📍 ${esc(item.city)}</p>` : ""}<p class="listing-date">${formatDate(item.created_at)}</p>${price ? `<p class="listing-price">${item.price_old && item.is_reduced ? `<s>${Number(item.price_old).toLocaleString("bg-BG")} евро</s> ` : ""}${esc(price)}</p>` : ""}</div></article>`;};
+    const waitForClient = () => new Promise(resolve => {if (window.PopitaiSupabase) return resolve(window.PopitaiSupabase);const timer = setInterval(() => {if (window.PopitaiSupabase) {clearInterval(timer);resolve(window.PopitaiSupabase);}}, 50);});
     async function loadHomeListings() {
-      const container = document.querySelector("#home-listings-list");
-      if (!container) return;
-
-      const client = await waitForClient();
-      const now = new Date().toISOString();
-
-      const { data, error } = await client
-        .from("listings")
-        .select("id, owner_id, title, category, subcategory, listing_type, price, price_negotiable, price_free, price_old, city, is_urgent, is_highlighted, is_reduced, is_boosted, is_owner_admin, created_at")
-        .eq("status", "approved")
-        .or("expires_at.is.null,expires_at.gt." + now)
-        .order("is_owner_admin", { ascending:false })
-        .order("created_at", { ascending:false })
-        .limit(30);
-
-      if (error) {
-        container.innerHTML = '<article class="empty-card home-listings-loading"><p>Обявите не могат да се заредят в момента.</p><a href="obyavi.html">Разгледай всички обяви</a></article>';
-        return;
-      }
-
+      const container = document.querySelector("#home-listings-list");if (!container) return;
+      const client = await waitForClient();const now = new Date().toISOString();
+      const { data, error } = await client.from("listings").select("id, owner_id, title, category, subcategory, listing_type, price, price_negotiable, price_free, price_old, city, is_urgent, is_highlighted, is_reduced, is_boosted, is_owner_admin, created_at").eq("status", "approved").or("expires_at.is.null,expires_at.gt." + now).order("is_owner_admin", { ascending:false }).order("created_at", { ascending:false }).limit(30);
+      if (error) {container.innerHTML = '<article class="empty-card home-listings-loading"><p>Обявите не могат да се заредят в момента.</p><a href="obyavi.html">Разгледай всички обяви</a></article>';return;}
       const items = [...(data || [])];
-
       // PROTECTED PROJECT LOGIC:
       // 1) Всички admin обяви са преди останалите.
       // 2) Между admin обявите: най-новата е първа.
@@ -1554,134 +490,47 @@
       items.sort((a, b) => {
         const aAdmin = a.owner_id === ADMIN_ID || a.is_owner_admin === true;
         const bAdmin = b.owner_id === ADMIN_ID || b.is_owner_admin === true;
-
         if (aAdmin !== bAdmin) return aAdmin ? -1 : 1;
         if (aAdmin && bAdmin) return new Date(b.created_at) - new Date(a.created_at);
-
         if (!!a.is_boosted !== !!b.is_boosted) return a.is_boosted ? -1 : 1;
         return new Date(b.created_at) - new Date(a.created_at);
       });
-
       const visible = items.slice(0, 4);
-
-      if (!visible.length) {
-        container.innerHTML = '<article class="empty-card home-listings-loading"><p>Все още няма активни обяви.</p><a href="dobavi-obqva.html">Добави първата обява</a></article>';
-        return;
-      }
-
+      if (!visible.length) {container.innerHTML = '<article class="empty-card home-listings-loading"><p>Все още няма активни обяви.</p><a href="dobavi-obqva.html">Добави първата обява</a></article>';return;}
       container.innerHTML = visible.map(card).join("");
     }
-
-    loadHomeListings().catch(() => {
-      const container = document.querySelector("#home-listings-list");
-      if (container) {
-        container.innerHTML = '<article class="empty-card home-listings-loading"><p>Обявите не могат да се заредят в момента.</p></article>';
-      }
-    });
+    loadHomeListings().catch(() => {const container = document.querySelector("#home-listings-list");if (container) container.innerHTML = '<article class="empty-card home-listings-loading"><p>Обявите не могат да се заредят в момента.</p></article>';});
   })();
   </script>
-
   <script src="supabase-businesses.js?v=20260807-1725" data-popitai-businesses defer></script>
   <script src="script.js?v=20260820-1833" defer></script>
-
   <script>
   (() => {
     const ADMIN_ID = "598d6626-25ed-450f-87a9-e83f34f641c4";
-
-    const waitForSupabase = () => new Promise(resolve => {
-      if (window.PopitaiSupabase) return resolve(window.PopitaiSupabase);
-      const timer = setInterval(() => {
-        if (window.PopitaiSupabase) {
-          clearInterval(timer);
-          resolve(window.PopitaiSupabase);
-        }
-      }, 50);
-    });
-
+    const waitForSupabase = () => new Promise(resolve => {if (window.PopitaiSupabase) return resolve(window.PopitaiSupabase);const timer = setInterval(() => {if (window.PopitaiSupabase) {clearInterval(timer);resolve(window.PopitaiSupabase);}}, 50);});
     function decorateBasicCard(card) {
       if (!card || card.dataset.homeBusinessDecorated === "1") return;
-
-      const main = card.querySelector(".business-main");
-      if (!main) return;
-
-      const paragraphs = [...main.querySelectorAll(":scope > p")];
-      const description = paragraphs.find(p => !p.querySelector("strong"));
-      if (description) description.classList.add("home-business-description");
-
-      const id = card.dataset.businessId || "";
-      if (!id) return;
-
-      const actions = document.createElement("div");
-      actions.className = "home-business-actions";
-      actions.innerHTML = `
-        <a class="home-business-profile-link" href="firma.html?id=${encodeURIComponent(id)}">
-          Виж профила
-        </a>`;
-
-      main.appendChild(actions);
-      card.dataset.homeBusinessDecorated = "1";
+      const main = card.querySelector(".business-main");if (!main) return;
+      const paragraphs = [...main.querySelectorAll(":scope > p")];const description = paragraphs.find(p => !p.querySelector("strong"));if (description) description.classList.add("home-business-description");
+      const id = card.dataset.businessId || "";if (!id) return;
+      const actions = document.createElement("div");actions.className = "home-business-actions";actions.innerHTML = `<a class="home-business-profile-link" href="firma.html?id=${encodeURIComponent(id)}">Виж профила</a>`;main.appendChild(actions);card.dataset.homeBusinessDecorated = "1";
     }
-
-    function decorateVisibleCards() {
-      document.querySelectorAll("#home-businesses .business-list-card").forEach(decorateBasicCard);
-    }
-
+    function decorateVisibleCards() {document.querySelectorAll("#home-businesses .business-list-card").forEach(decorateBasicCard);}
     async function markAdminCards() {
-      const container = document.querySelector("#home-businesses");
-      if (!container) return;
-
+      const container = document.querySelector("#home-businesses");if (!container) return;
       const client = await waitForSupabase();
-
-      const { data, error } = await client
-        .from("businesses")
-        .select("id, owner_id, phone")
-        .eq("status", "approved");
-
-      if (error || !data) return;
-
+      const { data, error } = await client.from("businesses").select("id, owner_id, phone").eq("status", "approved");if (error || !data) return;
       const byId = new Map(data.map(item => [String(item.id), item]));
-
-      container.querySelectorAll(".business-list-card").forEach(card => {
-        const item = byId.get(String(card.dataset.businessId || ""));
-        if (!item || item.owner_id !== ADMIN_ID) return;
-
-        card.classList.add("home-business-admin-card");
-
-        const actions = card.querySelector(".home-business-actions");
-        if (!actions || actions.querySelector(".home-business-call-link")) return;
-
-        if (item.phone) {
-          const phone = String(item.phone).replace(/\s+/g, "");
-          const call = document.createElement("a");
-          call.className = "home-business-call-link";
-          call.href = `tel:${phone}`;
-          call.textContent = "Обади се";
-          actions.prepend(call);
-        }
-      });
+      container.querySelectorAll(".business-list-card").forEach(card => {const item = byId.get(String(card.dataset.businessId || ""));if (!item || item.owner_id !== ADMIN_ID) return;card.classList.add("home-business-admin-card");const actions = card.querySelector(".home-business-actions");if (!actions || actions.querySelector(".home-business-call-link")) return;if (item.phone) {const phone = String(item.phone).replace(/\s+/g, "");const call = document.createElement("a");call.className = "home-business-call-link";call.href = `tel:${phone}`;call.textContent = "Обади се";actions.prepend(call);}});
     }
-
     document.addEventListener("DOMContentLoaded", () => {
-      const container = document.querySelector("#home-businesses");
-      if (!container) return;
-
+      const container = document.querySelector("#home-businesses");if (!container) return;
       decorateVisibleCards();
-
-      const observer = new MutationObserver(() => {
-        decorateVisibleCards();
-        clearTimeout(window.__homeBusinessesAdminTimer);
-        window.__homeBusinessesAdminTimer = setTimeout(markAdminCards, 120);
-      });
-
+      const observer = new MutationObserver(() => {decorateVisibleCards();clearTimeout(window.__homeBusinessesAdminTimer);window.__homeBusinessesAdminTimer = setTimeout(markAdminCards, 120);});
       observer.observe(container, { childList:true, subtree:true });
-
-      setTimeout(() => {
-        decorateVisibleCards();
-        markAdminCards();
-      }, 250);
+      setTimeout(() => {decorateVisibleCards();markAdminCards();}, 250);
     });
   })();
   </script>
-
 </body>
 </html>
