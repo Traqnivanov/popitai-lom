@@ -3,6 +3,7 @@
 
   const businessRoot = document.querySelector("[data-category-businesses]");
   const questionRoot = document.querySelector("[data-category-questions]");
+  const isEventsPage = questionRoot?.dataset.categoryQuestions === "Събития и град";
   if (!businessRoot && !questionRoot) return;
 
   const PUBLIC_CATEGORY_LABELS = {
@@ -41,6 +42,26 @@
         }
       }, 50);
     });
+  }
+
+  function ensureEventsSection() {
+    if (!isEventsPage || document.querySelector("[data-public-events]")) return;
+    const grid = document.querySelector(".subcategory-grid");
+    if (!grid) return;
+
+    const section = document.createElement("section");
+    section.className = "category-events-section";
+    section.innerHTML = `
+      <div class="block-heading spaced"><h2>Предстоящи събития</h2></div>
+      <div class="stack-list" data-public-events>
+        <article class="empty-card"><p>Зареждане на събитията…</p></article>
+      </div>`;
+    grid.insertAdjacentElement("afterend", section);
+
+    const script = document.createElement("script");
+    script.src = "events-public-v1.js?v=20260822-1833";
+    script.defer = true;
+    document.body.appendChild(script);
   }
 
   function businessCard(item) {
@@ -137,6 +158,8 @@
       ? items.map((item) => questionCard(item, counts.get(item.id) || 0)).join("")
       : '<article class="empty-card"><h3>Все още няма одобрени въпроси</h3><p>Задай въпрос и потърси препоръка от местната общност.</p><a class="primary-link-button" href="nov-vapros.html">Задай въпрос</a></article>';
   }
+
+  ensureEventsSection();
 
   (async () => {
     try {
