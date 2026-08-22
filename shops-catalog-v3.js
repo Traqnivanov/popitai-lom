@@ -27,6 +27,8 @@
   let currentUser = null;
   let shops = [];
   let loaded = false;
+  let submitted = false;
+  let successBox = null;
 
   const meta = {
     food:["Хранителни","Хранителни магазини в Лом","Супермаркети и местни хранителни магазини."],
@@ -35,6 +37,15 @@
     furniture:["Мебели","Мебелни магазини в Лом","Мебели, обзавеждане и решения за дома."],
     clothes:["Дрехи","Магазини за дрехи в Лом","Дрехи, обувки, бельо и аксесоари."],
     home:["Дом","Магазини за дома в Лом","Домашни потреби, подаръци, градина и специализирани стоки."]
+  };
+
+  const addLabels = {
+    food: "хранителен магазин",
+    construction: "строителен магазин",
+    tech: "магазин за техника",
+    furniture: "мебелен магазин",
+    clothes: "магазин за дрехи",
+    home: "магазин за дома"
   };
 
   const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({
@@ -125,7 +136,7 @@
     pc.textContent = currentMeta[2];
     document.getElementById("shops-panel")?.setAttribute("aria-labelledby", `tab-${cat}`);
     subs.hidden = cat !== "construction";
-    if (addBtn) addBtn.textContent = `＋ Добави ${currentMeta[0].toLocaleLowerCase("bg-BG")} магазин`;
+    if (addBtn) addBtn.textContent = `＋ Добави ${addLabels[cat] || "магазин"}`;
 
     if (!loaded) {
       count.textContent = "";
@@ -165,17 +176,46 @@
     addStatus.style.color = isError ? "#8a2020" : "#305d8d";
   }
 
+  function hasUnsentData() {
+    if (!form) return false;
+    const fd = new FormData(form);
+    return ["name","phone","address","working_hours","offer","source_type","source_details"]
+      .some(name => String(fd.get(name) || "").trim());
+  }
+
+  function resetFormState() {
+    if (!form) return;
+    form.reset();
+    form.hidden = false;
+    resetPhoneValidation();
+    if (categorySelect) categorySelect.value = cat;
+    setFormStatus("");
+  }
+
+  function clearSuccess() {
+    successBox?.remove();
+    successBox = null;
+    submitted = false;
+    resetFormState();
+  }
+
   function closeModal() {
     if (!modal) return;
+    if (submitted) {
+      clearSuccess();
+    } else {
+      if (hasUnsentData() && !window.confirm("Има неизпратени данни. Натисни OK, за да затвориш и изчистиш формата, или Отказ, за да останеш.")) return;
+      resetFormState();
+    }
     modal.hidden = true;
     document.body.style.overflow = "";
-    setFormStatus("");
   }
 
   function openModal() {
     if (!modal || !form || !currentUser) return;
+    if (submitted || successBox) clearSuccess();
     const currentMeta = meta[cat];
-    if (addTitle) addTitle.textContent = `Добави ${currentMeta[0].toLocaleLowerCase("bg-BG")} магазин`;
+    if (addTitle) addTitle.textContent = `Добави ${addLabels[cat] || "магазин"}`;
     if (categorySelect) categorySelect.value = cat;
     setFormStatus("");
     modal.hidden = false;
@@ -228,7 +268,7 @@
 
   async function submitShop(event) {
     event.preventDefault();
-    if (!client || !form) return;
+    if (!client || !form || submitted) return;
 
     const { data: authData } = await client.auth.getUser();
     currentUser = authData?.user || null;
@@ -261,18 +301,23 @@
     if (submit) submit.disabled = true;
     setFormStatus("Изпращане…");
     const { error } = await client.from("shops").insert(payload);
-    if (submit) submit.disabled = false;
 
     if (error) {
+      if (submit) submit.disabled = false;
       console.error("Магазини: грешка при изпращане.", error);
       setFormStatus("Не успяхме да изпратим предложението. Провери данните и опитай отново.", true);
       return;
     }
 
-    form.reset();
-    resetPhoneValidation();
-    if (categorySelect) categorySelect.value = cat;
-    setFormStatus("Предложението е изпратено за проверка.");
+    resetFormState();
+    submitted = true;
+    form.hidden = true;
+    successBox = document.createElement("div");
+    successBox.className = "form-status show";
+    successBox.setAttribute("role", "status");
+    successBox.innerHTML = '<strong>Предложението е изпратено за проверка.</strong><br><button class="form-submit" type="button" data-shop-success-close>Затвори</button>';
+    form.after(successBox);
+    successBox.querySelector("[data-shop-success-close]")?.addEventListener("click", closeModal);
   }
 
   phoneInput?.addEventListener("blur", () => {
