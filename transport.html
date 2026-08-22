@@ -16,6 +16,66 @@
 <a class="skip-link" href="#main-content">Към основното съдържание</a>
 <header class="site-header" id="site-header"><div class="header-inner"><a class="brand" href="index.html"><span class="brand-mark"><img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt=""></span><span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span></a><nav class="main-nav" id="main-nav"><a href="index.html">Начало</a><a class="active" href="info.html">Инфо Лом</a><a href="kategorii.html">Категории</a><a href="firmi.html">Фирми</a><a href="obyavi.html">Обяви</a><a href="vaprosi.html">Въпроси</a><a href="statii.html">Статии</a></nav><div class="header-actions"><a class="login-link" href="vhod.html">Вход</a><a class="ask-button" href="nov-vapros.html">Задай въпрос</a><button class="menu-button" id="menu-button" type="button" aria-label="Меню"><span></span><span></span><span></span></button></div></div></header>
 <main id="main-content" class="info-category-page"><section class="info-page-hero transport-hero"><div class="info-page-hero-inner"><nav class="info-page-crumb" aria-label="Навигационна пътека"><a href="index.html">Начало</a> › <a href="info.html">Инфо Лом</a> › <span aria-current="page">Транспорт</span></nav><span class="info-page-kicker">Инфо Лом</span><h1>Транспорт</h1><p>Автогара, автобуси, влакове и такси — най-важното за пътуване от и до Лом.</p></div></section><div class="info-page-tools"><div class="info-page-tools-inner"><a class="info-page-back" href="info.html">← Всички раздели</a><nav class="info-page-subnav" aria-label="Транспорт"><a href="#transport-avtobusi">Автобуси</a><a href="#transport-bdz">ЖП / БДЖ</a><a href="#transport-taksita">Таксита</a></nav></div></div><div class="info-section-wrap"><div data-info-transport-root><div class="info-loading">Зареждане…</div></div><section class="info-bottom-signal"><div><strong>Виждаш грешна или остаряла информация?</strong><span>Сигналът минава през администраторска проверка.</span></div><button class="info-btn info-btn--primary" type="button" data-transport-signal>Сигнализирай за грешка</button></section></div></main>
-<div class="info-modal" id="transport-modal" hidden><div class="info-modal-backdrop" data-transport-modal-close></div><section class="info-modal-card" role="dialog" aria-modal="true" aria-labelledby="transport-modal-title"><button class="info-modal-close" type="button" data-transport-modal-close>×</button><h2 id="transport-modal-title">Сигнал за транспортна информация</h2><p>Локален преглед — изпращането към базата ще се свърже след одобрение.</p></section></div>
+<div class="info-modal" id="transport-modal" hidden><div class="info-modal-backdrop" data-transport-modal-close></div><section class="info-modal-card" role="dialog" aria-modal="true" aria-labelledby="transport-modal-title"><button class="info-modal-close" type="button" data-transport-modal-close>×</button><h2 id="transport-modal-title">Сигнал за транспортна информация</h2><form class="content-form" id="transport-signal-form" novalidate><label for="transport-signal-problem">Какво е грешно?</label><textarea id="transport-signal-problem" rows="5" required minlength="10" maxlength="1800" aria-describedby="transport-signal-problem-error"></textarea><p class="form-message" id="transport-signal-problem-error" aria-live="polite"></p><label for="transport-signal-correct">Правилна информация / източник <small>(по желание)</small></label><textarea id="transport-signal-correct" rows="4" maxlength="1800"></textarea><button class="form-submit" type="submit">Изпрати сигнала</button><p class="form-message" id="transport-signal-status" aria-live="polite"></p></form></section></div>
 <footer class="site-footer"><div class="section-container footer-main"><div class="footer-brand"><a class="brand" href="index.html"><span class="brand-text"><strong>Попитай<span>.Лом</span></strong></span></a><p>Местната общност на Лом за препоръки, услуги и полезна информация.</p></div><div class="footer-column"><h2>Разгледай</h2><a href="info.html">Инфо Лом</a><a href="kategorii.html">Категории</a><a href="firmi.html">Фирми</a><a href="statii.html">Статии</a></div><div class="footer-column"><h2>За общността</h2><a href="za-nas.html">За сайта</a><a href="pravila.html">Правила</a><a href="kontakti.html">Контакти</a></div></div><div class="section-container footer-bottom"><p>© <span id="current-year">2026</span> Попитай.Лом.</p></div></footer>
-<script src="info-lom-transport-v1.js?v=20260817-2320" defer></script><script src="info-lom-page-nav.js?v=20260815-0905" defer></script><script src="script.js?v=20260820-1833" defer></script></body></html>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script><script src="supabase-config.js?v=20260820-1840" defer></script><script src="info-lom-transport-v1.js?v=20260817-2320" defer></script><script src="info-lom-page-nav.js?v=20260815-0905" defer></script><script>
+document.addEventListener("DOMContentLoaded",()=>{
+  const form=document.getElementById("transport-signal-form");
+  const problem=document.getElementById("transport-signal-problem");
+  const correct=document.getElementById("transport-signal-correct");
+  const fieldError=document.getElementById("transport-signal-problem-error");
+  const status=document.getElementById("transport-signal-status");
+  if(!form||!problem||!fieldError||!status) return;
+
+  function validateProblem(){
+    const value=problem.value.trim();
+    let message="";
+    if(!value) message="Опиши какво е грешно.";
+    else if(value.length<10) message="Добави малко повече информация за грешката.";
+    else if(value.length>1800) message="Описанието може да съдържа най-много 1800 знака.";
+    fieldError.textContent=message;
+    problem.setAttribute("aria-invalid",String(Boolean(message)));
+    return !message;
+  }
+
+  problem.addEventListener("blur",()=>{problem.dataset.touched="true";validateProblem();});
+  problem.addEventListener("input",()=>{if(problem.dataset.touched==="true"||problem.getAttribute("aria-invalid")==="true") validateProblem();});
+
+  form.addEventListener("submit",async event=>{
+    event.preventDefault();
+    problem.dataset.touched="true";
+    if(!validateProblem()){problem.focus();return;}
+    const button=form.querySelector('[type="submit"]');
+    button.disabled=true;
+    status.textContent="Изпращаме сигнала…";
+    status.className="form-message warning";
+    try{
+      const client=window.PopitaiSupabase;
+      if(!client) throw new Error("Supabase client missing");
+      const {data:authData,error:authError}=await client.auth.getUser();
+      if(authError) throw authError;
+      const user=authData?.user||null;
+      if(!user){
+        status.innerHTML='Трябва да влезеш в профила си, преди да подадеш сигнал. <a href="vhod.html">Вход</a>';
+        status.className="form-message error";
+        return;
+      }
+      const description=[`Какво е грешно: ${problem.value.trim()}`,correct?.value.trim()?`Правилна информация / източник: ${correct.value.trim()}`:"","Подадено от: Инфо Лом → Транспорт"].filter(Boolean).join("\n");
+      const {error}=await client.from("info_error_reports").insert({entry_id:null,reported_by:user.id,description,status:"pending",category:"transport",subcategory:"obshto"});
+      if(error) throw error;
+      form.reset();
+      delete problem.dataset.touched;
+      problem.removeAttribute("aria-invalid");
+      fieldError.textContent="";
+      status.textContent="Сигналът е изпратен за администраторска проверка.";
+      status.className="form-message success";
+    }catch(error){
+      console.error("Transport error report:",error);
+      status.textContent="Не успяхме да изпратим сигнала. Опитай отново.";
+      status.className="form-message error";
+    }finally{
+      button.disabled=false;
+    }
+  });
+});
+</script><script src="script.js?v=20260820-1833" defer></script></body></html>
