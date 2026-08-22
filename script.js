@@ -20,7 +20,7 @@ const CONSTRUCTION_SEARCH_STEMS = [
   // Общо ремонти — BG
   "строит", "ремонт", "майстор", "довършит", "баня", "бани",
   // Общо ремонти — Latin
-  "stroит", "remont", "maistor", "dovarshit", "banya",
+  "stroit", "stroит", "remont", "maistor", "dovarshit", "banya",
   // Плочки/фаянс — BG
   "плоч", "фаянс", "теракот", "гранитогрес", "фугир",
   // Плочки/фаянс — Latin
@@ -56,7 +56,7 @@ const CONSTRUCTION_SEARCH_STEMS = [
   // Настилки — BG
   "настил", "ламинат", "паркет", "замазк",
   // Настилки — Latin
-  "nastil", "laminat", "parket", "zamазk",
+  "nastil", "laminat", "parket", "zamazk", "zamазk",
   // Покриви/фасади — BG
   "покрив", "фасад", "изолац", "тенекедж",
   // Покриви/фасади — Latin
@@ -64,7 +64,7 @@ const CONSTRUCTION_SEARCH_STEMS = [
   // Зидария/бетон — BG
   "зидар", "бетон", "тухл", "цимент", "вар",
   // Зидария/бетон — Latin
-  "zidar", "beton", "tuhл", "ciment",
+  "zidar", "beton", "tuhl", "tuhл", "ciment",
   // Санитария — BG
   "санитар", "фугиран",
   // Санитария — Latin
