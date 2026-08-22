@@ -16,6 +16,7 @@
   const addTitle = document.getElementById("addTitle");
   const addStatus = document.getElementById("addStatus");
   const categorySelect = document.getElementById("shopCategory");
+  const phoneInput = document.getElementById("shopPhone");
   const client = window.PopitaiSupabase || null;
 
   const STORAGE_KEY = "popitai_magazini_cat";
@@ -40,6 +41,72 @@
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
   }[char]));
   const norm = value => String(value || "").toLocaleLowerCase("bg-BG").replace(/\s+/g," ").trim();
+
+  function phoneDigits(value) {
+    return String(value || "").replace(/\D/g, "");
+  }
+
+  function phoneValidationMessage(value) {
+    const normalized = String(value || "").trim();
+    if (!normalized) return "";
+    if (/\p{L}/u.test(normalized)) return "Телефонът не може да съдържа букви.";
+    if (!/^[+\d\s().-]+$/.test(normalized)) return "Използвай само цифри, интервали, +, тирета или скоби.";
+    if ((normalized.match(/\+/g) || []).length > 1 || (normalized.includes("+") && !normalized.startsWith("+"))) {
+      return "Знакът + може да бъде само веднъж и в началото.";
+    }
+
+    const digits = phoneDigits(normalized);
+    if (/^(\d)\1+$/.test(digits)) return "Въведи реален телефонен номер.";
+
+    if (normalized.startsWith("+")) {
+      if (!normalized.startsWith("+359")) return "Международният български номер трябва да започва с +359.";
+      if (![11, 12].includes(digits.length)) return "След +359 трябва да има 8 или 9 цифри.";
+      if (digits.charAt(3) === "0") return "След +359 не се изписва началната нула.";
+      return "";
+    }
+
+    if (!digits.startsWith("0")) return "Българският номер трябва да започва с 0 или +359.";
+    if (![9, 10].includes(digits.length)) return "Телефонът трябва да съдържа общо 9 или 10 цифри.";
+    return "";
+  }
+
+  function ensurePhoneError() {
+    if (!phoneInput) return null;
+    let error = document.getElementById("shopPhoneError");
+    if (error) return error;
+    error = document.createElement("p");
+    error.id = "shopPhoneError";
+    error.className = "help";
+    error.setAttribute("aria-live", "polite");
+    phoneInput.insertAdjacentElement("afterend", error);
+    const describedBy = new Set((phoneInput.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean));
+    describedBy.add(error.id);
+    phoneInput.setAttribute("aria-describedby", [...describedBy].join(" "));
+    return error;
+  }
+
+  function validatePhone() {
+    if (!phoneInput) return true;
+    const error = ensurePhoneError();
+    const message = phoneValidationMessage(phoneInput.value);
+    if (error) {
+      error.textContent = message;
+      error.style.color = message ? "#b42318" : "";
+      error.style.fontWeight = message ? "800" : "";
+    }
+    phoneInput.setAttribute("aria-invalid", String(Boolean(message)));
+    phoneInput.style.borderColor = message ? "#b42318" : "";
+    return !message;
+  }
+
+  function resetPhoneValidation() {
+    if (!phoneInput) return;
+    delete phoneInput.dataset.touched;
+    phoneInput.removeAttribute("aria-invalid");
+    phoneInput.style.borderColor = "";
+    const error = document.getElementById("shopPhoneError");
+    if (error) error.textContent = "";
+  }
 
   function list() {
     const q = norm(search?.value);
@@ -171,6 +238,10 @@
       return;
     }
     if (!form.reportValidity()) return;
+    if (!validatePhone()) {
+      phoneInput?.focus();
+      return;
+    }
 
     const fd = new FormData(form);
     const payload = {
@@ -194,14 +265,25 @@
 
     if (error) {
       console.error("Магазини: грешка при изпращане.", error);
-      setFormStatus("Не успяхме да изпратим предложението. Опитай отново.", true);
+      setFormStatus("Не успяхме да изпратим предложението. Провери данните и опитай отново.", true);
       return;
     }
 
     form.reset();
+    resetPhoneValidation();
     if (categorySelect) categorySelect.value = cat;
     setFormStatus("Предложението е изпратено за проверка.");
   }
+
+  phoneInput?.addEventListener("blur", () => {
+    phoneInput.dataset.touched = "true";
+    validatePhone();
+  });
+  phoneInput?.addEventListener("input", () => {
+    if (phoneInput.dataset.touched === "true" || phoneInput.getAttribute("aria-invalid") === "true") {
+      validatePhone();
+    }
+  });
 
   tabs.forEach(button => {
     if (!button.hasAttribute("aria-selected")) button.setAttribute("aria-selected","false");
