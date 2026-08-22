@@ -137,8 +137,16 @@ Joint live QA в `magazini.html` потвърди, че търсенето ра�
 ## QA-027 — Site-wide защита от неволно затваряне на попълнена форма
 Статус: `VERIFY / SITE-WIDE UX RULE`
 Joint live QA в `magazini.html` потвърди, че при въведени данни `Отказ` затваря modal-а веднага, без предупреждение; при повторно отваряне старите стойности и validation state остават. Потребителят изрично поиска това да се провери навсякъде в сайта.
-Одобрено правило за QA/UX проверка: ако форма/modal има реално въведени, но неизпратени промени, действие `Отказ`/`Затвори` не трябва да ги изхвърля без потвърждение. Показва се кратък confirm с ясни действия, напр. `Остани` и `Затвори и изчисти`. Ако формата е празна, се затваря директно. При `Остани` всички данни се пазят; при потвърдено `Затвори и изчисти` формата и старият validation state се нулират, така че следващото отваряне да е чисто. При изрично autosave/draft поведение се класифицира отделно, а не се уеднаквява механично.
+Одобрено правило за QA/UX проверка: ако форма/modal има реално въведени, но неизпратени промени, действие `Отказ`, бутонът `X` за затваряне или друго равностойно видимо действие за затваряне не трябва да ги изхвърля без потвърждение. Показва се кратък confirm с ясни действия, напр. `Остани` и `Затвори и изчисти`. Ако формата е празна, се затваря директно. При `Остани` всички данни се пазят; при потвърдено `Затвори и изчисти` формата и старият validation state се нулират, така че следващото отваряне да е чисто. При изрично autosave/draft поведение се класифицира отделно, а не се уеднаквява механично.
 Проверка site-wide: всички потребителски форми и modal-и, включително защитените модули само read-only/с отделно одобрение за промяна. QA правило не дава право да се променя LOCKED flow.
+
+## QA-028 — Типове/тагове трябва да идват от данните, не от твърди автоматични подтабове
+Статус: `OPEN / ARCHITECTURE / SITE-WIDE VERIFY`
+Потребителят потвърди системния модел: когато запис може да има много конкретни типове (магазин, услуга, заведение и други приложими записи), тези типове не трябва да се измислят като твърди автоматични подтабове в публичната страница. Класификацията трябва да идва от самия запис.
+Желан модел: основната категория остава отделна; при добавяне/редакция потребителят избира един или повече подходящи типове чрез чекове, специфични за съответната категория, и има възможност да добави допълнителен тип ръчно, когато липсва подходящ готов избор. Избраните/добавените типове се пазят като структурирани tags/types, показват се като ясни тагове върху картата, участват във филтрирането и търсенето и са връзката към QA-026 за синоними/транслитерация/tolerant matching.
+Не се допуска един универсален списък от типове за всички категории. Не се допуска и свободното ръчно въвеждане да създава хаос от дублиращи варианти (`боя`, `бои`, `БОЯ`, `boq` и др.); преди implementation трябва да се проектира normalization/alias модел, който пази смисъла на въведеното, но позволява надеждно търсене и дедупликация.
+`magazini.html` е първият потвърден пример: текущите строителни подфилтри са hardcoded UI слой, докато самите shop записи вече имат `tags/groups`. Преди промяна се прави read-only архитектурен одит на data model, формите, renderer-ите, картите, филтрите и search surfaces. Това е голяма системна задача и не се изпълнява като бързо `махни табовете`.
+Защитените Фирми/Обяви/Майстори/Admin и protected search priority не се променят като страничен ефект. Ако моделът трябва да се приложи в защитен модул, първо се иска отделно изрично одобрение.
 
 # B. 100% HTML INVENTORY / COVERAGE
 
@@ -154,7 +162,7 @@ Repo inventory:
 - `vaprosi.html` — pending QA question correctly hidden; filters/empty state checked; QA-009.
 - `statii.html` — one real article; QA-011.
 - `statia.html` — real article detail sections 1–4 load.
-- `tarsene.html` — subcategory searches, default no-q state and forced no-result state checked; QA-019/020/021/022/026.
+- `tarsene.html` — subcategory searches, default no-q state and forced no-result state checked; QA-019/020/021/022/026/028.
 - `404.html` — custom not-found heading + Back + Home link works structurally.
 - `za-nas.html`, `pravila.html`, `poveritelnost.html`, `uslovia.html`, `biskvitki.html` — basic structure read-only checked.
 
@@ -199,7 +207,7 @@ Repo inventory:
 Protected priority stays visible.
 
 ### Shops
-`magazini.html`: всички 6 tabs са joint-tested live: Хранителни/Строителни/Техника/Мебели/Дрехи/Дом зареждат съдържание. Shop search: `бои` намира релевантни записи; forced no-result `zzzztest` показва `Няма резултат.` + `Промени търсенето или филтъра.`. Add-store modal е отворен и category preselect `Строителни` е правилен. Empty submit дава specific errors за име/адрес/описание/източник; optional phone/work-hours/source-note не се маркират; invalid phone `123` дава semantic error on blur; valid `0888123456` clear-ва error; invalid submit пази вече въведените име/телефон. `Отказ` затваря веднага при dirty form, а повторното отваряне пази старите стойности/validation state → QA-027. QA-017/026/027. Success submit не е правен.
+`magazini.html`: всички 6 tabs са joint-tested live: Хранителни/Строителни/Техника/Мебели/Дрехи/Дом зареждат съдържание. Shop search: `бои` намира релевантни записи; forced no-result `zzzztest` показва `Няма резултат.` + `Промени търсенето или филтъра.`. Add-store modal е отворен и category preselect `Строителни` е правилен. Empty submit дава specific errors за име/адрес/описание/източник; optional phone/work-hours/source-note не се маркират; invalid phone `123` дава semantic error on blur; valid `0888123456` clear-ва error; invalid submit пази вече въведените име/телефон. `Отказ` затваря веднага при dirty form, а повторното отваряне пази старите стойности/validation state → QA-027. Строителните hardcoded подфилтри са маркирани за архитектурна замяна с data-driven types/tags след одит → QA-028. QA-017/026/027/028. Success submit не е правен.
 
 ## Info Lom deep read-only
 - `zdrave.html`: all health sections + anchors + direct phones/official links inspected; add/correction actions visible; QA-025.
@@ -265,8 +273,9 @@ Empty submit specific errors; QA-005; no additional listing.
 - QA-014/015/016 remain
 
 # E. MANUAL / PENDING, НЕ СЕ СЧИТА ЗА PASS
-- Site-wide dirty-form cancel/close behavior: check every applicable form/modal for QA-027; protected modules only read-only until separately approved.
-- Shops: success submit/post-submit/duplicate-prevention не е тестван; структурното решение за излишните строителни подфилтри е product/UX decision, не QA PASS/FAIL.
+- Site-wide dirty-form cancel/close behavior: check every applicable form/modal for QA-027, включително `X`; protected modules only read-only until separately approved.
+- Site-wide type/tag architecture: map where hardcoded subcategories/subtabs exist, where structured tags/types already exist, how forms collect them, how cards render them and how search/filter surfaces consume them → QA-028; protected modules remain read-only until separately approved.
+- Shops: success submit/post-submit/duplicate-prevention не е тестван.
 - Info Lom: actual button clicks, modals, anchor scrolling, external CTA actions section by section.
 - Auth: login/register/forgot/new-password invalid/valid behavior and post-submit.
 - Admin: protected moderation E2E only with user.
@@ -275,6 +284,6 @@ Empty submit specific errors; QA-005; no additional listing.
 - Visual error colors/focus after real invalid submit.
 
 # F. ROOT-CAUSE / FOLLOW-UP QUEUE
-Read-only investigation before fixes: QA-004, 006, 009, 010, 013, 015, 016, 018, 019, 021, 022, 023, 024, 025, 026, 027.
+Read-only investigation before fixes: QA-004, 006, 009, 010, 013, 015, 016, 018, 019, 021, 022, 023, 024, 025, 026, 027, 028.
 
 След края на QA поправките започват от този файл по status/priority. Нищо не става `CLOSED` без production retest.
