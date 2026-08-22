@@ -134,6 +134,12 @@ Live tree в `zdrave.html` показва правилни singular actions ка
 Joint live QA в `magazini.html` потвърди, че търсенето работи при директно съвпадение (`бои` → релевантни магазини), но потребителски заявки като `магазин за боя`, `латекс` и латиница/транслитерация (`boi`, `lateks`, `magazin za boq`) не трябва да зависят от exact text match. Нужно е да се провери същият модел във всички site search surfaces.
 Желано поведение: case/spacing normalization, кирилица↔латиница/transliteration tolerance, разумни aliases/synonyms/tags и ограничена typo tolerance, без измисляне на съдържание и без нерелевантни резултати. При общото `tarsene.html` всяка бъдеща промяна трябва изрично да запази LOCKED repair/construction/Masters priority и специалния приоритет на Ivanov Remonti; първо read-only root-cause/classification, после отделно решение за implementation.
 
+## QA-027 — Site-wide защита от неволно затваряне на попълнена форма
+Статус: `VERIFY / SITE-WIDE UX RULE`
+Joint live QA в `magazini.html` потвърди, че при въведени данни `Отказ` затваря modal-а веднага, без предупреждение; при повторно отваряне старите стойности и validation state остават. Потребителят изрично поиска това да се провери навсякъде в сайта.
+Одобрено правило за QA/UX проверка: ако форма/modal има реално въведени, но неизпратени промени, действие `Отказ`/`Затвори` не трябва да ги изхвърля без потвърждение. Показва се кратък confirm с ясни действия, напр. `Остани` и `Затвори и изчисти`. Ако формата е празна, се затваря директно. При `Остани` всички данни се пазят; при потвърдено `Затвори и изчисти` формата и старият validation state се нулират, така че следващото отваряне да е чисто. При изрично autosave/draft поведение се класифицира отделно, а не се уеднаквява механично.
+Проверка site-wide: всички потребителски форми и modal-и, включително защитените модули само read-only/с отделно одобрение за промяна. QA правило не дава право да се променя LOCKED flow.
+
 # B. 100% HTML INVENTORY / COVERAGE
 
 Repo inventory:
@@ -193,7 +199,7 @@ Repo inventory:
 Protected priority stays visible.
 
 ### Shops
-`magazini.html`: всички 6 tabs са joint-tested live: Хранителни/Строителни/Техника/Мебели/Дрехи/Дом зареждат съдържание. Shop search: `бои` намира релевантни записи; forced no-result `zzzztest` показва `Няма резултат.` + `Промени търсенето или филтъра.`. Add-store modal е отворен и category preselect `Строителни` е правилен. Empty submit дава specific errors за име/адрес/описание/източник; optional phone/work-hours/source-note не се маркират; invalid phone `123` дава semantic error on blur; valid `0888123456` clear-ва error; invalid submit пази вече въведените име/телефон. QA-017/026. Success submit не е правен.
+`magazini.html`: всички 6 tabs са joint-tested live: Хранителни/Строителни/Техника/Мебели/Дрехи/Дом зареждат съдържание. Shop search: `бои` намира релевантни записи; forced no-result `zzzztest` показва `Няма резултат.` + `Промени търсенето или филтъра.`. Add-store modal е отворен и category preselect `Строителни` е правилен. Empty submit дава specific errors за име/адрес/описание/източник; optional phone/work-hours/source-note не се маркират; invalid phone `123` дава semantic error on blur; valid `0888123456` clear-ва error; invalid submit пази вече въведените име/телефон. `Отказ` затваря веднага при dirty form, а повторното отваряне пази старите стойности/validation state → QA-027. QA-017/026/027. Success submit не е правен.
 
 ## Info Lom deep read-only
 - `zdrave.html`: all health sections + anchors + direct phones/official links inspected; add/correction actions visible; QA-025.
@@ -259,6 +265,7 @@ Empty submit specific errors; QA-005; no additional listing.
 - QA-014/015/016 remain
 
 # E. MANUAL / PENDING, НЕ СЕ СЧИТА ЗА PASS
+- Site-wide dirty-form cancel/close behavior: check every applicable form/modal for QA-027; protected modules only read-only until separately approved.
 - Shops: success submit/post-submit/duplicate-prevention не е тестван; структурното решение за излишните строителни подфилтри е product/UX decision, не QA PASS/FAIL.
 - Info Lom: actual button clicks, modals, anchor scrolling, external CTA actions section by section.
 - Auth: login/register/forgot/new-password invalid/valid behavior and post-submit.
@@ -268,6 +275,6 @@ Empty submit specific errors; QA-005; no additional listing.
 - Visual error colors/focus after real invalid submit.
 
 # F. ROOT-CAUSE / FOLLOW-UP QUEUE
-Read-only investigation before fixes: QA-004, 006, 009, 010, 013, 015, 016, 018, 019, 021, 022, 023, 024, 025, 026.
+Read-only investigation before fixes: QA-004, 006, 009, 010, 013, 015, 016, 018, 019, 021, 022, 023, 024, 025, 026, 027.
 
 След края на QA поправките започват от този файл по status/priority. Нищо не става `CLOSED` без production retest.
