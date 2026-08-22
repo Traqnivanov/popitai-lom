@@ -25,7 +25,7 @@
     </nav>
     <div class="header-actions">
       <a class="login-link" href="vhod.html">Вход</a><a class="ask-button" href="nov-vapros.html">Задай въпрос</a>
-      <button class="menu-button" id="menu-button" type="button" aria-label="Меню"><span></span><span></span><span></span></button>
+      <button class="menu-button" id="menu-button" type="button" aria-label="Отвори менюто" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span></button>
     </div>
   </div>
 </header>
@@ -74,7 +74,7 @@
 <div class="info-modal" id="education-modal" hidden>
   <div class="info-modal-backdrop" data-education-modal-close></div>
   <section class="info-modal-card" role="dialog" aria-modal="true" aria-labelledby="education-modal-title">
-    <button class="info-modal-close" type="button" data-education-modal-close>×</button>
+    <button class="info-modal-close" type="button" data-education-modal-close aria-label="Затвори">×</button>
     <h2 id="education-modal-title">Сигнал за информация</h2>
     <form class="content-form" id="education-signal-form" novalidate>
       <label for="education-signal-problem">Какво е грешно?</label>
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         return;
       }
       const description=[`Какво е грешно: ${problem.value.trim()}`,correct?.value.trim()?`Правилна информация / източник: ${correct.value.trim()}`:'','Подадено от: Инфо Лом → Образование и култура'].filter(Boolean).join('\n');
-      const {error}=await client.from('info_error_reports').insert({entry_id:null,reported_by:user.id,description,status:'pending',category:'obrazovanie-kultura',subcategory:'obshto'});
+      const {error}=await client.from('info_error_reports').insert({entry_id:null,reported_by:user.id,description,status:'pending',category:'obrazovanie',subcategory:'obshto'});
       if(error) throw error;
       form.reset();
       delete problem.dataset.touched;
