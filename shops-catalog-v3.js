@@ -52,6 +52,7 @@
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
   }[char]));
   const norm = value => String(value || "").toLocaleLowerCase("bg-BG").replace(/\s+/g," ").trim();
+  const cleanTag = value => String(value || "").replace(/\s+/g, " ").trim().slice(0, 80);
 
   function phoneDigits(value) {
     return String(value || "").replace(/\D/g, "");
@@ -119,6 +120,80 @@
     if (error) error.textContent = "";
   }
 
+  function categoryTags(category) {
+    const seen = new Map();
+    shops
+      .filter(shop => shop.cat === category)
+      .flatMap(shop => shop.tags || [])
+      .forEach(tag => {
+        const value = cleanTag(tag);
+        const key = norm(value);
+        if (value && key && !seen.has(key)) seen.set(key, value);
+      });
+    return [...seen.values()].sort((a, b) => a.localeCompare(b, "bg"));
+  }
+
+  function groupsForTags(category, tags) {
+    const wanted = new Set(tags.map(norm).filter(Boolean));
+    const groups = new Set();
+    if (!wanted.size) return [];
+    shops.forEach(shop => {
+      if (shop.cat !== category) return;
+      const shopTags = new Set((shop.tags || []).map(norm));
+      if (![...wanted].some(tag => shopTags.has(tag))) return;
+      (shop.groups || []).forEach(group => {
+        const value = String(group || "").trim();
+        if (value) groups.add(value);
+      });
+    });
+    return [...groups];
+  }
+
+  function ensureClassificationField() {
+    if (!form) return null;
+    let field = document.getElementById("shopClassificationField");
+    if (field) return field;
+
+    field = document.createElement("fieldset");
+    field.id = "shopClassificationField";
+    field.className = "field";
+    const sourceField = document.getElementById("shopSource")?.closest(".field");
+    if (sourceField) sourceField.insertAdjacentElement("beforebegin", field);
+    else form.appendChild(field);
+    return field;
+  }
+
+  function renderClassificationOptions() {
+    const field = ensureClassificationField();
+    if (!field) return;
+
+    const category = categorySelect?.value || cat;
+    const options = categoryTags(category);
+    const optionHtml = options.length
+      ? `<div style="display:grid;gap:7px">${options.map(tag => `<label style="display:flex;align-items:center;gap:8px;font-weight:650"><input type="checkbox" name="shop_tags" value="${esc(tag)}" style="width:auto"> <span>${esc(tag)}</span></label>`).join("")}</div>`
+      : '<p class="help">За тази категория още няма готови видове. Можеш да добавиш свое уточнение.</p>';
+
+    field.innerHTML = `
+      <legend style="font-size:.84rem;font-weight:850">Какво предлага магазинът — по желание</legend>
+      <p class="help">Избери едно или повече подходящи уточнения.</p>
+      ${optionHtml}
+      <label for="shopCustomTag" style="font-size:.84rem;font-weight:850;margin-top:4px">Друго уточнение</label>
+      <input id="shopCustomTag" name="custom_tag" maxlength="80" placeholder="Например: местен специализиран продукт">
+    `;
+  }
+
+  function selectedTags(fd) {
+    const values = [...fd.getAll("shop_tags"), fd.get("custom_tag")]
+      .map(cleanTag)
+      .filter(Boolean);
+    const unique = new Map();
+    values.forEach(value => {
+      const key = norm(value);
+      if (key && !unique.has(key)) unique.set(key, value);
+    });
+    return [...unique.values()];
+  }
+
   function list() {
     const q = norm(search?.value);
     return shops.filter(shop =>
@@ -179,8 +254,9 @@
   function hasUnsentData() {
     if (!form) return false;
     const fd = new FormData(form);
-    return ["name","phone","address","working_hours","offer","source_type","source_details"]
-      .some(name => String(fd.get(name) || "").trim());
+    if (["name","phone","address","working_hours","offer","source_type","source_details","custom_tag"]
+      .some(name => String(fd.get(name) || "").trim())) return true;
+    return fd.getAll("shop_tags").some(value => String(value || "").trim());
   }
 
   function resetFormState() {
@@ -189,6 +265,7 @@
     form.hidden = false;
     resetPhoneValidation();
     if (categorySelect) categorySelect.value = cat;
+    renderClassificationOptions();
     setFormStatus("");
   }
 
@@ -214,9 +291,9 @@
   function openModal() {
     if (!modal || !form || !currentUser) return;
     if (submitted || successBox) clearSuccess();
-    const currentMeta = meta[cat];
     if (addTitle) addTitle.textContent = `Добави ${addLabels[cat] || "магазин"}`;
     if (categorySelect) categorySelect.value = cat;
+    renderClassificationOptions();
     setFormStatus("");
     modal.hidden = false;
     document.body.style.overflow = "hidden";
@@ -227,6 +304,7 @@
     if (!client) {
       loaded = true;
       if (root) root.innerHTML = '<div class="empty"><strong>Магазините не могат да се заредят.</strong></div>';
+      renderClassificationOptions();
       return;
     }
 
@@ -241,6 +319,7 @@
       console.warn("Магазини: публичните записи не се заредиха.", error);
       if (root) root.innerHTML = '<div class="empty"><strong>Магазините не могат да се заредят.</strong><br>Опитай отново след малко.</div>';
       count.textContent = "";
+      renderClassificationOptions();
       return;
     }
 
@@ -255,6 +334,7 @@
       tags: Array.isArray(row.tags) ? row.tags : [],
       groups: Array.isArray(row.groups) ? row.groups : []
     }));
+    renderClassificationOptions();
     render();
   }
 
@@ -284,16 +364,21 @@
     }
 
     const fd = new FormData(form);
+    const category = String(fd.get("category") || "").trim();
+    const tags = selectedTags(fd);
+    const groups = groupsForTags(category, tags);
     const payload = {
       submitted_by: currentUser.id,
       name: String(fd.get("name") || "").trim(),
-      category: String(fd.get("category") || "").trim(),
+      category,
       phone: String(fd.get("phone") || "").trim(),
       address: String(fd.get("address") || "").trim(),
       working_hours: String(fd.get("working_hours") || "").trim(),
       offer: String(fd.get("offer") || "").trim(),
       source_type: String(fd.get("source_type") || "").trim(),
       source_details: String(fd.get("source_details") || "").trim(),
+      tags,
+      groups,
       status: "pending"
     };
 
@@ -329,6 +414,8 @@
       validatePhone();
     }
   });
+
+  categorySelect?.addEventListener("change", renderClassificationOptions);
 
   tabs.forEach(button => {
     if (!button.hasAttribute("aria-selected")) button.setAttribute("aria-selected","false");
