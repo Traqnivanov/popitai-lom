@@ -33,6 +33,7 @@ Questions/Answers чакат реален successful production submit retest п
 Правило: specific error до exact field, видим error state, focus first invalid, preserve data, live clear after fix, semantic validation.
 Transport signal blur/live-correction path е joint PASS.
 Health dynamic forms бяха source-confirmed като native-required-only. На 23.08.2026 е добавен `health-form-validation-v1.js`: field-specific errors за add/correction/signal, blur/focusout validation, live clear, `aria-invalid`, `aria-describedby`, red field/error state, submit capture + focus first invalid, без измислени min-length правила. `zdrave.html` зарежда слоя с cache version `20260823-0136`. Commits `cc061dca6cac98ee215e79d2607093bf808cbf21` и `1de49ee64292d0b044cc82c6d992ee1c90b3413a`. Нужен interaction retest.
+Auth forms вече са изведени в QA-033.
 
 ## QA-003 — `signal.html` e-mail validation
 Статус: `VERIFY - SOURCE GOOD`
@@ -165,6 +166,12 @@ Info intro now `Намери бързо точния контакт, услуг�
 Статус: `CLOSED`
 Production accessibility-tree retest on Health, Transport, Education, Banks, Utilities, Institutions: close control is descriptive (`Затвори съобщението`, aria present), not bare `×`.
 
+## QA-033 — Auth forms field-specific validation + unnecessary uploader
+Статус: `FIXED - NEEDS RETEST`
+Source audit found Login and Forgot Password relied on native browser required/type validation only; Registration had password-pair validation but name/e-mail/consent were not covered by the same field-specific UX. `vhod.html`, `registracia.html`, `zabravena-parola.html` и `nova-parola.html` also loaded `image-upload.js` although none of these pages has an upload UI.
+На 23.08.2026 `auth-form-validation.js` was extended without changing auth backend flow: exact adjacent errors for login e-mail/password, registration name/e-mail/password/confirm/consent, forgot-password e-mail and existing new-password/change-password pair rules; blur/touched behavior, live clear after correction, `aria-invalid`, `aria-describedby`, focus first invalid. No new password-strength business rule was invented; login password remains required-only, while create/reset password keeps the existing 8-character rule. Commit `9bf0ee0e31005ae24eb9abc5da8f95d4c721fa8f`.
+`vhod.html`, `zabravena-parola.html`, `registracia.html`, `nova-parola.html` now load cache-busted `auth-form-validation.js?v=20260823-0202`; unused `image-upload.js` was removed from all four. Commits: `98176b50d3bd5ac97da30869d7f2973cd3d264e5`, `11d57c69b12449e3d0dadcbc22c6086b88cfdf7a`, `beb35ca7e80db99eb7191f109a329b685fdeefe4`, `c0f099c95f7392ba6908ea6ed3aaedf432144cee`. Production interaction retest remains; no real sign-up/password-reset actions should be triggered unnecessarily.
+
 # B. KEY COVERAGE / E2E
 
 ## Public/category coverage
@@ -205,8 +212,8 @@ Backend grant fix applied; real valid production retest remains QA-004.
 - QA-029 actual first paint.
 - Contacts valid submit.
 - Signal missing/invalid email interaction.
+- Auth Login/Register/Forgot/New Password field-level validation and focus behavior; avoid real registration/reset mail unless explicitly needed.
 - Shops remaining CTA tab-by-tab strict retest.
-- Auth login/register/forgot/new-password behavior.
 - Admin moderation and guest/non-owner protected access checks.
 - Real mobile/device viewport and visual error colors/focus.
 
@@ -216,5 +223,6 @@ Backend grant fix applied; real valid production retest remains QA-004.
 3. QA-018 may require touching shared `script.js`; do not change it blindly because it carries LOCKED search logic. Prefer an exact owner-safe solution that does not alter protected search behavior, otherwise classify/ask approval before editing shared protected file.
 4. QA-019 is blocked until explicit approval for exact `мивк`/`автомивки` protected matching fix.
 5. QA-028 implementation is uploaded; remaining work is production modal interaction retest only.
+6. QA-033 implementation is uploaded; remaining work is production auth-form interaction retest only.
 
 Нищо не става `CLOSED` без реален production retest.
