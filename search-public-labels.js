@@ -14,10 +14,17 @@
     }
   };
 
+  let changed = false;
   STATIC_SEARCH_RECORDS.forEach(record => {
     const replacement = publicLabels[record.title];
     if (!replacement) return;
     record.title = replacement.title;
     record.desc = replacement.desc;
+    changed = true;
   });
+
+  if (changed && typeof renderSearchResults === "function") {
+    const query = new URLSearchParams(window.location.search).get("q") || "";
+    renderSearchResults(query);
+  }
 })();
