@@ -129,6 +129,39 @@
     return error;
   }
 
+  function armPostSubmitState(form, messageId, title, text, href = "", linkLabel = "") {
+    const message = document.getElementById(messageId);
+    if (!form || !message) return;
+
+    const previous = form._popitaiSubmitObserver;
+    if (previous) previous.disconnect();
+
+    const observer = new MutationObserver(() => {
+      if (message.classList.contains("is-error")) {
+        observer.disconnect();
+        form._popitaiSubmitObserver = null;
+        return;
+      }
+      if (!message.classList.contains("is-success")) return;
+
+      observer.disconnect();
+      form._popitaiSubmitObserver = null;
+      form.hidden = true;
+
+      let success = form.nextElementSibling;
+      if (!success || !success.classList.contains("post-submit-success")) {
+        success = document.createElement("div");
+        success.className = "empty-card post-submit-success";
+        success.setAttribute("role", "status");
+        form.insertAdjacentElement("afterend", success);
+      }
+      success.innerHTML = `<h2>${title}</h2><p>${text}</p>${href ? `<a class="primary-link-button" href="${href}">${linkLabel}</a>` : ""}`;
+    });
+
+    form._popitaiSubmitObserver = observer;
+    observer.observe(message, { childList: true, characterData: true, subtree: true, attributes: true, attributeFilter: ["class"] });
+  }
+
   function setupQuestionCategoryUx(category, title, description) {
     if (!category || !title || !description) return;
 
@@ -209,7 +242,17 @@
         event.preventDefault();
         event.stopImmediatePropagation();
         firstInvalid.focus();
+        return;
       }
+
+      armPostSubmitState(
+        form,
+        "new-question-message",
+        "Въпросът е изпратен",
+        "Въпросът е приет от системата. Ако профилът не е администраторски, той ще се покаже публично след одобрение.",
+        "vaprosi.html",
+        "Към въпросите"
+      );
     }, true);
   }
 
@@ -248,7 +291,15 @@
         event.preventDefault();
         event.stopImmediatePropagation();
         answer.focus();
+        return;
       }
+
+      armPostSubmitState(
+        form,
+        "answer-message",
+        "Отговорът е изпратен",
+        "Отговорът е изпратен и чака одобрение от администратор."
+      );
     }, true);
   }
 
