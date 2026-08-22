@@ -4,7 +4,6 @@
   const MODAL_SELECTOR = "#info-modal";
   const FORM_SELECTOR = "#info-submit-form, #info-error-form";
   const CLOSE_SELECTOR = "[data-modal-close]";
-  const REQUIRED_SELECTOR = `${FORM_SELECTOR} [required]`;
 
   function modal() {
     return document.querySelector(MODAL_SELECTOR);
@@ -12,6 +11,13 @@
 
   function activeForm() {
     return modal()?.querySelector(FORM_SELECTOR) || null;
+  }
+
+  function requiredFieldFromEvent(event) {
+    const field = event.target;
+    if (!field?.matches?.("[required]")) return null;
+    if (!field.closest(FORM_SELECTOR)) return null;
+    return field;
   }
 
   function ensureError(field) {
@@ -122,20 +128,20 @@
   }
 
   document.addEventListener("focusout", event => {
-    const field = event.target?.closest?.(REQUIRED_SELECTOR);
+    const field = requiredFieldFromEvent(event);
     if (!field) return;
     field.dataset.touched = "true";
     validateField(field, true);
   }, true);
 
   document.addEventListener("input", event => {
-    const field = event.target?.closest?.(REQUIRED_SELECTOR);
+    const field = requiredFieldFromEvent(event);
     if (!field) return;
     if (field.dataset.touched === "true" || field.getAttribute("aria-invalid") === "true") validateField(field, true);
   }, true);
 
   document.addEventListener("change", event => {
-    const field = event.target?.closest?.(REQUIRED_SELECTOR);
+    const field = requiredFieldFromEvent(event);
     if (!field) return;
     if (field.dataset.touched === "true" || field.getAttribute("aria-invalid") === "true") validateField(field, true);
   }, true);
