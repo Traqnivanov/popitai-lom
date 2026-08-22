@@ -20,14 +20,14 @@
 
   function isReady() {
     const priority = stagingRoot.querySelector('[data-approved-priority-institutions]');
-    if (!priority) return false;
+    if (!priority || priority.dataset.finalTwoApplied !== "true") return false;
 
     const regional = stagingRoot.querySelector('#institucii-oblastna');
     const emergency = stagingRoot.querySelector('#institucii-speshna');
-    const directory = stagingRoot.querySelector('.info-institution-directory, #institucii-other');
+    const directory = stagingRoot.querySelector('#institucii-other.info-institution-directory');
     if (!regional || !emergency || !directory) return false;
 
-    return priority.dataset.finalTwoApplied === "true";
+    return true;
   }
 
   function publish() {
