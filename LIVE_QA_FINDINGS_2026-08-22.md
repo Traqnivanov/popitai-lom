@@ -13,6 +13,7 @@
 - `CLOSED` = само след успешен production retest.
 - PASS не означава „страницата се отвори“; важат функции, линкове, състояния, роли и приложимите интеракции.
 - Нещо, което browser connector не може да натисне/попълни, остава `MANUAL / PENDING`, не PASS.
+- След всяка реално завършена задача статусът се актуализира веднага; не се чака пакет от няколко задачи. На всеки 5 приключени задачи може да има допълнителен checkpoint.
 
 ## ПРЕДИ ВСЯКА РЕДАКЦИЯ
 1. `PROJECT_RULES_00_READ_FIRST.md`
@@ -23,15 +24,25 @@
 
 LOCKED: Фирми/профили, Обяви, Майстори и ремонти, Admin core/critical actions, роли/права/ownership/approval/direct publish/лимити/statuses и protected repair search priority.
 
+## ПРИОРИТЕТЕН РЕД ЗА ИЗПЪЛНЕНИЕ
+- `P0 / SYSTEM`: load-state, flicker, render ownership, auth-state, intermittent loading — QA-006/029/030.
+- `P1 / FORMS`: post-submit, validation, dirty close, реални submit failures — QA-001/002/003/004/013/027.
+- `P1 / SEARCH`: relevance, legacy labels, empty state, transliteration/synonyms/types-tags — QA-019/021/022/026/028. Protected search priority остава LOCKED.
+- `P2 / CONTENT + ERROR STATES`: QA-011/017/018/020/023/024/025/031.
+- `P3 / ACCESSIBILITY + POLISH`: QA-007/009/010/032 и останалите visual/mobile/focus проверки.
+- LOCKED находките се одитират read-only и не се поправят без отделно изрично одобрение.
+
 # A. АКТИВНИ НАХОДКИ
 
 ## QA-001 — Site-wide post-submit UX
 Статус: `OPEN`
 След успешен submit формата трябва да изчезва/става inactive, да има ясен success + следващо действие и да няма accidental duplicate submit. При error формата остава и данните се пазят. Потвърден проблем поне в `nov-vapros.html` и `signal.html`.
+Source audit в Info Lom потвърждава същия клас проблем: Health add/correction оставя формата видима след success и само disable-ва submit; Transport/Education reset-ват формата, но `finally` отново enable-ва submit, т.е. success state не заключва потока срещу повторно изпращане.
 
 ## QA-002 — Site-wide validation UX
 Статус: `OPEN`
 Specific error до exact field; ясен red/error state; focus first invalid; preserve data; live clear after fix; semantic validation. `dobavi-firma.html` е добър reference model с summary `Провери отбелязаните полета. Данните ти са запазени.`
+Transport signal joint test: `abc` на blur правилно дава `Добави малко повече информация за грешката.`, а след валидна корекция грешката изчезва веднага — този конкретен validation path е PASS.
 
 ## QA-003 — `signal.html` e-mail validation
 Статус: `OPEN`
@@ -137,7 +148,8 @@ Joint live QA в `info.html` потвърди различно поведени�
 
 ## QA-027 — Site-wide защита от неволно затваряне на попълнена форма
 Статус: `VERIFY / SITE-WIDE UX RULE`
-Joint live QA в `magazini.html` потвърди, че при въведени данни `Отказ` затваря modal-а веднага, без предупреждение; при повторно отваряне старите стойности и validation state остават. Потребителят изрично поиска това да се провери навсякъде в сайта.
+Joint live QA в `magazini.html` потвърди, че при въведени данни `Отказ` затваря modal-а веднага, без предупреждение; при повторно отваряне старите стойности и validation state остават.
+Joint live QA в `transport.html` потвърди същото: при валидно въведен текст в signal modal натискане на `X` затваря директно без предупреждение. Source audit потвърждава, че Transport и Health close логиката няма dirty-state guard.
 Одобрено правило за QA/UX проверка: ако форма/modal има реално въведени, но неизпратени промени, действие `Отказ`, бутонът `X` за затваряне или друго равностойно видимо действие за затваряне не трябва да ги изхвърля без потвърждение. Показва се кратък confirm с ясни действия, напр. `Остани` и `Затвори и изчисти`. Ако формата е празна, се затваря директно. При `Остани` всички данни се пазят; при потвърдено `Затвори и изчисти` формата и старият validation state се нулират, така че следващото отваряне да е чисто. При изрично autosave/draft поведение се класифицира отделно, а не се уеднаквява механично.
 Проверка site-wide: всички потребителски форми и modal-и, включително защитените модули само read-only/с отделно одобрение за промяна. QA правило не дава право да се променя LOCKED flow.
 
@@ -150,10 +162,24 @@ Joint live QA в `magazini.html` потвърди, че при въведени 
 Защитените Фирми/Обяви/Майстори/Admin и protected search priority не се променят като страничен ефект. Ако моделът трябва да се приложи в защитен модул, първо се иска отделно изрично одобрение.
 
 ## QA-029 — Info Lom load flicker: static „остаряла информация“ блок се показва преди async съдържанието
-Статус: `OPEN / SITE-WIDE INFO UX / LOAD ORDER`
-Потребителят многократно наблюдава при зареждане на много Info Lom страници първо да се вижда текстът `Виждаш грешна или остаряла информация?`, след което реалното съдържание се появява и блокът се измества надолу. Source read-only проверката потвърди причината поне в `zdrave.html`, `transport.html`, `banki.html` и `komunalni.html`: dynamic root започва само с малък `Зареждане…`, а статичният `.info-bottom-signal` е веднага след него в DOM и е видим още преди async renderer-ът да напълни root-а. Това създава layout jump/flicker и изглежда като предупреждение, че текущата информация е стара, въпреки че текстът всъщност е CTA за сигнал.
-Проверка site-wide: всички Info Lom detail страници с async root + `info-bottom-signal`, както и други страници със статичен footer/CTA непосредствено след async празен root. Решението трябва да е load-state/readiness решение, не да се маха самият полезен сигнален CTA и не да се наслагва втори renderer.
-Отделно наблюдение: статичният header markup на `info.html` и други страници започва с `Вход`, а `script.js` по-късно може да го смени на `Профил`; това е сходен auth-state flicker и трябва да се класифицира в същия load-state audit, но не се смесва автоматично с content render ownership.
+Статус: `FIXED - NEEDS RETEST / SITE-WIDE INFO UX / LOAD ORDER`
+Потребителят многократно наблюдава при зареждане на много Info Lom страници първо да се вижда текстът `Виждаш грешна или остаряла информация?`, след което реалното съдържание се появява и блокът се измества надолу. Source audit потвърди причината в Info detail шаблоните: dynamic root започва с `Зареждане…`, а статичният `.info-bottom-signal` е веднага след него и се вижда преди async съдържанието.
+Source fix: в `info-lom-pages.css` е добавено строго scoped load-state правило, което скрива непосредствения `.info-bottom-signal` само докато `.info-section-wrap` още съдържа `.info-loading`; след финалния render сигналният CTA автоматично става видим. Няма timer, polling, MutationObserver или втори renderer.
+Render-ownership audit: Health/Transport/Education имат специализирани roots; Banks/Utilities зареждат generic helper, но generic renderer не таргетира техните specialized public roots; Institutions публикува от hidden staging към един public owner според защитеното render-ownership правило. Няма доказан текущ public double-render в тези roots.
+Pending преди `CLOSED`: cache-bust/version на променения CSS във всички Info detail HTML references + production first-paint retest на представителни страници, защото browser connector може да вижда страницата след завършване на load-а.
+
+## QA-030 — `info.html` остава с `Вход` при активна сесия
+Статус: `CLOSED / P0 AUTH LOAD-STATE`
+Root cause: `info.html` зареждаше `script.js`, но не зареждаше Supabase SDK + `supabase-config.js`; затова `script.js` виждаше `window.PopitaiSupabase === null` и не можеше да обнови `.login-link` от статично `Вход` към `Профил`.
+Fix: добавени са същите Supabase SDK/config dependencies преди `script.js`, без промяна на auth/roles/RLS/business logic. Production retest в същата активна сесия показа `Профил` на `info.html`.
+
+## QA-031 — `info.html` неестествен intro текст „без лутане“
+Статус: `CLOSED / P2 CONTENT`
+Потребителят маркира израза `без лутане из дълги списъци` като неподходящ. Одобреният текст е `Намери бързо точния контакт, услуга или място.`. Променено е само видимото copy; production retest потвърди новия текст.
+
+## QA-032 — Info Lom modal close бутон без достъпно име
+Статус: `OPEN / P3 ACCESSIBILITY / INFO`
+Joint test в Transport показа, че close бутонът се чете само като `×`. Source audit потвърждава същия markup без descriptive `aria-label` в generic `#info-modal`, използван от Health/Institutions/Banks/Utilities; Education вече има `aria-label="Затвори"`. Нужно е site-wide сравнително изчистване на close controls, без промяна на modal flow.
 
 # B. 100% HTML INVENTORY / COVERAGE
 
@@ -162,7 +188,7 @@ Repo inventory:
 
 ## Public/core
 - `index.html` — `PARTIAL PASS`; nav/cards/questions/firms/listings/articles inspected; QA-006/011.
-- `info.html` — `PARTIAL PASS`; 6 sections + quick anchor links; search exact/transliteration behavior checked → QA-026; session/header timing remains load-state issue → QA-029.
+- `info.html` — `PARTIAL PASS`; 6 sections + quick anchor links; search exact/transliteration behavior checked → QA-026; auth header load issue fixed and production retested → QA-030 CLOSED; intro copy retested → QA-031 CLOSED.
 - `kategorii.html` — structure/routes for exact 8 categories checked.
 - `firmi.html` — read-only protected list checked.
 - `obyavi.html` — intermittent load; filters/categories/search controls visible; active `TELEVIZOR` loads.
@@ -217,14 +243,14 @@ Protected priority stays visible.
 `magazini.html`: всички 6 tabs са joint-tested live: Хранителни/Строителни/Техника/Мебели/Дрехи/Дом зареждат съдържание. Shop search: `бои` намира релевантни записи; forced no-result `zzzztest` показва `Няма резултат.` + `Промени търсенето или филтъра.`. Add-store modal е отворен и category preselect `Строителни` е правилен. Empty submit дава specific errors за име/адрес/описание/източник; optional phone/work-hours/source-note не се маркират; invalid phone `123` дава semantic error on blur; valid `0888123456` clear-ва error; invalid submit пази вече въведените име/телефон. `Отказ` затваря веднага при dirty form, а повторното отваряне пази старите стойности/validation state → QA-027. Строителните hardcoded подфилтри са маркирани за архитектурна замяна с data-driven types/tags след одит → QA-028. QA-017/026/027/028. Success submit не е правен.
 
 ## Info Lom deep read-only
-- `zdrave.html`: all health sections + anchors + direct phones/official links inspected; add/correction actions visible; static bottom-signal-before-async-content source pattern confirmed → QA-025/029.
-- `institucii.html`: final priority content loads; signal action; QA-010; flicker/load-state remains under QA-029.
-- `transport.html`: bus/BDZ/taxi structure + anchor routes inspected; static bottom-signal-before-async-content source pattern confirmed → QA-029; interactive external actions remain manual.
-- `obrazovanie-kultura.html`: schools/kindergartens/chitalishta/library/museum/courses; many direct tel/official links visible; no new defect in this pass.
-- `banki.html`: ATMs/banks; `Добави банкомат`, signal action and official bank links present; static bottom-signal-before-async-content source pattern confirmed → QA-029.
-- `komunalni.html`: couriers/internet-TV/payment/insurance/electricity etc.; add buttons and direct tel/track/coverage links inspected; static bottom-signal-before-async-content source pattern confirmed → QA-029.
+- `zdrave.html`: all health sections + anchors + direct phones/official links inspected; add/correction actions visible; source confirms QA-001/027/029/032; QA-025.
+- `institucii.html`: final priority content loads; signal action; public single-owner staging architecture verified; QA-010/029/032.
+- `transport.html`: bus/BDZ/taxi structure + anchor routes inspected; validation blur/live-clear joint PASS; dirty-X fail → QA-027; close accessibility → QA-032; load-state → QA-029.
+- `obrazovanie-kultura.html`: schools/kindergartens/chitalishta/library/museum/courses; many direct tel/official links visible; signal form source has good aria close label but QA-001 post-success duplicate risk.
+- `banki.html`: ATMs/banks; `Добави банкомат`, signal action and official bank links present; specialized public root + QA-029/032.
+- `komunalni.html`: couriers/internet-TV/payment/insurance/electricity etc.; add buttons and direct tel/track/coverage links inspected; specialized public root + QA-029/032.
 
-Нито един Info section е final 100% PASS преди real click/anchor/modal/mobile test.
+Нито един Info section е final 100% PASS преди remaining production first-paint/modal/mobile checks.
 
 ## Detail/error pages
 - Active listing `TELEVIZOR`: title/category/price/date/address, 4 images, share, signal, contact phone, call + Viber actions visible. Interactive Share/Signal still manual.
@@ -280,11 +306,10 @@ Empty submit specific errors; QA-005; no additional listing.
 - QA-014/015/016 remain
 
 # E. MANUAL / PENDING, НЕ СЕ СЧИТА ЗА PASS
-- Site-wide dirty-form cancel/close behavior: check every applicable form/modal for QA-027, включително `X`; protected modules only read-only until separately approved.
+- Site-wide dirty-form cancel/close behavior: source audit first; manual only where source cannot prove behavior. Protected modules only read-only until separately approved.
 - Site-wide type/tag architecture: map where hardcoded subcategories/subtabs exist, where structured tags/types already exist, how forms collect them, how cards render them and how search/filter surfaces consume them → QA-028; protected modules remain read-only until separately approved.
-- Site-wide load-state/flicker audit: first paint vs final paint for async content roots and auth header state; Info Lom bottom-signal flicker confirmed in source pattern → QA-029.
+- QA-029: production first-paint retest after CSS cache-bust/version update on Info detail pages.
 - Shops: success submit/post-submit/duplicate-prevention не е тестван.
-- Info Lom: actual button clicks, modals, anchor scrolling, external CTA actions section by section.
 - Auth: login/register/forgot/new-password invalid/valid behavior and post-submit.
 - Admin: protected moderation E2E only with user.
 - Guest/non-owner checks: Admin URL, pending listing detail, returned firm preview, expanded editor.
@@ -292,6 +317,10 @@ Empty submit specific errors; QA-005; no additional listing.
 - Visual error colors/focus after real invalid submit.
 
 # F. ROOT-CAUSE / FOLLOW-UP QUEUE
-Read-only investigation before fixes: QA-004, 006, 009, 010, 013, 015, 016, 018, 019, 021, 022, 023, 024, 025, 026, 027, 028, 029.
+P0 first: QA-029 cache/version + first-paint retest; QA-006 read-only because LOCKED.
+Then P1 Forms: QA-001/002/003/004/013/027.
+Then P1 Search: QA-019/021/022/026/028, with protected priority untouched.
+Then P2/P3.
+Read-only investigation before risky/protected fixes remains mandatory.
 
-След края на QA поправките започват от този файл по status/priority. Нищо не става `CLOSED` без production retest.
+След края на QA поправките се работи от този файл по priority/status. Нищо не става `CLOSED` без production retest.
