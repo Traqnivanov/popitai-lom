@@ -91,7 +91,7 @@ Visible checkbox label `Highlighted` нарушава Bulgarian UI rule.
 
 ## QA-017 — `magazini.html` grammatically wrong CTA
 Статус: `OPEN`
-Live screenshot + tree: `+ Добави хранителни магазин`. Трябва граматически правилно dynamic naming, без промяна на shop flow.
+Live проверката потвърди грешни dynamic labels във всички тествани shop tabs, напр. `+ Добави хранителни магазин`, `+ Добави строителни магазин`, `+ Добави техника магазин`, `+ Добави мебели магазин`, `+ Добави дрехи магазин`, `+ Добави дом магазин`. Същият текст се повтаря и в modal heading. Трябва граматически правилно dynamic naming, без промяна на shop flow.
 
 ## QA-018 — `vapros.html` без id дублира not-found state
 Статус: `VERIFY / UX / RENDER OWNERSHIP`
@@ -129,6 +129,11 @@ Live tree в `zdrave.html` показва правилни singular actions ка
 - `Добави лаборатории и диагностика`
 Проверка на dynamic label generation; корекция само на visible wording, без content/admin flow side effects.
 
+## QA-026 — Search е прекалено exact: липсват синоними, транслитерация и tolerant matching
+Статус: `OPEN / SITE-WIDE VERIFY`
+Joint live QA в `magazini.html` потвърди, че търсенето работи при директно съвпадение (`бои` → релевантни магазини), но потребителски заявки като `магазин за боя`, `латекс` и латиница/транслитерация (`boi`, `lateks`, `magazin za boq`) не трябва да зависят от exact text match. Нужно е да се провери същият модел във всички site search surfaces.
+Желано поведение: case/spacing normalization, кирилица↔латиница/transliteration tolerance, разумни aliases/synonyms/tags и ограничена typo tolerance, без измисляне на съдържание и без нерелевантни резултати. При общото `tarsene.html` всяка бъдеща промяна трябва изрично да запази LOCKED repair/construction/Masters priority и специалния приоритет на Ivanov Remonti; първо read-only root-cause/classification, после отделно решение за implementation.
+
 # B. 100% HTML INVENTORY / COVERAGE
 
 Repo inventory:
@@ -143,7 +148,7 @@ Repo inventory:
 - `vaprosi.html` — pending QA question correctly hidden; filters/empty state checked; QA-009.
 - `statii.html` — one real article; QA-011.
 - `statia.html` — real article detail sections 1–4 load.
-- `tarsene.html` — subcategory searches, default no-q state and forced no-result state checked; QA-019/020/021/022.
+- `tarsene.html` — subcategory searches, default no-q state and forced no-result state checked; QA-019/020/021/022/026.
 - `404.html` — custom not-found heading + Back + Home link works structurally.
 - `za-nas.html`, `pravila.html`, `poveritelnost.html`, `uslovia.html`, `biskvitki.html` — basic structure read-only checked.
 
@@ -188,7 +193,7 @@ Repo inventory:
 Protected priority stays visible.
 
 ### Shops
-`magazini.html`: tabs Хранителни/Строителни/Техника/Мебели/Дрехи/Дом exist; Хранителни renders stores; QA-017. Connector cannot click remaining 5 tabs or Add-store button → `MANUAL / PENDING`, not PASS.
+`magazini.html`: всички 6 tabs са joint-tested live: Хранителни/Строителни/Техника/Мебели/Дрехи/Дом зареждат съдържание. Shop search: `бои` намира релевантни записи; forced no-result `zzzztest` показва `Няма резултат.` + `Промени търсенето или филтъра.`. Add-store modal е отворен и category preselect `Строителни` е правилен. Empty submit дава specific errors за име/адрес/описание/източник; optional phone/work-hours/source-note не се маркират; invalid phone `123` дава semantic error on blur; valid `0888123456` clear-ва error; invalid submit пази вече въведените име/телефон. QA-017/026. Success submit не е правен.
 
 ## Info Lom deep read-only
 - `zdrave.html`: all health sections + anchors + direct phones/official links inspected; add/correction actions visible; QA-025.
@@ -254,7 +259,7 @@ Empty submit specific errors; QA-005; no additional listing.
 - QA-014/015/016 remain
 
 # E. MANUAL / PENDING, НЕ СЕ СЧИТА ЗА PASS
-- Shops: 5 remaining tabs + add-store modal/form/submit.
+- Shops: success submit/post-submit/duplicate-prevention не е тестван; структурното решение за излишните строителни подфилтри е product/UX decision, не QA PASS/FAIL.
 - Info Lom: actual button clicks, modals, anchor scrolling, external CTA actions section by section.
 - Auth: login/register/forgot/new-password invalid/valid behavior and post-submit.
 - Admin: protected moderation E2E only with user.
@@ -263,6 +268,6 @@ Empty submit specific errors; QA-005; no additional listing.
 - Visual error colors/focus after real invalid submit.
 
 # F. ROOT-CAUSE / FOLLOW-UP QUEUE
-Read-only investigation before fixes: QA-004, 006, 009, 010, 013, 015, 016, 018, 019, 021, 022, 023, 024, 025.
+Read-only investigation before fixes: QA-004, 006, 009, 010, 013, 015, 016, 018, 019, 021, 022, 023, 024, 025, 026.
 
 След края на QA поправките започват от този файл по status/priority. Нищо не става `CLOSED` без production retest.
