@@ -45,7 +45,6 @@
     <span class="section-kicker">Информация</span>
     <h1>Контакти</h1>
     <p>Свържи се с екипа на Попитай.Лом.</p>
-    
   </div>
 </section>
 
@@ -59,7 +58,13 @@
           <p class="form-message" id="contact-message-error" aria-live="polite"></p>
           <button class="form-submit" type="submit">Изпрати</button>
           <p class="form-message" id="contact-form-message" aria-live="polite"></p>
-        </form></article></div></section>
+        </form>
+        <div id="contact-success" class="empty-card" role="status" hidden>
+          <h2>Съобщението е изпратено</h2>
+          <p>Благодарим! Съобщението е получено.</p>
+          <a class="primary-link-button" href="index.html">Към началото</a>
+        </div>
+      </article></div></section>
 </main>
 
   <footer class="site-footer">
@@ -104,7 +109,6 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
   </button>
 
-<script src="image-upload.js?v=20260820-0310" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="supabase-config.js?v=20260820-1840" defer></script>
   <script src="supabase-content.js?v=20260820-1846" defer></script>
@@ -123,6 +127,8 @@
       message: document.getElementById("contact-message-error")
     };
     const formMessage = document.getElementById("contact-form-message");
+    const success = document.getElementById("contact-success");
+    let submitted = false;
 
     function validationMessage(key) {
       const value = fields[key].value.trim();
@@ -146,6 +152,7 @@
     function validateField(key) {
       const message = validationMessage(key);
       errors[key].textContent = message;
+      errors[key].className = message ? "form-message error" : "form-message";
       fields[key].setAttribute("aria-invalid", String(Boolean(message)));
       return !message;
     }
@@ -164,6 +171,7 @@
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      if (submitted) return;
       const order = ["name", "email", "message"];
       order.forEach(key => { fields[key].dataset.touched = "true"; });
       const results = order.map(validateField);
@@ -196,19 +204,23 @@
         }
         const { error } = await client.from("contact_messages").insert({ name, email, message });
         if (error) throw error;
+
+        submitted = true;
         form.reset();
         Object.values(fields).forEach(field => {
           delete field.dataset.touched;
           field.removeAttribute("aria-invalid");
         });
-        Object.values(errors).forEach(error => { error.textContent = ""; });
-        formMessage.textContent = "Благодарим! Съобщението е получено.";
-        formMessage.className = "form-message success";
+        Object.values(errors).forEach(error => { error.textContent = ""; error.className = "form-message"; });
+        formMessage.textContent = "";
+        form.hidden = true;
+        if (success) success.hidden = false;
       } catch (err) {
+        console.error("Contact form submit failed:", err);
         formMessage.textContent = "Не успяхме да изпратим. Опитай отново.";
         formMessage.className = "form-message error";
       } finally {
-        btn.disabled = false;
+        if (!submitted) btn.disabled = false;
       }
     });
   });
