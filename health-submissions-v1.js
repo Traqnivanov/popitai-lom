@@ -4,6 +4,7 @@
   const addForm = document.getElementById("health-service-form");
   const addStatus = document.getElementById("health-add-status");
   const addButton = document.getElementById("health-submit-button");
+  const phoneInput = document.getElementById("health-phone");
 
   const signalButton = document.getElementById("health-signal-submit");
   const signalStatus = document.getElementById("health-signal-status");
@@ -24,6 +25,70 @@
     return String(value ?? "").replace(/[&<>"']/g, ch => ({
       "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"
     }[ch]));
+  }
+
+  function phoneDigits(value) {
+    return String(value || "").replace(/\D/g, "");
+  }
+
+  function phoneValidationMessage(value) {
+    const normalized = String(value || "").trim();
+    if (!normalized) return "";
+    if (/\p{L}/u.test(normalized)) return "Телефонът не може да съдържа букви.";
+    if (!/^[+\d\s().-]+$/.test(normalized)) return "Използвай само цифри, интервали, +, тирета или скоби.";
+    if ((normalized.match(/\+/g) || []).length > 1 || (normalized.includes("+") && !normalized.startsWith("+"))) {
+      return "Знакът + може да бъде само веднъж и в началото.";
+    }
+
+    const digits = phoneDigits(normalized);
+    if (/^(\d)\1+$/.test(digits)) return "Въведи реален телефонен номер.";
+
+    if (normalized.startsWith("+")) {
+      if (!normalized.startsWith("+359")) return "Международният български номер трябва да започва с +359.";
+      if (![11, 12].includes(digits.length)) return "След +359 трябва да има 8 или 9 цифри.";
+      if (digits.charAt(3) === "0") return "След +359 не се изписва началната нула.";
+      return "";
+    }
+
+    if (!digits.startsWith("0")) return "Българският номер трябва да започва с 0 или +359.";
+    if (![9, 10].includes(digits.length)) return "Телефонът трябва да съдържа общо 9 или 10 цифри.";
+    return "";
+  }
+
+  function ensurePhoneError() {
+    if (!phoneInput) return null;
+    let error = document.getElementById("health-phone-error");
+    if (error) return error;
+    error = document.createElement("p");
+    error.id = "health-phone-error";
+    error.className = "health-form-note";
+    error.setAttribute("aria-live", "polite");
+    phoneInput.insertAdjacentElement("afterend", error);
+    const describedBy = new Set((phoneInput.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean));
+    describedBy.add(error.id);
+    phoneInput.setAttribute("aria-describedby", [...describedBy].join(" "));
+    return error;
+  }
+
+  function validatePhone() {
+    if (!phoneInput) return true;
+    const error = ensurePhoneError();
+    const message = phoneValidationMessage(phoneInput.value);
+    if (error) {
+      error.textContent = message;
+      error.style.color = message ? "#b42318" : "";
+      error.style.fontWeight = message ? "800" : "";
+    }
+    phoneInput.setAttribute("aria-invalid", String(Boolean(message)));
+    return !message;
+  }
+
+  function resetPhoneValidation() {
+    if (!phoneInput) return;
+    delete phoneInput.dataset.touched;
+    phoneInput.removeAttribute("aria-invalid");
+    const error = document.getElementById("health-phone-error");
+    if (error) error.textContent = "";
   }
 
   async function waitClient() {
@@ -65,13 +130,23 @@
     return document.querySelector('input[name="health_type"]:checked')?.value || "doctor";
   }
 
+  phoneInput?.addEventListener("blur", () => {
+    phoneInput.dataset.touched = "true";
+    validatePhone();
+  });
+  phoneInput?.addEventListener("input", () => {
+    if (phoneInput.dataset.touched === "true" || phoneInput.getAttribute("aria-invalid") === "true") {
+      validatePhone();
+    }
+  });
+
   addForm?.addEventListener("submit", async event => {
     event.preventDefault();
     setStatus(addStatus, "");
 
     const name = document.getElementById("health-name")?.value.trim() || "";
     const specialty = document.getElementById("health-specialty")?.value.trim() || "";
-    const phone = document.getElementById("health-phone")?.value.trim() || "";
+    const phone = phoneInput?.value.trim() || "";
     const address = document.getElementById("health-address")?.value.trim() || "";
     const description = document.getElementById("health-description")?.value.trim() || "";
     const selected = TYPE_MAP[selectedHealthType()] || TYPE_MAP.doctor;
@@ -88,9 +163,17 @@
       return;
     }
 
+    if (phone) {
+      if (phoneInput) phoneInput.dataset.touched = "true";
+      if (!validatePhone()) {
+        phoneInput?.focus();
+        return;
+      }
+    }
+
     if (!phone && !address) {
       setStatus(addStatus, "Добави поне телефон или адрес, за да може записът да бъде проверен.", "error");
-      document.getElementById("health-phone")?.focus();
+      phoneInput?.focus();
       return;
     }
 
@@ -128,6 +211,7 @@
       );
 
       addForm.reset();
+      resetPhoneValidation();
       document.getElementById("health-type-doctor").checked = true;
     } catch (error) {
       console.error("Health submission error:", error);
