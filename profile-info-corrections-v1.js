@@ -73,7 +73,7 @@
 
     const heading=document.createElement("div");
     heading.className="block-heading spaced";
-    heading.innerHTML="<h2>Моите предложения и сигнали</h2>";
+    heading.innerHTML="<h2>Моите предложения и сигнали за Инфо Лом</h2>";
 
     list=document.createElement("div");
     list.id="profile-info-submissions";
