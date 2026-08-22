@@ -132,6 +132,7 @@ Live tree в `zdrave.html` показва правилни singular actions ка
 ## QA-026 — Search е прекалено exact: липсват синоними, транслитерация и tolerant matching
 Статус: `OPEN / SITE-WIDE VERIFY`
 Joint live QA в `magazini.html` потвърди, че търсенето работи при директно съвпадение (`бои` → релевантни магазини), но потребителски заявки като `магазин за боя`, `латекс` и латиница/транслитерация (`boi`, `lateks`, `magazin za boq`) не трябва да зависят от exact text match. Нужно е да се провери същият модел във всички site search surfaces.
+Joint live QA в `info.html` потвърди различно поведение за `телк` и `telk`: кирилица `телк` връща двата точни ТЕЛК alias резултата, а латиница `telk` връща други записи (`РЗИ Монтана`, `МБАЛ Св. Николай Чудотворец - Лом`). Source read-only проверката на `info-lom-home-search.js` показва exact substring логика (`includes`) без реална transliteration normalization; латинските съвпадения идват случайно от raw `data`/URL текст, не от надежден alias модел.
 Желано поведение: case/spacing normalization, кирилица↔латиница/transliteration tolerance, разумни aliases/synonyms/tags и ограничена typo tolerance, без измисляне на съдържание и без нерелевантни резултати. При общото `tarsene.html` всяка бъдеща промяна трябва изрично да запази LOCKED repair/construction/Masters priority и специалния приоритет на Ivanov Remonti; първо read-only root-cause/classification, после отделно решение за implementation.
 
 ## QA-027 — Site-wide защита от неволно затваряне на попълнена форма
@@ -148,6 +149,12 @@ Joint live QA в `magazini.html` потвърди, че при въведени 
 `magazini.html` е първият потвърден пример: текущите строителни подфилтри са hardcoded UI слой, докато самите shop записи вече имат `tags/groups`. Преди промяна се прави read-only архитектурен одит на data model, формите, renderer-ите, картите, филтрите и search surfaces. Това е голяма системна задача и не се изпълнява като бързо `махни табовете`.
 Защитените Фирми/Обяви/Майстори/Admin и protected search priority не се променят като страничен ефект. Ако моделът трябва да се приложи в защитен модул, първо се иска отделно изрично одобрение.
 
+## QA-029 — Info Lom load flicker: static „остаряла информация“ блок се показва преди async съдържанието
+Статус: `OPEN / SITE-WIDE INFO UX / LOAD ORDER`
+Потребителят многократно наблюдава при зареждане на много Info Lom страници първо да се вижда текстът `Виждаш грешна или остаряла информация?`, след което реалното съдържание се появява и блокът се измества надолу. Source read-only проверката потвърди причината поне в `zdrave.html`, `transport.html`, `banki.html` и `komunalni.html`: dynamic root започва само с малък `Зареждане…`, а статичният `.info-bottom-signal` е веднага след него в DOM и е видим още преди async renderer-ът да напълни root-а. Това създава layout jump/flicker и изглежда като предупреждение, че текущата информация е стара, въпреки че текстът всъщност е CTA за сигнал.
+Проверка site-wide: всички Info Lom detail страници с async root + `info-bottom-signal`, както и други страници със статичен footer/CTA непосредствено след async празен root. Решението трябва да е load-state/readiness решение, не да се маха самият полезен сигнален CTA и не да се наслагва втори renderer.
+Отделно наблюдение: статичният header markup на `info.html` и други страници започва с `Вход`, а `script.js` по-късно може да го смени на `Профил`; това е сходен auth-state flicker и трябва да се класифицира в същия load-state audit, но не се смесва автоматично с content render ownership.
+
 # B. 100% HTML INVENTORY / COVERAGE
 
 Repo inventory:
@@ -155,7 +162,7 @@ Repo inventory:
 
 ## Public/core
 - `index.html` — `PARTIAL PASS`; nav/cards/questions/firms/listings/articles inspected; QA-006/011.
-- `info.html` — `PARTIAL PASS`; 6 sections + quick anchor links; session/header timing needs observation.
+- `info.html` — `PARTIAL PASS`; 6 sections + quick anchor links; search exact/transliteration behavior checked → QA-026; session/header timing remains load-state issue → QA-029.
 - `kategorii.html` — structure/routes for exact 8 categories checked.
 - `firmi.html` — read-only protected list checked.
 - `obyavi.html` — intermittent load; filters/categories/search controls visible; active `TELEVIZOR` loads.
@@ -210,12 +217,12 @@ Protected priority stays visible.
 `magazini.html`: всички 6 tabs са joint-tested live: Хранителни/Строителни/Техника/Мебели/Дрехи/Дом зареждат съдържание. Shop search: `бои` намира релевантни записи; forced no-result `zzzztest` показва `Няма резултат.` + `Промени търсенето или филтъра.`. Add-store modal е отворен и category preselect `Строителни` е правилен. Empty submit дава specific errors за име/адрес/описание/източник; optional phone/work-hours/source-note не се маркират; invalid phone `123` дава semantic error on blur; valid `0888123456` clear-ва error; invalid submit пази вече въведените име/телефон. `Отказ` затваря веднага при dirty form, а повторното отваряне пази старите стойности/validation state → QA-027. Строителните hardcoded подфилтри са маркирани за архитектурна замяна с data-driven types/tags след одит → QA-028. QA-017/026/027/028. Success submit не е правен.
 
 ## Info Lom deep read-only
-- `zdrave.html`: all health sections + anchors + direct phones/official links inspected; add/correction actions visible; QA-025.
-- `institucii.html`: final priority content loads; signal action; QA-010; flicker still VERIFY.
-- `transport.html`: bus/BDZ/taxi structure + anchor routes inspected; interactive external actions remain manual.
+- `zdrave.html`: all health sections + anchors + direct phones/official links inspected; add/correction actions visible; static bottom-signal-before-async-content source pattern confirmed → QA-025/029.
+- `institucii.html`: final priority content loads; signal action; QA-010; flicker/load-state remains under QA-029.
+- `transport.html`: bus/BDZ/taxi structure + anchor routes inspected; static bottom-signal-before-async-content source pattern confirmed → QA-029; interactive external actions remain manual.
 - `obrazovanie-kultura.html`: schools/kindergartens/chitalishta/library/museum/courses; many direct tel/official links visible; no new defect in this pass.
-- `banki.html`: ATMs/banks; `Добави банкомат`, signal action and official bank links present; no new defect in this pass.
-- `komunalni.html`: couriers/internet-TV/payment/insurance/electricity etc.; add buttons and direct tel/track/coverage links inspected; no new defect in this pass.
+- `banki.html`: ATMs/banks; `Добави банкомат`, signal action and official bank links present; static bottom-signal-before-async-content source pattern confirmed → QA-029.
+- `komunalni.html`: couriers/internet-TV/payment/insurance/electricity etc.; add buttons and direct tel/track/coverage links inspected; static bottom-signal-before-async-content source pattern confirmed → QA-029.
 
 Нито един Info section е final 100% PASS преди real click/anchor/modal/mobile test.
 
@@ -275,6 +282,7 @@ Empty submit specific errors; QA-005; no additional listing.
 # E. MANUAL / PENDING, НЕ СЕ СЧИТА ЗА PASS
 - Site-wide dirty-form cancel/close behavior: check every applicable form/modal for QA-027, включително `X`; protected modules only read-only until separately approved.
 - Site-wide type/tag architecture: map where hardcoded subcategories/subtabs exist, where structured tags/types already exist, how forms collect them, how cards render them and how search/filter surfaces consume them → QA-028; protected modules remain read-only until separately approved.
+- Site-wide load-state/flicker audit: first paint vs final paint for async content roots and auth header state; Info Lom bottom-signal flicker confirmed in source pattern → QA-029.
 - Shops: success submit/post-submit/duplicate-prevention не е тестван.
 - Info Lom: actual button clicks, modals, anchor scrolling, external CTA actions section by section.
 - Auth: login/register/forgot/new-password invalid/valid behavior and post-submit.
@@ -284,6 +292,6 @@ Empty submit specific errors; QA-005; no additional listing.
 - Visual error colors/focus after real invalid submit.
 
 # F. ROOT-CAUSE / FOLLOW-UP QUEUE
-Read-only investigation before fixes: QA-004, 006, 009, 010, 013, 015, 016, 018, 019, 021, 022, 023, 024, 025, 026, 027, 028.
+Read-only investigation before fixes: QA-004, 006, 009, 010, 013, 015, 016, 018, 019, 021, 022, 023, 024, 025, 026, 027, 028, 029.
 
 След края на QA поправките започват от този файл по status/priority. Нищо не става `CLOSED` без production retest.
