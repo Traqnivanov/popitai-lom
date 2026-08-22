@@ -14,7 +14,6 @@
   <a class="skip-link" href="#main-content">Към основното съдържание</a>
   <header class="site-header" id="site-header">
     <div class="header-inner">
-      
       <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
         <span class="brand-mark" aria-hidden="true">
           <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
@@ -24,7 +23,6 @@
           <small>Попитай. Намери. Препоръчай.</small>
         </span>
       </a>
-    
       <nav class="main-nav" id="main-nav" aria-label="Главна навигация"><a class="" href="index.html">Начало</a><a class="" href="info.html">Инфо Лом</a><a class="" href="kategorii.html">Категории</a><a class="" href="firmi.html">Фирми</a><a class="" href="obyavi.html">Обяви</a><a class="" href="vaprosi.html">Въпроси</a><a class="" href="statii.html">Статии</a></nav>
       <div class="header-actions">
         <a class="login-link" href="vhod.html">Вход</a>
@@ -45,34 +43,35 @@
     <span class="section-kicker">Информация</span>
     <h1>Подай сигнал</h1>
     <p>Съобщи за обида, измама, фалшиво мнение или друго нарушение.</p>
-    
   </div>
 </section>
 
 <section class="content-section"><div class="section-container article-page"><article><p class="lead">Всеки сигнал се преглежда от администратор.</p>
-        <form class="content-form large-form simple-contact-form">
-          <label>Име</label><input required>
-          <label>Електронна поща</label><input type="email" required>
-          <label>Съобщение</label><textarea rows="7" required></textarea>
+        <form class="content-form large-form" id="signal-form" novalidate>
+          <label for="signal-name">Име</label>
+          <input id="signal-name" name="name" autocomplete="name" required minlength="2" maxlength="120" aria-describedby="signal-name-error">
+          <p class="form-message" id="signal-name-error" aria-live="polite"></p>
+
+          <label for="signal-email">Електронна поща</label>
+          <input id="signal-email" name="email" type="email" autocomplete="email" required maxlength="254" aria-describedby="signal-email-error">
+          <p class="form-message" id="signal-email-error" aria-live="polite"></p>
+
+          <label for="signal-message">Съобщение</label>
+          <textarea id="signal-message" name="message" rows="7" required minlength="10" maxlength="2000" aria-describedby="signal-message-error"></textarea>
+          <p class="form-message" id="signal-message-error" aria-live="polite"></p>
+
           <button class="form-submit" type="submit">Изпрати</button>
-          <p class="form-message"></p>
+          <p class="form-message" id="signal-form-message" aria-live="polite"></p>
         </form></article></div></section>
 </main>
 
   <footer class="site-footer">
     <div class="section-container footer-main">
       <div class="footer-brand">
-        
-      <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
-        <span class="brand-mark" aria-hidden="true">
-          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
-        </span>
-        <span class="brand-text">
-          <strong>Попитай<span>.Лом</span></strong>
-          <small>Попитай. Намери. Препоръчай.</small>
-        </span>
-      </a>
-    
+        <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
+          <span class="brand-mark" aria-hidden="true"><img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt=""></span>
+          <span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span>
+        </a>
         <p>Местната общност на Лом за препоръки, услуги и полезна информация.</p>
       </div>
       <div class="footer-column">
@@ -104,6 +103,123 @@
 <script src="image-upload.js?v=20260820-0310" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="supabase-config.js?v=20260820-1840" defer></script>
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("signal-form");
+    if (!form) return;
+
+    const fields = {
+      name: document.getElementById("signal-name"),
+      email: document.getElementById("signal-email"),
+      message: document.getElementById("signal-message")
+    };
+    const errors = {
+      name: document.getElementById("signal-name-error"),
+      email: document.getElementById("signal-email-error"),
+      message: document.getElementById("signal-message-error")
+    };
+    const formMessage = document.getElementById("signal-form-message");
+
+    function validationMessage(key) {
+      const value = fields[key].value.trim();
+      if (key === "name") {
+        if (!value) return "Въведи име.";
+        if (value.length < 2) return "Името трябва да съдържа поне 2 знака.";
+        if (value.length > 120) return "Името може да съдържа най-много 120 знака.";
+      }
+      if (key === "email") {
+        if (!value) return "Въведи електронна поща.";
+        if (!fields.email.validity.valid) return "Въведи валиден e-mail адрес.";
+      }
+      if (key === "message") {
+        if (!value) return "Опиши за какво подаваш сигнал.";
+        if (value.length < 10) return "Добави малко повече информация към сигнала.";
+        if (value.length > 2000) return "Съобщението може да съдържа най-много 2000 знака.";
+      }
+      return "";
+    }
+
+    function validateField(key) {
+      const message = validationMessage(key);
+      errors[key].textContent = message;
+      fields[key].setAttribute("aria-invalid", String(Boolean(message)));
+      return !message;
+    }
+
+    Object.keys(fields).forEach((key) => {
+      fields[key].addEventListener("blur", () => {
+        fields[key].dataset.touched = "true";
+        validateField(key);
+      });
+      fields[key].addEventListener("input", () => {
+        if (fields[key].dataset.touched === "true" || fields[key].getAttribute("aria-invalid") === "true") {
+          validateField(key);
+        }
+      });
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const order = ["name", "email", "message"];
+      order.forEach((key) => { fields[key].dataset.touched = "true"; });
+      const results = order.map(validateField);
+      const firstInvalid = results.findIndex((valid) => !valid);
+      if (firstInvalid !== -1) {
+        fields[order[firstInvalid]].focus();
+        return;
+      }
+
+      const button = form.querySelector('[type="submit"]');
+      button.disabled = true;
+      formMessage.textContent = "Изпращаме сигнала…";
+      formMessage.className = "form-message warning";
+
+      try {
+        const client = window.PopitaiSupabase;
+        if (!client) throw new Error("Supabase client missing");
+        const { data: authData, error: authError } = await client.auth.getUser();
+        if (authError) throw authError;
+        const user = authData?.user || null;
+        if (!user) {
+          formMessage.innerHTML = 'Трябва да влезеш в профила си, преди да подадеш сигнал. <a href="vhod.html">Вход</a>';
+          formMessage.className = "form-message error";
+          return;
+        }
+
+        const reason = [
+          `Име: ${fields.name.value.trim()}`,
+          `E-mail: ${fields.email.value.trim()}`,
+          "",
+          fields.message.value.trim()
+        ].join("\n");
+
+        const { error } = await client.from("reports").insert({
+          reporter_id: user.id,
+          target_type: "site",
+          target_id: null,
+          reason,
+          status: "pending"
+        });
+        if (error) throw error;
+
+        form.reset();
+        Object.values(fields).forEach((field) => {
+          delete field.dataset.touched;
+          field.removeAttribute("aria-invalid");
+        });
+        Object.values(errors).forEach((element) => { element.textContent = ""; });
+        formMessage.textContent = "Сигналът е изпратен за преглед от администратор.";
+        formMessage.className = "form-message success";
+      } catch (error) {
+        console.error("Signal submission error:", error);
+        formMessage.textContent = "Не успяхме да изпратим сигнала. Опитай отново.";
+        formMessage.className = "form-message error";
+      } finally {
+        button.disabled = false;
+      }
+    });
+  });
+  </script>
   <script src="script.js?v=20260820-1833" defer></script>
 </body>
 </html>
