@@ -7,7 +7,7 @@
   <meta name="description" content="Училища, детски градини, читалища, библиотека, музей и школи в Лом — проверена информация.">
   <link rel="stylesheet" href="style.css?v=20260805-0736">
   <link rel="stylesheet" href="info-lom.css?v=20260815-0905">
-  <link rel="stylesheet" href="info-lom-pages.css?v=20260815-0920">
+  <link rel="stylesheet" href="info-lom-pages.css?v=20260822-2358">
   <link rel="stylesheet" href="info-lom-education-v1.css?v=20260817-2020">
   <link rel="icon" href="assets/favicon-96.png" type="image/png">
 </head>
@@ -105,12 +105,16 @@
 <script src="info-lom-page-nav.js?v=20260815-0905" defer></script>
 <script>
 document.addEventListener('DOMContentLoaded',()=>{
+  const modal=document.getElementById('education-modal');
   const form=document.getElementById('education-signal-form');
   const problem=document.getElementById('education-signal-problem');
   const correct=document.getElementById('education-signal-correct');
   const fieldError=document.getElementById('education-signal-problem-error');
   const status=document.getElementById('education-signal-status');
-  if(!form||!problem||!fieldError||!status) return;
+  if(!modal||!form||!problem||!fieldError||!status) return;
+
+  let submitted=false;
+  let successBox=null;
 
   function validateProblem(){
     const value=problem.value.trim();
@@ -122,6 +126,48 @@ document.addEventListener('DOMContentLoaded',()=>{
     problem.setAttribute('aria-invalid',String(Boolean(message)));
     return !message;
   }
+
+  function hasUnsentData(){
+    return Boolean(problem.value.trim() || correct?.value.trim());
+  }
+
+  function resetFormState(){
+    form.reset();
+    form.hidden=false;
+    delete problem.dataset.touched;
+    problem.removeAttribute('aria-invalid');
+    fieldError.textContent='';
+    status.textContent='';
+    status.className='form-message';
+    const button=form.querySelector('[type="submit"]');
+    if(button) button.disabled=false;
+  }
+
+  function clearSuccess(){
+    successBox?.remove();
+    successBox=null;
+    submitted=false;
+    resetFormState();
+  }
+
+  function closeModal(){
+    if(submitted){
+      clearSuccess();
+    }else{
+      if(hasUnsentData() && !window.confirm('Има неизпратени данни. Натисни OK, за да затвориш и изчистиш формата, или Отказ, за да останеш.')) return;
+      resetFormState();
+    }
+    modal.hidden=true;
+    document.body.style.overflow='';
+  }
+
+  document.querySelectorAll('[data-education-modal-close]').forEach(el=>{
+    el.addEventListener('click',event=>{
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      closeModal();
+    },true);
+  });
 
   problem.addEventListener('blur',()=>{problem.dataset.touched='true';validateProblem();});
   problem.addEventListener('input',()=>{if(problem.dataset.touched==='true'||problem.getAttribute('aria-invalid')==='true') validateProblem();});
@@ -148,18 +194,21 @@ document.addEventListener('DOMContentLoaded',()=>{
       const description=[`Какво е грешно: ${problem.value.trim()}`,correct?.value.trim()?`Правилна информация / източник: ${correct.value.trim()}`:'','Подадено от: Инфо Лом → Образование и култура'].filter(Boolean).join('\n');
       const {error}=await client.from('info_error_reports').insert({entry_id:null,reported_by:user.id,description,status:'pending',category:'obrazovanie',subcategory:'obshto'});
       if(error) throw error;
-      form.reset();
-      delete problem.dataset.touched;
-      problem.removeAttribute('aria-invalid');
-      fieldError.textContent='';
-      status.textContent='Сигналът е изпратен за администраторска проверка.';
-      status.className='form-message success';
+      resetFormState();
+      submitted=true;
+      form.hidden=true;
+      successBox=document.createElement('div');
+      successBox.className='info-form-success';
+      successBox.setAttribute('role','status');
+      successBox.innerHTML='<p class="form-message success">Сигналът е изпратен за администраторска проверка.</p><button class="form-submit" type="button" data-education-success-close>Затвори</button>';
+      form.after(successBox);
+      successBox.querySelector('[data-education-success-close]')?.addEventListener('click',closeModal);
     }catch(error){
       console.error('Education error report:',error);
       status.textContent='Не успяхме да изпратим сигнала. Опитай отново.';
       status.className='form-message error';
     }finally{
-      button.disabled=false;
+      if(!submitted) button.disabled=false;
     }
   });
 });
