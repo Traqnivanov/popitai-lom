@@ -53,27 +53,25 @@
 <section class="content-section">
   <div class="section-container two-column-layout">
     <div>
-      <div class="filter-bar">
-        <button class="filter-chip active" type="button" data-question-filter="all">Всички</button>
-        <button class="filter-chip" type="button" data-question-filter="unanswered">Без отговор</button>
-        <button class="filter-chip" type="button" data-question-filter="answered">С отговор</button>
+      <div class="filter-bar" aria-label="Филтри за въпросите">
+        <button class="filter-chip active" type="button" data-public-question-filter="all">Всички</button>
+        <button class="filter-chip" type="button" data-public-question-filter="unanswered">Без отговор</button>
+        <button class="filter-chip" type="button" data-public-question-filter="answered">С отговор</button>
       </div>
-      <div class="stack-list" id="questions-list">
-        <article class="empty-card">
-          <h2>Все още няма публикувани въпроси</h2>
-          <p>Използвай бутона „Задай въпрос“, за да провериш публикуването.</p>
-        </article>
+      <div class="stack-list" data-public-questions-list aria-live="polite">
+        <article class="empty-card"><p>Зареждане на въпросите…</p></article>
       </div>
     </div>
     <aside class="side-panel">
       <h2>Намери въпрос</h2>
       <form class="side-search" action="tarsene.html">
-        <input type="search" name="q" placeholder="Търси въпрос">
+        <input type="search" name="q" placeholder="Търси въпрос" aria-label="Търси въпрос">
         <button type="submit">Търси</button>
       </form>
-      <h2>Тест на функциите</h2>
-      <p>Тестови записи могат да се добавят само от административната страница и се пазят само на твоето устройство.</p>
-      <a href="admin.html">Отвори тестовия панел</a>
+      <h2>Полезно</h2>
+      <a href="kategorii.html">Разгледай категориите</a>
+      <a href="pravila.html">Правила на общността</a>
+      <a href="signal.html">Подай сигнал за нередност</a>
     </aside>
   </div>
 </section>
@@ -125,6 +123,7 @@
 <script src="image-upload.js?v=20260820-0310" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="supabase-config.js?v=20260820-1840" defer></script>
+  <script src="questions-public-v1.js?v=20260822-1840" defer></script>
   <script src="script.js?v=20260820-1833" defer></script>
 </body>
 </html>
