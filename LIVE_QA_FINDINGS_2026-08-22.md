@@ -1,365 +1,268 @@
 # Попитай.Лом — LIVE QA FINDINGS — 22.08.2026
 
-Това е КАНОНИЧНИЯТ активен QA списък за текущия production browser/device одит. Не се разчита само на паметта на чата. След приключване на обхода поправките се работят от този списък.
+КАНОНИЧЕН активен QA списък. Нищо открито не остава само в чата. След QA поправките се работят от този файл.
 
-## ПРАВИЛО БЕЗ ЗАГУБА НА ИНФОРМАЦИЯ
+## РЕЖИМ БЕЗ ЗАГУБА
+- Влизат всички assistant-only и joint tests.
+- И най-дребният проблем/разлика се пази.
+- `VERIFY` = още не е доказан дефект.
+- `OPEN` = потвърден дефект.
+- `OPEN / LOCKED` / `BLOCKED / LOCKED` = защитен модул; без промяна без одобрение.
+- `IDEA / LOCKED` = само идея.
+- `FIXED - NEEDS RETEST` = поправено, чака production retest.
+- `CLOSED` = само след успешен production retest.
+- PASS не означава „страницата се отвори“; важат функции, линкове, състояния, роли и приложимите интеракции.
+- Нещо, което browser connector не може да натисне/попълни, остава `MANUAL / PENDING`, не PASS.
 
-- Всеки открит проблем, дори най-малък, се записва тук.
-- Влизат И самостоятелните тестове на асистента, И съвместните тестове с потребителя.
-- Подозрение/разлика без доказан дефект = `VERIFY`.
-- Потвърден дефект = `OPEN`.
-- Потвърден проблем в защитен модул = `OPEN / LOCKED` или `BLOCKED / LOCKED`.
-- Идея за защитен модул = `IDEA / LOCKED`; не е одобрена промяна.
-- След кодова поправка = `FIXED - NEEDS RETEST`.
-- Само след production retest = `CLOSED`.
-- Нищо не се премахва без ясна следа как е затворено.
-- „PASS“ не означава само, че страницата се е отворила. Пълен PASS се дава след приложимите функции, линкове, състояния и роли.
-- Ако дадена проверка изисква реално натискане/писане, а browser connector не може да го направи, тя остава изрично `MANUAL / PENDING`, а не се приема за минала.
-- Преди смяна на контекст/приключен тестов блок новите находки се checkpoint-ват в GitHub.
-
-## ЗАДЪЛЖИТЕЛНА ГРАНИЦА ПРЕДИ РЕДАКЦИЯ
-
-Преди всяка бъдеща редакция се четат в този ред:
+## ПРЕДИ ВСЯКА РЕДАКЦИЯ
 1. `PROJECT_RULES_00_READ_FIRST.md`
 2. `PROJECT_RULES_PROTECTED_CORE.md`
 3. `PROJECT_RULES.md`
 4. `PROJECT_RULES_RENDER_OWNERSHIP.md`
 5. `PROJECT_PROGRESS.md`
 
-QA не дава автоматично право за промяна на LOCKED логика. Фирми, Обяви, Майстори и ремонти, Admin core, роли, права, ownership, approval/direct publish, лимити, статуси и защитеният search priority не се променят без отделно изрично одобрение.
+LOCKED: Фирми/профили, Обяви, Майстори и ремонти, Admin core/critical actions, роли/права/ownership/approval/direct publish/лимити/statuses и protected repair search priority.
 
-# A. АКТИВНИ QA НАХОДКИ
+# A. АКТИВНИ НАХОДКИ
 
-## QA-001 — Системно post-submit UX правило
+## QA-001 — Site-wide post-submit UX
 Статус: `OPEN`
+След успешен submit формата трябва да изчезва/става inactive, да има ясен success + следващо действие и да няма accidental duplicate submit. При error формата остава и данните се пазят. Потвърден проблем поне в `nov-vapros.html` и `signal.html`.
 
-Одобрено като общ стандарт за всички submit форми:
-- след успешен submit формата изчезва или става неактивна;
-- показва се ясно success състояние;
-- има логично следващо действие според потока;
-- няма възможност за неволен дублиран submit;
-- при грешка формата остава и въведените данни се пазят.
-
-Потвърдено като проблем поне при `nov-vapros.html` и `signal.html`: след успешно изпращане формата остава видима/активна.
-
-## QA-002 — Общ validation UX стандарт
+## QA-002 — Site-wide validation UX
 Статус: `OPEN`
+Specific error до exact field; ясен red/error state; focus first invalid; preserve data; live clear after fix; semantic validation. `dobavi-firma.html` е добър reference model с summary `Провери отбелязаните полета. Данните ти са запазени.`
 
-При невалиден submit:
-- конкретна грешка до конкретното поле;
-- ясно визуално error състояние, включително червен текст/рамка или еквивалент;
-- фокус/видима позиция към първата грешка;
-- останалите данни се пазят;
-- при корекция грешката изчезва своевременно;
-- structured fields се валидират семантично.
-
-`dobavi-firma.html` е референтният работещ модел: specific errors за име/категория/телефон/описание, optional полетата не се маркират, общо съобщение `Провери отбелязаните полета. Данните ти са запазени.`
-
-## QA-003 — `signal.html` — неясна field-specific validation
+## QA-003 — `signal.html` e-mail validation
 Статус: `OPEN`
+При missing e-mail не е достатъчно ясно къде е грешката. Без промяна на signal/admin routing.
 
-При липсващ e-mail потребителят не получава достатъчно ясно указание до/за конкретното поле. Да се поправя само validation UX, без странична промяна на signal/admin routing.
-
-## QA-004 — `kontakti.html` — valid submit failure
+## QA-004 — `kontakti.html` valid submit fails
 Статус: `OPEN`
+Missing e-mail validation пази данните и показва field error; при валидни име/e-mail/message production връща `Не успяхме да изпратим. Опитай отново.` Реален submit/backend/runtime проблем.
 
-- Празен e-mail правилно показва `Въведи електронна поща.` и пази останалите данни.
-- При валидно попълнени име, e-mail и съобщение production връща `Не успяхме да изпратим. Опитай отново.`
-- Това е реален backend/runtime/submit проблем, не само визуален UX.
-
-## QA-005 — `dobavi-obqva.html` — validation разлика
+## QA-005 — `dobavi-obqva.html` validation summary difference
 Статус: `VERIFY / LOCKED`
+Specific errors работят за title/category/type/description/phone; optional fields не се маркират. Няма потвърден общ summary като Firm form. Класифициране без mechanical equalization.
 
-Празният submit дава specific errors за заглавие, категория, тип, описание и телефон; optional полетата не се маркират погрешно. Не е потвърден общ summary message като при фирмите. Да се класифицира като intended difference / not applicable / real UX gap. Обяви е LOCKED.
-
-## QA-006 — Публични Обяви — intermittent load failure
+## QA-006 — Public Listings intermittent load failure
 Статус: `VERIFY / INTERMITTENT / LOCKED`
+По-рано `obyavi.html` и home listings даваха load error; по-късно и двете заредиха `TELEVIZOR`. Read-only root-cause за cache/session/query/load-order.
 
-По-рано `obyavi.html` и home listings блокът показваха грешка при зареждане. По-късно същия ден и двете заредиха активната обява `TELEVIZOR`. Следователно не е постоянен fail; да се разследва read-only за cache/session/query/load-order причина. Без protected edit.
-
-## QA-007 — Визуален validation контрол
+## QA-007 — Visual validation colors/states
 Статус: `VERIFY`
+Accessibility tree не доказва цвят. Desktop/mobile screenshot QA трябва да потвърди clearly red/error text + field state във всички форми.
 
-Accessibility tree не доказва цвета. При desktop/mobile визуален QA трябва да се потвърди червен/ясен error state на всички форми.
-
-## QA-008 — Contact QA текст с липсваща начална буква
+## QA-008 — Contact QA text missing initial Q
 Статус: `VERIFY`
+В един test tree показа `A TEST 3...` вместо `QA TEST 3...`; вероятно ръчно въвеждане. Не bug без повторение.
 
-В един тест accessibility tree показа `A TEST 3 ...` вместо очакваното `QA TEST 3 ...`. Вероятно ръчно въвеждане; да не се приема за bug без повторение.
-
-## QA-009 — `vaprosi.html` зарежда стар `image-upload.js`
+## QA-009 — `vaprosi.html` stale `image-upload.js`
 Статус: `VERIFY`
+Uploader е премахнат, но page още зарежда `image-upload.js?v=20260820-0310`. Confirm dependency before removal.
 
-Формата за въпрос вече няма uploader, но `vaprosi.html` все още зарежда `image-upload.js?v=20260820-0310`. Да се потвърди като stale asset и да се махне само ако няма зависимост.
-
-## QA-010 — `institucii.html` — ARIA разлики
+## QA-010 — `institucii.html` ARIA gap
 Статус: `VERIFY`
+Menu button няма потвърдени `aria-expanded=false`/`aria-controls=main-nav`; modal close няма потвърден descriptive aria-label.
 
-Спрямо по-новия banking markup:
-- menu button няма потвърдени `aria-expanded="false"` / `aria-controls="main-nav"`;
-- modal close няма потвърден ясно описателен `aria-label`.
-
-## QA-011 — Home „Полезни статии“ не съответства на реалното съдържание
+## QA-011 — Home fake/missing article cards
 Статус: `OPEN`
+`statii.html` има само реалната статия `Как да избереш майстор и да избегнеш неприятни изненади`, но home показва още `Кои документи да поискаш при наемане на услуга` и `Как бързо да намериш работно време и телефон`; CTA водят към общия list, където те не съществуват. Нарушава canonical rule за реален approved material.
 
-Потвърдено live:
-- `statii.html` съдържа само реалната статия `Как да избереш майстор и да избегнеш неприятни изненади`;
-- home показва 3 карти;
-- допълнителните са `Кои документи да поискаш при наемане на услуга` и `Как бързо да намериш работно време и телефон`;
-- всички CTA водят към `statii.html`, където тези две статии не съществуват.
-
-Това противоречи на `PROJECT_PROGRESS.md`: без измислени заглавия/карти без одобрен реален материал.
-
-## QA-012 — Идея: скрит UX вход към Admin
+## QA-012 — Hidden Admin entry idea
 Статус: `IDEA / LOCKED`
+Possible 5 taps/hidden trigger само за UX obscurity; НЕ security. Real protection остава auth/role/RLS. Later consider re-auth, audit log, MFA/2FA. No implementation without separate approval.
 
-Идея за развитие след QA:
-- без публично видим Admin link;
-- възможен скрит trigger, например 5 натискания върху неочевиден елемент;
-- това е само obscurity, НЕ security защита;
-- реалната защита остава auth/role/RLS;
-- да се обмислят re-auth за критични действия, audit log и MFA/2FA.
-
-Няма реализация без отделно одобрение.
-
-## QA-013 — Profile не показва signal record след signal QA
+## QA-013 — Profile няма signal record след signal QA
 Статус: `VERIFY`
+Да се установи дали signal submit не е създал record, record е в друг flow или profile query/render има gap.
 
-`Моите предложения и сигнали` показва, че няма записи след signal теста. Да се установи дали submit не е създал запис, записът е в друг поток, или profile query/render има gap.
-
-## QA-014 — Admin видим английски label `Highlighted`
+## QA-014 — Admin visible English `Highlighted`
 Статус: `OPEN / LOCKED`
+Visible checkbox label `Highlighted` нарушава Bulgarian UI rule.
 
-В pending listing card се виждат `Спешно`, `Намалено`, `Горно позициониране`, `Highlighted`, `Статистики`, `Плаващи бутони`. `Highlighted` нарушава глобалното правило за български UI. Не се променя без Admin approval.
-
-## QA-015 — Admin summary `Въпроси 0` при pending въпрос
+## QA-015 — Admin summary `Въпроси 0` при pending question
 Статус: `VERIFY / LOCKED`
+`QA TEST 1` е в pending queue, summary е `Въпроси 0`. Възможно е metric да означава published questions; source/read-only classification first.
 
-Admin summary показва `Въпроси 0`, а `QA TEST 1` е реално в `Чакащи`. Възможно е метриката да значи публикувани въпроси, затова първо source/read-only класификация.
-
-## QA-016 — `admin.html` директно се отваря в текущата session
+## QA-016 — Direct `admin.html` opens in current session
 Статус: `VERIFY / SECURITY / LOCKED`
+Не е доказан bug, защото session може да е admin. Нужен доказан guest/non-admin test.
 
-Текущата browser session вижда целия Admin панел при директен URL. Това не доказва пробив, защото session може да е admin. Нужен е отделен тест с доказано guest/non-admin state.
-
-## QA-017 — `magazini.html` — граматически грешен CTA
+## QA-017 — `magazini.html` grammatically wrong CTA
 Статус: `OPEN`
+Live screenshot + tree: `+ Добави хранителни магазин`. Трябва граматически правилно dynamic naming, без промяна на shop flow.
 
-Live screenshot и accessibility tree потвърждават видим бутон:
-`+ Добави хранителни магазин`
-
-Текстът е граматически неправилен. Трябва да се провери динамичното именуване и да се коригира без промяна на shop business flow.
-
-## QA-018 — `vapros.html` без валиден id — дублирано not-found състояние
+## QA-018 — `vapros.html` без id дублира not-found state
 Статус: `VERIFY / UX / RENDER OWNERSHIP`
+Screenshot + tree: огромен hero `Въпросът не е намерен`, после отделна карта със същото heading + explanation. Source/render ownership classification needed.
 
-При директно `vapros.html` без id:
-- големият hero показва `Въпросът не е намерен`;
-- по-надолу има отделна карта със същото заглавие `Въпросът не е намерен` и обяснение;
-- accessibility tree също съдържа две отделни not-found headings/blocks.
-
-Screenshot потвърждава визуалното повторение. Да се провери source/render ownership и да се класифицира дали е умишлено или реално двойно error state.
-
-## QA-019 — `Автомобили → Автомивки` връща `Иванов Ремонти Лом`
+## QA-019 — `Автомобили → Автомивки` връща Ivanov Remonti
 Статус: `VERIFY / LOCKED SEARCH RELEVANCE`
+`tarsene?q=Автомивки` показва `Иванов Ремонти Лом` + `Автомобили`. Проверка защо има match; protected priority не се променя по предположение.
 
-`avtomobili.html` → `Автомивки` води към `tarsene.html?q=Автомивки`. Live резултатите включват `Иванов Ремонти Лом` и `Автомобили`. Да се провери защо ремонтната фирма съвпада с тази заявка. Защитеният search priority не се променя по предположение.
-
-## QA-020 — Множество подкатегории водят към празно търсене
+## QA-020 — Много подкатегории са текущи dead-ends
 Статус: `VERIFY / CONTENT-COVERAGE / UX`
+Всички 6 Services search subcategories и всички 4 Events search subcategories са `Няма намерени резултати`; има празни и в Cars/Restaurants. Не е automatic bug; classify content absence vs useful empty-state need, без invented content.
 
-Това не е автоматично технически дефект, но е реална текуща потребителска ситуация:
-- всички 6 подкатегории на `Услуги` в текущия live тест водят до `Няма намерени резултати`;
-- всички 4 search подкатегории на `Събития` водят до `Няма намерени резултати`;
-- отделни Автомобили/Заведения подкатегории също са празни.
+## QA-021 — Search default state показва legacy public labels
+Статус: `OPEN`
+`tarsene.html` без `q` показва 10 default results и публично рендерира category headings `Работа и услуги` и `Събития и град`. Canonical public labels са `Услуги` и `Събития`; legacy values трябва да остават само internal compatibility values.
 
-Да се класифицира като нормална липса на съдържание, UX dead-end или нужда от по-полезно empty-state действие; не се измисля съдържание.
+## QA-022 — Search no-results няма директно next action
+Статус: `VERIFY / UX`
+`tarsene.html?q=zzzzqa-no-result` показва `0 резултата`, heading `Няма намерени резултати` и `Опитай с по-кратка или различна дума.`, но няма direct CTA към категории/въпрос/друга логична стъпка в empty-state card. Класифициране спрямо global text/next-action rule.
 
-# B. 100% COVERAGE ИНВЕНТАР — PRODUCTION
+## QA-023 — `firma.html` без id дублира not-found state
+Статус: `VERIFY / UX / LOCKED / RENDER OWNERSHIP`
+Screenshot + tree: hero `Фирмата не е намерена`, после отделна card със същото heading + explanation + `Към фирмите`. Аналогично на QA-018; Firm е LOCKED, само read-only classification.
 
-Репо inventory за HTML страниците е извлечен от recursive GitHub tree. Пълният списък за обход е:
+## QA-024 — `obqva.html` без id има слаб/inconsistent not-found state
+Статус: `VERIFY / UX / LOCKED`
+Missing-id page няма main error heading/next CTA; в main content има само paragraph `Обявата не е намерена.` след breadcrumb. Сравнение с Question/Firm error states показва различен, много по-слаб fallback. Не се уеднаквява механично; classify first.
+
+## QA-025 — Health Info `Добави ...` labels с plural grammar
+Статус: `OPEN`
+Live tree в `zdrave.html` показва правилни singular actions като `Добави лекар`, `Добави ветеринар`, `Добави ветеринарна аптека`, но също grammatically wrong:
+- `Добави аптеки`
+- `Добави стоматолози`
+- `Добави лаборатории и диагностика`
+Проверка на dynamic label generation; корекция само на visible wording, без content/admin flow side effects.
+
+# B. 100% HTML INVENTORY / COVERAGE
+
+Repo inventory:
 `404.html`, `admin.html`, `avtomobili.html`, `banki.html`, `biskvitki.html`, `dobavi-firma.html`, `dobavi-obqva.html`, `firma.html`, `firmi.html`, `index.html`, `info.html`, `institucii.html`, `kategorii.html`, `komunalni.html`, `kontakti.html`, `magazini.html`, `maistori.html`, `nov-vapros.html`, `nova-parola.html`, `obqva.html`, `obrazovanie-kultura.html`, `obyavi.html`, `poveritelnost.html`, `pravila.html`, `profil.html`, `rabota.html`, `razshiren-profil.html`, `registracia.html`, `sabitiya.html`, `signal.html`, `statia.html`, `statii.html`, `tarsene.html`, `transport.html`, `uslovia.html`, `vapros.html`, `vaprosi.html`, `vhod.html`, `za-nas.html`, `zabravena-parola.html`, `zavedenia.html`, `zdrave-i-lekari.html`, `zdrave.html`.
 
-## Основни публични страници
+## Public/core
+- `index.html` — `PARTIAL PASS`; nav/cards/questions/firms/listings/articles inspected; QA-006/011.
+- `info.html` — `PARTIAL PASS`; 6 sections + quick anchor links; session/header timing needs observation.
+- `kategorii.html` — structure/routes for exact 8 categories checked.
+- `firmi.html` — read-only protected list checked.
+- `obyavi.html` — intermittent load; filters/categories/search controls visible; active `TELEVIZOR` loads.
+- `vaprosi.html` — pending QA question correctly hidden; filters/empty state checked; QA-009.
+- `statii.html` — one real article; QA-011.
+- `statia.html` — real article detail sections 1–4 load.
+- `tarsene.html` — subcategory searches, default no-q state and forced no-result state checked; QA-019/020/021/022.
+- `404.html` — custom not-found heading + Back + Home link works structurally.
+- `za-nas.html`, `pravila.html`, `poveritelnost.html`, `uslovia.html`, `biskvitki.html` — basic structure read-only checked.
 
-- `index.html` — `PARTIAL PASS + QA-006 + QA-011`; nav/cards/questions/firms/listings/articles inspected.
-- `info.html` — `PASS STRUCTURE / VERIFY SESSION`; 6 main cards + quick links to specific anchors inspected.
-- `kategorii.html` — `PASS STRUCTURE`; exactly 8 public categories and routes inspected.
-- `firmi.html` — `PASS READ-ONLY / LOCKED`; public list loads, Ivanov Remonti visible, add-firm action exists.
-- `obyavi.html` — `VERIFY INTERMITTENT / LOCKED`; one run failed, later run loaded `TELEVIZOR`.
-- `vaprosi.html` — `PASS PUBLIC PENDING-FILTER`; pending QA question is not public; filters/empty state inspected; QA-009 remains.
-- `statii.html` — `PASS LIST / QA-011`; exactly 1 real article.
-- `statia.html` — `PASS STRUCTURE`; real article loads with sections 1–4 and nav/footer.
-- `za-nas.html`, `pravila.html`, `poveritelnost.html`, `uslovia.html`, `biskvitki.html` — `PASS BASIC STRUCTURE`; full interactive/legal content review still manual if needed.
-- nonexistent route -> custom `404.html` — `PASS BASIC`: `Страницата не е намерена`, `Назад`, `Към началната страница`.
+## Category deep routes
+### Health category
+`zdrave-i-lekari.html`: Личен лекар, Педиатър, Кардиолог, Зъболекар, Физиотерапия, Аптеки; Ask question `?category=zdrave`; Info anchors checked.
 
-## Категории и подкатегории — deep route QA
+### Cars
+`avtomobili.html` searches:
+- Автосервизи → no results
+- Диагностика → no results
+- Гуми → `Автомобили`
+- Авточасти → no results
+- Автомивки → Ivanov Remonti + Автомобили → QA-019
+- Пътна помощ → Автомобили
 
-### `zdrave-i-lekari.html`
-Статус: `PASS STRUCTURE`
+### Restaurants
+`zavedenia.html`:
+- Ресторанти → Заведения
+- Кафенета → Заведения
+- Пицарии → Заведения
+- Сладкарници → no results
+- Доставка на храна → no results
 
-Проверени cards/sections: Личен лекар, Педиатър, Кардиолог, Зъболекар, Физиотерапия, Аптеки; Ask question `?category=zdrave`; links към Info Health anchors; category firms/questions states.
+### Services
+`rabota.html` public label is `Услуги`, Ask question `?category=rabota`.
+Домашни услуги, Красота и грижа, Компютърни услуги, Фото и видео, Счетоводни услуги, Обучение → all no results → QA-020.
 
-### `avtomobili.html`
-Статус: `PARTIAL PASS + QA-019`
+### Events
+`sabitiya.html`: upcoming-events empty state; Ask question `?category=sabitiya`; Предстоящи/Културни/Спортни/Обществени search routes → all no results → QA-020.
 
-Проверени search подкатегории:
-- Автосервизи → no results;
-- Диагностика → no results;
-- Гуми → result `Автомобили`;
-- Авточасти → no results;
-- Автомивки → `Иванов Ремонти Лом` + `Автомобили` → QA-019;
-- Пътна помощ → `Автомобили`.
+### Masters — LOCKED read-only
+`maistori.html`:
+- Цялостни ремонти → Ivanov Remonti
+- Бани и плочки → Ivanov Remonti
+- ВиК → Ivanov Remonti + Майстори
+- Електро → Ivanov Remonti + Майстори
+- Покриви → Ivanov Remonti + Майстори
+- Боядисване → Ivanov Remonti
+- Дограма → Ivanov Remonti + Майстори
+- Климатици → no results
+Protected priority stays visible.
 
-Липсата на резултат не се приема автоматично за дефект.
+### Shops
+`magazini.html`: tabs Хранителни/Строителни/Техника/Мебели/Дрехи/Дом exist; Хранителни renders stores; QA-017. Connector cannot click remaining 5 tabs or Add-store button → `MANUAL / PENDING`, not PASS.
 
-### `zavedenia.html`
-Статус: `PASS ROUTES / CONTENT GAPS`
+## Info Lom deep read-only
+- `zdrave.html`: all health sections + anchors + direct phones/official links inspected; add/correction actions visible; QA-025.
+- `institucii.html`: final priority content loads; signal action; QA-010; flicker still VERIFY.
+- `transport.html`: bus/BDZ/taxi structure + anchor routes inspected; interactive external actions remain manual.
+- `obrazovanie-kultura.html`: schools/kindergartens/chitalishta/library/museum/courses; many direct tel/official links visible; no new defect in this pass.
+- `banki.html`: ATMs/banks; `Добави банкомат`, signal action and official bank links present; no new defect in this pass.
+- `komunalni.html`: couriers/internet-TV/payment/insurance/electricity etc.; add buttons and direct tel/track/coverage links inspected; no new defect in this pass.
 
-- Ресторанти → result `Заведения`;
-- Кафенета → result `Заведения`;
-- Пицарии → result `Заведения`;
-- Сладкарници → no results;
-- Доставка на храна → no results.
+Нито един Info section е final 100% PASS преди real click/anchor/modal/mobile test.
 
-### `rabota.html` / публичен label `Услуги`
-Статус: `PASS ROUTES / QA-020`
+## Detail/error pages
+- Active listing `TELEVIZOR`: title/category/price/date/address, 4 images, share, signal, contact phone, call + Viber actions visible. Interactive Share/Signal still manual.
+- Pending `QA TEST 4`: authenticated owner detail visible; guest/non-owner authorization pending.
+- `obqva.html` missing id → QA-024.
+- Ivanov Remonti firm detail — protected read-only; contact/about/gallery/call/inquiry visible.
+- GUTREDDD firm detail — current authenticated owner can preview returned-for-correction profile; guest/non-owner visibility pending.
+- `firma.html` missing id → QA-023.
+- `razshiren-profil.html?id=Ivanov`: editor visible in current session; role/access classification pending, no protected action.
+- `vapros.html` missing id → QA-018.
+- `statia.html` valid detail → structure pass.
 
-Ask question route `?category=rabota` е наличен. Проверени:
-- Домашни услуги → no results;
-- Красота и грижа → no results;
-- Компютърни услуги → no results;
-- Фото и видео → no results;
-- Професионални услуги (`Счетоводни услуги`) → no results;
-- Обучение и уроци (`Обучение`) → no results.
+## Auth/profile
+- `vhod.html` and `registracia.html` still display auth forms while header shows authenticated `Профил` → `VERIFY UX`; real invalid/valid submits manual.
+- `zabravena-parola.html`: email + Send link + back login; real send pending because it sends mail.
+- `nova-parola.html`: direct page shows New password + Repeat + Save/show-password in current authenticated session; `VERIFY UX/ACCESS`; reset-token and submit behavior pending.
+- `profil.html`: QA question/listing statuses checked; signal gap QA-013; password-change form present.
 
-### `sabitiya.html`
-Статус: `PASS ROUTES / QA-020`
+# C. JOINT E2E RECORDS
 
-Upcoming events valid empty state; Ask question `?category=sabitiya`; Info Lom CTA. Search subcategories:
-- Предстоящи събития → no results;
-- Културни събития → no results;
-- Спортни събития → no results;
-- Обществени събития → no results.
+## QA TEST 1 — Question
+`QA TEST 1 — въпрос за изтриване`, category Автомобили.
+- submit success, but form stayed active → QA-001
+- profile → Чака одобрение
+- Admin queue → pending
+- public `vaprosi.html` → correctly hidden before approval
+Remaining: user Admin approval → public list → Cars latest questions → detail → profile status → cleanup.
 
-### `maistori.html` — LOCKED
-Статус: `READ-ONLY PASS / PROTECTED SEARCH`
-
-Проверени:
-- Цялостни ремонти → Иванов Ремонти Лом;
-- Бани и плочки → Иванов Ремонти Лом;
-- ВиК → Иванов Ремонти Лом + Майстори и ремонти;
-- Електро → Иванов Ремонти Лом + Майстори и ремонти;
-- Покриви → Иванов Ремонти Лом + Майстори и ремонти;
-- Боядисване → Иванов Ремонти Лом;
-- Дограма → Иванов Ремонти Лом + Майстори и ремонти;
-- Климатици → no results.
-
-Защитеният priority остава видим при съвпадащите repair заявки.
-
-### `magazini.html`
-Статус: `PARTIAL — MANUAL TABS PENDING + QA-017`
-
-Потвърдени tabs: Хранителни, Строителни, Техника, Мебели, Дрехи, Дом. Хранителни зарежда реални обекти. CTA има QA-017. Connector няма click action, затова 5-те останали tabs и add-shop open/submit flow остават `MANUAL / PENDING`; НЕ се маркират като PASS.
-
-## Инфо Лом
-
-- `zdrave.html` — sections: болница, лекари, аптеки, стоматолози, ветеринари/вет. аптеки, лаборатории; signal action наличен. `PARTIAL PASS`; button/modal/anchor manual interactions остават.
-- `institucii.html` — final content loads, включително Областна администрация Монтана и Филиал за спешна медицинска помощ – Лом. `PARTIAL PASS`; initial flicker и QA-010 остават.
-- `transport.html` — автогара, ЖП/БДЖ, таксита, anchors. `PARTIAL PASS`; реални external CTA/manual navigation още се проверяват.
-- `obrazovanie-kultura.html` — училища, детски градини, читалища, библиотека, музей, курсове, anchors. `PARTIAL PASS`.
-- `banki.html` — банкомати и банкови офиси/brands се зареждат. `PARTIAL PASS`.
-- `komunalni.html` — ВиК, куриери, интернет/TV, платежни точки, застраховане и utility sections. `PARTIAL PASS`.
-
-Нито един Info Lom раздел не се счита 100% final PASS преди manual CTA/anchor/modal/mobile проверката.
-
-## Detail страници / error states
-
-- `obqva.html?id=<QA TEST 4>` — current authenticated owner вижда pending detail, контактен телефон/call links/back/add-listing. `PASS OWNER READ-ONLY / LOCKED`; guest/non-owner visibility още не е тествана.
-- `firma.html?id=<Иванов Ремонти>` — protected read-only: title/contact/about/short intro/gallery, call/inquiry CTA. Gallery accessibility shows images 2–15, consistent with first image possibly used as cover; не се приема за defect без source check.
-- `razshiren-profil.html?id=<Иванов Ремонти>` — edit form се отваря в текущата session. Не се счита security bug без доказана role/session; protected read-only only.
-- `vapros.html` без id — QA-018.
-- `statia.html` — valid article detail PASS structure.
-- custom 404 — PASS basic.
-
-## Auth / profile pages
-
-- `vhod.html` — form exists even while header shows `Профил`; `VERIFY UX`, actual validation/manual submit pending.
-- `registracia.html` — form exists while authenticated; `VERIFY UX`, actual registration validation/manual submit pending.
-- `zabravena-parola.html` — email + `Изпрати линк` + back-to-login link. `PASS STRUCTURE / MANUAL SUBMIT PENDING` because submit sends real reset mail.
-- `nova-parola.html` — direct page shows New password + Repeat password + Save + show-password controls while current session is authenticated. `VERIFY UX/ACCESS`; actual reset-token and invalid/valid submit flow pending.
-- `profil.html` — QA question and QA listing statuses inspected; password change form exists; signal/profile gap QA-013.
-
-# C. СЪВМЕСТНИ END-TO-END ТЕСТОВЕ
-
-## QA TEST 1 — Въпрос
-`QA TEST 1 — въпрос за изтриване`, category `Автомобили`.
-
-Потвърдено:
-- submit success message;
-- form остава active → QA-001;
-- profile → `Чака одобрение`;
-- Admin queue → присъства и чака одобрение;
-- public `vaprosi.html` → не се показва преди approval, което е правилно.
-
-Остава: потребителят натиска Admin approval → public `vaprosi.html` → `avtomobili.html` latest questions → detail page → profile status → cleanup.
-
-## QA TEST 4 — Обява — LOCKED
-`QA TEST 4 — обява за изтриване`.
-
-Потвърдено:
-- реално подадена;
-- profile → `Чака одобрение`;
-- Admin queue → присъства;
-- authenticated owner detail page се отваря.
-
-ВАЖНО: записът вече е използвал реална месечна personal quota. Не се създава втори QA listing. Изтриване/отказ не възстановява quota.
+## QA TEST 4 — Listing — LOCKED
+- real record submitted
+- profile → pending
+- Admin queue → pending
+- owner detail visible
+- already consumed real personal monthly quota; DO NOT create another QA listing; delete/reject does not restore quota.
 
 ## Signal
-Потвърдено съвместно:
-- неясна e-mail validation → QA-003;
-- след success form остава → QA-001;
-- profile не показва record → QA-013.
+QA-003 + QA-001 + QA-013 remain.
 
 ## Contacts
-Потвърдено:
-- missing email field-specific error + preserved data;
-- valid submit failure → QA-004.
+Missing-email behavior partial pass; valid submit QA-004.
 
-## Firm form — LOCKED reference
-Empty submit дава correct field-specific validation + summary, без да маркира optional fields. Няма real submit.
+## Firm validation — LOCKED reference
+Empty submit gives specific errors + correct optional behavior + summary; no real submit.
 
-## Listing form — LOCKED
-Empty submit дава specific validation. Разликата в summary е QA-005. Няма нов QA listing.
+## Listing validation — LOCKED
+Empty submit specific errors; QA-005; no additional listing.
 
-# D. ADMIN READ-ONLY QA — LOCKED
+# D. ADMIN READ-ONLY — LOCKED
+- panel loads
+- summary: 2 Users / 5 Pending / 0 Questions / 0 Answers / 2 Firms
+- pending queue contains QA TEST 1 + QA TEST 4
+- moderation buttons present but not used autonomously
+- QA-014/015/016 remain
 
-Потвърдено без critical actions:
-- panel loads;
-- summary: 2 Потребители, 5 Чакащи, 0 Въпроси, 0 Отговори, 2 Фирми;
-- sections: Чакащи, Потребителски редакции, Разширени профили, Публикувани въпроси/отговори, Обяви, Скрити/отказани, Магазини, Събития, Инфо Лом, Потребители, Съобщения, фирмени секции;
-- QA TEST 1 и QA TEST 4 са в pending queue;
-- moderation actions са налични, но не са натискани самостоятелно;
-- QA-014, QA-015, QA-016 остават.
+# E. MANUAL / PENDING, НЕ СЕ СЧИТА ЗА PASS
+- Shops: 5 remaining tabs + add-store modal/form/submit.
+- Info Lom: actual button clicks, modals, anchor scrolling, external CTA actions section by section.
+- Auth: login/register/forgot/new-password invalid/valid behavior and post-submit.
+- Admin: protected moderation E2E only with user.
+- Guest/non-owner checks: Admin URL, pending listing detail, returned firm preview, expanded editor.
+- Mobile/device QA: real phone/device viewport for all template types.
+- Visual error colors/focus after real invalid submit.
 
-# E. ТЕКУЩИ QA РИСКОВЕ / НЕПРИКЛЮЧЕНИ РЪЧНИ ТЕСТОВЕ
+# F. ROOT-CAUSE / FOLLOW-UP QUEUE
+Read-only investigation before fixes: QA-004, 006, 009, 010, 013, 015, 016, 018, 019, 021, 022, 023, 024, 025.
 
-- Не натискай/създавай нова Обява за QA — оставащата quota е реална и QA TEST 4 вече я е използвал.
-- Protected Admin moderation actions се правят само съвместно с потребителя.
-- Shop tabs/add-store interaction изисква потребителски click.
-- Auth validation/submit (login/register/forgot/new password) изисква реално interaction.
-- Mobile/device QA изисква реална mobile viewport/device mode настройка.
-- Info Lom buttons/modals/external CTA/anchor behavior трябва да се минат интерактивно, не само по accessibility tree.
-- Guest/non-owner visibility за pending protected records трябва да се тества в доказано guest/non-owner session.
-
-# F. СЛЕДВАЩИ QA ДЕЙСТВИЯ
-
-1. Довършване на останалите HTML inventory pages и error/access states.
-2. Дълбок интерактивен обход на Shops tabs и add-store flow с потребителя.
-3. Дълбок Info Lom CTA/anchor/modal тест, секция по секция.
-4. Auth forms: invalid/valid field behavior и post-submit states.
-5. Protected Admin moderation E2E за QA TEST 1 и QA TEST 4 с потребителя.
-6. Guest/non-owner authorization checks за Admin, pending listing detail, expanded business editor и protected routes.
-7. Mobile/device QA на всички основни template types.
-8. Read-only root-cause investigation: QA-004, QA-006, QA-009, QA-010, QA-013, QA-015, QA-016, QA-018, QA-019.
-9. След края на QA поправките се започват от този файл по status/priority; след всяка поправка production retest преди `CLOSED`.
+След края на QA поправките започват от този файл по status/priority. Нищо не става `CLOSED` без production retest.
