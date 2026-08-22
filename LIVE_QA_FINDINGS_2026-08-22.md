@@ -25,8 +25,7 @@ LOCKED: Фирми/профили, Обяви, Майстори и ремонт�
 Статус: `OPEN / PARTIALLY FIXED`
 Глобално правило: след успешен submit формата изчезва/става inactive, има ясен success + следващо действие и accidental duplicate submit е невъзможен; при error формата остава и данните се пазят.
 - Health add/correction/signal, Transport signal, Education signal и Shops add: актуалният source вече има locked success state; interaction retest остава.
-- `nov-vapros.html`: на 23.08.2026 е добавен deterministic CSS success state, задействан от съществуващия `#new-question-message.is-success`: form controls се скриват, success message остава, показват се `Към профила` и `Виж въпросите`. Не се променят question status/approval/roles. Commit `641d84fd6ea04a3aebb602b9377d78243af127e7`.
-- `vapros.html` answer form: аналогично при `#answer-message.is-success` полетата/submit се скриват и се показват `Към въпросите` + `Задай нов въпрос`. Commit `c6c34927182e2219d3694bbfd1b35c3f36779c95`.
+- Questions/Answers: активният `question-answer-validation.js` има finite `armPostSubmitState()` — наблюдава само конкретното message поле, при `.is-success` се disconnect-ва, скрива формата и създава success block с next action. При `.is-error` също се disconnect-ва. Допълнителните CSS/HTML success слоеве, добавени по погрешка в `nov-vapros.html` и `vapros.html`, са напълно върнати с commits `7accd2f65f8cb07c425c2e9d2abe9925a7179e31` и `24427964ab1ab62fcec7d012e638c2a102e0f4b6`, за да няма втори owner/дублиране.
 Questions/Answers чакат реален successful production submit retest преди да се считат CLOSED по този path.
 
 ## QA-002 — Site-wide validation UX
@@ -141,15 +140,14 @@ Shops/general search още нямат пълния approved synonyms/transliter
 Health/Transport/Education/Shops source вече имат dirty guards: empty closes directly; unsent data asks confirmation; confirmed close resets values/validation; success closes separately. Interaction retest pending. LOCKED flows only read-only unless approved.
 
 ## QA-028 — Data-driven types/tags architecture
-Статус: `OPEN / ARCHITECTURE`
-Confirmed shop DB/source facts:
+Статус: `FIXED - NEEDS RETEST`
+Confirmed DB/source basis:
 - `public.shops` има `tags text[]` и `groups text[]`.
 - current records: clothes 5 (4 with tags), construction 8 (8 tags, 8 groups), food 12 (12 tags), furniture 3 (3 tags), home 6 (6 tags), tech 4 (4 tags).
 - construction groups: `materials` 7, `bath` 3, `metal` 3, `paint` 3.
-- tags include real existing values such as `Строителни материали`, `Бои`, `Железария`, `Санитария`, `Латекс`, `Хранителни стоки`, `Мебели`, `Електроника`, etc.
-- public `shops-catalog-v3.js` renders tags, construction subfilter reads groups, shop text search includes tags.
-- Add Shop insert payload НЕ събира/изпраща tags/groups.
-Therefore data model supports classification, but submission flow cannot create it consistently. Desired approved model: category-specific predefined type checks, one or more, optional normalized custom type, structured tags/types used on cards/filter/search; no universal list and no duplicate free-text chaos. Protected modules remain separate.
+- public catalog already renders tags, construction subfilter reads groups, and shop search includes tags.
+На 23.08.2026 `shops-catalog-v3.js` е обновен така, че Add Shop вече използва data-driven classification без измислен универсален списък: за избраната категория показва multi-select checkbox-и от реално съществуващите одобрени tags за същата категория, има optional custom tag с whitespace normalization/deduplication, а `groups` се извеждат само от вече съществуващите tag→group връзки в одобрените записи. Payload вече изпраща `tags` и `groups`; dirty-state следи и тези полета. Commit `b1d9f079c3e902bce0ed7478bd2e1a1412653f1a`; `magazini.html` cache-bust commit `f49d05eac0f3e035309904c08a6301f21ed6b224` (`shops-catalog-v3.js?v=20260823-0155`).
+Production page load след deploy е PASS — каталогът, auth state и CTA се зареждат без runtime-fatal failure. Connector-ът в текущата сесия няма click/fill action, затова modal/classification interaction и submit payload остават за retest. Protected modules не са променяни.
 
 ## QA-029 — Info Lom load flicker / old static signal first
 Статус: `FIXED - NEEDS RETEST`
@@ -173,12 +171,12 @@ Production accessibility-tree retest on Health, Transport, Education, Banks, Uti
 - All 45 HTML pages inventoried and at least structurally inspected.
 - `index.html`: PARTIAL PASS; QA-006/011 remain.
 - `info.html`: 6 sections + quick links; QA-026 retest remains; QA-030/031 closed.
-- `tarsene.html`: QA-021/022 closed; QA-019 locked; QA-020 classified; QA-026/028 remain.
+- `tarsene.html`: QA-021/022 closed; QA-019 locked; QA-020 classified; QA-026 remain.
 - `statii.html`: one real article only → source basis for QA-011.
 - `vaprosi.html`: pending QA question hidden publicly; QA-009 retest remains.
 - Services/Event subcategory routes classified as valid search shortcuts with current content gaps.
 - Masters was read-only checked; protected Ivanov priority remains visible.
-- Shops six tabs load; source grammar fixed; tags/groups architecture audited.
+- Shops six tabs load; source grammar fixed; tags/groups implementation uploaded; modal interaction retest remains.
 
 ## Info Lom
 - Health: labels CLOSED, modal a11y CLOSED; validation source fixed; post-submit/dirty close interaction retest pending.
@@ -188,7 +186,7 @@ Production accessibility-tree retest on Health, Transport, Education, Banks, Uti
 
 ## QA TEST 1 — Question
 `QA TEST 1 — въпрос за изтриване`, category Автомобили.
-Original submit created pending record; profile/Admin queue confirmed; public correctly hidden before approval. Post-success form issue now source-fixed via `nov-vapros.html` success state, but no new duplicate test record should be created just to retest. Remaining protected moderation E2E requires user/admin action when appropriate.
+Original submit created pending record; profile/Admin queue confirmed; public correctly hidden before approval. Active source-level post-success owner is `question-answer-validation.js`; redundant CSS/HTML layers were reverted. No new duplicate test record should be created just to retest. Remaining protected moderation E2E requires user/admin action when appropriate.
 
 ## QA TEST 4 — Listing — LOCKED
 Real listing submitted and pending; owner detail visible. Monthly personal quota already consumed; DO NOT create another QA listing. Delete/reject does not restore quota.
@@ -202,6 +200,7 @@ Backend grant fix applied; real valid production retest remains QA-004.
 # C. MANUAL / PENDING
 - Info search typing retest `телк` vs `telk`.
 - Health/Transport/Education/Shops dirty-close and post-success interaction retests.
+- Shops classification modal: open Add Shop, switch categories, verify category-specific existing tag choices, multi-select + custom tag, dirty-close behavior; do not create unnecessary moderation data just for UI verification.
 - Question/Answer successful submit UI retest without creating unnecessary duplicate records.
 - QA-029 actual first paint.
 - Contacts valid submit.
@@ -213,9 +212,9 @@ Backend grant fix applied; real valid production retest remains QA-004.
 
 # D. NEXT SAFE ORDER
 1. Continue source-only form/search/UX checks that do not touch LOCKED logic.
-2. QA-019 is blocked until explicit approval for exact `мивк`/`автомивки` protected matching fix.
-3. QA-018 may also require touching shared `script.js`; do not change it blindly because it carries LOCKED search logic.
-4. QA-011 home cleanup only with exact safe edit method; do not repeat broad `index.html` rewrite.
-5. QA-028 Shops type/tag implementation can proceed only from verified data/model, without inventing types and without protected side effects.
+2. QA-011 home cleanup only with exact safe edit method; do not repeat broad `index.html` rewrite and do not alter embedded protected Listings behavior.
+3. QA-018 may require touching shared `script.js`; do not change it blindly because it carries LOCKED search logic. Prefer an exact owner-safe solution that does not alter protected search behavior, otherwise classify/ask approval before editing shared protected file.
+4. QA-019 is blocked until explicit approval for exact `мивк`/`автомивки` protected matching fix.
+5. QA-028 implementation is uploaded; remaining work is production modal interaction retest only.
 
 Нищо не става `CLOSED` без реален production retest.
