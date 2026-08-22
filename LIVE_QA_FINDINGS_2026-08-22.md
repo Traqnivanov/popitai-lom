@@ -37,8 +37,7 @@ LOCKED: Фирми/профили, Обяви, Майстори и ремонт�
 ## QA-001 — Site-wide post-submit UX
 Статус: `OPEN`
 След успешен submit формата трябва да изчезва/става inactive, да има ясен success + следващо действие и да няма accidental duplicate submit. При error формата остава и данните се пазят.
-Health add/correction/signal е source-fixed на 23.08.2026: при success формата се заменя с ясно status съобщение + `Затвори`, повторен submit е невъзможен, а при error формата остава с данните. `zdrave.html` е cache-bust-нат към новия health script. Health остава `NEEDS RETEST`, докато site-wide QA-001 остава OPEN за останалите форми.
-Transport/Education бяха source-confirmed с duplicate risk и остават за проверка/поправка, ако текущите им последни версии още го съдържат.
+Source audit на актуалните версии към 23.08.2026: Health add/correction/signal, Transport signal, Education signal и Shops add вече имат заключен success state — формата се скрива/заменя със success и повторен submit не е възможен. Health е cache-bust-нат и частично production-потвърден; Transport/Education/Shops са source-confirmed и чакат само interaction retest. Site-wide QA-001 остава OPEN за останалите форми, включително Questions/Answers и други surfaces.
 
 ## QA-002 — Site-wide validation UX
 Статус: `OPEN`
@@ -47,8 +46,8 @@ Transport signal joint test: `abc` на blur правилно дава `Доба
 Health dynamic forms все още разчитат основно на native `required`/maxlength и остават част от QA-002 source audit.
 
 ## QA-003 — `signal.html` e-mail validation
-Статус: `OPEN`
-При missing e-mail не е достатъчно ясно къде е грешката. Без промяна на signal/admin routing.
+Статус: `VERIFY - SOURCE NOW GOOD`
+Актуалният source вече има field-specific e-mail validation: при празно поле `Въведи електронна поща.`, при невалиден адрес `Въведи валиден e-mail адрес.`, съобщението е непосредствено до полето, `aria-invalid` се обновява и при submit фокусът отива към първото невалидно поле. Няма промяна на signal/admin routing. Нужен е production interaction retest преди `CLOSED`.
 
 ## QA-004 — `kontakti.html` valid submit fails
 Статус: `FIXED - NEEDS RETEST`
@@ -71,25 +70,25 @@ Accessibility tree не доказва цвят. Desktop/mobile screenshot QA т
 В един test tree показа `A TEST 3...` вместо `QA TEST 3...`; вероятно ръчно въвеждане. Не bug без повторение.
 
 ## QA-009 — `vaprosi.html` stale `image-upload.js`
-Статус: `VERIFY`
-Uploader е премахнат, но page още зарежда `image-upload.js?v=20260820-0310`. Confirm dependency before removal.
+Статус: `FIXED - NEEDS RETEST`
+Актуалният source на `vaprosi.html` вече НЕ зарежда `image-upload.js`; страницата зарежда Supabase config, `questions-public-v1.js` и global `script.js`. Нужен production HTML/dependency retest преди `CLOSED`.
 
 ## QA-010 — `institucii.html` ARIA gap
-Статус: `VERIFY`
-Menu button няма потвърдени `aria-expanded=false`/`aria-controls=main-nav`; modal close няма потвърден descriptive aria-label.
+Статус: `FIXED - NEEDS RETEST`
+Актуалният source има `aria-expanded="false"` и `aria-controls="main-nav"` на menu button, а modal close има `aria-label="Затвори"`. Production страницата се зарежда; финален interaction/accessibility retest остава преди `CLOSED`.
 
 ## QA-011 — Home fake/missing article cards
 Статус: `OPEN`
-`statii.html` има само реалната статия `Как да избереш майстор и да избегнеш неприятни изненади`, но home показва още `Кои документи да поискаш при наемане на услуга` и `Как бързо да намериш работно време и телефон`; CTA водят към общия list, където те не съществуват. Нарушава canonical rule за реален approved material.
+`statii.html` има само реалната статия `Как да избереш майстор и да избегнеш неприятни изненади`, но home показва още `Кои документи да поискаш при наемане на услуга` и `Как бързо да намериш работно време и телефон`; CTA водят към общия list, където те не съществуват. Нарушава canonical rule за реален approved material. Source проверката потвърди, че реалната статия има detail URL `statia.html`; safe home cleanup предстои.
 
 ## QA-012 — Hidden Admin entry idea
 Статус: `IDEA / LOCKED`
 Possible 5 taps/hidden trigger само за UX obscurity; НЕ security. Real protection остава auth/role/RLS. Later consider re-auth, audit log, MFA/2FA. No implementation without separate approval.
 
 ## QA-013 — Profile няма general signal record след signal QA
-Статус: `CLASSIFIED / UX SCOPE`
-Backend проверката на 23.08.2026 потвърди, че general `signal.html` записва в таблица `reports` и има 1 recent `site / pending` record — submit-ът е създал record. `profile-info-corrections-v1.js` по дизайн зарежда само `info_submissions` и `info_error_reports`, т.е. секцията е за предложения/сигнали към Инфо Лом, не за general site reports. Това не е загубен signal record.
-Остава UX неяснота: динамичното heading `Моите предложения и сигнали` звучи по-общо от реалния scope. Без business промяна може да се уточни на `Моите предложения и сигнали за Инфо Лом`; ако някога се иска general reports да се виждат в профила, това е отделно решение.
+Статус: `CLOSED / CLASSIFIED UX SCOPE`
+Backend проверката потвърди, че general `signal.html` записва в `reports` и има recent `site / pending` record — submit-ът не е загубен. `profile-info-corrections-v1.js` по дизайн показва само Info Lom `info_submissions` и `info_error_reports`.
+UX scope copy е уточнен безопасно на `Моите предложения и сигнали за Инфо Лом`, cache-bust-нат в `profil.html` и production retest потвърди новото heading. General reports не са добавяни в profile flow; това би било отделно решение.
 
 ## QA-014 — Admin visible English `Highlighted`
 Статус: `OPEN / LOCKED`
@@ -104,8 +103,8 @@ Visible checkbox label `Highlighted` нарушава Bulgarian UI rule.
 Не е доказан bug, защото session може да е admin. Нужен доказан guest/non-admin test.
 
 ## QA-017 — `magazini.html` grammatically wrong CTA
-Статус: `OPEN`
-Live проверката потвърди грешни dynamic labels във всички тествани shop tabs, напр. `+ Добави хранителни магазин`, `+ Добави строителни магазин`, `+ Добави техника магазин`, `+ Добави мебели магазин`, `+ Добави дрехи магазин`, `+ Добави дом магазин`. Същият текст се повтаря и в modal heading. Трябва граматически правилно dynamic naming, без промяна на shop flow.
+Статус: `FIXED - NEEDS RETEST`
+Актуалният source използва explicit `addLabels` map: `хранителен магазин`, `строителен магазин`, `магазин за техника`, `мебелен магазин`, `магазин за дрехи`, `магазин за дома`, еднакво за CTA и modal heading. Production retest на текущо активния `Строителни` показа `＋ Добави строителен магазин`. Останалите 5 deterministic states са source-confirmed; финален tab-by-tab interaction retest остава преди `CLOSED`.
 
 ## QA-018 — `vapros.html` без id дублира not-found state
 Статус: `OPEN / UX / RENDER OWNERSHIP`
@@ -121,8 +120,8 @@ Source root cause е потвърден: legacy `script.js::renderQuestionDetail
 Всички 6 Services search subcategories и всички 4 Events search subcategories са `Няма намерени резултати`; има празни и в Cars/Restaurants. Не е automatic bug; classify content absence vs useful empty-state need, без invented content.
 
 ## QA-021 — Search default state показва legacy public labels
-Статус: `OPEN`
-`tarsene.html` без `q` показва 10 default results и публично рендерира category headings `Работа и услуги` и `Събития и град`. Canonical public labels са `Услуги` и `Събития`; legacy values трябва да остават само internal compatibility values.
+Статус: `CLOSED`
+`search-public-labels.js` заменя само public label/description за internal compatibility стойностите `Работа и услуги` → `Услуги` и `Събития и град` → `Събития`. Production retest на `tarsene.html` без `q` на 23.08.2026 показа `Услуги` и `Събития` и не показа старите публични headings. Internal compatibility стойностите и protected search priority не са променяни.
 
 ## QA-022 — Search no-results няма директно next action
 Статус: `VERIFY / UX`
@@ -137,9 +136,9 @@ Screenshot + tree: hero `Фирмата не е намерена`, после о
 Missing-id page няма main error heading/next CTA; в main content има само paragraph `Обявата не е намерена.` след breadcrumb. Сравнение с Question/Firm error states показва различен, много по-слаб fallback. Не се уеднаквява механично; classify first.
 
 ## QA-025 — Health Info `Добави ...` labels с plural grammar
-Статус: `FIXED - NEEDS RETEST`
-Live tree преди fix показваше `Добави аптеки`, `Добави стоматолози`, `Добави лаборатории и диагностика`.
-Source fix на 23.08.2026: `info-lom-health-unified.js` вече подава отделни singular add-labels `аптека`, `стоматолог`, `лаборатория`, без промяна на subcategory, entry_type, moderation или DB flow. `zdrave.html` е cache-bust-нат към новата версия. Нужен production retest на трите CTA преди `CLOSED`.
+Статус: `CLOSED`
+Source fix: `info-lom-health-unified.js` подава singular add-labels `аптека`, `стоматолог`, `лаборатория`, без промяна на subcategory, entry_type, moderation или DB flow; `zdrave.html` е cache-bust-нат.
+Production retest на 23.08.2026 показа точно `＋ Добави аптека`, `＋ Добави стоматолог`, `＋ Добави лаборатория`.
 
 ## QA-026 — Search е прекалено exact: липсват синоними, транслитерация и tolerant matching
 Статус: `OPEN / SITE-WIDE VERIFY`
@@ -149,11 +148,9 @@ Joint live QA в `info.html` потвърди различно поведени�
 
 ## QA-027 — Site-wide защита от неволно затваряне на попълнена форма
 Статус: `VERIFY / SITE-WIDE UX RULE`
-Joint live QA в `magazini.html` потвърди, че при въведени данни `Отказ` затваря modal-а веднага, без предупреждение; при повторно отваряне старите стойности и validation state остават.
-Joint live QA в `transport.html` потвърди същото: при валидно въведен текст в signal modal натискане на `X` затваря директно без предупреждение.
-Health source fix на 23.08.2026: `X`, backdrop и `Escape` вече проверяват за реално въведени неизпратени данни; празен form се затваря директно, dirty form иска потвърждение, а потвърденото затваряне изчиства modal body. Health е `NEEDS RETEST`; site-wide QA-027 остава активен за останалите modal-и.
-Одобрено правило за QA/UX проверка: ако форма/modal има реално въведени, но неизпратени промени, действие `Отказ`, бутонът `X` за затваряне или друго равностойно видимо действие за затваряне не трябва да ги изхвърля без потвърждение. Показва се кратък confirm с ясни действия. Ако формата е празна, се затваря директно. При `Остани` всички данни се пазят; при потвърдено затваряне формата и старият validation state се нулират.
-Проверка site-wide: всички потребителски форми и modal-и, включително защитените модули само read-only/с отделно одобрение за промяна. QA правило не дава право да се променя LOCKED flow.
+Първоначалните joint tests потвърдиха dirty-close fail в Shops и Transport.
+Актуалният source към 23.08.2026 вече има dirty-state guard в Health, Transport, Education и Shops: празна форма се затваря директно; при реално въведени неизпратени данни се иска confirm; при потвърдено затваряне формата/validation state се нулират; success state се изчиства отделно. Transport допълнително обработва `Escape` през същия `closeModal()` path; Health също. Тези surfaces са `FIXED - NEEDS INTERACTION RETEST`, докато site-wide QA-027 остава активен за останалите modal-и.
+Одобрено правило: ако форма/modal има реално въведени, но неизпратени промени, Cancel/X/равностойно close действие не трябва да ги изхвърля без потвърждение. При `Остани` всички данни се пазят; при потвърдено затваряне формата и старият validation state се нулират. LOCKED flows се променят само с отделно одобрение.
 
 ## QA-028 — Типове/тагове трябва да идват от данните, не от твърди автоматични подтабове
 Статус: `OPEN / ARCHITECTURE / SITE-WIDE VERIFY`
@@ -181,8 +178,8 @@ Fix: добавени са същите Supabase SDK/config dependencies пре�
 Отделно source audit откри същата нежелана дума на home Categories intro (`без лутане`); това е отделен safe content cleanup, не връща QA-031 в OPEN.
 
 ## QA-032 — Info Lom modal close бутон без достъпно име
-Статус: `OPEN / P3 ACCESSIBILITY / INFO`
-Joint test в Transport показа, че close бутонът се чете само като `×`. Source audit потвърждава същия markup без descriptive `aria-label` в част от Info modal-ите. Health `zdrave.html` вече има `aria-label="Затвори"` и е PASS по този конкретен markup; Education също има descriptive label. Transport/Banks/Utilities/Institutions остават за source + production проверка/корекция.
+Статус: `FIXED - NEEDS RETEST / P3 ACCESSIBILITY / INFO`
+Source audit на актуалните шест Info detail templates потвърди descriptive `aria-label="Затвори"` за Health, Transport, Education, Banks, Utilities и Institutions. Transport menu button също е допълнен с `aria-expanded="false"` и `aria-controls="main-nav"`; close path вече включва Escape през същата dirty-state логика. Нужен е interaction/accessibility retest на modal close controls преди `CLOSED`.
 
 # B. 100% HTML INVENTORY / COVERAGE
 
@@ -195,10 +192,10 @@ Repo inventory:
 - `kategorii.html` — structure/routes for exact 8 categories checked.
 - `firmi.html` — read-only protected list checked.
 - `obyavi.html` — intermittent load; filters/categories/search controls visible; active `TELEVIZOR` loads.
-- `vaprosi.html` — pending QA question correctly hidden; filters/empty state checked; QA-009.
-- `statii.html` — one real article; QA-011.
+- `vaprosi.html` — pending QA question correctly hidden; filters/empty state checked; source no longer loads image uploader → QA-009 fixed pending production dependency retest.
+- `statii.html` — one real article linking to `statia.html`; QA-011 home cleanup remains.
 - `statia.html` — real article detail sections 1–4 load.
-- `tarsene.html` — subcategory searches, default no-q state and forced no-result state checked; QA-019/020/021/022/026/028.
+- `tarsene.html` — public labels production retested → QA-021 CLOSED; QA-019/020/022/026/028 remain.
 - `404.html` — custom not-found heading + Back + Home link works structurally.
 - `za-nas.html`, `pravila.html`, `poveritelnost.html`, `uslovia.html`, `biskvitki.html` — basic structure read-only checked.
 
@@ -243,15 +240,15 @@ Repo inventory:
 Protected priority stays visible.
 
 ### Shops
-`magazini.html`: всички 6 tabs са joint-tested live: Хранителни/Строителни/Техника/Мебели/Дрехи/Дом зареждат съдържание. Shop search: `бои` намира релевантни записи; forced no-result `zzzztest` показва `Няма резултат.` + `Промени търсенето или филтъра.`. Add-store modal е отворен и category preselect `Строителни` е правилен. Empty submit дава specific errors за име/адрес/описание/източник; optional phone/work-hours/source-note не се маркират; invalid phone `123` дава semantic error on blur; valid `0888123456` clear-ва error; invalid submit пази вече въведените име/телефон. `Отказ` затваря веднага при dirty form, а повторното отваряне пази старите стойности/validation state → QA-027. Строителните hardcoded подфилтри са маркирани за архитектурна замяна с data-driven types/tags след одит → QA-028. QA-017/026/027/028. Success submit не е правен.
+`magazini.html`: всички 6 tabs са joint-tested live за съдържание. Актуалният source има правилните шест add labels и production current state показа `＋ Добави строителен магазин` → QA-017 fixed pending final tab-by-tab retest. Shop search exact-match проблемът остава QA-026. Dirty close и post-success source са поправени, но interaction retest остава QA-001/027. Строителните hardcoded подфилтри остават QA-028. Success submit не е правен.
 
 ## Info Lom deep read-only
-- `zdrave.html`: all health sections + anchors + direct phones/official links inspected. Health add/correction/signal source е обновен за QA-001/025/027 и cache-bust-нат; чака production retest. Health close button има descriptive `aria-label`.
-- `institucii.html`: final priority content loads; signal action; public single-owner staging architecture verified; QA-010/029/032.
-- `transport.html`: bus/BDZ/taxi structure + anchor routes inspected; validation blur/live-clear joint PASS; dirty-X fail → QA-027; close accessibility → QA-032; load-state → QA-029.
-- `obrazovanie-kultura.html`: schools/kindergartens/chitalishta/library/museum/courses; many direct tel/official links visible; signal form source has good aria close label but QA-001 post-success duplicate risk.
-- `banki.html`: ATMs/banks; `Добави банкомат`, signal action and official bank links present; specialized public root + QA-029/032.
-- `komunalni.html`: couriers/internet-TV/payment/insurance/electricity etc.; add buttons and direct tel/track/coverage links inspected; specialized public root + QA-029/032.
+- `zdrave.html`: health sections + anchors + direct phones/official links inspected; add-labels production retested → QA-025 CLOSED; post-success/dirty-close source fixed → QA-001/027 interaction retest pending.
+- `institucii.html`: final priority content loads; public single-owner staging architecture verified; menu/modal ARIA source fixed → QA-010 pending final interaction retest; QA-029 remains.
+- `transport.html`: validation blur/live-clear joint PASS; current source has success lock + dirty guard + descriptive close label + menu ARIA + Escape close through same guard → QA-001/027/032 pending interaction retest; QA-029 remains.
+- `obrazovanie-kultura.html`: current source has success lock + dirty guard + descriptive close label; QA-001/027 interaction retest pending.
+- `banki.html`: specialized public root; modal close has descriptive `aria-label`; QA-029/032 retest pending.
+- `komunalni.html`: specialized public root; modal close has descriptive `aria-label`; QA-029/032 retest pending.
 
 Нито един Info section е final 100% PASS преди remaining production first-paint/modal/mobile checks.
 
@@ -270,13 +267,13 @@ Protected priority stays visible.
 - `vhod.html` and `registracia.html` still display auth forms while header shows authenticated `Профил` → `VERIFY UX`; real invalid/valid submits manual.
 - `zabravena-parola.html`: email + Send link + back login; real send pending because it sends mail.
 - `nova-parola.html`: direct page shows New password + Repeat + Save/show-password in current authenticated session; `VERIFY UX/ACCESS`; reset-token and submit behavior pending.
-- `profil.html`: QA question/listing statuses checked. General signal is stored in `reports`; dynamic `Моите предложения и сигнали` section currently only displays Info Lom `info_submissions/info_error_reports` → QA-013 classified as scope/copy ambiguity. Password-change form present.
+- `profil.html`: general signal storage/scope classified; heading now explicitly `Моите предложения и сигнали за Инфо Лом` and production retested → QA-013 CLOSED. Password-change form present.
 
 # C. JOINT E2E RECORDS
 
 ## QA TEST 1 — Question
 `QA TEST 1 — въпрос за изтриване`, category Автомобили.
-- submit success, but form stayed active in original test → QA-001
+- submit success in original test; current question post-success source needs production retest → QA-001
 - profile → Чака одобрение
 - Admin queue → pending
 - public `vaprosi.html` → correctly hidden before approval
@@ -290,7 +287,7 @@ Remaining: user Admin approval → public list → Cars latest questions → det
 - already consumed real personal monthly quota; DO NOT create another QA listing; delete/reject does not restore quota.
 
 ## Signal
-General signal QA record е потвърден в DB като `reports.target_type=site`, status `pending`; не е загубен. QA-003/QA-001 остават за UX.
+General signal QA record е потвърден в DB като `reports.target_type=site`, status `pending`; не е загубен. Current source e-mail validation е field-specific → QA-003 production retest pending.
 
 ## Contacts
 Missing-email behavior partial pass; backend permission fix е приложен; valid production retest остава → QA-004.
@@ -309,10 +306,11 @@ Empty submit specific errors; QA-005; no additional listing.
 - QA-014/015/016 remain
 
 # E. MANUAL / PENDING, НЕ СЕ СЧИТА ЗА PASS
-- Site-wide dirty-form cancel/close behavior: source audit first; manual only where source cannot prove behavior. Health source fix needs production interaction retest. Protected modules only read-only until separately approved.
-- Site-wide type/tag architecture: map where hardcoded subcategories/subtabs exist, where structured tags/types already exist, how forms collect them, how cards render them and how search/filter surfaces consume them → QA-028; protected modules remain read-only until separately approved.
-- QA-029: production first-paint retest на Info detail pages.
-- Shops: success submit/post-submit/duplicate-prevention не е тестван.
+- Dirty-form/post-success interaction retests for Health/Transport/Education/Shops; source fixes are present.
+- QA-029 production first-paint observation on representative Info detail pages.
+- Contacts valid production submit after backend grant fix.
+- Signal missing/invalid e-mail production interaction retest.
+- Shops remaining five category CTA live retest; source map is correct.
 - Auth: login/register/forgot/new-password invalid/valid behavior and post-submit.
 - Admin: protected moderation E2E only with user.
 - Guest/non-owner checks: Admin URL, pending listing detail, returned firm preview, expanded editor.
@@ -321,9 +319,9 @@ Empty submit specific errors; QA-005; no additional listing.
 
 # F. ROOT-CAUSE / FOLLOW-UP QUEUE
 P0 first: QA-029 first-paint retest; QA-006 read-only because LOCKED.
-Then P1 Forms: QA-001/002/003/004/027; QA-013 е classified scope/copy cleanup.
-Then P1 Search: QA-019/021/022/026/028, with protected priority untouched.
-Then P2/P3, включително QA-011/017/018/025/032.
+Then P1 Forms: QA-001/002/003/004/027.
+Then P1 Search: QA-019/022/026/028, with QA-021 CLOSED and protected priority untouched.
+Then P2/P3: QA-011/017/018/020/025/032; QA-025 CLOSED, QA-017/032 pending retest.
 Read-only investigation before risky/protected fixes remains mandatory.
 
 След края на QA поправките се работи от този файл по priority/status. Нищо не става `CLOSED` без production retest.
