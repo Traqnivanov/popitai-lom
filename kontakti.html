@@ -50,7 +50,7 @@
 </section>
 
 <section class="content-section"><div class="section-container article-page"><article><p class="lead">За въпроси и предложения използвай формата или електронната поща.</p>
-        <form class="content-form large-form simple-contact-form">
+        <form class="content-form large-form" id="contact-form">
           <label for="contact-name">Име</label><input id="contact-name" type="text" required>
           <label for="contact-email">Електронна поща</label><input id="contact-email" type="email" required>
           <label for="contact-message">Съобщение</label><textarea id="contact-message" rows="7" required></textarea>
@@ -107,7 +107,7 @@
   <script src="supabase-content.js?v=20260820-1846" defer></script>
   <script>
   document.addEventListener("DOMContentLoaded", () => {
-    const form = document.querySelector(".simple-contact-form");
+    const form = document.getElementById("contact-form");
     if (!form) return;
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
