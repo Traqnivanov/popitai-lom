@@ -73,7 +73,7 @@
       </article>
 
       <article class="empty-card" id="question-not-found" hidden>
-        <h2>Въпросът не е намерен</h2>
+        <h2>Този въпрос не е достъпен</h2>
         <p>Възможно е да е изтрит или адресът да е непълен.</p>
         <a class="primary-link-button" href="vaprosi.html">Към всички въпроси</a>
       </article>
@@ -92,7 +92,7 @@
           <label for="answer-text">Твоят отговор</label>
           <textarea id="answer-text" rows="5" required minlength="3" placeholder="Сподели личен опит или полезен съвет"></textarea>
           <button class="form-submit" type="submit">Публикувай отговор</button>
-          <p class="form-message" id="answer-message"></p>
+          <p class="form-message" id="answer-message" aria-live="polite"></p>
         </form>
       </div>
     </div>
@@ -151,7 +151,6 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
   </button>
 
-<script src="image-upload.js?v=20260820-0310" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="supabase-config.js?v=20260820-1840" defer></script>
   <script src="question-answer-validation.js?v=20260822-1450" defer></script>
