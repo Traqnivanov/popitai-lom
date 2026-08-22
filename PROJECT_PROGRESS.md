@@ -63,6 +63,13 @@ LOCKED без отделно изрично одобрение:
 - Неактивният uploader за снимки е премахнат от публичната форма. Снимки към въпрос са бъдеща отделна функционалност и не се показва фалшив/неработещ UI.
 - `script.js` не е редактиран при тези корекции; search priority и Иванов Ремонти са запазени.
 
+### Институции
+- Публичният root е `[data-info-institutions-root]` и има един собственик: `info-lom-institutions-owner-v1.js`.
+- Съществуващите legacy/canonical/approved/final/enhancement слоеве рендерират само в скрит staging root `[data-institutions-staging]`; те не рисуват директно публичната секция.
+- Публичният owner публикува финалния вече одобрен DOM наведнъж само след наличие на priority stack, финалните карти за Областна администрация и Спешна медицинска помощ и финалния `#institucii-other` enhancement marker.
+- След публикуване staging root се премахва, а MutationObserver се изключва. Няма постоянен polling/observer върху публичната секция.
+- Не са променяни съдържание, телефони, CTA, официални линкове, signal flow или Admin логика.
+
 ### Търсене
 Публично се показват `Услуги` и `Събития` чрез изолиран label слой. Защитената логика в `script.js` за ремонтни/строителни търсения и Иванов Ремонти не се променя без отделно одобрение.
 
@@ -87,20 +94,14 @@ LOCKED без отделно изрично одобрение:
 Изчистени са:
 
 1. **Събития — публичен event flow** — отделен публичен renderer за одобрени предстоящи `events`.
-2. **Банки и банкомати — TEMP multi-render** — публичното банково съдържание използва отделен root `[data-info-banks-root]` и един renderer `info-lom-banks-v7.js`; старите canonical/enhancement render слоеве не рисуват банковия root.
+2. **Банки и банкомати — TEMP multi-render** — публичното банково съдържание използва отделен root `[data-info-banks-root]` и един renderer `info-lom-banks-v7.js`.
 3. **Образование и култура — signal routing** — сигналът използва каноничната категория `obrazovanie`.
 4. **Въпроси — category routing/UX** — правилни category links, category-specific насоки, checkbox validation и Supabase публични списъци.
 5. **„Майстори и ремонти“ — въпроси** — публичният блок използва Supabase без промяна на search priority, Иванов Ремонти, фирми, обяви, роли, лимити или Admin.
-6. **Магазини — field-specific validation** — задължителните полета вече следват глобалните правила за форми, а телефонът запазва semantic validation.
+6. **Магазини — field-specific validation** — задължителните полета следват глобалните правила за форми, а телефонът запазва semantic validation.
+7. **Институции — публичен render ownership** — публичната секция има един owner; старите слоеве работят само в скрит staging root и готовият финален DOM се публикува еднократно без промяна на одобрения UX/съдържание.
 
-### Единствен оставащ доказан технически блокер преди финалния browser/device QA
-
-**Институции — render ownership.**
-- Текущата страница все още сглобява финалния одобрен UX чрез няколко последователни слоя: `info-lom.js` → `info-lom-canonical.js` → `info-lom-approved-extension.js` → `info-lom-institutions-final.js` → `info-lom-page-enhancements.js`.
-- Одитът потвърди, че слоевете не са празни дубликати: `info-lom-approved-extension.js` заменя множество стандартни институционни карти със специфични priority карти и CTA, а `info-lom-institutions-final.js` добавя отделните финални карти за Областна администрация и Спешна медицинска помощ.
-- Премахване на файл/слой на сляпо би загубило вече одобрена информация или UX. Затова не е направен рисков „cleanup“ само за да намалее броят на файловете.
-- Нужно е отделно behavior-preserving consolidation: един owner трябва да поеме целия вече одобрен финален markup/данни/actions в контролирана последователност, след което старите render слоеве да бъдат изключени.
-- До тази консолидация „Институции“ не се маркира като архитектурно финализиран раздел.
+Към този checkpoint няма друг известен доказан source-code блокер от текущия technical/UX audit преди production browser/device QA.
 
 ## 6. ЗАДЪЛЖИТЕЛЕН СРАВНИТЕЛЕН КОНТРОЛ ЗА ПРОПУСКИ
 
@@ -127,8 +128,8 @@ LOCKED без отделно изрично одобрение:
 
 ## 7. ОСТАВАЩИ ЗАДАЧИ
 
-- Behavior-preserving consolidation на „Институции“ до един render owner, без загуба на одобрено съдържание, CTA, официални връзки или signal flow.
-- След това: production browser/device QA — desktop + mobile, реални бутони, форми, modal/focus, login states, console/runtime, cache/load-order/deployment.
+- Production browser/device QA — desktop + mobile, реални бутони, форми, modal/focus, login states, console/runtime, cache/load-order/deployment.
+- При production QA специално да се провери, че „Институции“ показва финалните priority карти без flicker/междинен стар UI и че anchor навигацията работи след еднократното публикуване.
 - QA не дава автоматично право за промяна на LOCKED логика.
 - При открити реални проблеми: поправя се само доказаният проблем и само в разрешения обхват.
 - Нови статии се добавят само при наличен реален одобрен материал/източник.
