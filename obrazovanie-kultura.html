@@ -76,8 +76,15 @@
   <section class="info-modal-card" role="dialog" aria-modal="true" aria-labelledby="education-modal-title">
     <button class="info-modal-close" type="button" data-education-modal-close>×</button>
     <h2 id="education-modal-title">Сигнал за информация</h2>
-    <p>Локален preview: бутонът е запазен видим, но не изпраща запис към production базата.</p>
-    <p>След одобрение се свързва към съществуващата система за сигнали.</p>
+    <form class="content-form" id="education-signal-form" novalidate>
+      <label for="education-signal-problem">Какво е грешно?</label>
+      <textarea id="education-signal-problem" rows="5" required minlength="10" maxlength="1800" aria-describedby="education-signal-problem-error"></textarea>
+      <p class="form-message" id="education-signal-problem-error" aria-live="polite"></p>
+      <label for="education-signal-correct">Правилна информация / източник <small>(по желание)</small></label>
+      <textarea id="education-signal-correct" rows="4" maxlength="1800"></textarea>
+      <button class="form-submit" type="submit">Изпрати сигнала</button>
+      <p class="form-message" id="education-signal-status" aria-live="polite"></p>
+    </form>
   </section>
 </div>
 
@@ -90,11 +97,73 @@
   <div class="section-container footer-bottom"><p>© <span id="current-year">2026</span> Попитай.Лом.</p></div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+<script src="supabase-config.js?v=20260820-1840" defer></script>
 <!-- Единствен собственик на съдържанието на тази страница: -->
 <script src="info-lom-education-v1.js?v=20260817-2020" defer></script>
-
 <!-- Само обща навигация/глобален сайт JS; НЕ рендерират education root: -->
 <script src="info-lom-page-nav.js?v=20260815-0905" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  const form=document.getElementById('education-signal-form');
+  const problem=document.getElementById('education-signal-problem');
+  const correct=document.getElementById('education-signal-correct');
+  const fieldError=document.getElementById('education-signal-problem-error');
+  const status=document.getElementById('education-signal-status');
+  if(!form||!problem||!fieldError||!status) return;
+
+  function validateProblem(){
+    const value=problem.value.trim();
+    let message='';
+    if(!value) message='Опиши какво е грешно.';
+    else if(value.length<10) message='Добави малко повече информация за грешката.';
+    else if(value.length>1800) message='Описанието може да съдържа най-много 1800 знака.';
+    fieldError.textContent=message;
+    problem.setAttribute('aria-invalid',String(Boolean(message)));
+    return !message;
+  }
+
+  problem.addEventListener('blur',()=>{problem.dataset.touched='true';validateProblem();});
+  problem.addEventListener('input',()=>{if(problem.dataset.touched==='true'||problem.getAttribute('aria-invalid')==='true') validateProblem();});
+
+  form.addEventListener('submit',async event=>{
+    event.preventDefault();
+    problem.dataset.touched='true';
+    if(!validateProblem()){problem.focus();return;}
+    const button=form.querySelector('[type="submit"]');
+    button.disabled=true;
+    status.textContent='Изпращаме сигнала…';
+    status.className='form-message warning';
+    try{
+      const client=window.PopitaiSupabase;
+      if(!client) throw new Error('Supabase client missing');
+      const {data:authData,error:authError}=await client.auth.getUser();
+      if(authError) throw authError;
+      const user=authData?.user||null;
+      if(!user){
+        status.innerHTML='Трябва да влезеш в профила си, преди да подадеш сигнал. <a href="vhod.html">Вход</a>';
+        status.className='form-message error';
+        return;
+      }
+      const description=[`Какво е грешно: ${problem.value.trim()}`,correct?.value.trim()?`Правилна информация / източник: ${correct.value.trim()}`:'','Подадено от: Инфо Лом → Образование и култура'].filter(Boolean).join('\n');
+      const {error}=await client.from('info_error_reports').insert({entry_id:null,reported_by:user.id,description,status:'pending',category:'obrazovanie-kultura',subcategory:'obshto'});
+      if(error) throw error;
+      form.reset();
+      delete problem.dataset.touched;
+      problem.removeAttribute('aria-invalid');
+      fieldError.textContent='';
+      status.textContent='Сигналът е изпратен за администраторска проверка.';
+      status.className='form-message success';
+    }catch(error){
+      console.error('Education error report:',error);
+      status.textContent='Не успяхме да изпратим сигнала. Опитай отново.';
+      status.className='form-message error';
+    }finally{
+      button.disabled=false;
+    }
+  });
+});
+</script>
 <script src="script.js?v=20260820-1833" defer></script>
 </body>
 </html>
