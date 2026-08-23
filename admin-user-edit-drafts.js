@@ -16,6 +16,10 @@
 
   let initialized = false;
   let active = false;
+  let currentUser = null;
+  let currentRole = null;
+
+  const isModerator = () => currentRole === "moderator";
 
   function setMessage(text, isError = false) {
     const box = $("#admin-panel-message");
@@ -32,11 +36,12 @@
 
   async function authIsStaff() {
     const { data } = await client.auth.getUser();
-    const user = data?.user;
-    if (!user) return false;
+    currentUser = data?.user || null;
+    if (!currentUser) return false;
     const { data: profile } = await client.from("profiles")
-      .select("role, is_blocked").eq("id", user.id).maybeSingle();
-    return Boolean(profile && ["admin", "moderator"].includes(profile.role) && profile.is_blocked !== true);
+      .select("role, is_blocked").eq("id", currentUser.id).maybeSingle();
+    currentRole = profile?.role || null;
+    return Boolean(profile && ["admin", "moderator"].includes(currentRole) && profile.is_blocked !== true);
   }
 
   function ensureMenuButton() {
@@ -52,23 +57,8 @@
   function fieldRows(draft) {
     const payload = draft.payload || {};
     const fields = draft.entity_type === "business"
-      ? [
-          ["Име", payload.name],
-          ["Категория", payload.category],
-          ["Телефон", payload.phone],
-          ["Описание", payload.description]
-        ]
-      : [
-          ["Заглавие", payload.title],
-          ["Категория", payload.category],
-          ["Подкатегория", payload.subcategory],
-          ["Тип", payload.listing_type],
-          ["Описание", payload.description],
-          ["Цена", payload.price],
-          ["Телефон", payload.phone],
-          ["Град", payload.city],
-          ["Улица", payload.street]
-        ];
+      ? [["Име", payload.name],["Категория", payload.category],["Телефон", payload.phone],["Описание", payload.description]]
+      : [["Заглавие", payload.title],["Категория", payload.category],["Подкатегория", payload.subcategory],["Тип", payload.listing_type],["Описание", payload.description],["Цена", payload.price],["Телефон", payload.phone],["Град", payload.city],["Улица", payload.street]];
     return fields
       .filter(([, value]) => value !== null && value !== undefined && String(value).trim() !== "")
       .map(([label, value]) => `<p style="margin:5px 0"><strong>${escapeHtml(label)}:</strong> ${escapeHtml(value)}</p>`)
@@ -77,17 +67,23 @@
 
   function mediaPreview(rows) {
     if (!rows.length) return "";
-    return `<section style="margin-top:12px">
-      <p style="margin:0 0 8px;font-weight:800">Нови снимки</p>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px">
-        ${rows.map((row) => {
-          const url = publicUrl(row.storage_path);
-          return `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" style="display:block;aspect-ratio:1/1;border-radius:10px;overflow:hidden;border:1px solid #d7deea">
-            <img src="${escapeHtml(url)}" alt="Нова снимка" loading="lazy" style="width:100%;height:100%;object-fit:cover">
-          </a>`;
-        }).join("")}
-      </div>
-    </section>`;
+    return `<section style="margin-top:12px"><p style="margin:0 0 8px;font-weight:800">Нови снимки</p><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px">${rows.map((row) => {
+      const url = publicUrl(row.storage_path);
+      return `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" style="display:block;aspect-ratio:1/1;border-radius:10px;overflow:hidden;border:1px solid #d7deea"><img src="${escapeHtml(url)}" alt="Нова снимка" loading="lazy" style="width:100%;height:100%;object-fit:cover"></a>`;
+    }).join("")}</div></section>`;
+  }
+
+  function actionBlock(draft) {
+    if (draft.status !== "pending") return "";
+    const own = isModerator() && draft.owner_id === currentUser?.id;
+    if (own) {
+      return '<div class="admin-record-actions"><span class="admin-status">Твоя редакция — обработва се от друг Moderator или Admin</span></div>';
+    }
+    const hasPermanentMediaRemoval = (draft.remove_media_ids || []).length > 0;
+    const approve = isModerator() && hasPermanentMediaRemoval
+      ? '<span class="admin-status">Одобрението изисква Admin заради окончателно премахване на снимки</span>'
+      : `<button class="admin-action-approve" data-user-edit-action="approve" data-id="${escapeHtml(draft.id)}">Одобри редакцията</button>`;
+    return `<div class="admin-record-actions">${approve}<button class="admin-action-hide" data-user-edit-action="return" data-id="${escapeHtml(draft.id)}">Върни за корекция</button></div>`;
   }
 
   function card(draft, entity, mediaRows) {
@@ -95,25 +91,19 @@
     const title = entity?.name || entity?.title || "Редакция";
     const returned = draft.status === "needs_changes";
     return `<article class="admin-record">
-      <div class="admin-record-meta">
-        <span class="admin-status ${escapeHtml(draft.status)}">${returned ? "Върната за корекция" : "Чака одобрение"}</span>
-        <span>${typeLabel}</span>
-      </div>
+      <div class="admin-record-meta"><span class="admin-status ${escapeHtml(draft.status)}">${returned ? "Върната за корекция" : "Чака одобрение"}</span><span>${typeLabel}</span></div>
       <h3>${escapeHtml(title)}</h3>
       <div style="padding:12px;border-radius:12px;background:#f8fafc">${fieldRows(draft)}</div>
       ${mediaPreview(mediaRows)}
       ${draft.remove_media_ids?.length ? `<p style="color:#8a2020;font-weight:800">Снимки за премахване: ${draft.remove_media_ids.length}</p>` : ""}
       ${draft.moderation_note ? `<p><strong>Бележка:</strong> ${escapeHtml(draft.moderation_note)}</p>` : ""}
-      ${draft.status === "pending" ? `<div class="admin-record-actions">
-        <button class="admin-action-approve" data-user-edit-action="approve" data-id="${escapeHtml(draft.id)}">Одобри редакцията</button>
-        <button class="admin-action-hide" data-user-edit-action="return" data-id="${escapeHtml(draft.id)}">Върни за корекция</button>
-      </div>` : ""}
+      ${actionBlock(draft)}
     </article>`;
   }
 
   async function fetchDrafts() {
     const { data, error } = await client.from("user_content_edit_drafts")
-      .select("id, entity_type, entity_id, payload, new_media_ids, remove_media_ids, status, moderation_note, updated_at")
+      .select("id, owner_id, entity_type, entity_id, payload, new_media_ids, remove_media_ids, status, moderation_note, updated_at")
       .in("status", ["pending", "needs_changes"])
       .order("updated_at", { ascending: false });
     if (error) throw error;
@@ -123,7 +113,7 @@
   async function refreshBadge() {
     try {
       const drafts = await fetchDrafts();
-      const count = drafts.filter((draft) => draft.status === "pending").length;
+      const count = drafts.filter((draft) => draft.status === "pending" && !(isModerator() && draft.owner_id === currentUser?.id)).length;
       const badge = $("[data-user-edits-badge]");
       if (badge) {
         badge.textContent = String(count);
@@ -154,15 +144,9 @@
       const mediaIds = [...new Set(drafts.flatMap((d) => d.new_media_ids || []))];
 
       const [businessResult, listingResult, mediaResult] = await Promise.all([
-        businessIds.length
-          ? client.from("businesses").select("id, name").in("id", businessIds)
-          : Promise.resolve({ data: [] }),
-        listingIds.length
-          ? client.from("listings").select("id, title").in("id", listingIds)
-          : Promise.resolve({ data: [] }),
-        mediaIds.length
-          ? client.from("media").select("id, storage_path").in("id", mediaIds)
-          : Promise.resolve({ data: [] })
+        businessIds.length ? client.from("businesses").select("id, name").in("id", businessIds) : Promise.resolve({ data: [] }),
+        listingIds.length ? client.from("listings").select("id, title").in("id", listingIds) : Promise.resolve({ data: [] }),
+        mediaIds.length ? client.from("media").select("id, storage_path").in("id", mediaIds) : Promise.resolve({ data: [] })
       ]);
 
       const entities = new Map([
@@ -194,10 +178,7 @@
     } else {
       const note = window.prompt("Какво трябва да се коригира?")?.trim();
       if (!note) return;
-      const { error } = await client.rpc("return_user_content_edit_draft", {
-        p_draft_id: id,
-        p_note: note
-      });
+      const { error } = await client.rpc("return_user_content_edit_draft", { p_draft_id: id, p_note: note });
       if (error) throw error;
       setMessage("Редакцията е върната за корекция.");
     }
@@ -247,9 +228,6 @@
     }, 60000);
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init, { once: true });
-  } else {
-    init();
-  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
+  else init();
 })();
