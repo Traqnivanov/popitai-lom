@@ -127,7 +127,7 @@
       .maybeSingle();
     if (error || !profile || profile.is_blocked === true) return false;
     if (!["admin", "moderator"].includes(profile.role)) return false;
-    currentProfile = profile;
+    currentProfile = { ...profile, id: user.id };
     return true;
   }
 
@@ -246,8 +246,7 @@
     renderContextHelp();
   }
 
-  async function refreshActionableCount() {
-    if (!client || !currentProfile) return;
+  async function countAdminPending() {
     const sources = [
       ["questions", "id"],
       ["answers", "id"],
@@ -257,30 +256,85 @@
       ["business_expanded_profile_drafts", "business_id"],
       ["shops", "id"],
       ["events", "id"],
-      ["reports", "id"]
+      ["reports", "id"],
+      ["info_submissions", "id"],
+      ["info_error_reports", "id"]
     ];
-    if (currentProfile.role === "admin") {
-      sources.push(["info_submissions", "id"], ["info_error_reports", "id"]);
-    }
-
     const results = await Promise.all(sources.map(([table, key]) =>
       client.from(table).select(key, { count:"exact", head:true }).eq("status", "pending")
     ));
     const failed = results.map((result, index) => result.error ? sources[index][0] : "").filter(Boolean);
-    if (failed.length) {
-      console.warn("Оперативният брояч не можа да провери:", failed.join(", "));
-      return;
+    if (failed.length) throw new Error(`Оперативният брояч не можа да провери: ${failed.join(", ")}`);
+    return results.reduce((sum, result) => sum + (result.count || 0), 0);
+  }
+
+  async function countModeratorPending() {
+    const userId = currentProfile?.id;
+    if (!userId) return 0;
+
+    const ownedBusinessesResult = await client.from("businesses").select("id").eq("owner_id", userId);
+    if (ownedBusinessesResult.error) throw ownedBusinessesResult.error;
+    const ownedBusinessIds = new Set((ownedBusinessesResult.data || []).map(row => row.id));
+
+    const sources = [
+      ["questions", "author_id"],
+      ["answers", "author_id"],
+      ["businesses", "owner_id"],
+      ["listings", "owner_id,author_id"],
+      ["user_content_edit_drafts", "owner_id"],
+      ["business_expanded_profile_drafts", "business_id"],
+      ["shops", "submitted_by"],
+      ["events", "author_id"],
+      ["reports", "reporter_id"],
+      ["info_submissions", "submitted_by"],
+      ["info_error_reports", "reported_by"]
+    ];
+
+    const results = await Promise.all(sources.map(([table, fields]) =>
+      client.from(table).select(fields).eq("status", "pending")
+    ));
+    const failed = results.map((result, index) => result.error ? sources[index][0] : "").filter(Boolean);
+    if (failed.length) throw new Error(`Оперативният брояч не можа да провери: ${failed.join(", ")}`);
+
+    return results.reduce((total, result, index) => {
+      const table = sources[index][0];
+      const foreign = (result.data || []).filter(row => {
+        if (table === "listings") return row.owner_id !== userId && row.author_id !== userId;
+        if (table === "business_expanded_profile_drafts") return !ownedBusinessIds.has(row.business_id);
+        const ownerField = {
+          questions:"author_id",
+          answers:"author_id",
+          businesses:"owner_id",
+          user_content_edit_drafts:"owner_id",
+          shops:"submitted_by",
+          events:"author_id",
+          reports:"reporter_id",
+          info_submissions:"submitted_by",
+          info_error_reports:"reported_by"
+        }[table];
+        return !ownerField || row[ownerField] !== userId;
+      });
+      return total + foreign.length;
+    }, 0);
+  }
+
+  async function refreshActionableCount() {
+    if (!client || !currentProfile) return;
+    try {
+      const total = currentProfile.role === "moderator"
+        ? await countModeratorPending()
+        : await countAdminPending();
+      const stat = document.querySelector("#admin-pending-count");
+      if (stat) stat.textContent = String(total);
+      ensureOperationalStatLabel();
+
+      const panelName = currentProfile.role === "admin" ? "Административен" : "Модераторски";
+      document.title = total > 0
+        ? `(${total}) ${panelName} панел | Попитай.Лом`
+        : `${panelName} панел | Попитай.Лом`;
+    } catch (error) {
+      console.warn("Оперативният брояч не можа да се обнови:", error);
     }
-
-    const total = results.reduce((sum, result) => sum + (result.count || 0), 0);
-    const stat = document.querySelector("#admin-pending-count");
-    if (stat) stat.textContent = String(total);
-    ensureOperationalStatLabel();
-
-    const panelName = currentProfile.role === "admin" ? "Административен" : "Модераторски";
-    document.title = total > 0
-      ? `(${total}) ${panelName} панел | Попитай.Лом`
-      : `${panelName} панел | Попитай.Лом`;
   }
 
   function schedulePresentation() {
