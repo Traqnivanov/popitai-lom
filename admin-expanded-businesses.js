@@ -14,7 +14,16 @@
     .replaceAll("'", "&#039;");
 
   let currentUser = null;
+  let currentRole = null;
   let initialized = false;
+
+  function isAdmin() {
+    return currentRole === "admin";
+  }
+
+  function isModerator() {
+    return currentRole === "moderator";
+  }
 
   function setMessage(text, isError = false) {
     const box = $("#admin-panel-message");
@@ -48,6 +57,7 @@
       .maybeSingle();
 
     if (profileError || !profile) return false;
+    currentRole = profile.role;
     return ["admin", "moderator"].includes(profile.role) && profile.is_blocked !== true;
   }
 
@@ -92,22 +102,29 @@
 
   function businessCard(item, ownerProfile, draft) {
     const ownerIsAdmin = ownerProfile?.role === "admin" && ownerProfile?.is_blocked !== true;
+    const ownedByCurrentUser = item.owner_id === currentUser?.id;
     const accessText = item.is_expanded ? "Разширен профил: включен" : "Разширен профил: изключен";
 
     let accessAction = "";
     if (ownerIsAdmin) {
       accessAction = '<span style="font-weight:800;color:#176438">Автоматичен достъп за администраторска фирма</span>';
-    } else if (item.is_expanded) {
-      accessAction = `<button type="button" class="admin-action-hide" data-expanded-action="revoke" data-id="${escapeHtml(item.id)}">Отнеми разширения профил</button>`;
+    } else if (isAdmin()) {
+      accessAction = item.is_expanded
+        ? `<button type="button" class="admin-action-hide" data-expanded-action="revoke" data-id="${escapeHtml(item.id)}">Отнеми разширения профил</button>`
+        : `<button type="button" class="admin-action-approve" data-expanded-action="grant" data-id="${escapeHtml(item.id)}">Дай разширен профил</button>`;
     } else {
-      accessAction = `<button type="button" class="admin-action-approve" data-expanded-action="grant" data-id="${escapeHtml(item.id)}">Дай разширен профил</button>`;
+      accessAction = '<span class="admin-status">Разширеният достъп се управлява само от Admin</span>';
     }
 
     let draftActions = "";
     if (draft?.status === "pending" && item.is_expanded) {
-      draftActions = `
-        <button type="button" class="admin-action-approve" data-expanded-action="approve-draft" data-id="${escapeHtml(item.id)}">Одобри редакцията</button>
-        <button type="button" class="admin-action-hide" data-expanded-action="return-draft" data-id="${escapeHtml(item.id)}">Върни за корекция</button>`;
+      if (isModerator() && ownedByCurrentUser) {
+        draftActions = '<span class="admin-status">Твоя редакция — трябва да бъде обработена от друг Moderator или Admin</span>';
+      } else {
+        draftActions = `
+          <button type="button" class="admin-action-approve" data-expanded-action="approve-draft" data-id="${escapeHtml(item.id)}">Одобри редакцията</button>
+          <button type="button" class="admin-action-hide" data-expanded-action="return-draft" data-id="${escapeHtml(item.id)}">Върни за корекция</button>`;
+      }
     }
 
     return `<article class="admin-record">
@@ -116,7 +133,7 @@
         <span>${escapeHtml(accessText)}</span>
       </div>
       <h3>${escapeHtml(item.name)}</h3>
-      <p><strong>Собственик:</strong> ${ownerIsAdmin ? "администратор" : "потребител"}</p>
+      <p><strong>Собственик:</strong> ${ownerIsAdmin ? "администратор" : ownedByCurrentUser && isModerator() ? "модератор (твоя фирма)" : "потребител"}</p>
       ${draftDetails(draft)}
       <div class="admin-record-actions" style="margin-top:12px">
         ${accessAction}
@@ -186,6 +203,10 @@
     let result;
 
     if (action === "grant" || action === "revoke") {
+      if (!isAdmin()) {
+        setMessage("Само Admin може да дава или отнема разширен достъп.", true);
+        return;
+      }
       const enable = action === "grant";
       const promptText = enable
         ? "Да се даде ли разширен профил на тази фирма?"
