@@ -3,6 +3,7 @@
 
   const FORM_SELECTOR = ".health-action-form";
   const FIELD_SELECTOR = "input:not([type='hidden']), textarea, select";
+  const MEANINGFUL_TEXT_FIELDS = new Set(["details", "current_problem", "proposed_value", "description", "correct_info"]);
   const messages = {
     name: "Въведи име или обект.",
     details: "Добави телефон, адрес или друга полезна информация.",
@@ -40,9 +41,34 @@
     return error;
   }
 
+  function isStructuredUsefulValue(value) {
+    const compact = value.replace(/\s+/g, "");
+    const phoneDigits = compact.replace(/[^\d]/g, "");
+    const looksLikePhone = phoneDigits.length >= 7 && phoneDigits.length <= 15 && /^[+\d()\s.-]+$/.test(value);
+    const looksLikeUrl = /^(https?:\/\/|www\.)\S+$/i.test(value);
+    return looksLikePhone || looksLikeUrl;
+  }
+
+  function isMeaningfulText(value) {
+    if (isStructuredUsefulValue(value)) return true;
+    const words = value.split(/\s+/).filter(part => /[\p{L}\p{N}]/u.test(part));
+    if (words.length < 2) return false;
+    const alphaNumeric = value.match(/[\p{L}\p{N}]/gu) || [];
+    return alphaNumeric.length >= 5;
+  }
+
   function validationMessage(field) {
     const value = String(field.value || "").trim();
     if (field.required && !value) return messages[field.name] || "Попълни това поле.";
+
+    if (value && MEANINGFUL_TEXT_FIELDS.has(field.name) && !isMeaningfulText(value)) {
+      if (field.name === "details") return "Добави поне две ясни думи, телефон или линк с полезна информация.";
+      if (field.name === "current_problem") return "Опиши ясно какво е грешно с поне две думи.";
+      if (field.name === "proposed_value") return "Напиши по-ясно правилната информация с поне две думи, телефон или линк.";
+      if (field.name === "description") return "Опиши ясно какво е грешно с поне две думи.";
+      return "Добави по-ясна информация с поне две думи, телефон или линк.";
+    }
+
     if (field.maxLength > 0 && value.length > field.maxLength) {
       return `Полето може да съдържа най-много ${field.maxLength} знака.`;
     }
@@ -79,7 +105,9 @@
   document.addEventListener("submit", event => {
     const form = event.target.closest?.(FORM_SELECTOR);
     if (!form || form.dataset.completed === "true") return;
-    const fields = [...form.querySelectorAll(FIELD_SELECTOR)].filter(field => field.required || field.maxLength > 0);
+    const fields = [...form.querySelectorAll(FIELD_SELECTOR)].filter(field =>
+      field.required || field.maxLength > 0 || MEANINGFUL_TEXT_FIELDS.has(field.name)
+    );
     fields.forEach(field => { field.dataset.touched = "true"; });
     const firstInvalid = fields.find(field => !validateField(field));
     if (!firstInvalid) return;
