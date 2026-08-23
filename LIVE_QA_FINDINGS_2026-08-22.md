@@ -171,6 +171,7 @@ Production tree на Health/Transport/Education/Banks/Utilities/Institutions п�
 - `vapros.html`: QA-018 CLOSED след production no-id/invalid-id retest през Opera; valid-id public positive-control няма при 0 approved questions.
 - `firma.html`: QA-023 production-confirmed duplicate no-id state; BLOCKED / LOCKED.
 - `obqva.html`: QA-024 production-confirmed weak no-id fallback; BLOCKED / LOCKED.
+- `institucii.html`: production structural/hash retest PASS през Opera — финалните `Областна администрация Монтана` и `Филиал за спешна медицинска помощ – Лом` карти са налични, а `#institucii-other` се резолвира след publish. First-paint/flicker наблюдението остава отделно pending.
 - `profil.html`: auth validation cache synced; unused image uploader removed; protected Firm/Listings scripts untouched.
 - Shops: 6 tabs load; grammar/source fixed; tags/groups uploaded; modal interaction pending.
 - Admin: QA-014 confirmed visible `Highlighted` and BLOCKED / LOCKED; QA-015 classified as published-question metric; QA-016 guest/non-admin check remains.
