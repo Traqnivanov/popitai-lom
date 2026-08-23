@@ -249,19 +249,18 @@
   }
 
   async function refreshCounts() {
-    // Only sources with an existing, approved moderation flow belong here.
-    // Add shops when their admin flow is connected and approved.
     const pendingSources = [
       "questions",
       "answers",
       "businesses",
       "listings",
-      "media",
-      "info_submissions",
-      "info_error_reports",
       "user_content_edit_drafts",
-      "business_expanded_profile_drafts"
+      "business_expanded_profile_drafts",
+      "shops",
+      "events",
+      "reports"
     ];
+    if (isAdminProfile()) pendingSources.push("info_submissions", "info_error_reports");
 
     const [users, approvedQuestions, approvedAnswers, pendingResults] = await Promise.all([
       client.from("profiles").select("id", { count: "exact", head: true }),
@@ -273,7 +272,10 @@
       }))
     ]);
 
+    const countsBySource = new Map(pendingSources.map((table, index) => [table, pendingResults[index].count || 0]));
     const pending = pendingResults.reduce((total, result) => total + (result.count || 0), 0);
+    const localPending = ["questions", "answers", "listings"]
+      .reduce((total, table) => total + (countsBySource.get(table) || 0), 0);
     const failedSources = pendingSources.filter((_, index) => pendingResults[index].error);
     if (failedSources.length) {
       console.warn("Pending counts unavailable for:", failedSources.join(", "));
@@ -285,12 +287,13 @@
 
     const badge = $("#admin-menu-badge");
     if (badge) {
-      badge.textContent = String(pending);
-      badge.hidden = pending === 0;
+      badge.textContent = String(localPending);
+      badge.hidden = localPending === 0;
     }
+    const panelName = isAdminProfile() ? "Административен" : "Модераторски";
     document.title = pending > 0
-      ? `(${pending}) Административен панел | Попитай.Лом`
-      : "Административен панел | Попитай.Лом";
+      ? `(${pending}) ${panelName} панел | Попитай.Лом`
+      : `${panelName} панел | Попитай.Лом`;
   }
 
   function recordCard(item, type, mode) {
