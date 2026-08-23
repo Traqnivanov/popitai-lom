@@ -97,8 +97,8 @@ General signal е в `reports`; profile section е уточнен като `Мо
 Source labels: хранителен магазин / строителен магазин / магазин за техника / мебелен магазин / магазин за дрехи / магазин за дома. Production construction CTA е потвърден; останалите tab interactions pending.
 
 ## QA-018 — Question detail double render owner
-Статус: `OPEN / REGRESSION FOUND IN PRODUCTION RETEST`
-След explicit approval legacy `script.js::renderQuestionDetail()` беше изключен при Supabase owner. Production no-id retest на 23.08 показа нов точен gap: `supabase-content.js::loadQuestionDetail()` прави `if (!id) return;`, затова страницата остава на `Зареждане на въпроса…` вместо едно not-found състояние. Това доказва, че owner conflict е премахнат, но no-id fallback трябва да се поеме от Supabase owner (или guard-ът да се ограничи behavior-preservingly), без връщане към двойно render ownership. Valid-id production retest остава след корекцията.
+Статус: `FIXED - NEEDS RETEST`
+След explicit approval legacy `script.js::renderQuestionDetail()` е изключен, когато Supabase detail owner е активен. Production no-id retest откри два последователни gaps: първо Supabase owner връщаше без fallback при липсващо `id`, после се показваха едновременно hero not-found и not-found card. И двата source проблема са коригирани в `supabase-content.js`: missing/invalid id вече се обработва от същия Supabase owner, hero/detail/answer area се скриват и остава единствено canonical `#question-not-found`. Финалният source commit е `bb59acd...`; `vapros.html` е cache-bust-нат към `supabase-content.js?v=20260823-1912` с commit `e70d3d8d...`. Финалният production retest не е отчетен като PASS, защото Opera connector прекъсна точно при повторната проверка. Valid-id public positive-control в момента също липсва: Supabase има 0 approved questions, затова не се създава фалшив тестов въпрос само за QA.
 
 ## QA-019 — `Автомобили → Автомивки` връща Ivanov Remonti
 Статус: `CLOSED`
@@ -168,7 +168,7 @@ Production tree на Health/Transport/Education/Banks/Utilities/Institutions п�
 - `tarsene.html`: QA-019/021/022 closed; QA-026 open.
 - `statii.html`: една реална статия → basis QA-011.
 - `vaprosi.html`: pending QA question правилно не е public; QA-009 retest.
-- `vapros.html`: QA-018 no-id production regression confirmed; valid-id retest after fix.
+- `vapros.html`: QA-018 final source fix + fresh cache version uploaded; production retest pending only because connector failed.
 - `profil.html`: auth validation cache synced; unused image uploader removed; protected Firm/Listings scripts untouched.
 - Shops: 6 tabs load; grammar/source fixed; tags/groups uploaded; modal interaction pending.
 - Masters: protected priority preserved except explicitly approved QA-019 false-positive exclusion for carwash terms; production positive control `мивка` PASS.
@@ -182,7 +182,7 @@ Production tree на Health/Transport/Education/Banks/Utilities/Institutions п�
 - Banki/Komunalni/Institutions generic Info modal validation, dirty close and post-success after helper wiring.
 - Shops classification modal multi-select/custom tag; avoid unnecessary moderation insert.
 - Question/Answer successful-submit UI without duplicate QA data.
-- QA-018 valid/no-id question detail production render after correction.
+- QA-018 final no-id production retest when browser connector is available; valid-id public control unavailable while there are 0 approved questions.
 - QA-029 actual first paint.
 - Contacts valid submit.
 - Signal invalid e-mail interaction.
@@ -191,9 +191,9 @@ Production tree на Health/Transport/Education/Banks/Utilities/Institutions п�
 - Admin/guest/non-owner protected checks when appropriate.
 
 # D. NEXT SAFE ORDER
-1. Fix QA-018 no-id fallback while preserving one render owner, then production retest no-id + valid-id.
+1. Retest QA-018 no-id in production as soon as connector is available; do not create fake approved content for positive control.
 2. Continue non-LOCKED source audit/fixes.
 3. QA-011 only via exact patch method; never broad rewrite of `index.html`.
-4. Continue remaining production/browser checks while connector is available.
+4. Continue remaining production/browser checks when connector is available.
 
 Нищо не става `CLOSED` без реален production retest.
