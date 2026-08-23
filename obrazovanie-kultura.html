@@ -81,7 +81,8 @@
       <textarea id="education-signal-problem" rows="5" required minlength="10" maxlength="1800" aria-describedby="education-signal-problem-error"></textarea>
       <p class="form-message" id="education-signal-problem-error" aria-live="polite"></p>
       <label for="education-signal-correct">Правилна информация / източник <small>(по желание)</small></label>
-      <textarea id="education-signal-correct" rows="4" maxlength="1800"></textarea>
+      <textarea id="education-signal-correct" rows="4" maxlength="1800" aria-describedby="education-signal-correct-error"></textarea>
+      <p class="form-message" id="education-signal-correct-error" aria-live="polite"></p>
       <button class="form-submit" type="submit">Изпрати сигнала</button>
       <p class="form-message" id="education-signal-status" aria-live="polite"></p>
     </form>
@@ -110,11 +111,30 @@ document.addEventListener('DOMContentLoaded',()=>{
   const problem=document.getElementById('education-signal-problem');
   const correct=document.getElementById('education-signal-correct');
   const fieldError=document.getElementById('education-signal-problem-error');
+  const correctError=document.getElementById('education-signal-correct-error');
   const status=document.getElementById('education-signal-status');
-  if(!modal||!form||!problem||!fieldError||!status) return;
+  if(!modal||!form||!problem||!fieldError||!correctError||!status) return;
 
   let submitted=false;
   let successBox=null;
+
+  function hasUsefulText(value){
+    const text=String(value||'').replace(/\s+/g,' ').trim();
+    const words=text.match(/[\p{L}\p{N}]+/gu)||[];
+    const letters=[...text.toLocaleLowerCase('bg-BG')].filter(ch=>/\p{L}/u.test(ch));
+    const distinctLetters=new Set(letters).size;
+    if(words.length<2||distinctLetters<4) return false;
+    if(words.length===2&&words[0].toLocaleLowerCase('bg-BG')===words[1].toLocaleLowerCase('bg-BG')) return false;
+    return true;
+  }
+
+  function isUsefulReference(value){
+    const text=String(value||'').trim();
+    if(!text) return true;
+    if(/^https?:\/\/\S+$/i.test(text)) return true;
+    if(/^\+?[\d\s().-]{7,20}$/.test(text)&&text.replace(/\D/g,'').length>=7) return true;
+    return hasUsefulText(text);
+  }
 
   function validateProblem(){
     const value=problem.value.trim();
@@ -122,8 +142,19 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(!value) message='Опиши какво е грешно.';
     else if(value.length<10) message='Добави малко повече информация за грешката.';
     else if(value.length>1800) message='Описанието може да съдържа най-много 1800 знака.';
+    else if(!hasUsefulText(value)) message='Напиши с думи какво точно е грешно, за да може сигналът да бъде проверен.';
     fieldError.textContent=message;
-    problem.setAttribute('aria-invalid',String(Boolean(message)));
+    if(message) problem.setAttribute('aria-invalid','true'); else problem.removeAttribute('aria-invalid');
+    return !message;
+  }
+
+  function validateCorrect(){
+    const value=correct?.value.trim()||'';
+    let message='';
+    if(value.length>1800) message='Правилната информация може да съдържа най-много 1800 знака.';
+    else if(value&&!isUsefulReference(value)) message='Добави ясна правилна информация, телефон или пълен линк към източник.';
+    correctError.textContent=message;
+    if(message) correct?.setAttribute('aria-invalid','true'); else correct?.removeAttribute('aria-invalid');
     return !message;
   }
 
@@ -135,8 +166,11 @@ document.addEventListener('DOMContentLoaded',()=>{
     form.reset();
     form.hidden=false;
     delete problem.dataset.touched;
+    if(correct) delete correct.dataset.touched;
     problem.removeAttribute('aria-invalid');
+    correct?.removeAttribute('aria-invalid');
     fieldError.textContent='';
+    correctError.textContent='';
     status.textContent='';
     status.className='form-message';
     const button=form.querySelector('[type="submit"]');
@@ -171,11 +205,16 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   problem.addEventListener('blur',()=>{problem.dataset.touched='true';validateProblem();});
   problem.addEventListener('input',()=>{if(problem.dataset.touched==='true'||problem.getAttribute('aria-invalid')==='true') validateProblem();});
+  correct?.addEventListener('blur',()=>{correct.dataset.touched='true';validateCorrect();});
+  correct?.addEventListener('input',()=>{if(correct.dataset.touched==='true'||correct.getAttribute('aria-invalid')==='true') validateCorrect();});
 
   form.addEventListener('submit',async event=>{
     event.preventDefault();
     problem.dataset.touched='true';
-    if(!validateProblem()){problem.focus();return;}
+    if(correct) correct.dataset.touched='true';
+    const problemOk=validateProblem();
+    const correctOk=validateCorrect();
+    if(!problemOk||!correctOk){(problemOk?correct:problem)?.focus();return;}
     const button=form.querySelector('[type="submit"]');
     button.disabled=true;
     status.textContent='Изпращаме сигнала…';
