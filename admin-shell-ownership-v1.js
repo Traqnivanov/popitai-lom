@@ -4,6 +4,10 @@
 
   const VIEW_KEY = "popitai-admin-active-view-v1";
 
+  function revealLayout() {
+    document.documentElement.classList.remove("admin-restoring-view");
+  }
+
   function restoreCoreShell() {
     const content = document.querySelector(".admin-content");
     if (!content) return;
@@ -58,7 +62,10 @@
   function restoreSavedView() {
     const key = readView();
     const selector = selectorForView(key);
-    if (!selector) return;
+    if (!selector) {
+      revealLayout();
+      return;
+    }
 
     let attempts = 0;
     const tryRestore = () => {
@@ -66,12 +73,17 @@
       const button = document.querySelector(`.admin-menu ${selector}`);
       if (button) {
         button.click();
+        window.requestAnimationFrame(() => window.requestAnimationFrame(revealLayout));
         return;
       }
-      if (attempts < 40) window.setTimeout(tryRestore, 100);
+      if (attempts < 40) {
+        window.setTimeout(tryRestore, 50);
+      } else {
+        revealLayout();
+      }
     };
 
-    window.setTimeout(tryRestore, 120);
+    tryRestore();
   }
 
   window.addEventListener("click", (event) => {
