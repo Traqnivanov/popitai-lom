@@ -39,6 +39,9 @@
   const IMAGE_STORE = "media";
   let mediaRows = [];
   const removedMediaIds = new Set();
+  let currentUserRole = "user";
+  let currentUserIsAdmin = false;
+  let currentUserIsModerator = false;
 
   function publicMediaUrl(path) {
     if (!path) return "";
@@ -68,10 +71,11 @@
           const role = mediaRole(row.storage_path);
           if (role === "gallery") gi++;
           const removed = removedMediaIds.has(row.id);
+          const removeButton = currentUserIsModerator ? "" : `<button type="button" data-remove-media="${escapeHtml(row.id)}" style="position:absolute;top:6px;right:6px;padding:5px 8px;background:rgba(122,31,26,.9);color:#fff;border:0;border-radius:8px;font-weight:900;cursor:pointer">${removed?"Отмени":"Премахни"}</button>`;
           return `<figure style="position:relative;margin:0;aspect-ratio:${role==="logo"?"1/1":"4/3"};background:#eef2f7;border:1px solid #d7deea;border-radius:10px;overflow:hidden${removed?";opacity:.35":""}">
             <img src="${escapeHtml(publicMediaUrl(row.storage_path))}" style="width:100%;height:100%;object-fit:cover" loading="lazy">
             ${role==="logo"?'<span style="position:absolute;left:6px;bottom:6px;padding:3px 7px;background:rgba(17,24,39,.75);color:#fff;border-radius:999px;font-size:11px;font-weight:800">Лого</span>':""}
-            <button type="button" data-remove-media="${escapeHtml(row.id)}" style="position:absolute;top:6px;right:6px;padding:5px 8px;background:rgba(122,31,26,.9);color:#fff;border:0;border-radius:8px;font-weight:900;cursor:pointer">${removed?"Отмени":"Премахни"}</button>
+            ${removeButton}
           </figure>`;
         }).join("")}
       </div>`;
@@ -184,7 +188,6 @@
   ];
 
   let loadedBusiness = null;
-  let currentUserIsStaff = false;
 
   function setState(message, type = "") {
     state.textContent = message || "";
@@ -262,7 +265,7 @@
     note.hidden = true;
     note.textContent = "";
 
-    if (currentUserIsStaff) {
+    if (currentUserIsAdmin) {
       setReadOnly(false);
       if (draft) {
         setState("Има непубликувани промени от предишното изпращане. Натисни „Запази промените“, за да ги публикуваш.");
@@ -330,11 +333,13 @@
       return;
     }
 
-    currentUserIsStaff = ["admin", "moderator"].includes(profileResult.data.role)
-      && profileResult.data.is_blocked !== true;
+    currentUserRole = profileResult.data.role || "user";
+    const activeProfile = profileResult.data.is_blocked !== true;
+    currentUserIsAdmin = currentUserRole === "admin" && activeProfile;
+    currentUserIsModerator = currentUserRole === "moderator" && activeProfile;
     loadedBusiness = business;
     businessName.textContent = business.name;
-    submitButton.textContent = currentUserIsStaff ? "Запази промените" : "Изпрати за одобрение";
+    submitButton.textContent = currentUserIsAdmin ? "Запази промените" : "Изпрати за одобрение";
 
     const fields = "short_intro, website, services, service_area, work_hours, show_short_intro, show_website, show_services, show_service_area, show_work_hours";
     const [draftResult, publishedResult] = await Promise.all([
@@ -358,7 +363,6 @@
     const source = draftResult.data || publishedResult.data || {};
     setValues(source);
 
-    // Зареждане на основните данни
     const { data: biz } = await client.from("businesses")
       .select("name, category, phone, city, address, description")
       .eq("id", businessId).maybeSingle();
@@ -393,10 +397,9 @@
     }
 
     submitButton.disabled = true;
-    setState(currentUserIsStaff ? "Запазваме промените…" : "Изпращаме промените…");
+    setState(currentUserIsAdmin ? "Запазваме промените…" : "Изпращаме промените…");
 
-    // Запис на основните данни
-    if (basic.name && currentUserIsStaff) {
+    if (basic.name && currentUserIsAdmin) {
       const { error: bizErr } = await client.from("businesses").update({
         name: basic.name.value.trim(),
         category: basic.category?.value || "",
@@ -411,7 +414,6 @@
         return;
       }
 
-      // Снимки
       try {
         const { data: authD } = await client.auth.getUser();
         const uid = authD?.user?.id;
@@ -427,7 +429,7 @@
       }
     }
 
-    const saveFunction = currentUserIsStaff
+    const saveFunction = currentUserIsAdmin
       ? "save_staff_owned_business_expanded_profile"
       : "save_own_business_expanded_profile_draft";
     const { error } = await client.rpc(saveFunction, {
@@ -455,8 +457,7 @@
     note.hidden = true;
     setState("");
 
-    // Съобщение до бутона
-    const successMsg = currentUserIsStaff
+    const successMsg = currentUserIsAdmin
       ? "Промените са запазени и публикувани."
       : "Промените са записани и чакат одобрение. Публикуваната версия остава видима.";
 
@@ -474,7 +475,7 @@
     submitButton.disabled = true;
 
     window.setTimeout(() => {
-      submitButton.textContent = currentUserIsStaff ? "Запази промените" : "Изпрати за одобрение";
+      submitButton.textContent = currentUserIsAdmin ? "Запази промените" : "Изпрати за одобрение";
       submitButton.disabled = false;
       inlineMsg.hidden = true;
     }, 4000);
