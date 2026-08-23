@@ -61,8 +61,8 @@ Specific errors работят; няма доказан функционален
 Еднократно `A TEST 3...`; вероятно ръчно въвеждане, не bug без повторение.
 
 ## QA-009 — `vaprosi.html` stale image uploader
-Статус: `FIXED - NEEDS RETEST`
-Current source не зарежда `image-upload.js`.
+Статус: `CLOSED`
+Current source не зарежда `image-upload.js`. Production retest на 23.08 през Opera PASS: публичната страница „Въпроси“ няма upload/image control и показва canonical Supabase empty state при 0 approved questions.
 
 ## QA-010 — `institucii.html` ARIA
 Статус: `FIXED - NEEDS RETEST`
@@ -167,7 +167,7 @@ Production tree на Health/Transport/Education/Banks/Utilities/Institutions п�
 - `info.html`: QA-026 retest; QA-030/031 closed.
 - `tarsene.html`: QA-019/021/022 closed; QA-026 open.
 - `statii.html`: една реална статия → basis QA-011.
-- `vaprosi.html`: pending QA question правилно не е public; QA-009 retest.
+- `vaprosi.html`: QA-009 CLOSED след production retest през Opera; pending QA question правилно не е public.
 - `vapros.html`: QA-018 CLOSED след production no-id/invalid-id retest през Opera; valid-id public positive-control няма при 0 approved questions.
 - `profil.html`: auth validation cache synced; unused image uploader removed; protected Firm/Listings scripts untouched.
 - Shops: 6 tabs load; grammar/source fixed; tags/groups uploaded; modal interaction pending.
