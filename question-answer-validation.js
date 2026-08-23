@@ -100,6 +100,30 @@
     return "";
   }
 
+  function obviousJunkText(value) {
+    const text = String(value || "").replace(/\s+/g, " ").trim();
+    if (!text) return false;
+
+    const compact = [...text.toLocaleLowerCase("bg-BG")].filter(ch => /[\p{L}\p{N}]/u.test(ch));
+    if (compact.length >= 8 && new Set(compact).size <= 2) return true;
+
+    const words = text.toLocaleLowerCase("bg-BG").match(/[\p{L}\p{N}]+/gu) || [];
+    if (words.length >= 2 && new Set(words).size === 1) return true;
+
+    return false;
+  }
+
+  function meaningfulTextRule(field, min, max, label, required = true) {
+    const basicMessage = textRule(field, min, max, label, required);
+    if (basicMessage) return basicMessage;
+
+    const value = String(field?.value || "").trim();
+    if (value && obviousJunkText(value)) {
+      return `${label[0].toUpperCase()}${label.slice(1)} трябва да съдържа разбираем текст.`;
+    }
+    return "";
+  }
+
   function wireField(field, validate) {
     if (!field) return;
     field.addEventListener("blur", () => {
@@ -209,9 +233,9 @@
     setupQuestionCategoryUx(category, title, description);
 
     const validators = [
-      [title, () => textRule(title, 10, 120, "заглавие")],
+      [title, () => meaningfulTextRule(title, 10, 120, "заглавие")],
       [category, () => category?.value ? "" : "Избери категория."],
-      [description, () => textRule(description, 20, 5000, "описание")]
+      [description, () => meaningfulTextRule(description, 20, 5000, "описание")]
     ];
 
     validators.forEach(([field, validate]) => wireField(field, validate));
@@ -282,7 +306,7 @@
     const answer = document.getElementById("answer-text");
     if (!form || !answer) return;
 
-    const validate = () => textRule(answer, 3, 5000, "отговор");
+    const validate = () => meaningfulTextRule(answer, 3, 5000, "отговор");
     wireField(answer, validate);
 
     form.addEventListener("submit", event => {
