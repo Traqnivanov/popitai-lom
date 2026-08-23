@@ -16,7 +16,11 @@
   };
 
   let currentUser = null;
+  let currentRole = null;
   let activeMode = "all";
+
+  const isAdmin = () => currentRole === "admin";
+  const isModerator = () => currentRole === "moderator";
 
   const formatDate = value => {
     if (!value) return "—";
@@ -52,7 +56,8 @@
       .maybeSingle();
 
     if (error) return false;
-    return ["admin","moderator"].includes(profile?.role) && profile?.is_blocked !== true;
+    currentRole = profile?.role || null;
+    return ["admin","moderator"].includes(currentRole) && profile?.is_blocked !== true;
   }
 
   function ensureButtons() {
@@ -84,10 +89,9 @@
   }
 
   async function refreshCount() {
-    const { count, error } = await client
-      .from("events")
-      .select("id", { count:"exact", head:true })
-      .eq("status", "pending");
+    let query = client.from("events").select("id", { count:"exact", head:true }).eq("status", "pending");
+    if (isModerator()) query = query.neq("author_id", currentUser.id);
+    const { count, error } = await query;
 
     if (error) {
       console.warn("Събития: броячът не се зареди.", error);
@@ -109,11 +113,18 @@
   }
 
   function card(event) {
-    const moderationActions = event.status === "pending" ? `
+    const own = isModerator() && event.author_id === currentUser?.id;
+    const moderationActions = own
+      ? '<span class="admin-status">Твое съдържание — обработва се от друг Moderator или Admin</span>'
+      : event.status === "pending" ? `
       <button class="admin-action-approve" type="button" data-event-action="approve" data-id="${esc(event.id)}">Одобри</button>
       <button class="admin-action-delete" type="button" data-event-action="reject" data-id="${esc(event.id)}">Откажи</button>` : event.status === "approved" ? `
       <button class="admin-action-hide" type="button" data-event-action="reject" data-id="${esc(event.id)}">Скрий</button>` : `
       <button class="admin-action-approve" type="button" data-event-action="approve" data-id="${esc(event.id)}">Одобри</button>`;
+
+    const deleteAction = isAdmin()
+      ? `<button class="admin-action-delete" type="button" data-event-action="delete" data-id="${esc(event.id)}">Изтрий окончателно</button>`
+      : "";
 
     return `
       <article class="admin-record">
@@ -127,7 +138,7 @@
         ${event.moderation_note ? `<p><strong>Бележка:</strong> ${esc(event.moderation_note)}</p>` : ""}
         <div class="admin-record-actions">
           ${moderationActions}
-          <button class="admin-action-delete" type="button" data-event-action="delete" data-id="${esc(event.id)}">Изтрий</button>
+          ${deleteAction}
         </div>
       </article>`;
   }
@@ -135,9 +146,10 @@
   async function loadRows(mode = "all") {
     let query = client
       .from("events")
-      .select("id,title,description,location,starts_at,status,moderation_note,created_at")
+      .select("id,author_id,title,description,location,starts_at,status,moderation_note,created_at")
       .order("created_at", { ascending:false });
     if (mode === "pending") query = query.eq("status", "pending");
+    if (isModerator() && mode === "pending") query = query.neq("author_id", currentUser.id);
     const { data, error } = await query;
     if (error) throw error;
     return data || [];
@@ -193,6 +205,10 @@
         if (!id || !action) return;
 
         if (action === "delete") {
+          if (!isAdmin()) {
+            message(root, "Само Admin може да изтрива окончателно.", true);
+            return;
+          }
           if (!window.confirm("Да се изтрие това събитие окончателно?")) return;
           button.disabled = true;
           const { error } = await client.from("events").delete().eq("id", id);
