@@ -37,11 +37,35 @@
     return profile?.role === "admin" && profile?.is_blocked !== true;
   }
 
+  function ensureReviewShortcut(){
+    const reviewGroup = document.querySelector('.admin-menu [data-admin-menu-group-items="review"]');
+    if(!reviewGroup) return null;
+
+    let button = reviewGroup.querySelector("[data-info-review-shortcut]");
+    if(!button){
+      button = document.createElement("button");
+      button.type = "button";
+      button.dataset.infoReviewShortcut = "1";
+      button.addEventListener("click",()=>{
+        document.querySelector(".admin-menu [data-info-admin]")?.click();
+      });
+      reviewGroup.appendChild(button);
+    }
+    return button;
+  }
+
   function applyLabel(){
-    const button = document.querySelector(".admin-menu [data-info-admin]");
-    if(!button) return false;
-    button.textContent = pendingCount ? `Инфо Лом (${pendingCount})` : "Инфо Лом";
-    button.dataset.infoPendingLabel = "1";
+    const contentButton = document.querySelector(".admin-menu [data-info-admin]");
+    if(!contentButton) return false;
+
+    contentButton.textContent = "Инфо Лом";
+    contentButton.dataset.infoPendingLabel = "1";
+
+    const reviewButton = ensureReviewShortcut();
+    if(reviewButton){
+      reviewButton.innerHTML = `Инфо Лом <span class="admin-badge" data-info-review-badge>${pendingCount}</span>`;
+      reviewButton.hidden = pendingCount <= 0;
+    }
     return true;
   }
 
