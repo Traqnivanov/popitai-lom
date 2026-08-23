@@ -16,6 +16,7 @@
   };
 
   let currentUser = null;
+  let activeMode = "all";
 
   const formatDate = value => {
     if (!value) return "—";
@@ -30,9 +31,10 @@
 
   async function waitForMenu() {
     for (let i = 0; i < 40; i += 1) {
-      const menu = document.querySelector('.admin-menu [data-admin-menu-group-items="content"]');
-      const content = document.querySelector(".admin-content");
-      if (menu && content) return { menu, content };
+      const review = document.querySelector('.admin-menu [data-admin-menu-group-items="review"]');
+      const content = document.querySelector('.admin-menu [data-admin-menu-group-items="content"]');
+      const panel = document.querySelector(".admin-content");
+      if (review && content && panel) return { review, content, panel };
       await new Promise(resolve => setTimeout(resolve, 50));
     }
     return null;
@@ -53,20 +55,32 @@
     return ["admin","moderator"].includes(profile?.role) && profile?.is_blocked !== true;
   }
 
-  function ensureButton() {
-    const group = document.querySelector('.admin-menu [data-admin-menu-group-items="content"]');
-    if (!group) return null;
+  function ensureButtons() {
+    const reviewGroup = document.querySelector('.admin-menu [data-admin-menu-group-items="review"]');
+    const contentGroup = document.querySelector('.admin-menu [data-admin-menu-group-items="content"]');
+    if (!reviewGroup || !contentGroup) return {};
 
-    let button = group.querySelector("[data-events-admin]");
-    if (!button) {
-      button = document.createElement("button");
-      button.type = "button";
-      button.dataset.eventsAdmin = "1";
-      button.innerHTML = 'Събития <span class="admin-badge" data-events-badge hidden>0</span>';
-      group.appendChild(button);
-      button.addEventListener("click", open);
+    let reviewButton = reviewGroup.querySelector("[data-events-review]");
+    if (!reviewButton) {
+      reviewButton = document.createElement("button");
+      reviewButton.type = "button";
+      reviewButton.dataset.eventsReview = "1";
+      reviewButton.innerHTML = 'Чакащи събития <span class="admin-badge" data-events-badge hidden>0</span>';
+      reviewGroup.appendChild(reviewButton);
+      reviewButton.addEventListener("click", () => open("pending"));
     }
-    return button;
+
+    let contentButton = contentGroup.querySelector("[data-events-admin]");
+    if (!contentButton) {
+      contentButton = document.createElement("button");
+      contentButton.type = "button";
+      contentButton.dataset.eventsAdmin = "1";
+      contentButton.textContent = "Събития";
+      contentGroup.appendChild(contentButton);
+      contentButton.addEventListener("click", () => open("all"));
+    }
+
+    return { reviewButton, contentButton };
   }
 
   async function refreshCount() {
@@ -80,10 +94,13 @@
       return;
     }
 
-    const badge = ensureButton()?.querySelector("[data-events-badge]");
-    if (!badge) return;
-    badge.textContent = String(count || 0);
-    badge.hidden = (count || 0) === 0;
+    const { reviewButton } = ensureButtons();
+    const badge = reviewButton?.querySelector("[data-events-badge]");
+    if (badge) {
+      badge.textContent = String(count || 0);
+      badge.hidden = (count || 0) === 0;
+    }
+    if (reviewButton) reviewButton.hidden = (count || 0) === 0;
   }
 
   function statusBadge(status) {
@@ -115,11 +132,13 @@
       </article>`;
   }
 
-  async function loadRows() {
-    const { data, error } = await client
+  async function loadRows(mode = "all") {
+    let query = client
       .from("events")
       .select("id,title,description,location,starts_at,status,moderation_note,created_at")
       .order("created_at", { ascending:false });
+    if (mode === "pending") query = query.eq("status", "pending");
+    const { data, error } = await query;
     if (error) throw error;
     return data || [];
   }
@@ -132,26 +151,32 @@
     box.classList.toggle("error", isError);
   }
 
-  async function open() {
+  async function open(mode = "all") {
+    activeMode = mode;
     const content = document.querySelector(".admin-content");
     if (!content) return;
 
     document.querySelectorAll(".admin-menu button").forEach(button => {
-      button.classList.toggle("active", button.hasAttribute("data-events-admin"));
+      const active = mode === "pending"
+        ? button.hasAttribute("data-events-review")
+        : button.hasAttribute("data-events-admin");
+      button.classList.toggle("active", active);
     });
 
+    const title = mode === "pending" ? "Чакащи събития" : "Събития";
     content.innerHTML = `
-      <div class="block-heading"><h2>Събития</h2></div>
+      <div class="block-heading"><h2>${title}</h2></div>
       <p class="admin-panel-message" data-events-message hidden></p>
       <div class="stack-list" data-events-list><article class="empty-card"><p>Зареждане…</p></article></div>`;
 
     try {
-      const rows = await loadRows();
+      const rows = await loadRows(mode);
       const list = content.querySelector("[data-events-list]");
       if (!list) return;
+      const emptyText = mode === "pending" ? "Няма чакащи събития." : "Няма подадени събития.";
       list.innerHTML = rows.length
         ? rows.map(card).join("")
-        : '<article class="empty-card"><p>Няма подадени събития.</p></article>';
+        : `<article class="empty-card"><p>${emptyText}</p></article>`;
       wireActions(content);
     } catch (error) {
       console.error(error);
@@ -178,7 +203,7 @@
             return;
           }
           await refreshCount();
-          await open();
+          await open(activeMode);
           return;
         }
 
@@ -211,7 +236,7 @@
         }
 
         await refreshCount();
-        await open();
+        await open(activeMode);
       });
     });
   }
@@ -220,7 +245,7 @@
     if (!(await allowed())) return;
     const ready = await waitForMenu();
     if (!ready) return;
-    ensureButton();
+    ensureButtons();
     await refreshCount();
   }
 
