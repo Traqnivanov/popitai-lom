@@ -119,7 +119,12 @@
   },true);
 
   document.addEventListener("DOMContentLoaded",async()=>{
-    await refreshCount();
-    syncAfterMenuSettles();
+    try{
+      if(!(await isAllowedAdmin())) return;
+      await refreshCount();
+      syncAfterMenuSettles();
+    }catch(error){
+      console.warn("Info Lom pending sync",error);
+    }
   },{once:true});
 })();
