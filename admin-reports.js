@@ -5,6 +5,8 @@
   if (!client) return;
 
   let currentUser = null;
+  let currentRole = null;
+  const isModerator = () => currentRole === "moderator";
 
   const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
@@ -43,7 +45,8 @@
       .maybeSingle();
 
     if (profileError) return false;
-    return ["admin","moderator"].includes(profile?.role) && profile?.is_blocked !== true;
+    currentRole = profile?.role || null;
+    return ["admin","moderator"].includes(currentRole) && profile?.is_blocked !== true;
   }
 
   async function waitForAdminShell() {
@@ -73,10 +76,9 @@
   }
 
   async function refreshCount() {
-    const { count, error } = await client
-      .from("reports")
-      .select("id", { count:"exact", head:true })
-      .eq("status", "pending");
+    let query = client.from("reports").select("id", { count:"exact", head:true }).eq("status", "pending");
+    if (isModerator()) query = query.neq("reporter_id", currentUser.id);
+    const { count, error } = await query;
 
     if (error) {
       console.warn("Сигнали: броячът не се зареди.", error);
@@ -112,11 +114,13 @@
   }
 
   async function loadPending() {
-    const { data, error } = await client
+    let query = client
       .from("reports")
       .select("id,reporter_id,target_type,target_id,reason,status,created_at")
       .eq("status", "pending")
       .order("created_at", { ascending:false });
+    if (isModerator()) query = query.neq("reporter_id", currentUser.id);
+    const { data, error } = await query;
     if (error) throw error;
     return data || [];
   }
