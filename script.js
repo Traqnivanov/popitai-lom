@@ -82,7 +82,12 @@ function normalizeSearchText(value) {
 
 function isConstructionQuery(value) {
   const query = normalizeSearchText(value);
-  return query.length > 0 && CONSTRUCTION_SEARCH_STEMS.some(stem => query.includes(stem));
+  const priorityQuery = query
+    .replace(/(^|\s)автомивк\p{L}*(?=\s|$)/gu, "$1")
+    .replace(/(^|\s)avtomivk\p{L}*(?=\s|$)/gu, "$1")
+    .replace(/\s+/g, " ")
+    .trim();
+  return priorityQuery.length > 0 && CONSTRUCTION_SEARCH_STEMS.some(stem => priorityQuery.includes(stem));
 }
 
 function rankSearchRecords(query, records = getAllSearchRecords()) {
@@ -739,6 +744,7 @@ qsa("[data-question-filter]").forEach(button => {
 
 // Детайл на въпрос
 function renderQuestionDetail() {
+  if (document.querySelector('script[data-popitai-supabase-content]')) return;
   const titleEl = qs("#question-detail-title");
   if (!titleEl) return;
 
@@ -1195,5 +1201,4 @@ qsa(".simple-contact-form").forEach(form => {
     if (!navigator.onLine) showToast(MESSAGES.offline, 'error', 'Няма интернет');
   });
 })();
-
 
