@@ -239,17 +239,23 @@
 
     await authReady;
     const id = new URLSearchParams(window.location.search).get("id");
-    if (!id) return;
+    const detailCard = qs("#question-detail-card");
+    const notFound = qs("#question-not-found");
+    const answerArea = qs("#question-answer-area");
+
+    if (!id) {
+      title.textContent = "Въпросът не е намерен";
+      if (detailCard) detailCard.hidden = true;
+      if (notFound) notFound.hidden = false;
+      if (answerArea) answerArea.hidden = true;
+      return;
+    }
 
     const { data: question, error } = await supabase
       .from("questions")
       .select("id, author_id, title, category, description, status, moderation_note, created_at")
       .eq("id", id)
       .maybeSingle();
-
-    const detailCard = qs("#question-detail-card");
-    const notFound = qs("#question-not-found");
-    const answerArea = qs("#question-answer-area");
 
     if (error || !question) {
       title.textContent = "Въпросът не е намерен";
