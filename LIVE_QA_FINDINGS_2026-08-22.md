@@ -81,12 +81,12 @@ Obscurity, не security. Без implementation без approval.
 General signal е в `reports`; profile section е уточнен като `Моите предложения и сигнали за Инфо Лом` и production е потвърден.
 
 ## QA-014 — Admin visible English `Highlighted`
-Статус: `OPEN / LOCKED`
-Нарушава Bulgarian UI rule.
+Статус: `BLOCKED / LOCKED`
+Production retest на 23.08 през Opera потвърждава видим checkbox label `Highlighted` върху pending listing cards. Това нарушава задължителния български UI, но Admin е LOCKED и не е променян без отделно одобрение.
 
 ## QA-015 — Admin `Въпроси 0` при pending question
-Статус: `VERIFY / LOCKED`
-Може да е metric за published questions. Read-only classification first.
+Статус: `CLOSED / CLASSIFIED`
+Production retest на 23.08 показва `Въпроси 0`, докато `QA TEST 1` е отделно в чакащата опашка. В същия Admin има отделни `Чакащи` и `Публикувани въпроси`, затова 0 е класифицирано като metric за публикуваните въпроси, не като дефект в pending count.
 
 ## QA-016 — Direct `admin.html` opens in current session
 Статус: `VERIFY / SECURITY / LOCKED`
@@ -117,12 +117,12 @@ Production показва `Услуги` и `Събития`; internal compatibi
 No-result има `Разгледай категориите` + `Задай въпрос`; positive-control query не ги показва. Protected ranking не е променян.
 
 ## QA-023 — `firma.html` no-id duplicate not-found
-Статус: `VERIFY / UX / LOCKED / RENDER OWNERSHIP`
-Firm е LOCKED; read-only only.
+Статус: `BLOCKED / LOCKED / RENDER OWNERSHIP`
+Production retest на 23.08 през Opera потвърждава два едновременни `Фирмата не е намерена` state-а: hero heading + отделна not-found card. Firm е LOCKED; read-only verification е завършена, но source fix изисква отделно одобрение.
 
 ## QA-024 — `obqva.html` weak no-id fallback
-Статус: `VERIFY / UX / LOCKED`
-Read-only only.
+Статус: `BLOCKED / LOCKED / UX`
+Production retest на 23.08 през Opera потвърждава само текст `Обявата не е намерена.` без следващо действие към обявите. Listings е LOCKED; не е правена промяна без отделно одобрение.
 
 ## QA-025 — Health add labels
 Статус: `CLOSED`
@@ -169,8 +169,11 @@ Production tree на Health/Transport/Education/Banks/Utilities/Institutions п�
 - `statii.html`: една реална статия → basis QA-011.
 - `vaprosi.html`: QA-009 CLOSED след production retest през Opera; pending QA question правилно не е public.
 - `vapros.html`: QA-018 CLOSED след production no-id/invalid-id retest през Opera; valid-id public positive-control няма при 0 approved questions.
+- `firma.html`: QA-023 production-confirmed duplicate no-id state; BLOCKED / LOCKED.
+- `obqva.html`: QA-024 production-confirmed weak no-id fallback; BLOCKED / LOCKED.
 - `profil.html`: auth validation cache synced; unused image uploader removed; protected Firm/Listings scripts untouched.
 - Shops: 6 tabs load; grammar/source fixed; tags/groups uploaded; modal interaction pending.
+- Admin: QA-014 confirmed visible `Highlighted` and BLOCKED / LOCKED; QA-015 classified as published-question metric; QA-016 guest/non-admin check remains.
 - Masters: protected priority preserved except explicitly approved QA-019 false-positive exclusion for carwash terms; production positive control `мивка` PASS.
 - QA TEST 4 Listing: pending real listing exists; DO NOT create another because monthly quota is consumed.
 - General Signal: DB confirmed pending `reports` record.
@@ -187,7 +190,7 @@ Production tree на Health/Transport/Education/Banks/Utilities/Institutions п�
 - Signal invalid e-mail interaction.
 - Auth form validation/focus; avoid real registration/reset mail unless needed.
 - Real mobile/device visual QA.
-- Admin/guest/non-owner protected checks when appropriate.
+- Admin guest/non-owner protected checks when appropriate.
 
 # D. NEXT SAFE ORDER
 1. Continue non-LOCKED source audit/fixes.
