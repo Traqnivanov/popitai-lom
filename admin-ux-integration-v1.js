@@ -5,6 +5,25 @@
   let currentProfile = null;
   let countTimer = 0;
 
+  const INFO_LABELS = {
+    "byuro-truda":"Бюро по труда",
+    "dsp":"Дирекция „Социално подпомагане“",
+    "imoten-registur":"Имотен регистър",
+    "kadastur":"Кадастър",
+    "kzp":"Комисия за защита на потребителите",
+    "nap":"НАП",
+    "noi":"НОИ",
+    "oblastna":"Областна администрация",
+    "odbh":"Областна дирекция по безопасност на храните",
+    "osz":"Общинска служба по земеделие",
+    "poshta":"Поща",
+    "prokuratura":"Прокуратура",
+    "riosv":"РИОСВ",
+    "rzi":"РЗИ",
+    "rzok":"РЗОК",
+    "sud":"Съд"
+  };
+
   const HELP = {
     pending: {
       title: "Какво управляваш тук",
@@ -157,6 +176,18 @@
     if (label) label.textContent = "Задачи за преглед";
   }
 
+  function organizeBusinessButtons() {
+    const review = document.querySelector('.admin-menu [data-admin-menu-group-items="review"]');
+    const content = document.querySelector('.admin-menu [data-admin-menu-group-items="content"]');
+    if (!review || !content) return;
+    const pending = document.querySelector('.admin-menu [data-business-view="businesses-pending"]');
+    const approved = document.querySelector('.admin-menu [data-business-view="businesses-approved"]');
+    const hidden = document.querySelector('.admin-menu [data-business-view="businesses-hidden"]');
+    if (pending && pending.parentElement !== review) review.appendChild(pending);
+    if (approved && approved.parentElement !== content) content.appendChild(approved);
+    if (hidden && hidden.parentElement !== content) content.appendChild(hidden);
+  }
+
   function localizeVisibleLabels() {
     document.querySelectorAll('input[data-ext="is_highlighted"]').forEach(input => {
       const label = input.closest("label");
@@ -173,9 +204,14 @@
       const walker = document.createTreeWalker(content, NodeFilter.SHOW_TEXT);
       let node;
       while ((node = walker.nextNode())) {
-        if (node.nodeValue?.includes("Highlighted")) {
-          node.nodeValue = node.nodeValue.replace(/Highlighted/g, "Откроена");
+        let value = node.nodeValue || "";
+        if (value.includes("Highlighted")) value = value.replace(/Highlighted/g, "Откроена");
+        const trimmed = value.trim();
+        if (Object.prototype.hasOwnProperty.call(INFO_LABELS, trimmed)) {
+          value = value.replace(trimmed, INFO_LABELS[trimmed]);
         }
+        if (value.includes("·")) value = value.replace(/\s*·\s*·\s*/g, " · ");
+        node.nodeValue = value;
       }
     }
 
@@ -205,6 +241,7 @@
   function syncPresentation() {
     ensureStyle();
     ensureOperationalStatLabel();
+    organizeBusinessButtons();
     localizeVisibleLabels();
     renderContextHelp();
   }
