@@ -4,6 +4,7 @@
   const MODAL_SELECTOR = "#info-modal";
   const FORM_SELECTOR = "#info-submit-form, #info-error-form";
   const CLOSE_SELECTOR = "[data-modal-close]";
+  const MEANINGFUL_TEXT_FIELDS = new Set(["details", "description", "correct_info"]);
 
   function modal() {
     return document.querySelector(MODAL_SELECTOR);
@@ -13,9 +14,9 @@
     return modal()?.querySelector(FORM_SELECTOR) || null;
   }
 
-  function requiredFieldFromEvent(event) {
+  function fieldFromEvent(event) {
     const field = event.target;
-    if (!field?.matches?.("[required]")) return null;
+    if (!field?.matches?.("input, textarea, select")) return null;
     if (!field.closest(FORM_SELECTOR)) return null;
     return field;
   }
@@ -43,10 +44,41 @@
     return label.replace(/\s*\*\s*$/, "").trim();
   }
 
-  function validateField(field, showRequired = false) {
-    if (!field?.matches("[required]")) return true;
+  function isStructuredUsefulValue(value) {
+    const compact = value.replace(/\s+/g, "");
+    const phoneDigits = compact.replace(/[^\d]/g, "");
+    const looksLikePhone = phoneDigits.length >= 7 && phoneDigits.length <= 15 && /^[+\d()\s.-]+$/.test(value);
+    const looksLikeUrl = /^(https?:\/\/|www\.)\S+$/i.test(value);
+    return looksLikePhone || looksLikeUrl;
+  }
+
+  function isMeaningfulText(value) {
+    if (isStructuredUsefulValue(value)) return true;
+    const words = value.split(/\s+/).filter(part => /[\p{L}\p{N}]/u.test(part));
+    if (words.length < 2) return false;
+    const alphaNumeric = value.match(/[\p{L}\p{N}]/gu) || [];
+    return alphaNumeric.length >= 5;
+  }
+
+  function validationMessage(field, showRequired = false) {
     const value = String(field.value || "").trim();
-    const message = !value && showRequired ? `Попълни „${fieldLabel(field)}“.` : "";
+    if (field.required && !value && showRequired) return `Попълни „${fieldLabel(field)}“.`;
+    if (!value) return "";
+
+    if (MEANINGFUL_TEXT_FIELDS.has(field.name) && !isMeaningfulText(value)) {
+      if (field.name === "details") return "Добави поне две ясни думи, телефон или линк с полезна информация.";
+      if (field.name === "description") return "Опиши ясно какво е грешно с поне две думи.";
+      return "Добави по-ясна информация с поне две думи, телефон или линк.";
+    }
+
+    if (field.maxLength > 0 && value.length > field.maxLength) {
+      return `Полето може да съдържа най-много ${field.maxLength} знака.`;
+    }
+    return "";
+  }
+
+  function validateField(field, showRequired = false) {
+    const message = validationMessage(field, showRequired);
     const error = ensureError(field);
     if (error) error.textContent = message;
     if (message) field.setAttribute("aria-invalid", "true");
@@ -128,20 +160,20 @@
   }
 
   document.addEventListener("focusout", event => {
-    const field = requiredFieldFromEvent(event);
+    const field = fieldFromEvent(event);
     if (!field) return;
     field.dataset.touched = "true";
     validateField(field, true);
   }, true);
 
   document.addEventListener("input", event => {
-    const field = requiredFieldFromEvent(event);
+    const field = fieldFromEvent(event);
     if (!field) return;
     if (field.dataset.touched === "true" || field.getAttribute("aria-invalid") === "true") validateField(field, true);
   }, true);
 
   document.addEventListener("change", event => {
-    const field = requiredFieldFromEvent(event);
+    const field = fieldFromEvent(event);
     if (!field) return;
     if (field.dataset.touched === "true" || field.getAttribute("aria-invalid") === "true") validateField(field, true);
   }, true);
@@ -150,9 +182,11 @@
     const form = event.target?.closest?.(FORM_SELECTOR);
     if (!form) return;
 
-    const required = [...form.querySelectorAll("[required]")];
+    const fields = [...form.querySelectorAll("input, textarea, select")].filter(field =>
+      field.required || MEANINGFUL_TEXT_FIELDS.has(field.name) || field.maxLength > 0
+    );
     let firstInvalid = null;
-    required.forEach(field => {
+    fields.forEach(field => {
       field.dataset.touched = "true";
       if (!validateField(field, true) && !firstInvalid) firstInvalid = field;
     });
