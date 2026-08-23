@@ -43,6 +43,10 @@
     return currentProfile?.role === "admin" && currentProfile?.is_blocked !== true;
   }
 
+  function isModeratorProfile() {
+    return currentProfile?.role === "moderator" && currentProfile?.is_blocked !== true;
+  }
+
   function roleLabel(role) {
     return {
       admin: "Главен администратор",
@@ -273,15 +277,28 @@
     ]);
 
     const countsBySource = new Map(pendingSources.map((table, index) => [table, pendingResults[index].count || 0]));
-    const pending = pendingResults.reduce((total, result) => total + (result.count || 0), 0);
-    const localPending = ["questions", "answers", "listings"]
+    let localPending = ["questions", "answers", "listings"]
       .reduce((total, table) => total + (countsBySource.get(table) || 0), 0);
+
+    if (isModeratorProfile() && currentUser?.id) {
+      const ownCoreResults = await Promise.all([
+        client.from("questions").select("id", { count: "exact", head: true }).eq("status", "pending").eq("author_id", currentUser.id),
+        client.from("answers").select("id", { count: "exact", head: true }).eq("status", "pending").eq("author_id", currentUser.id),
+        client.from("listings").select("id", { count: "exact", head: true }).eq("status", "pending").or(`owner_id.eq.${currentUser.id},author_id.eq.${currentUser.id}`)
+      ]);
+      const ownFailed = ownCoreResults.some(result => result.error);
+      if (!ownFailed) {
+        localPending = Math.max(0, localPending - ownCoreResults.reduce((sum, result) => sum + (result.count || 0), 0));
+      }
+    }
+
+    const pending = pendingResults.reduce((total, result) => total + (result.count || 0), 0);
     const failedSources = pendingSources.filter((_, index) => pendingResults[index].error);
     if (failedSources.length) {
       console.warn("Pending counts unavailable for:", failedSources.join(", "));
     }
     if ($("#admin-users-count")) $("#admin-users-count").textContent = String(users.count || 0);
-    if ($("#admin-pending-count")) $("#admin-pending-count").textContent = String(pending);
+    if (isAdminProfile() && $("#admin-pending-count")) $("#admin-pending-count").textContent = String(pending);
     if ($("#admin-approved-questions-count")) $("#admin-approved-questions-count").textContent = String(approvedQuestions.count || 0);
     if ($("#admin-approved-answers-count")) $("#admin-approved-answers-count").textContent = String(approvedAnswers.count || 0);
 
@@ -290,10 +307,11 @@
       badge.textContent = String(localPending);
       badge.hidden = localPending === 0;
     }
-    const panelName = isAdminProfile() ? "Административен" : "Модераторски";
-    document.title = pending > 0
-      ? `(${pending}) ${panelName} панел | Попитай.Лом`
-      : `${panelName} панел | Попитай.Лом`;
+    if (isAdminProfile()) {
+      document.title = pending > 0
+        ? `(${pending}) Административен панел | Попитай.Лом`
+        : "Административен панел | Попитай.Лом";
+    }
   }
 
   function recordCard(item, type, mode) {
@@ -377,16 +395,20 @@
 
   async function loadPending() {
     const [qResult, aResult, lResult] = await Promise.all([
-      client.from("questions").select("id, title, description, status, moderation_note, created_at").eq("status", "pending").order("created_at", { ascending: false }),
-      client.from("answers").select("id, question_id, body, status, moderation_note, created_at").eq("status", "pending").order("created_at", { ascending: false }),
-      client.from("listings").select("id, title, description, category, listing_type, phone, city, status, moderation_note, created_at, owner_id").eq("status", "pending").order("created_at", { ascending: false })
+      client.from("questions").select("id, title, description, status, moderation_note, created_at, author_id").eq("status", "pending").order("created_at", { ascending: false }),
+      client.from("answers").select("id, question_id, body, status, moderation_note, created_at, author_id").eq("status", "pending").order("created_at", { ascending: false }),
+      client.from("listings").select("id, title, description, category, listing_type, phone, city, status, moderation_note, created_at, owner_id, author_id").eq("status", "pending").order("created_at", { ascending: false })
     ]);
     if (qResult.error || aResult.error || lResult.error) throw qResult.error || aResult.error || lResult.error;
 
-    const listingItems = await attachListingMedia(lResult.data || []);
+    const moderatorId = isModeratorProfile() ? currentUser?.id : null;
+    const questions = (qResult.data || []).filter(item => !moderatorId || item.author_id !== moderatorId);
+    const answers = (aResult.data || []).filter(item => !moderatorId || item.author_id !== moderatorId);
+    const listings = (lResult.data || []).filter(item => !moderatorId || (item.owner_id !== moderatorId && item.author_id !== moderatorId));
+    const listingItems = await attachListingMedia(listings);
     const queue = [
-      ...(qResult.data || []).map((item) => ({ ...item, _type: "question" })),
-      ...(aResult.data || []).map((item) => ({ ...item, _type: "answer" })),
+      ...questions.map((item) => ({ ...item, _type: "question" })),
+      ...answers.map((item) => ({ ...item, _type: "answer" })),
       ...listingItems.map((item) => ({ ...item, _type: "listing" }))
     ].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
