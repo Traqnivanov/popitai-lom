@@ -1,9 +1,26 @@
 (() => {
   "use strict";
 
-  const client = window.PopitaiSupabase;
+  let client = null;
   const root = document.getElementById("profile-corrections");
-  if (!client || !root) return;
+  if (!root) return;
+
+  async function getClient() {
+    if (window.PopitaiSupabase) return window.PopitaiSupabase;
+    return new Promise((resolve, reject) => {
+      let tries = 0;
+      const timer = window.setInterval(() => {
+        tries += 1;
+        if (window.PopitaiSupabase) {
+          window.clearInterval(timer);
+          resolve(window.PopitaiSupabase);
+        } else if (tries >= 120) {
+          window.clearInterval(timer);
+          reject(new Error("Supabase client timeout"));
+        }
+      }, 50);
+    });
+  }
 
   const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;,"'":"&#39;"
@@ -171,6 +188,14 @@
 
   async function init() {
     root.innerHTML = '<article class="empty-card"><p>Проверка за върнато съдържание…</p></article>';
+
+    try {
+      client = client || await getClient();
+    } catch (error) {
+      console.error("Profile corrections Supabase init error:", error);
+      root.innerHTML = '<article class="empty-card"><p>Върнатото за корекция съдържание не може да се зареди.</p></article>';
+      return;
+    }
 
     const { data: authData, error: authError } = await client.auth.getUser();
     const user = authError ? null : authData?.user;
