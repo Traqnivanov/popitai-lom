@@ -70,7 +70,7 @@ Menu button има `aria-expanded` + `aria-controls`; modal close е descriptive
 
 ## QA-011 — Home fake article cards + `без лутане`
 Статус: `OPEN`
-`statii.html` има само една реална статия, а home още съдържа още две несъществуващи cards и фразата `без лутане` в Categories intro. Предишен broad `index.html` rewrite е напълно върнат; current trusted blob остава `9eca2b4497cbb792e774b015c1cff928025b5243`. `index.html` съдържа embedded LOCKED Listings logic, затова следващият fix трябва да е exact byte-safe patch, не full reformat.
+`statii.html` има само една реална статия, а home още съдържа още две несъществуващи cards и фразата `без лутане` в Categories intro. Production retest на 23.08 през Opera потвърждава и трите home article заглавия плюс видимото `без лутане`, т.е. дефектът е реално live, не само source finding. Предишен broad `index.html` rewrite е напълно върнат; current trusted blob остава `9eca2b4497cbb792e774b015c1cff928025b5243`. `index.html` съдържа embedded LOCKED Listings logic, затова fix-ът трябва да е exact byte-safe patch, не full reformat.
 
 ## QA-012 — Hidden Admin entry idea
 Статус: `IDEA / LOCKED`
@@ -159,11 +159,11 @@ Production tree на Health/Transport/Education/Banks/Utilities/Institutions п�
 
 ## QA-033 — Auth form validation + unused uploader
 Статус: `FIXED - NEEDS RETEST`
-`auth-form-validation.js` покрива Login e-mail/password, Registration name/e-mail/password/confirm/consent, Forgot e-mail, New/Change password pair. Blur/live clear/ARIA/focus first invalid; не е измислена нова password-strength политика. `vhod.html`, `registracia.html`, `zabravena-parola.html`, `nova-parola.html` зареждат `auth-form-validation.js?v=20260823-0202`. На 23.08 и `profil.html` е синхронизиран към същата cache версия за смяната на парола, а неизползваният `image-upload.js` е махнат и от профила. Промяната не засяга Firm/Listings renderers или protected profile business logic. Production interaction pending.
+`auth-form-validation.js` покрива Login e-mail/password, Registration name/e-mail/password/confirm/consent, Forgot e-mail, New/Change password pair. Blur/live clear/ARIA/focus first invalid; не е измислена нова password-strength политика. `vhod.html`, `registracia.html`, `zabravena-parola.html`, `nova-parola.html` зареждат `auth-form-validation.js?v=20260823-0202`. На 23.08 и `profil.html` е синхронизиран към същата cache версия за смяната на парола, а неизползваният `image-upload.js` е махнат и от профила. Production static/page-load retest през Opera PASS за Login, Registration, Forgot, New Password и Profile: правилните полета, password reveal controls и profile password-change form се виждат, без стар uploader. Реалното blur/live/focus interaction поведение остава pending. Промяната не засяга Firm/Listings renderers или protected profile business logic.
 
 # B. E2E / coverage checkpoints
 - Всички 45 HTML страници са inventoried и поне structural/source inspected.
-- `index.html`: PARTIAL — QA-006/011.
+- `index.html`: PARTIAL — QA-006/011; QA-011 production-confirmed през Opera.
 - `info.html`: QA-026 retest; QA-030/031 closed.
 - `tarsene.html`: QA-019/021/022 closed; QA-026 open.
 - `statii.html`: една реална статия → basis QA-011.
@@ -172,6 +172,8 @@ Production tree на Health/Transport/Education/Banks/Utilities/Institutions п�
 - `firma.html`: QA-023 production-confirmed duplicate no-id state; BLOCKED / LOCKED.
 - `obqva.html`: QA-024 production-confirmed weak no-id fallback; BLOCKED / LOCKED.
 - `institucii.html`: production structural/hash retest PASS през Opera — финалните `Областна администрация Монтана` и `Филиал за спешна медицинска помощ – Лом` карти са налични, а `#institucii-other` се резолвира след publish. First-paint/flicker наблюдението остава отделно pending.
+- `rabota.html` / public `Услуги`: production compatibility PASS — `kategorii.html` показва публично `Услуги`, сочи към legacy-compatible `rabota.html`, самата страница е озаглавена `Услуги`, а `nov-vapros.html?category=rabota` показва публична стойност и help text `Услуги`.
+- Auth pages: static/page-load structure PASS през Opera; QA-033 interaction pending.
 - `profil.html`: auth validation cache synced; unused image uploader removed; protected Firm/Listings scripts untouched.
 - Shops: 6 tabs load; grammar/source fixed; tags/groups uploaded; modal interaction pending.
 - Admin: QA-014 confirmed visible `Highlighted` and BLOCKED / LOCKED; QA-015 classified as published-question metric; QA-016 guest/non-admin check remains.
