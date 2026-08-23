@@ -21,6 +21,84 @@
     needs_info:"Нужна допълнителна информация"
   };
 
+  const CATEGORY_LABELS={
+    zdrave:"Здраве",institucii:"Институции",transport:"Транспорт",
+    obrazovanie:"Образование и култура",banki:"Банки и банкомати",
+    komunalni:"Комунални и ежедневни услуги"
+  };
+
+  const SUBCATEGORY_LABELS={
+    bolnica:"Болница",lekari:"Лекари",apteki:"Аптеки",stomatolozi:"Стоматолози",
+    veterinari:"Ветеринари","vet-apteki":"Ветеринарни аптеки",laboratorii:"Лаборатории",
+    obshtina:"Община",policia:"Полиция",pojarna:"Пожарна",speshna:"Спешна помощ",
+    vik:"ВиК",tok:"Електроенергия",avtobusi:"Автобуси",bdz:"ЖП / БДЖ",taksita:"Таксита",
+    uchilishta:"Училища","detski-gradini":"Детски градини",chitalishta:"Читалища",
+    biblioteka:"Библиотека",muzei:"Музей","shkoli-kursove":"Школи и курсове",
+    ofisi:"Банкови офиси",bankomati:"Банкомати","internet-tv":"Интернет и телевизия",
+    kurieri:"Куриери",chistota:"Чистота и отпадъци",obshto:"Общо"
+  };
+
+  const FIELD_LABELS={
+    name:"Име / обект",details:"Полезна информация",source:"Източник / линк",phone:"Телефон",
+    address:"Адрес",current_problem:"Какво е грешно",proposed_value:"Правилна информация",
+    note:"Бележка",working_hours:"Работно време",services:"Услуги",specialty:"Специалност"
+  };
+
+  const catLabel=value=>CATEGORY_LABELS[value]||value||"";
+  const subLabel=value=>SUBCATEGORY_LABELS[value]||value||"";
+  const fieldLabel=key=>FIELD_LABELS[key]||String(key||"").replaceAll("_"," ");
+
+  function hasUsefulText(value){
+    const text=String(value||"").replace(/\s+/g," ").trim();
+    const words=text.match(/[\p{L}\p{N}]+/gu)||[];
+    const letters=[...text.toLocaleLowerCase("bg-BG")].filter(ch=>/\p{L}/u.test(ch));
+    const distinctLetters=new Set(letters).size;
+    if(words.length<2||distinctLetters<4) return false;
+    if(words.length===2&&words[0].toLocaleLowerCase("bg-BG")===words[1].toLocaleLowerCase("bg-BG")) return false;
+    return true;
+  }
+
+  function validPhone(value){
+    const text=String(value||"").trim();
+    return /^\+?[\d\s().-]{7,20}$/.test(text)&&text.replace(/\D/g,"").length>=7&&text.replace(/\D/g,"").length<=15;
+  }
+
+  function validUrl(value){
+    try{
+      const url=new URL(String(value||"").trim());
+      return url.protocol==="http:"||url.protocol==="https:";
+    }catch{return false;}
+  }
+
+  function fieldMessage(key,value){
+    const text=String(value??"").trim();
+    const required=["name","details","current_problem","proposed_value"].includes(key);
+    if(!text) return required?`Попълни „${fieldLabel(key)}“.`:"";
+    if(key==="phone"&&!validPhone(text)) return "Въведи валиден телефонен номер.";
+    if(["source","url","website","public_url"].includes(key)&&!validUrl(text)&&!hasUsefulText(text)) return "Въведи пълен линк или ясен източник.";
+    if(["details","current_problem","proposed_value","note"].includes(key)&&!hasUsefulText(text)) return `Добави достатъчно ясна информация в „${fieldLabel(key)}“.`;
+    if(key==="name"){
+      const letters=[...text].filter(ch=>/\p{L}/u.test(ch));
+      if(letters.length<2||new Set(letters.map(ch=>ch.toLocaleLowerCase("bg-BG"))).size<2) return "Въведи разбираемо име на обекта.";
+    }
+    return "";
+  }
+
+  function setFieldError(field,message){
+    if(!field) return;
+    const error=field.parentElement?.querySelector("[data-field-error]");
+    if(error) error.textContent=message;
+    if(message) field.setAttribute("aria-invalid","true"); else field.removeAttribute("aria-invalid");
+  }
+
+  function validateField(field){
+    const key=field?.dataset.field;
+    if(!key) return true;
+    const message=fieldMessage(key,field.value);
+    setFieldError(field,message);
+    return !message;
+  }
+
   async function getClient(){
     if(window.PopitaiSupabase) return window.PopitaiSupabase;
     return new Promise((resolve,reject)=>{
@@ -53,7 +131,9 @@
       .profile-info-grid{display:grid;gap:9px;margin-top:10px}
       .profile-info-grid label{display:grid;gap:4px;font-weight:700}
       .profile-info-grid input,.profile-info-grid textarea{box-sizing:border-box;width:100%;border:1px solid #cbd4df;border-radius:10px;padding:10px;font:inherit}
+      .profile-info-grid [aria-invalid="true"]{border-color:#b42318;box-shadow:0 0 0 2px rgba(180,35,24,.10)}
       .profile-info-grid textarea{min-height:86px;resize:vertical}
+      .profile-info-field-error{min-height:0;margin:0;color:#a11f1f;font-size:12px;font-weight:700}
       .profile-info-save{margin-top:10px;border:0;border-radius:10px;padding:10px 13px;background:#1261d6;color:#fff;font:inherit;font-weight:800;cursor:pointer}
       .profile-info-save[disabled]{opacity:.6;cursor:wait}
       .profile-info-msg{margin-top:8px;font-size:13px;font-weight:700}
@@ -97,18 +177,19 @@
     const fields=primitiveFields(s.data);
     return `<article class="profile-info-card" data-own-submission="${esc(s.id)}">
       <span class="profile-info-status${needs?' warn':''}">${esc(STATUS[s.status]||s.status)}</span>
-      <h3>${esc(s.data?.name || s.entry_type || "Предложение")}</h3>
-      <p class="profile-info-meta">${esc(s.category)} → ${esc(s.subcategory)} · ${esc(fmt(s.created_at))}</p>
+      <h3>${esc(s.data?.name || "Предложение")}</h3>
+      <p class="profile-info-meta">${esc(catLabel(s.category))}${s.subcategory?` → ${esc(subLabel(s.subcategory))}`:""} · ${esc(fmt(s.created_at))}</p>
       ${needs?`<div class="profile-info-reason"><strong>Причина от администратора:</strong><br>${esc(s.admin_note||"Няма посочена причина.")}</div>`:""}
       ${needs?`<div class="profile-info-grid">
-        ${fields.map(([k,v])=>`<label>${esc(k)}
+        ${fields.map(([k,v])=>`<label>${esc(fieldLabel(k))}
           ${String(v??"").length>80
             ? `<textarea data-field="${esc(k)}">${esc(v)}</textarea>`
             : `<input data-field="${esc(k)}" value="${esc(v)}">`}
+          <span class="profile-info-field-error" data-field-error aria-live="polite"></span>
         </label>`).join("")}
       </div>
       <button class="profile-info-save" type="button" data-resubmit-submission>Изпрати отново</button>
-      <p class="profile-info-msg" data-msg></p>`:
+      <p class="profile-info-msg" data-msg aria-live="polite"></p>`:
       `<div class="profile-info-meta">Статусът се обновява автоматично след админ преглед.</div>`}
     </article>`;
   }
@@ -118,16 +199,17 @@
     return `<article class="profile-info-card" data-own-report="${esc(r.id)}">
       <span class="profile-info-status${needs?' warn':''}">${esc(STATUS[r.status]||r.status)}</span>
       <h3>Сигнал за грешка</h3>
-      <p class="profile-info-meta">${esc(r.category)} → ${esc(r.subcategory)} · ${esc(fmt(r.created_at))}</p>
+      <p class="profile-info-meta">${esc(catLabel(r.category))}${r.subcategory?` → ${esc(subLabel(r.subcategory))}`:""} · ${esc(fmt(r.created_at))}</p>
       <div class="profile-info-meta" style="white-space:pre-wrap">${esc(r.description)}</div>
       ${needs?`<div class="profile-info-reason"><strong>Администраторът иска:</strong><br>${esc(r.admin_note||"Допълнителна информация.")}</div>
       <div class="profile-info-grid">
         <label>Допълнение
-          <textarea data-report-extra placeholder="Напиши липсващата информация или добави по-точен източник…"></textarea>
+          <textarea data-report-extra aria-describedby="profile-report-extra-${esc(r.id)}" placeholder="Напиши липсващата информация или добави по-точен източник…"></textarea>
+          <span class="profile-info-field-error" id="profile-report-extra-${esc(r.id)}" data-report-extra-error aria-live="polite"></span>
         </label>
       </div>
       <button class="profile-info-save" type="button" data-resubmit-report>Изпрати допълнението</button>
-      <p class="profile-info-msg" data-msg></p>`:
+      <p class="profile-info-msg" data-msg aria-live="polite"></p>`:
       `<div class="profile-info-meta">Статусът се обновява автоматично след админ преглед.</div>`}
     </article>`;
   }
@@ -173,13 +255,38 @@
   }
 
   function bind(list){
+    list.querySelectorAll("[data-field]").forEach(field=>{
+      field.addEventListener("blur",()=>{field.dataset.touched="true";validateField(field);});
+      field.addEventListener("input",()=>{if(field.dataset.touched==="true"||field.getAttribute("aria-invalid")==="true") validateField(field);});
+    });
+
+    list.querySelectorAll("[data-report-extra]").forEach(field=>{
+      const validate=()=>{
+        const value=field.value.trim();
+        const message=!value?"Напиши допълнителната информация.":!hasUsefulText(value)&&!validUrl(value)&&!validPhone(value)?"Добави ясна информация, телефон или пълен линк към източник.":"";
+        const error=field.parentElement?.querySelector("[data-report-extra-error]");
+        if(error) error.textContent=message;
+        if(message) field.setAttribute("aria-invalid","true"); else field.removeAttribute("aria-invalid");
+        return !message;
+      };
+      field._validateInfoExtra=validate;
+      field.addEventListener("blur",()=>{field.dataset.touched="true";validate();});
+      field.addEventListener("input",()=>{if(field.dataset.touched==="true"||field.getAttribute("aria-invalid")==="true") validate();});
+    });
+
     list.querySelectorAll("[data-resubmit-submission]").forEach(btn=>{
       btn.addEventListener("click",async()=>{
         const card=btn.closest("[data-own-submission]");
         const msg=card.querySelector("[data-msg]");
         const id=card.dataset.ownSubmission;
         const fields={};
-        card.querySelectorAll("[data-field]").forEach(el=>fields[el.dataset.field]=el.value.trim());
+        let firstInvalid=null;
+        card.querySelectorAll("[data-field]").forEach(el=>{
+          el.dataset.touched="true";
+          if(!validateField(el)&&!firstInvalid) firstInvalid=el;
+          fields[el.dataset.field]=el.value.trim();
+        });
+        if(firstInvalid){firstInvalid.focus();return;}
 
         btn.disabled=true;
         msg.textContent="";
@@ -192,6 +299,11 @@
           if(row.status!=="needs_correction") throw new Error("Record is not returned");
 
           const nextData={...(row.data||{}),...fields};
+          if(JSON.stringify(nextData)===JSON.stringify(row.data||{})){
+            msg.textContent="Промени поне едно поле според бележката на администратора.";
+            msg.className="profile-info-msg error";
+            return;
+          }
           const {error}=await client.from("info_submissions")
             .update({data:nextData,status:"pending"})
             .eq("id",id);
@@ -215,13 +327,10 @@
         const card=btn.closest("[data-own-report]");
         const msg=card.querySelector("[data-msg]");
         const id=card.dataset.ownReport;
-        const extra=card.querySelector("[data-report-extra]").value.trim();
-
-        if(!extra){
-          msg.textContent="Напиши допълнителната информация.";
-          msg.className="profile-info-msg error";
-          return;
-        }
+        const extraField=card.querySelector("[data-report-extra]");
+        extraField.dataset.touched="true";
+        if(!extraField._validateInfoExtra?.()){extraField.focus();return;}
+        const extra=extraField.value.trim();
 
         btn.disabled=true;
         msg.textContent="";
