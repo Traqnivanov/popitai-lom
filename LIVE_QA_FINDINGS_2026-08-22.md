@@ -159,7 +159,7 @@ Production tree на Health/Transport/Education/Banks/Utilities/Institutions п�
 
 ## QA-033 — Auth form validation + unused uploader
 Статус: `FIXED - NEEDS RETEST`
-`auth-form-validation.js` покрива Login e-mail/password, Registration name/e-mail/password/confirm/consent, Forgot e-mail, New/Change password pair. Blur/live clear/ARIA/focus first invalid; не е измислена нова password-strength политика. `vhod.html`, `registracia.html`, `zabravena-parola.html`, `nova-parola.html` зареждат `auth-form-validation.js?v=20260823-0202`; ненужният `image-upload.js` е махнат от тези 4 страници. Production interaction pending.
+`auth-form-validation.js` покрива Login e-mail/password, Registration name/e-mail/password/confirm/consent, Forgot e-mail, New/Change password pair. Blur/live clear/ARIA/focus first invalid; не е измислена нова password-strength политика. `vhod.html`, `registracia.html`, `zabravena-parola.html`, `nova-parola.html` зареждат `auth-form-validation.js?v=20260823-0202`. На 23.08 и `profil.html` е синхронизиран към същата cache версия за смяната на парола, а неизползваният `image-upload.js` е махнат и от профила. Промяната не засяга Firm/Listings renderers или protected profile business logic. Production interaction pending.
 
 # B. E2E / coverage checkpoints
 - Всички 45 HTML страници са inventoried и поне structural/source inspected.
@@ -169,6 +169,7 @@ Production tree на Health/Transport/Education/Banks/Utilities/Institutions п�
 - `statii.html`: една реална статия → basis QA-011.
 - `vaprosi.html`: pending QA question правилно не е public; QA-009 retest.
 - `vapros.html`: QA-018 no-id production regression confirmed; valid-id retest after fix.
+- `profil.html`: auth validation cache synced; unused image uploader removed; protected Firm/Listings scripts untouched.
 - Shops: 6 tabs load; grammar/source fixed; tags/groups uploaded; modal interaction pending.
 - Masters: protected priority preserved except explicitly approved QA-019 false-positive exclusion for carwash terms; production positive control `мивка` PASS.
 - QA TEST 4 Listing: pending real listing exists; DO NOT create another because monthly quota is consumed.
