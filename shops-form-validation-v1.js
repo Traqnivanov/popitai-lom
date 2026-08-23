@@ -13,6 +13,29 @@
     source: document.getElementById("shopSource")
   };
 
+  function usefulText(value, minWords = 2) {
+    const text = String(value || "").replace(/\s+/g, " ").trim();
+    const words = text.match(/[\p{L}\p{N}]+/gu) || [];
+    const letters = [...text.toLocaleLowerCase("bg-BG")].filter(ch => /\p{L}/u.test(ch));
+    if (words.length < minWords) return false;
+    if (new Set(letters).size < 3) return false;
+    if (words.length === 2 && words[0].toLocaleLowerCase("bg-BG") === words[1].toLocaleLowerCase("bg-BG")) return false;
+    return true;
+  }
+
+  function sensibleName(value) {
+    const text = String(value || "").trim();
+    const letters = [...text].filter(ch => /\p{L}/u.test(ch));
+    return letters.length >= 2 && new Set(letters.map(ch => ch.toLocaleLowerCase("bg-BG"))).size >= 2;
+  }
+
+  function sensibleAddress(value) {
+    const text = String(value || "").trim();
+    if (text.length < 3) return false;
+    const letters = [...text].filter(ch => /\p{L}/u.test(ch));
+    return letters.length >= 2 && new Set(letters.map(ch => ch.toLocaleLowerCase("bg-BG"))).size >= 2;
+  }
+
   function ensureError(field) {
     if (!field?.id) return null;
     const id = `${field.id}Error`;
@@ -47,6 +70,7 @@
     if (!value) return "Въведи име на магазина.";
     if (value.length < 2) return "Името на магазина трябва да е поне 2 знака.";
     if (value.length > 120) return "Името на магазина може да е най-много 120 знака.";
+    if (!sensibleName(value)) return "Въведи разбираемо име на магазина.";
     return "";
   }
 
@@ -59,6 +83,7 @@
     if (!value) return "Въведи адрес на магазина в Лом.";
     if (value.length < 3) return "Добави по-точен адрес на магазина.";
     if (value.length > 200) return "Адресът може да е най-много 200 знака.";
+    if (!sensibleAddress(value)) return "Въведи разбираем адрес на магазина.";
     return "";
   }
 
@@ -67,6 +92,7 @@
     if (!value) return "Опиши накратко какво предлага магазинът.";
     if (value.length < 3) return "Добави малко повече информация какво предлага магазинът.";
     if (value.length > 500) return "Описанието може да е най-много 500 знака.";
+    if (!usefulText(value, 2)) return "Опиши с няколко думи какво реално предлага магазинът.";
     return "";
   }
 
