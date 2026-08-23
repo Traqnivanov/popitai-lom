@@ -239,12 +239,13 @@
 
     await authReady;
     const id = new URLSearchParams(window.location.search).get("id");
+    const hero = qs("#question-page-hero");
     const detailCard = qs("#question-detail-card");
     const notFound = qs("#question-not-found");
     const answerArea = qs("#question-answer-area");
 
     if (!id) {
-      title.textContent = "Въпросът не е намерен";
+      if (hero) hero.hidden = true;
       if (detailCard) detailCard.hidden = true;
       if (notFound) notFound.hidden = false;
       if (answerArea) answerArea.hidden = true;
@@ -258,7 +259,7 @@
       .maybeSingle();
 
     if (error || !question) {
-      title.textContent = "Въпросът не е намерен";
+      if (hero) hero.hidden = true;
       if (detailCard) detailCard.hidden = true;
       if (notFound) notFound.hidden = false;
       if (answerArea) answerArea.hidden = true;
