@@ -42,7 +42,7 @@ Exact adjacent messages, `aria-invalid`, focus first invalid са налични
 
 ## QA-004 — `kontakti.html` valid submit failure
 Статус: `FIXED - NEEDS RETEST`
-Root cause: `authenticated` нямаше реален INSERT grant върху `contact_messages`, въпреки RLS insert policy. Grant е добавен и проверен; frontend validation/post-success е поправен. Нужен един реален valid submit.
+Root cause: `authenticated` нямаше реален INSERT grant върху `contact_messages`, въпреки RLS insert policy. Grant е добавен и проверен; frontend validation/post-success е поправен. Backend rollback test на authenticated INSERT мина успешно и не остави тестов ред. Нужен един реален valid production submit.
 
 ## QA-005 — Listing validation summary difference
 Статус: `VERIFY / LOCKED`
@@ -97,12 +97,12 @@ General signal е в `reports`; profile section е уточнен като `Мо
 Source labels: хранителен магазин / строителен магазин / магазин за техника / мебелен магазин / магазин за дрехи / магазин за дома. Production construction CTA е потвърден; останалите tab interactions pending.
 
 ## QA-018 — Question detail double render owner
-Статус: `OPEN / UX / RENDER OWNERSHIP`
-No-id production дава две not-found състояния. Root cause: legacy `script.js::renderQuestionDetail()` + `supabase-content.js::loadQuestionDetail()` са два owners. Правилният fix е legacy owner да skip-не когато Supabase owner е активен. `script.js` носи и LOCKED repair priority → не се редактира на сляпо.
+Статус: `FIXED - NEEDS RETEST`
+След explicit approval на 23.08.2026 legacy `script.js::renderQuestionDetail()` вече връща веднага, когато в страницата има `script[data-popitai-supabase-content]`. Така `vapros.html` оставя Supabase `loadQuestionDetail()` като единствен owner. `vapros.html` е cache-bust-нат към `script.js?v=20260823-1436`. Source diff е проверен; временна неволна промяна в mobile SVG при cache-bust rewrite беше веднага възстановена, а net diff спрямо предишния state е само cache version. Production no-id/valid-id retest остава.
 
 ## QA-019 — `Автомобили → Автомивки` връща Ivanov Remonti
-Статус: `BLOCKED / LOCKED SEARCH RELEVANCE`
-Exact root cause: protected stem `мивк`/`mivk` за `мивка` съвпада и в `автомивки`; `rankSearchRecords()` prepends Ivanov. Fix трябва да пази `мивка` като repair/VиК, но да изключи carwash. Нужен explicit approval.
+Статус: `FIXED - NEEDS RETEST`
+След explicit approval на 23.08.2026 protected priority logic е коригирана минимално: `isConstructionQuery()` премахва само цели `автомивк...` / `avtomivk...` tokens преди проверката на съществуващите construction stems. Самите stems, включително `мивк`/`mivk`, не са променени. Source matrix: `мивка`/`mivka` → repair priority остава; `автомивка`/`автомивки`/`avtomivka` → false; `ремонт автомивка` и `ВиК автомивка` → true заради реалния repair term. `tarsene.html` е cache-bust-нат към `script.js?v=20260823-1436`. Production retest остава.
 
 ## QA-020 — Dead-end subcategories
 Статус: `CLASSIFIED / CONTENT-COVERAGE / UX`
@@ -165,14 +165,15 @@ Production tree на Health/Transport/Education/Banks/Utilities/Institutions п�
 - Всички 45 HTML страници са inventoried и поне structural/source inspected.
 - `index.html`: PARTIAL — QA-006/011.
 - `info.html`: QA-026 retest; QA-030/031 closed.
-- `tarsene.html`: QA-021/022 closed; QA-019 locked; QA-026 open.
+- `tarsene.html`: QA-021/022 closed; QA-019 fixed/source-tested, production retest pending; QA-026 open.
 - `statii.html`: една реална статия → basis QA-011.
 - `vaprosi.html`: pending QA question правилно не е public; QA-009 retest.
+- `vapros.html`: QA-018 owner fix uploaded; no-id/valid-id production retest pending.
 - Shops: 6 tabs load; grammar/source fixed; tags/groups uploaded; modal interaction pending.
-- Masters: read-only; Ivanov protected priority remains unchanged.
+- Masters: protected priority preserved except explicitly approved QA-019 false-positive exclusion for carwash terms.
 - QA TEST 4 Listing: pending real listing exists; DO NOT create another because monthly quota is consumed.
 - General Signal: DB confirmed pending `reports` record.
-- Contacts: backend grant fixed; valid production submit pending.
+- Contacts: backend grant + authenticated rollback test PASS; valid production submit pending.
 
 # C. MANUAL / PENDING
 - Info search `телк` vs `telk` typing.
@@ -181,6 +182,8 @@ Production tree на Health/Transport/Education/Banks/Utilities/Institutions п�
 - Institutions generic Info modal remains source gap until exact safe wiring is done.
 - Shops classification modal multi-select/custom tag; avoid unnecessary moderation insert.
 - Question/Answer successful-submit UI without duplicate QA data.
+- QA-018 valid/no-id question detail production render.
+- QA-019 `автомивки` vs `мивка` production search behavior.
 - QA-029 actual first paint.
 - Contacts valid submit.
 - Signal invalid e-mail interaction.
@@ -192,7 +195,7 @@ Production tree на Health/Transport/Education/Banks/Utilities/Institutions п�
 1. Continue non-LOCKED source audit/fixes.
 2. Find exact safe way to wire `info-lom-form-ux-v1.js` into `institucii.html` without broad rewrite.
 3. QA-011 only via exact patch method; never broad rewrite of `index.html`.
-4. QA-018 owner fix only if protected shared `script.js` can be changed behavior-preservingly; otherwise request approval.
-5. QA-019 blocked until explicit approval.
+4. Production retest QA-018/019 when browser interaction is available.
+5. Continue remaining source-only findings before asking the user for manual actions.
 
 Нищо не става `CLOSED` без реален production retest.
