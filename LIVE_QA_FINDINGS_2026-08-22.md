@@ -97,12 +97,12 @@ General signal е в `reports`; profile section е уточнен като `Мо
 Source labels: хранителен магазин / строителен магазин / магазин за техника / мебелен магазин / магазин за дрехи / магазин за дома. Production construction CTA е потвърден; останалите tab interactions pending.
 
 ## QA-018 — Question detail double render owner
-Статус: `FIXED - NEEDS RETEST`
-След explicit approval на 23.08.2026 legacy `script.js::renderQuestionDetail()` вече връща веднага, когато в страницата има `script[data-popitai-supabase-content]`. Така `vapros.html` оставя Supabase `loadQuestionDetail()` като единствен owner. `vapros.html` е cache-bust-нат към `script.js?v=20260823-1436`. Source diff е проверен; временна неволна промяна в mobile SVG при cache-bust rewrite беше веднага възстановена, а net diff спрямо предишния state е само cache version. Production no-id/valid-id retest остава.
+Статус: `OPEN / REGRESSION FOUND IN PRODUCTION RETEST`
+След explicit approval legacy `script.js::renderQuestionDetail()` беше изключен при Supabase owner. Production no-id retest на 23.08 показа нов точен gap: `supabase-content.js::loadQuestionDetail()` прави `if (!id) return;`, затова страницата остава на `Зареждане на въпроса…` вместо едно not-found състояние. Това доказва, че owner conflict е премахнат, но no-id fallback трябва да се поеме от Supabase owner (или guard-ът да се ограничи behavior-preservingly), без връщане към двойно render ownership. Valid-id production retest остава след корекцията.
 
 ## QA-019 — `Автомобили → Автомивки` връща Ivanov Remonti
-Статус: `FIXED - NEEDS RETEST`
-След explicit approval на 23.08.2026 protected priority logic е коригирана минимално: `isConstructionQuery()` премахва само цели `автомивк...` / `avtomivk...` tokens преди проверката на съществуващите construction stems. Самите stems, включително `мивк`/`mivk`, не са променени. Source matrix: `мивка`/`mivka` → repair priority остава; `автомивка`/`автомивки`/`avtomivka` → false; `ремонт автомивка` и `ВиК автомивка` → true заради реалния repair term. `tarsene.html` е cache-bust-нат към `script.js?v=20260823-1436`. Production retest остава.
+Статус: `CLOSED`
+След explicit approval protected priority logic беше коригирана минимално: `isConstructionQuery()` премахва само цели `автомивк...` / `avtomivk...` tokens преди проверката на съществуващите construction stems. Production retest на 23.08: `автомивки` връща само `Автомобили` и не показва Иванов Ремонти; positive control `мивка` продължава да връща `Иванов Ремонти Лом`. Защитеният repair priority е запазен извън carwash false-positive-а.
 
 ## QA-020 — Dead-end subcategories
 Статус: `CLASSIFIED / CONTENT-COVERAGE / UX`
@@ -165,12 +165,12 @@ Production tree на Health/Transport/Education/Banks/Utilities/Institutions п�
 - Всички 45 HTML страници са inventoried и поне structural/source inspected.
 - `index.html`: PARTIAL — QA-006/011.
 - `info.html`: QA-026 retest; QA-030/031 closed.
-- `tarsene.html`: QA-021/022 closed; QA-019 fixed/source-tested, production retest pending; QA-026 open.
+- `tarsene.html`: QA-019/021/022 closed; QA-026 open.
 - `statii.html`: една реална статия → basis QA-011.
 - `vaprosi.html`: pending QA question правилно не е public; QA-009 retest.
-- `vapros.html`: QA-018 owner fix uploaded; no-id/valid-id production retest pending.
+- `vapros.html`: QA-018 no-id production regression confirmed; valid-id retest after fix.
 - Shops: 6 tabs load; grammar/source fixed; tags/groups uploaded; modal interaction pending.
-- Masters: protected priority preserved except explicitly approved QA-019 false-positive exclusion for carwash terms.
+- Masters: protected priority preserved except explicitly approved QA-019 false-positive exclusion for carwash terms; production positive control `мивка` PASS.
 - QA TEST 4 Listing: pending real listing exists; DO NOT create another because monthly quota is consumed.
 - General Signal: DB confirmed pending `reports` record.
 - Contacts: backend grant + authenticated rollback test PASS; valid production submit pending.
@@ -181,8 +181,7 @@ Production tree на Health/Transport/Education/Banks/Utilities/Institutions п�
 - Banki/Komunalni/Institutions generic Info modal validation, dirty close and post-success after helper wiring.
 - Shops classification modal multi-select/custom tag; avoid unnecessary moderation insert.
 - Question/Answer successful-submit UI without duplicate QA data.
-- QA-018 valid/no-id question detail production render.
-- QA-019 `автомивки` vs `мивка` production search behavior.
+- QA-018 valid/no-id question detail production render after correction.
 - QA-029 actual first paint.
 - Contacts valid submit.
 - Signal invalid e-mail interaction.
@@ -191,9 +190,9 @@ Production tree на Health/Transport/Education/Banks/Utilities/Institutions п�
 - Admin/guest/non-owner protected checks when appropriate.
 
 # D. NEXT SAFE ORDER
-1. Continue non-LOCKED source audit/fixes.
-2. QA-011 only via exact patch method; never broad rewrite of `index.html`.
-3. Production retest QA-018/019 when browser interaction is available.
-4. Continue remaining source-only findings before asking the user for manual actions.
+1. Fix QA-018 no-id fallback while preserving one render owner, then production retest no-id + valid-id.
+2. Continue non-LOCKED source audit/fixes.
+3. QA-011 only via exact patch method; never broad rewrite of `index.html`.
+4. Continue remaining production/browser checks while connector is available.
 
 Нищо не става `CLOSED` без реален production retest.
