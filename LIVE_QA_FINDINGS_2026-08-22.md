@@ -26,7 +26,7 @@ LOCKED: Фирми/профили, Обяви, Майстори и ремонт�
 Глобално правило: success → form hidden/inactive + clear success + next action + duplicate prevention; error → form/data stay.
 - Health, Transport, Education, Shops: source fix наличен; interaction retest остава.
 - Questions/Answers: `question-answer-validation.js::armPostSubmitState()` е finite owner за success state; излишните CSS/HTML success слоеве в `nov-vapros.html` и `vapros.html` са напълно върнати (`7accd2f...`, `24427964...`).
-- Generic Info forms (`info-lom.js`) бяха доказано слаби: success само disable-ва submit и оставя формата активна. На 23.08 е добавен `info-lom-form-ux-v1.js`, който при `.ok` спира finite observer-а, скрива формата и показва success + `Затвори`. Качен е на `banki.html` (`ae8a3047...`) и `komunalni.html` (`c84ce029...`). Interaction retest остава. `institucii.html` все още използва generic form owner без този helper и остава незавършен по тази точка.
+- Generic Info forms (`info-lom.js`) бяха доказано слаби: success само disable-ва submit и оставя формата активна. На 23.08 е добавен `info-lom-form-ux-v1.js`, който при `.ok` спира finite observer-а, скрива формата и показва success + `Затвори`. Качен е на `banki.html` (`ae8a3047...`), `komunalni.html` (`c84ce029...`) и `institucii.html` (`d1f6adac...`). Interaction retest остава.
 
 ## QA-002 — Site-wide field validation UX
 Статус: `OPEN / PARTIALLY FIXED`
@@ -34,7 +34,7 @@ LOCKED: Фирми/профили, Обяви, Майстори и ремонт�
 - Transport: blur/live-correction path PASS.
 - Health: `health-form-validation-v1.js` source fix + cache version; interaction retest.
 - Auth forms: QA-033.
-- Generic Info forms (`info-lom.js`) бяха native-required-only. `info-lom-form-ux-v1.js` вече добавя delegated field-specific required errors, `aria-invalid`, `aria-describedby`, blur/live clear и focus first invalid на Banki + Komunalni. Не са измисляни нови min-length правила. `institucii.html` още не зарежда helper-а.
+- Generic Info forms (`info-lom.js`) бяха native-required-only. `info-lom-form-ux-v1.js` вече добавя delegated field-specific required errors, `aria-invalid`, `aria-describedby`, blur/live clear и focus first invalid на Banki + Komunalni + Institutions. Не са измисляни нови min-length правила. Interaction retest остава.
 
 ## QA-003 — `signal.html` e-mail validation
 Статус: `VERIFY - SOURCE GOOD`
@@ -135,7 +135,7 @@ Info Lom source normalizes Cyrillic/Latin to common canonical form; `телк` �
 ## QA-027 — Dirty-form close protection
 Статус: `VERIFY / PARTIALLY FIXED`
 Health/Transport/Education/Shops source имат dirty guards; interaction pending.
-Generic Info Banki + Komunalni вече зареждат `info-lom-form-ux-v1.js`: capture guard intercepts X/backdrop/Escape only при unsent data, asks confirmation, confirmed close resets form/validation, empty form falls through to original close owner. `institucii.html` остава без този helper и все още има generic `closeModal()` без dirty check.
+Generic Info Banki + Komunalni + Institutions вече зареждат `info-lom-form-ux-v1.js`: capture guard intercepts X/backdrop/Escape only при unsent data, asks confirmation, confirmed close resets form/validation, empty form falls through to original close owner. Interaction retest остава.
 
 ## QA-028 — Data-driven Shops types/tags
 Статус: `FIXED - NEEDS RETEST`
@@ -178,8 +178,7 @@ Production tree на Health/Transport/Education/Banks/Utilities/Institutions п�
 # C. MANUAL / PENDING
 - Info search `телк` vs `telk` typing.
 - Health/Transport/Education/Shops dirty-close + post-success interactions.
-- Banki/Komunalni generic Info modal validation, dirty close and post-success after new helper.
-- Institutions generic Info modal remains source gap until exact safe wiring is done.
+- Banki/Komunalni/Institutions generic Info modal validation, dirty close and post-success after helper wiring.
 - Shops classification modal multi-select/custom tag; avoid unnecessary moderation insert.
 - Question/Answer successful-submit UI without duplicate QA data.
 - QA-018 valid/no-id question detail production render.
@@ -193,9 +192,8 @@ Production tree на Health/Transport/Education/Banks/Utilities/Institutions п�
 
 # D. NEXT SAFE ORDER
 1. Continue non-LOCKED source audit/fixes.
-2. Find exact safe way to wire `info-lom-form-ux-v1.js` into `institucii.html` without broad rewrite.
-3. QA-011 only via exact patch method; never broad rewrite of `index.html`.
-4. Production retest QA-018/019 when browser interaction is available.
-5. Continue remaining source-only findings before asking the user for manual actions.
+2. QA-011 only via exact patch method; never broad rewrite of `index.html`.
+3. Production retest QA-018/019 when browser interaction is available.
+4. Continue remaining source-only findings before asking the user for manual actions.
 
 Нищо не става `CLOSED` без реален production retest.
