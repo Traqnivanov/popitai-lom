@@ -104,7 +104,7 @@
       <p>Създадено за хората от Лом.</p>
     </div>
   </footer>
-  <nav class="mobile-bottom-nav" aria-label="Мобилна навигация"><a class="" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>Начало</span></a><a class="" href="kategorii.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Категории</span></a><a class="mobile-ask" href="nov-vapros.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Въпрос</span></a><a class="" href="vaprosi.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4 4Z"/></svg><span>Въпроси</span></a><a class="" href="profil.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профил</span></a></nav>
+  <nav class="mobile-bottom-nav" aria-label="Мобилна навигация"><a class="" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>Начало</span></a><a class="" href="kategorii.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Категории</span></a><a class="mobile-ask" href="nov-vapros.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Въпрос</span></a><a class="" href="vaprosi.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg><span>Въпроси</span></a><a class="" href="profil.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профил</span></a></nav>
   <button class="back-to-top" id="back-to-top" type="button" aria-label="Към началото">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
   </button>
@@ -130,12 +130,27 @@
     const success = document.getElementById("contact-success");
     let submitted = false;
 
+    function sensibleName(value) {
+      const letters=[...String(value||"")].filter(ch=>/\p{L}/u.test(ch));
+      return letters.length>=2&&new Set(letters.map(ch=>ch.toLocaleLowerCase("bg-BG"))).size>=2;
+    }
+
+    function usefulMessage(value) {
+      const text=String(value||"").replace(/\s+/g," ").trim();
+      const words=text.match(/[\p{L}\p{N}]+/gu)||[];
+      const letters=[...text.toLocaleLowerCase("bg-BG")].filter(ch=>/\p{L}/u.test(ch));
+      if(words.length<2||new Set(letters).size<4) return false;
+      if(words.length===2&&words[0].toLocaleLowerCase("bg-BG")===words[1].toLocaleLowerCase("bg-BG")) return false;
+      return true;
+    }
+
     function validationMessage(key) {
       const value = fields[key].value.trim();
       if (key === "name") {
         if (!value) return "Въведи име.";
         if (value.length < 2) return "Името трябва да съдържа поне 2 знака.";
         if (value.length > 120) return "Името може да съдържа най-много 120 знака.";
+        if (!sensibleName(value)) return "Въведи разбираемо име.";
       }
       if (key === "email") {
         if (!value) return "Въведи електронна поща.";
@@ -145,6 +160,7 @@
         if (!value) return "Въведи съобщение.";
         if (value.length < 10) return "Съобщението трябва да съдържа поне 10 знака.";
         if (value.length > 5000) return "Съобщението може да съдържа най-много 5000 знака.";
+        if (!usefulMessage(value)) return "Напиши с няколко думи какъв е въпросът или предложението ти.";
       }
       return "";
     }
@@ -153,7 +169,7 @@
       const message = validationMessage(key);
       errors[key].textContent = message;
       errors[key].className = message ? "form-message error" : "form-message";
-      fields[key].setAttribute("aria-invalid", String(Boolean(message)));
+      if(message) fields[key].setAttribute("aria-invalid","true"); else fields[key].removeAttribute("aria-invalid");
       return !message;
     }
 
