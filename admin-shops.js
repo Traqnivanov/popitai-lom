@@ -33,7 +33,9 @@
   };
 
   let currentUser = null;
+  let currentRole = null;
   let activeMode = "all";
+  const isModerator = () => currentRole === "moderator";
 
   const formatDate = value => {
     if (!value) return "";
@@ -66,7 +68,8 @@
       .select("role,is_blocked")
       .eq("id", currentUser.id)
       .maybeSingle();
-    return ["admin","moderator"].includes(profile?.role) && profile?.is_blocked !== true;
+    currentRole = profile?.role || null;
+    return ["admin","moderator"].includes(currentRole) && profile?.is_blocked !== true;
   }
 
   function ensureButtons() {
@@ -98,10 +101,9 @@
   }
 
   async function refreshCount() {
-    const { count, error } = await client
-      .from("shops")
-      .select("id",{count:"exact",head:true})
-      .eq("status","pending");
+    let query = client.from("shops").select("id",{count:"exact",head:true}).eq("status","pending");
+    if (isModerator()) query = query.neq("submitted_by", currentUser.id);
+    const { count, error } = await query;
     if (error) {
       console.warn("Магазини: броячът не се зареди.", error);
       return;
@@ -121,6 +123,17 @@
   }
 
   function card(shop) {
+    const own = isModerator() && shop.submitted_by === currentUser?.id;
+    if (own) {
+      return `
+        <article class="admin-record">
+          <h3>${esc(shop.name)}</h3>
+          <div class="admin-record-meta">${statusBadge(shop.status)}<span>${esc(categoryLabels[shop.category] || shop.category)}</span><span>${esc(formatDate(shop.created_at))}</span></div>
+          <p><strong>Адрес:</strong> ${esc(shop.address)}</p>
+          <div class="admin-record-actions"><span class="admin-status">Твое съдържание — обработва се от друг Moderator или Admin</span></div>
+        </article>`;
+    }
+
     const pendingActions = shop.status === "pending" ? `
       <div class="admin-record-actions">
         <button class="admin-action-approve" type="button" data-shop-action="approve" data-id="${esc(shop.id)}">Одобри</button>
@@ -158,9 +171,10 @@
   async function loadRows(mode = "all") {
     let query = client
       .from("shops")
-      .select("id,name,category,phone,address,working_hours,offer,source_type,source_details,status,moderation_note,created_at")
+      .select("id,submitted_by,name,category,phone,address,working_hours,offer,source_type,source_details,status,moderation_note,created_at")
       .order("created_at",{ascending:false});
     if (mode === "pending") query = query.eq("status", "pending");
+    if (isModerator() && mode === "pending") query = query.neq("submitted_by", currentUser.id);
     const { data, error } = await query;
     if (error) throw error;
     return data || [];
