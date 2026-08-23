@@ -3,9 +3,10 @@
   "use strict";
 
   const VIEW_KEY = "popitai-admin-active-view-v1";
+  const START_CLASS = "admin-shell-starting";
 
-  function revealLayout() {
-    document.documentElement.classList.remove("admin-restoring-view");
+  function revealStartup() {
+    document.documentElement.classList.remove(START_CLASS);
   }
 
   function restoreCoreShell() {
@@ -59,34 +60,100 @@
     try { return sessionStorage.getItem(VIEW_KEY) || ""; } catch (_) { return ""; }
   }
 
-  function restoreSavedView() {
-    const key = readView();
-    const selector = selectorForView(key);
-    if (!selector) {
-      revealLayout();
+  function isLoadingText(root) {
+    const text = String(root?.textContent || "");
+    return text.includes("Зареждане…") || text.includes("Зареждане на панела…");
+  }
+
+  function baseShellReady() {
+    return Boolean(
+      document.querySelector('.admin-menu [data-admin-view="pending"]') &&
+      document.querySelector("#admin-pending-count") &&
+      document.querySelector(".admin-content")
+    );
+  }
+
+  function waitForState(test, timeoutMs = 5000) {
+    return new Promise(resolve => {
+      if (test()) {
+        resolve(true);
+        return;
+      }
+
+      let finished = false;
+      const finish = value => {
+        if (finished) return;
+        finished = true;
+        observer.disconnect();
+        window.clearTimeout(timeout);
+        resolve(value);
+      };
+
+      // Еднократен startup observer; изключва се веднага след достигане на състоянието.
+      const observer = new MutationObserver(() => {
+        if (test()) finish(true);
+      });
+      observer.observe(document.documentElement, {
+        subtree: true,
+        childList: true,
+        attributes: true,
+        characterData: true
+      });
+
+      const timeout = window.setTimeout(() => finish(false), timeoutMs);
+    });
+  }
+
+  async function restoreSavedView() {
+    const baseReady = await waitForState(baseShellReady);
+    if (!baseReady) {
+      revealStartup();
       return;
     }
 
-    let attempts = 0;
-    const tryRestore = () => {
-      attempts += 1;
-      const button = document.querySelector(`.admin-menu ${selector}`);
-      if (button) {
-        button.click();
-        window.requestAnimationFrame(() => window.requestAnimationFrame(revealLayout));
-        return;
-      }
-      if (attempts < 40) {
-        window.setTimeout(tryRestore, 50);
-      } else {
-        revealLayout();
-      }
-    };
+    const key = readView();
+    const selector = selectorForView(key);
 
-    tryRestore();
+    if (!selector) {
+      await waitForState(() => !isLoadingText(document.querySelector(".admin-content")));
+      revealStartup();
+      return;
+    }
+
+    const targetFound = await waitForState(() => Boolean(document.querySelector(`.admin-menu ${selector}`)));
+    if (!targetFound) {
+      revealStartup();
+      return;
+    }
+
+    const button = document.querySelector(`.admin-menu ${selector}`);
+    const content = document.querySelector(".admin-content");
+    if (!button || !content) {
+      revealStartup();
+      return;
+    }
+
+    // Ако базовият renderer вече е на същата секция и е приключил, няма втори render.
+    if (button.classList.contains("active") && !isLoadingText(content)) {
+      revealStartup();
+      return;
+    }
+
+    const beforeHtml = content.innerHTML;
+    button.click();
+
+    await waitForState(() => {
+      const currentContent = document.querySelector(".admin-content");
+      const currentButton = document.querySelector(`.admin-menu ${selector}`);
+      if (!currentContent || !currentButton) return false;
+      const changed = currentContent.innerHTML !== beforeHtml;
+      return currentButton.classList.contains("active") && changed && !isLoadingText(currentContent);
+    });
+
+    revealStartup();
   }
 
-  window.addEventListener("click", (event) => {
+  window.addEventListener("click", event => {
     const button = event.target?.closest?.(".admin-menu button");
     if (!button) return;
 
@@ -98,8 +165,8 @@
     );
     if (isInfoButton) return;
 
-    // Info Lom има собствен legacy render, който може да е заменил общия shell.
-    // Възстановяваме само shell-а преди следващият модул да рендерира своето съдържание.
+    // Info Lom има собствен legacy render. При излизане от него възстановяваме
+    // само общия shell преди следващият модул да поеме своя render root.
     restoreCoreShell();
   }, true);
 
