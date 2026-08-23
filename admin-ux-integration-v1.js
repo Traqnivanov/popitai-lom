@@ -32,11 +32,11 @@
     },
     contacts: {
       title: "Съобщения",
-      text: "Това е входяща поща, не moderation queue. „Маркирай като прочетено“ променя само състоянието прочетено/непрочетено."
+      text: "Това е входяща поща, не е списък за модерация. „Маркирай като прочетено“ променя само състоянието прочетено/непрочетено."
     },
     "shops-pending": {
       title: "Чакащи магазини",
-      text: "„Одобри“ публикува предложението за магазин. „Откажи“ не го публикува и записва причината. Тук няма действие „Върни за корекция“, защото няма отделен потребителски correction flow."
+      text: "„Одобри“ публикува предложението за магазин. „Откажи“ не го публикува и записва причината. Тук няма действие „Върни за корекция“, защото няма отделен потребителски поток за корекция."
     },
     "shops-all": {
       title: "Магазини",
@@ -52,7 +52,7 @@
     },
     reports: {
       title: "Общи сигнали",
-      text: "„Маркирай като обработен“ означава, че сигналът е прегледан и приключен. „Отхвърли“ го приключва като неоснователен/неприет. Този поток е отделен от сигналите за грешка в „Инфо Лом“."
+      text: "„Маркирай като обработен“ означава, че сигналът е прегледан и приключен. „Отхвърли“ го приключва като неприет. Този поток е отделен от сигналите за грешка в „Инфо Лом“."
     },
     info: {
       title: "Инфо Лом",
@@ -151,6 +151,12 @@
     document.head.appendChild(style);
   }
 
+  function ensureOperationalStatLabel() {
+    const stat = document.querySelector("#admin-pending-count");
+    const label = stat?.closest("article")?.querySelector("span");
+    if (label) label.textContent = "Задачи за преглед";
+  }
+
   function localizeVisibleLabels() {
     document.querySelectorAll('input[data-ext="is_highlighted"]').forEach(input => {
       const label = input.closest("label");
@@ -198,6 +204,7 @@
 
   function syncPresentation() {
     ensureStyle();
+    ensureOperationalStatLabel();
     localizeVisibleLabels();
     renderContextHelp();
   }
@@ -230,12 +237,8 @@
 
     const total = results.reduce((sum, result) => sum + (result.count || 0), 0);
     const stat = document.querySelector("#admin-pending-count");
-    const badge = document.querySelector("#admin-menu-badge");
     if (stat) stat.textContent = String(total);
-    if (badge) {
-      badge.textContent = String(total);
-      badge.hidden = total === 0;
-    }
+    ensureOperationalStatLabel();
 
     const panelName = currentProfile.role === "admin" ? "Административен" : "Модераторски";
     document.title = total > 0
