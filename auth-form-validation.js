@@ -99,6 +99,35 @@
     }, true);
   }
 
+  function setupRegistrationName() {
+    const form = document.querySelector("#register-form");
+    const input = document.querySelector("#register-name");
+    if (!form || !input) return;
+    const error = ensureError(input);
+
+    const validate = (showRequired = false) => {
+      const value = String(input.value || "").trim();
+      let message = "";
+      if (!value && showRequired) message = "Въведи име.";
+      else if (value && value.length < 2) message = "Името трябва да съдържа поне 2 знака.";
+      else if (value) {
+        const letters = [...value].filter(ch => /\p{L}/u.test(ch));
+        const distinct = new Set(letters.map(ch => ch.toLocaleLowerCase("bg-BG"))).size;
+        if (letters.length < 2 || distinct < 2) message = "Въведи разбираемо име.";
+      }
+      return setFieldError(input, error, message);
+    };
+
+    wireField(input, validate);
+    form.addEventListener("submit", event => {
+      input.dataset.touched = "true";
+      if (validate(true)) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      input.focus();
+    }, true);
+  }
+
   function setupConsent(formSelector) {
     const form = document.querySelector(formSelector);
     const consent = form?.querySelector('.check-row input[type="checkbox"]');
@@ -210,13 +239,7 @@
   setupEmail("#login-form", "#login-email");
   setupRequiredText("#login-form", "#login-password", "Въведи парола.");
 
-  setupRequiredText(
-    "#register-form",
-    "#register-name",
-    "Въведи име.",
-    2,
-    "Името трябва да съдържа поне 2 знака."
-  );
+  setupRegistrationName();
   setupEmail("#register-form", "#register-email");
   setupConsent("#register-form");
 
