@@ -127,12 +127,27 @@
     const success = document.getElementById("signal-success");
     let submitted = false;
 
+    function sensibleName(value) {
+      const letters=[...String(value||"")].filter(ch=>/\p{L}/u.test(ch));
+      return letters.length>=2&&new Set(letters.map(ch=>ch.toLocaleLowerCase("bg-BG"))).size>=2;
+    }
+
+    function usefulMessage(value) {
+      const text=String(value||"").replace(/\s+/g," ").trim();
+      const words=text.match(/[\p{L}\p{N}]+/gu)||[];
+      const letters=[...text.toLocaleLowerCase("bg-BG")].filter(ch=>/\p{L}/u.test(ch));
+      if(words.length<2||new Set(letters).size<4) return false;
+      if(words.length===2&&words[0].toLocaleLowerCase("bg-BG")===words[1].toLocaleLowerCase("bg-BG")) return false;
+      return true;
+    }
+
     function validationMessage(key) {
       const value = fields[key].value.trim();
       if (key === "name") {
         if (!value) return "Въведи име.";
         if (value.length < 2) return "Името трябва да съдържа поне 2 знака.";
         if (value.length > 120) return "Името може да съдържа най-много 120 знака.";
+        if (!sensibleName(value)) return "Въведи разбираемо име.";
       }
       if (key === "email") {
         if (!value) return "Въведи електронна поща.";
@@ -142,6 +157,7 @@
         if (!value) return "Опиши за какво подаваш сигнал.";
         if (value.length < 10) return "Добави малко повече информация към сигнала.";
         if (value.length > 2000) return "Съобщението може да съдържа най-много 2000 знака.";
+        if (!usefulMessage(value)) return "Опиши с няколко думи какъв е проблемът или нарушението.";
       }
       return "";
     }
@@ -150,7 +166,7 @@
       const message = validationMessage(key);
       errors[key].textContent = message;
       errors[key].className = message ? "form-message error" : "form-message";
-      fields[key].setAttribute("aria-invalid", String(Boolean(message)));
+      if(message) fields[key].setAttribute("aria-invalid","true"); else fields[key].removeAttribute("aria-invalid");
       return !message;
     }
 
