@@ -113,6 +113,7 @@
         resolve(value);
       };
 
+      // Еднократен startup observer; изключва се веднага след достигане на състоянието.
       const observer = new MutationObserver(() => {
         if (test()) finish(true);
       });
@@ -154,6 +155,7 @@
       const content = document.querySelector(".admin-content");
       if (!button || !content) return;
 
+      // Ако базовият renderer вече е на същата секция и е приключил, няма втори render.
       if (button.classList.contains("active") && !isLoadingText(content)) return;
 
       const beforeHtml = content.innerHTML;
@@ -167,6 +169,7 @@
         return currentButton.classList.contains("active") && changed && !isLoadingText(currentContent);
       });
     } finally {
+      // Startup никога не държи интерфейса скрит повече от един общ кратък лимит.
       revealStartup();
     }
   }
@@ -177,6 +180,9 @@
 
     const key = viewKey(button);
     if (key) saveView(key);
+
+    // Всички Admin/Moderator модули използват един и същ shell.
+    // Capture фазата гарантира root-а преди конкретният renderer да започне.
     restoreCoreShell();
   }, true);
 
