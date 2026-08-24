@@ -147,7 +147,8 @@
     return (drafts || [])
       .map(draft => ({ draft, business: businessById.get(draft.business_id) }))
       .filter(row => row.business)
-      .filter(row => !(isModerator() && row.business.owner_id === currentUser?.id));
+      .filter(row => !(isModerator() && row.business.owner_id === currentUser?.id))
+      .filter(row => !(isModerator() && row.business.is_expanded !== true));
   }
 
   async function refreshReviewCount() {
@@ -210,6 +211,11 @@
 
   function managementCard(item, ownerProfile, draft) {
     const ownerIsAdmin = ownerProfile?.role === "admin" && ownerProfile?.is_blocked !== true;
+    const ownerLabel = ownerProfile?.role === "admin"
+      ? "администратор"
+      : ownerProfile?.role === "moderator"
+        ? "модератор"
+        : "потребител";
     const accessText = item.is_expanded ? "Разширен профил: включен" : "Разширен профил: изключен";
     const accessAction = ownerIsAdmin
       ? '<span style="font-weight:800;color:#176438">Автоматичен достъп за администраторска фирма</span>'
@@ -220,7 +226,7 @@
     return `<article class="admin-record">
       <div class="admin-record-meta"><span>${escapeHtml(item.status || "")}</span><span>${escapeHtml(accessText)}</span></div>
       <h3>${escapeHtml(item.name)}</h3>
-      <p><strong>Собственик:</strong> ${ownerIsAdmin ? "администратор" : "потребител"}</p>
+      <p><strong>Собственик:</strong> ${escapeHtml(ownerLabel)}</p>
       ${draft?.status === "pending" ? '<p class="admin-status">Има чакаща редакция — обработва се от „За преглед“.</p>' : ""}
       <div class="admin-record-actions" style="margin-top:12px">
         ${accessAction}
