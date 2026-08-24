@@ -297,7 +297,7 @@
   }
 
   function setOpenGroup(name) {
-    $(".admin-menu-group").forEach(group => {
+    $$(".admin-menu-group").forEach(group => {
       group.classList.toggle("is-open", group.dataset.adminMenuGroup === name);
     });
   }
@@ -325,7 +325,7 @@
       event.preventDefault();
       const group = groupToggle.closest(".admin-menu-group");
       const wasOpen = group?.classList.contains("is-open");
-      $(".admin-menu-group").forEach(item => item.classList.remove("is-open"));
+      $$(".admin-menu-group").forEach(item => item.classList.remove("is-open"));
       if (!wasOpen && group) group.classList.add("is-open");
       return;
     }
@@ -850,7 +850,7 @@
     const viewButton = event.target.closest("[data-admin-view]");
     if (viewButton) {
       event.preventDefault();
-      $(".admin-menu button").forEach((item) => {
+      $$(".admin-menu button").forEach((item) => {
         if (!item.hasAttribute("data-admin-group-toggle") && !item.hasAttribute("data-admin-menu-collapse")) {
           item.classList.toggle("active", item === viewButton);
         }
