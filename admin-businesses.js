@@ -318,8 +318,19 @@
     }
   }
 
+  async function waitForCoreMenu() {
+    for (let i = 0; i < 60; i += 1) {
+      const review = document.querySelector('.admin-menu [data-admin-menu-group-items="review"]');
+      const content = document.querySelector('.admin-menu [data-admin-menu-group-items="content"]');
+      if (review && content && document.querySelector("#admin-view-content")) return true;
+      await new Promise(resolve => window.setTimeout(resolve, 50));
+    }
+    return false;
+  }
+
   async function init() {
     if (!(await authIsStaff())) return;
+    if (!(await waitForCoreMenu())) return;
     addBusinessControls();
     await refreshBusinessCounts();
 
