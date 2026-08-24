@@ -292,7 +292,7 @@
       event.preventDefault();
       document.body.classList.toggle("admin-sidebar-collapsed");
       try {
-        sessionStorage.setItem("popitai-admin-sidebar-collapsed-v1", document.body.classList.contains("admin-sidebar-collapsed") ? "1" : "0");
+        sessionStorage.setItem("popitai-admin-sidebar-collapsed-v2", document.body.classList.contains("admin-sidebar-collapsed") ? "1" : "0");
       } catch (_) {}
       return;
     }
@@ -401,7 +401,8 @@
   }
 
   try {
-    if (sessionStorage.getItem("popitai-admin-sidebar-collapsed-v1") === "1") {
+    sessionStorage.removeItem("popitai-admin-sidebar-collapsed-v1");
+    if (sessionStorage.getItem("popitai-admin-sidebar-collapsed-v2") === "1") {
       document.body.classList.add("admin-sidebar-collapsed");
     }
   } catch (_) {}
