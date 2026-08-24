@@ -7,26 +7,26 @@
   <meta name="description" content="Управление и модерация на Попитай.Лом.">
   <meta name="theme-color" content="#0b5fd7">
   <link rel="stylesheet" href="style.css?v=20260805-0736">
+  <link rel="stylesheet" href="admin-panel-v2.css?v=20260824-1905">
   <link rel="icon" href="assets/favicon-96.png" type="image/png">
   <style>html.admin-shell-starting .admin-stats,html.admin-shell-starting .admin-layout{visibility:hidden}</style>
   <script>document.documentElement.classList.add("admin-shell-starting");</script>
 </head>
-<body data-skip-supabase-content="true">
+<body class="admin-panel-v2" data-skip-supabase-content="true">
   <a class="skip-link" href="#main-content">Към основното съдържание</a>
 
-  <header class="site-header" id="site-header">
-    <div class="header-inner">
-      <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
-        <span class="brand-mark" aria-hidden="true"><img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt=""></span>
-        <span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span>
+  <header class="admin-topbar">
+    <div class="admin-topbar-inner">
+      <button class="admin-mobile-menu-button" type="button" data-admin-mobile-menu aria-label="Отвори менюто" aria-expanded="false">☰</button>
+      <a class="admin-topbar-brand" href="admin.html" aria-label="Начало на панела">
+        <img src="assets/popitai-lom-logo-mark-256.webp" width="36" height="36" alt="">
+        <span>Попитай.Лом</span>
       </a>
-      <nav class="main-nav" id="main-nav" aria-label="Главна навигация">
-        <a href="index.html">Начало</a><a href="info.html">Инфо Лом</a><a href="kategorii.html">Категории</a><a href="firmi.html">Фирми</a><a href="obyavi.html">Обяви</a><a href="vaprosi.html">Въпроси</a><a href="statii.html">Статии</a>
-      </nav>
-      <div class="header-actions">
-        <a class="login-link" href="vhod.html">Вход</a>
-        <a class="ask-button" href="nov-vapros.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Задай въпрос</a>
-        <button class="menu-button" id="menu-button" type="button" aria-label="Отвори менюто" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span></button>
+      <span class="admin-topbar-separator">/</span>
+      <span class="admin-topbar-title">Панел</span>
+      <div class="admin-topbar-actions">
+        <a class="admin-topbar-link" href="index.html">Към сайта</a>
+        <a class="admin-topbar-profile" href="profil.html">Профил</a>
       </div>
     </div>
   </header>
@@ -36,7 +36,7 @@
       <div class="section-container">
         <span class="section-kicker">Управление</span>
         <h1>Панел за управление</h1>
-        <p>Зареждане на достъпа и текущата секция…</p>
+        <p>Зареждане на достъпа и текущите задачи…</p>
       </div>
     </section>
 
@@ -57,18 +57,14 @@
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="section-container footer-main">
-      <div class="footer-brand"><a class="brand" href="index.html"><span class="brand-mark"><img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt=""></span><span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span></a><p>Местната общност на Лом за препоръки, услуги и полезна информация.</p></div>
-      <div class="footer-column"><h2>Разгледай</h2><a href="kategorii.html">Категории</a><a href="vaprosi.html">Въпроси</a><a href="firmi.html">Фирми</a><a href="statii.html">Статии</a></div>
-      <div class="footer-column"><h2>За общността</h2><a href="za-nas.html">За сайта</a><a href="pravila.html">Правила</a><a href="kontakti.html">Контакти</a><a href="signal.html">Подай сигнал</a></div>
-      <div class="footer-column"><h2>Правна информация</h2><a href="poveritelnost.html">Поверителност</a><a href="uslovia.html">Условия за ползване</a><a href="biskvitki.html">Бисквитки</a></div>
-    </div>
-    <div class="section-container footer-bottom"><p>© <span id="current-year">2026</span> Попитай.Лом. Всички права запазени.</p><p>Създадено за хората от Лом.</p></div>
-  </footer>
+  <div class="admin-mobile-overlay" data-admin-mobile-overlay hidden></div>
+  <nav class="admin-mobile-bottom-nav" aria-label="Навигация на панела">
+    <button type="button" data-admin-mobile-tab="dashboard">Начало</button>
+    <button type="button" data-admin-mobile-tab="review">Преглед</button>
+    <button type="button" data-admin-mobile-tab="content">Съдържание</button>
+    <button type="button" data-admin-mobile-tab="menu">Меню</button>
+  </nav>
 
-  <nav class="mobile-bottom-nav" aria-label="Мобилна навигация"><a href="index.html"><span>Начало</span></a><a href="kategorii.html"><span>Категории</span></a><a class="mobile-ask" href="nov-vapros.html"><span>Въпрос</span></a><a href="vaprosi.html"><span>Въпроси</span></a><a href="profil.html"><span>Профил</span></a></nav>
-  <button class="back-to-top" id="back-to-top" type="button" aria-label="Към началото">↑</button>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="supabase-config.js?v=20260824-1446" defer></script>
   <script src="script.js?v=20260820-1833" defer></script>
@@ -80,7 +76,7 @@
   <script src="admin-shops.js?v=20260824-1838" defer></script>
   <script src="admin-events.js?v=20260824-1838" defer></script>
   <script src="admin-reports.js?v=20260824-1838" defer></script>
-  <script src="admin-shell-ownership-v1.js?v=20260824-1838" defer></script>
+  <script src="admin-shell-ownership-v1.js?v=20260824-1905" defer></script>
   <script src="admin-ux-integration-v1.js?v=20260824-0120" defer></script>
   <script src="admin-role-guard-v1.js?v=20260824-0005" defer></script>
 </body>
