@@ -248,6 +248,11 @@
 
     document.addEventListener("click", handleClick);
     document.addEventListener("click", handleNavigationChrome, true);
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape" && document.body.classList.contains("admin-mobile-menu-open")) {
+        closeMobileMenu({ restoreFocus: true });
+      }
+    });
     window.addEventListener("popitai:admin-actionable-counts", event => {
       dashboardCounts = event.detail || null;
       updateTopbarTasks(dashboardCounts);
@@ -305,10 +310,14 @@
     });
   }
 
-  function closeMobileMenu() {
+  function closeMobileMenu({ restoreFocus = false } = {}) {
     document.body.classList.remove("admin-mobile-menu-open");
     const trigger = $("[data-admin-mobile-menu]");
-    if (trigger) trigger.setAttribute("aria-expanded", "false");
+    if (trigger) {
+      trigger.setAttribute("aria-expanded", "false");
+      trigger.setAttribute("aria-label", "Отвори менюто");
+      if (restoreFocus) trigger.focus();
+    }
     const overlay = $("[data-admin-mobile-overlay]");
     if (overlay) overlay.hidden = true;
   }
@@ -317,7 +326,10 @@
     if (group) setOpenGroup(group);
     document.body.classList.add("admin-mobile-menu-open");
     const trigger = $("[data-admin-mobile-menu]");
-    if (trigger) trigger.setAttribute("aria-expanded", "true");
+    if (trigger) {
+      trigger.setAttribute("aria-expanded", "true");
+      trigger.setAttribute("aria-label", "Затвори менюто");
+    }
     const overlay = $("[data-admin-mobile-overlay]");
     if (overlay) overlay.hidden = false;
   }
