@@ -30,7 +30,8 @@
       body[data-staff-role="moderator"] [data-business-action="delete"],
       body[data-staff-role="moderator"] [data-event-action="delete"],
       body[data-staff-role="moderator"] [data-expanded-action="grant"],
-      body[data-staff-role="moderator"] [data-expanded-action="revoke"] {
+      body[data-staff-role="moderator"] [data-expanded-action="revoke"],
+      body[data-staff-role="moderator"] label:has(.listing-ext-check) {
         display: none !important;
       }
     `;
