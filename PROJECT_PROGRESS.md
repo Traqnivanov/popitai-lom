@@ -7,9 +7,11 @@
 Преди всяка редакция се четат в този ред:
 1. `PROJECT_RULES_00_READ_FIRST.md`
 2. `PROJECT_RULES_PROTECTED_CORE.md`
-3. `PROJECT_RULES.md`
-4. `PROJECT_RULES_RENDER_OWNERSHIP.md`
-5. конкретните модулни правила, ако има такива.
+3. `PROJECT_RULES_ADMIN_MODERATOR.md`
+4. `PROJECT_RULES.md`
+5. `PROJECT_RULES_RENDER_OWNERSHIP.md`
+6. `ADMIN_PANEL_V2_APPROVED_SPEC.md`, когато се работи по Admin/Moderator панела
+7. конкретните модулни правила, ако има такива.
 
 При конфликт между документи не се избира правило по предположение — конфликтът се проверява и се отстранява преди промяна.
 
@@ -126,7 +128,42 @@ LOCKED без отделно изрично одобрение:
 
 Забранено е механично уеднаквяване на различни категории само защото една има повече бутони, полета или действия от друга. Целта е да се намират истински пропуски спрямо потребителската задача и правилата на проекта.
 
-## 7. ОСТАВАЩИ ЗАДАЧИ
+## 7. ADMIN / MODERATOR PANEL V2 — ТЕКУЩ СТАТУС
+
+Одобреният UX модел е записан в `ADMIN_PANEL_V2_APPROVED_SPEC.md`.
+Текущият implementation handoff е в `ADMIN_PANEL_V2_HANDOFF_2026-08-24.md`.
+
+Статус: **В ПРОЦЕС / НЕ Е PASS**.
+
+Вече е приложено:
+- отделен Admin/Moderator app shell;
+- Dashboard начало с role-correct actionable tasks;
+- persistent task indicator в top bar;
+- grouped navigation: Начало / За преглед / Съдържание / Управление;
+- sticky/collapsible sidebar;
+- mobile drawer + bottom navigation;
+- shared content shell;
+- role-aware help;
+- Info Lom / Shops / Events / Reports са насочени към shared render root;
+- Moderator self-moderation и hard-delete/expanded границите остават защитени.
+
+Задължително остава:
+- source re-audit на current `admin-management.js`;
+- production QA desktop Moderator;
+- production QA desktop Admin;
+- production QA mobile Moderator;
+- production QA mobile Admin;
+- group toggle/collapse/expand;
+- Dashboard direct links;
+- refresh restore във всяка важна секция;
+- long-scroll sticky behavior;
+- blank/loading/error states;
+- interoperability между Info Lom / Shops / Events / Reports / Businesses / Listings / User edits / Expanded profiles;
+- финална role/ownership проверка.
+
+Не се маркира „готово“ преди реалния QA.
+
+## 8. ОСТАВАЩИ ЗАДАЧИ
 
 - Production browser/device QA — desktop + mobile, реални бутони, форми, modal/focus, login states, console/runtime, cache/load-order/deployment.
 - При production QA специално да се провери, че „Институции“ показва финалните priority карти без flicker/междинен стар UI и че anchor навигацията работи след еднократното публикуване.
@@ -134,7 +171,7 @@ LOCKED без отделно изрично одобрение:
 - При открити реални проблеми: поправя се само доказаният проблем и само в разрешения обхват.
 - Нови статии се добавят само при наличен реален одобрен материал/източник.
 
-## 8. РАБОТЕН РЕЖИМ
+## 9. РАБОТЕН РЕЖИМ
 
 - Безопасно и вече решено → изпълнява се без междинно „ОК“.
 - Независима следваща задача → продължава се без излишно спиране.
