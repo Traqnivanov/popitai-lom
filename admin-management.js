@@ -313,7 +313,7 @@
   }
 
   function setOpenGroup(name) {
-    $(".admin-menu-group").forEach(group => {
+    $$(".admin-menu-group").forEach(group => {
       const open = group.dataset.adminMenuGroup === name;
       group.classList.toggle("is-open", open);
       const toggle = group.querySelector("[data-admin-group-toggle]");
