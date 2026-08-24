@@ -9,7 +9,15 @@
   <link rel="stylesheet" href="style.css?v=20260805-0736">
   <link rel="stylesheet" href="admin-panel-v2.css?v=20260824-2110">
   <link rel="icon" href="assets/favicon-96.png" type="image/png">
-  <style>html.admin-shell-starting .admin-stats,html.admin-shell-starting .admin-layout{visibility:hidden}</style>
+  <style>
+    html.admin-shell-starting .admin-stats,html.admin-shell-starting .admin-layout{visibility:hidden}
+    @media(max-width:780px){
+      body.admin-panel-v2.admin-sidebar-collapsed .admin-menu{overflow:auto;padding:10px}
+      body.admin-panel-v2.admin-sidebar-collapsed .admin-menu>.admin-menu-home{display:block}
+      body.admin-panel-v2.admin-sidebar-collapsed .admin-menu>.admin-menu-group{display:grid}
+      body.admin-panel-v2 .admin-menu-footer{display:none}
+    }
+  </style>
   <script>document.documentElement.classList.add("admin-shell-starting");</script>
 </head>
 <body class="admin-panel-v2" data-skip-supabase-content="true">
