@@ -104,8 +104,7 @@
     let actions = "";
     if (ownModeratorBusiness) {
       actions = '<span class="admin-status">Собствено съдържание — без модераторски действия</span>';
-    } else
-    else if (mode === "pending") {
+    } else if (mode === "pending") {
       actions = `
         <button class="admin-action-approve" data-business-action="approve" data-id="${escapeHtml(item.id)}">Одобри</button>
         <button class="admin-action-hide" data-business-action="changes" data-id="${escapeHtml(item.id)}">Върни за корекция</button>
