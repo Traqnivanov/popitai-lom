@@ -25,6 +25,10 @@
   };
 
   const HELP = {
+    dashboard: {
+      title: "Начало",
+      text: "Тук виждаш само реалните задачи, които текущата роля може да обработи. Натисни „Прегледай“, за да отвориш съответната опашка."
+    },
     pending: {
       title: "Какво управляваш тук",
       text: "Тук са новите въпроси, отговори и обяви, които чакат решение. „Одобри“ публикува. „Върни за корекция“ изпраща бележка към автора, който може да поправи и изпрати отново. „Откажи“ не публикува съдържанието. „Изтрий“ го премахва окончателно."
@@ -143,6 +147,8 @@
   }
 
   function activeContextKey() {
+    const currentTitle = document.querySelector("#admin-view-title")?.textContent?.trim() || "";
+    if (currentTitle === "Какво има за преглед" || currentTitle === "Начало") return "dashboard";
     const active = document.querySelector(".admin-menu button.active");
     if (!active) return "";
     if (active.dataset.adminView) return active.dataset.adminView;
@@ -220,9 +226,32 @@
     });
   }
 
+  function roleAwareHelp(key) {
+    const base = HELP[key];
+    if (!base) return null;
+    if (currentProfile?.role !== "moderator") return base;
+
+    const moderatorText = {
+      pending: "Тук са чуждите нови въпроси, отговори и обяви, които чакат решение. Moderator може да одобри, върне за корекция или откаже според съществуващия поток. Собственото съдържание не се модерира от същия Moderator.",
+      questions: "Moderator може да скрива чужд публикуван въпрос, когато потокът го позволява. Окончателното изтриване е само за Admin.",
+      answers: "Moderator може да скрива чужд публикуван отговор, когато потокът го позволява. Окончателното изтриване е само за Admin.",
+      hidden: "Moderator може да възстановява чуждо съдържание според потока. Окончателното изтриване е само за Admin.",
+      users: "Moderator може да блокира и разблокира обикновени потребители. Не може да управлява Admin, друг Moderator или системни роли.",
+      "events-pending": "Moderator може да одобри или откаже чуждо чакащо събитие. Собственото съдържание не се модерира от същия Moderator. Окончателното изтриване е само за Admin.",
+      "events-all": "Moderator може да управлява чужди събития чрез разрешените обратими действия. Окончателното изтриване е само за Admin.",
+      expanded: "Moderator може да обработва чужда чакаща редакция на разширен профил, когато потокът го позволява. Даване и отнемане на разширен достъп е само за Admin.",
+      "businesses-pending": "Moderator може да одобри, върне за корекция или откаже чужда чакаща фирма. Собствената фирма не се модерира от същия Moderator.",
+      "businesses-approved": "Moderator може да скрие чужда публикувана фирма. Окончателното изтриване и управлението на разширен достъп са само за Admin.",
+      "businesses-hidden": "Moderator може да възстанови чужда скрита фирма, когато потокът го позволява. Собствената фирма няма модераторски действия. Окончателното изтриване е само за Admin."
+    }[key];
+
+    return moderatorText ? { ...base, text: moderatorText } : base;
+  }
+
   function renderContextHelp() {
     document.querySelectorAll("[data-admin-context-help]").forEach(node => node.remove());
-    const help = HELP[activeContextKey()];
+    const key = activeContextKey();
+    const help = roleAwareHelp(key);
     const content = document.querySelector(".admin-content");
     const heading = content?.querySelector(".block-heading");
     if (!help || !content || !heading) return;
@@ -231,10 +260,12 @@
     box.className = "admin-context-help";
     box.dataset.adminContextHelp = "1";
     const summary = document.createElement("summary");
-    summary.textContent = `Как работи — ${help.title}`;
+    summary.textContent = "? Помощ";
+    const title = document.createElement("strong");
+    title.textContent = help.title;
     const paragraph = document.createElement("p");
     paragraph.textContent = help.text;
-    box.append(summary, paragraph);
+    box.append(summary, title, paragraph);
     heading.after(box);
   }
 
