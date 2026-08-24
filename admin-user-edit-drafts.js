@@ -83,11 +83,6 @@
   }
 
   function actionBlock(draft) {
-    if (draft.status !== "pending") return "";
-    const own = isModerator() && draft.owner_id === currentUser?.id;
-    if (own) {
-      return '<div class="admin-record-actions"><span class="admin-status">Твоя редакция — обработва се от друг Moderator или Admin</span></div>';
-    }
     const hasPermanentMediaRemoval = (draft.remove_media_ids || []).length > 0;
     const approve = isModerator() && hasPermanentMediaRemoval
       ? '<span class="admin-status">Одобрението изисква Admin заради окончателно премахване на снимки</span>'
@@ -98,9 +93,8 @@
   function card(draft, entity, mediaRows) {
     const typeLabel = draft.entity_type === "business" ? "Фирма" : "Обява";
     const title = entity?.name || entity?.title || "Редакция";
-    const returned = draft.status === "needs_changes";
     return `<article class="admin-record">
-      <div class="admin-record-meta"><span class="admin-status ${escapeHtml(draft.status)}">${returned ? "Върната за корекция" : "Чака одобрение"}</span><span>${typeLabel}</span></div>
+      <div class="admin-record-meta"><span class="admin-status ${escapeHtml(draft.status)}">Чака одобрение</span><span>${typeLabel}</span></div>
       <h3>${escapeHtml(title)}</h3>
       <div style="padding:12px;border-radius:12px;background:#f8fafc">${fieldRows(draft)}</div>
       ${mediaPreview(mediaRows)}
@@ -111,10 +105,12 @@
   }
 
   async function fetchDrafts() {
-    const { data, error } = await client.from("user_content_edit_drafts")
+    let query = client.from("user_content_edit_drafts")
       .select("id, owner_id, entity_type, entity_id, payload, new_media_ids, remove_media_ids, status, moderation_note, updated_at")
-      .in("status", ["pending", "needs_changes"])
+      .eq("status", "pending")
       .order("updated_at", { ascending: false });
+    if (isModerator() && currentUser?.id) query = query.neq("owner_id", currentUser.id);
+    const { data, error } = await query;
     if (error) throw error;
     return data || [];
   }
@@ -122,12 +118,14 @@
   async function refreshBadge() {
     try {
       const drafts = await fetchDrafts();
-      const count = drafts.filter((draft) => draft.status === "pending" && !(isModerator() && draft.owner_id === currentUser?.id)).length;
+      const count = drafts.length;
+      const button = $("[data-user-edits-view]");
       const badge = $("[data-user-edits-badge]");
       if (badge) {
         badge.textContent = String(count);
         badge.hidden = count === 0;
       }
+      if (button) button.hidden = count === 0;
     } catch (_) {}
   }
 
