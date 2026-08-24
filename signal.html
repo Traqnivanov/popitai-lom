@@ -125,6 +125,13 @@
     };
     const formMessage = document.getElementById("signal-form-message");
     const success = document.getElementById("signal-success");
+    const params = new URLSearchParams(window.location.search);
+    const allowedTargetTypes = new Set(["listing", "business", "question", "answer", "profile"]);
+    const requestedTargetType = String(params.get("target_type") || "").trim();
+    const requestedTargetId = String(params.get("target_id") || "").trim();
+    const validTargetId = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(requestedTargetId);
+    const targetType = allowedTargetTypes.has(requestedTargetType) && validTargetId ? requestedTargetType : "site";
+    const targetId = targetType === "site" ? null : requestedTargetId;
     let submitted = false;
 
     function sensibleName(value) {
@@ -220,8 +227,8 @@
 
         const { error } = await client.from("reports").insert({
           reporter_id: user.id,
-          target_type: "site",
-          target_id: null,
+          target_type: targetType,
+          target_id: targetId,
           reason,
           status: "pending"
         });

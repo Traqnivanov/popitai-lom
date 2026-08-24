@@ -100,7 +100,7 @@
       <p id="business-detail-city-row" hidden><strong>Град</strong><br><span id="business-detail-city"></span></p>
       <p id="business-detail-address-row" hidden><strong>Адрес</strong><br><span id="business-detail-address"></span></p>
       <p id="business-detail-hours-row" hidden><strong>Работно време</strong><br><span id="business-detail-hours"></span></p>
-      <a class="secondary-link-button full" href="signal.html">Подай сигнал</a>
+      <a class="secondary-link-button full" id="business-report-link" href="signal.html">Подай сигнал</a>
     </aside>
   </div>
 </section>
@@ -156,6 +156,10 @@
     const cover = document.querySelector("#expanded-business-cover");
     const hero = document.querySelector("#business-page-hero");
     const businessId = new URLSearchParams(location.search).get("id");
+    const reportLink = document.querySelector("#business-report-link");
+    if (reportLink && businessId) {
+      reportLink.href = `signal.html?target_type=business&target_id=${encodeURIComponent(businessId)}`;
+    }
 
     const finishPlain = () => {
       cover?.remove();

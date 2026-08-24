@@ -68,7 +68,7 @@
         <div class="question-actions">
           <button type="button" id="question-helpful-button">Полезно</button>
           <button type="button" id="question-share-button">Сподели</button>
-          <a href="signal.html">Докладвай</a>
+          <a id="question-report-link" href="signal.html">Докладвай</a>
         </div>
       </article>
 
@@ -151,6 +151,15 @@
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
   </button>
 
+  <script>
+  (() => {
+    const questionId = new URLSearchParams(window.location.search).get("id");
+    const reportLink = document.querySelector("#question-report-link");
+    if (reportLink && questionId) {
+      reportLink.href = `signal.html?target_type=question&target_id=${encodeURIComponent(questionId)}`;
+    }
+  })();
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="supabase-config.js?v=20260820-1840" defer></script>
   <script src="question-answer-validation.js?v=20260822-1840" defer></script>
