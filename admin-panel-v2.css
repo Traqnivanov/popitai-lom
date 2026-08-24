@@ -86,6 +86,48 @@ body.admin-panel-v2 > .back-to-top {
   gap: 8px;
 }
 
+.admin-topbar-tasks {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 12px;
+  color: #42516a;
+  background: #f7f9fc;
+  border: 1px solid var(--admin-v2-line);
+  border-radius: 11px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+.admin-topbar-tasks[hidden] {
+  display: none;
+}
+
+.admin-topbar-tasks.has-tasks {
+  color: #9d1f1f;
+  background: #fff1f1;
+  border-color: #efb4b4;
+  box-shadow: 0 0 0 1px rgba(198,40,40,.04);
+}
+
+.admin-topbar-tasks.has-tasks strong {
+  color: #b42323;
+  font-size: 15px;
+}
+
+.admin-topbar-task-dot {
+  width: 9px;
+  height: 9px;
+  flex: 0 0 auto;
+  background: #d62828;
+  border-radius: 999px;
+  box-shadow: 0 0 0 4px rgba(214,40,40,.11);
+}
+
 .admin-topbar-link,
 .admin-topbar-profile,
 .admin-mobile-menu-button {
@@ -417,26 +459,37 @@ body.admin-panel-v2.admin-sidebar-collapsed .admin-layout {
   grid-template-columns: var(--admin-v2-sidebar-collapsed) minmax(0,1fr);
 }
 
-body.admin-panel-v2.admin-sidebar-collapsed .admin-menu-group-toggle {
-  justify-content: center;
-  font-size: 0;
-}
-
-body.admin-panel-v2.admin-sidebar-collapsed .admin-menu-group-toggle::before {
-  content: "•";
-  font-size: 22px;
-}
-
-body.admin-panel-v2.admin-sidebar-collapsed .admin-menu-group-toggle::after,
-body.admin-panel-v2.admin-sidebar-collapsed .admin-menu-group-items,
-body.admin-panel-v2.admin-sidebar-collapsed .admin-menu-home span,
-body.admin-panel-v2.admin-sidebar-collapsed .admin-menu-collapse span {
+body.admin-panel-v2.admin-sidebar-collapsed .admin-menu > .admin-menu-home,
+body.admin-panel-v2.admin-sidebar-collapsed .admin-menu > .admin-menu-group {
   display: none;
 }
 
-body.admin-panel-v2.admin-sidebar-collapsed .admin-menu-home,
+body.admin-panel-v2.admin-sidebar-collapsed .admin-menu {
+  overflow: visible;
+  padding: 8px;
+}
+
+body.admin-panel-v2.admin-sidebar-collapsed .admin-menu-footer {
+  padding: 0;
+  border-top: 0;
+}
+
 body.admin-panel-v2.admin-sidebar-collapsed .admin-menu-collapse {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+  color: var(--admin-v2-blue);
+  background: var(--admin-v2-blue-soft);
+  border: 1px solid #c5d8f3;
   text-align: center;
+  font-size: 12px;
+  line-height: 1.1;
+}
+
+body.admin-panel-v2.admin-sidebar-collapsed .admin-menu-collapse span {
+  display: inline;
 }
 
 @media (max-width: 1050px) {
@@ -470,6 +523,16 @@ body.admin-panel-v2.admin-sidebar-collapsed .admin-menu-collapse {
   .admin-topbar-separator,
   .admin-topbar-title,
   .admin-topbar-link {
+    display: none;
+  }
+
+  .admin-topbar-tasks {
+    min-height: 40px;
+    padding: 0 9px;
+    font-size: 11px;
+  }
+
+  .admin-topbar-tasks.has-tasks span:last-child {
     display: none;
   }
 
