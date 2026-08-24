@@ -546,6 +546,11 @@
   function recordCard(item, type, mode) {
     const isListing = type === "listing";
     const isQuestion = type === "question";
+    const ownModeratorContent = isModeratorProfile() && Boolean(currentUser?.id) && (
+      isListing
+        ? (item.owner_id === currentUser.id || item.author_id === currentUser.id)
+        : item.author_id === currentUser.id
+    );
 
     const title = isListing
       ? `${item.listing_type || ""} · ${item.title}`
@@ -591,7 +596,9 @@
       </div>` : "";
 
     let actions = "";
-    if (mode === "pending") {
+    if (ownModeratorContent) {
+      actions = `${viewLink}<span class="admin-status">Собствено съдържание — без модераторски действия</span>`;
+    } else if (mode === "pending") {
       actions = `${viewLink}
         <button class="admin-action-approve" data-admin-action="approve" data-type="${type}" data-id="${escapeHtml(item.id)}">Одобри</button>
         <button class="admin-action-hide" data-admin-action="changes" data-type="${type}" data-id="${escapeHtml(item.id)}">Върни за корекция</button>
@@ -649,8 +656,8 @@
   async function loadPublished(type) {
     const table = type === "question" ? "questions" : "answers";
     const fields = type === "question"
-      ? "id, title, description, status, moderation_note, created_at"
-      : "id, question_id, body, status, moderation_note, created_at";
+      ? "id, title, description, status, moderation_note, created_at, author_id"
+      : "id, question_id, body, status, moderation_note, created_at, author_id";
     const { data, error } = await client.from(table).select(fields).eq("status", "approved").order("created_at", { ascending: false });
     if (error) throw error;
     return (data || []).length
@@ -660,7 +667,7 @@
 
   async function loadListingsAdmin(statusFilter = "approved") {
     const { data, error } = await client.from("listings")
-      .select("id, title, description, category, listing_type, phone, city, status, moderation_note, created_at, owner_id, is_urgent, is_reduced, is_boosted, is_highlighted, show_stats, show_contact_buttons, expires_at")
+      .select("id, title, description, category, listing_type, phone, city, status, moderation_note, created_at, owner_id, author_id, is_urgent, is_reduced, is_boosted, is_highlighted, show_stats, show_contact_buttons, expires_at")
       .eq("status", statusFilter)
       .order("created_at", { ascending: false });
     if (error) throw error;
@@ -671,9 +678,9 @@
 
   async function loadHidden() {
     const [qResult, aResult, lResult] = await Promise.all([
-      client.from("questions").select("id, title, description, status, moderation_note, created_at").in("status", ["rejected", "needs_changes"]).order("created_at", { ascending: false }),
-      client.from("answers").select("id, question_id, body, status, moderation_note, created_at").in("status", ["rejected", "needs_changes"]).order("created_at", { ascending: false }),
-      client.from("listings").select("id, title, description, category, listing_type, phone, city, status, moderation_note, created_at").in("status", ["rejected", "needs_changes"]).order("created_at", { ascending: false })
+      client.from("questions").select("id, title, description, status, moderation_note, created_at, author_id").in("status", ["rejected", "needs_changes"]).order("created_at", { ascending: false }),
+      client.from("answers").select("id, question_id, body, status, moderation_note, created_at, author_id").in("status", ["rejected", "needs_changes"]).order("created_at", { ascending: false }),
+      client.from("listings").select("id, title, description, category, listing_type, phone, city, status, moderation_note, created_at, owner_id, author_id").in("status", ["rejected", "needs_changes"]).order("created_at", { ascending: false })
     ]);
     if (qResult.error || aResult.error || lResult.error) throw qResult.error || aResult.error || lResult.error;
     const hiddenListings = await attachListingMedia(lResult.data || []);
