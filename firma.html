@@ -12,66 +12,259 @@
 
   <!-- BUSINESS DETAIL LOADING FLASH — TEST V1 -->
   <style id="business-detail-loading-flash-test-v1">
-    #business-not-found[hidden]{display:none !important;}
-    body.business-profile-preflight #expanded-business-cover{display:block;}
-    #expanded-business-cover.business-cover-preflight img:not([src]){visibility:hidden;}
+    #business-not-found[hidden]{
+      display:none !important;
+    }
+
+    /* Докато проверяваме дали профилът е expanded, пазим мястото за cover.
+       При обикновена фирма slot-ът се премахва веднага след read-only проверката. */
+    body.business-profile-preflight #expanded-business-cover{
+      display:block;
+    }
+
+    #expanded-business-cover.business-cover-preflight img:not([src]){
+      visibility:hidden;
+    }
   </style>
 </head>
 <body class="business-profile-preflight">
+
   <a class="skip-link" href="#main-content">Към основното съдържание</a>
-  <header class="site-header" id="site-header"><div class="header-inner"><a class="brand" href="index.html" aria-label="Попитай.Лом – начало"><span class="brand-mark" aria-hidden="true"><img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt=""></span><span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span></a><nav class="main-nav" id="main-nav" aria-label="Главна навигация"><a class="" href="index.html">Начало</a><a class="" href="info.html">Инфо Лом</a><a class="" href="kategorii.html">Категории</a><a class="active" href="firmi.html">Фирми</a><a class="" href="obyavi.html">Обяви</a><a class="" href="vaprosi.html">Въпроси</a><a class="" href="statii.html">Статии</a></nav><div class="header-actions"><a class="login-link" href="vhod.html">Вход</a><a class="ask-button" href="nov-vapros.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Задай въпрос</a><button class="menu-button" id="menu-button" type="button" aria-label="Отвори менюто" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span></button></div></div></header>
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="Попитай.Лом – начало">
+        <span class="brand-mark" aria-hidden="true">
+          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
+        </span>
+        <span class="brand-text">
+          <strong>Попитай<span>.Лом</span></strong>
+          <small>Попитай. Намери. Препоръчай.</small>
+        </span>
+      </a>
+      <nav class="main-nav" id="main-nav" aria-label="Главна навигация"><a class="" href="index.html">Начало</a><a class="" href="info.html">Инфо Лом</a><a class="" href="kategorii.html">Категории</a><a class="active" href="firmi.html">Фирми</a><a class="" href="obyavi.html">Обяви</a><a class="" href="vaprosi.html">Въпроси</a><a class="" href="statii.html">Статии</a></nav>
+      <div class="header-actions">
+        <a class="login-link" href="vhod.html">Вход</a>
+        <a class="ask-button" href="nov-vapros.html">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          Задай въпрос
+        </a>
+        <button class="menu-button" id="menu-button" type="button" aria-label="Отвори менюто" aria-expanded="false" aria-controls="main-nav">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
 
 <main id="main-content">
-  <nav class="site-breadcrumbs section-container" aria-label="Навигационна пътека"><ol><li><a href="index.html">Начало</a></li><li><a href="firmi.html">Фирми</a></li><li><span aria-current="page">Фирмен профил</span></li></ol></nav>
-<section class="page-hero" id="business-page-hero"><div class="section-container"><div class="expanded-business-cover business-cover-preflight" id="expanded-business-cover" aria-hidden="true"><img alt="" decoding="async"></div><span class="section-kicker">Фирмен профил</span><h1 id="business-detail-name">Зареждане…</h1><p id="business-detail-summary"></p></div></section>
-<section class="content-section"><div class="section-container two-column-layout"><div><article class="company-profile" id="business-detail-card"><div class="company-summary"><div class="business-logo-wrap"><div class="firm-logo large" id="business-detail-logo">Ф</div><div class="business-logo-image" id="business-detail-logo-image" hidden></div></div><span class="category-tag" id="business-detail-category-tag"></span></div><div class="business-action-buttons" id="business-action-buttons"></div><h2>За фирмата</h2><p id="business-detail-description"></p><div class="media-gallery business-gallery" id="business-gallery" hidden aria-label="Снимки на фирмата"></div></article><article class="empty-card" id="business-not-found" hidden><h2>Фирмата не е намерена</h2><p>Профилът може да е изтрит или адресът да е непълен.</p><a class="primary-link-button" href="firmi.html">Към фирмите</a></article></div><aside class="side-panel contact-panel" id="business-contact-panel"><h2>Контакти</h2><p><strong>Телефон</strong><br><a id="business-detail-phone" href="#"></a></p><p id="business-detail-city-row" hidden><strong>Град</strong><br><span id="business-detail-city"></span></p><p id="business-detail-address-row" hidden><strong>Адрес</strong><br><span id="business-detail-address"></span></p><p id="business-detail-hours-row" hidden><strong>Работно време</strong><br><span id="business-detail-hours"></span></p><a class="secondary-link-button full" id="business-report-link" href="signal.html">Подай сигнал</a></aside></div></section>
+  <nav class="site-breadcrumbs section-container" aria-label="Навигационна пътека">
+    <ol><li><a href="index.html">Начало</a></li><li><a href="firmi.html">Фирми</a></li><li><span aria-current="page">Фирмен профил</span></li></ol>
+  </nav>
+<section class="page-hero" id="business-page-hero">
+  <div class="section-container">
+    <div class="expanded-business-cover business-cover-preflight" id="expanded-business-cover" aria-hidden="true">
+      <img alt="" decoding="async">
+    </div>
+    <span class="section-kicker">Фирмен профил</span>
+    <h1 id="business-detail-name">Зареждане…</h1>
+    <p id="business-detail-summary"></p>
+  </div>
+</section>
+
+<section class="content-section">
+  <div class="section-container two-column-layout">
+    <div>
+      <article class="company-profile" id="business-detail-card">
+        <div class="company-summary">
+          <div class="business-logo-wrap">
+            <div class="firm-logo large" id="business-detail-logo">Ф</div>
+            <div class="business-logo-image" id="business-detail-logo-image" hidden></div>
+          </div>
+          <span class="category-tag" id="business-detail-category-tag"></span>
+        </div>
+        <div class="business-action-buttons" id="business-action-buttons"></div>
+        <h2>За фирмата</h2>
+        <p id="business-detail-description"></p>
+        <div class="media-gallery business-gallery" id="business-gallery" hidden aria-label="Снимки на фирмата"></div>
+      </article>
+
+      <article class="empty-card" id="business-not-found" hidden>
+        <h2>Фирмата не е намерена</h2>
+        <p>Профилът може да е изтрит или адресът да е непълен.</p>
+        <a class="primary-link-button" href="firmi.html">Към фирмите</a>
+      </article>
+    </div>
+
+    <aside class="side-panel contact-panel" id="business-contact-panel">
+      <h2>Контакти</h2>
+      <p><strong>Телефон</strong><br><a id="business-detail-phone" href="#"></a></p>
+      <p id="business-detail-city-row" hidden><strong>Град</strong><br><span id="business-detail-city"></span></p>
+      <p id="business-detail-address-row" hidden><strong>Адрес</strong><br><span id="business-detail-address"></span></p>
+      <p id="business-detail-hours-row" hidden><strong>Работно време</strong><br><span id="business-detail-hours"></span></p>
+      <a class="secondary-link-button full" id="business-report-link" href="signal.html">Подай сигнал</a>
+    </aside>
+  </div>
+</section>
 </main>
 
-  <footer class="site-footer"><div class="section-container footer-main"><div class="footer-brand"><a class="brand" href="index.html" aria-label="Попитай.Лом – начало"><span class="brand-mark" aria-hidden="true"><img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt=""></span><span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span></a><p>Местната общност на Лом за препоръки, услуги и полезна информация.</p></div><div class="footer-column"><h2>Разгледай</h2><a href="kategorii.html">Категории</a><a href="vaprosi.html">Въпроси</a><a href="firmi.html">Фирми</a><a href="statii.html">Статии</a></div><div class="footer-column"><h2>За общността</h2><a href="za-nas.html">За сайта</a><a href="pravila.html">Правила</a><a href="kontakti.html">Контакти</a><a href="signal.html">Подай сигнал</a></div><div class="footer-column"><h2>Правна информация</h2><a href="poveritelnost.html">Поверителност</a><a href="uslovia.html">Условия за ползване</a><a href="biskvitki.html">Бисквитки</a></div></div><div class="section-container footer-bottom"><p>© <span id="current-year">2026</span> Попитай.Лом. Всички права запазени.</p><p>Създадено за хората от Лом.</p></div></footer>
+  <footer class="site-footer">
+    <div class="section-container footer-main">
+      <div class="footer-brand">
+        <a class="brand" href="index.html" aria-label="Попитай.Лом – начало">
+          <span class="brand-mark" aria-hidden="true">
+            <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
+          </span>
+          <span class="brand-text">
+            <strong>Попитай<span>.Лом</span></strong>
+            <small>Попитай. Намери. Препоръчай.</small>
+          </span>
+        </a>
+        <p>Местната общност на Лом за препоръки, услуги и полезна информация.</p>
+      </div>
+      <div class="footer-column">
+        <h2>Разгледай</h2>
+        <a href="kategorii.html">Категории</a><a href="vaprosi.html">Въпроси</a>
+        <a href="firmi.html">Фирми</a><a href="statii.html">Статии</a>
+      </div>
+      <div class="footer-column">
+        <h2>За общността</h2>
+        <a href="za-nas.html">За сайта</a><a href="pravila.html">Правила</a>
+        <a href="kontakti.html">Контакти</a><a href="signal.html">Подай сигнал</a>
+      </div>
+      <div class="footer-column">
+        <h2>Правна информация</h2>
+        <a href="poveritelnost.html">Поверителност</a><a href="uslovia.html">Условия за ползване</a>
+        <a href="biskvitki.html">Бисквитки</a>
+      </div>
+    </div>
+    <div class="section-container footer-bottom">
+      <p>© <span id="current-year">2026</span> Попитай.Лом. Всички права запазени.</p>
+      <p>Създадено за хората от Лом.</p>
+    </div>
+  </footer>
   <nav class="mobile-bottom-nav" aria-label="Мобилна навигация"><a class="" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>Начало</span></a><a class="" href="kategorii.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Категории</span></a><a class="mobile-ask" href="nov-vapros.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Въпрос</span></a><a class="" href="vaprosi.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg><span>Въпроси</span></a><a class="" href="profil.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профил</span></a></nav>
-  <button class="back-to-top" id="back-to-top" type="button" aria-label="Към началото"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg></button>
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="Към началото">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
+  </button>
 
   <script src="image-upload.js?v=20260820-0310" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="supabase-config.js?v=20260820-1840" defer></script>
   <script src="supabase-businesses.js?v=20260807-1725" data-popitai-businesses defer></script>
+
   <script>
   (() => {
     const cover = document.querySelector("#expanded-business-cover");
     const hero = document.querySelector("#business-page-hero");
     const businessId = new URLSearchParams(location.search).get("id");
     const reportLink = document.querySelector("#business-report-link");
-    if (reportLink && businessId) reportLink.href = `signal.html?target_type=business&target_id=${encodeURIComponent(businessId)}`;
-    const finishPlain = () => { cover?.remove(); document.body.classList.remove("business-profile-preflight"); };
-    if (!cover || !businessId) { finishPlain(); return; }
+    if (reportLink && businessId) {
+      reportLink.href = `signal.html?target_type=business&target_id=${encodeURIComponent(businessId)}`;
+    }
+
+    const finishPlain = () => {
+      cover?.remove();
+      document.body.classList.remove("business-profile-preflight");
+    };
+
+    if (!cover || !businessId) {
+      finishPlain();
+      return;
+    }
+
     let attempts = 0;
     const check = async () => {
       const client = window.PopitaiSupabase;
-      if (!client) { attempts += 1; if (attempts < 40) setTimeout(check, 50); else finishPlain(); return; }
+
+      if (!client) {
+        attempts += 1;
+        if (attempts < 40) {
+          setTimeout(check, 50);
+        } else {
+          finishPlain();
+        }
+        return;
+      }
+
       try {
-        const { data, error } = await client.from("businesses").select("id, is_expanded, status").eq("id", businessId).maybeSingle();
-        if (!error && data?.status === "approved" && data?.is_expanded === true) { document.body.classList.add("has-expanded-business-profile"); hero?.classList.add("expanded-business-hero"); document.body.classList.remove("business-profile-preflight"); return; }
+        const { data, error } = await client
+          .from("businesses")
+          .select("id, is_expanded, status")
+          .eq("id", businessId)
+          .maybeSingle();
+
+        if (!error && data?.status === "approved" && data?.is_expanded === true) {
+          document.body.classList.add("has-expanded-business-profile");
+          hero?.classList.add("expanded-business-hero");
+          document.body.classList.remove("business-profile-preflight");
+          return;
+        }
       } catch (_) {}
+
       finishPlain();
     };
+
     check();
   })();
   </script>
+
   <script src="business-expanded-profile.js?v=20260806-1905" defer></script>
+
+  <!-- LOCAL TEST — STAGE 1: one owner per public element; no DB/GitHub writes -->
   <script id="business-profile-stage1-no-duplicates-test">
   (() => {
     const businessId = new URLSearchParams(location.search).get("id");
     if (!businessId) return;
-    const normalizePhone = (href) => { const raw = String(href || "").replace(/^tel:/i, ""); const digits = raw.replace(/\D+/g, ""); if (!digits) return ""; if (digits.startsWith("359")) return digits; if (digits.startsWith("0")) return `359${digits.slice(1)}`; return digits; };
+
+    const normalizePhone = (href) => {
+      const raw = String(href || "").replace(/^tel:/i, "");
+      const digits = raw.replace(/\D+/g, "");
+      if (!digits) return "";
+      if (digits.startsWith("359")) return digits;
+      if (digits.startsWith("0")) return `359${digits.slice(1)}`;
+      return digits;
+    };
+
     const applyStage1 = () => {
       if (!document.body.classList.contains("has-expanded-business-profile")) return false;
-      const baseActions = document.querySelector("#business-action-buttons"); if (baseActions && !baseActions.hidden) { baseActions.hidden = true; baseActions.setAttribute("aria-hidden", "true"); }
-      const realLogo = document.querySelector("#business-detail-logo-image"); const fallbackLogo = document.querySelector("#business-detail-logo"); if (realLogo && fallbackLogo && !realLogo.hidden && realLogo.querySelector("img") && !fallbackLogo.hidden) { fallbackLogo.hidden = true; fallbackLogo.setAttribute("aria-hidden", "true"); }
-      const expandedHours = document.querySelector("[data-expanded-work-hours]"); const baseHours = document.querySelector("#business-detail-hours-row"); if (expandedHours && baseHours && !baseHours.hidden) { baseHours.hidden = true; baseHours.setAttribute("aria-hidden", "true"); }
-      const phoneHref = document.querySelector("#business-detail-phone")?.getAttribute("href") || ""; const viberNumber = normalizePhone(phoneHref); const inquiry = document.querySelector("#expanded-business-actions .expanded-action-secondary"); const desiredHref = viberNumber ? `viber://chat?number=${viberNumber}` : ""; if (inquiry && desiredHref && inquiry.getAttribute("href") !== desiredHref) inquiry.setAttribute("href", desiredHref);
+
+      const baseActions = document.querySelector("#business-action-buttons");
+      if (baseActions && !baseActions.hidden) {
+        baseActions.hidden = true;
+        baseActions.setAttribute("aria-hidden", "true");
+      }
+
+      const realLogo = document.querySelector("#business-detail-logo-image");
+      const fallbackLogo = document.querySelector("#business-detail-logo");
+      if (realLogo && fallbackLogo && !realLogo.hidden && realLogo.querySelector("img") && !fallbackLogo.hidden) {
+        fallbackLogo.hidden = true;
+        fallbackLogo.setAttribute("aria-hidden", "true");
+      }
+
+      const expandedHours = document.querySelector("[data-expanded-work-hours]");
+      const baseHours = document.querySelector("#business-detail-hours-row");
+      if (expandedHours && baseHours && !baseHours.hidden) {
+        baseHours.hidden = true;
+        baseHours.setAttribute("aria-hidden", "true");
+      }
+
+      const phoneHref = document.querySelector("#business-detail-phone")?.getAttribute("href") || "";
+      const viberNumber = normalizePhone(phoneHref);
+      const inquiry = document.querySelector("#expanded-business-actions .expanded-action-secondary");
+      const desiredHref = viberNumber ? `viber://chat?number=${viberNumber}` : "";
+      if (inquiry && desiredHref && inquiry.getAttribute("href") !== desiredHref) {
+        inquiry.setAttribute("href", desiredHref);
+      }
+
       return true;
     };
-    document.addEventListener("DOMContentLoaded", applyStage1, { once: true }); window.addEventListener("load", applyStage1, { once: true }); [0,100,250,500,900,1400,2200,3200].forEach(ms => window.setTimeout(applyStage1, ms));
+
+    // Finite checks only. No document-wide MutationObserver:
+    // the previous observer could retrigger itself through hidden/href mutations.
+    document.addEventListener("DOMContentLoaded", applyStage1, { once: true });
+    window.addEventListener("load", applyStage1, { once: true });
+    [0, 100, 250, 500, 900, 1400, 2200, 3200].forEach(ms => {
+      window.setTimeout(applyStage1, ms);
+    });
   })();
   </script>
   <script src="script.js?v=20260820-1833" defer></script>
