@@ -134,7 +134,7 @@
   }
 
   async function open() {
-    const content = document.querySelector(".admin-content");
+    const content = window.PopitaiAdminShell?.ensure?.("Сигнали за преглед") || document.querySelector("#admin-view-content");
     if (!content) return;
 
     document.querySelectorAll(".admin-menu button").forEach(button => {
@@ -142,7 +142,6 @@
     });
 
     content.innerHTML = `
-      <div class="block-heading"><h2>Сигнали за преглед</h2></div>
       <p class="admin-panel-message" data-reports-message hidden></p>
       <div class="stack-list" data-reports-list><article class="empty-card"><p>Зареждане…</p></article></div>`;
 
