@@ -250,8 +250,40 @@
     document.addEventListener("click", handleNavigationChrome, true);
     window.addEventListener("popitai:admin-actionable-counts", event => {
       dashboardCounts = event.detail || null;
+      updateTopbarTasks(dashboardCounts);
       if (activeView === "dashboard") renderDashboard();
     });
+  }
+
+  function updateTopbarTasks(detail) {
+    const button = document.querySelector("[data-admin-topbar-tasks]");
+    if (!button) return;
+    const total = Number(detail?.total || 0);
+    const counts = detail?.counts || {};
+    const parts = [
+      ["Фирми", counts.businesses],
+      ["Обяви", counts.listings],
+      ["Въпроси", counts.questions],
+      ["Отговори", counts.answers],
+      ["Магазини", counts.shops],
+      ["Събития", counts.events],
+      ["Сигнали", counts.reports],
+      ["Инфо Лом", Number(counts.info_submissions || 0) + Number(counts.info_error_reports || 0)],
+      ["Редакции", counts.user_content_edit_drafts],
+      ["Разширени профили", counts.business_expanded_profile_drafts]
+    ].filter(([, count]) => Number(count || 0) > 0);
+
+    button.hidden = false;
+    button.classList.toggle("has-tasks", total > 0);
+    button.innerHTML = total > 0
+      ? `<span class="admin-topbar-task-dot" aria-hidden="true"></span><strong>${total}</strong><span>за преглед</span>`
+      : '<span>Няма чакащи задачи</span>';
+    button.title = parts.length
+      ? parts.map(([label,count]) => `${label}: ${count}`).join(" · ")
+      : "Няма чакащи задачи";
+    button.setAttribute("aria-label", total > 0
+      ? `${total} задачи за преглед. ${button.title}`
+      : "Няма чакащи задачи");
   }
 
   function setOpenGroup(name) {
@@ -290,9 +322,16 @@
 
     if (event.target.closest("[data-admin-menu-collapse]")) {
       event.preventDefault();
-      document.body.classList.toggle("admin-sidebar-collapsed");
+      const collapsed = document.body.classList.toggle("admin-sidebar-collapsed");
+      const collapseButton = document.querySelector("[data-admin-menu-collapse]");
+      const label = collapseButton?.querySelector("span");
+      if (label) label.textContent = collapsed ? "→ Меню" : "← Свий менюто";
+      if (collapseButton) {
+        collapseButton.title = collapsed ? "Разгъни менюто" : "Свий менюто";
+        collapseButton.setAttribute("aria-label", collapsed ? "Разгъни менюто" : "Свий менюто");
+      }
       try {
-        sessionStorage.setItem("popitai-admin-sidebar-collapsed-v2", document.body.classList.contains("admin-sidebar-collapsed") ? "1" : "0");
+        sessionStorage.setItem("popitai-admin-sidebar-collapsed-v2", collapsed ? "1" : "0");
       } catch (_) {}
       return;
     }
@@ -404,6 +443,15 @@
     sessionStorage.removeItem("popitai-admin-sidebar-collapsed-v1");
     if (sessionStorage.getItem("popitai-admin-sidebar-collapsed-v2") === "1") {
       document.body.classList.add("admin-sidebar-collapsed");
+      window.setTimeout(() => {
+        const collapseButton = document.querySelector("[data-admin-menu-collapse]");
+        const label = collapseButton?.querySelector("span");
+        if (label) label.textContent = "→ Меню";
+        if (collapseButton) {
+          collapseButton.title = "Разгъни менюто";
+          collapseButton.setAttribute("aria-label", "Разгъни менюто");
+        }
+      }, 0);
     }
   } catch (_) {}
 
