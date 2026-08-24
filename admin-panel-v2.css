@@ -276,6 +276,10 @@ body.admin-panel-v2 .admin-menu button.active {
   background: var(--admin-v2-blue-soft);
 }
 
+body.admin-panel-v2 .admin-menu button[hidden] {
+  display: none !important;
+}
+
 body.admin-panel-v2 .admin-menu-group {
   display: grid;
   gap: 4px;
