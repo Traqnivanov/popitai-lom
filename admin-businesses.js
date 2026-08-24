@@ -17,6 +17,10 @@
   let currentProfile = null;
   let activeBusinessView = null;
 
+  function isAdminProfile() {
+    return currentProfile?.role === "admin" && currentProfile?.is_blocked !== true;
+  }
+
   function isModeratorProfile() {
     return currentProfile?.role === "moderator" && currentProfile?.is_blocked !== true;
   }
@@ -101,6 +105,10 @@
 
   function businessCard(item, mode, mediaRows = []) {
     const ownModeratorBusiness = isModeratorProfile() && isOwnBusiness(item);
+    const permanentDeleteButton = isAdminProfile()
+      ? `<button class="admin-action-delete" data-business-action="delete" data-id="${escapeHtml(item.id)}">Изтрий окончателно</button>`
+      : "";
+
     let actions = "";
     if (ownModeratorBusiness) {
       actions = '<span class="admin-status">Собствено съдържание — без модераторски действия</span>';
@@ -113,11 +121,11 @@
       actions = `
         <a class="admin-action-secondary" href="firma.html?id=${encodeURIComponent(item.id)}" target="_blank" rel="noopener">Отвори</a>
         <button class="admin-action-hide" data-business-action="hide" data-id="${escapeHtml(item.id)}">Скрий</button>
-        <button class="admin-action-delete" data-business-action="delete" data-id="${escapeHtml(item.id)}">Изтрий окончателно</button>`;
+        ${permanentDeleteButton}`;
     } else {
       actions = `
         <button class="admin-action-approve" data-business-action="restore" data-id="${escapeHtml(item.id)}">Публикувай отново</button>
-        <button class="admin-action-delete" data-business-action="delete" data-id="${escapeHtml(item.id)}">Изтрий окончателно</button>`;
+        ${permanentDeleteButton}`;
     }
 
     return `<article class="admin-record">
@@ -259,6 +267,10 @@
       if (!note) return;
       result = await updateBusiness(id, "rejected", note);
     } else if (action === "delete") {
+      if (!isAdminProfile()) {
+        setMessage("Окончателното изтриване е само за администратор.", true);
+        return;
+      }
       if (!window.confirm("Фирмата ще бъде изтрита окончателно. Продължаваш ли?")) return;
       result = await client.from("businesses").delete().eq("id", id);
     } else {
