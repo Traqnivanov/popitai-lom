@@ -4,6 +4,7 @@
 
   const VIEW_KEY = "popitai-admin-active-view-v1";
   const START_CLASS = "admin-shell-starting";
+  const STARTUP_MAX_WAIT_MS = 1800;
 
   function revealStartup() {
     document.documentElement.classList.remove(START_CLASS);
@@ -73,7 +74,7 @@
     );
   }
 
-  function waitForState(test, timeoutMs = 5000) {
+  function waitForState(test, timeoutMs = STARTUP_MAX_WAIT_MS) {
     return new Promise(resolve => {
       if (test()) {
         resolve(true);
@@ -105,52 +106,49 @@
   }
 
   async function restoreSavedView() {
-    const baseReady = await waitForState(baseShellReady);
-    if (!baseReady) {
+    const deadline = performance.now() + STARTUP_MAX_WAIT_MS;
+    const remaining = () => Math.max(0, Math.ceil(deadline - performance.now()));
+    const waitWithinStartup = test => {
+      const left = remaining();
+      return left > 0 ? waitForState(test, left) : Promise.resolve(false);
+    };
+
+    try {
+      const baseReady = await waitWithinStartup(baseShellReady);
+      if (!baseReady) return;
+
+      const key = readView();
+      const selector = selectorForView(key);
+
+      if (!selector) {
+        await waitWithinStartup(() => !isLoadingText(document.querySelector(".admin-content")));
+        return;
+      }
+
+      const targetFound = await waitWithinStartup(() => Boolean(document.querySelector(`.admin-menu ${selector}`)));
+      if (!targetFound) return;
+
+      const button = document.querySelector(`.admin-menu ${selector}`);
+      const content = document.querySelector(".admin-content");
+      if (!button || !content) return;
+
+      // Ако базовият renderer вече е на същата секция и е приключил, няма втори render.
+      if (button.classList.contains("active") && !isLoadingText(content)) return;
+
+      const beforeHtml = content.innerHTML;
+      button.click();
+
+      await waitWithinStartup(() => {
+        const currentContent = document.querySelector(".admin-content");
+        const currentButton = document.querySelector(`.admin-menu ${selector}`);
+        if (!currentContent || !currentButton) return false;
+        const changed = currentContent.innerHTML !== beforeHtml;
+        return currentButton.classList.contains("active") && changed && !isLoadingText(currentContent);
+      });
+    } finally {
+      // Startup никога не държи интерфейса скрит повече от един общ кратък лимит.
       revealStartup();
-      return;
     }
-
-    const key = readView();
-    const selector = selectorForView(key);
-
-    if (!selector) {
-      await waitForState(() => !isLoadingText(document.querySelector(".admin-content")));
-      revealStartup();
-      return;
-    }
-
-    const targetFound = await waitForState(() => Boolean(document.querySelector(`.admin-menu ${selector}`)));
-    if (!targetFound) {
-      revealStartup();
-      return;
-    }
-
-    const button = document.querySelector(`.admin-menu ${selector}`);
-    const content = document.querySelector(".admin-content");
-    if (!button || !content) {
-      revealStartup();
-      return;
-    }
-
-    // Ако базовият renderer вече е на същата секция и е приключил, няма втори render.
-    if (button.classList.contains("active") && !isLoadingText(content)) {
-      revealStartup();
-      return;
-    }
-
-    const beforeHtml = content.innerHTML;
-    button.click();
-
-    await waitForState(() => {
-      const currentContent = document.querySelector(".admin-content");
-      const currentButton = document.querySelector(`.admin-menu ${selector}`);
-      if (!currentContent || !currentButton) return false;
-      const changed = currentContent.innerHTML !== beforeHtml;
-      return currentButton.classList.contains("active") && changed && !isLoadingText(currentContent);
-    });
-
-    revealStartup();
   }
 
   window.addEventListener("click", event => {
