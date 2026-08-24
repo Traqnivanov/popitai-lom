@@ -37,7 +37,8 @@
 
   let currentUser = null;
   let currentProfile = null;
-  let activeView = "pending";
+  let activeView = "dashboard";
+  let dashboardCounts = null;
 
   function isAdminProfile() {
     return currentProfile?.role === "admin" && currentProfile?.is_blocked !== true;
@@ -181,9 +182,11 @@
     if (heroTitle) heroTitle.textContent = admin ? "Административен панел" : "Модераторски панел";
     if (heroText) {
       heroText.textContent = admin
-        ? "Одобрявай ново съдържание, управлявай публикуваното и следи потребителите."
-        : "Одобрявай съдържание и управлявай потока в рамките на модераторските права.";
+        ? "Какво чака действие и управление на съдържанието."
+        : "Какво чака действие в рамките на модераторските права.";
     }
+    const topbarTitle = $(".admin-topbar-title");
+    if (topbarTitle) topbarTitle.textContent = admin ? "Административен панел" : "Модераторски панел";
     document.title = `${admin ? "Административен" : "Модераторски"} панел | Попитай.Лом`;
 
     const testTools = $(".admin-test-tools");
@@ -193,7 +196,7 @@
     if (stats) {
       stats.innerHTML = `
         <article><strong id="admin-users-count">0</strong><span>Потребители</span></article>
-        <article><strong id="admin-pending-count">0</strong><span>Чакащи</span></article>
+        <article><strong id="admin-pending-count">0</strong><span>Задачи за преглед</span></article>
         <article><strong id="admin-approved-questions-count">0</strong><span>Въпроси</span></article>
         <article><strong id="admin-approved-answers-count">0</strong><span>Отговори</span></article>`;
     }
@@ -201,14 +204,19 @@
     const menu = $(".admin-menu");
     if (menu) {
       menu.innerHTML = `
-        <section class="admin-menu-group" aria-labelledby="admin-menu-review-title">
-          <h2 class="admin-menu-group-title" id="admin-menu-review-title">За преглед</h2>
+        <button class="admin-menu-home active" type="button" data-admin-view="dashboard"><span>Начало</span></button>
+        <section class="admin-menu-group is-open" data-admin-menu-group="review">
+          <h2 class="admin-menu-group-title">
+            <button class="admin-menu-group-toggle" type="button" data-admin-group-toggle="review">За преглед</button>
+          </h2>
           <div class="admin-menu-group-items" data-admin-menu-group-items="review">
-            <button class="active" type="button" data-admin-view="pending">Чакащи <span class="admin-badge" id="admin-menu-badge" hidden>0</span></button>
+            <button type="button" data-admin-view="pending">Чакащи <span class="admin-badge" id="admin-menu-badge" hidden>0</span></button>
           </div>
         </section>
-        <section class="admin-menu-group" aria-labelledby="admin-menu-content-title">
-          <h2 class="admin-menu-group-title" id="admin-menu-content-title">Съдържание</h2>
+        <section class="admin-menu-group" data-admin-menu-group="content">
+          <h2 class="admin-menu-group-title">
+            <button class="admin-menu-group-toggle" type="button" data-admin-group-toggle="content">Съдържание</button>
+          </h2>
           <div class="admin-menu-group-items" data-admin-menu-group-items="content">
             <button type="button" data-admin-view="questions">Публикувани въпроси</button>
             <button type="button" data-admin-view="answers">Публикувани отговори</button>
@@ -216,25 +224,187 @@
             <button type="button" data-admin-view="hidden">Скрити/отказани</button>
           </div>
         </section>
-        <section class="admin-menu-group" aria-labelledby="admin-menu-management-title">
-          <h2 class="admin-menu-group-title" id="admin-menu-management-title">Управление</h2>
+        <section class="admin-menu-group" data-admin-menu-group="management">
+          <h2 class="admin-menu-group-title">
+            <button class="admin-menu-group-toggle" type="button" data-admin-group-toggle="management">Управление</button>
+          </h2>
           <div class="admin-menu-group-items" data-admin-menu-group-items="management">
             <button type="button" data-admin-view="users">Потребители</button>
             ${admin ? '<button type="button" data-admin-view="contacts">Съобщения</button>' : ""}
           </div>
-        </section>`;
+        </section>
+        <div class="admin-menu-footer">
+          <button class="admin-menu-collapse" type="button" data-admin-menu-collapse><span>← Свий менюто</span></button>
+        </div>`;
     }
 
     const content = $(".admin-content");
     if (content) {
       content.innerHTML = `
-        <div class="block-heading"><h2 id="admin-view-title">Чакащи за одобрение</h2></div>
+        <div class="block-heading"><h2 id="admin-view-title">Начало</h2></div>
         <p class="admin-panel-message" id="admin-panel-message" hidden></p>
-        <div id="admin-view-content" class="stack-list"><article class="empty-card"><p>Зареждане…</p></article></div>`;
+        <div id="admin-view-content" class="stack-list"><article class="empty-card"><p>Зареждане на задачите…</p></article></div>`;
     }
 
     document.addEventListener("click", handleClick);
+    document.addEventListener("click", handleNavigationChrome, true);
+    window.addEventListener("popitai:admin-actionable-counts", event => {
+      dashboardCounts = event.detail || null;
+      if (activeView === "dashboard") renderDashboard();
+    });
   }
+
+  function setOpenGroup(name) {
+    $(".admin-menu-group").forEach(group => {
+      group.classList.toggle("is-open", group.dataset.adminMenuGroup === name);
+    });
+  }
+
+  function closeMobileMenu() {
+    document.body.classList.remove("admin-mobile-menu-open");
+    const trigger = $("[data-admin-mobile-menu]");
+    if (trigger) trigger.setAttribute("aria-expanded", "false");
+    const overlay = $("[data-admin-mobile-overlay]");
+    if (overlay) overlay.hidden = true;
+  }
+
+  function openMobileMenu(group = "") {
+    if (group) setOpenGroup(group);
+    document.body.classList.add("admin-mobile-menu-open");
+    const trigger = $("[data-admin-mobile-menu]");
+    if (trigger) trigger.setAttribute("aria-expanded", "true");
+    const overlay = $("[data-admin-mobile-overlay]");
+    if (overlay) overlay.hidden = false;
+  }
+
+  function handleNavigationChrome(event) {
+    const groupToggle = event.target.closest("[data-admin-group-toggle]");
+    if (groupToggle) {
+      event.preventDefault();
+      const group = groupToggle.closest(".admin-menu-group");
+      const wasOpen = group?.classList.contains("is-open");
+      $(".admin-menu-group").forEach(item => item.classList.remove("is-open"));
+      if (!wasOpen && group) group.classList.add("is-open");
+      return;
+    }
+
+    if (event.target.closest("[data-admin-menu-collapse]")) {
+      event.preventDefault();
+      document.body.classList.toggle("admin-sidebar-collapsed");
+      try {
+        sessionStorage.setItem("popitai-admin-sidebar-collapsed-v1", document.body.classList.contains("admin-sidebar-collapsed") ? "1" : "0");
+      } catch (_) {}
+      return;
+    }
+
+    if (event.target.closest("[data-admin-mobile-menu]")) {
+      event.preventDefault();
+      if (document.body.classList.contains("admin-mobile-menu-open")) closeMobileMenu();
+      else openMobileMenu();
+      return;
+    }
+
+    if (event.target.closest("[data-admin-mobile-overlay]")) {
+      closeMobileMenu();
+      return;
+    }
+
+    const mobileTab = event.target.closest("[data-admin-mobile-tab]");
+    if (mobileTab) {
+      event.preventDefault();
+      const tab = mobileTab.dataset.adminMobileTab;
+      if (tab === "dashboard") {
+        document.querySelector('[data-admin-view="dashboard"]')?.click();
+        closeMobileMenu();
+      } else if (tab === "review") {
+        openMobileMenu("review");
+      } else if (tab === "content") {
+        openMobileMenu("content");
+      } else {
+        openMobileMenu("management");
+      }
+      return;
+    }
+
+    const menuButton = event.target.closest(".admin-menu button");
+    if (menuButton && !menuButton.hasAttribute("data-admin-group-toggle") && !menuButton.hasAttribute("data-admin-menu-collapse")) {
+      const group = menuButton.closest(".admin-menu-group");
+      if (group?.dataset.adminMenuGroup) setOpenGroup(group.dataset.adminMenuGroup);
+      closeMobileMenu();
+    }
+
+    const dashboardOpen = event.target.closest("[data-dashboard-target]");
+    if (dashboardOpen) {
+      event.preventDefault();
+      const selector = dashboardTargetSelector(dashboardOpen.dataset.dashboardTarget);
+      const target = selector ? document.querySelector(selector) : null;
+      if (target) target.click();
+    }
+  }
+
+  function dashboardTargetSelector(key) {
+    return {
+      questions: '[data-admin-view="pending"]',
+      answers: '[data-admin-view="pending"]',
+      listings: '[data-admin-view="pending"]',
+      businesses: '[data-business-view="businesses-pending"]',
+      user_content_edit_drafts: '[data-user-edits-view]',
+      business_expanded_profile_drafts: '[data-expanded-businesses-view]',
+      shops: '[data-shops-review]',
+      events: '[data-events-review]',
+      reports: '[data-reports-admin]',
+      info: '[data-info-moderator-review],[data-info-review-shortcut],[data-info-admin]'
+    }[key] || "";
+  }
+
+  function renderDashboard() {
+    const title = $("#admin-view-title");
+    const container = $("#admin-view-content");
+    if (!title || !container) return;
+    title.textContent = "Какво има за преглед";
+
+    const detail = dashboardCounts;
+    const total = Number(detail?.total ?? $("#admin-pending-count")?.textContent ?? 0);
+    const counts = detail?.counts || {};
+    const tasks = [
+      ["businesses", "Фирми", Number(counts.businesses || 0)],
+      ["listings", "Обяви", Number(counts.listings || 0)],
+      ["questions", "Въпроси", Number(counts.questions || 0)],
+      ["answers", "Отговори", Number(counts.answers || 0)],
+      ["shops", "Магазини", Number(counts.shops || 0)],
+      ["events", "Събития", Number(counts.events || 0)],
+      ["reports", "Сигнали", Number(counts.reports || 0)],
+      ["info", "Инфо Лом", Number(counts.info_submissions || 0) + Number(counts.info_error_reports || 0)],
+      ["user_content_edit_drafts", "Потребителски редакции", Number(counts.user_content_edit_drafts || 0)],
+      ["business_expanded_profile_drafts", "Разширени профили", Number(counts.business_expanded_profile_drafts || 0)]
+    ].filter(([, , count]) => count > 0);
+
+    container.innerHTML = `
+      <section class="admin-v2-dashboard">
+        <div class="admin-v2-dashboard-summary">
+          <strong>${total}</strong>
+          <span>${total === 1 ? "задача чака преглед" : "задачи чакат преглед"}</span>
+        </div>
+        ${tasks.length ? `
+          <div class="admin-v2-task-list">
+            ${tasks.map(([key,label,count]) => `
+              <div class="admin-v2-task-row">
+                <strong>${escapeHtml(label)}</strong>
+                <span class="admin-v2-task-count">${count}</span>
+                <button class="admin-v2-task-open" type="button" data-dashboard-target="${escapeHtml(key)}">Прегледай</button>
+              </div>`).join("")}
+          </div>`
+          : (dashboardCounts
+            ? '<div class="admin-v2-no-tasks">Няма задачи за преглед.</div>'
+            : '<article class="empty-card"><p>Зареждане на текущите задачи…</p></article>')}
+      </section>`;
+  }
+
+  try {
+    if (sessionStorage.getItem("popitai-admin-sidebar-collapsed-v1") === "1") {
+      document.body.classList.add("admin-sidebar-collapsed");
+    }
+  } catch (_) {}
 
   async function loadAuth() {
     const { data, error } = await client.auth.getUser();
@@ -492,7 +662,8 @@
     setMessage("");
 
     try {
-      if (view === "pending") container.innerHTML = await loadPending();
+      if (view === "dashboard") { renderDashboard(); return; }
+      else if (view === "pending") container.innerHTML = await loadPending();
       else if (view === "questions") container.innerHTML = await loadPublished("question");
       else if (view === "answers") container.innerHTML = await loadPublished("answer");
       else if (view === "listings") container.innerHTML = await loadListingsAdmin();
@@ -611,7 +782,11 @@
     const viewButton = event.target.closest("[data-admin-view]");
     if (viewButton) {
       event.preventDefault();
-      $$(".admin-menu button").forEach((item) => item.classList.toggle("active", item === viewButton));
+      $(".admin-menu button").forEach((item) => {
+        if (!item.hasAttribute("data-admin-group-toggle") && !item.hasAttribute("data-admin-menu-collapse")) {
+          item.classList.toggle("active", item === viewButton);
+        }
+      });
       await loadView(viewButton.dataset.adminView);
       return;
     }
@@ -636,10 +811,12 @@
       return;
     }
 
-    await Promise.all([refreshCounts(), loadView("pending")]);
+    await refreshCounts();
+    await loadView("dashboard");
     window.setInterval(async () => {
       await refreshCounts();
       if (activeView === "pending") await loadView("pending");
+      if (activeView === "dashboard") renderDashboard();
     }, 60000);
   }
 
