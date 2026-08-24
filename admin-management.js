@@ -253,6 +253,7 @@
       updateTopbarTasks(dashboardCounts);
       if (activeView === "dashboard") renderDashboard();
     });
+    syncMobileNav("dashboard");
   }
 
   function updateTopbarTasks(detail) {
@@ -284,6 +285,15 @@
     button.setAttribute("aria-label", total > 0
       ? `${total} задачи за преглед. ${button.title}`
       : "Няма чакащи задачи");
+  }
+
+  function syncMobileNav(tab) {
+    document.querySelectorAll("[data-admin-mobile-tab]").forEach(button => {
+      const active = button.dataset.adminMobileTab === tab;
+      button.classList.toggle("active", active);
+      if (active) button.setAttribute("aria-current", "page");
+      else button.removeAttribute("aria-current");
+    });
   }
 
   function setOpenGroup(name) {
@@ -831,6 +841,10 @@
     const externalModuleButton = event.target.closest(".admin-menu button:not([data-admin-view]):not([data-admin-group-toggle]):not([data-admin-menu-collapse])");
     if (externalModuleButton) {
       activeView = "external";
+      syncMobileNav(
+        externalModuleButton.closest('[data-admin-menu-group="review"]') ? "review" :
+        externalModuleButton.closest('[data-admin-menu-group="content"]') ? "content" : "menu"
+      );
     }
 
     const viewButton = event.target.closest("[data-admin-view]");
@@ -842,6 +856,11 @@
         }
       });
       if (viewButton.dataset.adminView === "dashboard") setOpenGroup("");
+      syncMobileNav(
+        viewButton.dataset.adminView === "dashboard" ? "dashboard" :
+        viewButton.closest('[data-admin-menu-group="review"]') ? "review" :
+        viewButton.closest('[data-admin-menu-group="content"]') ? "content" : "menu"
+      );
       await loadView(viewButton.dataset.adminView);
       return;
     }
@@ -867,7 +886,7 @@
     }
 
     await refreshCounts();
-    await loadView("dashboard");
+    if (activeView === "dashboard") await loadView("dashboard");
     window.setInterval(async () => {
       await refreshCounts();
       if (activeView === "pending") await loadView("pending");
