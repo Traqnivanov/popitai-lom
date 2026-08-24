@@ -10,16 +10,31 @@
     document.documentElement.classList.remove(START_CLASS);
   }
 
-  function restoreCoreShell() {
+  function restoreCoreShell(title = "Администрация") {
     const content = document.querySelector(".admin-content");
-    if (!content) return;
-    if (content.querySelector("#admin-view-title") && content.querySelector("#admin-view-content")) return;
+    if (!content) return null;
 
-    content.innerHTML = `
-      <div class="block-heading"><h2 id="admin-view-title">Администрация</h2></div>
-      <p class="admin-panel-message" id="admin-panel-message" hidden></p>
-      <div id="admin-view-content" class="stack-list"><article class="empty-card"><p>Зареждане…</p></article></div>`;
+    let titleNode = content.querySelector("#admin-view-title");
+    let viewNode = content.querySelector("#admin-view-content");
+
+    if (!titleNode || !viewNode) {
+      content.innerHTML = `
+        <div class="block-heading"><h2 id="admin-view-title"></h2></div>
+        <p class="admin-panel-message" id="admin-panel-message" hidden></p>
+        <div id="admin-view-content" class="stack-list"></div>`;
+      titleNode = content.querySelector("#admin-view-title");
+      viewNode = content.querySelector("#admin-view-content");
+    }
+
+    if (titleNode) titleNode.textContent = title;
+    return viewNode;
   }
+
+  window.PopitaiAdminShell = Object.freeze({
+    ensure(title = "Администрация") {
+      return restoreCoreShell(title);
+    }
+  });
 
   function viewKey(button) {
     if (!button) return "";
@@ -158,13 +173,8 @@
     const key = viewKey(button);
     if (key) saveView(key);
 
-    const isInfoButton = button.matches(
-      "[data-info-admin],[data-info-moderator-review],[data-info-review-shortcut]"
-    );
-    if (isInfoButton) return;
-
-    // Info Lom има собствен legacy render. При излизане от него възстановяваме
-    // само общия shell преди следващият модул да поеме своя render root.
+    // Всички Admin/Moderator модули използват един и същ shell.
+    // Capture фазата гарантира root-а преди конкретният renderer да започне.
     restoreCoreShell();
   }, true);
 
