@@ -312,6 +312,9 @@
     await refreshBusinessCounts();
 
     document.addEventListener("click", async (event) => {
+      const menuButton = event.target.closest(".admin-menu button");
+      if (menuButton && !menuButton.matches("[data-business-view]")) activeBusinessView = null;
+
       const viewButton = event.target.closest("[data-business-view]");
       if (viewButton) {
         event.preventDefault();
