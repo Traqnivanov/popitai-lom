@@ -182,7 +182,8 @@
 
   async function open(mode = "all") {
     activeMode = mode;
-    const content = document.querySelector(".admin-content");
+    const title = mode === "pending" ? "Чакащи магазини" : "Магазини";
+    const content = window.PopitaiAdminShell?.ensure?.(title) || document.querySelector("#admin-view-content");
     if (!content) return;
 
     document.querySelectorAll(".admin-menu button").forEach(button => {
@@ -192,9 +193,7 @@
       button.classList.toggle("active", active);
     });
 
-    const title = mode === "pending" ? "Чакащи магазини" : "Магазини";
     content.innerHTML = `
-      <div class="block-heading"><h2>${title}</h2></div>
       <p class="admin-panel-message" data-shops-message hidden></p>
       <div class="stack-list" data-shops-list><article class="empty-card"><p>Зареждане…</p></article></div>`;
 
