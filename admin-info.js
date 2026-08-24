@@ -475,19 +475,36 @@
     root.querySelectorAll("[data-resolve-report]").forEach(btn=>btn.addEventListener("click",async()=>{const x=state.reports.find(r=>r.id===btn.dataset.resolveReport),panel=btn.closest("[data-report-panel]");if(!x||!panel)return;const entryId=panel.querySelector("[data-target-entry]")?.value||"",fieldKey=panel.querySelector("[data-field-key]")?.value.trim()||"",newValue=panel.querySelector("[data-new-value]")?.value.trim()??"",adminNote=panel.querySelector("[data-admin-note]")?.value.trim()||"",source=panel.querySelector("[data-source]")?.value.trim()||"";try{if(entryId&&fieldKey){if(!/^[A-Za-z0-9_]+$/.test(fieldKey)){panelMsg(panel,"Невалиден JSON key.");return;}if(!source){panelMsg(panel,"За промяна по запис е нужен източник.");return;}const entry=state.entries.find(e=>e.id===entryId);if(!entry){panelMsg(panel,"Записът не е намерен.");return;}const oldValue=entry.data?.[fieldKey];if(!window.confirm(`Да се приложи промяна по „${entry.name}“ и да се затвори сигналът?`))return;const merged={...(entry.data||{}),[fieldKey]:newValue};const {error}=await client.from("info_entries").update({data:merged,updated_by:currentUser?.id||null}).eq("id",entryId);if(error)throw error;await insertHistory({entryId,fieldName:`data.${fieldKey}`,oldValue:oldValue==null?null:(typeof oldValue==="string"?oldValue:JSON.stringify(oldValue)),newValue,reason:adminNote||x.description||"Обработен сигнал за грешка",source});}else{if(!window.confirm("Да се маркира сигналът като обработен без промяна на публичен запис?"))return;}await markReport(x.id,"resolved",adminNote);panelMsg(panel,"Сигналът е обработен.",true);setTimeout(open,500);}catch(err){console.error(err);panelMsg(panel,"Грешка при обработването. Проверете дали записът е променен преди повторен опит.");}}));
   }
 
+  async function waitForInfoButton(){
+    for(let i=0;i<60;i+=1){
+      if(ensureButton()) return true;
+      await new Promise(resolve=>window.setTimeout(resolve,50));
+    }
+    return false;
+  }
+
+  function syncPendingSummary(){
+    window.setTimeout(()=>{
+      if(isModerator()){
+        injectPendingSummary(infoPendingCount);
+        return;
+      }
+      const label=document.querySelector("[data-info-admin]")?.textContent||"";
+      const pending=Number((label.match(/\((\d+)\)/)||[])[1]||0);
+      injectPendingSummary(pending);
+    },80);
+  }
+
   document.addEventListener("DOMContentLoaded",async()=>{
     if(!(await allowed())) return;
-    ensureButton();
+    if(!(await waitForInfoButton())) return;
     adminStyles();
     await refreshPendingIndicator();
+    syncPendingSummary();
 
-    const m=document.querySelector(".admin-menu");
-    if(m){new MutationObserver(()=>ensureButton()).observe(m,{childList:true});}
-
-    const c=document.querySelector(".admin-content");
-    if(c){
-      let scheduled=false;
-      new MutationObserver(()=>{if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;if(isModerator()){injectPendingSummary(infoPendingCount);return;}const label=document.querySelector("[data-info-admin]")?.textContent||"";const pending=Number((label.match(/\((\d+)\)/)||[])[1]||0);injectPendingSummary(pending);});}).observe(c,{childList:true});
-    }
+    document.addEventListener("click",event=>{
+      if(event.target?.closest?.(".admin-menu button,[data-admin-view],[data-dashboard-target]")) syncPendingSummary();
+    },true);
+    window.addEventListener("popitai:admin-actionable-counts",syncPendingSummary);
   });
 })();
