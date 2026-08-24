@@ -379,6 +379,13 @@
     if (menuButton && !menuButton.hasAttribute("data-admin-group-toggle") && !menuButton.hasAttribute("data-admin-menu-collapse")) {
       const group = menuButton.closest(".admin-menu-group");
       if (group?.dataset.adminMenuGroup) setOpenGroup(group.dataset.adminMenuGroup);
+      if (!menuButton.hasAttribute("data-admin-view")) {
+        activeView = "external";
+        syncMobileNav(
+          group?.dataset.adminMenuGroup === "review" ? "review" :
+          group?.dataset.adminMenuGroup === "content" ? "content" : "menu"
+        );
+      }
       closeMobileMenu();
     }
 
