@@ -7,7 +7,7 @@
   <meta name="description" content="Управление и модерация на Попитай.Лом.">
   <meta name="theme-color" content="#0b5fd7">
   <link rel="stylesheet" href="style.css?v=20260805-0736">
-  <link rel="stylesheet" href="admin-panel-v2.css?v=20260824-1905">
+  <link rel="stylesheet" href="admin-panel-v2.css?v=20260824-2002">
   <link rel="icon" href="assets/favicon-96.png" type="image/png">
   <style>html.admin-shell-starting .admin-stats,html.admin-shell-starting .admin-layout{visibility:hidden}</style>
   <script>document.documentElement.classList.add("admin-shell-starting");</script>
@@ -25,6 +25,7 @@
       <span class="admin-topbar-separator">/</span>
       <span class="admin-topbar-title">Панел</span>
       <div class="admin-topbar-actions">
+        <button class="admin-topbar-tasks" type="button" data-admin-topbar-tasks data-admin-view="dashboard" hidden>Зареждане на задачите…</button>
         <a class="admin-topbar-link" href="index.html">Към сайта</a>
         <a class="admin-topbar-profile" href="profil.html">Профил</a>
       </div>
@@ -68,7 +69,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="supabase-config.js?v=20260824-1446" defer></script>
   <script src="script.js?v=20260824-1947" defer></script>
-  <script src="admin-management.js?v=20260824-1947" defer></script>
+  <script src="admin-management.js?v=20260824-2002" defer></script>
   <script src="admin-user-edit-drafts.js?v=20260824-0005" defer></script>
   <script src="admin-expanded-businesses.js?v=20260824-0005" defer></script>
   <script src="admin-info.js?v=20260824-1838" defer></script>
