@@ -207,17 +207,17 @@
         <button class="admin-menu-home active" type="button" data-admin-view="dashboard"><span>Начало</span></button>
         <section class="admin-menu-group" data-admin-menu-group="review">
           <h2 class="admin-menu-group-title">
-            <button class="admin-menu-group-toggle" type="button" data-admin-group-toggle="review">За преглед</button>
+            <button class="admin-menu-group-toggle" type="button" data-admin-group-toggle="review" aria-expanded="false" aria-controls="admin-menu-group-review">За преглед</button>
           </h2>
-          <div class="admin-menu-group-items" data-admin-menu-group-items="review">
+          <div class="admin-menu-group-items" id="admin-menu-group-review" data-admin-menu-group-items="review">
             <button type="button" data-admin-view="pending">Чакащи <span class="admin-badge" id="admin-menu-badge" hidden>0</span></button>
           </div>
         </section>
         <section class="admin-menu-group" data-admin-menu-group="content">
           <h2 class="admin-menu-group-title">
-            <button class="admin-menu-group-toggle" type="button" data-admin-group-toggle="content">Съдържание</button>
+            <button class="admin-menu-group-toggle" type="button" data-admin-group-toggle="content" aria-expanded="false" aria-controls="admin-menu-group-content">Съдържание</button>
           </h2>
-          <div class="admin-menu-group-items" data-admin-menu-group-items="content">
+          <div class="admin-menu-group-items" id="admin-menu-group-content" data-admin-menu-group-items="content">
             <button type="button" data-admin-view="questions">Публикувани въпроси</button>
             <button type="button" data-admin-view="answers">Публикувани отговори</button>
             <button type="button" data-admin-view="listings">Обяви</button>
@@ -226,9 +226,9 @@
         </section>
         <section class="admin-menu-group" data-admin-menu-group="management">
           <h2 class="admin-menu-group-title">
-            <button class="admin-menu-group-toggle" type="button" data-admin-group-toggle="management">Управление</button>
+            <button class="admin-menu-group-toggle" type="button" data-admin-group-toggle="management" aria-expanded="false" aria-controls="admin-menu-group-management">Управление</button>
           </h2>
-          <div class="admin-menu-group-items" data-admin-menu-group-items="management">
+          <div class="admin-menu-group-items" id="admin-menu-group-management" data-admin-menu-group-items="management">
             <button type="button" data-admin-view="users">Потребители</button>
             ${admin ? '<button type="button" data-admin-view="contacts">Съобщения</button>' : ""}
           </div>
@@ -297,8 +297,11 @@
   }
 
   function setOpenGroup(name) {
-    $$(".admin-menu-group").forEach(group => {
-      group.classList.toggle("is-open", group.dataset.adminMenuGroup === name);
+    $(".admin-menu-group").forEach(group => {
+      const open = group.dataset.adminMenuGroup === name;
+      group.classList.toggle("is-open", open);
+      const toggle = group.querySelector("[data-admin-group-toggle]");
+      if (toggle) toggle.setAttribute("aria-expanded", String(open));
     });
   }
 
@@ -325,8 +328,8 @@
       event.preventDefault();
       const group = groupToggle.closest(".admin-menu-group");
       const wasOpen = group?.classList.contains("is-open");
-      $$(".admin-menu-group").forEach(item => item.classList.remove("is-open"));
-      if (!wasOpen && group) group.classList.add("is-open");
+      if (wasOpen) setOpenGroup("");
+      else if (group?.dataset.adminMenuGroup) setOpenGroup(group.dataset.adminMenuGroup);
       return;
     }
 
