@@ -73,7 +73,13 @@
   }
 
   function readView() {
-    try { return sessionStorage.getItem(VIEW_KEY) || ""; } catch (_) { return ""; }
+    try {
+      const navigation = performance.getEntriesByType?.("navigation")?.[0];
+      if (navigation?.type !== "reload") return "";
+      return sessionStorage.getItem(VIEW_KEY) || "";
+    } catch (_) {
+      return "";
+    }
   }
 
   function isLoadingText(root) {
