@@ -1190,8 +1190,14 @@ qsa(".simple-contact-form").forEach(form => {
 
   window.addEventListener('offline', () => showToast(MESSAGES.offline, 'error', 'Няма интернет'));
   window.addEventListener('online', () => showToast('Връзката с интернет е възстановена.', 'success', 'Отново си онлайн'));
-  window.addEventListener('unhandledrejection', () => showToast(MESSAGES.generic, 'error', 'Възникна проблем'));
+  const isAdminWorkspace = () => document.body?.classList?.contains('admin-panel-v2');
+
+  window.addEventListener('unhandledrejection', () => {
+    if (isAdminWorkspace()) return;
+    showToast(MESSAGES.generic, 'error', 'Възникна проблем');
+  });
   window.addEventListener('error', event => {
+    if (isAdminWorkspace()) return;
     if (event.target !== window) showToast(MESSAGES.generic, 'error', 'Възникна проблем');
   }, true);
 
