@@ -45,13 +45,23 @@
   }
 
   function ensureMenuButton() {
-    const menu = $(".admin-menu");
-    if (!menu || $("[data-user-edits-view]", menu)) return;
+    const review = $('.admin-menu [data-admin-menu-group-items="review"]');
+    if (!review) return false;
+    if ($("[data-user-edits-view]", review)) return true;
     const button = document.createElement("button");
     button.type = "button";
     button.dataset.userEditsView = "true";
     button.innerHTML = 'Потребителски редакции <span class="admin-badge" data-user-edits-badge hidden>0</span>';
-    (menu.querySelector('[data-admin-menu-group-items="review"]') || menu).append(button);
+    review.append(button);
+    return true;
+  }
+
+  async function waitForMenuButton() {
+    for (let i = 0; i < 60; i += 1) {
+      if (ensureMenuButton()) return true;
+      await new Promise(resolve => window.setTimeout(resolve, 50));
+    }
+    return false;
   }
 
   function fieldRows(draft) {
@@ -188,11 +198,7 @@
   async function init() {
     if (initialized || !(await authIsStaff())) return;
     initialized = true;
-    ensureMenuButton();
-
-    const observer = new MutationObserver(() => ensureMenuButton());
-    const menu = $(".admin-menu");
-    if (menu) observer.observe(menu, { childList: true });
+    if (!(await waitForMenuButton())) return;
 
     document.addEventListener("click", async (event) => {
       const menuButton = event.target.closest(".admin-menu button");
