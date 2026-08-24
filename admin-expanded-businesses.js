@@ -62,14 +62,24 @@
   }
 
   function ensureMenuButton() {
-    const menu = $(".admin-menu");
-    if (!menu || $("[data-expanded-businesses-view]", menu)) return;
+    const review = $('.admin-menu [data-admin-menu-group-items="review"]');
+    if (!review) return false;
+    if ($("[data-expanded-businesses-view]", review)) return true;
 
     const button = document.createElement("button");
     button.type = "button";
     button.dataset.expandedBusinessesView = "true";
     button.textContent = "Разширени профили";
-    (menu.querySelector('[data-admin-menu-group-items="review"]') || menu).append(button);
+    review.append(button);
+    return true;
+  }
+
+  async function waitForMenuButton() {
+    for (let i = 0; i < 60; i += 1) {
+      if (ensureMenuButton()) return true;
+      await new Promise(resolve => window.setTimeout(resolve, 50));
+    }
+    return false;
   }
 
   function draftDetails(draft) {
@@ -248,11 +258,7 @@
 
     if (!(await authIsStaff())) return;
 
-    ensureMenuButton();
-
-    const menuObserver = new MutationObserver(() => ensureMenuButton());
-    const menu = $(".admin-menu");
-    if (menu) menuObserver.observe(menu, { childList: true });
+    if (!(await waitForMenuButton())) return;
 
     document.addEventListener("click", async (event) => {
       const viewButton = event.target.closest("[data-expanded-businesses-view]");
