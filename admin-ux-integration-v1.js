@@ -87,7 +87,11 @@
     },
     expanded: {
       title: "Разширени фирмени профили",
-      text: "„Дай/Отнеми разширен профил“ управлява достъпа до разширените секции и не изтрива запазените разширени данни. „Одобри редакцията“ публикува чакаща чернова; „Върни за корекция“ изпраща бележка към собственика."
+      text: "Тук се обработват чакащи редакции на разширени фирмени профили. „Одобри редакцията“ публикува чакащата чернова, а „Върни за корекция“ изпраща бележка към собственика."
+    },
+    "expanded-access": {
+      title: "Достъп до разширен профил",
+      text: "Този Admin-only раздел управлява дали фирмата има право да използва разширените секции. Даване или отнемане на достъп не изтрива вече запазените разширени данни."
     },
     "businesses-pending": {
       title: "Чакащи фирми",
@@ -157,9 +161,10 @@
     if (active.hasAttribute("data-events-review")) return "events-pending";
     if (active.hasAttribute("data-events-admin")) return "events-all";
     if (active.hasAttribute("data-reports-admin")) return "reports";
-    if (active.hasAttribute("data-info-admin")) return "info";
+    if (active.hasAttribute("data-info-admin") || active.hasAttribute("data-info-moderator-review") || active.hasAttribute("data-info-review-shortcut")) return "info";
     if (active.hasAttribute("data-user-edits-view")) return "user-edits";
     if (active.hasAttribute("data-expanded-businesses-view")) return "expanded";
+    if (active.hasAttribute("data-expanded-access-view")) return "expanded-access";
     if (active.dataset.businessView) return active.dataset.businessView;
     return "";
   }
@@ -307,9 +312,15 @@
     const userId = currentProfile?.id;
     if (!userId) return { total:0, counts:{} };
 
-    const ownedBusinessesResult = await client.from("businesses").select("id").eq("owner_id", userId);
-    if (ownedBusinessesResult.error) throw ownedBusinessesResult.error;
-    const ownedBusinessIds = new Set((ownedBusinessesResult.data || []).map(row => row.id));
+    const businessesResult = await client.from("businesses").select("id,owner_id,is_expanded");
+    if (businessesResult.error) throw businessesResult.error;
+    const businessRows = businessesResult.data || [];
+    const ownedBusinessIds = new Set(businessRows.filter(row => row.owner_id === userId).map(row => row.id));
+    const reviewableExpandedBusinessIds = new Set(
+      businessRows
+        .filter(row => row.owner_id !== userId && row.is_expanded === true)
+        .map(row => row.id)
+    );
 
     const sources = [
       ["questions", "author_id"],
@@ -336,7 +347,7 @@
       const table = sources[index][0];
       const foreign = (result.data || []).filter(row => {
         if (table === "listings") return row.owner_id !== userId && row.author_id !== userId;
-        if (table === "business_expanded_profile_drafts") return !ownedBusinessIds.has(row.business_id);
+        if (table === "business_expanded_profile_drafts") return reviewableExpandedBusinessIds.has(row.business_id);
         const ownerField = {
           questions:"author_id",
           answers:"author_id",
