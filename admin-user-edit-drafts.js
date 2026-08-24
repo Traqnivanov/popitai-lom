@@ -15,7 +15,6 @@
     .replaceAll("'", "&#039;");
 
   let initialized = false;
-  let active = false;
   let currentUser = null;
   let currentRole = null;
 
@@ -133,7 +132,6 @@
   }
 
   async function loadView() {
-    active = true;
     const title = $("#admin-view-title");
     const container = $("#admin-view-content");
     if (!title || !container) return;
@@ -201,9 +199,6 @@
     if (!(await waitForMenuButton())) return;
 
     document.addEventListener("click", async (event) => {
-      const menuButton = event.target.closest(".admin-menu button");
-      if (menuButton && !menuButton.matches("[data-user-edits-view]")) active = false;
-
       const view = event.target.closest("[data-user-edits-view]");
       if (view) {
         event.preventDefault();
@@ -228,10 +223,6 @@
     }, true);
 
     await refreshBadge();
-    window.setInterval(async () => {
-      await refreshBadge();
-      if (active) await loadView();
-    }, 60000);
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
