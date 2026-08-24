@@ -10,7 +10,7 @@
     document.documentElement.classList.remove(START_CLASS);
   }
 
-  function restoreCoreShell(title = "Администрация") {
+  function restoreCoreShell(title = "") {
     const content = document.querySelector(".admin-content");
     if (!content) return null;
 
@@ -26,12 +26,12 @@
       viewNode = content.querySelector("#admin-view-content");
     }
 
-    if (titleNode) titleNode.textContent = title;
+    if (titleNode && title) titleNode.textContent = title;
     return viewNode;
   }
 
   window.PopitaiAdminShell = Object.freeze({
-    ensure(title = "Администрация") {
+    ensure(title = "") {
       return restoreCoreShell(title);
     }
   });
