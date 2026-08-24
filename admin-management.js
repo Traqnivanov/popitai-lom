@@ -828,6 +828,11 @@
   }
 
   async function handleClick(event) {
+    const externalModuleButton = event.target.closest(".admin-menu button:not([data-admin-view]):not([data-admin-group-toggle]):not([data-admin-menu-collapse])");
+    if (externalModuleButton) {
+      activeView = "external";
+    }
+
     const viewButton = event.target.closest("[data-admin-view]");
     if (viewButton) {
       event.preventDefault();
