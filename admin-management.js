@@ -236,6 +236,17 @@
         <div class="admin-menu-footer">
           <button class="admin-menu-collapse" type="button" data-admin-menu-collapse><span>← Свий менюто</span></button>
         </div>`;
+
+      menu.querySelectorAll("[data-admin-group-toggle]").forEach(groupToggle => {
+        groupToggle.addEventListener("click", event => {
+          event.preventDefault();
+          event.stopPropagation();
+          const group = groupToggle.closest(".admin-menu-group");
+          const wasOpen = group?.classList.contains("is-open");
+          if (wasOpen) setOpenGroup("");
+          else if (group?.dataset.adminMenuGroup) setOpenGroup(group.dataset.adminMenuGroup);
+        });
+      });
     }
 
     const content = $(".admin-content");
@@ -335,16 +346,6 @@
   }
 
   function handleNavigationChrome(event) {
-    const groupToggle = event.target.closest("[data-admin-group-toggle]");
-    if (groupToggle) {
-      event.preventDefault();
-      const group = groupToggle.closest(".admin-menu-group");
-      const wasOpen = group?.classList.contains("is-open");
-      if (wasOpen) setOpenGroup("");
-      else if (group?.dataset.adminMenuGroup) setOpenGroup(group.dataset.adminMenuGroup);
-      return;
-    }
-
     if (event.target.closest("[data-admin-menu-collapse]")) {
       event.preventDefault();
       const collapsed = document.body.classList.toggle("admin-sidebar-collapsed");
