@@ -266,6 +266,8 @@
     });
     window.addEventListener("popitai:admin-actionable-counts", event => {
       dashboardCounts = event.detail || null;
+      const pendingCount = $("#admin-pending-count");
+      if (pendingCount) pendingCount.textContent = String(Number(dashboardCounts?.total || 0));
       updateTopbarTasks(dashboardCounts);
       if (activeView === "dashboard") renderDashboard();
     });
@@ -888,16 +890,19 @@
     const viewButton = event.target.closest("[data-admin-view]");
     if (viewButton) {
       event.preventDefault();
+      const activeMenuButton = viewButton.closest(".admin-menu")
+        ? viewButton
+        : document.querySelector(`.admin-menu [data-admin-view="${CSS.escape(viewButton.dataset.adminView || "")}"]`);
       $$(".admin-menu button").forEach((item) => {
         if (!item.hasAttribute("data-admin-group-toggle") && !item.hasAttribute("data-admin-menu-collapse")) {
-          item.classList.toggle("active", item === viewButton);
+          item.classList.toggle("active", item === activeMenuButton);
         }
       });
       if (viewButton.dataset.adminView === "dashboard") setOpenGroup("");
       syncMobileNav(
         viewButton.dataset.adminView === "dashboard" ? "dashboard" :
-        viewButton.closest('[data-admin-menu-group="review"]') ? "review" :
-        viewButton.closest('[data-admin-menu-group="content"]') ? "content" : "menu"
+        activeMenuButton?.closest('[data-admin-menu-group="review"]') ? "review" :
+        activeMenuButton?.closest('[data-admin-menu-group="content"]') ? "content" : "menu"
       );
       await loadView(viewButton.dataset.adminView);
       return;
@@ -925,11 +930,6 @@
 
     await refreshCounts();
     if (activeView === "dashboard") await loadView("dashboard");
-    window.setInterval(async () => {
-      await refreshCounts();
-      if (activeView === "pending") await loadView("pending");
-      if (activeView === "dashboard") renderDashboard();
-    }, 60000);
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
