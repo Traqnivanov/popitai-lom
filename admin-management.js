@@ -602,6 +602,10 @@
         ${item.is_urgent ? "🔴 Спешно " : ""}${item.is_boosted ? "⬆ Горно " : ""}${item.is_highlighted ? "✨ Highlighted " : ""}${item.show_contact_buttons ? "📞 Бутони " : ""}
       </div>` : "";
 
+    const permanentDeleteButton = isAdminProfile()
+      ? `<button class="admin-action-delete" data-admin-action="delete" data-type="${type}" data-id="${escapeHtml(item.id)}">${mode === "pending" ? "Изтрий" : "Изтрий окончателно"}</button>`
+      : "";
+
     let actions = "";
     if (ownModeratorContent) {
       actions = `${viewLink}<span class="admin-status">Собствено съдържание — без модераторски действия</span>`;
@@ -610,15 +614,15 @@
         <button class="admin-action-approve" data-admin-action="approve" data-type="${type}" data-id="${escapeHtml(item.id)}">Одобри</button>
         <button class="admin-action-hide" data-admin-action="changes" data-type="${type}" data-id="${escapeHtml(item.id)}">Върни за корекция</button>
         <button class="admin-action-delete" data-admin-action="reject" data-type="${type}" data-id="${escapeHtml(item.id)}">Откажи</button>
-        <button class="admin-action-delete" data-admin-action="delete" data-type="${type}" data-id="${escapeHtml(item.id)}">Изтрий</button>`;
+        ${permanentDeleteButton}`;
     } else if (mode === "published") {
       actions = `${viewLink}
         <button class="admin-action-hide" data-admin-action="hide" data-type="${type}" data-id="${escapeHtml(item.id)}">Скрий</button>
-        <button class="admin-action-delete" data-admin-action="delete" data-type="${type}" data-id="${escapeHtml(item.id)}">Изтрий окончателно</button>`;
+        ${permanentDeleteButton}`;
     } else {
       actions = `
         <button class="admin-action-approve" data-admin-action="restore" data-type="${type}" data-id="${escapeHtml(item.id)}">Публикувай отново</button>
-        <button class="admin-action-delete" data-admin-action="delete" data-type="${type}" data-id="${escapeHtml(item.id)}">Изтрий окончателно</button>`;
+        ${permanentDeleteButton}`;
     }
 
     const typeLabel = isListing ? "Обява" : isQuestion ? "Въпрос" : "Отговор";
@@ -818,6 +822,10 @@
       if (!note) return;
       result = await updateStatus(type, id, "rejected", note);
     } else if (action === "delete") {
+      if (!isAdminProfile()) {
+        setMessage("Окончателното изтриване е само за администратор.", true);
+        return;
+      }
       const confirmed = window.confirm("Това ще изтрие съдържанието окончателно и не може да се върне. Продължаваш ли?");
       if (!confirmed) return;
       result = await client.from(table).delete().eq("id", id);
