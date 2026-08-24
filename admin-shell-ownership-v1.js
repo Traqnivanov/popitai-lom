@@ -173,7 +173,7 @@
   }
 
   window.addEventListener("click", event => {
-    const button = event.target?.closest?.(".admin-menu button");
+    const button = event.target?.closest?.(".admin-menu button,[data-admin-topbar-tasks][data-admin-view]");
     if (!button) return;
 
     const key = viewKey(button);
