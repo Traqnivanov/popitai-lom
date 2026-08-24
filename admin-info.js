@@ -354,16 +354,17 @@
   async function open(){
     if(!(await allowed())) return;
     adminStyles();
-    const menu=document.querySelector(".admin-menu"),box=document.querySelector(".admin-content");
+    const menu=document.querySelector(".admin-menu");
     menu?.querySelectorAll("button").forEach(b=>b.classList.toggle("active",b.dataset.infoAdmin==="1"||b.dataset.infoModeratorReview==="1"));
+    const box=window.PopitaiAdminShell?.ensure?.("Инфо Лом") || document.querySelector("#admin-view-content");
     if(!box)return;
-    box.innerHTML='<div class="block-heading"><h2>Инфо Лом</h2></div><article class="empty-card"><p>Зареждане…</p></article>';
-    try{ render(await loadData(),box); }catch(err){ console.error(err); box.innerHTML='<div class="block-heading"><h2>Инфо Лом</h2></div><article class="empty-card"><p>Не успяхме да заредим данните.</p></article>'; }
+    box.innerHTML='<article class="empty-card"><p>Зареждане…</p></article>';
+    try{ render(await loadData(),box); }catch(err){ console.error(err); box.innerHTML='<article class="empty-card"><p>Не успяхме да заредим данните.</p></article>'; }
   }
 
   function render(state,box){
     const {entries,subs,reports}=state;
-    box.innerHTML=`<div class="block-heading"><h2>Инфо Лом</h2></div><div class="info-admin-toolbar"><button type="button" data-tab="entries">Записи (${entries.length})</button><button type="button" data-tab="subs">Предложения (${subs.length})</button><button type="button" data-tab="reports">Сигнали (${reports.length})</button><a href="info.html" target="_blank" rel="noopener">Виж страницата</a></div><div id="info-admin-list"></div>`;
+    box.innerHTML=`<div class="info-admin-toolbar"><button type="button" data-tab="entries">Записи (${entries.length})</button><button type="button" data-tab="subs">Предложения (${subs.length})</button><button type="button" data-tab="reports">Сигнали (${reports.length})</button><a href="info.html" target="_blank" rel="noopener">Виж страницата</a></div><div id="info-admin-list"></div>`;
     const draw=tab=>{box.querySelectorAll("[data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));const out=document.getElementById("info-admin-list");if(!out)return;if(tab==="entries"){out.innerHTML=`<div class="info-admin-toolbar"><input type="search" data-entry-search placeholder="Търси по име, адрес, телефон, раздел..."><select data-entry-category><option value="">Всички раздели</option>${[...new Set(entries.map(e=>e.category))].sort().map(v=>`<option value="${esc(v)}">${esc(catLabel(v))}</option>`).join("")}</select><select data-entry-status><option value="">Всички статуси</option><option value="published">Публикувани</option><option value="review">За проверка</option><option value="hidden">Скрити</option></select></div><div class="info-admin-meta" data-entry-count></div><div data-entry-groups></div>`;renderEntryGroups(out,entries);wireEntryFilters(out,entries);}else if(tab==="subs"){out.innerHTML=`<div class="stack-list">${subs.map(x=>submissionCard(x,entries)).join("")||'<article class="empty-card"><p>Няма чакащи предложения.</p></article>'}</div>`;wireSubmissions(out,state);}else{out.innerHTML=`<div class="stack-list">${reports.map(x=>reportCard(x,entries)).join("")||'<article class="empty-card"><p>Няма чакащи сигнали.</p></article>'}</div>`;wireReports(out,state);}};
     box.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>draw(b.dataset.tab)));
     box.querySelector('[data-tab="'+(subs.length?"subs":reports.length?"reports":"entries")+'"]')?.click();
