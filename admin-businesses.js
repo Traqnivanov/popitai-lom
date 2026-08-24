@@ -355,11 +355,6 @@
       try { await performAction(actionButton); }
       finally { actionButton.disabled = false; }
     }, true);
-
-    window.setInterval(async () => {
-      await refreshBusinessCounts();
-      if (activeBusinessView === "businesses-pending") await loadBusinesses(activeBusinessView);
-    }, 60000);
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true });
