@@ -42,6 +42,7 @@
     if (button.dataset.businessView) return `business:${button.dataset.businessView}`;
     if (button.hasAttribute("data-user-edits-view")) return "user-edits";
     if (button.hasAttribute("data-expanded-businesses-view")) return "expanded";
+    if (button.hasAttribute("data-expanded-access-view")) return "expanded-access";
     if (button.hasAttribute("data-shops-review")) return "shops-review";
     if (button.hasAttribute("data-shops-admin")) return "shops";
     if (button.hasAttribute("data-events-review")) return "events-review";
@@ -58,6 +59,7 @@
     return {
       "user-edits": "[data-user-edits-view]",
       expanded: "[data-expanded-businesses-view]",
+      "expanded-access": "[data-expanded-access-view]",
       "shops-review": "[data-shops-review]",
       shops: "[data-shops-admin]",
       "events-review": "[data-events-review]",
@@ -111,7 +113,6 @@
         resolve(value);
       };
 
-      // Еднократен startup observer; изключва се веднага след достигане на състоянието.
       const observer = new MutationObserver(() => {
         if (test()) finish(true);
       });
@@ -153,7 +154,6 @@
       const content = document.querySelector(".admin-content");
       if (!button || !content) return;
 
-      // Ако базовият renderer вече е на същата секция и е приключил, няма втори render.
       if (button.classList.contains("active") && !isLoadingText(content)) return;
 
       const beforeHtml = content.innerHTML;
@@ -167,7 +167,6 @@
         return currentButton.classList.contains("active") && changed && !isLoadingText(currentContent);
       });
     } finally {
-      // Startup никога не държи интерфейса скрит повече от един общ кратък лимит.
       revealStartup();
     }
   }
@@ -178,9 +177,6 @@
 
     const key = viewKey(button);
     if (key) saveView(key);
-
-    // Всички Admin/Moderator модули използват един и същ shell.
-    // Capture фазата гарантира root-а преди конкретният renderer да започне.
     restoreCoreShell();
   }, true);
 
