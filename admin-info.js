@@ -73,14 +73,18 @@
   async function getClient(){
     if(window.PopitaiSupabase) return window.PopitaiSupabase;
     return new Promise(resolve => {
+      let tries = 0;
       const t = setInterval(() => {
+        tries += 1;
         if(window.PopitaiSupabase){ clearInterval(t); resolve(window.PopitaiSupabase); }
+        else if(tries >= 100){ clearInterval(t); resolve(null); }
       },50);
     });
   }
 
   async function allowed(){
     client = client || await getClient();
+    if(!client) return false;
     const {data:u} = await client.auth.getUser();
     currentUser = u?.user || null;
     if(!currentUser) return false;
@@ -106,7 +110,13 @@
 
   function ensureButton(){
     const menu = document.querySelector(".admin-menu");
-    if(!menu) return;
+    if(!menu) return false;
+
+    if(isModerator()){
+      menu.querySelector("[data-info-admin]")?.remove();
+      return Boolean(ensureModeratorReviewShortcut());
+    }
+
     let b = menu.querySelector("[data-info-admin]");
     if(!b){
       b = document.createElement("button");
@@ -115,13 +125,8 @@
       b.addEventListener("click",open);
       (menu.querySelector('[data-admin-menu-group-items="content"]') || menu).appendChild(b);
     }
-    if(isModerator()){
-      b.textContent="Инфо Лом";
-      b.dataset.infoPendingLabel="1";
-      ensureModeratorReviewShortcut();
-    }else if(!b.dataset.infoPendingLabel){
-      b.textContent = "Инфо Лом";
-    }
+    if(!b.dataset.infoPendingLabel) b.textContent = "Инфо Лом";
+    return true;
   }
 
   function pendingSubmissionQuery(){
@@ -139,6 +144,7 @@
   async function refreshPendingIndicator(){
     try{
       client = client || await getClient();
+      if(!client) return;
       const [{count:subsCount,error:subsErr},{count:reportsCount,error:reportsErr}] = await Promise.all([
         pendingSubmissionQuery(),
         pendingReportQuery()
@@ -146,17 +152,16 @@
       if(subsErr) throw subsErr;
       if(reportsErr) throw reportsErr;
       const pending = (subsCount||0) + (reportsCount||0);
-      const b = document.querySelector(".admin-menu [data-info-admin]");
-      if(b){
-        if(isModerator()){
-          b.textContent="Инфо Лом";
-          b.dataset.infoPendingLabel="1";
-          const review=ensureModeratorReviewShortcut();
-          if(review){
-            review.innerHTML=`Инфо Лом <span class="admin-badge">${pending}</span>`;
-            review.hidden=pending<=0;
-          }
-        }else{
+
+      if(isModerator()){
+        const review=ensureModeratorReviewShortcut();
+        if(review){
+          review.innerHTML=`Инфо Лом <span class="admin-badge">${pending}</span>`;
+          review.hidden=pending<=0;
+        }
+      }else{
+        const b = document.querySelector(".admin-menu [data-info-admin]");
+        if(b){
           b.textContent = pending ? `Инфо Лом (${pending})` : "Инфо Лом";
           b.dataset.infoPendingLabel = "1";
         }
@@ -356,7 +361,9 @@
     if(!(await allowed())) return;
     adminStyles();
     const menu=document.querySelector(".admin-menu");
-    menu?.querySelectorAll("button").forEach(b=>b.classList.toggle("active",b.dataset.infoAdmin==="1"||b.dataset.infoModeratorReview==="1"));
+    menu?.querySelectorAll("button").forEach(b=>b.classList.toggle("active",
+      (isAdmin() && b.dataset.infoAdmin==="1") || (isModerator() && b.dataset.infoModeratorReview==="1")
+    ));
     const box=window.PopitaiAdminShell?.ensure?.("Инфо Лом") || document.querySelector("#admin-view-content");
     if(!box)return;
     box.innerHTML='<article class="empty-card"><p>Зареждане…</p></article>';
@@ -474,7 +481,7 @@
   function wireReports(root,state){
     root.querySelectorAll("[data-report-review]").forEach(btn=>btn.addEventListener("click",()=>{const p=root.querySelector(`[data-report-panel="${CSS.escape(btn.dataset.reportReview)}"]`);if(p)p.hidden=!p.hidden;}));
     root.querySelectorAll("[data-report-return]").forEach(btn=>btn.addEventListener("click",async()=>{const x=state.reports.find(r=>r.id===btn.dataset.reportReturn);if(!x)return;const note=window.prompt("Каква допълнителна информация е нужна?","")?.trim();if(!note)return;try{await markReport(x.id,"needs_info",note);window.alert("Поискана е допълнителна информация от подателя.");await open();}catch(err){console.error(err);window.alert("Неуспешно връщане към подателя.");}}));
-    root.querySelectorAll("[data-report-reject]").forEach(btn=>btn.addEventListener("click",async()=>{const x=state.reports.find(r=>r.id===btn.dataset.reportReject);if(!x)return;const note=window.prompt("Причина / бележка:","")??"";if(!window.confirm("Да се отхвърли сигналът?"))return;try{await markReport(x.id,"rejected",note);await open();}catch(err){console.error(err);window.alert("Неуспешно отхвърляне.");}}));
+    root.querySelectorAll("[data-report-reject]").forEach(btn=>btn.addEventListener("click",async()=>{const x=state.reports.find(r=>r.id===btn.dataset.reportReject);if(!x)return;const note=window.prompt("Причина / бележка:","")??"";if(!window.confirm("Да се отхвърли сигналът?"))return;try{await markReport(x.id,"dismissed",note);await open();}catch(err){console.error(err);window.alert("Неуспешно отхвърляне.");}}));
     root.querySelectorAll("[data-resolve-report]").forEach(btn=>btn.addEventListener("click",async()=>{const x=state.reports.find(r=>r.id===btn.dataset.resolveReport),panel=btn.closest("[data-report-panel]");if(!x||!panel)return;const entryId=panel.querySelector("[data-target-entry]")?.value||"",fieldKey=panel.querySelector("[data-field-key]")?.value.trim()||"",newValue=panel.querySelector("[data-new-value]")?.value.trim()??"",adminNote=panel.querySelector("[data-admin-note]")?.value.trim()||"",source=panel.querySelector("[data-source]")?.value.trim()||"";try{if(entryId&&fieldKey){if(!/^[A-Za-z0-9_]+$/.test(fieldKey)){panelMsg(panel,"Невалиден JSON key.");return;}if(!source){panelMsg(panel,"За промяна по запис е нужен източник.");return;}const entry=state.entries.find(e=>e.id===entryId);if(!entry){panelMsg(panel,"Записът не е намерен.");return;}if(!window.confirm(`Да се приложи промяна по „${entry.name}“ и да се затвори сигналът?`))return;}else{if(!window.confirm("Да се маркира сигналът като обработен без промяна на публичен запис?"))return;}const {error}=await client.rpc("staff_resolve_info_error_report",{p_report_id:x.id,p_entry_id:entryId||null,p_field_key:fieldKey||null,p_new_value:newValue,p_admin_note:adminNote,p_source:source});if(error)throw error;panelMsg(panel,"Сигналът е обработен.",true);setTimeout(open,500);}catch(err){console.error(err);panelMsg(panel,"Грешка при обработването. Проверете дали записът е променен преди повторен опит.");}}));
   }
 
