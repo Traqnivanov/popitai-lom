@@ -189,18 +189,49 @@ admin-management.js претърпя няколко тесни поправки 
 - нужда от user-only действие;
 - blocker, който не е безопасно да решиш сам.
 
-## 10. Следваща правилна стъпка
+## 10. Текущ audit checkpoint — 24.08.2026 вечер
+
+Source/backend re-audit е изпълнен и текущият `main` включва:
+- Moderator hard-delete UI/JS fix;
+- business module restore + startup-order guard;
+- persistent observer cleanup;
+- Info Lom Moderator direct-edit boundary + narrow moderation RPCs;
+- Admin/Moderator/public RLS role-boundary corrections;
+- Moderator foreign-content field guard за core content, media, shops, events;
+- Moderator review-queue field guard за reports / Info Lom submissions / Info Lom error reports;
+- group-toggle ARIA state;
+- mobile drawer aria-controls / label / Escape focus restore;
+- topbar Dashboard refresh-restore persistence;
+- cache-bust на променените Admin v2 scripts.
+
+Backend transaction QA потвърждава:
+- Moderator hard delete е блокиран;
+- Moderator не може да управлява роли;
+- Moderator не може да дава expanded access;
+- Moderator не може да блокира Admin;
+- разрешено moderation update минава;
+- промяна на защитено чуждо съдържание се блокира;
+- anon role helpers връщат false;
+- anon вижда одобрено публично съдържание, не вижда non-approved и няма INSERT/UPDATE/DELETE table grants.
+
+Production Moderator Dashboard е пасивно потвърден с 2 actionable задачи: Магазини 1 + Инфо Лом 1.
+
+## 11. Следваща правилна стъпка
 
 Не започвай нов redesign.
 
-Продължи по одобрения v2 модел:
-1. source audit на current admin-management.js и shell;
-2. production QA на Dashboard + group toggle + collapse/expand;
-3. sequential desktop module QA;
-4. fix само доказани дефекти;
-5. mobile QA;
-6. update PROJECT_PROGRESS.md и QA findings;
+Остава само реалният interaction QA:
+1. desktop Moderator — всички групи, direct links, modules, refresh, actions;
+2. desktop Admin — същият пълен flow;
+3. mobile Moderator;
+4. mobile Admin;
+5. long-scroll/sticky/loading/empty/error/no-blank checks;
+6. update QA findings;
 7. чак тогава final PASS.
+
+Текущият browser connector няма click/press API. Passive accessibility-tree проверката не е достатъчна за final PASS. Ако няма друг интерактивен browser tool, това е user-only QA blocker и потребителят трябва да бъде включен само за този конкретен interactive step.
+
+## 12. Не се прави
 
 ## 11. Не се прави
 

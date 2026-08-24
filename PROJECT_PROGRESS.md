@@ -147,19 +147,33 @@ LOCKED без отделно изрично одобрение:
 - Info Lom / Shops / Events / Reports са насочени към shared render root;
 - Moderator self-moderation и hard-delete/expanded границите остават защитени.
 
+Вече е проверено/затегнато в текущия Admin v2 audit:
+- source re-audit на `admin-management.js`, shared shell и external module startup;
+- отстранени са single-element `.forEach` рисковете;
+- Moderator hard-delete UI/JS е премахнат и backend hard-delete остава Admin-only;
+- business module е върнат в Admin v2 и startup race е отстранен;
+- permanent menu/content observers са премахнати; остават само bounded startup observers;
+- Info Lom Moderator няма свободно директно редактиране на каталога; работи през тесни moderation RPC потоци;
+- Moderator foreign-content direct UPDATE е ограничен до moderation/review полета в DB за core content, shops, events, media, reports и Info Lom queues;
+- Moderator self-moderation, role management, expanded-access и Admin blocking границите са backend-проверени;
+- public/anon RLS helper достъпът е коригиран така, че нерегистриран посетител да вижда само публично съдържание и да няма write/role права;
+- group-toggle ARIA, mobile drawer ARIA/Escape, cache bust и topbar refresh-restore са коригирани;
+- production Moderator Dashboard е пасивно потвърден с очакваните 2 задачи: Магазини 1 + Инфо Лом 1.
+
 Задължително остава:
-- source re-audit на current `admin-management.js`;
-- production QA desktop Moderator;
-- production QA desktop Admin;
-- production QA mobile Moderator;
-- production QA mobile Admin;
-- group toggle/collapse/expand;
-- Dashboard direct links;
+- реален interaction QA desktop Moderator;
+- реален interaction QA desktop Admin;
+- реален interaction QA mobile Moderator;
+- реален interaction QA mobile Admin;
+- group toggle/collapse/expand чрез реални кликове;
+- Dashboard direct links чрез реални кликове;
 - refresh restore във всяка важна секция;
 - long-scroll sticky behavior;
 - blank/loading/error states;
 - interoperability между Info Lom / Shops / Events / Reports / Businesses / Listings / User edits / Expanded profiles;
-- финална role/ownership проверка.
+- финална role/ownership проверка през реалния UI.
+
+Текущият свързан browser connector позволява четене/навигация и screenshot, но няма click/press действие. Затова passive production QA не се брои за пълен functional PASS.
 
 Не се маркира „готово“ преди реалния QA.
 
