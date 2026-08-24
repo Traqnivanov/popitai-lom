@@ -57,7 +57,7 @@
     const hasAdminPage = document.querySelector("#admin-view-content, .admin-content")
       && document.body?.dataset.skipSupabaseContent === "true";
     if (hasAdminPage) {
-      appendScript("admin-businesses.js?v=20260824-1438", "popitai-admin-businesses");
+      appendScript("admin-businesses.js?v=20260824-1446", "popitai-admin-businesses");
     }
 
     const detailTitle = document.querySelector("#question-detail-title");
