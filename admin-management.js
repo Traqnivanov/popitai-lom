@@ -205,7 +205,7 @@
     if (menu) {
       menu.innerHTML = `
         <button class="admin-menu-home active" type="button" data-admin-view="dashboard"><span>Начало</span></button>
-        <section class="admin-menu-group is-open" data-admin-menu-group="review">
+        <section class="admin-menu-group" data-admin-menu-group="review">
           <h2 class="admin-menu-group-title">
             <button class="admin-menu-group-toggle" type="button" data-admin-group-toggle="review">За преглед</button>
           </h2>
@@ -787,6 +787,7 @@
           item.classList.toggle("active", item === viewButton);
         }
       });
+      if (viewButton.dataset.adminView === "dashboard") setOpenGroup("");
       await loadView(viewButton.dataset.adminView);
       return;
     }
