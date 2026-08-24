@@ -265,12 +265,16 @@
     ));
     const failed = results.map((result, index) => result.error ? sources[index][0] : "").filter(Boolean);
     if (failed.length) throw new Error(`Оперативният брояч не можа да провери: ${failed.join(", ")}`);
-    return results.reduce((sum, result) => sum + (result.count || 0), 0);
+
+    const counts = {};
+    sources.forEach(([table], index) => { counts[table] = results[index].count || 0; });
+    const total = Object.values(counts).reduce((sum, count) => sum + count, 0);
+    return { total, counts };
   }
 
   async function countModeratorPending() {
     const userId = currentProfile?.id;
-    if (!userId) return 0;
+    if (!userId) return { total:0, counts:{} };
 
     const ownedBusinessesResult = await client.from("businesses").select("id").eq("owner_id", userId);
     if (ownedBusinessesResult.error) throw ownedBusinessesResult.error;
@@ -296,7 +300,8 @@
     const failed = results.map((result, index) => result.error ? sources[index][0] : "").filter(Boolean);
     if (failed.length) throw new Error(`Оперативният брояч не можа да провери: ${failed.join(", ")}`);
 
-    return results.reduce((total, result, index) => {
+    const counts = {};
+    results.forEach((result, index) => {
       const table = sources[index][0];
       const foreign = (result.data || []).filter(row => {
         if (table === "listings") return row.owner_id !== userId && row.author_id !== userId;
@@ -314,16 +319,19 @@
         }[table];
         return !ownerField || row[ownerField] !== userId;
       });
-      return total + foreign.length;
-    }, 0);
-  }
+      counts[table] = foreign.length;
+    });
 
+    const total = Object.values(counts).reduce((sum, count) => sum + count, 0);
+    return { total, counts };
+  }
   async function refreshActionableCount() {
     if (!client || !currentProfile) return;
     try {
-      const total = currentProfile.role === "moderator"
+      const detail = currentProfile.role === "moderator"
         ? await countModeratorPending()
         : await countAdminPending();
+      const total = Number(detail?.total || 0);
       const stat = document.querySelector("#admin-pending-count");
       if (stat) stat.textContent = String(total);
       ensureOperationalStatLabel();
@@ -332,6 +340,14 @@
       document.title = total > 0
         ? `(${total}) ${panelName} панел | Попитай.Лом`
         : `${panelName} панел | Попитай.Лом`;
+
+      window.dispatchEvent(new CustomEvent("popitai:admin-actionable-counts", {
+        detail: {
+          total,
+          counts: detail?.counts || {},
+          role: currentProfile.role
+        }
+      }));
     } catch (error) {
       console.warn("Оперативният брояч не можа да се обнови:", error);
     }
