@@ -158,6 +158,8 @@
       badge.textContent = String(pendingCount);
       badge.hidden = pendingCount === 0;
     }
+    const pendingButton = document.querySelector('[data-business-view="businesses-pending"]');
+    if (pendingButton) pendingButton.hidden = pendingCount === 0;
     if ($("#admin-businesses-count")) $("#admin-businesses-count").textContent = String(approvedCount);
   }
 
@@ -276,10 +278,27 @@
     const menu = $(".admin-menu");
     if (!menu || $("[data-business-view]")) return;
 
-    menu.insertAdjacentHTML("beforeend", `
-      <button type="button" data-business-view="businesses-pending">Чакащи фирми <span class="admin-badge" id="admin-businesses-badge" hidden>0</span></button>
-      <button type="button" data-business-view="businesses-approved">Публикувани фирми</button>
-      <button type="button" data-business-view="businesses-hidden">Скрити фирми</button>`);
+    const review = menu.querySelector('[data-admin-menu-group-items="review"]');
+    const content = menu.querySelector('[data-admin-menu-group-items="content"]');
+    if (!review || !content) return;
+
+    const pending = document.createElement("button");
+    pending.type = "button";
+    pending.dataset.businessView = "businesses-pending";
+    pending.innerHTML = 'Чакащи фирми <span class="admin-badge" id="admin-businesses-badge" hidden>0</span>';
+    review.appendChild(pending);
+
+    const approved = document.createElement("button");
+    approved.type = "button";
+    approved.dataset.businessView = "businesses-approved";
+    approved.textContent = "Публикувани фирми";
+    content.appendChild(approved);
+
+    const hidden = document.createElement("button");
+    hidden.type = "button";
+    hidden.dataset.businessView = "businesses-hidden";
+    hidden.textContent = "Скрити фирми";
+    content.appendChild(hidden);
 
     const stats = $(".admin-stats");
     if (stats && !$("#admin-businesses-count")) {
