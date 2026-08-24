@@ -45,6 +45,17 @@
     ));
   }
 
+  function stripModeratorListingExtendedControls(target) {
+    if (currentRole !== "moderator") return;
+    const approve = target.closest?.('[data-admin-action="approve"][data-type="listing"]');
+    const id = approve?.dataset?.id;
+    if (!id) return;
+    document.querySelectorAll('.listing-ext-check').forEach(input => {
+      if (input.dataset.id !== id) return;
+      input.closest("label")?.remove();
+    });
+  }
+
   function showBlockedMessage() {
     const box = document.querySelector("#admin-panel-message, .admin-panel-message");
     if (box) {
@@ -77,6 +88,7 @@
   }
 
   document.addEventListener("click", (event) => {
+    stripModeratorListingExtendedControls(event.target);
     if (!isForbiddenModeratorAction(event.target)) return;
     event.preventDefault();
     event.stopImmediatePropagation();
