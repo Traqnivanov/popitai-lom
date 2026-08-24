@@ -14,7 +14,16 @@
     .replaceAll("'", "&#039;");
 
   let currentUser = null;
+  let currentProfile = null;
   let activeBusinessView = null;
+
+  function isModeratorProfile() {
+    return currentProfile?.role === "moderator" && currentProfile?.is_blocked !== true;
+  }
+
+  function isOwnBusiness(item) {
+    return Boolean(item?.owner_id && currentUser?.id && item.owner_id === currentUser.id);
+  }
 
   const labels = {
     pending: "Чака одобрение",
@@ -91,8 +100,12 @@
   }
 
   function businessCard(item, mode, mediaRows = []) {
+    const ownModeratorBusiness = isModeratorProfile() && isOwnBusiness(item);
     let actions = "";
-    if (mode === "pending") {
+    if (ownModeratorBusiness) {
+      actions = '<span class="admin-status">Собствено съдържание — без модераторски действия</span>';
+    } else
+    else if (mode === "pending") {
       actions = `
         <button class="admin-action-approve" data-business-action="approve" data-id="${escapeHtml(item.id)}">Одобри</button>
         <button class="admin-action-hide" data-business-action="changes" data-id="${escapeHtml(item.id)}">Върни за корекция</button>
@@ -125,12 +138,16 @@
     currentUser = error ? null : data?.user || null;
     if (!currentUser) return false;
     const { data: profile } = await client.from("profiles").select("role, is_blocked").eq("id", currentUser.id).maybeSingle();
+    currentProfile = profile || null;
     return Boolean(profile && ["admin", "moderator"].includes(profile.role) && !profile.is_blocked);
   }
 
   async function refreshBusinessCounts() {
+    let pendingQuery = client.from("businesses").select("id", { count: "exact", head: true }).eq("status", "pending");
+    if (isModeratorProfile() && currentUser?.id) pendingQuery = pendingQuery.neq("owner_id", currentUser.id);
+
     const [pending, approved] = await Promise.all([
-      client.from("businesses").select("id", { count: "exact", head: true }).eq("status", "pending"),
+      pendingQuery,
       client.from("businesses").select("id", { count: "exact", head: true }).eq("status", "approved")
     ]);
 
@@ -164,12 +181,16 @@
 
     let query = client
       .from("businesses")
-      .select("id, name, category, description, phone, status, moderation_note, created_at")
+      .select("id, name, category, description, phone, status, moderation_note, created_at, owner_id")
       .order("created_at", { ascending: false });
 
     query = config.filter.length === 1
       ? query.eq("status", config.filter[0])
       : query.in("status", config.filter);
+
+    if (config.mode === "pending" && isModeratorProfile() && currentUser?.id) {
+      query = query.neq("owner_id", currentUser.id);
+    }
 
     const { data, error } = await query;
     if (error) {
