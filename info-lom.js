@@ -200,15 +200,26 @@
     document.querySelectorAll("[data-info-signal]").forEach(btn=>btn.addEventListener("click",()=>openSignal(btn.dataset.infoSignal||"")));
   }
 
+  let modalReturnFocus = null;
+
   function modal(){ return document.getElementById("info-modal"); }
   function showModal(title, lead, body){
     const m=modal(); if(!m)return;
+    modalReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     m.querySelector("[data-modal-title]").textContent=title;
     m.querySelector("[data-modal-lead]").textContent=lead||"";
     m.querySelector("[data-modal-body]").innerHTML=body;
     m.hidden=false; document.body.style.overflow="hidden";
+    requestAnimationFrame(() => m.querySelector("[data-modal-close]")?.focus());
   }
-  function closeModal(){ const m=modal(); if(!m)return; m.hidden=true; document.body.style.overflow=""; }
+  function closeModal(){
+    const m=modal(); if(!m)return;
+    m.hidden=true;
+    document.body.style.overflow="";
+    const target = modalReturnFocus;
+    modalReturnFocus = null;
+    requestAnimationFrame(() => target?.isConnected && target.focus());
+  }
 
   function loginMessage(){ return `<div class="info-login-note">За да изпратиш предложение или сигнал, първо <a href="vhod.html">влез в профила си</a>. Информацията никога не се публикува автоматично.</div>`; }
 
