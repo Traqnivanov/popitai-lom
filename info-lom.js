@@ -210,7 +210,7 @@
     m.querySelector("[data-modal-lead]").textContent=lead||"";
     m.querySelector("[data-modal-body]").innerHTML=body;
     m.hidden=false; document.body.style.overflow="hidden";
-    requestAnimationFrame(() => m.querySelector("[data-modal-close]")?.focus());
+    requestAnimationFrame(() => m.querySelector("button[data-modal-close]")?.focus());
   }
   function closeModal(){
     const m=modal(); if(!m)return;
