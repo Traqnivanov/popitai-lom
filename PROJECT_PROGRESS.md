@@ -128,62 +128,63 @@ LOCKED без отделно изрично одобрение:
 
 Забранено е механично уеднаквяване на различни категории само защото една има повече бутони, полета или действия от друга. Целта е да се намират истински пропуски спрямо потребителската задача и правилата на проекта.
 
-## 7. ADMIN / MODERATOR PANEL V2 — ТЕКУЩ СТАТУС
+## 7. ADMIN / MODERATOR PANEL V2 — PASS
 
-Одобреният UX модел е записан в `ADMIN_PANEL_V2_APPROVED_SPEC.md`.
-Текущият implementation handoff е в `ADMIN_PANEL_V2_HANDOFF_2026-08-24.md`.
+Одобреният UX модел е записан в `ADMIN_PANEL_V2_APPROVED_SPEC.md`, а implementation handoff — в `ADMIN_PANEL_V2_HANDOFF_2026-08-24.md`.
 
-Статус: **В ПРОЦЕС / НЕ Е PASS**.
+Статус: **ЗАВЪРШЕН / REAL INTERACTION QA PASS**.
 
-Вече е приложено:
-- отделен Admin/Moderator app shell;
-- Dashboard начало с role-correct actionable tasks;
-- persistent task indicator в top bar;
-- grouped navigation: Начало / За преглед / Съдържание / Управление;
-- sticky/collapsible sidebar;
-- mobile drawer + bottom navigation;
-- shared content shell;
-- role-aware help;
-- Info Lom / Shops / Events / Reports са насочени към shared render root;
-- Moderator self-moderation и hard-delete/expanded границите остават защитени.
+Реално са проверени и са PASS:
+- Admin desktop;
+- Moderator desktop;
+- Admin mobile;
+- Moderator mobile;
+- menu groups, collapse/expand, refresh restore и long-scroll/sticky behavior;
+- Dashboard direct links, mobile drawer и bottom navigation;
+- секциите Info Lom / Shops / Events / Reports / Businesses / Listings / User edits / Expanded profiles / Users;
+- липса на blank render и role-correct UI;
+- Moderator self-moderation protection;
+- Admin-only permanent delete;
+- Admin-only role и expanded-access management;
+- backend enforcement на същите граници.
 
-Вече е проверено/затегнато в текущия Admin v2 audit:
-- source re-audit на `admin-management.js`, shared shell и external module startup;
-- отстранени са single-element `.forEach` рисковете;
-- Moderator hard-delete UI/JS е премахнат и backend hard-delete остава Admin-only;
-- business module е върнат в Admin v2 и startup race е отстранен;
-- permanent menu/content observers са премахнати; остават само bounded startup observers;
-- Info Lom Moderator няма свободно директно редактиране на каталога; работи през тесни moderation RPC потоци;
-- Moderator foreign-content direct UPDATE е ограничен до moderation/review полета в DB за core content, shops, events, media, reports и Info Lom queues;
-- Moderator self-moderation, role management, expanded-access и Admin blocking границите са backend-проверени;
-- public/anon RLS helper достъпът е коригиран така, че нерегистриран посетител да вижда само публично съдържание и да няма write/role права;
-- group-toggle ARIA, mobile drawer ARIA/Escape, cache bust и topbar refresh-restore са коригирани;
-- production Moderator Dashboard е пасивно потвърден с очакваните 2 задачи: Магазини 1 + Инфо Лом 1.
+Последната backend корекция е PR #68, merge commit `0ef403878d9d0511d09dc12721e41e47d5459d58`. Директните Moderator status updates за Info Lom са ограничени до разрешените review състояния; approved/resolved остават през защитените RPC потоци.
 
-Задължително остава:
-- реален interaction QA desktop Moderator;
-- реален interaction QA desktop Admin;
-- реален interaction QA mobile Moderator;
-- реален interaction QA mobile Admin;
-- group toggle/collapse/expand чрез реални кликове;
-- Dashboard direct links чрез реални кликове;
-- refresh restore във всяка важна секция;
-- long-scroll sticky behavior;
-- blank/loading/error states;
-- interoperability между Info Lom / Shops / Events / Reports / Businesses / Listings / User edits / Expanded profiles;
-- финална role/ownership проверка през реалния UI.
+Admin/Moderator Panel v2 не се започва отново без конкретен нов доказан проблем.
 
-Текущият свързан browser connector позволява четене/навигация и screenshot, но няма click/press действие. Затова passive production QA не се брои за пълен functional PASS.
+## 8. PUBLIC PRODUCTION QA — ТЕКУЩ СТАТУС
 
-Не се маркира „готово“ преди реалния QA.
+На 25.08.2026 е извършен реален desktop production QA на публичния сайт и signed-out състоянията.
 
-## 8. ОСТАВАЩИ ЗАДАЧИ
+Проверено:
+- основните публични страници, category hubs, Info Lom разделите, магазини, събития, търсене и graceful not-found състояния;
+- вътрешните `href/src` референции във всички 43 HTML файла — няма доказан счупен вътрешен адрес;
+- публичните въпроси: loading → empty state, филтри и търсене;
+- формите за въпрос, фирма, обява, вход, регистрация, сигнал и забравена парола — labels/ARIA, status региони и submit controls;
+- signed-out profile state — няма password form/heading и очакваната липса на сесия не се показва като грешка;
+- Info Lom signal modal — правилно signed-out съдържание, focus към close button и връщане към trigger;
+- „Институции“ — еднократен public render owner, 22 priority карти и работеща anchor навигация;
+- shop tabs и refresh restore;
+- homepage articles — остава само реалната статия;
+- deployment/cache re-check на приложените корекции.
 
-- Production browser/device QA — desktop + mobile, реални бутони, форми, modal/focus, login states, console/runtime, cache/load-order/deployment.
-- При production QA специално да се провери, че „Институции“ показва финалните priority карти без flicker/междинен стар UI и че anchor навигацията работи след еднократното публикуване.
-- QA не дава автоматично право за промяна на LOCKED логика.
-- При открити реални проблеми: поправя се само доказаният проблем и само в разрешения обхват.
-- Нови статии се добавят само при наличен реален одобрен материал/източник.
+Поправени доказани публични проблеми:
+- PR #69 — Institutions render timeout;
+- PR #70 — placeholder article cards и modal focus tracking;
+- PR #71 — signed-out profile state;
+- PR #72 — question not-found heading;
+- PR #73 — password section visibility;
+- PR #74 — точният Info Lom modal focus target;
+- PR #75 — премахнати три остарели еднократни Actions workflows, включително legacy workflow с риск за защитената moderation логика.
+
+Не са създавани fake QA записи и не са изпращани публични форми.
+
+Остава:
+- реален public mobile browser/device QA;
+- authenticated user login/logout/login-state QA с реална сесия;
+- финален console/runtime контрол в тези две среди.
+
+Тези оставащи проверки не са маркирани като PASS предварително. При открит проблем се поправя само доказаният дефект; LOCKED логика не се променя без отделно решение.
 
 ## 9. РАБОТЕН РЕЖИМ
 
