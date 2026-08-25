@@ -63,7 +63,7 @@
 
     timeoutId = setTimeout(() => {
       if (!publish()) showError();
-    }, 12000);
+    }, 30000);
   }
 
   if (document.readyState === "loading") {
