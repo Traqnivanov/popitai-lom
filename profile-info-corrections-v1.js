@@ -217,8 +217,12 @@
   async function load(){
     client=client||await getClient();
     const {data:u,error:uErr}=await client.auth.getUser();
-    if(uErr) throw uErr;
-    user=u?.user||null;
+    const missingSession = uErr && (
+      uErr.name === "AuthSessionMissingError" ||
+      String(uErr.message || "").toLowerCase().includes("auth session missing")
+    );
+    if(uErr && !missingSession) throw uErr;
+    user=missingSession ? null : u?.user||null;
 
     const list=ensureSection();
     if(!list) return;
