@@ -34,8 +34,14 @@
     show(loginButton, !user);
     show(logoutButton, Boolean(user));
     show(adminButton, false);
-    if (passwordHeading) passwordHeading.hidden = !user;
-    if (passwordForm) passwordForm.hidden = !user;
+    if (passwordHeading) {
+      passwordHeading.hidden = !user;
+      passwordHeading.style.setProperty("display", user ? "flex" : "none", "important");
+    }
+    if (passwordForm) {
+      passwordForm.hidden = !user;
+      passwordForm.style.setProperty("display", user ? "grid" : "none", "important");
+    }
 
     if (!user) return;
 
