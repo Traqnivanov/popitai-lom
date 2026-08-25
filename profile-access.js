@@ -9,6 +9,8 @@
   const loginButton = actions.querySelector('a[href="vhod.html"]');
   const logoutButton = document.querySelector("#logout-button");
   let adminButton = document.querySelector("#profile-admin-button");
+  const passwordHeading = document.querySelector("#profile-password-heading");
+  const passwordForm = document.querySelector("#change-password-form");
 
   if (!adminButton) {
     adminButton = document.createElement("a");
@@ -32,6 +34,8 @@
     show(loginButton, !user);
     show(logoutButton, Boolean(user));
     show(adminButton, false);
+    if (passwordHeading) passwordHeading.hidden = !user;
+    if (passwordForm) passwordForm.hidden = !user;
 
     if (!user) return;
 
