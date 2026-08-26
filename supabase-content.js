@@ -188,6 +188,13 @@
       uploader.insertAdjacentElement("afterend", notice);
     }
 
+    const initialSubmitButton = form.querySelector('[type="submit"]');
+    await authReady;
+    if (initialSubmitButton) {
+      const isAdmin = authProfile?.role === "admin" && authProfile?.is_blocked !== true;
+      initialSubmitButton.textContent = isAdmin ? "Публикувай въпроса" : "Изпрати за преглед";
+    }
+
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       event.stopImmediatePropagation();
