@@ -294,6 +294,10 @@
 
     await getAuth();
 
+    if (submitButton && !editId) {
+      submitButton.textContent = isAdmin ? "Публикувай обявата" : "Изпрати за преглед";
+    }
+
     if (window.PopitaiImages?.setMaxFiles) {
       window.PopitaiImages.setMaxFiles("listing-image-uploader", isAdmin ? 20 : 6);
     }
@@ -592,7 +596,7 @@
       if (!user) {
         setMessage("Трябва да влезеш в профила си.", "error");
         btn.disabled = false;
-        btn.textContent = isAdmin ? "Публикувай обявата" : "Публикувай обявата";
+        btn.textContent = isAdmin ? "Публикувай обявата" : "Изпрати за преглед";
         return;
       }
 
@@ -610,7 +614,7 @@
             "error"
           );
           btn.disabled = false;
-          btn.textContent = "Публикувай обявата";
+          btn.textContent = "Изпрати за преглед";
           return;
         }
       }
@@ -713,7 +717,7 @@
         btn.disabled = false;
         btn.textContent = editId
           ? (admin ? "Запази и публикувай" : "Изпрати редакцията")
-          : "Публикувай обявата";
+          : (admin ? "Публикувай обявата" : "Изпрати за преглед");
         return;
       }
 
