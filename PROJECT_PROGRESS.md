@@ -167,6 +167,7 @@ Admin/Moderator Panel v2 не се започва отново без конкр
 - shop tabs и refresh restore;
 - homepage articles — остава само реалната статия;
 - deployment/cache re-check на приложените корекции.
+- authenticated user login/logout/login-state QA с реална сесия — вход, профил, празни състояния, password section, достъп до формите и изход са PASS.
 
 Поправени доказани публични проблеми:
 - PR #69 — Institutions render timeout;
@@ -176,13 +177,14 @@ Admin/Moderator Panel v2 не се започва отново без конкр
 - PR #73 — password section visibility;
 - PR #74 — точният Info Lom modal focus target;
 - PR #75 — премахнати три остарели еднократни Actions workflows, включително legacy workflow с риск за защитената moderation логика.
+- PR #77 — role-correct submit labels: обикновен потребител вижда „Изпрати за преглед“, а Admin запазва direct-publish текста;
+- PR #78 — премахнато двойното зареждане на `supabase-content.js` във формата за нов въпрос.
 
 Не са създавани fake QA записи и не са изпращани публични форми.
 
 Остава:
 - реален public mobile browser/device QA;
-- authenticated user login/logout/login-state QA с реална сесия;
-- финален console/runtime контрол в тези две среди.
+- финален console/runtime контрол в реална mobile среда.
 
 Тези оставащи проверки не са маркирани като PASS предварително. При открит проблем се поправя само доказаният дефект; LOCKED логика не се променя без отделно решение.
 
