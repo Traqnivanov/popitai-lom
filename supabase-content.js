@@ -56,6 +56,14 @@
   let approvedQuestions = [];
   let answerCounts = new Map();
 
+  function questionCategoryInfo(value) {
+    return window.PopitaiCategoryDictionary?.categoryForValue?.("question", value) || null;
+  }
+
+  function questionCategoryLabel(value) {
+    return questionCategoryInfo(value)?.label || value || "";
+  }
+
   function setMessage(selector, text, type = "warning") {
     const element = qs(selector);
     if (!element) return;
@@ -103,7 +111,7 @@
     const innerClass = compact ? "" : "question-list-content";
     const content = `
       <div class="question-card-category-row">
-        <span class="question-category">${escapeHtml(question.category)}</span>
+        <span class="question-category">${escapeHtml(questionCategoryLabel(question.category))}</span>
       </div>
       <${titleTag}><a href="vapros.html?id=${encodeURIComponent(question.id)}">${escapeHtml(question.title)}</a></${titleTag}>
       <p>${escapeHtml(question.description)}</p>
@@ -273,6 +281,9 @@
       return;
     }
 
+    const categoryInfo = questionCategoryInfo(question.category);
+    const categoryLabel = categoryInfo?.label || question.category || "";
+
     document.title = `${question.title} | Попитай.Лом`;
     title.textContent = question.title;
     if (qs("#question-detail-summary")) qs("#question-detail-summary").textContent = question.description;
@@ -281,10 +292,11 @@
     if (qs("#question-author-avatar")) qs("#question-author-avatar").textContent = "П";
     if (qs("#question-created-at")) qs("#question-created-at").textContent = formatDate(question.created_at);
     if (qs("#question-hero-category")) {
-      qs("#question-hero-category").innerHTML = `<span>${escapeHtml(question.category)}</span>${question.status !== "approved" ? `<span class="db-status-badge ${escapeHtml(question.status)}">${escapeHtml(statusLabels[question.status] || question.status)}</span>` : ""}`;
+      qs("#question-hero-category").innerHTML = `<span>${escapeHtml(categoryLabel)}</span>${question.status !== "approved" ? `<span class="db-status-badge ${escapeHtml(question.status)}">${escapeHtml(statusLabels[question.status] || question.status)}</span>` : ""}`;
     }
     if (qs("#question-category-link")) {
-      qs("#question-category-link").textContent = question.category;
+      qs("#question-category-link").textContent = categoryLabel;
+      qs("#question-category-link").href = categoryInfo?.route || "kategorii.html";
     }
 
     const { data: answers, error: answersError } = await supabase
