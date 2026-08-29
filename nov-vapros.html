@@ -58,16 +58,8 @@
       <input id="question-title" name="title" required minlength="10" maxlength="120" placeholder="Например: Кой препоръчва добър електротехник?">
 
       <label for="question-category">Категория</label>
-      <select id="question-category" name="category" required>
+      <select id="question-category" name="category" data-popitai-category-source="question" required>
         <option value="">Избери категория</option>
-        <option value="Майстори и ремонти">Майстори и ремонти</option>
-        <option value="Здраве и лекари">Здраве и лекари</option>
-        <option value="Автомобили">Автомобили</option>
-        <option value="Магазини и покупки">Магазини и покупки</option>
-        <option value="Заведения">Заведения</option>
-        <option value="Работа и услуги">Услуги</option>
-        <option value="Обяви">Обяви</option>
-        <option value="Събития и град">Събития</option>
       </select>
 
       <label for="question-description">Описание</label>
@@ -101,6 +93,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 <script src="supabase-config.js?v=20260820-1840" defer></script>
+<script src="public-category-dictionary-v1.js?v=20260830-stage1" defer></script>
 <script src="question-answer-validation.js?v=20260823-0005" defer></script>
 <script src="supabase-content.js?v=20260826-submit-labels" data-popitai-supabase-content="true" defer></script>
 <script src="script.js?v=20260820-1833" defer></script>
