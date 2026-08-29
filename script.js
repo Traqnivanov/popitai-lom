@@ -1,5 +1,4 @@
 ﻿const STATIC_SEARCH_RECORDS = [
-  ...(window.PopitaiCategoryDictionary?.staticSearchRecords?.() || []),
   {"type": "Статия", "title": "Как да избереш майстор и да избегнеш неприятни изненади", "desc": "Практични проверки и ясни условия преди ремонт.", "url": "statia.html"}
 ];
 const CATEGORY_ICON_META = {"Майстори и ремонти": {"className": "blue", "icon": "<path d=\"M14.7 6.3a4 4 0 0 0-5.4-5.4L7 3.2l3.8 3.8 2.3-2.3a4 4 0 0 0 1.6 1.6Z\"/><path d=\"M10.8 7 3 14.8a2.1 2.1 0 0 0 3 3L13.8 10\"/><path class=\"icon-accent\" d=\"m4 3 3 3-1.5 1.5-3-3L4 3Zm3 3 14 14\"/>"}, "Здраве и лекари": {"className": "mint", "icon": "<path d=\"M6 3v5a5 5 0 0 0 10 0V3\"/><path d=\"M4 3h2M16 3h2\"/><path d=\"M11 13v2a5 5 0 0 0 10 0v-1\"/><circle class=\"icon-accent\" cx=\"21\" cy=\"12\" r=\"2\"/>"}, "Автомобили": {"className": "slate", "icon": "<path d=\"m5 11 1.4-4A2 2 0 0 1 8.3 5h7.4a2 2 0 0 1 1.9 2l1.4 4\"/><rect x=\"3\" y=\"11\" width=\"18\" height=\"7\" rx=\"2\"/><path d=\"M6 18v2M18 18v2\"/><circle class=\"icon-accent\" cx=\"7.5\" cy=\"14.5\" r=\"1.2\"/><circle class=\"icon-accent\" cx=\"16.5\" cy=\"14.5\" r=\"1.2\"/>"}, "Магазини и покупки": {"className": "sand", "icon": "<path d=\"M6 8h12l1 13H5L6 8Z\"/><path class=\"icon-accent\" d=\"M9 9V6a3 3 0 0 1 6 0v3\"/>"}, "Заведения": {"className": "rose", "icon": "<path d=\"M5 3v7M2.5 3v4.5A2.5 2.5 0 0 0 5 10a2.5 2.5 0 0 0 2.5-2.5V3M5 10v11\"/><path class=\"icon-accent\" d=\"M17 3v18M14 3v6a3 3 0 0 0 3 3\"/>"}, "Работа и услуги": {"className": "violet", "icon": "<rect x=\"3\" y=\"7\" width=\"18\" height=\"13\" rx=\"2\"/><path d=\"M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18\"/><path class=\"icon-accent\" d=\"M10 12v3h4v-3\"/>"}, "Обяви": {"className": "teal", "icon": "<path d=\"M4 10v4M8 8.5v7M8 9l10-4v14L8 15Z\"/><path d=\"m8 15 2.5 5\"/><path class=\"icon-accent\" d=\"M20 8.5c1 .8 1.5 2 1.5 3.5S21 14.7 20 15.5\"/>"}, "Събития и град": {"className": "blue", "icon": "<rect x=\"3\" y=\"5\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M8 3v4M16 3v4M3 10h18\"/><circle class=\"icon-accent\" cx=\"8\" cy=\"14\" r=\".7\"/><circle class=\"icon-accent\" cx=\"12\" cy=\"14\" r=\".7\"/><circle class=\"icon-accent\" cx=\"16\" cy=\"14\" r=\".7\"/><circle class=\"icon-accent\" cx=\"8\" cy=\"18\" r=\".7\"/><circle class=\"icon-accent\" cx=\"12\" cy=\"18\" r=\".7\"/><circle class=\"icon-accent\" cx=\"16\" cy=\"18\" r=\".7\"/>"}};
@@ -204,6 +203,7 @@ function saveBusinesses(items) {
 }
 
 function getAllSearchRecords() {
+  const categoryRecords = window.PopitaiCategoryDictionary?.staticSearchRecords?.() || [];
   const dynamicQuestions = getQuestions().map(item => ({
     id: item.id,
     type: "Въпрос",
@@ -218,7 +218,7 @@ function getAllSearchRecords() {
     desc: item.description,
     url: businessUrl(item.id)
   }));
-  return [IVANOV_REMONTI, ...STATIC_SEARCH_RECORDS, ...dynamicQuestions, ...dynamicBusinesses];
+  return [IVANOV_REMONTI, ...categoryRecords, ...STATIC_SEARCH_RECORDS, ...dynamicQuestions, ...dynamicBusinesses];
 }
 
 // Навигация
@@ -260,6 +260,29 @@ const searchForm = qs("#search-form");
 const searchInput = qs("#main-search");
 const clearSearch = qs("#clear-search");
 const suggestionsBox = qs("#search-suggestions");
+let categoryDictionaryPromise = null;
+
+function ensureCategoryDictionary() {
+  if (window.PopitaiCategoryDictionary) return Promise.resolve(window.PopitaiCategoryDictionary);
+  if (categoryDictionaryPromise) return categoryDictionaryPromise;
+
+  categoryDictionaryPromise = new Promise((resolve) => {
+    const existing = document.querySelector('script[src*="public-category-dictionary-v1.js"]');
+    if (existing) {
+      existing.addEventListener("load", () => resolve(window.PopitaiCategoryDictionary || null), { once: true });
+      existing.addEventListener("error", () => resolve(null), { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "public-category-dictionary-v1.js?v=20260830-stage1";
+    script.onload = () => resolve(window.PopitaiCategoryDictionary || null);
+    script.onerror = () => resolve(null);
+    document.head.appendChild(script);
+  });
+
+  return categoryDictionaryPromise;
+}
 
 function renderSuggestions(value) {
   if (!suggestionsBox) return;
@@ -284,8 +307,10 @@ function renderSuggestions(value) {
 }
 
 if (searchInput) {
-  searchInput.addEventListener("input", () => {
+  ensureCategoryDictionary();
+  searchInput.addEventListener("input", async () => {
     if (clearSearch) clearSearch.classList.toggle("visible", searchInput.value.trim().length > 0);
+    await ensureCategoryDictionary();
     renderSuggestions(searchInput.value);
   });
 }
