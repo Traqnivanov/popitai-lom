@@ -1,0 +1,11 @@
+-- Restore anonymous access to approved listings without changing any listing
+-- ownership, moderation, quota, status, or write permissions.
+--
+-- This legacy SELECT policy queried public.profiles directly. Because anon is
+-- intentionally not granted access to profiles, PostgreSQL evaluated the
+-- policy with "permission denied for table profiles" before the separate
+-- public-approved policy could return rows.
+--
+-- Admin SELECT access remains enforced by the existing "admin manage listings"
+-- policy through public.is_admin(), the hardened SECURITY DEFINER role helper.
+drop policy if exists "Admin reads all listings" on public.listings;

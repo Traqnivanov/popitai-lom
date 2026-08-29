@@ -179,12 +179,16 @@ Admin/Moderator Panel v2 не се започва отново без конкр
 - PR #75 — премахнати три остарели еднократни Actions workflows, включително legacy workflow с риск за защитената moderation логика.
 - PR #77 — role-correct submit labels: обикновен потребител вижда „Изпрати за преглед“, а Admin запазва direct-publish текста;
 - PR #78 — премахнато двойното зареждане на `supabase-content.js` във формата за нов въпрос.
+- PR #80 — публичните одобрени обяви отново се зареждат за anonymous посетители. Премахната е само дублиращата legacy Admin SELECT policy, която четеше директно `profiles` и връщаше `401`; Admin достъпът остава през защитения `is_admin()` policy, без промяна на роли, ownership, статуси, лимити или moderation flow.
 
 Не са създавани fake QA записи и не са изпращани публични форми.
 
+На 29.08.2026 е прегледан реален public mobile device запис. Проверени са homepage, mobile menu и bottom navigation, категории/търсене, фирми, основни Info Lom раздели, обяви, вход/регистрация и category hub. Няма доказан blank render или критично mobile layout разместване. Записът откри production грешката при „Обяви“, потвърдена чрез mobile API/Postgres logs и поправена с PR #80.
+
 Остава:
-- реален public mobile browser/device QA;
-- финален console/runtime контрол в реална mobile среда.
+- кратък mobile production re-check на „Обяви“ след PR #80;
+- целеви mobile interaction QA на непоказаните в записа въпроси, статии, detail/modal states;
+- финален console/runtime контрол за тези оставащи mobile потоци.
 
 Тези оставащи проверки не са маркирани като PASS предварително. При открит проблем се поправя само доказаният дефект; LOCKED логика не се променя без отделно решение.
 
