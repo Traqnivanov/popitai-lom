@@ -87,7 +87,7 @@ function isConstructionQuery(value) {
   const query = normalizeSearchText(value);
   const priorityQuery = query
     .replace(/(^|\s)автомивк\p{L}*(?=\s|$)/gu, "$1")
-    .replace(/(^|\s)avtomивк\p{L}*(?=\s|$)/gu, "$1")
+    .replace(/(^|\s)avtomivk\p{L}*(?=\s|$)/gu, "$1")
     .replace(/\s+/g, " ")
     .trim();
   return priorityQuery.length > 0 && CONSTRUCTION_SEARCH_STEMS.some(stem => priorityQuery.includes(stem));
