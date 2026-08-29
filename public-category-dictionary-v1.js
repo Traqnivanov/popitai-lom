@@ -27,106 +27,60 @@
   ]);
 
   const SERVICE_GROUPS = Object.freeze([
-    Object.freeze({
-      label: "Майстори и ремонти",
-      values: Object.freeze(SERVICE_SUBCATEGORIES.slice(0, 8))
-    }),
-    Object.freeze({
-      label: "Автомобилни услуги",
-      values: Object.freeze(SERVICE_SUBCATEGORIES.slice(8, 14))
-    }),
-    Object.freeze({
-      label: "Други услуги",
-      values: Object.freeze(SERVICE_SUBCATEGORIES.slice(14))
-    })
+    Object.freeze({ label: "Майстори и ремонти", values: Object.freeze(SERVICE_SUBCATEGORIES.slice(0, 8)) }),
+    Object.freeze({ label: "Автомобилни услуги", values: Object.freeze(SERVICE_SUBCATEGORIES.slice(8, 14)) }),
+    Object.freeze({ label: "Други услуги", values: Object.freeze(SERVICE_SUBCATEGORIES.slice(14)) })
   ]);
 
   const PUBLIC_CATEGORIES = Object.freeze([
     Object.freeze({
-      id: "maistori",
-      label: "Майстори и ремонти",
-      searchLabel: "Майстори и ремонти",
-      description: "Ремонти, ВиК, електро, покриви, дограма и услуги за дома.",
-      route: "maistori.html",
+      id: "maistori", label: "Майстори и ремонти", searchLabel: "Майстори и ремонти",
+      description: "Ремонти, ВиК, електро, покриви, дограма и услуги за дома.", route: "maistori.html",
       values: Object.freeze({ business: "Майстори и ремонти", question: "Майстори и ремонти" })
     }),
     Object.freeze({
-      id: "zdrave",
-      label: "Здраве и лекари",
-      searchLabel: "Здраве и лекари",
-      description: "Лекари, стоматолози, аптеки и здравни услуги.",
-      route: "zdrave-i-lekari.html",
+      id: "zdrave", label: "Здраве и лекари", searchLabel: "Здраве и лекари",
+      description: "Лекари, стоматолози, аптеки и здравни услуги.", route: "zdrave-i-lekari.html",
       values: Object.freeze({ business: "Здраве и лекари", question: "Здраве и лекари" })
     }),
     Object.freeze({
-      id: "avtomobili",
-      label: "Автомобили",
-      searchLabel: "Автомобили",
-      description: "Сервизи, гуми, части, автомивки и пътна помощ.",
-      route: "avtomobili.html",
+      id: "avtomobili", label: "Автомобили", searchLabel: "Автомобили",
+      description: "Сервизи, гуми, части, автомивки и пътна помощ.", route: "avtomobili.html",
       values: Object.freeze({ business: "Автомобили", question: "Автомобили" })
     }),
     Object.freeze({
-      id: "magazini",
-      label: "Магазини и покупки",
-      searchLabel: "Магазини и покупки",
-      description: "Местни магазини, материали, техника и покупки.",
-      route: "magazini.html",
+      id: "magazini", label: "Магазини и покупки", searchLabel: "Магазини и покупки",
+      description: "Местни магазини, материали, техника и покупки.", route: "magazini.html",
       values: Object.freeze({ business: "Магазини и покупки", question: "Магазини и покупки" })
     }),
     Object.freeze({
-      id: "zavedenia",
-      label: "Заведения",
-      searchLabel: "Заведения",
-      description: "Ресторанти, кафенета, пицарии и доставки.",
-      route: "zavedenia.html",
+      id: "zavedenia", label: "Заведения", searchLabel: "Заведения",
+      description: "Ресторанти, кафенета, пицарии и доставки.", route: "zavedenia.html",
       values: Object.freeze({ business: "Заведения", question: "Заведения" })
     }),
     Object.freeze({
-      id: "uslugi",
-      label: "Услуги",
-      searchLabel: "Услуги",
-      description: "Услуги, предлагани от местни хора и фирми.",
-      route: "rabota.html",
+      id: "uslugi", label: "Услуги", searchLabel: "Услуги",
+      description: "Услуги, предлагани от местни хора и фирми.", route: "rabota.html",
       values: Object.freeze({ business: "Работа и услуги", question: "Работа и услуги", listing: "Услуги" })
     }),
     Object.freeze({
-      id: "obyavi",
-      label: "Обяви",
-      navigationLabel: "Всички обяви",
-      searchLabel: "Обяви",
-      description: "Купува, продава, подарява, наема и търси.",
-      route: "obyavi.html",
+      id: "obyavi", label: "Обяви", navigationLabel: "Всички обяви", searchLabel: "Обяви",
+      description: "Купува, продава, подарява, наема и търси.", route: "obyavi.html",
       values: Object.freeze({ question: "Обяви" })
     }),
     Object.freeze({
-      id: "sabitiya",
-      label: "Събития",
-      searchLabel: "Събития",
-      description: "Предстоящи и актуални събития в Лом.",
-      route: "sabitiya.html",
+      id: "sabitiya", label: "Събития", searchLabel: "Събития",
+      description: "Предстоящи и актуални събития в Лом.", route: "sabitiya.html",
       values: Object.freeze({ question: "Събития и град" })
     })
   ]);
 
   const LISTING_CATEGORIES = Object.freeze([
-    "Електроника",
-    "Дом и градина",
-    "Дрехи и обувки",
-    "Деца и бебета",
-    "Спорт и хоби",
-    "Автомобили и МПС",
-    "Животни",
-    "Работа",
-    "Имоти",
-    "Услуги",
-    "Друго"
+    "Електроника", "Дом и градина", "Дрехи и обувки", "Деца и бебета", "Спорт и хоби",
+    "Автомобили и МПС", "Животни", "Работа", "Имоти", "Услуги", "Друго"
   ]);
 
-  const BUSINESS_CATEGORY_IDS = Object.freeze([
-    "maistori", "zdrave", "avtomobili", "magazini", "zavedenia", "uslugi"
-  ]);
-
+  const BUSINESS_CATEGORY_IDS = Object.freeze(["maistori", "zdrave", "avtomobili", "magazini", "zavedenia", "uslugi"]);
   const byId = new Map(PUBLIC_CATEGORIES.map((item) => [item.id, item]));
 
   function categoryForValue(type, value) {
@@ -184,11 +138,7 @@
     if (!select || !source) return;
 
     if (source === "listing") {
-      replaceOptions(
-        select,
-        LISTING_CATEGORIES.map((value) => ({ value, label: value })),
-        "Избери категория"
-      );
+      replaceOptions(select, LISTING_CATEGORIES.map((value) => ({ value, label: value })), "Избери категория");
       return;
     }
 
@@ -198,9 +148,7 @@
 
     replaceOptions(
       select,
-      categories
-        .map((item) => ({ value: item.values?.[source], label: item.label }))
-        .filter((item) => item.value),
+      categories.map((item) => ({ value: item.values?.[source], label: item.label })).filter((item) => item.value),
       source === "business" ? "Избери" : "Избери категория"
     );
   }
@@ -250,15 +198,17 @@
     }
 
     category.addEventListener("change", () => sync({ userChanged: true }));
-    subcategory.addEventListener("change", () => {
-      delete subcategory.dataset.legacyBlankAllowed;
-    });
+    subcategory.addEventListener("change", () => { delete subcategory.dataset.legacyBlankAllowed; });
     sync();
 
     if (!editId) return;
-
     const submit = document.querySelector("#listing-submit");
     if (!submit) return;
+
+    const editIsLoaded = () => {
+      const label = String(submit.textContent || "").trim();
+      return !submit.disabled && (label === "Изпрати редакцията" || label === "Запази и публикувай");
+    };
 
     const captureLoadedEdit = () => {
       sync();
@@ -269,17 +219,16 @@
     };
 
     const observer = new MutationObserver(() => {
-      if (!submit.disabled) {
-        captureLoadedEdit();
-        observer.disconnect();
-      }
+      if (!editIsLoaded()) return;
+      captureLoadedEdit();
+      observer.disconnect();
     });
-    observer.observe(submit, { attributes: true, attributeFilter: ["disabled"] });
+    observer.observe(submit, { attributes: true, childList: true, characterData: true, subtree: true, attributeFilter: ["disabled"] });
+
     window.setTimeout(() => {
-      if (!submit.disabled) {
-        captureLoadedEdit();
-        observer.disconnect();
-      }
+      if (!editIsLoaded()) return;
+      captureLoadedEdit();
+      observer.disconnect();
     }, 0);
   }
 
@@ -302,9 +251,6 @@
 
   window.PopitaiCategoryDictionary = api;
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initDomBindings, { once: true });
-  } else {
-    initDomBindings();
-  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initDomBindings, { once: true });
+  else initDomBindings();
 })();
