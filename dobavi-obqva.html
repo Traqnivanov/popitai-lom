@@ -66,23 +66,16 @@
       <p class="listing-duplicate-warning" id="listing-duplicate-warning" hidden style="color:#b45309;font-weight:800;margin:-8px 0 8px"></p>
 
       <label for="listing-category">Категория</label>
-      <select id="listing-category" required>
+      <select id="listing-category" data-popitai-category-source="listing" required>
         <option value="">Избери категория</option>
-        <option value="Електроника">Електроника</option>
-        <option value="Дом и градина">Дом и градина</option>
-        <option value="Дрехи и обувки">Дрехи и обувки</option>
-        <option value="Деца и бебета">Деца и бебета</option>
-        <option value="Спорт и хоби">Спорт и хоби</option>
-        <option value="Автомобили и МПС">Автомобили и МПС</option>
-        <option value="Животни">Животни</option>
-        <option value="Работа">Работа</option>
-        <option value="Имоти">Имоти</option>
-        <option value="Услуги">Услуги</option>
-        <option value="Друго">Друго</option>
       </select>
 
-      <label for="listing-subcategory">Подкатегория <small style="color:#888;font-weight:400">(по желание)</small></label>
-      <input id="listing-subcategory" type="text" placeholder="Например: Телефони, Мебели, Апартаменти…">
+      <div id="listing-subcategory-field" hidden>
+        <label for="listing-subcategory">Подкатегория</label>
+        <select id="listing-subcategory" disabled>
+          <option value="">Избери подкатегория</option>
+        </select>
+      </div>
 
       <label for="listing-type" id="listing-type-label">Тип обява</label>
       <select id="listing-type" required>
@@ -220,7 +213,8 @@
   <script src="business-image-bootstrap.js?v=20260806-0430" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="supabase-config.js?v=20260820-1840" defer></script>
-  <script src="listing-form-validation.js?v=20260825-phone62" defer></script>
+  <script src="public-category-dictionary-v1.js?v=20260830-stage1" defer></script>
+  <script src="listing-form-validation-v2.js?v=20260830-stage1" defer></script>
   <script src="supabase-listings.js?v=20260826-submit-labels" defer></script>
   <script src="script.js?v=20260820-1833" defer></script>
 </body>
