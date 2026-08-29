@@ -10,8 +10,9 @@
 3. `PROJECT_RULES_ADMIN_MODERATOR.md`
 4. `PROJECT_RULES.md`
 5. `PROJECT_RULES_RENDER_OWNERSHIP.md`
-6. `ADMIN_PANEL_V2_APPROVED_SPEC.md`, когато се работи по Admin/Moderator панела
-7. конкретните модулни правила, ако има такива.
+6. `PUBLIC_SITE_INFORMATION_ARCHITECTURE_APPROVED_SPEC.md`, когато се работи по публичния сайт
+7. `ADMIN_PANEL_V2_APPROVED_SPEC.md`, когато се работи по Admin/Moderator панела
+8. конкретните модулни правила, ако има такива.
 
 При конфликт между документи не се избира правило по предположение — конфликтът се проверява и се отстранява преди промяна.
 
@@ -152,7 +153,21 @@ LOCKED без отделно изрично одобрение:
 
 Admin/Moderator Panel v2 не се започва отново без конкретен нов доказан проблем.
 
-## 8. PUBLIC PRODUCTION QA — ТЕКУЩ СТАТУС
+## 8. PUBLIC IA/UX — APPROVED / СЛЕДВАЩА РАБОТА
+
+Каноничната публична структура е одобрена и записана в `PUBLIC_SITE_INFORMATION_ARCHITECTURE_APPROVED_SPEC.md`. Не се правят отделни импровизирани UX решения извън нея.
+
+Задължителният ред е:
+
+1. **Каноничен речник и структурирана подкатегория** — един source за category/label/routing/form mappings; зависим subcategory select в съществуващата форма за обява; безопасно запазване на legacy стойности; без schema/RLS/role промяна.
+2. **Реално общо търсене** — Supabase-backed approved фирми, въпроси и обяви; групиране по тип; без legacy localStorage ownership; запазен защитен приоритет за ремонти/строителство/майстори и „Иванов Ремонти“.
+3. **Обяви в тематичните категории** — read-only approved listings layer; един запис се показва в общия каталог и релевантната тема; без промяна на ownership, status, quota, approval или moderation.
+4. **Общи layout фрагменти и навигация** — параметризиран static source/build-sync за public header/footer/mobile nav; Admin остава извън generator; „+ Добави“, новата mobile навигация и видим вход към „Въпроси и препоръки“; запазени page-specific CTA targets.
+5. **QA и production** — desktop/mobile, anonymous/authenticated, форми, търсене, focus/modals, loading/empty/error, console/runtime/cache/load order и regression на цялото защитено ядро.
+
+Всеки етап се изпълнява в отделен branch/PR, проверява се преди merge и се проверява отново в production. Безопасното и вече одобрено продължава без междинно „ОК“. Спира се само при ново LOCKED решение, доказан риск или user-only действие.
+
+## 9. PUBLIC PRODUCTION QA — ТЕКУЩ СТАТУС
 
 На 25.08.2026 е извършен реален desktop production QA на публичния сайт и signed-out състоянията.
 
@@ -192,7 +207,7 @@ Admin/Moderator Panel v2 не се започва отново без конкр
 
 Тези оставащи проверки не са маркирани като PASS предварително. При открит проблем се поправя само доказаният дефект; LOCKED логика не се променя без отделно решение.
 
-## 9. РАБОТЕН РЕЖИМ
+## 10. РАБОТЕН РЕЖИМ
 
 - Безопасно и вече решено → изпълнява се без междинно „ОК“.
 - Независима следваща задача → продължава се без излишно спиране.
