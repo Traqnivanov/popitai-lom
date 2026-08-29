@@ -6,12 +6,9 @@
   const isEventsPage = questionRoot?.dataset.categoryQuestions === "Събития и град";
   if (!businessRoot && !questionRoot) return;
 
-  const PUBLIC_CATEGORY_LABELS = {
-    "Работа и услуги": "Услуги",
-    "Събития и град": "Събития"
-  };
+  const publicCategoryLabel = (value, type) =>
+    window.PopitaiCategoryDictionary?.publicLabel?.(value, type) || value || "";
 
-  const publicCategoryLabel = (value) => PUBLIC_CATEGORY_LABELS[value] || value || "";
   const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   }[char]));
@@ -70,7 +67,7 @@
       <div class="firm-logo">${initial}</div>
       <div class="business-main">
         <div class="firm-title-row"><h3><a href="firma.html?id=${encodeURIComponent(item.id)}">${esc(item.name)}</a></h3></div>
-        <span class="question-category">${esc(publicCategoryLabel(item.category))}</span>
+        <span class="question-category">${esc(publicCategoryLabel(item.category, "business"))}</span>
         ${item.description ? `<p>${esc(item.description)}</p>` : ""}
         ${item.city ? `<p>📍 ${esc(item.city)}</p>` : ""}
         <div class="category-hub-actions">
@@ -83,7 +80,7 @@
 
   function questionCard(item, answerCount) {
     return `<article class="compact-card dynamic-question-card" data-question-id="${esc(item.id)}">
-      <div class="question-card-category-row"><span class="question-category">${esc(publicCategoryLabel(item.category))}</span></div>
+      <div class="question-card-category-row"><span class="question-category">${esc(publicCategoryLabel(item.category, "question"))}</span></div>
       <h3><a href="vapros.html?id=${encodeURIComponent(item.id)}">${esc(item.title)}</a></h3>
       <p>${esc(item.description)}</p>
       <small>${formatDate(item.created_at)} · ${answerCount} ${answerCount === 1 ? "отговор" : "отговора"}</small>
