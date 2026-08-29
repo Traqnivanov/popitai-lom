@@ -8,22 +8,6 @@
   const client = window.PopitaiSupabase || null;
   const PAGE_SIZE = 20;
 
-  const PUBLIC_LABELS = {
-    "Работа и услуги": "Услуги",
-    "Събития и град": "Събития"
-  };
-
-  const CATEGORY_HREFS = {
-    "Майстори и ремонти": "maistori.html",
-    "Здраве и лекари": "zdrave-i-lekari.html",
-    "Автомобили": "avtomobili.html",
-    "Магазини и покупки": "magazini.html",
-    "Заведения": "zavedenia.html",
-    "Работа и услуги": "rabota.html",
-    "Обяви": "obyavi.html",
-    "Събития и град": "sabitiya.html"
-  };
-
   const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   }[char]));
@@ -44,8 +28,8 @@
   let currentFilter = "all";
   let visibleCount = PAGE_SIZE;
 
-  function publicLabel(category) {
-    return PUBLIC_LABELS[category] || category || "";
+  function categoryInfo(category) {
+    return window.PopitaiCategoryDictionary?.categoryForValue?.("question", category) || null;
   }
 
   function filteredQuestions() {
@@ -59,8 +43,9 @@
 
   function questionCard(item) {
     const count = answerCounts.get(item.id) || 0;
-    const category = publicLabel(item.category);
-    const href = CATEGORY_HREFS[item.category] || "kategorii.html";
+    const info = categoryInfo(item.category);
+    const category = info?.label || item.category || "";
+    const href = info?.route || "kategorii.html";
     return `
       <article class="list-card question-list-card dynamic-question-card" data-question-id="${esc(item.id)}">
         <div class="question-list-content">
