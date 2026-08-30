@@ -166,7 +166,7 @@ Admin/Moderator Panel v2 не се започва отново без конкр
 
 1. **Етап 1 — ЗАВЪРШЕН / PRODUCTION** — каноничен речник за category/label/routing/form mappings; зависим structured subcategory select за `Обяви → Услуги`; безопасно legacy edit поведение. Одобреният narrow backend integrity amendment добавя taxonomy validation без промяна на RLS, роли, ownership, quotas, media или moderation.
 2. **Етап 2 — ЗАВЪРШЕН / PRODUCTION QA PASS** — authoritative Supabase-backed public search за approved фирми, въпроси и active approved обяви; grouped results; без legacy `localStorage` ownership; loading/error/empty; запазен защитен приоритет за ремонти/строителство/майстори и „Иванов Ремонти“. Production corpus и cache/load-order корекциите са проверени.
-3. **Етап 3 — ЗАВЪРШЕН / PRODUCTION RUNTIME PASS** — изолиран read-only listings owner показва approved + active обяви в `Майстори и ремонти`, `Автомобили` и `Услуги`, използвайки само каноничните service groups от Stage 1 dictionary. Има ограничени резултати, loading/error/empty states и approved mobile priority/expand логика. Не са променяни DB/RLS, ownership, status, quota, approval, moderation, форми или `supabase-listings.js`. Production desktop/runtime е проверен с реалните empty states; общият каталог и защитеният search regression остават PASS. Реалният mobile touch/viewport interaction се проверява окончателно в Етап 5.
+3. **Етап 3 — ЗАВЪРШЕН / PRODUCTION RUNTIME PASS** — PR #93, merge commit `956eaae7fca5175f13ee805610c5d698eaa82e53`. Изолиран read-only listings owner показва approved + active обяви в `Майстори и ремонти`, `Автомобили` и `Услуги`, използвайки само каноничните service groups от Stage 1 dictionary. Има ограничени резултати, loading/error/empty states и approved mobile priority/expand логика. Не са променяни DB/RLS, ownership, status, quota, approval, moderation, форми или `supabase-listings.js`. Production desktop/runtime е проверен с реалните empty states; общият каталог и защитеният search regression остават PASS. Реалният mobile touch/viewport interaction се проверява окончателно в Етап 5.
 4. **СЛЕДВАЩ: Етап 4 — Общи layout фрагменти и навигация** — параметризиран static source/build-sync за public header/footer/mobile nav; Admin остава извън generator; „+ Добави“, новата mobile навигация и видим вход към „Въпроси и препоръки“; запазени page-specific CTA targets.
 5. **Етап 5 — QA и production** — desktop/mobile, anonymous/authenticated, форми, търсене, focus/modals, loading/empty/error, console/runtime/cache/load order и regression на цялото защитено ядро.
 
@@ -214,7 +214,7 @@ Admin/Moderator Panel v2 не се започва отново без конкр
 
 ## 10. РАБОТЕН РЕЖИМ
 
-- Безопасно и вече решено → изпълнява се без междинно „ОК`.
+- Безопасно и вече решено → изпълнява се без междинно „ОК“.
 - Независима следваща задача → продължава се без излишно спиране.
 - Защитено, рисково или ново бизнес решение → спира се преди промяната и се иска решение.
 - След одобрена промяна се докладва след качване, освен ако възникне реален риск или проблем.
