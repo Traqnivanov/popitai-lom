@@ -1,0 +1,59 @@
+name: Public shell sync
+
+on:
+  pull_request:
+    paths:
+      - "*.html"
+      - "public-shell-v1.css"
+      - "public-shell-v1.js"
+      - "public-shell-manifest-v1.json"
+      - "public-shell-template-v1.json"
+      - ".github/scripts/sync_public_shell.py"
+      - ".github/workflows/public-shell-check.yml"
+  push:
+    paths:
+      - "public-shell-v1.css"
+      - "public-shell-v1.js"
+      - "public-shell-manifest-v1.json"
+      - "public-shell-template-v1.json"
+      - ".github/scripts/sync_public_shell.py"
+      - ".github/workflows/public-shell-check.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python .github/scripts/sync_public_shell.py --write
+      - run: python .github/scripts/sync_public_shell.py --check
+      - name: Commit synchronized static shell
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo "Public shell already synchronized."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- '*.html'
+          git commit -m "Synchronize Public IA Stage 4 shell"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+  check:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python .github/scripts/sync_public_shell.py --check
