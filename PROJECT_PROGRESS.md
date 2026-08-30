@@ -1,6 +1,6 @@
 # Попитай.Лом — ТЕКУЩ CHECKPOINT
 
-Актуализирано: 30.08.2026
+Актуализирано: 31.08.2026
 
 ## 1. ПРАВИЛА ПРЕДИ РАБОТА
 
@@ -14,11 +14,13 @@
 7. `PUBLIC_SITE_INFORMATION_ARCHITECTURE_APPROVED_SPEC.md` за останалата public IA, доколкото не противоречи на Marketplace V3
 8. `ADMIN_PANEL_V2_APPROVED_SPEC.md` за Admin/Moderator панела.
 
-Marketplace V3 е каноничният public marketplace presentation source. LOCKED backend/roles/ownership/moderation/quota/status правила остават с по-висок приоритет.
+Marketplace V3 е каноничният public marketplace presentation source за production. LOCKED backend/roles/ownership/moderation/quota/status правила остават с по-висок приоритет.
+
+**За V6 design track след горния ред задължително се чете `PUBLIC_PRODUCT_V6_MASTER_CONTROL.md`.** Той е единната контролна точка за текущия V6 roadmap, gaps, handoff и exact next task. Supporting V6 документи се четат според задачата.
 
 ## 2. ЗАЩИТЕНО ЯДРО — НЕПРОМЕНЕНО
 
-Marketplace V3 не заменя и не променя firm owner, protected listings write/edit/media owner, RLS/schema/ownership/approval/status/quota semantics, Admin/Moderator boundaries, protected construction search / `Иванов Ремонти` priority, boost/admin priority ordering или специализираните Shops/Health owners.
+Marketplace V3 и V6 design track не заменят и не променят firm owner, protected listings write/edit/media owner, RLS/schema/ownership/approval/status/quota semantics, Admin/Moderator boundaries, protected construction search / `Иванов Ремонти` priority, boost/admin priority ordering или специализираните Shops/Health/Info owners без отделно изрично approval.
 
 ## 3. MARKETPLACE V3
 
@@ -72,11 +74,13 @@ Protected regression е scope-safe: няма schema/RLS/roles/ownership/moderati
 
 ## 7. ADMIN / MODERATOR
 
-Admin/Moderator Panel V2 остава **ЗАВЪРШЕН / REAL INTERACTION QA PASS**. Role boundaries, self-moderation protection, Admin-only permanent delete и Admin-only role/access management не са променяни.
+Admin/Moderator Panel V2 остава **ЗАВЪРШЕН / REAL INTERACTION QA PASS** за текущия production scope. Role boundaries, self-moderation protection, Admin-only permanent delete и Admin-only role/access management не са променяни.
 
-## 8. MARKETPLACE V3 — ЗАТВОРЕН ЕТАП
+V6 нови states/relations по-късно трябва да се приобщят към този role model; това е design requirement, не текуща production промяна.
 
-Marketplace V3 не се започва отначало и старите равнопоставени `Категории` / `Обяви` решения не се връщат. Нов marketplace change се прави само при конкретен доказан production проблем или ново изрично продуктово решение.
+## 8. MARKETPLACE V3 — ЗАТВОРЕН PRODUCTION ЕТАП
+
+Marketplace V3 не се започва отначало и старите равнопоставени `Категории` / `Обяви` решения не се връщат като production fix. V6 може да предложи нова approved product architecture, но докато няма final V6 approved spec, production остава на V3.
 
 Production commits:
 - Marketplace V3: `57997443b0539596425a5f8e375c56153d079f6d`;
@@ -84,4 +88,30 @@ Production commits:
 
 ## 9. РАБОТЕН РЕЖИМ
 
-Безопасните следващи стъпки се изпълняват автономно. При protected/risky/new business decision се спира преди рискова промяна. Не се казва „готово“, преди промяната да е live и проверена.
+Безопасните следващи стъпки се изпълняват автономно. При protected/risky/new business decision се спира преди рискова промяна. Не се казва „готово“, преди съответният stage да е проверен по собствените му критерии; production feature не е „готов“ преди live verification.
+
+## 10. V6 DESIGN TRACK — ТЕКУЩ CHECKPOINT
+
+Branch: `v6-product-foundation-draft`  
+Production impact от този planning track: **NONE**.
+
+Създадени planning foundations:
+- `PUBLIC_PRODUCT_V6_WORKING_MODEL.md`;
+- `PUBLIC_PRODUCT_V6_GUARDRAILS.md`;
+- `PUBLIC_PRODUCT_V6_CONTENT_SEO_STRATEGY.md`;
+- `PUBLIC_PRODUCT_V6_CONTENT_INVENTORY_RULE.md`;
+- `PUBLIC_PRODUCT_V6_INFO_LOM_CORE_STRATEGY.md`;
+- `PUBLIC_PRODUCT_V6_ADOPTION_LAUNCH.md`;
+- **`PUBLIC_PRODUCT_V6_MASTER_CONTROL.md` — текущият master roadmap/handoff/gap source.**
+
+Вече очертаната V6 посока е: съществуващите protected owner-и се запазват, а над тях се проектират по-добри search/relationship/content/distribution връзки. `Инфо Лом` е един от основните authoritative knowledge/SEO/trust стълбове; Q&A се развива като contextual community memory; Facebook е distribution, не source-of-truth; Content/Articles и SEO не дублират authoritative owner data; performance е lightweight-by-default.
+
+### V6 текуща фаза
+
+`STAGE V6-0 — CONTROL / CONTINUITY`: **DONE**.
+
+### V6 exact next task
+
+`STAGE V6-A1 — CURRENT → TARGET OWNER / RELATIONSHIP MAP`.
+
+Нов чат не започва V6 code и не преотваря случайно старите решения. Чете `PUBLIC_PRODUCT_V6_MASTER_CONTROL.md` и продължава от записания `EXACT NEXT TASK`. При реален production incident се прави отделен fix scope и след това се връща към същия V6 checkpoint.
