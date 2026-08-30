@@ -1,0 +1,46 @@
+/* PUBLIC SHELL — Stage 4 — 2026-08-30 */
+.main-nav-primary{display:flex;align-items:center;justify-content:center;gap:6px}
+.main-nav-extra{display:none}
+.ask-button,.hero-cover-primary.public-add-trigger,.primary-link-button.public-add-trigger{font:inherit;cursor:pointer}
+.ask-button span{display:inline}
+.public-stage4-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:20px}
+.page-hero .public-stage4-actions .primary-link-button,.page-hero .public-stage4-actions .secondary-link-button{margin-top:0}
+.shops-hero .public-stage4-actions{margin-top:18px}
+.health-category-page .public-stage4-actions .health-hero-add{margin:0}
+.public-add-layer[hidden]{display:none!important}
+.public-add-layer{position:fixed;z-index:5000;inset:0;display:grid;place-items:center;padding:18px;background:rgba(6,20,42,.58);backdrop-filter:blur(4px)}
+.public-add-dialog{width:min(560px,100%);max-height:calc(100dvh - 36px);overflow:auto;border:1px solid #d8e1ec;border-radius:20px;background:#fff;box-shadow:0 28px 80px rgba(5,25,55,.28);padding:18px}
+.public-add-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding-bottom:14px;border-bottom:1px solid #e3e8ef}
+.public-add-head span{display:block;color:#68758a;font-size:.82rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.public-add-head h2{margin:4px 0 0;color:#142033;font-size:1.35rem}
+.public-add-close{width:42px;height:42px;display:grid;place-items:center;flex:0 0 42px;border:1px solid #d6dee9;border-radius:12px;background:#fff;color:#34445a;font:inherit;font-size:1.35rem;cursor:pointer}
+.public-add-options{display:grid;gap:9px;padding-top:14px}
+.public-add-option{width:100%;min-height:68px;display:grid;gap:3px;align-content:center;padding:12px 14px;border:1px solid #d9e2ed;border-radius:14px;background:#fff;color:#172339;text-align:left;text-decoration:none;font:inherit;cursor:pointer}
+.public-add-option:hover,.public-add-option:focus-visible{border-color:#9dbce5;background:#f5f9ff;outline:none}
+.public-add-option strong{color:#0b5fd7;font-size:.98rem}.public-add-option span{color:#68758a;font-size:.84rem;line-height:1.35}
+body.public-add-open{overflow:hidden}
+.mobile-bottom-nav button{font:inherit}
+.mobile-bottom-nav .mobile-add{border:0;cursor:pointer}
+@media(max-width:860px){
+  .main-nav{max-height:calc(100dvh - var(--header-height) - 18px);overflow-y:auto}
+  .main-nav-primary,.main-nav-extra{display:grid;width:100%;gap:4px}
+  .main-nav-primary a,.main-nav-extra a{width:100%}
+  .main-nav-extra{margin-top:8px;padding-top:8px;border-top:1px solid #e3e8ef}
+  .main-nav-extra a{padding:10px 14px;color:#68758a;font-size:14px}
+  body:has(#main-nav.open){overflow:hidden}
+  body:has(#main-nav.open)::before{content:"";position:fixed;z-index:900;inset:0;background:rgba(4,18,38,.56);backdrop-filter:blur(2px)}
+  body:has(#main-nav.open) .site-header{z-index:1000}
+  body:has(#main-nav.open) .mobile-bottom-nav{opacity:0;visibility:hidden;pointer-events:none}
+}
+@media(max-width:760px){
+  .mobile-bottom-nav a,.mobile-bottom-nav button{min-height:54px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;color:#637087;background:transparent;text-decoration:none;font-size:10px;font-weight:800}
+  .mobile-bottom-nav a.active{color:var(--primary)}
+  .mobile-bottom-nav a svg,.mobile-bottom-nav button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .mobile-bottom-nav .mobile-add{position:relative;top:-15px;width:58px;height:58px;justify-self:center;color:#fff;background:var(--primary);border-radius:18px;box-shadow:0 10px 26px rgba(11,95,215,.3)}
+  .mobile-bottom-nav .mobile-add span{position:absolute;top:62px;color:#637087}
+  .public-add-layer{align-items:end;padding:12px 12px calc(12px + env(safe-area-inset-bottom))}
+  .public-add-dialog{width:100%;max-height:min(78dvh,680px);border-radius:20px 20px 16px 16px}
+  .public-stage4-actions{align-items:stretch}
+  .public-stage4-actions>.primary-link-button,.public-stage4-actions>.secondary-link-button,.public-stage4-actions>.health-hero-add{width:100%;justify-content:center}
+}
+@media(max-width:620px){.ask-button span{display:none}}

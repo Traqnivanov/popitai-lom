@@ -649,42 +649,46 @@
       .health-field--full{grid-column:auto}
     }
   </style>
+  <link rel="stylesheet" href="public-shell-v1.css?v=20260830-stage4">
 </head>
 
 <body class="health-category-page">
   <a class="skip-link" href="#main-content">Към основното съдържание</a>
 
-  <header class="site-header" id="site-header">
-    <div class="header-inner">
-      <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
-        <span class="brand-mark" aria-hidden="true">
-          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
-        </span>
-        <span class="brand-text">
-          <strong>Попитай<span>.Лом</span></strong>
-          <small>Попитай. Намери. Препоръчай.</small>
-        </span>
-      </a>
-
-      <nav class="main-nav" id="main-nav" aria-label="Главна навигация">
-        <a href="index.html">Начало</a>
-        <a class="" href="info.html">Инфо Лом</a>
-        <a class="active" href="kategorii.html">Категории</a>
-        <a href="firmi.html">Фирми</a>
-        <a class="" href="obyavi.html">Обяви</a>
-        <a href="vaprosi.html">Въпроси</a>
-        <a href="statii.html">Статии</a>
-      </nav>
-
-      <div class="header-actions">
-        <a class="login-link" href="vhod.html">Вход</a>
-        <a class="ask-button" href="nov-vapros.html?category=zdrave">Задай въпрос</a>
-        <button class="menu-button" id="menu-button" type="button" aria-label="Отвори менюто" aria-expanded="false" aria-controls="main-nav">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
+  <!-- PUBLIC SHELL:HEADER START -->
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
+      <span class="brand-mark" aria-hidden="true"><img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt=""></span>
+      <span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span>
+    </a>
+    <nav class="main-nav" id="main-nav" aria-label="Главна навигация">
+      <div class="main-nav-primary"><a href="index.html">Начало</a><a href="info.html">Инфо Лом</a><a class="active" aria-current="page" href="kategorii.html">Категории</a><a href="firmi.html">Фирми</a><a href="obyavi.html">Обяви</a><a href="vaprosi.html">Въпроси</a><a href="statii.html">Статии</a></div>
+      <div class="main-nav-extra" aria-label="Още"><a href="sabitiya.html">Събития</a><a href="za-nas.html">За сайта</a><a href="pravila.html">Правила</a><a href="kontakti.html">Контакти</a></div>
+    </nav>
+    <div class="header-actions">
+      <a class="login-link" href="vhod.html">Вход</a>
+      <button class="ask-button public-add-trigger" type="button" aria-label="Добави" aria-haspopup="dialog" aria-expanded="false" aria-controls="public-add-sheet">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Добави</span>
+      </button>
+      <button class="menu-button" id="menu-button" type="button" aria-label="Отвори менюто" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span></button>
     </div>
-  </header>
+  </div>
+</header>
+<!-- PUBLIC SHELL:HEADER END -->
+<!-- PUBLIC SHELL:ADD START -->
+<div class="public-add-layer" id="public-add-sheet" hidden>
+  <section class="public-add-dialog" role="dialog" aria-modal="true" aria-labelledby="public-add-title">
+    <div class="public-add-head"><div><span>Добави в Попитай.Лом</span><h2 id="public-add-title">Какво искаш да добавиш?</h2></div><button class="public-add-close" type="button" aria-label="Затвори">×</button></div>
+    <div class="public-add-options">
+      <a class="public-add-option" href="nov-vapros.html?category=zdrave"><strong>Задай въпрос</strong><span>Потърси съвет, опит или препоръка</span></a>
+      <a class="public-add-option" href="dobavi-obqva.html"><strong>Добави обява</strong><span>Продажба, търсене, работа, имот или услуга</span></a>
+      <a class="public-add-option" href="dobavi-firma.html"><strong>Добави фирма</strong><span>Постоянен профил на местна фирма или доставчик</span></a>
+      <button class="public-add-option" type="button" data-public-special-action="health"><strong>Добави лекар или здравна услуга</strong><span>Предложението се изпраща за проверка</span></button>
+    </div>
+  </section>
+</div>
+<!-- PUBLIC SHELL:ADD END -->
 
   <main id="main-content">
   <nav class="site-breadcrumbs section-container" aria-label="Навигационна пътека">
@@ -695,7 +699,7 @@
         <span class="section-kicker">Здраве и лекари</span>
         <h1>Намери лекар или здравна услуга в Лом</h1>
         <p>Лични лекари, специалисти, стоматолози и ветеринари — с адрес, телефон и информация за практиката, когато е потвърдена.</p>
-        <button class="health-hero-add" type="button" aria-expanded="false" aria-controls="health-pro-panel">＋ Добави лекар или здравна услуга</button>
+        <div class="public-stage4-actions"><button class="health-hero-add" type="button" aria-expanded="false" aria-controls="health-pro-panel">＋ Добави лекар или здравна услуга</button><a class="secondary-link-button" href="nov-vapros.html?category=zdrave">Задай въпрос</a></div>
       </div>
     </section>
 
@@ -844,24 +848,12 @@
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="section-container footer-main">
-      <div class="footer-brand">
-        <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
-          <span class="brand-mark" aria-hidden="true">
-            <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
-          </span>
-          <span class="brand-text">
-            <strong>Попитай<span>.Лом</span></strong>
-            <small>Попитай. Намери. Препоръчай.</small>
-          </span>
-        </a>
-      </div>
-    </div>
-    <div class="section-container footer-bottom">
-      <p>© <span id="current-year">2026</span> Попитай.Лом.</p>
-    </div>
-  </footer>
+  <!-- PUBLIC SHELL:FOOTER START -->
+<footer class="site-footer"><div class="section-container footer-main"><div class="footer-brand"><a class="brand" href="index.html" aria-label="Попитай Лом – начало"><span class="brand-mark" aria-hidden="true"><img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt=""></span><span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span></a></div></div><div class="section-container footer-bottom"><p>© <span id="current-year">2026</span> Попитай.Лом.</p></div></footer>
+<!-- PUBLIC SHELL:FOOTER END -->
+<!-- PUBLIC SHELL:MOBILE START -->
+<nav class="mobile-bottom-nav" aria-label="Мобилна навигация"><a href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>Начало</span></a><a class="active" aria-current="page" href="kategorii.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Категории</span></a><button class="mobile-add public-add-trigger" type="button" aria-label="Добави" aria-haspopup="dialog" aria-expanded="false" aria-controls="public-add-sheet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Добави</span></button><a href="obyavi.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V5M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg><span>Обяви</span></a><a href="profil.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профил</span></a></nav>
+<!-- PUBLIC SHELL:MOBILE END -->
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="supabase-config.js?v=20260820-1840" defer></script>
@@ -956,5 +948,6 @@
 })();
   </script>
 
+  <script src="public-shell-v1.js?v=20260830-stage4" defer></script>
 </body>
 </html>
