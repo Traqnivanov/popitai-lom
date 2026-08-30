@@ -34,11 +34,20 @@ Marketplace V3 е адаптиран върху тези owners и не ги з�
 
 ## 3. MARKETPLACE V3 — ТЕКУЩ СТАТУС
 
-Статус: **IMPLEMENTED / PRE-MERGE QA**.
+Статус: **PRE-MERGE GATE PASS / PRODUCTION QA PENDING**.
 
 Работен branch: `marketplace-v3-unified-ia`  
 PR: **#105 — Unify public marketplace as Обяви и услуги**  
-`main` остава непроменен до финалния merge gate.
+Финален pre-merge head преди тази checkpoint актуализация: `bc8fe600e412a479de7b5e5853aeda948cecabe9`.
+
+На този head са SUCCESS едновременно:
+- `Marketplace V3 contract`;
+- `Public shell sync`;
+- `Public contextual IA recovery`.
+
+Canonical shell sync отчита `0 page(s) changed` и `41 pages synchronized`; exact-header guard потвърждава липса на competing `Категории`, unresolved placeholders и duplicate desktop `Вход`.
+
+`main` остава непроменен до merge на PR #105.
 
 ### Канонична структура
 
@@ -98,7 +107,7 @@ Compatibility mapping използва съществуващите stored categ
 
 ## 5. QA / REGRESSION GATES
 
-Добавен е `Marketplace V3 contract` CI, който пази:
+`Marketplace V3 contract` CI пази:
 - един marketplace entry;
 - четирите public groups;
 - canonical taxonomy/mapping;
@@ -114,13 +123,14 @@ Canonical shell generator валидира:
 - `404.html` и `admin.html` остават excluded;
 - един `Обяви и услуги` desktop entry;
 - няма competing top-level `Категории`;
+- няма duplicate desktop `Вход`;
 - няма unresolved template placeholders;
 - exact five-entry mobile navigation;
 - deterministic second sync.
 
-Contextual recovery и shell auto-sync workflow-ите вече са сериализирани чрез общ concurrency group, за да не се състезават за branch ref.
+Contextual recovery и shell auto-sync workflow-ите са сериализирани чрез общ concurrency group, за да не се състезават за branch ref.
 
-Последният contextual push sync след serialization е SUCCESS и е потвърдил `Contextual IA already synchronized`.
+Последният contextual sync е SUCCESS и е потвърдил, че contextual IA е вече synchronized.
 
 ## 6. АКТУАЛНИ ЛИМИТИ ЗА ОБЯВИ — НЕПРОМЕНЕНИ
 
@@ -150,19 +160,18 @@ Contextual recovery и shell auto-sync workflow-ите вече са сериа�
 
 ## 9. ОСТАВАЩИ СТЪПКИ ПРЕДИ `PRODUCTION PASS`
 
-1. изчакване на последния canonical shell auto-sync след премахването на duplicate `Вход`;
-2. всички PR CI/check workflows да са SUCCESS върху финалния head;
-3. PR #105 да бъде маркиран ready и merge-нат;
-4. GitHub Pages production runtime QA с cache-busting на:
+1. маркиране на PR #105 ready и merge;
+2. GitHub Pages deployment на merge commit;
+3. production runtime QA с cache-busting на:
    - `obyavi.html`;
    - `maistori.html`;
    - `avtomobili.html`;
    - `rabota.html`;
    - `dobavi-obqva.html`;
    - `kategorii.html` compatibility redirect;
-5. проверка на desktop/mobile navigation, search, filters, one-CTA deep views, add-flow mapping, loading/empty/error states и липса на old competing UI;
-6. protected regression: auth/edit, listings, firms, quotas/moderation boundaries и Ivanov priority;
-7. без fake production records и без изпращане на тестова production форма.
+4. проверка на desktop/mobile navigation, search, filters, one-CTA deep views, add-flow mapping, loading/empty/error states и липса на old competing UI;
+5. protected regression: auth/edit, listings, firms, quotas/moderation boundaries и Ivanov priority;
+6. без fake production records и без изпращане на тестова production форма.
 
 Само след тези стъпки Marketplace V3 може да бъде записан като **PRODUCTION PASS**.
 
