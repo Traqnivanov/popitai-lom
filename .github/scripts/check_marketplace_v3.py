@@ -17,6 +17,7 @@ market = text("marketplace-v3.js")
 shell = text("public-shell-v1.js")
 listings = text("category-listings-v1.js")
 css = text("marketplace-v3.css")
+dictionary = text("public-category-dictionary-v1.js")
 
 
 def require(name: str, source: str, needle: str) -> None:
@@ -31,7 +32,7 @@ def forbid(name: str, source: str, pattern: str) -> None:
 
 # Product contract: one marketplace entry, exact four public main groups.
 for needle in [
-    '"obyavi.html", "Обяви и услуги"',
+    'href="obyavi.html">Обяви и услуги</a>',
     '<span>Обяви</span>',
     '<span>Инфо</span>',
     '<span>Профил</span>',
@@ -73,14 +74,13 @@ for label in [
     "Електроника", "Дом и градина", "Дрехи и обувки", "Деца и бебета", "Спорт и хоби", "Животни", "Работа", "Имоти", "Друго",
 ]:
     # Service values can be supplied by the canonical dictionary rather than duplicated in this owner.
-    if label not in market and label not in text("public-category-dictionary-v1.js"):
+    if label not in market and label not in dictionary:
         problems.append(f"canonical marketplace taxonomy missing: {label}")
 
-# Presentation owner must stay write-free. The read-only thematic owner must also stay write-free.
+# Presentation owners must not mutate Supabase rows. URLSearchParams.delete is intentionally allowed.
+write_pattern = r"\.from\([^\)]*\)(?:(?!;).){0,500}\.(?:insert|update|delete|upsert)\s*\("
 for path, source in [("marketplace-v3.js", market), ("category-listings-v1.js", listings)]:
-    for method in [".insert(", ".update(", ".delete(", ".upsert("]:
-        if method in source:
-            problems.append(f"{path}: presentation/read-only owner contains write method {method}")
+    forbid(path, source, write_pattern)
 
 # Preserve protected priority ordering and approved/active constraints in the listings owner.
 for needle in [
