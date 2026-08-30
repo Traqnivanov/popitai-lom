@@ -145,11 +145,16 @@
     if (!items.length) emptyState(root);
   }
 
-  function setupRetry(client, root) {
-    root.addEventListener("click", (event) => {
+  function setupRetry(root) {
+    root.addEventListener("click", async (event) => {
       const retry = event.target.closest("[data-category-listings-retry]");
       if (!retry) return;
-      loadRoot(client, root).catch(() => errorState(root));
+      try {
+        const client = await waitForClient();
+        await loadRoot(client, root);
+      } catch (_) {
+        errorState(root);
+      }
     });
   }
 
@@ -209,12 +214,12 @@
   }
 
   mobilePriorityGrids.forEach(setupMobilePriorityGrid);
+  listingRoots.forEach(setupRetry);
 
   if (!listingRoots.length) return;
   (async () => {
     try {
       const client = await waitForClient();
-      listingRoots.forEach((root) => setupRetry(client, root));
       await Promise.all(listingRoots.map((root) => loadRoot(client, root)));
     } catch (error) {
       console.error("Category listings load error:", error);
