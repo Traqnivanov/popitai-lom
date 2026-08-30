@@ -70,64 +70,64 @@
       "special": null
     },
     "kategorii.html": {
-      "nav": "categories",
-      "mobile": "categories",
+      "nav": "listings",
+      "mobile": "listings",
       "footer": "standard",
       "question": "nov-vapros.html",
       "shell": "standard",
       "special": null
     },
     "maistori.html": {
-      "nav": "categories",
-      "mobile": "categories",
+      "nav": "listings",
+      "mobile": "listings",
       "footer": "standard",
       "question": "nov-vapros.html?category=maistori",
       "shell": "standard",
       "special": null
     },
     "zdrave-i-lekari.html": {
-      "nav": "categories",
-      "mobile": "categories",
+      "nav": "listings",
+      "mobile": "listings",
       "footer": "health",
       "question": "nov-vapros.html?category=zdrave",
       "shell": "health",
       "special": "health"
     },
     "avtomobili.html": {
-      "nav": "categories",
-      "mobile": "categories",
+      "nav": "listings",
+      "mobile": "listings",
       "footer": "standard",
       "question": "nov-vapros.html?category=avtomobili",
       "shell": "standard",
       "special": null
     },
     "magazini.html": {
-      "nav": "categories",
-      "mobile": "categories",
+      "nav": "listings",
+      "mobile": "listings",
       "footer": "standard",
       "question": "nov-vapros.html?category=magazini",
       "shell": "standard",
       "special": "shop"
     },
     "zavedenia.html": {
-      "nav": "categories",
-      "mobile": "categories",
+      "nav": "listings",
+      "mobile": "listings",
       "footer": "standard",
       "question": "nov-vapros.html?category=zavedenia",
       "shell": "standard",
       "special": null
     },
     "rabota.html": {
-      "nav": "categories",
-      "mobile": "categories",
+      "nav": "listings",
+      "mobile": "listings",
       "footer": "standard",
       "question": "nov-vapros.html?category=rabota",
       "shell": "standard",
       "special": null
     },
     "sabitiya.html": {
-      "nav": "categories",
-      "mobile": "categories",
+      "nav": "listings",
+      "mobile": "listings",
       "footer": "standard",
       "question": "nov-vapros.html?category=sabitiya",
       "shell": "standard",
