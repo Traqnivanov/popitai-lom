@@ -22,17 +22,25 @@ Marketplace V3 не заменя и не променя firm owner, protected li
 
 ## 3. MARKETPLACE V3
 
-Статус: **PRE-MERGE GATE PASS / PRODUCTION QA PENDING**.
+Статус: **PRODUCTION PASS**.
 
-Branch: `marketplace-v3-unified-ia`. PR: **#105 — Unify public marketplace as Обяви и услуги**.
+Основната реализация е merge-ната в `main` чрез **PR #106 — Unify public marketplace as Обяви и услуги**, merge commit `57997443b0539596425a5f8e375c56153d079f6d`.
 
-Последният implementation/shell QA head е `bc8fe600e412a479de7b5e5853aeda948cecabe9`. На него са SUCCESS едновременно `Marketplace V3 contract`, `Public shell sync` и `Public contextual IA recovery`. След този QA gate са правени само checkpoint документационни актуализации; implementation файловете от зеления head не са променяни.
+Production visual QA откри един presentation-only дефект: accessibility `.sr-only` labels в marketplace search участваха като видими grid елементи и размествaха търсачката. Поправката е merge-ната чрез **PR #107 — Fix Marketplace V3 search form layout**, final production commit `6155921d6c76caaab3639bac6b2fb62c79d8bd4e`.
 
-Canonical shell е synchronized за 41 public pages и exact-header guard пази един `Обяви и услуги` desktop entry, без top-level `Категории`, без duplicate desktop `Вход`, без unresolved placeholders и mobile точно `Начало | Обяви | + | Инфо | Профил`.
+След final commit GitHub Pages build/deployment е **SUCCESS**, а `Marketplace V3 contract` на `main` е **SUCCESS**.
 
-Desktop: `Начало | Обяви и услуги | Фирми | Инфо Лом | Статии | Още ▼ | Профил | + Добави`.
+Canonical shell е synchronized за 41 public pages. Desktop е:
 
-`kategorii.html` е backward-compatible redirect към `obyavi.html`, а не втори marketplace hub.
+`Начало | Обяви и услуги | Фирми | Инфо Лом | Статии | Още ▼ | Профил | + Добави`
+
+Mobile canonical markup е точно:
+
+`Начало | Обяви | + | Инфо | Профил`
+
+Няма top-level `Категории`, няма duplicate desktop `Вход`, няма unresolved shell placeholders.
+
+`kategorii.html` е backward-compatible redirect към `obyavi.html`, а не втори marketplace hub. Production проверката потвърди, че query string и hash се запазват при redirect.
 
 Четири public main groups: `Майстори и ремонти`, `Автомобили`, `Други услуги`, `Други обяви`. Точната taxonomy и public↔stored mapping са в `PUBLIC_MARKETPLACE_V3_APPROVED_SPEC.md`.
 
@@ -44,9 +52,19 @@ Landing `obyavi.html` е единният marketplace. `maistori.html`, `avtomob
 
 Add flow: `Предлагам / Търся → главна група → подкатегория → protected details form`. `edit=<id>` има приоритет над create prefill.
 
-## 5. QA / REGRESSION
+## 5. PRODUCTION QA / REGRESSION
 
-Marketplace contract пази unified entry, taxonomy/mapping, write-free presentation, approved/active filters и protected Ivanov/Admin + boost ordering. Shell generator пази exact 41-page canonical nav и deterministic sync. Contextual и shell auto-sync са serialized; последният contextual sync е SUCCESS и synchronized.
+Проверено live без създаване на тестови записи и без production form submit:
+
+- `obyavi.html` — единен `Обяви и услуги` landing, точна desktop навигация, search layout след hotfix, четири public groups и реални active listings;
+- `maistori.html` — 8 approved repair subcategories, един `Добави обява`, search, `Всички | Предлагат | Търсят | Фирми`, real firm results и коректен empty state за липсващи active listings;
+- `avtomobili.html` — `Автомобили за продажба или търсене` + 6 auto-service subcategories, един CTA и същите result filters;
+- `rabota.html` — 8 approved general-service subcategories, един CTA и същите result filters;
+- `dobavi-obqva.html` — production prefill `intent=seek + main=maistori + subcategory=Боядисване` се зарежда като `Търся → Майстори и ремонти → Боядисване`; не е изпращана форма;
+- `kategorii.html` — production redirect към `obyavi.html` със запазени query/hash;
+- shell — exact desktop entry и canonical five-item mobile markup са в synchronized 41-page source; responsive CSS/contract guard остава активен.
+
+Protected regression е scope-safe: няма schema/RLS/roles/ownership/moderation/quota/Admin/Moderator промени; presentation owners са write-free; protected listing write/edit/media owner и Ivanov/Admin + boost ordering остават непроменени.
 
 ## 6. ЛИМИТИ — НЕПРОМЕНЕНИ
 
@@ -56,17 +74,14 @@ Marketplace contract пази unified entry, taxonomy/mapping, write-free presen
 
 Admin/Moderator Panel V2 остава **ЗАВЪРШЕН / REAL INTERACTION QA PASS**. Role boundaries, self-moderation protection, Admin-only permanent delete и Admin-only role/access management не са променяни.
 
-## 8. ОСТАВА ДО PRODUCTION PASS
+## 8. MARKETPLACE V3 — ЗАТВОРЕН ЕТАП
 
-1. PR #105 ready + merge;
-2. GitHub Pages deployment;
-3. production runtime QA на `obyavi.html`, `maistori.html`, `avtomobili.html`, `rabota.html`, `dobavi-obqva.html`, `kategorii.html` redirect;
-4. desktop/mobile nav, search, filters, one-CTA views, add mapping и load/empty/error states;
-5. protected regression: auth/edit, listings, firms, quotas/moderation и Ivanov priority;
-6. без fake production records и без production form submit.
+Marketplace V3 не се започва отначало и старите равнопоставени `Категории` / `Обяви` решения не се връщат. Нов marketplace change се прави само при конкретен доказан production проблем или ново изрично продуктово решение.
 
-Само след тези стъпки статусът става **PRODUCTION PASS**.
+Production commits:
+- Marketplace V3: `57997443b0539596425a5f8e375c56153d079f6d`;
+- search-layout hotfix: `6155921d6c76caaab3639bac6b2fb62c79d8bd4e`.
 
 ## 9. РАБОТЕН РЕЖИМ
 
-Безопасните следващи стъпки се изпълняват автономно. При protected/risky/new business decision се спира преди рискова промяна. Не се казва „готово“, преди да е live и проверено.
+Безопасните следващи стъпки се изпълняват автономно. При protected/risky/new business decision се спира преди рискова промяна. Не се казва „готово“, преди промяната да е live и проверена.
