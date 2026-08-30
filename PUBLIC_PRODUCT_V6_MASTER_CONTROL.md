@@ -177,7 +177,27 @@ V6 не е нов сайт и не е giant rewrite.
 
 Статус: **стратегическа основа; launch execution calendar не е нужен още**.
 
-### G. Existing approved/production specs
+### G. `PUBLIC_PRODUCT_V6_INTERACTION_FORM_LINK_CONTRACT.md`
+
+Роля: единен interaction standard за бутоните, линковете, формите, state-овете и user flows.
+
+Вече съдържа:
+- button hierarchy и states;
+- link vs action contract;
+- no-dead-link правило;
+- create/edit/resubmit разграничение;
+- prefill/validation/backend parity;
+- success/pending/error states;
+- стандартен flow record;
+- cross-flow consistency;
+- mobile interaction gate;
+- UX copy gate;
+- interaction QA matrix;
+- definition of done за user flow.
+
+Статус: **готов V6 design gate; конкретният current interaction inventory още липсва**.
+
+### H. Existing approved/production specs
 
 Те остават източник на текущата реалност, докато V6 не бъде approved и не ги supersede-не изрично:
 
@@ -228,10 +248,11 @@ V6 не е нов сайт и не е giant rewrite.
 - protected boundaries;
 - current search integration;
 - current Admin integration;
+- current buttons/forms/links/entry points;
 - V6 target role;
 - `KEEP / ADAPT / REPLACE PRESENTATION / NEW RELATION / DEFER`;
 - backend impact: `NONE / READ / NEW RELATION / SCHEMA-RLS`;
-- доказателство от код/rules.
+- доказателство от code/rules.
 
 **Това е следващата основна работа.**
 
@@ -398,6 +419,32 @@ V6 не е нов сайт и не е giant rewrite.
 
 Прототипът трябва да бъде проверен реално на desktop и mobile viewport, не само по markup.
 
+### GAP 10A — INTERACTION / FORMS / BUTTONS / LINKS CURRENT→TARGET CONTRACT
+
+Имаме общите правила и новия V6 interaction design gate, но още няма доказана карта как всеки реален flow работи днес и как трябва да работи във V6.
+
+Трябва да се извадят и проверят минимум:
+- всички primary/secondary CTA по ключовите public screens;
+- exact link destinations;
+- create/edit/resubmit flows;
+- query/prefill behavior;
+- auth/owner/moderator/admin states;
+- form fields и conditional fields;
+- frontend/backend validation parity;
+- submit owner/action;
+- approved/pending/draft/rejected states;
+- success/error/empty/loading states;
+- browser back/cancel/context preservation;
+- double-submit/duplicate protection;
+- mobile keyboard/focus/sticky CTA/modal/sheet behavior;
+- accessibility labels/focus/status;
+- analytics events;
+- dead links/placeholders/contradictory CTA.
+
+За всеки ключов екран се използва standard flow record от `PUBLIC_PRODUCT_V6_INTERACTION_FORM_LINK_CONTRACT.md`.
+
+Това не е козметична проверка. **Визуално готов екран ≠ готов user flow.**
+
 ### GAP 11 — TECHNICAL DESIGN / MIGRATION / PERFORMANCE BUDGET
 
 Преди implementation трябва да има exact plan:
@@ -423,7 +470,7 @@ V6 не е нов сайт и не е giant rewrite.
 - казва кое старо production решение остава;
 - кое се supersede-ва;
 - кое е LOCKED;
-- exact IA/search/data/moderation/share/content contracts;
+- exact IA/search/data/moderation/share/content/interaction contracts;
 - rollout order;
 - QA/rollback.
 
@@ -452,11 +499,12 @@ V6 не е нов сайт и не е giant rewrite.
 - owner map;
 - current→target matrix;
 - code/rules evidence;
+- current buttons/forms/links/flow inventory skeleton;
 - current content/search/Info/Article inventory skeleton;
 - analytics baseline.
 
 Exit gate:
-**не остава основен public/backend owner, който „не знаем кой го държи“.**
+**не остава основен public/backend owner или ключов user flow, за който „не знаем кой го държи и накъде води“.**
 
 ### STAGE V6-B — PRODUCT CONTRACTS
 
@@ -468,10 +516,11 @@ Exit gate:
 - Q&A canonical/duplicate;
 - relationship/recommendations;
 - Facebook Bridge;
-- local ranking/freshness.
+- local ranking/freshness;
+- exact interaction semantics, form states и link destinations.
 
 Exit gate:
-**всеки важен user flow има ясен owner, state и moderation/permission behavior.**
+**всеки важен user flow има ясен owner, state, CTA/destination и moderation/permission behavior.**
 
 ### STAGE V6-C — VISUAL / INTERACTION PROTOTYPE
 
@@ -479,16 +528,18 @@ Exit gate:
 
 Exit gate:
 - няма скрити navigation/UX contradictions;
+- всички ключови CTA/forms/links са проследени като flow, не само нарисувани;
+- happy path + loading/empty/error/pending states са видими;
 - mobile е реално проверен;
 - visual language е единен;
 - Info/Articles/Q&A/Marketplace изглеждат като една система.
 
 ### STAGE V6-D — TECHNICAL DESIGN
 
-Exact schema/relations/RLS/indexes/migrations/rollback/performance/SEO rendering.
+Exact schema/relations/RLS/indexes/migrations/rollback/performance/SEO rendering + frontend/backend validation/action ownership.
 
 Exit gate:
-**можем да кажем точно кои файлове/tables/policies се пипат и защо.**
+**можем да кажем точно кои файлове/tables/policies/actions се пипат и защо.**
 
 ### STAGE V6-E — FINAL APPROVAL SPEC
 
@@ -504,6 +555,7 @@ Exit gate:
 Не giant rewrite. Всеки implementation slice има:
 - scope;
 - tests/CI;
+- interaction QA;
 - protected regression;
 - desktop/mobile QA;
 - production verification;
@@ -521,12 +573,14 @@ Exit gate:
 - [x] Content/SEO strategy;
 - [x] Content readiness rule;
 - [x] Info Lom core/SEO/growth strategy;
+- [x] interaction/forms/buttons/links design gate;
 - [x] external product pattern research captured conceptually;
 - [x] master continuity/control system.
 
 ### Не е завършено
 
 - [ ] CURRENT → TARGET owner matrix;
+- [ ] current→target interaction/forms/buttons/links matrix;
 - [ ] first-party analytics baseline;
 - [ ] Info Lom coverage inventory;
 - [ ] Article/content inventory;
@@ -572,7 +626,7 @@ Exit gate:
 16. service worker/PWA/manifest if present;
 17. Analytics inputs relevant to V6.
 
-За всяко: `CURRENT → TARGET → OWNER → PROTECTED? → DATA → MODERATION → SEARCH → SEO → ADMIN → PERFORMANCE → ACTION`.
+За всяко: `CURRENT → TARGET → OWNER → PROTECTED? → DATA → MODERATION → SEARCH → SEO → ADMIN → BUTTONS/FORMS/LINKS → STATES → PERFORMANCE → ACTION`.
 
 След завършване master control се актуализира и `EXACT NEXT TASK` се премества към V6-A2.
 
@@ -678,6 +732,8 @@ Exit gate:
 Не е „готов“, ако има prototype или файл. Готов е когато:
 - product contract е approved;
 - permissions/moderation са ясни;
+- buttons/forms/links/destinations и всички важни states са проверени;
+- create/edit/pending/error behavior е изрично определено;
 - desktop/mobile UX е проверен;
 - performance impact е приемлив;
 - backend/SEO/fallback са проектирани;
@@ -704,6 +760,7 @@ Exit gate:
 - authoritative facts си остават при правилния owner;
 - community opinion е отделено от verified fact;
 - Admin/Moderator границите са запазени;
+- buttons/forms/links имат единни semantics и проверени end states;
 - performance е lightweight-by-default;
 - SEO/content не дублират authoritative data;
 - Facebook е distribution, не source-of-truth;
@@ -713,7 +770,7 @@ Exit gate:
 
 ## 14. HANDOFF LINE
 
-**Текущ checkpoint:** V6 planning foundation + continuity system са оформени.  
+**Текущ checkpoint:** V6 planning foundation + continuity system + interaction design gate са оформени.  
 **Production:** непроменен от този V6 planning track.  
-**Следва:** `STAGE V6-A1 — CURRENT → TARGET OWNER / RELATIONSHIP MAP`.  
+**Следва:** `STAGE V6-A1 — CURRENT → TARGET OWNER / RELATIONSHIP MAP`, включително current buttons/forms/links/states.  
 **Забранено следващо действие:** директен V6 production code преди inventory/contracts/prototype/technical design/final approval.
