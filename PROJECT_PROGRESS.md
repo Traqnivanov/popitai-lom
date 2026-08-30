@@ -74,7 +74,12 @@ LOCKED без отделно изрично одобрение:
 - Не са променяни съдържание, телефони, CTA, официални линкове, signal flow или Admin логика.
 
 ### Търсене
-Публично се показват `Услуги` и `Събития` чрез изолиран label слой. Защитената логика в `script.js` за ремонтни/строителни търсения и Иванов Ремонти не се променя без отделно одобрение.
+- `public-search-v1.js` е authoritative owner за общото публично търсене в `tarsene.html` и за homepage suggestions при актуално зареден Stage 2 search layer.
+- Реалните remote източници са само approved фирми, approved въпроси и approved + active обяви с ограничени заявки и минимални публични полета. Няма profiles, телефони или Admin/moderation полета в search payload-а.
+- Резултатите се групират по тип: Категории, Фирми, Обяви, Въпроси, Статии и Проверена информация. Authoritative owner няма `localStorage` fallback.
+- Има debounce/cancel, loading/error/empty states и zero-results действия `Разгледай категориите`, `+ Добави` с избор фирма/обява и отделно `Задай въпрос`.
+- Защитената логика в `script.js` за ремонтни/строителни търсения и Иванов Ремонти остава отделна и непроменена. Stage 2 използва съществуващия `rankSearchRecords()` detector; не дублира construction stems.
+- Production regression: `шпакловка` → точно един „Иванов Ремонти Лом“; `автомивка` → автомобилни резултати без Иванов priority; `работа` → без false-positive Иванов; реална approved обява и Verified Info резултат се намират; no-results state е проверен.
 
 ### Статии
 В списъка остава само реално наличната статия. Не се създават заглавия, карти или съдържание без реален одобрен източник.
@@ -157,13 +162,13 @@ Admin/Moderator Panel v2 не се започва отново без конкр
 
 Каноничната публична структура е одобрена и записана в `PUBLIC_SITE_INFORMATION_ARCHITECTURE_APPROVED_SPEC.md`. Не се правят отделни импровизирани UX решения извън нея.
 
-Задължителният ред е:
+Текущият ред и статус е:
 
-1. **Каноничен речник и структурирана подкатегория** — един source за category/label/routing/form mappings; зависим subcategory select в съществуващата форма за обява; безопасно запазване на legacy стойности; без schema/RLS/role промяна.
-2. **Реално общо търсене** — Supabase-backed approved фирми, въпроси и обяви; групиране по тип; без legacy localStorage ownership; запазен защитен приоритет за ремонти/строителство/майстори и „Иванов Ремонти“.
-3. **Обяви в тематичните категории** — read-only approved listings layer; един запис се показва в общия каталог и релевантната тема; без промяна на ownership, status, quota, approval или moderation.
-4. **Общи layout фрагменти и навигация** — параметризиран static source/build-sync за public header/footer/mobile nav; Admin остава извън generator; „+ Добави“, новата mobile навигация и видим вход към „Въпроси и препоръки“; запазени page-specific CTA targets.
-5. **QA и production** — desktop/mobile, anonymous/authenticated, форми, търсене, focus/modals, loading/empty/error, console/runtime/cache/load order и regression на цялото защитено ядро.
+1. **Етап 1 — ЗАВЪРШЕН / PRODUCTION** — каноничен речник за category/label/routing/form mappings; зависим structured subcategory select за `Обяви → Услуги`; безопасно legacy edit поведение. Одобреният narrow backend integrity amendment добавя taxonomy validation без промяна на RLS, роли, ownership, quotas, media или moderation.
+2. **Етап 2 — ЗАВЪРШЕН / PRODUCTION QA PASS** — authoritative Supabase-backed public search за approved фирми, въпроси и active approved обяви; grouped results; без legacy `localStorage` ownership; loading/error/empty; запазен защитен приоритет за ремонти/строителство/майстори и „Иванов Ремонти“. Production corpus и cache/load-order корекциите са проверени.
+3. **СЛЕДВАЩ: Етап 3 — Обяви в тематичните категории** — read-only approved listings layer; един запис се показва в общия каталог и релевантната тема; без промяна на ownership, status, quota, approval или moderation. Преди код се прави read-only mapping/ownership audit на всяка засегната тематична страница.
+4. **Етап 4 — Общи layout фрагменти и навигация** — параметризиран static source/build-sync за public header/footer/mobile nav; Admin остава извън generator; „+ Добави“, новата mobile навигация и видим вход към „Въпроси и препоръки“; запазени page-specific CTA targets.
+5. **Етап 5 — QA и production** — desktop/mobile, anonymous/authenticated, форми, търсене, focus/modals, loading/empty/error, console/runtime/cache/load order и regression на цялото защитено ядро.
 
 Всеки етап се изпълнява в отделен branch/PR, проверява се преди merge и се проверява отново в production. Безопасното и вече одобрено продължава без междинно „ОК“. Спира се само при ново LOCKED решение, доказан риск или user-only действие.
 
