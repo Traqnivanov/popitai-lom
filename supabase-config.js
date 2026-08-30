@@ -61,6 +61,14 @@
         if (query) window.location.href = `tarsene.html?q=${encodeURIComponent(query)}`;
       });
 
+      const resultsForm = document.getElementById("results-search-form");
+      const resultsInput = document.getElementById("results-search-input");
+      resultsForm?.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const query = resultsInput?.value.trim() || "";
+        window.location.href = `tarsene.html?q=${encodeURIComponent(query)}`;
+      });
+
       const results = document.getElementById("search-results");
       const count = document.getElementById("results-count");
       if (results) {
