@@ -101,12 +101,12 @@ def main():
  except Exception as e: print(f'public-shell manifest/template error: {e}',file=sys.stderr); return 2
  changed=[]; errors=[]
  for n,c in m['pages'].items():
-  path=ROOT/n; cur=path.read_text(encoding='utf-8-sig')
+  path=ROOT/n; raw=path.read_bytes(); had_bom=raw.startswith(b'\xef\xbb\xbf'); cur=raw.decode('utf-8-sig')
   try: exp=expected(n,cur,c,t)
   except Exception as e: errors.append(f'{n}: {e}'); continue
   if cur!=exp:
    changed.append(n)
-   if a.write: path.write_text(exp,encoding='utf-8')
+   if a.write: path.write_bytes((b'\xef\xbb\xbf' if had_bom else b'')+exp.encode('utf-8'))
  if a.check:
   errors+=validate()
   if changed: errors.append('out-of-sync public shell pages: '+', '.join(sorted(changed)))
