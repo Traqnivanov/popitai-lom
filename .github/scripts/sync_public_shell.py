@@ -7,10 +7,12 @@ ROOT=Path(__file__).resolve().parents[2]
 MANIFEST=ROOT/'public-shell-manifest-v1.json'
 TEMPLATE=ROOT/'public-shell-template-v1.json'
 CSS_REF='<link rel="stylesheet" href="public-shell-v1.css?v=20260830-stage4">'
-JS_REF='<script src="public-shell-v1.js?v=20260830-stage5-focus1" defer></script>'
+JS_REF='<script src="public-shell-v1.js?v=20260830-marketplace-v3" defer></script>'
 CSS_ASSET_RE=re.compile(r'<link rel="stylesheet" href="public-shell-v1\.css(?:\?v=[^"]*)?">')
 JS_ASSET_RE=re.compile(r'<script src="public-shell-v1\.js(?:\?v=[^"]*)?" defer></script>')
-NAV=[('home','index.html','Начало'),('info','info.html','Инфо Лом'),('categories','kategorii.html','Категории'),('firms','firmi.html','Фирми'),('listings','obyavi.html','Обяви'),('questions','vaprosi.html','Въпроси'),('articles','statii.html','Статии')]
+LEGACY_NAV_KEYS={'home','info','categories','firms','listings','questions','articles'}
+MARKETPLACE_NAV_KEYS={'categories','listings'}
+MORE_PAGES={'vaprosi.html','vapros.html','nov-vapros.html','sabitiya.html','za-nas.html','pravila.html','kontakti.html'}
 MARKERS={'header':('<!-- PUBLIC SHELL:HEADER START -->','<!-- PUBLIC SHELL:HEADER END -->'),'add':('<!-- PUBLIC SHELL:ADD START -->','<!-- PUBLIC SHELL:ADD END -->'),'footer':('<!-- PUBLIC SHELL:FOOTER START -->','<!-- PUBLIC SHELL:FOOTER END -->'),'mobile':('<!-- PUBLIC SHELL:MOBILE START -->','<!-- PUBLIC SHELL:MOBILE END -->')}
 LEGACY={
  'header':re.compile(r'<header\b[^>]*class="[^"]*site-header[^"]*".*?</header>',re.S),
@@ -30,21 +32,39 @@ def load():
  actual={p.name for p in ROOT.glob('*.html')}-excluded
  if actual!=set(pages): raise ValueError(f'public page manifest mismatch: actual-only={sorted(actual-set(pages))}; manifest-only={sorted(set(pages)-actual)}')
  for n,c in pages.items():
-  if c.get('nav') not in {None,*[x[0] for x in NAV]}: raise ValueError(f'invalid nav: {n}')
+  if c.get('nav') not in {None,*LEGACY_NAV_KEYS}: raise ValueError(f'invalid nav: {n}')
   if c.get('mobile') not in {None,'home','categories','listings','profile'}: raise ValueError(f'invalid mobile: {n}')
   if c.get('footer','standard') not in {'standard','info','health'}: raise ValueError(f'invalid footer: {n}')
   if c.get('special') not in {None,'shop','health'}: raise ValueError(f'invalid special: {n}')
  return m,t
 
-def render(t,c):
- nav=''.join(f'<a{(" class=\"active\" aria-current=\"page\"" if c.get("nav")==k else "")} href="{h}">{l}</a>' for k,h,l in NAV)
+def attr(active):
+ return ' class="active" aria-current="page"' if active else ''
+
+def render(t,c,name):
+ nav_key=c.get('nav')
+ nav=(
+  f'<a{attr(nav_key=="home")} href="index.html">Начало</a>'
+  f'<a{attr(nav_key in MARKETPLACE_NAV_KEYS)} href="obyavi.html">Обяви и услуги</a>'
+  f'<a{attr(nav_key=="firms")} href="firmi.html">Фирми</a>'
+  f'<a{attr(nav_key=="info")} href="info.html">Инфо Лом</a>'
+  f'<a{attr(nav_key=="articles")} href="statii.html">Статии</a>'
+  f'<details class="public-more{" active" if name in MORE_PAGES else ""}"><summary{" aria-current=\"page\"" if name in MORE_PAGES else ""}>Още</summary><div class="public-more-menu"><a href="vaprosi.html">Въпроси</a><a href="sabitiya.html">Събития</a><a href="za-nas.html">За сайта</a><a href="pravila.html">Правила</a><a href="kontakti.html">Контакти</a></div></details>'
+  f'<a{attr(name=="profil.html")} href="profil.html">Профил</a>'
+ )
  header=t['header'].replace('{{NAV_LINKS}}',nav)
  add=t['add'][c.get('special') or 'none'].replace('{{QUESTION}}',c.get('question','nov-vapros.html'))
  footer=t['footer'][c.get('footer','standard')]
  mobile=t['mobile']
- for k in ['home','categories','listings','profile']:
-  attr=' class="active" aria-current="page"' if c.get('mobile')==k else ''
-  mobile=mobile.replace('{{'+k.upper()+'_ATTR}}',attr)
+ mobile_active=c.get('mobile')
+ replacements={
+  'HOME': mobile_active=='home',
+  'MARKETPLACE': mobile_active in {'categories','listings'},
+  'INFO': mobile_active=='info' or nav_key=='info',
+  'PROFILE': mobile_active=='profile' or name=='profil.html',
+ }
+ for key,active in replacements.items():
+  mobile=mobile.replace('{{'+key+'_ATTR}}',attr(active))
  return {'header':header,'add':add,'footer':footer,'mobile':mobile}
 
 def marker_re(kind):
@@ -82,7 +102,7 @@ def migrate(name,text):
  return text
 
 def expected(name,text,c,t):
- text=migrate(name,text); parts=render(t,c)
+ text=migrate(name,text); parts=render(t,c,name)
  for k in ['header','add','footer','mobile']: text=replace_fragment(text,k,parts[k])
  text=sync_asset_ref(text,CSS_ASSET_RE,CSS_REF,'</head>')
  text=sync_asset_ref(text,JS_ASSET_RE,JS_REF,'</body>')
@@ -104,9 +124,16 @@ def validate():
  if '}, { capture: true });' not in shell_js: problems.append('public-shell-v1.js: hamburger Escape focus listener must run in capture phase')
  pages=json.loads(MANIFEST.read_text(encoding='utf-8')).get('pages') or {}
  for n in pages:
-  text=(ROOT/n).read_text(encoding='utf-8-sig')
-  if text.count(CSS_REF)!=1: problems.append(f'{n}: expected exactly one canonical public shell CSS reference')
-  if text.count(JS_REF)!=1: problems.append(f'{n}: expected exactly one canonical public shell JS reference')
+  page=(ROOT/n).read_text(encoding='utf-8-sig')
+  if page.count(CSS_REF)!=1: problems.append(f'{n}: expected exactly one canonical public shell CSS reference')
+  if page.count(JS_REF)!=1: problems.append(f'{n}: expected exactly one canonical public shell JS reference')
+  if '{{' in marker_re('header').search(page).group(0) or '{{' in marker_re('mobile').search(page).group(0): problems.append(f'{n}: unresolved public shell placeholder')
+  header=marker_re('header').search(page).group(0)
+  mobile=marker_re('mobile').search(page).group(0)
+  if 'href="kategorii.html">Категории</a>' in header: problems.append(f'{n}: competing Categories entry remains in canonical header')
+  if header.count('href="obyavi.html">Обяви и услуги</a>')!=1: problems.append(f'{n}: canonical header must contain one Обяви и услуги entry')
+  for label in ['<span>Начало</span>','<span>Обяви</span>','<span>Добави</span>','<span>Инфо</span>','<span>Профил</span>']:
+   if label not in mobile: problems.append(f'{n}: canonical mobile nav missing {label}')
  return problems
 
 def main():
@@ -127,5 +154,5 @@ def main():
   if changed: errors.append('out-of-sync public shell pages: '+', '.join(sorted(changed)))
  if errors:
   print('Public shell check FAILED:',file=sys.stderr); [print('- '+x,file=sys.stderr) for x in errors]; return 1
- print(f'Public shell synchronized: {len(changed)} page(s) changed.' if a.write else 'Public shell check PASS: 41 pages synchronized; protected exclusions intact.'); return 0
+ print(f'Public shell synchronized: {len(changed)} page(s) changed.' if a.write else 'Public shell check PASS: 41 pages synchronized; Marketplace V3 shell canonical; protected exclusions intact.'); return 0
 if __name__=='__main__': raise SystemExit(main())
