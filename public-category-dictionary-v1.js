@@ -174,6 +174,57 @@
     });
   }
 
+  function syncPublicCategoryLabels() {
+    document.querySelectorAll(".question-category").forEach((element) => {
+      const current = String(element.textContent || "").trim();
+      const label = publicLabel(current);
+      if (label && label !== current) element.textContent = label;
+    });
+
+    ["#business-detail-category-tag", "#business-detail-category"].forEach((selector) => {
+      const element = document.querySelector(selector);
+      if (!element) return;
+      const current = String(element.textContent || "").trim();
+      const label = publicLabel(current, "business");
+      if (label && label !== current) element.textContent = label;
+    });
+
+    const filter = document.querySelector("#businesses-category-filter");
+    if (filter) {
+      Array.from(filter.options).forEach((option) => {
+        if (!option.value) return;
+        const label = publicLabel(option.value, "business");
+        if (label && option.textContent !== label) option.textContent = label;
+      });
+    }
+  }
+
+  function observePublicCategoryLabels() {
+    const targets = [
+      document.querySelector("#businesses-list"),
+      document.querySelector("#home-businesses"),
+      document.querySelector("#business-detail-category-tag"),
+      document.querySelector("#business-detail-category"),
+      document.querySelector("#businesses-category-filter")
+    ].filter(Boolean);
+
+    syncPublicCategoryLabels();
+    if (!targets.length) return;
+
+    let queued = false;
+    const scheduleSync = () => {
+      if (queued) return;
+      queued = true;
+      queueMicrotask(() => {
+        queued = false;
+        syncPublicCategoryLabels();
+      });
+    };
+
+    const observer = new MutationObserver(scheduleSync);
+    targets.forEach((target) => observer.observe(target, { childList: true, subtree: true }));
+  }
+
   function setupListingSubcategoryField() {
     const category = document.querySelector("#listing-category");
     const subcategory = document.querySelector("#listing-subcategory");
@@ -235,6 +286,7 @@
   function initDomBindings() {
     document.querySelectorAll("select[data-popitai-category-source]").forEach(populateCategorySelect);
     setupListingSubcategoryField();
+    observePublicCategoryLabels();
   }
 
   const api = Object.freeze({
