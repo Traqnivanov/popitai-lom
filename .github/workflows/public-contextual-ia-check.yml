@@ -18,6 +18,7 @@ on:
       - "public-context-special-actions-v1.js"
       - "category-hub-v1.js"
       - ".github/scripts/apply_contextual_recovery.py"
+      - ".github/scripts/check_category_hub_cache.py"
       - ".github/scripts/sync_public_shell.py"
       - ".github/workflows/public-contextual-ia-check.yml"
   push:
@@ -37,6 +38,7 @@ on:
       - "public-context-special-actions-v1.js"
       - "category-hub-v1.js"
       - ".github/scripts/apply_contextual_recovery.py"
+      - ".github/scripts/check_category_hub_cache.py"
       - ".github/scripts/sync_public_shell.py"
       - ".github/workflows/public-contextual-ia-check.yml"
 
@@ -70,6 +72,7 @@ jobs:
           cmp /tmp/contextual-first.diff /tmp/contextual-second.diff
       - run: python .github/scripts/apply_contextual_recovery.py --check
       - run: python .github/scripts/sync_public_shell.py --check
+      - run: python .github/scripts/check_category_hub_cache.py
       - run: node --check public-context-prefill-v1.js
       - run: node --check public-context-special-actions-v1.js
       - run: node --check category-hub-v1.js
@@ -101,6 +104,7 @@ jobs:
           python-version: "3.12"
       - run: python .github/scripts/apply_contextual_recovery.py --check
       - run: python .github/scripts/sync_public_shell.py --check
+      - run: python .github/scripts/check_category_hub_cache.py
       - run: node --check public-context-prefill-v1.js
       - run: node --check public-context-special-actions-v1.js
       - run: node --check category-hub-v1.js
