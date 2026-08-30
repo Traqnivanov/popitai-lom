@@ -4,17 +4,9 @@
 Branch: `v6-product-foundation-draft`  
 Актуализирано: 31.08.2026
 
-Този документ е **единната контролна точка** за V6. Той не заменя LOCKED правилата, а казва:
+Това е **единната контролна точка** за V6. Всеки V6 чат започва оттук след LOCKED правилата и `PROJECT_PROGRESS.md`, работи само по записания stage и преди clean handoff актуализира този документ.
 
-- къде сме;
-- какво вече е решено/описано;
-- какво още липсва;
-- какъв е редът на работа;
-- какво е следващото действие;
-- как всеки нов чат продължава без да започва отначало;
-- как се предотвратяват повторни одити, връщане към стари грешки и паралелни противоречиви решения.
-
-**Всяка V6 работа започва от този документ и завършва с негово актуализиране.**
+Целта е да няма работа „по чатове“, повторни одити, преотваряне на вече затворени решения или нов код върху непроверена архитектура.
 
 ---
 
@@ -22,37 +14,23 @@ Branch: `v6-product-foundation-draft`
 
 ### Production
 
-Production продължава да работи по текущите approved правила и Marketplace V3. V6 все още е **design/research/prototype track**.
+Production остава на текущите approved правила и Marketplace V3. V6 е **design/research/prototype track**.
 
-Няма разрешение V6 draft идеите автоматично да променят:
-
-- production UI;
-- schema/RLS;
-- Admin/Moderator роли;
-- quotas/status/moderation;
-- protected owner-и;
-- Ivanov/Admin priority;
-- Health/Info verified ownership.
+Този track не е променял production UI, schema, RLS, роли, quotas, moderation, protected owners, Admin/Ivanov priority, Health/Info ownership или production URLs.
 
 ### V6 цел
 
-V6 не е нов сайт и не е giant rewrite.
+V6 е надграждане върху съществуващата система, не нов сайт:
 
-Целта е съществуващата голяма основа да стане една свързана местна система:
+**локална търсачка + marketplace + фирми/местни обекти + Инфо Лом + статии + contextual Q&A + структурирана памет на Лом + SEO/share/distribution layer.**
 
-**локална търсачка + marketplace + фирми/обекти + Инфо Лом + статии + Q&A + структурирана памет на Лом + distribution/SEO layer.**
+Growth loop:
 
-Работен growth модел:
-
-`Google / Facebook / direct → Попитай search → verified Info / entity / listing / article / canonical Q&A → ако липсва отговор, Попитай → moderation → share → нови хора → знанието остава → по-силен search/SEO/direct habit.`
+`Google / Facebook / direct → Попитай search → verified Info / entity / listing / article / canonical Q&A → ако няма достатъчен отговор, Попитай → moderation → share → нови хора → знанието остава → по-силен search/SEO/direct habit.`
 
 ---
 
-## 2. ЗАДЪЛЖИТЕЛЕН РЕД НА ЧЕТЕНЕ В НОВ ЧАТ
-
-Нов чат **не започва от памет, стар handoff или случайна задача**.
-
-Минималният ред е:
+## 2. ЗАДЪЛЖИТЕЛЕН READ ORDER
 
 1. `PROJECT_RULES_00_READ_FIRST.md`
 2. `PROJECT_RULES_PROTECTED_CORE.md`
@@ -60,717 +38,292 @@ V6 не е нов сайт и не е giant rewrite.
 4. `PROJECT_RULES.md`
 5. `PROJECT_RULES_RENDER_OWNERSHIP.md`
 6. `PROJECT_PROGRESS.md`
-7. **`PUBLIC_PRODUCT_V6_MASTER_CONTROL.md` — този документ**
-8. само след това supporting V6 spec-овете, които са нужни за конкретната текуща задача.
+7. `PUBLIC_PRODUCT_V6_MASTER_CONTROL.md`
+8. task-specific V6 supporting docs.
 
-Ако има конфликт:
+При конфликт:
 
-**LOCKED rules > approved production specs > V6 master control > V6 supporting draft documents > prototype/ideas/chat notes.**
+**LOCKED rules > approved production specs > V6 master control > V6 supporting drafts > prototypes/chat notes.**
 
 ---
 
-## 3. V6 DOCUMENT REGISTRY — КАКВО ВЕЧЕ ИМАМЕ
+## 3. V6 DOCUMENT REGISTRY
 
-### A. `PUBLIC_PRODUCT_V6_WORKING_MODEL.md`
+### Product / strategy foundations
 
-Роля: големият продуктов модел.
+- `PUBLIC_PRODUCT_V6_WORKING_MODEL.md` — product architecture, Q&A memory, relationships, Facebook Bridge, search/ranking/SEO concepts.
+- `PUBLIC_PRODUCT_V6_GUARDRAILS.md` — Admin/Moderator, permission parity, lightweight-by-default, performance hard gate, SUPER IDEA exception.
+- `PUBLIC_PRODUCT_V6_CONTENT_SEO_STRATEGY.md` — evergreen/local content, SEO, internal linking, quality gate.
+- `PUBLIC_PRODUCT_V6_CONTENT_INVENTORY_RULE.md` — readiness statuses; `има файл` ≠ `проверено готово`.
+- `PUBLIC_PRODUCT_V6_INFO_LOM_CORE_STRATEGY.md` — Info Lom positioning, SEO/trust/share/freshness/topic-cluster strategy.
+- `PUBLIC_PRODUCT_V6_ADOPTION_LAUNCH.md` — habit-change, positioning `Лом на едно място`, Facebook distribution, business/user value.
+- `PUBLIC_PRODUCT_V6_INTERACTION_FORM_LINK_CONTRACT.md` — button/link/form/state/end-to-end flow contract.
 
-Вече съдържа:
-- крайна визия;
-- V6 като надграждане, не рестарт;
-- taxonomy vs shortcuts;
-- `Попитай` като действие;
-- canonical/duplicate philosophy;
-- relationship layer;
-- Facebook Bridge;
-- structured recommendations;
-- search V6;
-- local ranking;
-- SEO/freshness;
-- външни доказани модели;
-- high-level път до код.
+### Current-system evidence
 
-Статус: **силна продуктова основа, но не implementation spec**.
+- **`PUBLIC_PRODUCT_V6_CURRENT_TARGET_OWNER_MAP.md`** — V6-A1 current→target owner/relationship map with code/rules evidence, interaction findings and protected boundaries.
 
-### B. `PUBLIC_PRODUCT_V6_GUARDRAILS.md`
+### Production truth until final V6 approval
 
-Роля: ограниченията, които новите идеи не могат да заобикалят.
-
-Вече съдържа:
-- Admin/Moderator integration rule;
-- permission/RLS consistency;
-- performance hard gate;
-- lightweight-by-default;
-- `SUPER IDEA` exception;
-- duplicate/recommendation/Facebook/freshness safety;
-- без тежки frameworks/SDKs по подразбиране.
-
-Статус: **задължителен design gate**.
-
-### C. `PUBLIC_PRODUCT_V6_CONTENT_SEO_STRATEGY.md`
-
-Роля: статии, guides, SEO, internal linking и content acquisition.
-
-Вече съдържа:
-- evergreen guides;
-- local utility content;
-- top/comparison ограничения;
-- Q&A като content engine;
-- seasonal content;
-- article → authoritative owner rule;
-- SEO architecture;
-- content quality gate;
-- adoption loop.
-
-Статус: **стратегия, не content inventory**.
-
-### D. `PUBLIC_PRODUCT_V6_CONTENT_INVENTORY_RULE.md`
-
-Роля: как се определя дали дадено съдържание реално е готово.
-
-Статуси:
-- `ТРЯБВА ДА ИМА`;
-- `РАЗРАБОТВАНО`;
-- `ИМА ОСНОВА В INFO/OWNER`;
-- `ИМА ФАЙЛ / НЕПРОВЕРЕНО`;
-- `ПРОВЕРЕНО ГОТОВО`;
-- `ЗА ПРЕРАБОТКА`;
-- `НЕ Е НУЖНО`.
-
-Статус: **готово правило; реалният inventory още липсва**.
-
-### E. `PUBLIC_PRODUCT_V6_INFO_LOM_CORE_STRATEGY.md`
-
-Роля: `Инфо Лом` като authoritative local knowledge core.
-
-Вече съдържа:
-- positioning;
-- роля спрямо Articles/Q&A/entities/listings;
-- SEO demand coverage;
-- Info → Articles;
-- Info → Q&A;
-- first-class search source;
-- share strategy;
-- web growth loop;
-- topic clusters;
-- freshness/trust;
-- Admin/Moderator/owner boundaries;
-- performance;
-- analytics/content-gap loop.
-
-Статус: **основен V6 стълб**.
-
-### F. `PUBLIC_PRODUCT_V6_ADOPTION_LAUNCH.md`
-
-Роля: как потребителят постепенно да започва първо от Попитай.Лом, а не директно от Facebook.
-
-Вече съдържа:
-- habit-change problem;
-- `Публикувай при нас → сподели във Facebook`;
-- value proposition за фирми и потребители;
-- pre-launch supply logic;
-- positioning `Лом на едно място`;
-- channels;
-- trust;
-- adoption loop;
-- launch metrics.
-
-Статус: **стратегическа основа; launch execution calendar не е нужен още**.
-
-### G. `PUBLIC_PRODUCT_V6_INTERACTION_FORM_LINK_CONTRACT.md`
-
-Роля: единен interaction standard за бутоните, линковете, формите, state-овете и user flows.
-
-Вече съдържа:
-- button hierarchy и states;
-- link vs action contract;
-- no-dead-link правило;
-- create/edit/resubmit разграничение;
-- prefill/validation/backend parity;
-- success/pending/error states;
-- стандартен flow record;
-- cross-flow consistency;
-- mobile interaction gate;
-- UX copy gate;
-- interaction QA matrix;
-- definition of done за user flow.
-
-Статус: **готов V6 design gate; конкретният current interaction inventory още липсва**.
-
-### H. Existing approved/production specs
-
-Те остават източник на текущата реалност, докато V6 не бъде approved и не ги supersede-не изрично:
-
-- `PUBLIC_MARKETPLACE_V3_APPROVED_SPEC.md`;
-- `PUBLIC_SITE_INFORMATION_ARCHITECTURE_APPROVED_SPEC.md`;
-- `ADMIN_PANEL_V2_APPROVED_SPEC.md`;
-- `PROJECT_PROGRESS.md`;
+- `PUBLIC_MARKETPLACE_V3_APPROVED_SPEC.md`
+- `PUBLIC_SITE_INFORMATION_ARCHITECTURE_APPROVED_SPEC.md`
+- `ADMIN_PANEL_V2_APPROVED_SPEC.md`
+- `PROJECT_PROGRESS.md`
 - LOCKED rules.
 
 ---
 
-## 4. GAP AUDIT — КАКВО ОЩЕ НЯМАМЕ И Е ЗАДЪЛЖИТЕЛНО ПРЕДИ КОД
+## 4. STAGE STATUS
 
-Това са реалните липси. Докато не бъдат затворени, **не започваме V6 production implementation**.
+### `STAGE V6-0 — CONTROL / CONTINUITY`
 
-### GAP 1 — CURRENT → TARGET OWNER / RELATIONSHIP MATRIX
+**DONE.**
 
-Липсва пълна доказана карта на текущата система.
+Established:
+- one master control;
+- canonical read order;
+- decision hierarchy;
+- clean handoff protocol;
+- interruption/no-side-mission rules;
+- Definition of Done.
 
-Трябва да се опишат минимум:
-- global shell/navigation;
-- marketplace/listings;
-- firms/business profiles;
-- masters/construction;
-- cars;
-- jobs;
-- property semantics;
-- health;
-- shops;
-- restaurants;
-- events;
-- Info Lom subowners;
-- articles;
-- questions/answers;
-- public search;
-- profile/user content;
-- Admin/Moderator;
-- analytics;
-- SEO/static rendering;
-- sharing/PWA/service worker, ако съществуват.
+### `STAGE V6-A1 — CURRENT → TARGET OWNER / RELATIONSHIP MAP`
 
-За всеки owner:
-- текущ URL/entry;
-- read owner;
-- write owner;
-- schema/data source;
-- moderation;
-- protected boundaries;
-- current search integration;
-- current Admin integration;
-- current buttons/forms/links/entry points;
-- V6 target role;
-- `KEEP / ADAPT / REPLACE PRESENTATION / NEW RELATION / DEFER`;
-- backend impact: `NONE / READ / NEW RELATION / SCHEMA-RLS`;
-- доказателство от code/rules.
+**DONE FOR STATIC PLANNING EVIDENCE.**
 
-**Това е следващата основна работа.**
+Artifact:
+`PUBLIC_PRODUCT_V6_CURRENT_TARGET_OWNER_MAP.md`
 
-### GAP 2 — FINAL INFORMATION ARCHITECTURE / TAXONOMY CONTRACT
-
-Имаме работна taxonomy, но не е заключена.
-
-Трябва да се решат:
-- всички main categories;
-- subcategories;
-- кое е category и кое shortcut;
-- `Открий в Лом`;
-- точната роля на `Фирми` спрямо marketplace;
-- Работа/Имоти/Автомобили/Красота/Дом и градина;
-- Shops/Restaurants/Events;
-- Health специализираният owner;
-- backward URLs/SEO canonical mapping.
-
-Резултатът трябва да е **един договор**, не списък от чат решения.
-
-### GAP 3 — SEARCH V6 CONTRACT
-
-Имаме концепция, но нямаме точен algorithm/UX contract.
-
-Трябва да се опише:
-- query normalization;
-- synonym/local dictionary;
-- factual vs entity vs transactional vs community vs how-to intent;
-- Info Lom priority;
-- category/entity/listing/question/article result types;
-- duplicate/canonical matching;
-- Lom/local ranking;
-- protected Admin/Ivanov/boost ordering;
-- fallback/empty states;
-- DB query budget;
-- mobile autocomplete;
-- accessibility;
-- analytics events.
-
-### GAP 4 — Q&A CANONICAL / DUPLICATE / MEMORY DATA MODEL
-
-Философията е ясна; точният model липсва.
-
-Трябва да се реши:
-- canonical question identity;
-- aliases/signposts;
-- duplicate vs related;
-- moderator/admin decision flow;
-- reversible history;
-- search indexing;
-- SEO canonical/noindex rules;
-- how similar questions are suggested before submit;
-- protected moderation state;
-- unanswered/stale handling.
-
-Никаква schema промяна преди този договор.
-
-### GAP 5 — STRUCTURED RECOMMENDATION RELATION MODEL
-
-Идеята е силна, но е cross-owner backend промяна.
-
-Трябва да се проектира:
-- question → answer → recommended entity;
-- разрешени target owners/types;
-- relational integrity;
-- approved/rejected/hidden states;
-- duplicate recommendation behavior;
-- derived counts;
-- provenance;
-- self-promotion/abuse/moderation rules;
-- Admin/Moderator actions;
-- RLS/indexes/performance;
-- rollback.
-
-### GAP 6 — FACEBOOK BRIDGE TECHNICAL CONTRACT
-
-Имаме продуктова стратегия, но не точен технически flow.
-
-Трябва да се опише:
-- approved-only share timing;
-- pending → approved notification/return flow;
-- Web Share vs Facebook URL vs copy fallback;
-- prepared text;
-- dynamic Open Graph preview endpoint;
-- inbound paste-own-Facebook-post flow;
-- provenance;
-- what is explicitly unsupported;
-- tracking without private Facebook data;
-- performance/no SDK default.
-
-### GAP 7 — INFO LOM CURRENT COVERAGE / SEO MAP
-
-Имаме стратегия, но не знаем системно кое е:
-- готово;
-- частично;
-- непроверено;
-- липсващо;
-- дублирано;
-- stale;
-- потенциален high-value Google entry;
-- потенциален shareable utility page.
-
-Трябва да има Info Lom inventory по owner/topic + target search intents + source/freshness status.
-
-### GAP 8 — ARTICLE / GUIDE INVENTORY + CONTENT MAP
-
-Имаме правило и стратегия, но не реалния списък.
-
-Трябва да се извадят:
-- всички съществуващи article файлове;
-- разработвани теми от Info/старо съдържание;
-- high-intent evergreen guides;
-- local utility pages;
-- seasonal content;
-- topic clusters;
-- source owner;
-- target query/intention;
-- status по inventory rule;
-- duplicate/cannibalization risk.
-
-### GAP 9 — FIRST-PARTY ANALYTICS / EVIDENCE BASELINE
-
-Имаме външни/local signals, но V6 още няма канонично записан baseline от собствената analytics система.
-
-Трябва да се провери read-only:
-- най-посещавани pages;
-- mobile/desktop;
-- entry pages;
-- search usage/queries, ако се пазят;
-- category engagement;
-- Info Lom usage;
-- conversion/add flows;
-- source/referrer;
-- zero-result/unanswered сигнали, ако са налични.
-
-Резултатът не трябва да диктува архитектурата сам, но трябва да валидира shortcuts/content priorities.
-
-### GAP 10 — REAL V6 VISUAL PROTOTYPE / FLOW PROTOTYPE
-
-Има V5 standalone prototype, но той не е финален V6 contract.
-
-Трябва да се визуализират минимум:
-- desktop landing;
-- mobile landing;
-- all categories;
-- search/autocomplete/results;
-- Info Lom result/entry;
-- article → Info → Q&A linking;
-- `Не намери? Попитай Лом`;
-- ask composer;
-- duplicate suggestion;
-- canonical question page;
-- recommendation-to-entity example;
-- pending/approved state;
-- Facebook share state;
-- Shops/Restaurants/Discover;
-- Construction;
-- Health;
-- Jobs;
+A1 mapped:
+- shell/navigation/home;
+- taxonomy;
+- public search implementations;
+- Info Lom + subowner model;
+- Articles;
+- Q&A;
+- Firms/basic+expanded/edit ownership;
+- Listings/Marketplace;
+- Masters/Construction;
 - Cars;
+- Services vs Jobs;
 - Property;
-- empty/loading/error states;
-- Admin moderation concept for new V6 states.
+- Health;
+- Shops;
+- Restaurants;
+- Events;
+- Profile;
+- Admin/Moderator;
+- SEO/detail rendering;
+- sharing;
+- PWA current evidence;
+- Analytics current evidence;
+- buttons/forms/links/states/render-ownership concerns.
 
-Прототипът трябва да бъде проверен реално на desktop и mobile viewport, не само по markup.
-
-### GAP 10A — INTERACTION / FORMS / BUTTONS / LINKS CURRENT→TARGET CONTRACT
-
-Имаме общите правила и новия V6 interaction design gate, но още няма доказана карта как всеки реален flow работи днес и как трябва да работи във V6.
-
-Трябва да се извадят и проверят минимум:
-- всички primary/secondary CTA по ключовите public screens;
-- exact link destinations;
-- create/edit/resubmit flows;
-- query/prefill behavior;
-- auth/owner/moderator/admin states;
-- form fields и conditional fields;
-- frontend/backend validation parity;
-- submit owner/action;
-- approved/pending/draft/rejected states;
-- success/error/empty/loading states;
-- browser back/cancel/context preservation;
-- double-submit/duplicate protection;
-- mobile keyboard/focus/sticky CTA/modal/sheet behavior;
-- accessibility labels/focus/status;
-- analytics events;
-- dead links/placeholders/contradictory CTA.
-
-За всеки ключов екран се използва standard flow record от `PUBLIC_PRODUCT_V6_INTERACTION_FORM_LINK_CONTRACT.md`.
-
-Това не е козметична проверка. **Визуално готов екран ≠ готов user flow.**
-
-### GAP 11 — TECHNICAL DESIGN / MIGRATION / PERFORMANCE BUDGET
-
-Преди implementation трябва да има exact plan:
-- schema/relations only where needed;
-- indexes;
-- RLS/RPC;
-- Admin integration;
-- migrations;
-- rollback;
-- backwards compatibility;
-- query budgets;
-- JS/CSS/asset budget;
-- edge/share rendering;
-- caching;
-- SEO rendering;
-- error/fallback behavior.
-
-### GAP 12 — FINAL CANONICAL V6 APPROVED SPEC
-
-Най-важният финален gate.
-
-След като горните части са проверени, се създава **един финален V6 approved spec**, който:
-- казва кое старо production решение остава;
-- кое се supersede-ва;
-- кое е LOCKED;
-- exact IA/search/data/moderation/share/content/interaction contracts;
-- rollout order;
-- QA/rollback.
-
-Докато този документ не е одобрен, старите approved production specs остават действащи.
+A1 exit gate is satisfied at owner level: no major public domain is left as an unexplained new owner. Remaining uncertainties require runtime/content evidence, so they are moved to A2 instead of reopening A1.
 
 ---
 
-## 5. MASTER EXECUTION ORDER
+## 5. IMPORTANT A1 DISCOVERIES
 
-Работата не се води „по каквото се сетим“.
+These findings are now part of the V6 working truth until disproved by A2 runtime evidence.
 
-### STAGE V6-0 — CONTROL / CONTINUITY
+### A. Preserve the owner architecture
 
-**Статус: ЗАВЪРШЕН С ТОЗИ ДОКУМЕНТ.**
+Firms, Listings, Health/Info, Shops and Events already have meaningful separate ownership/moderation. V6 should connect them; it should not collapse them into a universal table.
 
-Резултат:
-- един master control;
-- един read order;
-- един gap list;
-- един exact next task;
-- една handoff процедура.
+### B. Info Lom is already structurally capable of being the authoritative core
 
-### STAGE V6-A — CURRENT SYSTEM INVENTORY
+Current Info data/model includes publication/reliability/confirmation concepts and controlled correction/submission flows. Articles/Q&A should reference it rather than duplicate mutable verified facts.
 
-Задача:
-- owner map;
-- current→target matrix;
-- code/rules evidence;
-- current buttons/forms/links/flow inventory skeleton;
-- current content/search/Info/Article inventory skeleton;
-- analytics baseline.
+### C. Health stays specialized
 
-Exit gate:
-**не остава основен public/backend owner или ключов user flow, за който „не знаем кой го държи и накъде води“.**
+Health catalog uses verified/published Info data and specialized submissions. Generic marketplace write must not replace this.
 
-### STAGE V6-B — PRODUCT CONTRACTS
+### D. Shops stay specialized
 
-След inventory се заключват:
-- final taxonomy/IA;
-- search contract;
-- Info Lom role/SEO map;
-- content/article architecture;
-- Q&A canonical/duplicate;
-- relationship/recommendations;
-- Facebook Bridge;
-- local ranking/freshness;
-- exact interaction semantics, form states и link destinations.
+`shops` has its own catalog/tags/groups/submission/moderation flow. Global discovery/search may expose it, but generic Firms/Listings must not bypass the owner.
 
-Exit gate:
-**всеки важен user flow има ясен owner, state, CTA/destination и moderation/permission behavior.**
+### E. Restaurants currently use Firms owner
 
-### STAGE V6-C — VISUAL / INTERACTION PROTOTYPE
+`Заведения` is currently a category/read composition over approved `businesses` + Q&A. No separate restaurant write owner was proven. V6 should improve discovery before inventing another database.
 
-Всички ключови desktop/mobile states се визуализират и проверяват.
+### F. Jobs vs Services must be separated in public IA
 
-Exit gate:
-- няма скрити navigation/UX contradictions;
-- всички ключови CTA/forms/links са проследени като flow, не само нарисувани;
-- happy path + loading/empty/error/pending states са видими;
-- mobile е реално проверен;
-- visual language е единен;
-- Info/Articles/Q&A/Marketplace изглеждат като една система.
+Current `rabota.html` actually represents **Услуги**. Real `Работа` already exists as a protected Listing category with job-specific types. V6 target must distinguish:
 
-### STAGE V6-D — TECHNICAL DESIGN
+**Работа = jobs intent / Listings owner.**  
+**Услуги = offer/seek service intent / existing service listing + firm owners.**
 
-Exact schema/relations/RLS/indexes/migrations/rollback/performance/SEO rendering + frontend/backend validation/action ownership.
+### G. Property already has Listing semantics
 
-Exit gate:
-**можем да кажем точно кои файлове/tables/policies/actions се пипат и защо.**
+`Имоти` exists in the protected listing taxonomy with sell/rent/seek types; no dedicated property write owner is needed. A V6 `Имоти` page should be a read/presentation layer.
 
-### STAGE V6-E — FINAL APPROVAL SPEC
+### H. Home still carries old parallel category presentation
 
-Създава се един каноничен V6 approved spec.
+`index.html` still contains the older equal-category hub and compatibility links through `kategorii.html`. V6 needs one approved landing presentation rather than more incremental patches.
 
-Exit gate:
-**няма спор коя идея от кой чат е последна.**
+### I. Search activation is not yet proven
 
-### STAGE V6-F — INCREMENTAL IMPLEMENTATION
+Two implementations exist:
+- legacy search in `script.js`, which `tarsene.html` currently loads;
+- newer DB-backed `public-search-v1.js`.
 
-Само след approval.
+Static source audit did **not** find an activation reference for `public-search-v1.js` in `tarsene.html`, `index.html` or `public-shell-v1.js`. A2 must establish the real runtime owner before Search V6 is designed. Previous assumptions that the newer file is automatically active are not accepted without proof.
 
-Не giant rewrite. Всеки implementation slice има:
-- scope;
-- tests/CI;
-- interaction QA;
-- protected regression;
-- desktop/mobile QA;
-- production verification;
-- rollback.
+### J. Global Info search is not yet granular
+
+The newer search implementation knows whole Info pages statically, while `info.html` has granular `info_entries` search. V6 should make verified Info records first-class global results with a controlled query budget.
+
+### K. Dynamic detail SEO/share needs a server-readable layer
+
+`vapros.html`, `obqva.html` and `firma.html` start with generic static title/description. Client rendering is not enough to guarantee correct per-record social previews/canonical metadata. The existing V6 edge/share-render idea is therefore technically justified, subject to performance design.
+
+### L. Render layering must not grow
+
+Concrete consolidation candidates include:
+- home business cards rendered then decorated through MutationObserver/delayed lookup;
+- known Info Banks multi-render chain;
+- legacy/new search ambiguity;
+- shell source + runtime patches.
+
+Do not add more patch layers in V6.
+
+### M. Interaction flow remains a first-class gate
+
+A screen is not ready because it looks right. Every target flow must be traced:
+
+`ENTRY → CTA → destination/prefill → auth → owner → fields → validation → submit → status → success/error → back/cancel → mobile → accessibility → analytics → performance`.
 
 ---
 
-## 6. CURRENT STATUS LEDGER
+## 6. CURRENT OPEN GAPS BEFORE PRODUCTION CODE
 
-### Завършено като V6 planning foundation
+### A2 evidence/inventory gaps
 
-- [x] high-level product model;
-- [x] Admin/Moderator/performance guardrails;
-- [x] Facebook/adoption positioning;
-- [x] Content/SEO strategy;
-- [x] Content readiness rule;
-- [x] Info Lom core/SEO/growth strategy;
-- [x] interaction/forms/buttons/links design gate;
-- [x] external product pattern research captured conceptually;
-- [x] master continuity/control system.
+- [ ] prove active global Search runtime owner;
+- [ ] Info Lom coverage/freshness/SEO inventory;
+- [ ] Article/Guide inventory by readiness status;
+- [ ] verify dynamic detail share/SEO behavior;
+- [ ] verify Q&A Moderator self-content backend/UI behavior read-only;
+- [ ] verify Moderator own-business edit behavior read-only;
+- [ ] verify Q/Firm/Info share handlers;
+- [ ] confirm current PWA/service-worker/manifest absence/presence;
+- [ ] identify Popitai first-party analytics source and baseline, if one exists.
 
-### Не е завършено
+### V6-B product contracts still missing
 
-- [ ] CURRENT → TARGET owner matrix;
-- [ ] current→target interaction/forms/buttons/links matrix;
-- [ ] first-party analytics baseline;
-- [ ] Info Lom coverage inventory;
-- [ ] Article/content inventory;
-- [ ] final taxonomy;
+- [ ] final IA/taxonomy/shortcuts/`Открий в Лом` contract;
 - [ ] exact Search V6 contract;
-- [ ] exact Q&A canonical data/moderation model;
-- [ ] structured recommendation data model;
-- [ ] Facebook Bridge technical contract;
-- [ ] final local ranking contract;
-- [ ] V6 visual prototype;
-- [ ] real mobile prototype QA;
-- [ ] exact technical migration/performance design;
-- [ ] final V6 approved spec;
-- [ ] production code.
+- [ ] Info Lom SEO/search/content contract from A2 evidence;
+- [ ] Q&A canonical/duplicate/alias/moderation contract;
+- [ ] structured recommendation relation contract;
+- [ ] Facebook Bridge technical/product contract;
+- [ ] local relevance ranking preserving protected Admin/Ivanov/boost semantics;
+- [ ] freshness/recheck contract;
+- [ ] exact interaction/form/link/state contracts for target screens.
+
+### Later gates
+
+- [ ] V6-C real desktop/mobile visual/interaction prototype + real mobile viewport QA;
+- [ ] V6-D schema/RLS/index/migration/rollback/performance/SEO render design;
+- [ ] V6-E one final canonical approved spec;
+- [ ] V6-F incremental implementation + CI/protected regression/live QA.
+
+No V6 production code before these gates.
 
 ---
 
 ## 7. EXACT NEXT TASK
 
-Следващият чат **НЕ измисля нова feature посока и НЕ започва код**.
+# `STAGE V6-A2 — EVIDENCE / COVERAGE / RUNTIME BASELINE`
 
-Следващата задача е:
+A new chat must continue in this exact order unless the user explicitly changes priority:
 
-# `STAGE V6-A1 — CURRENT → TARGET OWNER / RELATIONSHIP MAP`
+1. **Search runtime proof** — identify which search implementation actually owns current behavior; no writes.
+2. **Info Lom inventory** — topic/subowner/current coverage/source/freshness/status/SEO intent/share potential.
+3. **Article/Guide inventory** — existing, developed, Info-backed, missing; apply readiness rule.
+4. **SEO/share runtime current-state** — question/listing/firm/Info metadata and share handlers.
+5. **Protected interaction verification** — Q&A Moderator self-content and Moderator own-business edit, read-only evidence only.
+6. **PWA current state** — manifest/service worker/share target presence/absence.
+7. **Analytics source/baseline** — identify real Popitai first-party source; if unavailable, record it as unavailable rather than inventing metrics.
+8. Write `PUBLIC_PRODUCT_V6_A2_EVIDENCE_BASELINE.md`, update this Master Control and `PROJECT_PROGRESS.md`.
 
-Първи пакет за проверка:
+A2 exit gate:
 
-1. global shell/navigation;
-2. public search;
-3. `Инфо Лом` + subowners;
-4. Articles;
-5. Questions/Answers;
-6. Firms;
-7. Listings/Marketplace;
-8. Health;
-9. Shops;
-10. Restaurants;
-11. Events;
-12. Jobs/Cars/Property/Masters;
-13. Admin/Moderator integration;
-14. profile/user-content surfaces;
-15. SEO/share/static rendering;
-16. service worker/PWA/manifest if present;
-17. Analytics inputs relevant to V6.
+**we know what content/evidence currently exists, which runtime paths are active, what is only planned, and which measurements are actually available.**
 
-За всяко: `CURRENT → TARGET → OWNER → PROTECTED? → DATA → MODERATION → SEARCH → SEO → ADMIN → BUTTONS/FORMS/LINKS → STATES → PERFORMANCE → ACTION`.
-
-След завършване master control се актуализира и `EXACT NEXT TASK` се премества към V6-A2.
+Then move to V6-B product contracts.
 
 ---
 
-## 8. NEW CHAT PROTOCOL — БЕЗ ПОВТОРЕНИЕ НА СТАРИТЕ ГРЕШКИ
+## 8. NEW CHAT PROTOCOL
 
-### В началото на всеки нов чат
+At start:
+- read canonical rules/order;
+- read `PROJECT_PROGRESS.md`;
+- read this Master Control;
+- inspect current branch/code only where the exact task requires it;
+- execute `EXACT NEXT TASK` autonomously.
 
-Асистентът трябва:
+Do not ask “какво правехме?”, “коя версия е последна?” or restart old audits when the answer is recorded here.
 
-1. да прочете правилата в canonical order;
-2. да прочете `PROJECT_PROGRESS.md`;
-3. да прочете този Master Control;
-4. да провери branch/текущите файлове, ако задачата зависи от code state;
-5. да изпълни само `EXACT NEXT TASK`, освен ако потребителят изрично промени приоритета.
+At end of a meaningful stage:
+- update status ledger;
+- record confirmed vs inferred;
+- record new risks/decisions;
+- set exact next task;
+- record production untouched/changed;
+- link new supporting documents.
 
-Не пита:
-- „Какво правехме?“;
-- „От къде да започна?“;
-- „Коя версия е последна?“
-ако това е записано тук.
-
-### В края на всеки работен чат
-
-Преди приключване се актуализира минимум:
-
-- `CURRENT STATUS LEDGER`;
-- `EXACT NEXT TASK`;
-- нови решения;
-- открити рискове;
-- създадени/променени V6 documents;
-- какво е проверено и какво е само предположение;
-- production untouched/changed status.
-
-Ако това не е актуализирано, чатът **не се счита за чист handoff**.
+No clean handoff without this update.
 
 ---
 
 ## 9. DECISION DISCIPLINE
 
-### LOCKED / approved решения
+LOCKED/approved decisions reopen only for:
+- proven defect;
+- strong evidence-based new solution;
+- explicit protected/business approval when required.
 
-Не се отварят повторно само защото нов чат предпочита друго решение.
+Working V6 ideas remain `WORKING` until inventory + contract + prototype + technical impact + approval.
 
-Промяна само ако:
-- има доказан проблем;
-- нова силна evidence-based идея;
-- protected/business decision е изрично одобрено.
-
-### Working V6 решения
-
-Маркират се като `WORKING`, докато не минат inventory + prototype + technical impact + approval.
-
-### Rejected / replaced идеи
-
-Не се изтриват безследно. При важна архитектурна промяна се записва:
-- какво отпада;
-- защо;
-- какво го заменя.
-
-Това предотвратява следващ чат да „преоткрие“ старо отхвърлено решение.
+Rejected/replaced important ideas are documented with reason; they are not silently forgotten so another chat does not rediscover them.
 
 ---
 
-## 10. INTERRUPTION RULE — PRODUCTION BUG НЕ НУЛИРА V6 ПЛАНА
+## 10. INTERRUPTION / NO SIDE-MISSION RULE
 
-Ако по време на V6 се появи реален production проблем:
+A real production bug is a separate incident scope. Fixing it does not reset V6. After the incident, return to the recorded exact next task unless the bug disproves a V6 premise.
 
-1. проблемът се третира като отделен incident/fix scope;
-2. не се използва като повод да се преработва V6 отначало;
-3. след fix се връщаме към записания `EXACT NEXT TASK`;
-4. само ако bug-ът доказва грешна V6 предпоставка, master control се коригира.
-
-Така следващите чатове няма да прекарват времето си в безкрайно поправяне и преотваряне на вече затворени етапи.
+A good new idea is recorded in the correct document/gap. It does not interrupt the current stage unless it is a blocker or architectural dependency.
 
 ---
 
-## 11. NO SIDE-MISSION RULE
+## 11. DEFINITION OF DONE
 
-Ако по време на работа се открие добра нова идея:
+### Planning stage
 
-- записва се в правилния V6 документ или в GAP/decision section;
-- оценява се спрямо value/performance/protected impact;
-- **не прекъсва текущия stage**, освен ако е blocker или критична архитектурна зависимост.
+Done only when key unknowns for that scope are closed, owner/rules contradictions are resolved or explicitly deferred, and the next dependency is exact.
 
-По този начин идеите не се губят, но и проектът не се разпада на 20 паралелни посоки.
+### User flow
 
----
-
-## 12. DEFINITION OF DONE
-
-### Planning document
-
-Не е „готов“, ако просто има текст. Готов е когато:
-- няма ключова неизвестна за scope-а;
-- е съгласуван с rules/owners;
-- противоречията са разрешени;
-- next dependency е ясна.
-
-### Feature / flow
-
-Не е „готов“, ако има prototype или файл. Готов е когато:
-- product contract е approved;
-- permissions/moderation са ясни;
-- buttons/forms/links/destinations и всички важни states са проверени;
-- create/edit/pending/error behavior е изрично определено;
-- desktop/mobile UX е проверен;
-- performance impact е приемлив;
-- backend/SEO/fallback са проектирани;
-- implementation е live и production-verified, ако сме стигнали до code stage.
+Done only when CTA/link/form/prefill/auth/validation/status/success/error/back/mobile/accessibility/performance behavior is defined and, at implementation stage, tested.
 
 ### Content
 
-Следва `PUBLIC_PRODUCT_V6_CONTENT_INVENTORY_RULE.md`; `има файл` ≠ `проверено готово`.
+Follows `PUBLIC_PRODUCT_V6_CONTENT_INVENTORY_RULE.md`. A file or prior chat discussion does not equal verified-ready content.
+
+### Production feature
+
+Not done until approved contract → implementation → tests/CI → protected regression → desktop/mobile QA → live production verification → rollback path.
 
 ---
 
-## 13. КРАЙНАТА СИСТЕМА, КЪМ КОЯТО ВЪРВИМ
+## 12. HANDOFF LINE
 
-Когато V6 е завършен, потребителят не трябва да мисли за owner-и, таблици и architecture.
-
-Той трябва просто да усеща:
-
-**„Ако е за Лом — първо проверявам в Попитай.Лом.“**
-
-Търси → намира проверена информация, местен обект, услуга, обява, статия или вече отговорен въпрос → ако няма отговор, пита → може да сподели → отговорът остава → следващият човек намира по-бързо.
-
-Вътрешно системата остава дисциплинирана:
-
-- authoritative facts си остават при правилния owner;
-- community opinion е отделено от verified fact;
-- Admin/Moderator границите са запазени;
-- buttons/forms/links имат единни semantics и проверени end states;
-- performance е lightweight-by-default;
-- SEO/content не дублират authoritative data;
-- Facebook е distribution, не source-of-truth;
-- V6 се внедрява incrementally, не като giant rewrite.
-
----
-
-## 14. HANDOFF LINE
-
-**Текущ checkpoint:** V6 planning foundation + continuity system + interaction design gate са оформени.  
-**Production:** непроменен от този V6 planning track.  
-**Следва:** `STAGE V6-A1 — CURRENT → TARGET OWNER / RELATIONSHIP MAP`, включително current buttons/forms/links/states.  
-**Забранено следващо действие:** директен V6 production code преди inventory/contracts/prototype/technical design/final approval.
+**Completed:** V6-0 control/continuity + V6-A1 owner/relationship static audit.  
+**Primary A1 artifact:** `PUBLIC_PRODUCT_V6_CURRENT_TARGET_OWNER_MAP.md`.  
+**Production impact:** NONE.  
+**Current exact next task:** `STAGE V6-A2 — EVIDENCE / COVERAGE / RUNTIME BASELINE`.  
+**Forbidden next action:** direct V6 production implementation before V6-B/C/D/E gates.
