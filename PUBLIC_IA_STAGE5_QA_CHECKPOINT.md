@@ -1,7 +1,7 @@
 # PUBLIC IA — Stage 5 QA Checkpoint
 
 Date: 2026-08-30
-Status: **IN PROGRESS — DESKTOP / SIGNED-OUT / SOURCE-LEVEL PASS; REAL MOBILE + POST-STAGE4 AUTH INTERACTION REMAIN**
+Status: **IN PROGRESS — DESKTOP / SIGNED-OUT / AUTHENTICATED RENDER+ROLE / SOURCE-LEVEL PASS; REAL MOBILE INTERACTION + FINAL INTERACTIVE CONSOLE REMAIN**
 
 ## Basis
 
@@ -35,7 +35,7 @@ Live production homepage was checked visually at desktop width:
 
 - logo and header fit without horizontal overflow;
 - desktop navigation fits: `Начало`, `Инфо Лом`, `Категории`, `Фирми`, `Обяви`, `Въпроси`, `Статии`;
-- `Вход` and global `Добави` remain visible;
+- `Вход` and global `Добави` remain visible while signed out;
 - hero image, heading, search and CTA layout remain intact;
 - no visible Stage 4 layout jump or shell overlap.
 
@@ -181,6 +181,42 @@ Stage 4 adds:
 
 The old `.mobile-ask` rule is unused by the new `.mobile-add` markup and does not own the new control.
 
+### 11. Post-Stage4 authenticated render / role-correct production QA — PASS
+
+A real authenticated Admin session was opened in production after Stage 4. No fake form records were submitted.
+
+Verified live:
+
+#### `profil.html`
+- public header switches from `Вход` to `Профил`;
+- authenticated `Изход` control is rendered;
+- `Административен панел` link is visible for the Admin role;
+- password section is visible only in the authenticated state;
+- real existing firms/listings/profile content render instead of signed-out placeholders.
+
+#### `nov-vapros.html`
+- authenticated header remains in `Профил` state;
+- existing question form remains available;
+- Admin role correctly receives `Публикувай въпроса`, preserving direct-publish semantics.
+
+#### `dobavi-obqva.html`
+- authenticated header remains in `Профил` state;
+- existing listing fields/uploader remain rendered;
+- Admin-only listing controls remain available;
+- Admin role correctly receives `Публикувай обявата`, preserving direct-publish semantics.
+
+#### `dobavi-firma.html`
+- authenticated header remains in `Профил` state;
+- existing firm form and media controls remain rendered;
+- Admin role correctly receives `Публикувай фирмата`, preserving direct-publish semantics.
+
+#### `admin.html`
+- authenticated session resolves to `Административен панел`, not the anonymous denial state;
+- real review counters and management groups render;
+- public Stage 4 shell does not take ownership of the Admin UI.
+
+This proves post-Stage4 authenticated rendering, profile visibility, staff-link visibility and role-correct submit labels. The connector cannot press `Изход`, so the logout click transition itself is not claimed as newly re-tested here.
+
 ## Checks not yet honestly marked PASS
 
 ### A. Real post-Stage4 mobile viewport / touch interaction
@@ -198,29 +234,18 @@ Still required on an actual mobile viewport/device:
 
 The currently available browser connector cannot resize/emulate a mobile viewport or execute element press actions, so this is not marked PASS from source inspection alone.
 
-### B. Post-Stage4 authenticated interaction
+### B. Remaining interactive focus/modal/logout + console evidence
 
-A real authenticated session after the Stage 4 shell deployment is still required for final Stage 5 sign-off:
-
-- login → profile;
-- profile password section visible only when authenticated;
-- logout/login-state behavior;
-- authenticated access to the existing submit/edit flows;
-- staff/admin link visibility remains role-correct where applicable.
-
-Previous authenticated QA before Stage 4 was PASS, and Stage 4 preserved the profile roots/scripts, but the specification requires authenticated production verification for the final stage. Therefore post-Stage4 authenticated interaction is not marked PASS yet.
-
-### C. Interactive modal/focus and console
-
-Source-level focus behavior is correct, but the current Opera connector exposes read/screenshot/navigation only and cannot press the controls or expose browser console logs. Final Stage 5 requires:
+Source-level focus behavior is correct, authenticated render/role state is now proven, but the Opera connector exposes read/screenshot/navigation only and cannot press controls or expose browser console logs. Final Stage 5 still requires:
 
 - real click/Escape/Tab on add sheet/menu;
-- console/runtime check during the remaining mobile/auth flows.
+- one real logout/login-state transition during the final device interaction pass;
+- console/runtime observation during the remaining mobile interaction flow.
 
 ## Current conclusion
 
 No Stage 5 defect requiring code change has been proven in the checks completed so far.
 
-Stage 5 remains **IN PROGRESS**, not failed and not complete.
+Post-Stage4 authenticated render/access/role correctness is **PASS**.
 
-The remaining evidence is limited to user/device/session interaction that cannot be truthfully replaced by static source inspection with the currently available connector.
+Stage 5 remains **IN PROGRESS**, with the remaining evidence narrowed to real mobile/touch interaction plus the associated interactive focus/logout/console observation that cannot be truthfully replaced by static source inspection with the currently available connector.
