@@ -159,59 +159,66 @@
   }
 
   function setupMobilePriorityGrid(grid, index) {
-    const cards = Array.from(grid.querySelectorAll(":scope > .subcategory-card"));
-    const priority = String(grid.dataset.mobilePriority || "")
-      .split("|")
-      .map((value) => value.trim())
-      .filter(Boolean);
-    if (!cards.length || !priority.length) return;
+  const units = Array.from(grid.children).filter((element) =>
+    element.matches(".subcategory-card, .contextual-subcategory-item")
+  );
+  const priority = String(grid.dataset.mobilePriority || "")
+    .split("|")
+    .map((value) => value.trim())
+    .filter(Boolean);
+  if (!units.length || !priority.length) return;
 
-    if (!grid.id) grid.id = `category-subcategories-${index + 1}`;
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "category-mobile-expand secondary-link-button";
-    button.textContent = "Всички услуги";
-    button.setAttribute("aria-controls", grid.id);
-    button.setAttribute("aria-expanded", "false");
-    button.hidden = true;
-    grid.insertAdjacentElement("afterend", button);
+  if (!grid.id) grid.id = `category-subcategories-${index + 1}`;
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "category-mobile-expand secondary-link-button";
+  button.textContent = "Всички услуги";
+  button.setAttribute("aria-controls", grid.id);
+  button.setAttribute("aria-expanded", "false");
+  button.hidden = true;
+  grid.insertAdjacentElement("afterend", button);
 
-    const media = window.matchMedia("(max-width: 720px)");
-    let expanded = false;
+  const media = window.matchMedia("(max-width: 720px)");
+  let expanded = false;
 
-    function cardLabel(card) {
-      return String(card.querySelector("strong")?.textContent || "").trim();
-    }
-
-    function sync() {
-      if (!media.matches) {
-        cards.forEach((card) => {
-          card.hidden = false;
-          card.style.order = "";
-        });
-        button.hidden = true;
-        return;
-      }
-
-      cards.forEach((card, cardIndex) => {
-        const label = cardLabel(card);
-        const priorityIndex = priority.indexOf(label);
-        card.style.order = String(priorityIndex >= 0 ? priorityIndex : 100 + cardIndex);
-        card.hidden = !expanded && priorityIndex < 0;
-      });
-      button.hidden = false;
-      button.setAttribute("aria-expanded", String(expanded));
-      button.textContent = expanded ? "Покажи по-малко" : "Всички услуги";
-    }
-
-    button.addEventListener("click", () => {
-      expanded = !expanded;
-      sync();
-    });
-    if (media.addEventListener) media.addEventListener("change", sync);
-    else media.addListener(sync);
-    sync();
+  function unitCard(unit) {
+    if (unit.matches(".subcategory-card")) return unit;
+    return unit.querySelector(":scope > .subcategory-card");
   }
+
+  function unitLabel(unit) {
+    return String(unitCard(unit)?.querySelector("strong")?.textContent || "").trim();
+  }
+
+  function sync() {
+    if (!media.matches) {
+      units.forEach((unit) => {
+        unit.hidden = false;
+        unit.style.order = "";
+      });
+      button.hidden = true;
+      return;
+    }
+
+    units.forEach((unit, unitIndex) => {
+      const label = unitLabel(unit);
+      const priorityIndex = priority.indexOf(label);
+      unit.style.order = String(priorityIndex >= 0 ? priorityIndex : 100 + unitIndex);
+      unit.hidden = !expanded && priorityIndex < 0;
+    });
+    button.hidden = false;
+    button.setAttribute("aria-expanded", String(expanded));
+    button.textContent = expanded ? "Покажи по-малко" : "Всички услуги";
+  }
+
+  button.addEventListener("click", () => {
+    expanded = !expanded;
+    sync();
+  });
+  if (media.addEventListener) media.addEventListener("change", sync);
+  else media.addListener(sync);
+  sync();
+}
 
   mobilePriorityGrids.forEach(setupMobilePriorityGrid);
   listingRoots.forEach(setupRetry);
