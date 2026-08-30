@@ -7,7 +7,9 @@ ROOT=Path(__file__).resolve().parents[2]
 MANIFEST=ROOT/'public-shell-manifest-v1.json'
 TEMPLATE=ROOT/'public-shell-template-v1.json'
 CSS_REF='<link rel="stylesheet" href="public-shell-v1.css?v=20260830-stage4">'
-JS_REF='<script src="public-shell-v1.js?v=20260830-stage4" defer></script>'
+JS_REF='<script src="public-shell-v1.js?v=20260830-stage5-focus1" defer></script>'
+CSS_ASSET_RE=re.compile(r'<link rel="stylesheet" href="public-shell-v1\.css(?:\?v=[^"]*)?">')
+JS_ASSET_RE=re.compile(r'<script src="public-shell-v1\.js(?:\?v=[^"]*)?" defer></script>')
 NAV=[('home','index.html','Начало'),('info','info.html','Инфо Лом'),('categories','kategorii.html','Категории'),('firms','firmi.html','Фирми'),('listings','obyavi.html','Обяви'),('questions','vaprosi.html','Въпроси'),('articles','statii.html','Статии')]
 MARKERS={'header':('<!-- PUBLIC SHELL:HEADER START -->','<!-- PUBLIC SHELL:HEADER END -->'),'add':('<!-- PUBLIC SHELL:ADD START -->','<!-- PUBLIC SHELL:ADD END -->'),'footer':('<!-- PUBLIC SHELL:FOOTER START -->','<!-- PUBLIC SHELL:FOOTER END -->'),'mobile':('<!-- PUBLIC SHELL:MOBILE START -->','<!-- PUBLIC SHELL:MOBILE END -->')}
 LEGACY={
@@ -57,6 +59,10 @@ def replace_fragment(text,kind,body):
   if anchor: return text[:anchor.end()]+'\n'+body+text[anchor.end():]
  raise ValueError(f'cannot locate {kind} fragment')
 
+def sync_asset_ref(text,pattern,ref,anchor):
+ if pattern.search(text): return pattern.sub(ref,text,count=1)
+ return text.replace(anchor,'  '+ref+'\n'+anchor,1)
+
 def migrate(name,text):
  if name=='index.html':
   for sid,comment in HOME_STYLES.items():
@@ -78,8 +84,8 @@ def migrate(name,text):
 def expected(name,text,c,t):
  text=migrate(name,text); parts=render(t,c)
  for k in ['header','add','footer','mobile']: text=replace_fragment(text,k,parts[k])
- if 'public-shell-v1.css' not in text: text=text.replace('</head>','  '+CSS_REF+'\n</head>',1)
- if 'public-shell-v1.js' not in text: text=text.replace('</body>','  '+JS_REF+'\n</body>',1)
+ text=sync_asset_ref(text,CSS_ASSET_RE,CSS_REF,'</head>')
+ text=sync_asset_ref(text,JS_ASSET_RE,JS_REF,'</body>')
  return text
 
 def validate():
@@ -94,6 +100,13 @@ def validate():
  req('zdrave-i-lekari.html','nov-vapros.html?category=zdrave'); req('magazini.html','href="#shops-panel">Намери магазин</a>'); req('magazini.html','href="obyavi.html">Всички обяви</a>'); req('magazini.html','nov-vapros.html?category=magazini')
  for asset in ['public-shell-v1.css','public-shell-v1.js','public-shell-template-v1.json']:
   if not (ROOT/asset).is_file(): problems.append(f'missing asset: {asset}')
+ shell_js=(ROOT/'public-shell-v1.js').read_text(encoding='utf-8')
+ if '}, { capture: true });' not in shell_js: problems.append('public-shell-v1.js: hamburger Escape focus listener must run in capture phase')
+ pages=json.loads(MANIFEST.read_text(encoding='utf-8')).get('pages') or {}
+ for n in pages:
+  text=(ROOT/n).read_text(encoding='utf-8-sig')
+  if text.count(CSS_REF)!=1: problems.append(f'{n}: expected exactly one canonical public shell CSS reference')
+  if text.count(JS_REF)!=1: problems.append(f'{n}: expected exactly one canonical public shell JS reference')
  return problems
 
 def main():
