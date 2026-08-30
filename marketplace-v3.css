@@ -1,0 +1,123 @@
+/* Marketplace V3 — unified "Обяви и услуги" presentation layer.
+   Backend ownership, moderation, quotas and stored taxonomy remain unchanged. */
+
+:root {
+  --marketplace-ink: #071b36;
+  --marketplace-blue: #0b5fd7;
+  --marketplace-blue-soft: #eaf3ff;
+  --marketplace-gold: #c99a3d;
+  --marketplace-line: #dce5f0;
+  --marketplace-muted: #5c697d;
+  --marketplace-surface: #ffffff;
+  --marketplace-soft: #f7f9fc;
+}
+
+.main-nav-primary .public-more { position: relative; display: inline-flex; align-items: center; }
+.main-nav-primary .public-more > summary { list-style: none; cursor: pointer; font: inherit; font-weight: 800; color: inherit; padding: 10px 8px; border-radius: 10px; white-space: nowrap; }
+.main-nav-primary .public-more > summary::-webkit-details-marker { display: none; }
+.main-nav-primary .public-more > summary::after { content: "⌄"; margin-left: 5px; font-size: 12px; }
+.main-nav-primary .public-more.active > summary,
+.main-nav-primary .public-more > summary:hover { color: var(--marketplace-blue); background: var(--marketplace-blue-soft); }
+.main-nav-primary .public-more-menu { position: absolute; z-index: 70; top: calc(100% + 8px); right: 0; min-width: 190px; padding: 8px; border: 1px solid var(--marketplace-line); border-radius: 14px; background: #fff; box-shadow: 0 18px 42px rgba(7, 27, 54, .14); }
+.main-nav-primary .public-more-menu a { display: block; padding: 9px 11px; border-radius: 9px; }
+
+.marketplace-v3 .page-hero { background: linear-gradient(180deg, #f5f9ff 0%, #ffffff 100%); }
+.marketplace-v3 .page-hero .section-container { max-width: 1120px; }
+.marketplace-v3 .section-kicker { letter-spacing: .07em; }
+.marketplace-v3 .page-hero h1 { color: var(--marketplace-ink); }
+.marketplace-v3 .page-hero p { max-width: 760px; color: var(--marketplace-muted); }
+
+.marketplace-search { display: grid; grid-template-columns: minmax(240px, 1fr) minmax(210px, 290px) auto; gap: 10px; max-width: 900px; margin-top: 24px; padding: 10px; border: 1px solid #cbd8e8; border-radius: 16px; background: #fff; box-shadow: 0 10px 30px rgba(11, 95, 215, .08); }
+.marketplace-search input,
+.marketplace-search select { min-height: 48px; width: 100%; border: 1px solid var(--marketplace-line); border-radius: 11px; padding: 0 13px; background: #fff; color: var(--marketplace-ink); font: inherit; }
+.marketplace-search button { min-height: 48px; border: 0; border-radius: 11px; padding: 0 24px; background: var(--marketplace-blue); color: #fff; font: inherit; font-weight: 900; cursor: pointer; }
+.marketplace-primary-cta { margin-top: 14px; display: inline-flex; }
+
+.marketplace-category-section { margin-bottom: 30px; }
+.marketplace-category-section h2,
+.marketplace-results-heading h2 { margin: 0; color: var(--marketplace-ink); }
+.marketplace-category-section > p,
+.marketplace-results-heading p { color: var(--marketplace-muted); margin: 7px 0 16px; }
+.marketplace-priority-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.marketplace-category-card { display: flex; min-height: 122px; flex-direction: column; justify-content: space-between; padding: 18px; border: 1px solid var(--marketplace-line); border-radius: 16px; background: var(--marketplace-surface); color: var(--marketplace-ink); text-decoration: none; transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; }
+.marketplace-category-card:hover,
+.marketplace-category-card:focus-visible { transform: translateY(-2px); border-color: #a8c7f1; box-shadow: 0 10px 24px rgba(7, 27, 54, .08); }
+.marketplace-category-card strong { font-size: 17px; }
+.marketplace-category-card span { color: var(--marketplace-muted); font-size: 13px; line-height: 1.45; }
+.marketplace-category-card--priority { border-top: 4px solid var(--marketplace-blue); }
+.marketplace-category-card--accent { border-top: 4px solid var(--marketplace-gold); }
+.marketplace-shortcuts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.marketplace-shortcut { display: inline-flex; align-items: center; min-height: 42px; padding: 0 14px; border: 1px solid var(--marketplace-line); border-radius: 999px; background: #fff; color: #24415f; text-decoration: none; font-weight: 800; font-size: 13px; }
+.marketplace-all-categories { margin-top: 12px; }
+.marketplace-all-categories > summary { cursor: pointer; font-weight: 900; color: var(--marketplace-blue); }
+.marketplace-all-categories-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+
+.marketplace-v3-landing #listing-categories { display: none !important; }
+.marketplace-v3-landing .marketplace-advanced-filters { margin: 0 0 22px; }
+.marketplace-v3-landing .marketplace-advanced-filters > summary { cursor: pointer; font-weight: 800; color: #304e70; }
+.marketplace-v3-landing .marketplace-advanced-filters #listings-filters { margin-top: 12px; }
+.marketplace-results-heading { margin: 8px 0 16px; }
+
+.marketplace-v3-theme .two-column-layout { grid-template-columns: minmax(0, 1fr); max-width: 1120px; }
+.marketplace-v3-theme .side-panel { display: none !important; }
+.marketplace-v3-theme .public-stage4-actions { margin-top: 18px; }
+.marketplace-v3-theme .public-stage4-actions > *:not(.marketplace-category-add) { display: none !important; }
+.marketplace-category-search { max-width: 760px; margin-top: 14px; grid-template-columns: minmax(240px, 1fr) auto; }
+.marketplace-v3-theme .contextual-subcategory-actions { display: none !important; }
+.marketplace-v3-theme .contextual-subcategory-item { min-width: 0; }
+.marketplace-v3-theme .subcategory-card { height: 100%; min-height: 92px; position: relative; padding-right: 42px; }
+.marketplace-v3-theme .subcategory-card::after { content: "→"; position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: var(--marketplace-blue); font-weight: 900; }
+.marketplace-filterbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 22px 0 18px; padding-top: 18px; border-top: 1px solid var(--marketplace-line); }
+.marketplace-filterbar a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 14px; border: 1px solid var(--marketplace-line); border-radius: 999px; background: #fff; color: #294767; text-decoration: none; font-weight: 800; font-size: 13px; }
+.marketplace-filterbar a.active { border-color: var(--marketplace-blue); background: var(--marketplace-blue); color: #fff; }
+.marketplace-result-label { display: inline-flex; margin-left: 8px; padding: 3px 8px; border-radius: 999px; background: var(--marketplace-blue-soft); color: var(--marketplace-blue); font-size: 11px; font-weight: 900; vertical-align: middle; }
+.marketplace-v3-theme [data-marketplace-secondary="questions"],
+.marketplace-v3-theme [data-marketplace-secondary-heading="questions"] { display: none !important; }
+.marketplace-v3-theme .marketplace-legacy-promo { display: none !important; }
+
+.marketplace-form-flow { margin: 4px 0 22px; padding: 18px; border: 1px solid #cddcec; border-radius: 16px; background: #f8fbff; }
+.marketplace-form-flow h2 { margin: 0 0 4px; font-size: 19px; color: var(--marketplace-ink); }
+.marketplace-form-flow > p { margin: 0 0 16px; color: var(--marketplace-muted); font-size: 13px; }
+.marketplace-intent-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.marketplace-intent-option { position: relative; }
+.marketplace-intent-option input { position: absolute; opacity: 0; pointer-events: none; }
+.marketplace-intent-option span { display: flex; min-height: 48px; align-items: center; justify-content: center; border: 1px solid #c7d5e5; border-radius: 11px; background: #fff; color: #274765; font-weight: 900; cursor: pointer; }
+.marketplace-intent-option input:checked + span { border-color: var(--marketplace-blue); background: var(--marketplace-blue-soft); color: var(--marketplace-blue); box-shadow: inset 0 0 0 1px var(--marketplace-blue); }
+.marketplace-form-flow label.marketplace-field-label { display: block; margin: 12px 0 7px; font-weight: 900; }
+.marketplace-form-flow select { width: 100%; min-height: 48px; border: 1px solid #c7d5e5; border-radius: 11px; padding: 0 12px; background: #fff; font: inherit; }
+.marketplace-form-error { min-height: 18px; margin: 8px 0 0; color: #b91c1c; font-size: 13px; font-weight: 800; }
+.marketplace-storage-field { display: none !important; }
+.marketplace-v3-form #listing-type-label.marketplace-storage-field + #listing-type.marketplace-storage-field { display: none !important; }
+.marketplace-v3-form .marketplace-detail-type-label { margin-top: 2px; }
+.marketplace-v3-form .marketplace-form-note { margin: 0 0 18px; padding: 12px 14px; border-radius: 12px; background: #f4f8fd; color: #4b6079; font-size: 13px; }
+
+@media (max-width: 900px) {
+  .marketplace-priority-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .marketplace-search { grid-template-columns: 1fr; }
+  .marketplace-search button { width: 100%; }
+  .main-nav-primary .public-more { display: block; }
+  .main-nav-primary .public-more-menu { position: static; box-shadow: none; border: 0; padding: 4px 0 0 12px; min-width: 0; }
+}
+
+@media (max-width: 720px) {
+  .marketplace-v3 .page-hero { padding-bottom: 24px; }
+  .marketplace-v3 .page-hero h1 { font-size: clamp(28px, 9vw, 38px); }
+  .marketplace-v3 .page-hero p { font-size: 15px; }
+  .marketplace-search { margin-top: 18px; padding: 8px; gap: 8px; }
+  .marketplace-primary-cta { width: 100%; justify-content: center; min-height: 48px; }
+  .marketplace-priority-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+  .marketplace-category-card { min-height: 102px; padding: 14px; }
+  .marketplace-category-card strong { font-size: 15px; }
+  .marketplace-category-card span { font-size: 12px; }
+  .marketplace-shortcuts { display: none; }
+  .marketplace-shortcut { min-height: 42px; padding: 0 12px; }
+  .marketplace-all-categories-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .marketplace-all-categories-grid .marketplace-shortcut { justify-content: center; text-align: center; border-radius: 12px; }
+  .marketplace-v3-theme .subcategory-grid { gap: 9px; }
+  .marketplace-v3-theme .subcategory-card { min-height: 82px; }
+  .marketplace-filterbar { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; scrollbar-width: none; }
+  .marketplace-filterbar::-webkit-scrollbar { display: none; }
+  .marketplace-filterbar a { flex: 0 0 auto; min-height: 44px; }
+  .marketplace-intent-grid { grid-template-columns: 1fr 1fr; }
+  .marketplace-form-flow { padding: 14px; margin-left: -2px; margin-right: -2px; }
+}

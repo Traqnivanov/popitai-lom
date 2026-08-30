@@ -1,0 +1,40 @@
+name: Marketplace V3 contract
+
+on:
+  pull_request:
+    paths:
+      - "marketplace-v3.js"
+      - "marketplace-v3.css"
+      - "public-shell-v1.js"
+      - "category-listings-v1.js"
+      - "public-category-dictionary-v1.js"
+      - ".github/scripts/check_marketplace_v3.py"
+      - ".github/workflows/marketplace-v3-check.yml"
+  push:
+    paths:
+      - "marketplace-v3.js"
+      - "marketplace-v3.css"
+      - "public-shell-v1.js"
+      - "category-listings-v1.js"
+      - "public-category-dictionary-v1.js"
+      - ".github/scripts/check_marketplace_v3.py"
+      - ".github/workflows/marketplace-v3-check.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: python .github/scripts/check_marketplace_v3.py
+      - run: node --check marketplace-v3.js
+      - run: node --check public-shell-v1.js
+      - run: node --check category-listings-v1.js

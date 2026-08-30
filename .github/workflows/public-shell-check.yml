@@ -20,6 +20,10 @@ on:
       - ".github/scripts/sync_public_shell.py"
       - ".github/workflows/public-shell-check.yml"
 
+concurrency:
+  group: public-ia-sync-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
