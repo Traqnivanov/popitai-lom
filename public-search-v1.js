@@ -101,11 +101,18 @@
     return text.length <= max ? text : `${text.slice(0, max - 1).trimEnd()}…`;
   }
 
+  function searchTokenMatches(haystack, token) {
+    if (haystack.includes(token)) return true;
+    if (token.length < 4) return false;
+    const stem = token.slice(0, -1);
+    return stem.length >= 3 && haystack.includes(stem);
+  }
+
   function recordMatches(query, record) {
     const tokens = normalizeSearchText(query).split(" ").filter(Boolean);
     if (!tokens.length) return true;
     const haystack = normalizeSearchText(`${record.title || ""} ${record.desc || ""} ${record.type || ""}`);
-    return tokens.every((token) => haystack.includes(token));
+    return tokens.every((token) => searchTokenMatches(haystack, token));
   }
 
   function protectedPriorityRecord(query) {
