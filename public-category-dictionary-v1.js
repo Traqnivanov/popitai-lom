@@ -29,7 +29,7 @@
   const SERVICE_GROUPS = Object.freeze([
     Object.freeze({ label: "Майстори и ремонти", values: Object.freeze(SERVICE_SUBCATEGORIES.slice(0, 8)) }),
     Object.freeze({ label: "Автомобилни услуги", values: Object.freeze(SERVICE_SUBCATEGORIES.slice(8, 14)) }),
-    Object.freeze({ label: "Други услуги", values: Object.freeze(SERVICE_SUBCATEGORIES.slice(14)) })
+    Object.freeze({ label: "Общи услуги", values: Object.freeze(SERVICE_SUBCATEGORIES.slice(14)) })
   ]);
 
   const PUBLIC_CATEGORIES = Object.freeze([
@@ -59,7 +59,7 @@
       values: Object.freeze({ business: "Заведения", question: "Заведения" })
     }),
     Object.freeze({
-      id: "uslugi", label: "Услуги", searchLabel: "Услуги",
+      id: "rabota", label: "Услуги", searchLabel: "Услуги",
       description: "Услуги, предлагани от местни хора и фирми.", route: "rabota.html",
       values: Object.freeze({ business: "Работа и услуги", question: "Работа и услуги", listing: "Услуги" })
     }),
@@ -80,7 +80,7 @@
     "Автомобили и МПС", "Животни", "Работа", "Имоти", "Услуги", "Друго"
   ]);
 
-  const BUSINESS_CATEGORY_IDS = Object.freeze(["maistori", "zdrave", "avtomobili", "magazini", "zavedenia", "uslugi"]);
+  const BUSINESS_CATEGORY_IDS = Object.freeze(["maistori", "zdrave", "avtomobili", "magazini", "zavedenia", "rabota"]);
   const byId = new Map(PUBLIC_CATEGORIES.map((item) => [item.id, item]));
 
   function categoryForValue(type, value) {
