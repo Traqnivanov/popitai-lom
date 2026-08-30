@@ -17,13 +17,14 @@ jobs:
           ref: post-marketplace-category-hub-cache
           fetch-depth: 1
 
-      - name: Bump category hub cache key everywhere it is loaded
+      - name: Synchronize category hub cache key with file blob
         run: |
           python - <<'PY'
           from pathlib import Path
-          import re
+          import re, subprocess
 
-          target = 'category-hub-v1.js?v=20260830-context2'
+          version = subprocess.check_output(['git', 'hash-object', 'category-hub-v1.js'], text=True).strip()[:12]
+          target = f'category-hub-v1.js?v={version}'
           changed = []
           seen = []
           pattern = re.compile(r'category-hub-v1\.js\?v=[^"\']+')
@@ -37,17 +38,20 @@ jobs:
                   bom = path.read_bytes().startswith(b'\xef\xbb\xbf')
                   path.write_bytes((b'\xef\xbb\xbf' if bom else b'') + updated.encode('utf-8'))
                   changed.append(path.name)
+          print('Expected cache key:', target)
           print('Category hub pages:', ', '.join(sorted(seen)))
           print('Updated:', ', '.join(sorted(changed)) if changed else 'none')
           if not seen:
               raise SystemExit('No category-hub references found')
           PY
 
-      - name: Guard one canonical cache key
+      - name: Guard blob-derived cache key
         run: |
           python - <<'PY'
           from pathlib import Path
-          expected = 'category-hub-v1.js?v=20260830-context2'
+          import subprocess
+          version = subprocess.check_output(['git', 'hash-object', 'category-hub-v1.js'], text=True).strip()[:12]
+          expected = f'category-hub-v1.js?v={version}'
           bad = []
           count = 0
           for path in Path('.').glob('*.html'):
@@ -58,8 +62,8 @@ jobs:
               if expected not in text:
                   bad.append(path.name)
           if bad:
-              raise SystemExit('Non-canonical category-hub cache key: ' + ', '.join(sorted(bad)))
-          print(f'Cache-key guard PASS across {count} page(s).')
+              raise SystemExit('Stale category-hub cache key: ' + ', '.join(sorted(bad)))
+          print(f'Blob cache-key guard PASS across {count} page(s): {expected}')
           PY
 
       - name: Verify canonical public shell
@@ -74,5 +78,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -- '*.html'
-          git commit -m "Bump category hub cache key"
+          git commit -m "Use blob-derived category hub cache key"
           git push origin "HEAD:post-marketplace-category-hub-cache"
