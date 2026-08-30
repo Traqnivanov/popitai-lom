@@ -18,6 +18,7 @@ LEGACY={
 }
 HOME_STYLES={
  'mobile-navigation-test-v2':'MOBILE NAVIGATION — TEST V2','desktop-navigation-test-v1':'DESKTOP NAVIGATION — TEST V1','desktop-navigation-test-v1-1':'DESKTOP NAVIGATION — TEST V1.1','desktop-header-sticky-fit-fix':'INTERNAL TEST: DESKTOP HEADER STICKY/FIT FIX','desktop-info-lom-accent':'INTERNAL TEST: DESKTOP INFO LOM ACCENT','whole-desktop-header-separation':'INTERNAL TEST: WHOLE DESKTOP HEADER SEPARATION'}
+BOM_PAGES={'index.html','profil.html'}
 THEMATIC={'maistori.html':('maistori','Намери майстор'),'avtomobili.html':('avtomobili','Намери автосервиз или услуга'),'zavedenia.html':('zavedenia','Намери заведение'),'rabota.html':('rabota','Намери услуга'),'sabitiya.html':('sabitiya','Разгледай предстоящите')}
 
 def load():
@@ -101,12 +102,13 @@ def main():
  except Exception as e: print(f'public-shell manifest/template error: {e}',file=sys.stderr); return 2
  changed=[]; errors=[]
  for n,c in m['pages'].items():
-  path=ROOT/n; raw=path.read_bytes(); had_bom=raw.startswith(b'\xef\xbb\xbf'); cur=raw.decode('utf-8-sig')
+  path=ROOT/n; raw=path.read_bytes(); cur=raw.decode('utf-8-sig')
   try: exp=expected(n,cur,c,t)
   except Exception as e: errors.append(f'{n}: {e}'); continue
-  if cur!=exp:
+  desired=(b'\xef\xbb\xbf' if n in BOM_PAGES else b'')+exp.encode('utf-8')
+  if raw!=desired:
    changed.append(n)
-   if a.write: path.write_bytes((b'\xef\xbb\xbf' if had_bom else b'')+exp.encode('utf-8'))
+   if a.write: path.write_bytes(desired)
  if a.check:
   errors+=validate()
   if changed: errors.append('out-of-sync public shell pages: '+', '.join(sorted(changed)))
