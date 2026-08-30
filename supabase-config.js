@@ -78,7 +78,7 @@
     }
 
     const searchScript = document.createElement("script");
-    searchScript.src = "public-search-v1.js?v=20260830-stage2";
+    searchScript.src = "public-search-v1.js?v=20260830-stage2b";
     searchScript.dataset.popitaiPublicSearch = "true";
     searchScript.onerror = () => {
       if (guard.domReady || document.readyState === "complete") {
