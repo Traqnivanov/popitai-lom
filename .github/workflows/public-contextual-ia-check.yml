@@ -54,6 +54,14 @@ jobs:
           python-version: "3.12"
       - run: python .github/scripts/apply_contextual_recovery.py --write
       - run: python .github/scripts/sync_public_shell.py --write
+      - name: Verify deterministic second sync
+        shell: bash
+        run: |
+          git diff > /tmp/contextual-first.diff
+          python .github/scripts/apply_contextual_recovery.py --write
+          python .github/scripts/sync_public_shell.py --write
+          git diff > /tmp/contextual-second.diff
+          cmp /tmp/contextual-first.diff /tmp/contextual-second.diff
       - run: python .github/scripts/apply_contextual_recovery.py --check
       - run: python .github/scripts/sync_public_shell.py --check
       - run: node --check public-context-prefill-v1.js
