@@ -18,20 +18,13 @@ Marketplace V3 е каноничният public marketplace presentation source.
 
 ## 2. ЗАЩИТЕНО ЯДРО — НЕПРОМЕНЕНО
 
-Marketplace V3 не заменя и не променя:
-- фирмени профили и firm owner;
-- protected listings write/edit/media owner;
-- RLS/schema/ownership/approval/status/quota semantics;
-- Admin/Moderator boundaries;
-- protected construction search / `Иванов Ремонти` priority;
-- boost/admin priority ordering;
-- специализираните Shops/Health owners.
+Marketplace V3 не заменя и не променя firm owner, protected listings write/edit/media owner, RLS/schema/ownership/approval/status/quota semantics, Admin/Moderator boundaries, protected construction search / `Иванов Ремонти` priority, boost/admin priority ordering или специализираните Shops/Health owners.
 
 ## 3. MARKETPLACE V3
 
 Статус: **PRE-MERGE GATE PASS / PRODUCTION QA PENDING**.
 
-Branch: `marketplace-v3-unified-ia`  
+Branch: `marketplace-v3-unified-ia`.  
 PR: **#105 — Unify public marketplace as Обяви и услуги**.
 
 Последният implementation/shell QA head е `bc8fe600e412a479de7b5e5853aeda948cecabe9`. На него са SUCCESS едновременно `Marketplace V3 contract`, `Public shell sync` и `Public contextual IA recovery`. След този QA gate са правени само checkpoint документационни актуализации; implementation файловете от зеления head не са променяни.
@@ -42,22 +35,11 @@ Desktop target: `Начало | Обяви и услуги | Фирми | Инф
 
 `kategorii.html` е backward-compatible redirect към `obyavi.html`, а не втори marketplace hub.
 
-Четири public main groups:
-1. `Майстори и ремонти`
-2. `Автомобили`
-3. `Други услуги`
-4. `Други обяви`
-
-Точната taxonomy и public↔stored mapping са в `PUBLIC_MARKETPLACE_V3_APPROVED_SPEC.md`.
+Четири public main groups: `Майстори и ремонти`, `Автомобили`, `Други услуги`, `Други обяви`. Точната taxonomy и public↔stored mapping са в `PUBLIC_MARKETPLACE_V3_APPROVED_SPEC.md`.
 
 ## 4. IMPLEMENTATION
 
-- `marketplace-v3.js` — presentation/orchestration + compatibility mapping.
-- `marketplace-v3.css` — responsive V3 visual layer.
-- `public-shell-v1.js` — runtime shell compatibility, V3 assets и accessibility behavior.
-- `public-shell-template-v1.json` + `.github/scripts/sync_public_shell.py` — canonical shell за 41 public pages.
-- `category-listings-v1.js` — read-only thematic results; approved/active + protected priority.
-- `supabase-listings.js` — protected write owner; не е заменян.
+`marketplace-v3.js` е presentation/orchestration + compatibility mapping; `marketplace-v3.css` е responsive V3 visual layer; `public-shell-v1.js` пази runtime shell/accessibility; `public-shell-template-v1.json` + `.github/scripts/sync_public_shell.py` са canonical shell за 41 public pages; `category-listings-v1.js` е read-only thematic owner; `supabase-listings.js` остава protected write owner.
 
 Landing `obyavi.html` е единният marketplace. `maistori.html`, `avtomobili.html`, `rabota.html` са deep/category views с един основен Add CTA, subcategory navigation, `Всички | Предлагат | Търсят | Фирми`, реални listings/firms и secondary questions.
 
@@ -65,19 +47,11 @@ Add flow: `Предлагам / Търся → главна група → по�
 
 ## 5. QA / REGRESSION
 
-Marketplace contract пази unified entry, taxonomy/mapping, write-free presentation, approved/active filters и protected Ivanov/Admin + boost ordering.
-
-Shell generator пази exact 41-page canonical nav и deterministic sync. Contextual и shell auto-sync са serialized чрез общ concurrency group; последният contextual sync е SUCCESS и synchronized.
+Marketplace contract пази unified entry, taxonomy/mapping, write-free presentation, approved/active filters и protected Ivanov/Admin + boost ordering. Shell generator пази exact 41-page canonical nav и deterministic sync. Contextual и shell auto-sync са serialized; последният contextual sync е SUCCESS и synchronized.
 
 ## 6. ЛИМИТИ — НЕПРОМЕНЕНИ
 
-- до 5 нови лични обяви за календарен месец;
-- до 5 нови фирмени обяви на одобрена фирма за календарен месец;
-- квотите са отделни;
-- edit не използва нова квота;
-- подадена нова обява използва квота независимо от последващо отхвърляне/изтриване;
-- неизползвана квота не се прехвърля;
-- admin профилите нямат тези лимити.
+До 5 нови лични и до 5 нови фирмени обяви на одобрена фирма за календарен месец; квотите са отделни; edit не използва нова квота; подадена нова обява използва квота независимо от последващо отхвърляне/изтриване; неизползвана квота не се прехвърля; admin профилите нямат тези лимити.
 
 ## 7. ADMIN / MODERATOR
 
