@@ -117,7 +117,7 @@ Admin/Moderator Panel v2 не се започва отново без конкр
 2. **Етап 2 — ЗАВЪРШЕН / PRODUCTION QA PASS** — authoritative Supabase-backed public search с grouped results, loading/error/empty и запазен protected construction/Ivanov priority.
 3. **Етап 3 — ЗАВЪРШЕН / PRODUCTION RUNTIME PASS** — read-only thematic listings за `Майстори`, `Автомобили`, `Услуги`; PR #93, merge `956eaae7fca5175f13ee805610c5d698eaa82e53`.
 4. **Етап 4 — ЗАВЪРШЕН / PRODUCTION RUNTIME PASS** — canonical static public shell, explicit 41-page manifest, deterministic sync/check, global `+ Добави`, five-item mobile nav, hamburger extras и page-specific CTA hierarchy. Final PR #96, merge `2b1015c75276eec5f88090c9f9854b855a3f04d5`. Production checkpoint: `PUBLIC_IA_STAGE4_PRODUCTION_CHECKPOINT.md`, PR #97 / merge `77fb99139292d58727c476918bae21af7f225141`.
-5. **Етап 5 — В ПРОЦЕС** — финален desktop/mobile, anonymous/authenticated, forms, focus/modals, loading/empty/error/not-found, runtime/cache/load-order и protected-core regression. Текущите доказателства са записани в `PUBLIC_IA_STAGE5_QA_CHECKPOINT.md`.
+5. **Етап 5 — В ПРОЦЕС** — финален desktop/mobile, anonymous/authenticated, forms, focus/modals, loading/empty/error/not-found, runtime/cache/load-order и protected-core regression. Desktop, signed-out и post-Stage4 authenticated render/role correctness са PASS; остава реалният mobile/touch + interactive console pass. Текущите доказателства са записани в `PUBLIC_IA_STAGE5_QA_CHECKPOINT.md`.
 
 ## 7. STAGE 4 — ФИНАЛЕН СТАТУС
 
@@ -138,7 +138,7 @@ Stage 4 не изисква rollback.
 
 ## 8. STAGE 5 — ТЕКУЩ QA СТАТУС
 
-Статус: **В ПРОЦЕС — няма доказан нов дефект, но финалният PASS още не е честно завършен.**
+Статус: **В ПРОЦЕС — няма доказан нов дефект; authenticated render/role QA вече е PASS, но финалният mobile interactive PASS остава.**
 
 ### Проверено след Stage 4 — PASS
 
@@ -155,19 +155,23 @@ Stage 4 не изисква rollback.
 - Admin anonymous gate остава `Нямаш достъп` и Admin е извън public shell;
 - menu/add-sheet source ownership и deferred load order;
 - responsive CSS contract: 5-column bottom nav, body bottom padding, safe-area, mobile add button geometry, sheet `dvh` constraints, hamburger overlay;
-- protected search regression след Stage 4.
+- protected search regression след Stage 4;
+- real post-Stage4 authenticated `profil.html` — `Профил`, `Изход`, password section, Admin link и реалните profile content roots се рендерират;
+- authenticated `nov-vapros.html` — Admin вижда `Публикувай въпроса`;
+- authenticated `dobavi-obqva.html` — Admin-only controls се рендерират и submit е `Публикувай обявата`;
+- authenticated `dobavi-firma.html` — submit е `Публикувай фирмата`;
+- authenticated `admin.html` — реалният `Административен панел`, review counters и management groups се рендерират, без public-shell takeover.
 
 Не са създавани fake QA записи и не са изпращани production форми.
 
 ### Остава за финален Stage 5 PASS
 
 1. **Реален post-Stage4 mobile viewport/touch QA** — bottom navigation, center `Добави`, hamburger, add sheet, safe-area/scroll, representative question/article/detail states, Stage 3 mobile expand и липса на horizontal scroll/overlay collision.
-2. **Реален post-Stage4 authenticated QA** — login/profile/password section/logout, authenticated submit/edit access и role-correct staff link visibility където е приложимо.
-3. **Interactive focus/modal + console check** по оставащите mobile/auth flows — реален click/Escape/Tab и browser console/runtime наблюдение.
+2. **Interactive focus/logout + console check** в оставащия device pass — реален click/Escape/Tab, един logout/login-state transition и browser console/runtime наблюдение.
 
 Тези проверки не се маркират като PASS само от source analysis. Наличният Opera connector може да чете/снима/навигира, но не може да resize-ва mobile viewport, да press-ва controls или да показва console logs.
 
-Предишният authenticated QA преди Stage 4 и mobile записът от 29.08.2026 остават полезна regression база, но не заменят post-Stage4 evidence за финалния Stage 5.
+Authenticated render/access/role correctness след Stage 4 вече е доказан. Самият logout click остава част от финалния интерактивен device pass.
 
 ## 9. СРАВНИТЕЛЕН КОНТРОЛ ЗА ПРОПУСКИ
 
@@ -188,4 +192,4 @@ Stage 4 не изисква rollback.
 - Независима следваща задача → продължава се без излишно спиране.
 - Защитено, рисково или ново бизнес решение → спира се преди промяната и се иска решение.
 - След одобрена промяна се тества преди merge и отново в production.
-- Stage 5 не се обявява за завършен, докато оставащите реални mobile/auth interaction проверки не са доказани.
+- Stage 5 не се обявява за завършен, докато оставащият реален mobile/touch + interactive console pass не е доказан.
