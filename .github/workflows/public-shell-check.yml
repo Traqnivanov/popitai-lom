@@ -12,6 +12,7 @@ on:
       - ".github/workflows/public-shell-check.yml"
   push:
     paths:
+      - "*.html"
       - "public-shell-v1.css"
       - "public-shell-v1.js"
       - "public-shell-manifest-v1.json"
