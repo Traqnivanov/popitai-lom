@@ -127,10 +127,6 @@
     }
   }
 
-  function canonicalIvanovRecord() {
-    return protectedPriorityRecord("ремонт");
-  }
-
   function rankRecords(query, records) {
     const matches = records.filter((record) => recordMatches(query, record));
     const protectedRecord = protectedPriorityRecord(query);
@@ -196,7 +192,6 @@
 
   function staticRecords() {
     return dedupeRecords([
-      canonicalIvanovRecord(),
       ...categoryRecords(),
       ...ARTICLE_RECORDS,
       ...VERIFIED_INFO_RECORDS
