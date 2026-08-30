@@ -47,7 +47,7 @@
   menu?.querySelectorAll("a[href]").forEach(link => link.addEventListener("click", closeMenu));
   document.addEventListener("keydown", event => {
     if (event.key === "Escape" && menu?.classList.contains("open")) { closeMenu(); menuButton?.focus(); }
-  });
+  }, { capture: true });
 
   const shopAction = sheet.querySelector('[data-public-special-action="shop"]');
   const shopOwner = document.getElementById("addBtn");
