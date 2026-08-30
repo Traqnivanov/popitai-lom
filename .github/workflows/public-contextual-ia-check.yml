@@ -1,0 +1,85 @@
+name: Public contextual IA recovery
+
+on:
+  pull_request:
+    paths:
+      - "maistori.html"
+      - "avtomobili.html"
+      - "rabota.html"
+      - "zavedenia.html"
+      - "magazini.html"
+      - "zdrave-i-lekari.html"
+      - "sabitiya.html"
+      - "dobavi-obqva.html"
+      - "dobavi-firma.html"
+      - "public-category-dictionary-v1.js"
+      - "public-context-prefill-v1.js"
+      - "public-context-actions-v1.css"
+      - "public-context-special-actions-v1.js"
+      - ".github/scripts/apply_contextual_recovery.py"
+      - ".github/scripts/sync_public_shell.py"
+      - ".github/workflows/public-contextual-ia-check.yml"
+  push:
+    paths:
+      - "maistori.html"
+      - "avtomobili.html"
+      - "rabota.html"
+      - "zavedenia.html"
+      - "magazini.html"
+      - "zdrave-i-lekari.html"
+      - "sabitiya.html"
+      - "dobavi-obqva.html"
+      - "dobavi-firma.html"
+      - "public-category-dictionary-v1.js"
+      - "public-context-prefill-v1.js"
+      - "public-context-actions-v1.css"
+      - "public-context-special-actions-v1.js"
+      - ".github/scripts/apply_contextual_recovery.py"
+      - ".github/scripts/sync_public_shell.py"
+      - ".github/workflows/public-contextual-ia-check.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python .github/scripts/apply_contextual_recovery.py --write
+      - run: python .github/scripts/sync_public_shell.py --write
+      - run: python .github/scripts/apply_contextual_recovery.py --check
+      - run: python .github/scripts/sync_public_shell.py --check
+      - run: node --check public-context-prefill-v1.js
+      - run: node --check public-context-special-actions-v1.js
+      - name: Commit synchronized contextual IA
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo "Contextual IA already synchronized."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- maistori.html avtomobili.html rabota.html zavedenia.html magazini.html dobavi-obqva.html dobavi-firma.html
+          git commit -m "Synchronize contextual category actions"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+  check:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python .github/scripts/apply_contextual_recovery.py --check
+      - run: python .github/scripts/sync_public_shell.py --check
+      - run: node --check public-context-prefill-v1.js
+      - run: node --check public-context-special-actions-v1.js
