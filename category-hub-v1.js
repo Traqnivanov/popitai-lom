@@ -9,6 +9,24 @@
   const publicCategoryLabel = (value, type) =>
     window.PopitaiCategoryDictionary?.publicLabel?.(value, type) || value || "";
 
+  const questionCreateAction = (categoryValue) => {
+    const info = window.PopitaiCategoryDictionary?.categoryForValue?.("question", categoryValue) || null;
+    const labels = {
+      maistori: "Задай въпрос за ремонт",
+      zdrave: "Задай въпрос за здраве",
+      avtomobili: "Задай въпрос за автомобил",
+      magazini: "Задай въпрос за магазин",
+      zavedenia: "Задай въпрос за заведение",
+      rabota: "Задай въпрос за услуга",
+      obyavi: "Задай въпрос за обява",
+      sabitiya: "Задай въпрос за събитие"
+    };
+    return {
+      href: info?.id ? `nov-vapros.html?category=${encodeURIComponent(info.id)}` : "nov-vapros.html",
+      label: labels[info?.id] || "Задай въпрос"
+    };
+  };
+
   const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (char) => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
   }[char]));
@@ -151,9 +169,13 @@
       });
     }
 
-    questionRoot.innerHTML = items.length
-      ? items.map((item) => questionCard(item, counts.get(item.id) || 0)).join("")
-      : '<article class="empty-card"><h3>Все още няма одобрени въпроси</h3><p>Задай въпрос и потърси препоръка от местната общност.</p><a class="primary-link-button" href="nov-vapros.html">Задай въпрос</a></article>';
+    if (items.length) {
+      questionRoot.innerHTML = items.map((item) => questionCard(item, counts.get(item.id) || 0)).join("");
+      return;
+    }
+
+    const action = questionCreateAction(category);
+    questionRoot.innerHTML = `<article class="empty-card"><h3>Все още няма одобрени въпроси</h3><p>Задай въпрос и потърси препоръка от местната общност.</p><a class="primary-link-button" href="${esc(action.href)}">${esc(action.label)}</a></article>`;
   }
 
   ensureEventsSection();
