@@ -32,6 +32,7 @@
 .shops-page :focus-visible{outline:3px solid rgba(11,95,215,.32);outline-offset:2px}
 @media(max-width:760px){.panel{border-radius:18px}.panel-head{grid-template-columns:1fr;padding:15px}.add{width:100%}.toolbar{grid-template-columns:1fr;padding:11px 15px 0}.count{display:none}.subs{padding-inline:15px}.grid{grid-template-columns:1fr;padding:12px 15px 15px}.actions .act{flex:1 1 auto}.shops-hero{padding-top:24px}}
 </style>
+  <link rel="stylesheet" href="public-context-actions-v1.css?v=20260830-recovery1">
   <link rel="stylesheet" href="public-shell-v1.css?v=20260830-stage4">
 </head>
 <body class="shops-page">
@@ -78,7 +79,7 @@
 <section class="shops-hero"><div class="section-container">
 <span class="kicker">Категория</span>
 <div class="title-row"><span class="title-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 13H6L5 8Z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg></span><h1>Намери магазин в Лом</h1></div>
-<p>Избери какво търсиш и намери подходящ магазин в Лом.</p><div class="public-stage4-actions"><a class="primary-link-button" href="#shops-panel">Намери магазин</a><a class="secondary-link-button" href="obyavi.html">Всички обяви</a><a class="secondary-link-button" href="nov-vapros.html?category=magazini">Задай въпрос</a></div>
+<p>Избери какво търсиш и намери подходящ магазин в Лом.</p><div class="public-stage4-actions"><a class="primary-link-button" href="#shops-panel">Намери магазин</a><button class="secondary-link-button context-shop-add" type="button" data-context-shop-add hidden>Добави магазин</button><a class="secondary-link-button" href="obyavi.html">Всички обяви</a><a class="secondary-link-button" href="nov-vapros.html?category=magazini">Задай въпрос</a></div>
 </div></section>
 
 <section class="shop-main"><div class="section-container">
@@ -122,5 +123,6 @@
 <script src="script.js?v=20260820-1833" defer></script>
 <script src="shops-form-validation-v1.js?v=20260822-1845" defer></script>
 <script src="shops-catalog-v3.js?v=20260823-0155" defer></script>
+  <script src="public-context-special-actions-v1.js?v=20260830-recovery1" defer></script>
   <script src="public-shell-v1.js?v=20260830-stage4" defer></script>
 </body></html>
