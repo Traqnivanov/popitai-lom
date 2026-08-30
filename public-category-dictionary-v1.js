@@ -33,7 +33,7 @@
   ]);
 
   const PUBLIC_CATEGORIES = Object.freeze([
-    Object.freeze({ id: "maistori", label: "Майстори и ремонти", searchLabel: "Майстори и ремонти", description: "Ремонти, ВиК, електро, покриви, дограми и услуги за дома.", route: "maistori.html", values: Object.freeze({ business: "Майстори и ремонти", question: "Майстори и ремонти" }) }),
+    Object.freeze({ id: "maistori", label: "Майстори и ремонти", searchLabel: "Майстори и ремонти", description: "Ремонти, ВиК, електро, покриви, дограма и услуги за дома.", route: "maistori.html", values: Object.freeze({ business: "Майстори и ремонти", question: "Майстори и ремонти" }) }),
     Object.freeze({ id: "zdrave", label: "Здраве и лекари", searchLabel: "Здраве и лекари", description: "Лекари, стоматолози, аптеки и здравни услуги.", route: "zdrave-i-lekari.html", values: Object.freeze({ business: "Здраве и лекари", question: "Здраве и лекари" }) }),
     Object.freeze({ id: "avtomobili", label: "Автомобили", searchLabel: "Автомобили", description: "Сервизи, гуми, части, автомивки и пътна помощ.", route: "avtomobili.html", values: Object.freeze({ business: "Автомобили", question: "Автомобили" }) }),
     Object.freeze({ id: "magazini", label: "Магазини и покупки", searchLabel: "Магазини и покупки", description: "Местни магазини, материали, техника и покупки.", route: "magazini.html", values: Object.freeze({ business: "Магазини и покупки", question: "Магазини и покупки" }) }),
