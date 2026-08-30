@@ -8,6 +8,7 @@
   <meta name="theme-color" content="#0b5fd7">
   <link rel="canonical" href="https://traqnivanov.github.io/popitai-lom/rabota.html">
   <link rel="stylesheet" href="style.css?v=20260820-1930">
+  <link rel="stylesheet" href="category-listings-v1.css?v=20260830-stage3">
   <link rel="icon" href="assets/favicon-96.png" type="image/png">
 </head>
 <body class="">
@@ -45,13 +46,15 @@
   <div class="section-container two-column-layout">
     <div>
       <div class="block-heading"><h2>Каква услуга търсиш?</h2></div>
-      <div class="subcategory-grid">
+      <div class="subcategory-grid" data-mobile-priority="Домашна помощ|Красота и грижа|Компютърни и технически услуги|Обучение и уроци|Професионални услуги">
         <a class="subcategory-card" href="tarsene.html?q=Домашна%20помощ"><strong>Домашна помощ</strong><span>Фирми и препоръки</span></a>
         <a class="subcategory-card" href="tarsene.html?q=Красота%20и%20грижа"><strong>Красота и грижа</strong><span>Фирми и препоръки</span></a>
         <a class="subcategory-card" href="tarsene.html?q=Компютърни%20и%20технически%20услуги"><strong>Компютърни и технически услуги</strong><span>Фирми и препоръки</span></a>
         <a class="subcategory-card" href="tarsene.html?q=Фото%2C%20видео%20и%20събитийни%20услуги"><strong>Фото, видео и събитийни услуги</strong><span>Фирми и препоръки</span></a>
         <a class="subcategory-card" href="tarsene.html?q=Професионални%20услуги"><strong>Професионални услуги</strong><span>Фирми и препоръки</span></a>
         <a class="subcategory-card" href="tarsene.html?q=Обучение%20и%20уроци"><strong>Обучение и уроци</strong><span>Фирми и препоръки</span></a>
+        <a class="subcategory-card" href="tarsene.html?q=Грижа%20за%20деца%2C%20възрастни%20и%20домашни%20любимци"><strong>Грижа за деца, възрастни и домашни любимци</strong><span>Фирми и препоръки</span></a>
+        <a class="subcategory-card" href="tarsene.html?q=Транспорт%2C%20преместване%20и%20доставки"><strong>Транспорт, преместване и доставки</strong><span>Фирми и препоръки</span></a>
       </div>
 
       <article class="empty-card" style="margin-top:18px">
@@ -64,6 +67,11 @@
       <!-- Вътрешната фирмена категория остава непроменена, защото Фирми е LOCKED. -->
       <div class="stack-list" data-category-businesses="Работа и услуги" data-limit="6">
         <article class="empty-card"><p>Зареждане на фирмите…</p></article>
+      </div>
+
+      <div class="block-heading spaced"><h2>Активни предложения и търсения</h2><a href="obyavi.html">Всички обяви</a></div>
+      <div class="category-listings-grid" data-category-listings data-service-group="Общи услуги" data-limit="4" data-empty-message="Все още няма активни обяви за услуги." data-empty-href="obyavi.html" data-empty-label="Разгледай всички обяви">
+        <article class="empty-card category-listings-state"><p>Зареждане на обявите…</p></article>
       </div>
 
       <div class="block-heading spaced"><h2>Последни въпроси</h2><a href="vaprosi.html">Всички въпроси</a></div>
@@ -102,6 +110,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 <script src="supabase-config.js?v=20260820-1840" defer></script>
 <script src="public-category-dictionary-v1.js?v=20260830-stage1" defer></script>
+<script src="category-listings-v1.js?v=20260830-stage3" defer></script>
 <script src="category-hub-v1.js?v=20260830-stage1" defer></script>
 <script src="script.js?v=20260820-1833" defer></script>
 </body>
