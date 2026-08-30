@@ -7,6 +7,7 @@
   <meta name="description" content="Ремонти, ВиК, електро, покриви, дограма и други услуги за дома.">
   <meta name="theme-color" content="#0b5fd7">
   <link rel="stylesheet" href="style.css?v=20260820-1930">
+  <link rel="stylesheet" href="category-listings-v1.css?v=20260830-stage3">
   <link rel="icon" href="assets/favicon-96.png" type="image/png">
 </head>
 <body class="">
@@ -56,10 +57,14 @@
   <div class="section-container two-column-layout">
     <div>
       <div class="block-heading"><h2>Подраздели</h2></div>
-      <div class="subcategory-grid"><a class="subcategory-card" href="tarsene.html?q=Цялостни ремонти"><strong>Цялостни ремонти</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Бани и плочки"><strong>Бани и плочки</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=ВиК"><strong>ВиК</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Електро"><strong>Електро</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Покриви"><strong>Покриви</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Боядисване"><strong>Боядисване</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Дограма"><strong>Дограма</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Климатици"><strong>Климатици</strong><span>Въпроси и фирми</span></a></div>
+      <div class="subcategory-grid" data-mobile-priority="Цялостни ремонти|ВиК|Електро|Покриви|Бани и плочки"><a class="subcategory-card" href="tarsene.html?q=Цялостни ремонти"><strong>Цялостни ремонти</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Бани и плочки"><strong>Бани и плочки</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=ВиК"><strong>ВиК</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Електро"><strong>Електро</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Покриви"><strong>Покриви</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Боядисване"><strong>Боядисване</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Дограма"><strong>Дограма</strong><span>Въпроси и фирми</span></a><a class="subcategory-card" href="tarsene.html?q=Климатици"><strong>Климатици</strong><span>Въпроси и фирми</span></a></div>
       <div class="block-heading spaced"><h2>Местни фирми</h2><a href="firmi.html">Всички фирми</a></div>
       <div class="stack-list" data-category-businesses="Майстори и ремонти" data-limit="6">
         <article class="empty-card"><p>Зареждане на фирмите…</p></article>
+      </div>
+      <div class="block-heading spaced"><h2>Активни предложения и търсения</h2><a href="obyavi.html">Всички обяви</a></div>
+      <div class="category-listings-grid" data-category-listings data-service-group="Майстори и ремонти" data-limit="4" data-empty-message="Все още няма активни обяви за ремонтни услуги." data-empty-href="obyavi.html" data-empty-label="Разгледай всички обяви">
+        <article class="empty-card category-listings-state"><p>Зареждане на обявите…</p></article>
       </div>
       <div class="block-heading spaced"><h2>Последни въпроси</h2><a href="vaprosi.html">Всички въпроси</a></div>
       <div class="stack-list" data-category-questions="Майстори и ремонти" data-limit="4">
@@ -125,6 +130,8 @@
 <script src="image-upload.js?v=20260820-0310" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="supabase-config.js?v=20260820-1840" defer></script>
+  <script src="public-category-dictionary-v1.js?v=20260830-stage1" defer></script>
+  <script src="category-listings-v1.js?v=20260830-stage3" defer></script>
   <script src="category-hub-v1.js?v=20260822-1833" defer></script>
   <script src="script.js?v=20260820-1833" defer></script>
 </body>
