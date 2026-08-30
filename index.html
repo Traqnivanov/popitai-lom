@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="bg">
 <head>
   <meta charset="UTF-8">
@@ -191,319 +191,7 @@
       #info-lom-home-v1 .info-lom-item{min-height:58px;align-items:center}
     }
   </style>
-
-
-
-  <!-- MOBILE NAVIGATION — TEST V2 -->
-  <style id="mobile-navigation-test-v2">
-    .main-nav .nav-info-lom svg{display:none}
-    .main-nav .nav-primary-group,
-    .main-nav .nav-secondary-group{display:contents}
-
-    @media (min-width:761px){
-      .main-nav .nav-secondary-group{display:none}
-      .main-nav .nav-info-lom{
-        display:inline-flex;
-        align-items:center;
-      }
-      .main-nav .nav-info-lom svg{display:none}
-    }
-
-    @media (max-width:760px){
-      .main-nav{background:#fff}
-
-      .main-nav .nav-primary-group,
-      .main-nav .nav-secondary-group{
-        display:flex;
-        flex-direction:column;
-        width:100%;
-      }
-
-      .main-nav .nav-primary-group{gap:4px}
-
-      .main-nav .nav-secondary-group{
-        margin-top:10px;
-        padding-top:10px;
-        border-top:1px solid #e4e9f0;
-        gap:2px;
-      }
-
-      .main-nav a{width:100%}
-
-      .main-nav .nav-primary-group > a{
-        padding:12px 16px;
-        border-radius:12px;
-        font-weight:700;
-      }
-
-      .main-nav .nav-info-lom{
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        gap:10px;
-        color:#071d3d;
-        background:linear-gradient(90deg,#f6f9fd 0%,#edf5ff 100%);
-        border:1px solid #d8e4f2;
-        font-weight:800;
-      }
-
-      .main-nav .nav-info-lom svg{
-        display:block;
-        width:20px;
-        height:20px;
-        flex:0 0 20px;
-        fill:none;
-        stroke:#126ed8;
-        stroke-width:1.9;
-        stroke-linecap:round;
-        stroke-linejoin:round;
-      }
-
-      .main-nav .nav-secondary-group a{
-        padding:7px 16px;
-        font-size:.84em;
-        line-height:1.25;
-        font-weight:600;
-        color:#6b7482;
-      }
-
-      body:has(#main-nav.open){
-        overflow:hidden;
-      }
-
-      body:has(#main-nav.open)::before{
-        content:"";
-        position:fixed;
-        inset:0;
-        background:rgba(4,18,38,.58);
-        backdrop-filter:blur(1.5px);
-        -webkit-backdrop-filter:blur(1.5px);
-        z-index:900;
-      }
-
-      body:has(#main-nav.open) .site-header{
-        z-index:1000;
-      }
-
-      body:has(#main-nav.open) .mobile-bottom-nav{
-        opacity:0;
-        visibility:hidden;
-        pointer-events:none;
-      }
-    }
-  </style>
-
-
-
-  <!-- DESKTOP NAVIGATION — TEST V1 -->
-  <style id="desktop-navigation-test-v1">
-    .nav-mobile-group{display:none}
-    .nav-desktop-group{
-      display:flex;
-      align-items:center;
-      gap:2px;
-    }
-
-    .nav-desktop-group a{
-      white-space:nowrap;
-    }
-
-    .nav-desktop-group .nav-info-lom-desktop{
-      position:relative;
-      font-weight:800;
-      color:#0b5fd7;
-    }
-
-    .nav-desktop-group .nav-info-lom-desktop::after{
-      content:"";
-      position:absolute;
-      left:50%;
-      bottom:2px;
-      width:18px;
-      height:2px;
-      border-radius:999px;
-      background:#b28a16;
-      transform:translateX(-50%);
-      opacity:.9;
-    }
-
-    @media (max-width:760px){
-      .nav-desktop-group{display:none}
-      .nav-mobile-group{display:block;width:100%}
-    }
-  </style>
-
-
-  <!-- DESKTOP NAVIGATION — TEST V1.1 -->
-  <style id="desktop-navigation-test-v1-1">
-    @media (min-width:761px){
-      .header-inner{
-        gap:14px;
-      }
-
-      .main-nav{
-        flex:1 1 auto;
-        min-width:0;
-      }
-
-      .nav-desktop-group{
-        gap:0;
-        justify-content:center;
-        flex-wrap:nowrap;
-      }
-
-      .nav-desktop-group a{
-        padding-left:12px;
-        padding-right:12px;
-        font-size:.95rem;
-        white-space:nowrap;
-      }
-
-      .header-actions{
-        flex:0 0 auto;
-        gap:12px;
-      }
-
-      .login-link{
-        white-space:nowrap;
-      }
-
-      .ask-button{
-        white-space:nowrap;
-        min-width:max-content;
-        padding-left:16px;
-        padding-right:16px;
-      }
-
-      .site-header.scrolled{
-        background:rgba(255,255,255,.96);
-        border-bottom:1px solid #e6ebf2;
-        box-shadow:0 8px 22px rgba(7,29,61,.08);
-        backdrop-filter:blur(8px);
-        -webkit-backdrop-filter:blur(8px);
-      }
-}
-  </style>
-
-
-  <!-- INTERNAL TEST: DESKTOP HEADER STICKY/FIT FIX -->
-  <style id="desktop-header-sticky-fit-fix">
-    @media (min-width:761px){
-      .site-header{
-        position:sticky !important;
-        top:0 !important;
-        z-index:1000 !important;
-      }
-
-      .header-inner{
-        width:calc(100% - 24px);
-        max-width:1440px;
-        gap:10px;
-      }
-
-      .main-nav{
-        min-width:0;
-      }
-
-      .nav-desktop-group{
-        gap:0;
-      }
-
-      .nav-desktop-group a{
-        padding-left:9px;
-        padding-right:9px;
-        font-size:14px;
-        white-space:nowrap;
-      }
-
-      .header-actions{
-        gap:8px;
-      }
-
-      .login-link,
-      .ask-button{
-        white-space:nowrap;
-      }
-
-      .ask-button{
-        padding-left:14px;
-        padding-right:14px;
-      }
-
-      .site-header.scrolled{
-        background:rgba(255,255,255,.97);
-        border-bottom:1px solid #e6ebf2;
-        box-shadow:0 8px 22px rgba(7,29,61,.10);
-        backdrop-filter:blur(8px);
-        -webkit-backdrop-filter:blur(8px);
-      }
-    }
-  </style>
-
-
-  <!-- INTERNAL TEST: DESKTOP INFO LOM ACCENT -->
-  <style id="desktop-info-lom-accent">
-    @media (min-width:761px){
-      .nav-desktop-group .nav-info-lom-desktop{
-        display:inline-flex;
-        align-items:center;
-        gap:7px;
-        padding:9px 12px;
-        color:#0b5fd7;
-        background:#edf5ff;
-        border:1px solid #cfe0f5;
-        border-radius:999px;
-        font-weight:800;
-      }
-
-      .nav-desktop-group .nav-info-lom-desktop::before{
-        content:"i";
-        display:grid;
-        place-items:center;
-        width:18px;
-        height:18px;
-        border:1.8px solid #0b5fd7;
-        border-radius:50%;
-        font-size:12px;
-        line-height:1;
-        font-weight:800;
-      }
-
-      .nav-desktop-group .nav-info-lom-desktop::after{
-        display:none;
-      }
-
-      .nav-desktop-group .nav-info-lom-desktop:hover,
-      .nav-desktop-group .nav-info-lom-desktop:focus-visible{
-        color:#084cae;
-        background:#e4efff;
-        border-color:#b9d2f1;
-      }
-    }
-  </style>
-
-
-  <!-- INTERNAL TEST: WHOLE DESKTOP HEADER SEPARATION -->
-  <style id="whole-desktop-header-separation">
-    @media (min-width:761px){
-      .site-header{
-        background:#f7faff !important;
-        border-bottom:1px solid #cfd9e8 !important;
-        box-shadow:0 4px 14px rgba(7,29,61,.08);
-      }
-
-      .site-header.scrolled{
-        background:#f4f8fd !important;
-        border-bottom:1px solid #bfcddd !important;
-        box-shadow:0 10px 26px rgba(7,29,61,.14) !important;
-        backdrop-filter:blur(10px);
-        -webkit-backdrop-filter:blur(10px);
-      }
-    }
-  </style>
-
-
-  <!-- INTERNAL TEST: INFO LOM / CATEGORIES SPACING -->
+<!-- INTERNAL TEST: INFO LOM / CATEGORIES SPACING -->
   <style id="info-lom-categories-spacing">
     #info-lom-home-v1{
       padding-bottom:8px;
@@ -813,77 +501,46 @@
     }
   </style>
 
+  <link rel="stylesheet" href="public-shell-v1.css?v=20260830-stage4">
 </head>
 
 <body>
   <a class="skip-link" href="#main-content">Към основното съдържание</a>
 
-  <header class="site-header" id="site-header">
-    <div class="header-inner">
-      <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
-        <span class="brand-mark" aria-hidden="true">
-          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
-        </span>
-
-        <span class="brand-text">
-          <strong>Попитай<span>.Лом</span></strong>
-          <small>Попитай. Намери. Препоръчай.</small>
-        </span>
-      </a>
-
-      <nav class="main-nav" id="main-nav" aria-label="Главна навигация">
-        <div class="nav-desktop-group">
-          <a class="active" href="index.html">Начало</a>
-          <a class="nav-info-lom-desktop" href="#info-lom-home-v1">Инфо Лом</a>
-          <a href="kategorii.html">Категории</a>
-          <a href="firmi.html">Фирми</a>
-          <a href="obyavi.html">Обяви</a>
-          <a href="vaprosi.html">Въпроси</a>
-          <a href="statii.html">Статии</a>
-        </div>
-
-        <div class="nav-mobile-group">
-          <div class="nav-primary-group">
-            <a class="nav-info-lom" href="#info-lom-home-v1">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="12" cy="12" r="9"></circle>
-                <path d="M12 10v6M12 7h.01"></path>
-              </svg>
-              <span>Инфо Лом</span>
-            </a>
-            <a href="firmi.html">Фирми</a>
-            <a href="obyavi.html">Обяви</a>
-            <a href="statii.html">Статии</a>
-          </div>
-
-          <div class="nav-secondary-group" aria-label="Още">
-            <a href="za-nas.html">За сайта</a>
-            <a href="kontakti.html">Контакти</a>
-            <a href="pravila.html">Правила</a>
-          </div>
-        </div>
-      </nav>
-
-      <div class="header-actions">
-        <a class="login-link" href="vhod.html">Вход</a>
-        <a class="ask-button" href="nov-vapros.html">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 5v14M5 12h14"/>
-          </svg>
-          Задай въпрос
-        </a>
-
-        <button class="menu-button" id="menu-button" type="button"
-                aria-label="Отвори менюто"
-                aria-expanded="false"
-                aria-controls="main-nav">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-      </div>
+  <!-- PUBLIC SHELL:HEADER START -->
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
+      <span class="brand-mark" aria-hidden="true"><img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt=""></span>
+      <span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span>
+    </a>
+    <nav class="main-nav" id="main-nav" aria-label="Главна навигация">
+      <div class="main-nav-primary"><a class="active" aria-current="page" href="index.html">Начало</a><a href="info.html">Инфо Лом</a><a href="kategorii.html">Категории</a><a href="firmi.html">Фирми</a><a href="obyavi.html">Обяви</a><a href="vaprosi.html">Въпроси</a><a href="statii.html">Статии</a></div>
+      <div class="main-nav-extra" aria-label="Още"><a href="sabitiya.html">Събития</a><a href="za-nas.html">За сайта</a><a href="pravila.html">Правила</a><a href="kontakti.html">Контакти</a></div>
+    </nav>
+    <div class="header-actions">
+      <a class="login-link" href="vhod.html">Вход</a>
+      <button class="ask-button public-add-trigger" type="button" aria-label="Добави" aria-haspopup="dialog" aria-expanded="false" aria-controls="public-add-sheet">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Добави</span>
+      </button>
+      <button class="menu-button" id="menu-button" type="button" aria-label="Отвори менюто" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span></button>
     </div>
-  </header>
+  </div>
+</header>
+<!-- PUBLIC SHELL:HEADER END -->
+<!-- PUBLIC SHELL:ADD START -->
+<div class="public-add-layer" id="public-add-sheet" hidden>
+  <section class="public-add-dialog" role="dialog" aria-modal="true" aria-labelledby="public-add-title">
+    <div class="public-add-head"><div><span>Добави в Попитай.Лом</span><h2 id="public-add-title">Какво искаш да добавиш?</h2></div><button class="public-add-close" type="button" aria-label="Затвори">×</button></div>
+    <div class="public-add-options">
+      <a class="public-add-option" href="nov-vapros.html"><strong>Задай въпрос</strong><span>Потърси съвет, опит или препоръка</span></a>
+      <a class="public-add-option" href="dobavi-obqva.html"><strong>Добави обява</strong><span>Продажба, търсене, работа, имот или услуга</span></a>
+      <a class="public-add-option" href="dobavi-firma.html"><strong>Добави фирма</strong><span>Постоянен профил на местна фирма или доставчик</span></a>
+      
+    </div>
+  </section>
+</div>
+<!-- PUBLIC SHELL:ADD END -->
 
   <main id="main-content">
     <section class="hero-section hero-cover" aria-labelledby="hero-title">
@@ -957,7 +614,7 @@
           </form>
 
           <div class="hero-cover-actions">
-            <a class="hero-cover-primary" href="nov-vapros.html">Задай въпрос</a>
+            <button class="hero-cover-primary public-add-trigger" type="button" aria-haspopup="dialog" aria-controls="public-add-sheet">+ Добави</button>
             <a class="hero-cover-secondary" href="kategorii.html">Разгледай категориите</a>
           </div>
 
@@ -1370,74 +1027,13 @@
 
   </main>
 
-  <footer class="site-footer">
-    <div class="section-container footer-main">
-      <div class="footer-brand">
-        <a class="brand footer-logo" href="index.html" aria-label="Попитай Лом – начало">
-          <span class="brand-mark" aria-hidden="true">
-          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
-        </span>
-          <span class="brand-text">
-            <strong>Попитай<span>.Лом</span></strong>
-            <small>Попитай. Намери. Препоръчай.</small>
-          </span>
-        </a>
+  <!-- PUBLIC SHELL:FOOTER START -->
+<footer class="site-footer"><div class="section-container footer-main"><div class="footer-brand"><a class="brand" href="index.html" aria-label="Попитай Лом – начало"><span class="brand-mark" aria-hidden="true"><img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt=""></span><span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span></a><p>Местната общност на Лом за препоръки, услуги и полезна информация.</p></div><div class="footer-column"><h2>Разгледай</h2><a href="kategorii.html">Категории</a><a href="vaprosi.html">Въпроси</a><a href="firmi.html">Фирми</a><a href="statii.html">Статии</a></div><div class="footer-column"><h2>За общността</h2><a href="za-nas.html">За сайта</a><a href="pravila.html">Правила</a><a href="kontakti.html">Контакти</a><a href="signal.html">Подай сигнал</a></div><div class="footer-column"><h2>Правна информация</h2><a href="poveritelnost.html">Поверителност</a><a href="uslovia.html">Условия за ползване</a><a href="biskvitki.html">Бисквитки</a></div></div><div class="section-container footer-bottom"><p>© <span id="current-year">2026</span> Попитай.Лом. Всички права запазени.</p><p>Създадено за хората от Лом.</p></div></footer>
+<!-- PUBLIC SHELL:FOOTER END -->
 
-        <p>Местната общност на Лом за препоръки, услуги и полезна информация.</p>
-      </div>
-
-      <div class="footer-column">
-        <h2>Разгледай</h2>
-        <a href="kategorii.html">Категории</a>
-        <a href="vaprosi.html">Въпроси</a>
-        <a href="firmi.html">Фирми</a>
-        <a href="statii.html">Статии</a>
-      </div>
-
-      <div class="footer-column">
-        <h2>За общността</h2>
-        <a href="za-nas.html">За сайта</a>
-        <a href="pravila.html">Правила</a>
-        <a href="kontakti.html">Контакти</a>
-        <a href="signal.html">Подай сигнал</a>
-      </div>
-
-      <div class="footer-column">
-        <h2>Правна информация</h2>
-        <a href="poveritelnost.html">Поверителност</a>
-        <a href="uslovia.html">Условия за ползване</a>
-        <a href="biskvitki.html">Бисквитки</a>
-      </div>
-    </div>
-
-    <div class="section-container footer-bottom">
-      <p>© <span id="current-year">2026</span> Попитай.Лом. Всички права запазени.</p>
-      <p>Създадено за хората от Лом.</p>
-    </div>
-  </footer>
-
-  <nav class="mobile-bottom-nav" aria-label="Мобилна навигация">
-    <a class="active" href="index.html">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg>
-      <span>Начало</span>
-    </a>
-    <a href="kategorii.html">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      <span>Категории</span>
-    </a>
-    <a class="mobile-ask" href="nov-vapros.html" aria-label="Задай въпрос">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-      <span>Въпрос</span>
-    </a>
-    <a href="vaprosi.html">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg>
-      <span>Въпроси</span>
-    </a>
-    <a href="vhod.html">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
-      <span>Профил</span>
-    </a>
-  </nav>
+  <!-- PUBLIC SHELL:MOBILE START -->
+<nav class="mobile-bottom-nav" aria-label="Мобилна навигация"><a class="active" aria-current="page" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>Начало</span></a><a href="kategorii.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Категории</span></a><button class="mobile-add public-add-trigger" type="button" aria-label="Добави" aria-haspopup="dialog" aria-expanded="false" aria-controls="public-add-sheet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Добави</span></button><a href="obyavi.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V5M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg><span>Обяви</span></a><a href="profil.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профил</span></a></nav>
+<!-- PUBLIC SHELL:MOBILE END -->
 
   <button class="back-to-top" id="back-to-top" type="button" aria-label="Към началото">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
@@ -1662,5 +1258,6 @@
   })();
   </script>
 
+  <script src="public-shell-v1.js?v=20260830-stage4" defer></script>
 </body>
 </html>

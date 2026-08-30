@@ -8,36 +8,45 @@
   <meta name="theme-color" content="#0b5fd7">
   <link rel="stylesheet" href="style.css?v=20260820-1930">
   <link rel="icon" href="assets/favicon-96.png" type="image/png">
+  <link rel="stylesheet" href="public-shell-v1.css?v=20260830-stage4">
 </head>
 <body class="">
 
   <a class="skip-link" href="#main-content">Към основното съдържание</a>
-  <header class="site-header" id="site-header">
-    <div class="header-inner">
-      
-      <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
-        <span class="brand-mark" aria-hidden="true">
-          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
-        </span>
-        <span class="brand-text">
-          <strong>Попитай<span>.Лом</span></strong>
-          <small>Попитай. Намери. Препоръчай.</small>
-        </span>
-      </a>
-    
-      <nav class="main-nav" id="main-nav" aria-label="Главна навигация"><a class="" href="index.html">Начало</a><a class="" href="info.html">Инфо Лом</a><a class="" href="kategorii.html">Категории</a><a class="" href="firmi.html">Фирми</a><a class="" href="obyavi.html">Обяви</a><a class="" href="vaprosi.html">Въпроси</a><a class="active" href="statii.html">Статии</a></nav>
-      <div class="header-actions">
-        <a class="login-link" href="vhod.html">Вход</a>
-        <a class="ask-button" href="nov-vapros.html">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-          Задай въпрос
-        </a>
-        <button class="menu-button" id="menu-button" type="button" aria-label="Отвори менюто" aria-expanded="false" aria-controls="main-nav">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
+  <!-- PUBLIC SHELL:HEADER START -->
+<header class="site-header" id="site-header">
+  <div class="header-inner">
+    <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
+      <span class="brand-mark" aria-hidden="true"><img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt=""></span>
+      <span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span>
+    </a>
+    <nav class="main-nav" id="main-nav" aria-label="Главна навигация">
+      <div class="main-nav-primary"><a href="index.html">Начало</a><a href="info.html">Инфо Лом</a><a href="kategorii.html">Категории</a><a href="firmi.html">Фирми</a><a href="obyavi.html">Обяви</a><a href="vaprosi.html">Въпроси</a><a class="active" aria-current="page" href="statii.html">Статии</a></div>
+      <div class="main-nav-extra" aria-label="Още"><a href="sabitiya.html">Събития</a><a href="za-nas.html">За сайта</a><a href="pravila.html">Правила</a><a href="kontakti.html">Контакти</a></div>
+    </nav>
+    <div class="header-actions">
+      <a class="login-link" href="vhod.html">Вход</a>
+      <button class="ask-button public-add-trigger" type="button" aria-label="Добави" aria-haspopup="dialog" aria-expanded="false" aria-controls="public-add-sheet">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Добави</span>
+      </button>
+      <button class="menu-button" id="menu-button" type="button" aria-label="Отвори менюто" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span></button>
     </div>
-  </header>
+  </div>
+</header>
+<!-- PUBLIC SHELL:HEADER END -->
+<!-- PUBLIC SHELL:ADD START -->
+<div class="public-add-layer" id="public-add-sheet" hidden>
+  <section class="public-add-dialog" role="dialog" aria-modal="true" aria-labelledby="public-add-title">
+    <div class="public-add-head"><div><span>Добави в Попитай.Лом</span><h2 id="public-add-title">Какво искаш да добавиш?</h2></div><button class="public-add-close" type="button" aria-label="Затвори">×</button></div>
+    <div class="public-add-options">
+      <a class="public-add-option" href="nov-vapros.html"><strong>Задай въпрос</strong><span>Потърси съвет, опит или препоръка</span></a>
+      <a class="public-add-option" href="dobavi-obqva.html"><strong>Добави обява</strong><span>Продажба, търсене, работа, имот или услуга</span></a>
+      <a class="public-add-option" href="dobavi-firma.html"><strong>Добави фирма</strong><span>Постоянен профил на местна фирма или доставчик</span></a>
+      
+    </div>
+  </section>
+</div>
+<!-- PUBLIC SHELL:ADD END -->
 
 <main id="main-content">
   <nav class="site-breadcrumbs section-container" aria-label="Навигационна пътека">
@@ -65,44 +74,12 @@
 </section>
 </main>
 
-  <footer class="site-footer">
-    <div class="section-container footer-main">
-      <div class="footer-brand">
-        
-      <a class="brand" href="index.html" aria-label="Попитай Лом – начало">
-        <span class="brand-mark" aria-hidden="true">
-          <img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
-        </span>
-        <span class="brand-text">
-          <strong>Попитай<span>.Лом</span></strong>
-          <small>Попитай. Намери. Препоръчай.</small>
-        </span>
-      </a>
-    
-        <p>Местната общност на Лом за препоръки, услуги и полезна информация.</p>
-      </div>
-      <div class="footer-column">
-        <h2>Разгледай</h2>
-        <a href="kategorii.html">Категории</a><a href="vaprosi.html">Въпроси</a>
-        <a href="firmi.html">Фирми</a><a href="statii.html">Статии</a>
-      </div>
-      <div class="footer-column">
-        <h2>За общността</h2>
-        <a href="za-nas.html">За сайта</a><a href="pravila.html">Правила</a>
-        <a href="kontakti.html">Контакти</a><a href="signal.html">Подай сигнал</a>
-      </div>
-      <div class="footer-column">
-        <h2>Правна информация</h2>
-        <a href="poveritelnost.html">Поверителност</a><a href="uslovia.html">Условия за ползване</a>
-        <a href="biskvitki.html">Бисквитки</a>
-      </div>
-    </div>
-    <div class="section-container footer-bottom">
-      <p>© <span id="current-year">2026</span> Попитай.Лом. Всички права запазени.</p>
-      <p>Създадено за хората от Лом.</p>
-    </div>
-  </footer>
-  <nav class="mobile-bottom-nav" aria-label="Мобилна навигация"><a class="" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>Начало</span></a><a class="" href="kategorii.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Категории</span></a><a class="mobile-ask" href="nov-vapros.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Въпрос</span></a><a class="" href="vaprosi.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/></svg><span>Въпроси</span></a><a class="" href="profil.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профил</span></a></nav>
+  <!-- PUBLIC SHELL:FOOTER START -->
+<footer class="site-footer"><div class="section-container footer-main"><div class="footer-brand"><a class="brand" href="index.html" aria-label="Попитай Лом – начало"><span class="brand-mark" aria-hidden="true"><img src="assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt=""></span><span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span></a><p>Местната общност на Лом за препоръки, услуги и полезна информация.</p></div><div class="footer-column"><h2>Разгледай</h2><a href="kategorii.html">Категории</a><a href="vaprosi.html">Въпроси</a><a href="firmi.html">Фирми</a><a href="statii.html">Статии</a></div><div class="footer-column"><h2>За общността</h2><a href="za-nas.html">За сайта</a><a href="pravila.html">Правила</a><a href="kontakti.html">Контакти</a><a href="signal.html">Подай сигнал</a></div><div class="footer-column"><h2>Правна информация</h2><a href="poveritelnost.html">Поверителност</a><a href="uslovia.html">Условия за ползване</a><a href="biskvitki.html">Бисквитки</a></div></div><div class="section-container footer-bottom"><p>© <span id="current-year">2026</span> Попитай.Лом. Всички права запазени.</p><p>Създадено за хората от Лом.</p></div></footer>
+<!-- PUBLIC SHELL:FOOTER END -->
+  <!-- PUBLIC SHELL:MOBILE START -->
+<nav class="mobile-bottom-nav" aria-label="Мобилна навигация"><a href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>Начало</span></a><a href="kategorii.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Категории</span></a><button class="mobile-add public-add-trigger" type="button" aria-label="Добави" aria-haspopup="dialog" aria-expanded="false" aria-controls="public-add-sheet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Добави</span></button><a href="obyavi.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V5M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"/></svg><span>Обяви</span></a><a href="profil.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профил</span></a></nav>
+<!-- PUBLIC SHELL:MOBILE END -->
   <button class="back-to-top" id="back-to-top" type="button" aria-label="Към началото">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"/></svg>
   </button>
@@ -110,5 +87,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="supabase-config.js?v=20260820-1840" defer></script>
   <script src="script.js?v=20260820-1833" defer></script>
+  <script src="public-shell-v1.js?v=20260830-stage4" defer></script>
 </body>
 </html>
