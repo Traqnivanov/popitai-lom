@@ -101,13 +101,15 @@
   }
 
   function validateSubcategory(value) {
-    const category = fields.category?.value || "";
+    const category = String(fields.category?.value || "").trim();
     const subcategory = String(value || "").trim();
-    if (category !== "Услуги") return "";
+    if (category !== "Услуги") {
+      return subcategory ? "Подкатегория се избира само за категория „Услуги“." : "";
+    }
     if (!subcategory && fields.subcategory.dataset.legacyBlankAllowed === "true") return "";
     if (!subcategory) return "Избери подкатегория на услугата.";
     const valid = window.PopitaiCategoryDictionary?.isValidListingSubcategory?.(category, subcategory);
-    return valid === false ? "Избери валидна подкатегория на услугата." : "";
+    return valid === true ? "" : "Избери валидна подкатегория на услугата.";
   }
 
   function validateListingType(value) {
