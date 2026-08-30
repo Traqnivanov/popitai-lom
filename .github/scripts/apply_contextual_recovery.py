@@ -13,6 +13,7 @@ DICT = ROOT / "public-category-dictionary-v1.js"
 CSS_REF = '<link rel="stylesheet" href="public-context-actions-v1.css?v=20260830-recovery1">'
 PREFILL_REF = '<script src="public-context-prefill-v1.js?v=20260830-recovery1" defer></script>'
 SPECIAL_REF = '<script src="public-context-special-actions-v1.js?v=20260830-recovery1" defer></script>'
+MOBILE_LISTINGS_REF = '<script src="category-listings-v1.js?v=20260830-recovery-mobile1" defer></script>'
 
 HERO_START = '<!-- CONTEXTUAL CATEGORY ACTIONS START -->'
 HERO_END = '<!-- CONTEXTUAL CATEGORY ACTIONS END -->'
@@ -263,6 +264,15 @@ def validate(repair: list[str], auto: list[str], general: list[str]) -> list[str
             problems.append(f"{name}: missing seek action label {seek_label}")
         if CSS_REF not in text:
             problems.append(f"{name}: contextual CSS not loaded")
+        if text.count(MOBILE_LISTINGS_REF) != 1:
+            problems.append(f"{name}: expected exactly one recovered mobile-priority listings owner reference")
+        priority_match = re.search(r'data-mobile-priority="([^"]+)"', text)
+        if not priority_match:
+            problems.append(f"{name}: missing data-mobile-priority contract")
+        else:
+            for priority_label in priority_match.group(1).split("|"):
+                if f"<strong>{priority_label}</strong>" not in text:
+                    problems.append(f"{name}: mobile priority label has no exact contextual card: {priority_label}")
 
     require("maistori.html", 'href="dobavi-firma.html?category=maistori">Добави фирма</a>')
     require("avtomobili.html", 'href="dobavi-firma.html?category=avtomobili">Добави фирма</a>')
@@ -290,6 +300,16 @@ def validate(repair: list[str], auto: list[str], general: list[str]) -> list[str
     ]:
         if needle not in prefill:
             problems.append(f"public-context-prefill-v1.js: missing safety guard {needle!r}")
+
+    mobile_owner = content("category-listings-v1.js")
+    for needle in [
+        'element.matches(".subcategory-card, .contextual-subcategory-item")',
+        'return unit.querySelector(":scope > .subcategory-card")',
+        "unit.hidden = !expanded && priorityIndex < 0",
+        'button.textContent = expanded ? "Покажи по-малко" : "Всички услуги"',
+    ]:
+        if needle not in mobile_owner:
+            problems.append(f"category-listings-v1.js: missing contextual mobile-priority guard {needle!r}")
 
     if "Боядисване и шпакловка" in content("maistori.html"):
         problems.append("maistori.html: non-canonical taxonomy alias introduced")
@@ -333,7 +353,7 @@ def main() -> int:
             print(f"- {problem}", file=sys.stderr)
         return 1
 
-    print("Contextual recovery check PASS: canonical service context, safe form prefill, specialized owners and protected exclusions verified.")
+    print("Contextual recovery check PASS: canonical service context, safe form prefill, mobile priority compatibility, specialized owners and protected exclusions verified.")
     return 0
 
 
