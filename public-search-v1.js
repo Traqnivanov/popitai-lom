@@ -139,7 +139,10 @@
     const result = [];
     records.forEach((record) => {
       if (!record?.url || !record?.title) return;
-      const key = `${record.type || ""}|${record.url}`;
+      const identity = record.id || `${record.type || ""}|${record.title}|${record.url}`;
+      const key = record.type === "Фирма"
+        ? `business-url:${record.url}`
+        : `record-id:${identity}`;
       if (seen.has(key)) return;
       seen.add(key);
       result.push(record);
