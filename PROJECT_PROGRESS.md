@@ -37,13 +37,14 @@ Marketplace V3 е адаптиран върху тези owners и не ги з�
 Статус: **PRE-MERGE GATE PASS / PRODUCTION QA PENDING**.
 
 Работен branch: `marketplace-v3-unified-ia`  
-PR: **#105 — Unify public marketplace as Обяви и услуги**  
-Финален pre-merge head преди тази checkpoint актуализация: `bc8fe600e412a479de7b5e5853aeda948cecabe9`.
+PR: **#105 — Unify public marketplace as Обяви и услуги**.
 
-На този head са SUCCESS едновременно:
+Последният code/shell QA head е `bc8fe600e412a479de7b5e5853aeda948cecabe9`. На него са SUCCESS едновременно:
 - `Marketplace V3 contract`;
 - `Public shell sync`;
 - `Public contextual IA recovery`.
+
+След този gate има само checkpoint документационна актуализация; implementation файловете от зеления QA head не са променяни.
 
 Canonical shell sync отчита `0 page(s) changed` и `41 pages synchronized`; exact-header guard потвърждава липса на competing `Категории`, unresolved placeholders и duplicate desktop `Вход`.
 
