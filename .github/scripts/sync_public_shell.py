@@ -132,6 +132,7 @@ def validate():
   mobile=marker_re('mobile').search(page).group(0)
   if 'href="kategorii.html">Категории</a>' in header: problems.append(f'{n}: competing Categories entry remains in canonical header')
   if header.count('href="obyavi.html">Обяви и услуги</a>')!=1: problems.append(f'{n}: canonical header must contain one Обяви и услуги entry')
+  if 'class="login-link"' in header: problems.append(f'{n}: duplicate login entry remains in canonical Marketplace V3 header')
   for label in ['<span>Начало</span>','<span>Обяви</span>','<span>Добави</span>','<span>Инфо</span>','<span>Профил</span>']:
    if label not in mobile: problems.append(f'{n}: canonical mobile nav missing {label}')
  return problems
