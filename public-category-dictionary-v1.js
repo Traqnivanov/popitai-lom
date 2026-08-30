@@ -250,6 +250,9 @@
 
     category.addEventListener("change", () => sync({ userChanged: true }));
     subcategory.addEventListener("change", () => { delete subcategory.dataset.legacyBlankAllowed; });
+    document.querySelectorAll("#listing-type, #listing-type-rabota-select, #listing-type-imoti-select").forEach((typeField) => {
+      typeField.addEventListener("change", () => { delete subcategory.dataset.legacyBlankAllowed; });
+    });
     sync();
 
     if (!editId) return;
