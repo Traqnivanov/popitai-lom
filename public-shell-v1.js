@@ -1,7 +1,22 @@
 (() => {
   "use strict";
 
-  const file = (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
+  function detectFile() {
+    const pathFile = (window.location.pathname.split("/").pop() || "").toLowerCase();
+    if (pathFile.endsWith(".html")) return pathFile;
+    if (document.getElementById("listing-form")) return "dobavi-obqva.html";
+    if (document.getElementById("listings-list")) return "obyavi.html";
+    const heading = String(document.querySelector("main h1")?.textContent || "").trim();
+    if (heading === "Майстори и ремонти") return "maistori.html";
+    if (heading === "Автомобили") return "avtomobili.html";
+    if (heading === "Услуги") return "rabota.html";
+    if (heading === "Категории") return "kategorii.html";
+    return pathFile || "index.html";
+  }
+
+  const file = detectFile();
+  const shellScript = document.currentScript || Array.from(document.scripts).find((script) => String(script.src || "").includes("public-shell-v1.js"));
+  const assetUrl = (relative) => shellScript?.src ? new URL(relative, shellScript.src).href : relative;
   const marketplaceFiles = new Set(["obyavi.html", "obqva.html", "dobavi-obqva.html", "maistori.html", "avtomobili.html", "rabota.html", "kategorii.html"]);
   const firmFiles = new Set(["firmi.html", "firma.html", "dobavi-firma.html", "razshiren-profil.html"]);
   const infoFiles = new Set(["info.html", "zdrave.html", "transport.html", "institucii.html", "komunalni.html", "obrazovanie-kultura.html", "banki.html"]);
@@ -24,7 +39,7 @@
     if (document.querySelector('link[data-marketplace-v3="styles"]')) return;
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "marketplace-v3.css?v=20260830-v3";
+    link.href = assetUrl("marketplace-v3.css?v=20260830-v3");
     link.dataset.marketplaceV3 = "styles";
     document.head.appendChild(link);
   }
@@ -33,7 +48,7 @@
     if (!["obyavi.html", "kategorii.html", "maistori.html", "avtomobili.html", "rabota.html", "dobavi-obqva.html"].includes(file)) return;
     if (document.querySelector('script[data-marketplace-v3="app"]')) return;
     const script = document.createElement("script");
-    script.src = "marketplace-v3.js?v=20260830-v3";
+    script.src = assetUrl("marketplace-v3.js?v=20260830-v3");
     script.dataset.marketplaceV3 = "app";
     document.head.appendChild(script);
   }
@@ -94,7 +109,10 @@
   }
 
   function patchFooter() {
-    document.querySelectorAll('.site-footer a[href="kategorii.html"]').forEach((link) => {
+    document.querySelectorAll(".site-footer a[href]").forEach((link) => {
+      let path = "";
+      try { path = new URL(link.href, window.location.href).pathname.toLowerCase(); } catch (_) {}
+      if (!path.endsWith("/kategorii.html") && !path.endsWith("kategorii.html")) return;
       link.href = "obyavi.html";
       link.textContent = "Обяви и услуги";
     });
