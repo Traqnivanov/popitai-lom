@@ -1,5 +1,7 @@
-﻿const STATIC_SEARCH_RECORDS = [{"type": "Категория", "title": "Майстори и ремонти", "desc": "Ремонти, ВиК, електро, покриви, дограма и услуги за дома.", "url": "maistori.html"}, {"type": "Категория", "title": "Здраве и лекари", "desc": "Лекари, стоматолози, аптеки и здравни услуги.", "url": "zdrave-i-lekari.html"}, {"type": "Категория", "title": "Автомобили", "desc": "Сервизи, гуми, части, автомивки и пътна помощ.", "url": "avtomobili.html"}, {"type": "Категория", "title": "Магазини и покупки", "desc": "Местни магазини, материали, техника и покупки.", "url": "magazini.html"}, {"type": "Категория", "title": "Заведения", "desc": "Ресторанти, кафенета, пицарии и доставки.", "url": "zavedenia.html"}, {"type": "Категория", "title": "Работа и услуги", "desc": "Работа и услуги, предлагани от местни хора.", "url": "rabota.html"}, {"type": "Категория", "title": "Обяви", "desc": "Купува, продава, подарява, наема и търси.", "url": "obyavi.html"}, {"type": "Категория", "title": "Събития и град", "desc": "Събития, институции и полезна градска информация.", "url": "sabitiya.html"}, {"type": "Статия", "title": "Как да избереш майстор и да избегнеш неприятни изненади", "desc": "Практични проверки и ясни условия преди ремонт.", "url": "statia.html"}];
-const CATEGORY_META = {"Майстори и ремонти": {"slug": "maistori", "className": "blue", "icon": "<path d=\"M14.7 6.3a4 4 0 0 0-5.4-5.4L7 3.2l3.8 3.8 2.3-2.3a4 4 0 0 0 1.6 1.6Z\"/><path d=\"M10.8 7 3 14.8a2.1 2.1 0 0 0 3 3L13.8 10\"/><path class=\"icon-accent\" d=\"m4 3 3 3-1.5 1.5-3-3L4 3Zm3 3 14 14\"/>"}, "Здраве и лекари": {"slug": "zdrave", "className": "mint", "icon": "<path d=\"M6 3v5a5 5 0 0 0 10 0V3\"/><path d=\"M4 3h2M16 3h2\"/><path d=\"M11 13v2a5 5 0 0 0 10 0v-1\"/><circle class=\"icon-accent\" cx=\"21\" cy=\"12\" r=\"2\"/>"}, "Автомобили": {"slug": "avtomobili", "className": "slate", "icon": "<path d=\"m5 11 1.4-4A2 2 0 0 1 8.3 5h7.4a2 2 0 0 1 1.9 2l1.4 4\"/><rect x=\"3\" y=\"11\" width=\"18\" height=\"7\" rx=\"2\"/><path d=\"M6 18v2M18 18v2\"/><circle class=\"icon-accent\" cx=\"7.5\" cy=\"14.5\" r=\"1.2\"/><circle class=\"icon-accent\" cx=\"16.5\" cy=\"14.5\" r=\"1.2\"/>"}, "Магазини и покупки": {"slug": "magazini", "className": "sand", "icon": "<path d=\"M6 8h12l1 13H5L6 8Z\"/><path class=\"icon-accent\" d=\"M9 9V6a3 3 0 0 1 6 0v3\"/>"}, "Заведения": {"slug": "zavedenia", "className": "rose", "icon": "<path d=\"M5 3v7M2.5 3v4.5A2.5 2.5 0 0 0 5 10a2.5 2.5 0 0 0 2.5-2.5V3M5 10v11\"/><path class=\"icon-accent\" d=\"M17 3v18M14 3v6a3 3 0 0 0 3 3\"/>"}, "Работа и услуги": {"slug": "rabota", "className": "violet", "icon": "<rect x=\"3\" y=\"7\" width=\"18\" height=\"13\" rx=\"2\"/><path d=\"M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18\"/><path class=\"icon-accent\" d=\"M10 12v3h4v-3\"/>"}, "Обяви": {"slug": "obyavi", "className": "teal", "icon": "<path d=\"M4 10v4M8 8.5v7M8 9l10-4v14L8 15Z\"/><path d=\"m8 15 2.5 5\"/><path class=\"icon-accent\" d=\"M20 8.5c1 .8 1.5 2 1.5 3.5S21 14.7 20 15.5\"/>"}, "Събития и град": {"slug": "sabitiya", "className": "blue", "icon": "<rect x=\"3\" y=\"5\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M8 3v4M16 3v4M3 10h18\"/><circle class=\"icon-accent\" cx=\"8\" cy=\"14\" r=\".7\"/><circle class=\"icon-accent\" cx=\"12\" cy=\"14\" r=\".7\"/><circle class=\"icon-accent\" cx=\"16\" cy=\"14\" r=\".7\"/><circle class=\"icon-accent\" cx=\"8\" cy=\"18\" r=\".7\"/><circle class=\"icon-accent\" cx=\"12\" cy=\"18\" r=\".7\"/><circle class=\"icon-accent\" cx=\"16\" cy=\"18\" r=\".7\"/>"}};
+﻿const STATIC_SEARCH_RECORDS = [
+  {"type": "Статия", "title": "Как да избереш майстор и да избегнеш неприятни изненади", "desc": "Практични проверки и ясни условия преди ремонт.", "url": "statia.html"}
+];
+const CATEGORY_ICON_META = {"Майстори и ремонти": {"className": "blue", "icon": "<path d=\"M14.7 6.3a4 4 0 0 0-5.4-5.4L7 3.2l3.8 3.8 2.3-2.3a4 4 0 0 0 1.6 1.6Z\"/><path d=\"M10.8 7 3 14.8a2.1 2.1 0 0 0 3 3L13.8 10\"/><path class=\"icon-accent\" d=\"m4 3 3 3-1.5 1.5-3-3L4 3Zm3 3 14 14\"/>"}, "Здраве и лекари": {"className": "mint", "icon": "<path d=\"M6 3v5a5 5 0 0 0 10 0V3\"/><path d=\"M4 3h2M16 3h2\"/><path d=\"M11 13v2a5 5 0 0 0 10 0v-1\"/><circle class=\"icon-accent\" cx=\"21\" cy=\"12\" r=\"2\"/>"}, "Автомобили": {"className": "slate", "icon": "<path d=\"m5 11 1.4-4A2 2 0 0 1 8.3 5h7.4a2 2 0 0 1 1.9 2l1.4 4\"/><rect x=\"3\" y=\"11\" width=\"18\" height=\"7\" rx=\"2\"/><path d=\"M6 18v2M18 18v2\"/><circle class=\"icon-accent\" cx=\"7.5\" cy=\"14.5\" r=\"1.2\"/><circle class=\"icon-accent\" cx=\"16.5\" cy=\"14.5\" r=\"1.2\"/>"}, "Магазини и покупки": {"className": "sand", "icon": "<path d=\"M6 8h12l1 13H5L6 8Z\"/><path class=\"icon-accent\" d=\"M9 9V6a3 3 0 0 1 6 0v3\"/>"}, "Заведения": {"className": "rose", "icon": "<path d=\"M5 3v7M2.5 3v4.5A2.5 2.5 0 0 0 5 10a2.5 2.5 0 0 0 2.5-2.5V3M5 10v11\"/><path class=\"icon-accent\" d=\"M17 3v18M14 3v6a3 3 0 0 0 3 3\"/>"}, "Работа и услуги": {"className": "violet", "icon": "<rect x=\"3\" y=\"7\" width=\"18\" height=\"13\" rx=\"2\"/><path d=\"M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18\"/><path class=\"icon-accent\" d=\"M10 12v3h4v-3\"/>"}, "Обяви": {"className": "teal", "icon": "<path d=\"M4 10v4M8 8.5v7M8 9l10-4v14L8 15Z\"/><path d=\"m8 15 2.5 5\"/><path class=\"icon-accent\" d=\"M20 8.5c1 .8 1.5 2 1.5 3.5S21 14.7 20 15.5\"/>"}, "Събития и град": {"className": "blue", "icon": "<rect x=\"3\" y=\"5\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M8 3v4M16 3v4M3 10h18\"/><circle class=\"icon-accent\" cx=\"8\" cy=\"14\" r=\".7\"/><circle class=\"icon-accent\" cx=\"12\" cy=\"14\" r=\".7\"/><circle class=\"icon-accent\" cx=\"16\" cy=\"14\" r=\".7\"/><circle class=\"icon-accent\" cx=\"8\" cy=\"18\" r=\".7\"/><circle class=\"icon-accent\" cx=\"12\" cy=\"18\" r=\".7\"/><circle class=\"icon-accent\" cx=\"16\" cy=\"18\" r=\".7\"/>"}};
 // APPROVED CATEGORY ICONS — 2026-08-05
 
 const IVANOV_REMONTI = {
@@ -127,7 +129,11 @@ function setStored(key, value) {
 }
 
 function categoryMeta(category) {
-  return CATEGORY_META[category] || CATEGORY_META["Събития и град"];
+  return CATEGORY_ICON_META[category] || CATEGORY_ICON_META["Събития и град"];
+}
+
+function publicCategoryLabel(value, type = "") {
+  return window.PopitaiCategoryDictionary?.publicLabel?.(value, type) || value || "";
 }
 
 function categoryIcon(category, className = "category-symbol") {
@@ -197,6 +203,7 @@ function saveBusinesses(items) {
 }
 
 function getAllSearchRecords() {
+  const categoryRecords = window.PopitaiCategoryDictionary?.staticSearchRecords?.() || [];
   const dynamicQuestions = getQuestions().map(item => ({
     id: item.id,
     type: "Въпрос",
@@ -211,7 +218,7 @@ function getAllSearchRecords() {
     desc: item.description,
     url: businessUrl(item.id)
   }));
-  return [IVANOV_REMONTI, ...STATIC_SEARCH_RECORDS, ...dynamicQuestions, ...dynamicBusinesses];
+  return [IVANOV_REMONTI, ...categoryRecords, ...STATIC_SEARCH_RECORDS, ...dynamicQuestions, ...dynamicBusinesses];
 }
 
 // Навигация
@@ -253,6 +260,29 @@ const searchForm = qs("#search-form");
 const searchInput = qs("#main-search");
 const clearSearch = qs("#clear-search");
 const suggestionsBox = qs("#search-suggestions");
+let categoryDictionaryPromise = null;
+
+function ensureCategoryDictionary() {
+  if (window.PopitaiCategoryDictionary) return Promise.resolve(window.PopitaiCategoryDictionary);
+  if (categoryDictionaryPromise) return categoryDictionaryPromise;
+
+  categoryDictionaryPromise = new Promise((resolve) => {
+    const existing = document.querySelector('script[src*="public-category-dictionary-v1.js"]');
+    if (existing) {
+      existing.addEventListener("load", () => resolve(window.PopitaiCategoryDictionary || null), { once: true });
+      existing.addEventListener("error", () => resolve(null), { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "public-category-dictionary-v1.js?v=20260830-stage1";
+    script.onload = () => resolve(window.PopitaiCategoryDictionary || null);
+    script.onerror = () => resolve(null);
+    document.head.appendChild(script);
+  });
+
+  return categoryDictionaryPromise;
+}
 
 function renderSuggestions(value) {
   if (!suggestionsBox) return;
@@ -277,8 +307,10 @@ function renderSuggestions(value) {
 }
 
 if (searchInput) {
-  searchInput.addEventListener("input", () => {
+  ensureCategoryDictionary();
+  searchInput.addEventListener("input", async () => {
     if (clearSearch) clearSearch.classList.toggle("visible", searchInput.value.trim().length > 0);
+    await ensureCategoryDictionary();
     renderSuggestions(searchInput.value);
   });
 }
@@ -660,21 +692,29 @@ loadAuthUser();
 const newQuestionForm = qs("#new-question-form");
 if (newQuestionForm) {
   const categoryFromUrl = new URLSearchParams(window.location.search).get("category");
-  const categoryFromSlug = Object.entries(CATEGORY_META).find(([, meta]) => meta.slug === categoryFromUrl);
-  if (categoryFromSlug && qs("#question-category")) qs("#question-category").value = categoryFromSlug[0];
+  const categoryFromDictionary = window.PopitaiCategoryDictionary?.publicCategories?.find(
+    item => item.id === categoryFromUrl
+  );
+  const questionCategoryValue = categoryFromDictionary?.values?.question || "";
+  const questionCategorySelect = qs("#question-category");
+  if (questionCategoryValue && questionCategorySelect &&
+      Array.from(questionCategorySelect.options).some(option => option.value === questionCategoryValue)) {
+    questionCategorySelect.value = questionCategoryValue;
+  }
 }
 
 function questionCard(item, compact = false) {
   const answers = Array.isArray(item.answers) ? item.answers.length : 0;
   const testBadge = item.isTest ? '<span class="test-badge">ТЕСТ</span>' : "";
   const media = cardMediaSlot(item, compact ? "compact-card-media" : "question-list-media");
+  const categoryLabel = publicCategoryLabel(item.category, "question");
   if (compact) {
     return `
       <article class="compact-card dynamic-question-card" data-question-id="${escapeHtml(item.id)}">
         ${media}
         <div class="question-card-category-row">
           ${categoryIcon(item.category, "category-symbol-small")}
-          <span class="question-category">${escapeHtml(item.category)}</span>
+          <span class="question-category">${escapeHtml(categoryLabel)}</span>
           ${testBadge}
         </div>
         <h3><a href="${questionUrl(item.id)}">${escapeHtml(item.title)}</a></h3>
@@ -688,7 +728,7 @@ function questionCard(item, compact = false) {
       <div class="question-list-content">
         <div class="question-card-category-row">
           ${categoryIcon(item.category, "category-symbol-small")}
-          <span class="question-category">${escapeHtml(item.category)}</span>
+          <span class="question-category">${escapeHtml(categoryLabel)}</span>
           ${testBadge}
         </div>
         <h2><a href="${questionUrl(item.id)}">${escapeHtml(item.title)}</a></h2>
@@ -764,7 +804,8 @@ function renderQuestionDetail() {
     return;
   }
 
-  const meta = categoryMeta(question.category);
+  const categoryInfo = window.PopitaiCategoryDictionary?.categoryForValue?.("question", question.category);
+  const categoryLabel = publicCategoryLabel(question.category, "question");
   document.title = `${question.title} | Попитай.Лом`;
   titleEl.textContent = question.title;
   qs("#question-detail-summary").textContent = question.description;
@@ -779,10 +820,10 @@ function renderQuestionDetail() {
   qs("#question-author-name").textContent = question.author || "Гост";
   qs("#question-author-avatar").textContent = (question.author || "Г").charAt(0).toUpperCase();
   qs("#question-created-at").textContent = formatDate(question.createdAt);
-  qs("#question-hero-category").innerHTML = `${categoryIcon(question.category)}<span>${escapeHtml(question.category)}</span>${question.isTest ? '<span class="test-badge">ТЕСТ</span>' : ""}`;
+  qs("#question-hero-category").innerHTML = `${categoryIcon(question.category)}<span>${escapeHtml(categoryLabel)}</span>${question.isTest ? '<span class="test-badge">ТЕСТ</span>' : ""}`;
   const categoryLink = qs("#question-category-link");
-  categoryLink.href = `${meta.slug}.html`;
-  categoryLink.textContent = question.category;
+  categoryLink.href = categoryInfo?.route || "kategorii.html";
+  categoryLink.textContent = categoryLabel;
 
   const answers = Array.isArray(question.answers) ? question.answers : [];
   const answersList = qs("#answers-list");
@@ -844,6 +885,7 @@ renderQuestionDetail();
 function businessCard(item) {
   const initials = item.name.split(/\s+/).slice(0,2).map(word => word.charAt(0)).join("").toUpperCase();
   const media = cardMediaSlot(item, "business-card-media");
+  const categoryLabel = publicCategoryLabel(item.category, "business");
   return `
     <article class="business-list-card" data-business-id="${escapeHtml(item.id)}">
       ${media || `<div class="firm-logo">${escapeHtml(initials || "Ф")}</div>`}
@@ -852,7 +894,7 @@ function businessCard(item) {
           <h2><a href="${businessUrl(item.id)}">${escapeHtml(item.name)}</a></h2>
           <span class="pending-badge ${item.promoted ? "promoted-badge" : ""}">${item.promoted ? "ПРОМОТИРАН" : (item.isTest ? "ТЕСТ" : "Чака преглед")}</span>
         </div>
-        <span class="question-category">${escapeHtml(item.category)}</span>
+        <span class="question-category">${escapeHtml(categoryLabel)}</span>
         <p>${escapeHtml(item.description)}</p>
         <div class="firm-footer"><span>Без измислена оценка</span><a href="${businessUrl(item.id)}">Виж профила</a></div>
       </div>
@@ -935,7 +977,7 @@ function renderBusinessDetail() {
   nameEl.textContent = item.name;
   qs("#business-detail-summary").textContent = item.description;
   qs("#business-detail-description").textContent = item.description;
-  qs("#business-detail-category").textContent = item.category;
+  qs("#business-detail-category").textContent = publicCategoryLabel(item.category, "business");
   qs("#business-detail-logo").textContent = initials || "Ф";
   if (window.PopitaiImages) {
     const logoMeta = Array.isArray(item.logo) ? item.logo[0] : null;
