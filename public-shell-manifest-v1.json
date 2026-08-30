@@ -1,0 +1,337 @@
+{
+  "version": 1,
+  "excluded": [
+    "404.html",
+    "admin.html"
+  ],
+  "pages": {
+    "index.html": {
+      "nav": "home",
+      "mobile": "home",
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    },
+    "info.html": {
+      "nav": "info",
+      "mobile": null,
+      "footer": "info",
+      "question": "nov-vapros.html",
+      "shell": "info",
+      "special": null
+    },
+    "banki.html": {
+      "nav": "info",
+      "mobile": null,
+      "footer": "info",
+      "question": "nov-vapros.html",
+      "shell": "info",
+      "special": null
+    },
+    "institucii.html": {
+      "nav": "info",
+      "mobile": null,
+      "footer": "info",
+      "question": "nov-vapros.html",
+      "shell": "info",
+      "special": null
+    },
+    "komunalni.html": {
+      "nav": "info",
+      "mobile": null,
+      "footer": "info",
+      "question": "nov-vapros.html",
+      "shell": "info",
+      "special": null
+    },
+    "obrazovanie-kultura.html": {
+      "nav": "info",
+      "mobile": null,
+      "footer": "info",
+      "question": "nov-vapros.html",
+      "shell": "info",
+      "special": null
+    },
+    "transport.html": {
+      "nav": "info",
+      "mobile": null,
+      "footer": "info",
+      "question": "nov-vapros.html",
+      "shell": "info",
+      "special": null
+    },
+    "zdrave.html": {
+      "nav": "info",
+      "mobile": null,
+      "footer": "info",
+      "question": "nov-vapros.html",
+      "shell": "info",
+      "special": null
+    },
+    "kategorii.html": {
+      "nav": "categories",
+      "mobile": "categories",
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    },
+    "maistori.html": {
+      "nav": "categories",
+      "mobile": "categories",
+      "footer": "standard",
+      "question": "nov-vapros.html?category=maistori",
+      "shell": "standard",
+      "special": null
+    },
+    "zdrave-i-lekari.html": {
+      "nav": "categories",
+      "mobile": "categories",
+      "footer": "health",
+      "question": "nov-vapros.html?category=zdrave",
+      "shell": "health",
+      "special": "health"
+    },
+    "avtomobili.html": {
+      "nav": "categories",
+      "mobile": "categories",
+      "footer": "standard",
+      "question": "nov-vapros.html?category=avtomobili",
+      "shell": "standard",
+      "special": null
+    },
+    "magazini.html": {
+      "nav": "categories",
+      "mobile": "categories",
+      "footer": "standard",
+      "question": "nov-vapros.html?category=magazini",
+      "shell": "standard",
+      "special": "shop"
+    },
+    "zavedenia.html": {
+      "nav": "categories",
+      "mobile": "categories",
+      "footer": "standard",
+      "question": "nov-vapros.html?category=zavedenia",
+      "shell": "standard",
+      "special": null
+    },
+    "rabota.html": {
+      "nav": "categories",
+      "mobile": "categories",
+      "footer": "standard",
+      "question": "nov-vapros.html?category=rabota",
+      "shell": "standard",
+      "special": null
+    },
+    "sabitiya.html": {
+      "nav": "categories",
+      "mobile": "categories",
+      "footer": "standard",
+      "question": "nov-vapros.html?category=sabitiya",
+      "shell": "standard",
+      "special": null
+    },
+    "firmi.html": {
+      "nav": "firms",
+      "mobile": null,
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    },
+    "firma.html": {
+      "nav": "firms",
+      "mobile": null,
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    },
+    "dobavi-firma.html": {
+      "nav": "firms",
+      "mobile": null,
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    },
+    "razshiren-profil.html": {
+      "nav": "firms",
+      "mobile": null,
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    },
+    "obyavi.html": {
+      "nav": "listings",
+      "mobile": "listings",
+      "footer": "standard",
+      "question": "nov-vapros.html?category=obyavi",
+      "shell": "standard",
+      "special": null
+    },
+    "obqva.html": {
+      "nav": "listings",
+      "mobile": "listings",
+      "footer": "standard",
+      "question": "nov-vapros.html?category=obyavi",
+      "shell": "standard",
+      "special": null
+    },
+    "dobavi-obqva.html": {
+      "nav": "listings",
+      "mobile": "listings",
+      "footer": "standard",
+      "question": "nov-vapros.html?category=obyavi",
+      "shell": "standard",
+      "special": null
+    },
+    "vaprosi.html": {
+      "nav": "questions",
+      "mobile": null,
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    },
+    "vapros.html": {
+      "nav": "questions",
+      "mobile": null,
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    },
+    "nov-vapros.html": {
+      "nav": "questions",
+      "mobile": null,
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    },
+    "statii.html": {
+      "nav": "articles",
+      "mobile": null,
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    },
+    "statia.html": {
+      "nav": "articles",
+      "mobile": null,
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    },
+    "profil.html": {
+      "nav": null,
+      "mobile": "profile",
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    },
+    "vhod.html": {
+      "nav": null,
+      "mobile": null,
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    },
+    "registracia.html": {
+      "nav": null,
+      "mobile": null,
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    },
+    "zabravena-parola.html": {
+      "nav": null,
+      "mobile": null,
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    },
+    "nova-parola.html": {
+      "nav": null,
+      "mobile": null,
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    },
+    "tarsene.html": {
+      "nav": null,
+      "mobile": null,
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    },
+    "kontakti.html": {
+      "nav": null,
+      "mobile": null,
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    },
+    "pravila.html": {
+      "nav": null,
+      "mobile": null,
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    },
+    "signal.html": {
+      "nav": null,
+      "mobile": null,
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    },
+    "poveritelnost.html": {
+      "nav": null,
+      "mobile": null,
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    },
+    "uslovia.html": {
+      "nav": null,
+      "mobile": null,
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    },
+    "biskvitki.html": {
+      "nav": null,
+      "mobile": null,
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    },
+    "za-nas.html": {
+      "nav": null,
+      "mobile": null,
+      "footer": "standard",
+      "question": "nov-vapros.html",
+      "shell": "standard",
+      "special": null
+    }
+  }
+}
