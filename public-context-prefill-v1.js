@@ -7,6 +7,7 @@
   const dictionary = window.PopitaiCategoryDictionary;
   if (!dictionary) return;
 
+  const BUSINESS_PREFILL_IDS = new Set(["maistori", "avtomobili", "rabota", "zavedenia"]);
   const optionExists = (select, value) => Boolean(select) && Array.from(select.options).some((option) => option.value === value);
 
   function applyListingPrefill() {
@@ -51,7 +52,7 @@
     if (!form || !category) return;
 
     const publicCategoryId = String(params.get("category") || "").trim();
-    if (!publicCategoryId) return;
+    if (!BUSINESS_PREFILL_IDS.has(publicCategoryId)) return;
 
     const item = dictionary.publicCategories.find((entry) => entry.id === publicCategoryId);
     const businessValue = String(item?.values?.business || "").trim();
