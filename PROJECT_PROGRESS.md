@@ -14,7 +14,7 @@
 7. `ADMIN_PANEL_V2_APPROVED_SPEC.md`, когато се работи по Admin/Moderator панела
 8. конкретните модулни правила, ако има такива.
 
-При конфликт между документи не се избира правило по предположение — конфликтът се проверява и се отстранява преди промяна.
+При конфликт между документи не се избира правило по предположение — конфликтът се проверява и се отстранява преди промяна. По-късен checkpoint няма право мълчаливо да стеснява APPROVED спецификацията.
 
 ## 2. ЗАЩИТЕНО ЯДРО
 
@@ -43,18 +43,36 @@ LOCKED без отделно изрично одобрение:
 
 Публично се използват `Услуги` и `Събития`. Legacy стойностите `Работа и услуги` / `Събития и град` се пазят само като вътрешни compatibility стойности там, където още са нужни.
 
+### Консолидация на „Услуги“
+- `Майстори и ремонти`, `Автомобили` и `Услуги` са тематични входове за откриване и contextual действия.
+- `Обяви → Услуги` е единственият публикационен тип за еднократно предлагане/търсене на услуга.
+- `Фирми → Услуги` е постоянен профил на доставчик, не конкурентен marketplace hub.
+- `Инфо Лом → Комунални услуги` остава отделен проверен справочник.
+- здравната услуга остава специален health flow без medical marketplace.
+
 ### Каноничен речник / Обяви → Услуги
 - Stage 1 речникът е authoritative source за public label/routing/form mappings.
 - `Обяви → Услуги` използва контролиран dependent subcategory select с одобрените 22 service стойности.
+- Каноничната ремонтна стойност остава `Боядисване`; не се въвежда stored alias `Боядисване и шпакловка`.
 - Старите/legacy записи не се мигрират на сляпо.
 - Backend taxonomy integrity amendment е приложен без промяна на RLS, ownership, квоти, media или moderation semantics.
+
+### Contextual add — RECOVERED
+- Майстори: всичките 8 repair subcategories имат discovery + `Предложи услуга` + `Търся изпълнител`; listing form се prefill-ва с `Услуги + exact subcategory`; firm flow prefill-ва `Майстори и ремонти`.
+- Автомобили: 6 auto-service subcategories имат contextual offer/seek; автомобилна публикация prefill-ва `Автомобили и МПС`; фирма prefill-ва `Автомобили`.
+- Услуги: 8 general-service subcategories имат contextual offer/seek; firm flow използва public `Услуги` / internal `Работа и услуги`.
+- `Предложи услуга` НЕ prefill-ва listing type; потребителят избира от съществуващите разрешени типове.
+- `Търся изпълнител` / `Търся услуга` може да prefill-не съществуващото `Търси`.
+- Заведения използват съществуващата фирмена форма с `Заведения` prefill.
+- Shops делегира към съществуващия специализиран shop add owner; Health остава при health owner; Events няма fake `Добави събитие` без доказан public submission owner.
+- `edit=<id>` има приоритет и create-prefill никога не презаписва loaded listing/business data.
 
 ### Търсене
 - `public-search-v1.js` е authoritative owner за общото публично търсене.
 - Публичните remote източници са approved фирми, approved въпроси и approved + active обяви с минимални публични полета.
 - Няма authoritative `localStorage` fallback.
 - Защитената construction/„Иванов Ремонти“ логика остава в `script.js` и не се дублира.
-- Production regression след Stage 4: `шпакловка` → точно `Иванов Ремонти Лом`; `работа` → без false-positive Ivanov; `автомивка` → автомобилен контекст без construction/Ivanov injection.
+- Production regression след contextual recovery: `шпакловка` → `Иванов Ремонти Лом`; `работа` → без false-positive Ivanov; `автомивка` → автомобилен контекст без construction/Ivanov injection.
 
 ### Тематични обяви
 - `category-listings-v1.js` е read-only listings owner за `Майстори и ремонти`, `Автомобили` и `Услуги`.
@@ -65,16 +83,16 @@ LOCKED без отделно изрично одобрение:
 - Активният публичен каталог е `shops-catalog-v3.js` + Supabase.
 - Специализираният shop add flow остава единственият owner на магазинните предложения.
 - Default категорията е `food` / `Хранителни`; валиден последно избран tab се възстановява от `localStorage`.
-- Stage 4 глобалният `Добави` не създава втори shop flow, а делегира към съществуващия owner.
+- Contextual `Добави магазин` делегира към съществуващия owner и не създава втори shop flow.
 
 ### Здраве
 - Съществуващият health dataset/renderer и `Добави лекар или здравна услуга` flow остават собственици.
-- Stage 4 не създава втори лекарски каталог или medical marketplace.
+- Не се създава втори лекарски каталог или medical marketplace.
 
 ### Събития
 - Публичният renderer показва одобрени предстоящи събития.
 - Admin moderation flow остава непроменен.
-- Stage 4 не показва фалшиво `Добави събитие`, когато няма достъпен доказан публичен flow.
+- Не се показва `Добави събитие`, когато няма доказан публичен submission flow.
 
 ### Въпроси
 - `questions-public-v1.js` е authoritative owner на общия публичен списък.
@@ -84,7 +102,7 @@ LOCKED без отделно изрично одобрение:
 ### Инфо Лом / Институции
 - Всеки public root има един финален renderer owner.
 - За Институции публичният owner е `info-lom-institutions-owner-v1.js`; legacy слоевете работят само в staging root.
-- Stage 4 shell не променя Info Lom data/content ownership.
+- Public shell/contextual recovery не променя Info Lom data/content ownership.
 
 ## 4. АКТУАЛНИ ЛИМИТИ ЗА ОБЯВИ
 
@@ -116,62 +134,59 @@ Admin/Moderator Panel v2 не се започва отново без конкр
 1. **Етап 1 — ЗАВЪРШЕН / PRODUCTION** — каноничен речник, structured `Обяви → Услуги` subcategory, legacy-safe edit поведение и narrow backend integrity validation.
 2. **Етап 2 — ЗАВЪРШЕН / PRODUCTION QA PASS** — authoritative Supabase-backed public search с grouped results, loading/error/empty и запазен protected construction/Ivanov priority.
 3. **Етап 3 — ЗАВЪРШЕН / PRODUCTION RUNTIME PASS** — read-only thematic listings за `Майстори`, `Автомобили`, `Услуги`; PR #93, merge `956eaae7fca5175f13ee805610c5d698eaa82e53`.
-4. **Етап 4 — ЗАВЪРШЕН / PRODUCTION RUNTIME PASS** — canonical static public shell, explicit 41-page manifest, deterministic sync/check, global `+ Добави`, five-item mobile nav, hamburger extras и page-specific CTA hierarchy. Final PR #96, merge `2b1015c75276eec5f88090c9f9854b855a3f04d5`. Production checkpoint: `PUBLIC_IA_STAGE4_PRODUCTION_CHECKPOINT.md`, PR #97 / merge `77fb99139292d58727c476918bae21af7f225141`.
-5. **Етап 5 — В ПРОЦЕС** — финален desktop/mobile, anonymous/authenticated, forms, focus/modals, loading/empty/error/not-found, runtime/cache/load-order и protected-core regression. Desktop, signed-out и post-Stage4 authenticated render/role correctness са PASS; остава реалният mobile/touch + interactive console pass. Текущите доказателства са записани в `PUBLIC_IA_STAGE5_QA_CHECKPOINT.md`.
+4. **Етап 4 — RECOVERED / PRODUCTION CONTEXTUAL-ADD PASS** — canonical shell/navigation + задължителната contextual-add връзка `theme/subcategory → existing form → safe prefill`. Recovery PR #100, merge `b0594a42c937280cdc8ca1585819230a8db27b33`. Production evidence: `PUBLIC_IA_STAGE4_CONTEXTUAL_RECOVERY_PRODUCTION_CHECKPOINT.md`.
+5. **Етап 5 — RESTART REQUIRED** — старият Stage 5 QA е изпълнен върху функционално непълен Stage 4 и не е финален acceptance. Полезните му проверки остават reference evidence, но Stage 5 се изпълнява отново върху recovered production baseline.
 
-## 7. STAGE 4 — ФИНАЛЕН СТАТУС
+## 7. STAGE 4 — ФИНАЛЕН RECOVERY СТАТУС
 
-Stage 4 е merge-нат и production deploy-нат.
+Статус: **ЗАВЪРШЕН СЛЕД RECOVERY / PRODUCTION CONTEXTUAL-ADD PASS**.
 
-Доказано преди/след merge:
-- 41/41 public pages имат точно един canonical header/add/footer/mobile shell;
-- old script sources/order, form/field IDs и Stage 3 data roots са запазени;
-- няма duplicate IDs;
-- `admin.html` и `404.html` са извън generator-а;
-- оригиналният UTF-8 BOM contract на `index.html` и `profil.html` е запазен;
-- generator sync е idempotent;
-- GitHub Pages build/deploy и public shell sync са PASS;
-- Homepage, Categories, Info, Health, Shops, Events и Stage 3 hubs са production runtime PASS;
-- protected search corpus е PASS.
+Shell/navigation частта от стария Stage 4 остава валидна, но старият checkpoint сам по себе си не е достатъчен за canonical Stage 4 acceptance.
 
-Stage 4 не изисква rollback.
+След recovery е доказано:
+- 41-page canonical shell остава синхронизиран и без protected-page takeover;
+- всичките 22 service subcategories имат deterministic discovery + contextual create/seek targets;
+- `Майстори → ВиК → Предложи услуга` runtime дава `Услуги / ВиК / тип непопълнен`;
+- `Майстори → ВиК → Търся изпълнител` runtime дава `Услуги / ВиК / Търси`;
+- representative auto/general service runtime prefills са точни;
+- vehicle listing prefill е `Автомобили и МПС`;
+- фирмените prefills за Майстори/Автомобили/Услуги/Заведения са точни;
+- невалидни URL params се игнорират;
+- `edit` има приоритет: реалната `TELEVIZOR` обява запази `Електроника / Продава` въпреки конфликтни create-prefill params;
+- generic firm prefill не заобикаля Health;
+- Shops и Health специализираните owners са запазени;
+- Events няма fake submission action;
+- protected `шпакловка / работа / автомивка` regression е PASS;
+- не са създавани fake QA записи и не е изпращана production форма;
+- contextual recovery workflow и GitHub Pages build/deploy са SUCCESS за merge commit `b0594a42c937280cdc8ca1585819230a8db27b33`.
 
-## 8. STAGE 5 — ТЕКУЩ QA СТАТУС
+Owner решенията са записани в `PUBLIC_IA_STAGE4_CONTEXTUAL_RECOVERY_OWNER_DECISIONS.md`.
 
-Статус: **В ПРОЦЕС — няма доказан нов дефект; authenticated render/role QA вече е PASS, но финалният mobile interactive PASS остава.**
+## 8. STAGE 5 — ТЕКУЩ СТАТУС
 
-### Проверено след Stage 4 — PASS
+Статус: **RESTART REQUIRED ОТ RECOVERED PRODUCTION BASELINE**.
 
-- desktop homepage visual smoke — header/hero/search/CTA без overflow или видимо layout разместване;
-- signed-out `nov-vapros.html` — labels, category, description, rules checkbox, `Изпрати за преглед`;
-- signed-out `dobavi-obqva.html` — category/type/description/price/phone/до 6 снимки/rules/submit;
-- signed-out `dobavi-firma.html` — name/category/phone/address/description/images/submit;
-- `signal.html` и `vhod.html` controls/render;
-- signed-out `profil.html` — no-session states без password exposure;
-- not-found/detail states за listing/question/business;
-- production 404;
-- public list/empty states за Въпроси, Обяви, Статии;
-- zero-search state и recovery actions;
-- Admin anonymous gate остава `Нямаш достъп` и Admin е извън public shell;
-- menu/add-sheet source ownership и deferred load order;
-- responsive CSS contract: 5-column bottom nav, body bottom padding, safe-area, mobile add button geometry, sheet `dvh` constraints, hamburger overlay;
-- protected search regression след Stage 4;
-- real post-Stage4 authenticated `profil.html` — `Профил`, `Изход`, password section, Admin link и реалните profile content roots се рендерират;
-- authenticated `nov-vapros.html` — Admin вижда `Публикувай въпроса`;
-- authenticated `dobavi-obqva.html` — Admin-only controls се рендерират и submit е `Публикувай обявата`;
-- authenticated `dobavi-firma.html` — submit е `Публикувай фирмата`;
-- authenticated `admin.html` — реалният `Административен панел`, review counters и management groups се рендерират, без public-shell takeover.
+`PUBLIC_IA_STAGE5_QA_CHECKPOINT.md` съдържа полезни pre-recovery evidence за desktop, signed-out/authenticated render/role, forms, error states и protected core, но не може да бъде използван като финален Stage 5 PASS след функционалната Stage 4 recovery промяна.
 
-Не са създавани fake QA записи и не са изпращани production форми.
+### Вече доказано след recovery
+- contextual service/vehicle/business form prefills работят в production;
+- invalid params и edit-priority protections работят;
+- Shops/Health/Events ownership boundaries са запазени;
+- protected search corpus е PASS;
+- няма DB/RLS/schema/quota/status/moderation/Admin/Moderator промяна.
 
-### Остава за финален Stage 5 PASS
+### Задължително за новия Stage 5
+1. desktop + mobile върху recovered UI;
+2. anonymous + authenticated;
+3. real touch/click/focus/Escape/Tab на global и contextual actions;
+4. representative contextual flow от самата категория до формата и обратно;
+5. forms, loading/empty/error/not-found и detail states;
+6. responsive/horizontal-scroll/overlay/safe-area checks;
+7. runtime/console/cache/load-order;
+8. protected-core regression;
+9. без fake production records.
 
-1. **Реален post-Stage4 mobile viewport/touch QA** — bottom navigation, center `Добави`, hamburger, add sheet, safe-area/scroll, representative question/article/detail states, Stage 3 mobile expand и липса на horizontal scroll/overlay collision.
-2. **Interactive focus/logout + console check** в оставащия device pass — реален click/Escape/Tab, един logout/login-state transition и browser console/runtime наблюдение.
-
-Тези проверки не се маркират като PASS само от source analysis. Наличният Opera connector може да чете/снима/навигира, но не може да resize-ва mobile viewport, да press-ва controls или да показва console logs.
-
-Authenticated render/access/role correctness след Stage 4 вече е доказан. Самият logout click остава част от финалния интерактивен device pass.
+Stage 5 не се обявява за завършен само по source analysis или по стария pre-recovery checkpoint.
 
 ## 9. СРАВНИТЕЛЕН КОНТРОЛ ЗА ПРОПУСКИ
 
@@ -182,7 +197,8 @@ Authenticated render/access/role correctness след Stage 4 вече е док
 - loading/empty/error/not-found states;
 - mobile/ARIA/focus поведение;
 - moderation/admin routing;
-- render ownership и липса на втори renderer.
+- render ownership и липса на втори renderer;
+- contextual action → exact target/prefill → display destination.
 
 Разлика е дефект само ако противоречи на реалната потребителска задача или каноничните правила.
 
@@ -192,4 +208,5 @@ Authenticated render/access/role correctness след Stage 4 вече е док
 - Независима следваща задача → продължава се без излишно спиране.
 - Защитено, рисково или ново бизнес решение → спира се преди промяната и се иска решение.
 - След одобрена промяна се тества преди merge и отново в production.
-- Stage 5 не се обявява за завършен, докато оставащият реален mobile/touch + interactive console pass не е доказан.
+- APPROVED спецификацията има приоритет пред по-късен checkpoint, който я стеснява.
+- Stage 5 започва от recovered production baseline и не се маркира PASS без реалните required device/session/runtime проверки.
