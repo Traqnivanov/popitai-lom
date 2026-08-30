@@ -39,12 +39,7 @@ Marketplace V3 е адаптиран върху тези owners и не ги з�
 Работен branch: `marketplace-v3-unified-ia`  
 PR: **#105 — Unify public marketplace as Обяви и услуги**.
 
-Последният code/shell QA head е `bc8fe600e412a479de7b5e5853aeda948cecabe9`. На него са SUCCESS едновременно:
-- `Marketplace V3 contract`;
-- `Public shell sync`;
-- `Public contextual IA recovery`.
-
-След този gate има само checkpoint документационна актуализация; implementation файловете от зеления QA head не са променяни.
+Последният implementation/shell QA head е `bc8fe600e412a479de7b5e5853aeda948cecabe9`. На него са SUCCESS едновременно `Marketplace V3 contract`, `Public shell sync` и `Public contextual IA recovery`. След този gate са правени само checkpoint документационни актуализации; implementation файловете от зеления QA head не са променяни.
 
 Canonical shell sync отчита `0 page(s) changed` и `41 pages synchronized`; exact-header guard потвърждава липса на competing `Категории`, unresolved placeholders и duplicate desktop `Вход`.
 
@@ -52,17 +47,11 @@ Canonical shell sync отчита `0 page(s) changed` и `41 pages synchronized`
 
 ### Канонична структура
 
-Един top-level marketplace:
+Един top-level marketplace: `Обяви и услуги`.
 
-`Обяви и услуги`
+Desktop: `Начало | Обяви и услуги | Фирми | Инфо Лом | Статии | Още ▼ | Профил | + Добави`.
 
-Desktop:
-
-`Начало | Обяви и услуги | Фирми | Инфо Лом | Статии | Още ▼ | Профил | + Добави`
-
-Mobile:
-
-`Начало | Обяви | + | Инфо | Профил`
+Mobile: `Начало | Обяви | + | Инфо | Профил`.
 
 `kategorii.html` е backward-compatible redirect, не втори marketplace hub.
 
@@ -88,13 +77,9 @@ Mobile:
 
 ### Add flow
 
-Public flow:
+Public flow: `Предлагам / Търся → главна група → подкатегория → protected details form`.
 
-`Предлагам / Търся → главна група → подкатегория → protected details form`
-
-Compatibility mapping използва съществуващите stored categories/types; няма mass migration и няма втори write owner.
-
-`edit=<id>` остава с приоритет и create prefill не презаписва loaded listing data.
+Compatibility mapping използва съществуващите stored categories/types; няма mass migration и няма втори write owner. `edit=<id>` остава с приоритет и create prefill не презаписва loaded listing data.
 
 ## 4. MARKETPLACE V3 — IMPLEMENTATION OWNERS
 
@@ -104,34 +89,15 @@ Compatibility mapping използва съществуващите stored categ
 - `public-shell-template-v1.json` + `.github/scripts/sync_public_shell.py` — canonical static shell за 41 public pages.
 - `category-listings-v1.js` — read-only thematic results; approved/active + protected priority ordering.
 - `supabase-listings.js` — protected listings owner; не е заменян.
-- `public-category-dictionary-v1.js` — stored taxonomy/compatibility source; не се използва като причина за старата public IA.
+- `public-category-dictionary-v1.js` — stored taxonomy/compatibility source.
 
 ## 5. QA / REGRESSION GATES
 
-`Marketplace V3 contract` CI пази:
-- един marketplace entry;
-- четирите public groups;
-- canonical taxonomy/mapping;
-- exact mobile labels;
-- липса на presentation DB writes;
-- approved/active constraints;
-- protected Ivanov/Admin + boost priority;
-- скриване на old competing contextual CTA;
-- липса на schema/policy промени.
+`Marketplace V3 contract` CI пази един marketplace entry, четирите public groups, canonical taxonomy/mapping, exact mobile labels, липса на presentation DB writes, approved/active constraints, protected Ivanov/Admin + boost priority, скриване на old competing contextual CTA и липса на schema/policy промени.
 
-Canonical shell generator валидира:
-- точно 41 public pages;
-- `404.html` и `admin.html` остават excluded;
-- един `Обяви и услуги` desktop entry;
-- няма competing top-level `Категории`;
-- няма duplicate desktop `Вход`;
-- няма unresolved template placeholders;
-- exact five-entry mobile navigation;
-- deterministic second sync.
+Canonical shell generator валидира точно 41 public pages, `404.html`/`admin.html` exclusions, един `Обяви и услуги` desktop entry, липса на top-level `Категории`, липса на duplicate desktop `Вход`, липса на unresolved placeholders, exact five-entry mobile navigation и deterministic sync.
 
-Contextual recovery и shell auto-sync workflow-ите са сериализирани чрез общ concurrency group, за да не се състезават за branch ref.
-
-Последният contextual sync е SUCCESS и е потвърдил, че contextual IA е вече synchronized.
+Contextual recovery и shell auto-sync workflow-ите са сериализирани чрез общ concurrency group. Последният contextual sync е SUCCESS и е потвърдил, че contextual IA е synchronized.
 
 ## 6. АКТУАЛНИ ЛИМИТИ ЗА ОБЯВИ — НЕПРОМЕНЕНИ
 
@@ -147,9 +113,7 @@ Contextual recovery и shell auto-sync workflow-ите са сериализир
 
 ## 7. ADMIN / MODERATOR PANEL V2
 
-Статус: **ЗАВЪРШЕН / REAL INTERACTION QA PASS**.
-
-Не се започва отново без конкретен доказан проблем. Moderator self-moderation protection, Admin-only permanent delete и Admin-only role/access management остават backend enforced.
+Статус: **ЗАВЪРШЕН / REAL INTERACTION QA PASS**. Не се започва отново без конкретен доказан проблем. Moderator self-moderation protection, Admin-only permanent delete и Admin-only role/access management остават backend enforced.
 
 ## 8. СПЕЦИАЛИЗИРАНИ OWNERS — НЕПРОМЕНЕНИ
 
@@ -161,16 +125,10 @@ Contextual recovery и shell auto-sync workflow-ите са сериализир
 
 ## 9. ОСТАВАЩИ СТЪПКИ ПРЕДИ `PRODUCTION PASS`
 
-1. маркиране на PR #105 ready и merge;
+1. PR #105 ready + merge;
 2. GitHub Pages deployment на merge commit;
-3. production runtime QA с cache-busting на:
-   - `obyavi.html`;
-   - `maistori.html`;
-   - `avtomobili.html`;
-   - `rabota.html`;
-   - `dobavi-obqva.html`;
-   - `kategorii.html` compatibility redirect;
-4. проверка на desktop/mobile navigation, search, filters, one-CTA deep views, add-flow mapping, loading/empty/error states и липса на old competing UI;
+3. production runtime QA на `obyavi.html`, `maistori.html`, `avtomobili.html`, `rabota.html`, `dobavi-obqva.html` и `kategorii.html` redirect;
+4. desktop/mobile navigation, search, filters, one-CTA deep views, add-flow mapping, loading/empty/error states и липса на old competing UI;
 5. protected regression: auth/edit, listings, firms, quotas/moderation boundaries и Ivanov priority;
 6. без fake production records и без изпращане на тестова production форма.
 
@@ -178,8 +136,4 @@ Contextual recovery и shell auto-sync workflow-ите са сериализир
 
 ## 10. РАБОТЕН РЕЖИМ
 
-- безопасно и вече решено → изпълнява се без междинно `ОК`;
-- следваща независима QA/implementation стъпка → продължава се автономно;
-- protected/risky/new business decision → спира се преди рискова промяна;
-- след промяна → CI/QA преди merge и production QA след merge;
-- не се казва „готово“, ако промяната не е live и проверена.
+Безопасното и вече решеното се изпълнява автономно. При protected/risky/new business decision се спира преди рискова промяна. След промяна има CI/QA преди merge и production QA след merge. Не се казва „готово“, ако промяната не е live и проверена.
