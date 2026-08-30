@@ -34,19 +34,9 @@ Marketplace V3 не заменя и не променя:
 Branch: `marketplace-v3-unified-ia`  
 PR: **#105 — Unify public marketplace as Обяви и услуги**.
 
-Последният implementation/shell QA head е `bc8fe600e412a479de7b5e5853aeda948cecabe9`. На него са SUCCESS едновременно:
-- `Marketplace V3 contract`;
-- `Public shell sync`;
-- `Public contextual IA recovery`.
+Последният implementation/shell QA head е `bc8fe600e412a479de7b5e5853aeda948cecabe9`. На него са SUCCESS едновременно `Marketplace V3 contract`, `Public shell sync` и `Public contextual IA recovery`. След този QA gate са правени само checkpoint документационни актуализации; implementation файловете от зеления head не са променяни.
 
-След този QA gate са правени само checkpoint документационни актуализации; implementation файловете от зеления head не са променяни.
-
-Canonical shell е synchronized за 41 public pages и exact-header guard пази:
-- един desktop вход `Обяви и услуги`;
-- без top-level `Категории`;
-- без duplicate desktop `Вход`;
-- без unresolved placeholders;
-- mobile точно `Начало | Обяви | + | Инфо | Профил`.
+Canonical shell е synchronized за 41 public pages и exact-header guard пази един `Обяви и услуги` desktop entry, без top-level `Категории`, без duplicate desktop `Вход`, без unresolved placeholders и mobile точно `Начало | Обяви | + | Инфо | Профил`.
 
 Desktop target: `Начало | Обяви и услуги | Фирми | Инфо Лом | Статии | Още ▼ | Профил | + Добави`.
 
