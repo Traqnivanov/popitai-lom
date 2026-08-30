@@ -9,8 +9,13 @@
   <link rel="stylesheet" href="style.css?v=20260805-0736">
   <link rel="icon" href="assets/favicon-96.png" type="image/png">
   <style>
-    .search-empty-actions{display:none;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .search-empty-actions{display:none;gap:10px;flex-wrap:wrap;margin-top:14px;align-items:flex-start}
     #search-results:has(> .empty-card) + .search-empty-actions{display:flex}
+    .search-add-chooser{position:relative}
+    .search-add-chooser > summary{cursor:pointer;list-style:none}
+    .search-add-chooser > summary::-webkit-details-marker{display:none}
+    .search-add-chooser-menu{display:grid;gap:6px;margin-top:8px;padding:10px;border:1px solid #dfe6ef;border-radius:12px;background:#fff;box-shadow:0 8px 22px rgba(7,29,61,.08)}
+    .search-add-chooser-menu a{white-space:nowrap}
   </style>
 </head>
 <body class="">
@@ -62,6 +67,13 @@
     <div class="stack-list" id="search-results"></div>
     <div class="search-empty-actions" aria-label="Следващи действия при липса на резултати">
       <a class="primary-link-button" href="kategorii.html">Разгледай категориите</a>
+      <details class="search-add-chooser">
+        <summary class="secondary-link-button">+ Добави</summary>
+        <div class="search-add-chooser-menu" aria-label="Избери какво да добавиш">
+          <a class="secondary-link-button" href="dobavi-firma.html">Добави фирма</a>
+          <a class="secondary-link-button" href="dobavi-obqva.html">Добави обява</a>
+        </div>
+      </details>
       <a class="secondary-link-button" href="nov-vapros.html">Задай въпрос</a>
     </div>
   </div>
