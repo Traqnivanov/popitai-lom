@@ -1,0 +1,58 @@
+name: Post-marketplace title recovery
+
+on:
+  push:
+    branches:
+      - post-marketplace-regression-1
+
+permissions:
+  contents: write
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: post-marketplace-regression-1
+          fetch-depth: 1
+
+      - name: Replace legacy Categories page titles
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          changed = []
+          pattern = re.compile(r'(<title>[^<]*?)\s*\|\s*Категории\s*\|\s*Попитай\.Лом(</title>)', re.I)
+          for path in Path('.').glob('*.html'):
+              text = path.read_text(encoding='utf-8-sig')
+              updated = pattern.sub(r'\1 | Обяви и услуги | Попитай.Лом\2', text)
+              if updated != text:
+                  bom = path.read_bytes().startswith(b'\xef\xbb\xbf')
+                  path.write_bytes((b'\xef\xbb\xbf' if bom else b'') + updated.encode('utf-8'))
+                  changed.append(path.name)
+          print('Updated:', ', '.join(changed) if changed else 'none')
+          PY
+
+      - name: Verify no legacy Categories title remains
+        run: |
+          if grep -R --include='*.html' -nE '<title>[^<]*\|[[:space:]]*Категории[[:space:]]*\|[[:space:]]*Попитай\.Лом</title>' .; then
+            echo 'Legacy Categories title remains.' >&2
+            exit 1
+          fi
+
+      - name: Verify canonical public shell
+        run: python .github/scripts/sync_public_shell.py --check
+
+      - name: Commit recovery when needed
+        run: |
+          if git diff --quiet; then
+            echo 'Titles already canonical.'
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- '*.html'
+          git commit -m "Replace legacy Categories page titles"
+          git push origin "HEAD:post-marketplace-regression-1"
