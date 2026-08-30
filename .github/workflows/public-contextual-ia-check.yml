@@ -16,6 +16,7 @@ on:
       - "public-context-prefill-v1.js"
       - "public-context-actions-v1.css"
       - "public-context-special-actions-v1.js"
+      - "category-hub-v1.js"
       - ".github/scripts/apply_contextual_recovery.py"
       - ".github/scripts/sync_public_shell.py"
       - ".github/workflows/public-contextual-ia-check.yml"
@@ -34,6 +35,7 @@ on:
       - "public-context-prefill-v1.js"
       - "public-context-actions-v1.css"
       - "public-context-special-actions-v1.js"
+      - "category-hub-v1.js"
       - ".github/scripts/apply_contextual_recovery.py"
       - ".github/scripts/sync_public_shell.py"
       - ".github/workflows/public-contextual-ia-check.yml"
@@ -70,6 +72,12 @@ jobs:
       - run: python .github/scripts/sync_public_shell.py --check
       - run: node --check public-context-prefill-v1.js
       - run: node --check public-context-special-actions-v1.js
+      - run: node --check category-hub-v1.js
+      - name: Guard category-aware empty question action
+        shell: bash
+        run: |
+          grep -F 'categoryForValue?.("question", categoryValue)' category-hub-v1.js
+          grep -F 'nov-vapros.html?category=${encodeURIComponent(info.id)}' category-hub-v1.js
       - name: Commit synchronized contextual IA
         shell: bash
         run: |
@@ -95,3 +103,9 @@ jobs:
       - run: python .github/scripts/sync_public_shell.py --check
       - run: node --check public-context-prefill-v1.js
       - run: node --check public-context-special-actions-v1.js
+      - run: node --check category-hub-v1.js
+      - name: Guard category-aware empty question action
+        shell: bash
+        run: |
+          grep -F 'categoryForValue?.("question", categoryValue)' category-hub-v1.js
+          grep -F 'nov-vapros.html?category=${encodeURIComponent(info.id)}' category-hub-v1.js
