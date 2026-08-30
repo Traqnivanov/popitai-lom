@@ -26,6 +26,7 @@
 .marketplace-v3 .section-kicker { letter-spacing: .07em; }
 .marketplace-v3 .page-hero h1 { color: var(--marketplace-ink); }
 .marketplace-v3 .page-hero p { max-width: 760px; color: var(--marketplace-muted); }
+.marketplace-search > .sr-only { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
 
 .marketplace-search { display: grid; grid-template-columns: minmax(240px, 1fr) minmax(210px, 290px) auto; gap: 10px; max-width: 900px; margin-top: 24px; padding: 10px; border: 1px solid #cbd8e8; border-radius: 16px; background: #fff; box-shadow: 0 10px 30px rgba(11, 95, 215, .08); }
 .marketplace-search input,
