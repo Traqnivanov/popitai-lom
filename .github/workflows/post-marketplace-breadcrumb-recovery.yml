@@ -49,5 +49,13 @@ jobs:
           fi
           echo 'Breadcrumb guard PASS.'
 
+      - name: Guard legacy Categories titles
+        run: |
+          if grep -R --include='*.html' -nE '<title>[^<]*\|[[:space:]]*Категории[[:space:]]*\|[[:space:]]*Попитай\.Лом</title>' .; then
+            echo 'Legacy Categories page title remains.' >&2
+            exit 1
+          fi
+          echo 'Title guard PASS.'
+
       - name: Verify canonical public shell
         run: python .github/scripts/sync_public_shell.py --check
