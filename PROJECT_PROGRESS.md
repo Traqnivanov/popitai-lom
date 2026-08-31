@@ -23,8 +23,6 @@
 
 Marketplace V3 остава current approved production model.
 
-Canonical production navigation:
-
 Desktop:
 `Начало | Обяви и услуги | Фирми | Инфо Лом | Статии | Още ▼ | Профил | + Добави`
 
@@ -40,18 +38,18 @@ V6 planning до този checkpoint **НЕ е променял production UI, s
 ## 3. ЗАЩИТЕНО ЯДРО — НЕПРОМЕНЕНО
 
 V6 не bypass-ва:
-- Firms owner;
-- Listings write/edit/media owner;
-- Masters/Construction protected logic;
-- Shops specialized owner;
-- Health/Info specialized owner;
-- Events specialized owner;
+- Firms;
+- Listings;
+- Masters/Construction;
+- Shops;
+- Health/Info;
+- Events;
 - Admin/Moderator boundaries;
-- quotas/status/approval/direct-publish rules;
+- quotas/status/approval/direct-publish;
 - protected Admin/Ivanov/boost priority;
-- RLS/schema/security rules.
+- RLS/schema/security.
 
-Moderator own-business edit mismatch, намерен в A2, остава отделен protected defect candidate и не се поправя странично в V6-B.
+Moderator own-business edit mismatch от A2 остава отделен protected defect candidate и не се поправя странично във V6-B.
 
 ---
 
@@ -64,10 +62,11 @@ Completed artifacts:
 - `PUBLIC_PRODUCT_V6_CURRENT_TARGET_OWNER_MAP.md` — A1;
 - `PUBLIC_PRODUCT_V6_A2_EVIDENCE_BASELINE.md` — A2;
 - `PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md` — B1;
-- `PUBLIC_PRODUCT_V6_B1_HEALTH_PRESENTATION_PARITY_CLARIFICATION.md` — locked Health presentation/Facebook clarification;
+- `PUBLIC_PRODUCT_V6_B1_HEALTH_PRESENTATION_PARITY_CLARIFICATION.md` — locked Health clarification;
 - `PUBLIC_PRODUCT_V6_B2_SEARCH_INTENT_RESULT_CONTRACT.md` — B2;
 - `PUBLIC_PRODUCT_V6_B3_INFO_SOURCE_FRESHNESS_SEO_SEARCH_CONTRACT.md` — B3;
 - `PUBLIC_PRODUCT_V6_B4_ARTICLE_GUIDE_CONTENT_ARCHITECTURE_CONTRACT.md` — B4;
+- `PUBLIC_PRODUCT_V6_B5_QA_CANONICAL_DUPLICATE_ALIAS_MODERATION_CONTRACT.md` — B5;
 - `PUBLIC_PRODUCT_V6_MASTER_CONTROL.md` — canonical roadmap/handoff.
 
 ---
@@ -84,139 +83,123 @@ Completed artifacts:
 **DONE**
 
 Key evidence:
-- current `tarsene.html` uses legacy `script.js` owner;
-- current Info DB audit had 152 published entries, all with `confirmed_at` at audit time;
-- Info source-of-truth was mixed: Health mostly DB-driven; Banks/Education/Transport hardcoded mutable facts; Utilities hybrid; Institutions layered;
-- current article `Как да избереш майстор...` exists but is `ЗА ПРЕРАБОТКА`;
-- `Как се пенсионира човек` is `РАЗРАБОТВАНО` with НОИ/Info backbone;
+- current search page uses legacy `script.js` owner;
+- current Info DB audit had 152 published entries at audit time;
+- Info source-of-truth was mixed across sections;
+- current article exists but is not V6-ready;
+- dynamic Question/Listing/Firm initial SEO metadata is generic;
+- current question share action is incomplete in audited detail owner;
+- Q&A Moderator self-moderation is correctly backend-restricted to foreign content;
 - no reliable Popitai first-party analytics baseline was proven;
-- dynamic detail SEO/share is incomplete;
 - no current PWA/share-target implementation was proven.
 
 ### `V6-B1 — FINAL IA / TAXONOMY / OWNER CONTRACT`
 **DONE**
 
-Locked:
-- stable 16-category taxonomy;
-- shortcuts vs taxonomy;
-- `Открий в Лом`;
-- owner-aware Find/Add/Ask;
-- Jobs vs Services;
-- specialized Health/Shops/Events boundaries;
-- protected Construction logic/URLs/ranking preserved.
+Locked stable 16-category taxonomy, shortcuts, `Открий в Лом`, owner-aware Find/Add/Ask, Jobs vs Services, specialized owner boundaries and protected Construction semantics.
 
 #### Health clarification — LOCKED
 
 `Здраве и лекари`:
-- е една от общите V6 категории;
-- трябва визуално/navigation/interaction/share/Facebook да използва същия общ V6 category system;
-- current Health structure е input/coverage, **не frozen UI**;
-- може да се прегрупира и визуално преработи;
-- verified data/moderation/reliability owner остава specialized Health/Info;
-- Facebook/share layer не става owner на health facts.
+- is part of the same common V6 category/mobile/search/share/Facebook system;
+- current Health UI/grouping is input, not frozen target;
+- may be visually regrouped/redesigned;
+- verified Health/Info owner/moderation/reliability/freshness remain specialized;
+- Facebook/share does not become a second health fact owner.
 
-### `V6-B2 — SEARCH V6 / RESULT COMPOSITION / INTENT ROUTING CONTRACT`
+### `V6-B2 — SEARCH V6 CONTRACT`
 **DONE**
 
-Locked:
-- one Search owner/render owner;
-- lightweight BG normalization/synonyms;
-- exact result families: route, verified_info, business, listing, shop, event, question, article;
-- bounded two-phase owner query planner;
-- deterministic intent composition;
-- verified Info vs community separation;
-- protected Admin/Ivanov/boost-safe boundary;
-- contextual no-result → `Попитай Лом` only after complete fallback;
-- debounce/cancellation/cache/pagination/partial-failure states;
-- internal search `noindex,follow`;
-- no schema/RLS/production implementation.
+One Search owner, bounded intent-aware queries, exact result families, verified Info vs community separation, protected ranking boundary, contextual no-result, performance/cache/failure/SEO contract.
 
 ### `V6-B3 — INFO SOURCE / FRESHNESS / SEO / SEARCH CONTRACT`
 **DONE**
 
-Locked:
-- mutable local Info facts have one target truth owner: controlled Info/`info_entries` flow;
-- specialized renderers may remain, but hardcoded mutable facts are migration debt, not second truth;
-- publication visibility vs reliability trust are separate;
-- reliability classes: official/strong/secondary/conflict/unverified;
-- field-risk freshness default windows: 7/30/90/180/365 days;
-- fresh/due/stale semantics;
-- stale/conflict high-risk facts do not become verified Search answers;
-- `confirmed_at` means real evidence reconfirmation, not cosmetic edit;
-- safe Search V6 Info whitelist;
-- stable Info canonical/SEO/share contract;
-- no schema/RLS/production implementation.
+One target truth owner for mutable Info facts, trust/freshness semantics, stale behavior, provenance, safe Search fields and canonical Info SEO/share contract.
 
 ### `V6-B4 — ARTICLE / GUIDE CONTENT ARCHITECTURE CONTRACT`
 **DONE**
 
+Locked:
+- Article explains process/choice/context;
+- Info owns mutable verified facts;
+- Q&A owns community experience;
+- one main guide intent → one canonical guide;
+- only `ПРОВЕРЕНО ГОТОВО` is Search/SEO/feature eligible;
+- honest author/source/review/freshness semantics;
+- no duplicate mutable Info truth in article/social preview;
+- Health guides use common V6 category/share/Facebook shell;
+- no schema/RLS/production implementation.
+
+### `V6-B5 — Q&A CANONICAL / DUPLICATE / ALIAS / MODERATION CONTRACT`
+**DONE**
+
 Artifact:
-`PUBLIC_PRODUCT_V6_B4_ARTICLE_GUIDE_CONTENT_ARCHITECTURE_CONTRACT.md`
+`PUBLIC_PRODUCT_V6_B5_QA_CANONICAL_DUPLICATE_ALIAS_MODERATION_CONTRACT.md`
 
 Locked:
-- Article/Guide explains process/choice/context; Info owns mutable verified facts; Q&A owns community experience;
-- one primary guide intent → one canonical guide;
-- current file existence does not make an article ready;
-- only `ПРОВЕРЕНО ГОТОВО` is Search/SEO/Home/category-feature eligible;
-- readiness hard gate covers user value, completeness, sources, owner boundary, local value, safety, SEO, links, mobile, performance, freshness and share;
-- honest author/editorial ownership; no invented credentials;
-- mutable local phone/address/hours are not duplicated into article truth;
-- article freshness classes E365/P180/P90/S30/V7 and fresh/due/stale behavior;
-- `updated` ≠ `reviewed`;
-- task-oriented internal linking to Info/categories/entities/Q&A;
-- Search V6 article eligibility is intent-aware;
-- canonical/SEO/cannibalization/thin-content prevention;
-- Articles are first-class Facebook/share assets, but social previews cannot become stale second truth owners;
-- Health guides use the common V6 category/article/share shell while Health data remains specialized;
-- initial content priorities have explicit statuses without invented analytics claims;
-- storage/CMS/schema decision deferred to V6-D;
-- no production implementation.
+- one real question intent → one canonical knowledge center;
+- moderation status is separate from canonical/duplicate state;
+- bounded pre-submit duplicate check with max 3 visible candidates and no per-keystroke mega-search;
+- aliases/alternate wording point to canonical instead of creating competing SEO pages;
+- merge is non-destructive, auditable and reversible where reasonable;
+- no destructive automatic merge/delete/rewrite;
+- approved answers only participate publicly;
+- Moderator self-Q&A moderation remains forbidden; canonical actions must respect same boundary;
+- `Избран от автора`, community `Полезен` and `Проверена информация` are separate concepts;
+- community approval/votes do not create verified truth;
+- old/time-sensitive Q&A stays dated; current verified owner can supersede stale factual snippets;
+- unanswered canonical questions may remain public/shareable and appear onsite to prevent duplicates, but are default `noindex,follow` until useful answer/utility threshold;
+- only canonical/independent approved questions are normal Search V6 candidates; aliases resolve to canonical;
+- one canonical SEO/share/Facebook destination;
+- conservative share preview for sensitive/health content;
+- contextual `Попитай Лом` can prefill query/category but never auto-submit and duplicate check runs before final submit;
+- relation-layer hooks are conceptual only; no schema/RLS/production implementation.
 
 Production impact: **NONE**.
 
-### `V6-B5 — Q&A CANONICAL / DUPLICATE / ALIAS / MODERATION CONTRACT`
+### `V6-B6 — STRUCTURED RECOMMENDATION RELATION CONTRACT`
 **CURRENT STAGE**
 
 ---
 
 ## 6. EXACT NEXT TASK
 
-# `STAGE V6-B5 — Q&A CANONICAL / DUPLICATE / ALIAS / MODERATION CONTRACT`
+# `STAGE V6-B6 — STRUCTURED RECOMMENDATION RELATION CONTRACT`
 
-B5 starts from locked B1–B4 + A2 Q&A evidence. Do not reopen earlier stages without a proven blocker and do not start production code.
+B6 starts from B1–B5 + current entity/Q&A owners. No broad re-audit and no production code.
 
-B5 must lock:
-- canonical question identity;
-- duplicate detection before publish;
-- aliases/alternate phrasings;
-- non-destructive merge/redirect/history model;
-- category/subcategory/topic relations;
-- verified Info vs community answer separation;
-- best/accepted/useful-answer semantics without fake authority;
-- Moderator/Admin/self-content boundaries;
-- old/stale Q&A behavior;
-- Search V6 Q&A eligibility/ranking boundaries;
-- canonical Q&A SEO/share/Facebook behavior;
-- contextual `Попитай Лом` prefill and no-result flow;
-- performance/privacy boundaries;
+B6 must lock:
+- recommendation relation identity;
+- allowed source content/types;
+- allowed target entity owner types;
+- entity resolution without free-text counter corruption;
+- positive recommendation vs mere mention/neutral/negative context;
+- moderation/approval boundaries;
+- self-recommendation/conflict-of-interest behavior;
+- dedupe and one-user/one-source signal semantics;
+- invalidation when source or target becomes nonpublic;
+- derived counts from valid relations, not manually maintained protected counters;
+- category/entity/Search presentation semantics;
+- interaction with future B8 ranking while preserving Admin/Ivanov/boost protected rules;
+- privacy/abuse/performance;
 - no schema/RLS/production implementation.
 
 Required artifact:
 
-`PUBLIC_PRODUCT_V6_B5_QA_CANONICAL_DUPLICATE_ALIAS_MODERATION_CONTRACT.md`
+`PUBLIC_PRODUCT_V6_B6_STRUCTURED_RECOMMENDATION_RELATION_CONTRACT.md`
 
-B5 exit gate:
+B6 exit gate:
 
-**един реален въпрос има един canonical knowledge center, duplicate formulations не създават конкуриращи се thin pages, moderation/trust boundaries са ясни, а Search/SEO/share/Facebook водят към правилния canonical Q&A без да превръщат community opinion във verified fact.**
+**всяка recommendation signal има traceable approved source, resolved target owner и clear polarity/validity; counts are derived only from valid relations; self/duplicate/removed content cannot inflate trust; recommendation layer cannot overwrite protected entity owners or ranking.**
 
 ---
 
 ## 7. WORKING MODE
 
 - safe read/design work is autonomous;
-- no repeated user explanations;
+- no repeated user context questions;
 - no broad re-audit of completed stages;
-- new ideas are recorded without derailing current exact task;
 - protected/risky production changes require proper approval;
 - no V6 production code before B/C/D/E gates.
 
@@ -225,16 +208,14 @@ At end of each B-stage:
 2. update Master Control;
 3. update `PROJECT_PROGRESS.md`;
 4. update `PUBLIC_PRODUCT_V6_NEXT_CHAT_START.md`;
-5. record status/evidence/risks;
-6. set exactly one next task;
-7. state production impact truthfully.
+5. set exactly one next task;
+6. state production impact.
 
 ---
 
 ## 8. CURRENT HANDOFF
 
-**Completed:** V6-0, A1, A2, B1, B2, B3, B4.  
-**Current:** V6-B5.  
-**Next artifact:** `PUBLIC_PRODUCT_V6_B5_QA_CANONICAL_DUPLICATE_ALIAS_MODERATION_CONTRACT.md`.  
-**Production:** unchanged by V6 planning.  
-**Do not do next:** production implementation before B/C/D/E approval gates.
+**Completed:** V6-0, A1, A2, B1, B2, B3, B4, B5.  
+**Current:** V6-B6.  
+**Next artifact:** `PUBLIC_PRODUCT_V6_B6_STRUCTURED_RECOMMENDATION_RELATION_CONTRACT.md`.  
+**Production:** unchanged by V6 planning.
