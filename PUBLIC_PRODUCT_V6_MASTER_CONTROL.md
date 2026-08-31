@@ -20,7 +20,7 @@ V6 е design/research/prototype track и до този checkpoint **не е пр
 
 V6 target:
 
-**local search + marketplace + Firms/entities + Info Lom + Articles/Guides + canonical Q&A + structured recommendations + Facebook distribution + SEO/share + structured local memory.**
+**local search + marketplace + Firms/entities + Info Lom + Articles/Guides + canonical Q&A + structured recommendations + Facebook distribution + deterministic local relevance + SEO/share + structured local memory.**
 
 ---
 
@@ -40,7 +40,8 @@ V6 target:
 12. `PUBLIC_PRODUCT_V6_B4_ARTICLE_GUIDE_CONTENT_ARCHITECTURE_CONTRACT.md`
 13. `PUBLIC_PRODUCT_V6_B5_QA_CANONICAL_DUPLICATE_ALIAS_MODERATION_CONTRACT.md`
 14. `PUBLIC_PRODUCT_V6_B6_STRUCTURED_RECOMMENDATION_RELATION_CONTRACT.md`
-15. task-specific evidence.
+15. `PUBLIC_PRODUCT_V6_B7_FACEBOOK_BRIDGE_TECHNICAL_PRODUCT_CONTRACT.md`
+16. task-specific evidence.
 
 ---
 
@@ -55,6 +56,7 @@ V6 target:
 - B4 — `PUBLIC_PRODUCT_V6_B4_ARTICLE_GUIDE_CONTENT_ARCHITECTURE_CONTRACT.md`
 - B5 — `PUBLIC_PRODUCT_V6_B5_QA_CANONICAL_DUPLICATE_ALIAS_MODERATION_CONTRACT.md`
 - B6 — `PUBLIC_PRODUCT_V6_B6_STRUCTURED_RECOMMENDATION_RELATION_CONTRACT.md`
+- B7 — `PUBLIC_PRODUCT_V6_B7_FACEBOOK_BRIDGE_TECHNICAL_PRODUCT_CONTRACT.md`
 
 Supporting strategy:
 - `PUBLIC_PRODUCT_V6_WORKING_MODEL.md`
@@ -78,8 +80,8 @@ Supporting strategy:
 - B4 — DONE
 - B5 — DONE
 - B6 — DONE
-- **B7 Facebook Bridge — CURRENT**
-- B8 Local relevance ranking — OPEN
+- B7 — DONE
+- **B8 Local Relevance / Ranking / Protected Priority — CURRENT**
 - B9 Exact interaction/forms/buttons/links/states — OPEN
 
 Later:
@@ -119,140 +121,130 @@ Firms, Listings, Health/Info, Shops, Events, Q&A and other specialized owners re
 
 ### C. Health common shell / specialized truth
 
-Health joins the same V6 category/mobile/search/share/Facebook system as other categories. Current Health UI is not frozen. Verified Health/Info owner/moderation/trust/freshness remain specialized. Facebook never becomes second Health truth owner.
+Health joins the common V6 visual/category/mobile/search/share/Facebook system. Current Health UI is not frozen. Verified Health/Info owner/moderation/reliability/freshness remain specialized.
 
-### D. Search V6
+### D. Search V6 intent/composition
 
-One explicit Search owner. Result families: route, verified_info, business, listing, shop, event, question, article. Bounded relevant-owner queries only.
+One Search owner. Result families: route, verified_info, business, listing, shop, event, question, article. Bounded relevant-owner queries only.
 
-### E. Info truth
+Search group ordering is intent-first; owner-local ranking stays owner-aware.
 
-Mutable local facts belong to controlled Info owner. Publication/reliability/freshness/stale/provenance semantics from B3 are locked.
+### E. Verified Info truth
+
+Mutable local facts stay Info-owned. B3 publication/reliability/freshness/stale/provenance rules remain hard boundaries.
 
 ### F. Articles
 
-Article/Guide explains process/choice/context. Only `ПРОВЕРЕНО ГОТОВО` is normal Search/SEO/feature eligible. One guide intent → one canonical guide. Article/share preview cannot become duplicate mutable Info truth.
+Only `ПРОВЕРЕНО ГОТОВО` is normal Search/SEO/feature eligible. Article explains process/context; it does not duplicate Info facts.
 
 ### G. Canonical Q&A
 
-One real question intent → one canonical knowledge center. Aliases resolve to canonical. Merge is non-destructive/auditable. Moderation approval ≠ verified fact.
+One question intent → one canonical knowledge center. Aliases resolve canonical. Approved/community content does not become verified fact.
 
-Approved unanswered canonical question may be public/shareable onsite but is default `noindex,follow` until useful answer/utility threshold.
+### H. Structured recommendation
 
-### H. Q&A trust labels
+Initial relation source = approved Q&A answer. Durable targets = approved Business/Firms/Restaurants, provider-like Health Info, approved Shops.
 
-`Избран от автора`, community `Полезен`, and `Проверена информация` are separate concepts. No fake best/verified answer.
+Positive valid non-self relation only; same author contributes max one unit per target; counts derived from valid relations.
 
-### I. Structured recommendation relation
+### I. Facebook Bridge
 
-Initial source = approved Q&A answer.
+Facebook is controlled distribution only.
 
-Initial durable targets:
-- approved Businesses/Firms; Restaurants are Firms;
-- provider-like published Health Info;
-- approved Shops.
+Only public approved canonical content is share-eligible. One canonical Popitai URL, server-readable OG target later, Web Share enhancement + Clipboard/manual fallback, no Facebook SDK dependency by default, no arbitrary group automation/scraping/import.
 
-Listings/Events are excluded from durable entity recommendation counts initially.
+### J. External Facebook data is not trust signal
 
-### J. Recommendation validity
+Facebook likes/comments/reactions do not become Popitai answers/recommendations automatically.
 
-Countable relation requires:
-- stable resolved target id;
-- approved public source;
-- public target;
-- explicit positive polarity;
-- non-self source;
-- valid moderation/relation state.
+### K. Protected ranking survives all relation/share layers
 
-Mere mention/negative/ambiguous text does not count.
+Admin/Ivanov/boost protected priority is not changed by Search orchestration, recommendations or Facebook distribution. B8 must now define exact adapter/order boundaries.
 
-### K. Recommendation anti-inflation
+### L. No invented popularity analytics
 
-Same source author contributes max one active positive unit per target. Same answer/target cannot duplicate. Free-text extraction alone cannot change reputation.
+A2 proved no reliable Popitai first-party popularity/search baseline. B8 cannot invent `popular`, `most searched`, `top` weighting.
 
-Counts are derived from valid unique relations, never manual protected entity counter truth. Cached/materialized aggregates are allowed only if rebuildable.
+### M. Performance remains hard gate
 
-### L. Health recommendations
-
-Community recommendation is separate from verified Health trust and cannot alter `reliability_status` or imply medical efficacy.
-
-### M. Protected ranking survives
-
-Recommendation counts/signals cannot directly reorder protected Admin/Ivanov/boost semantics. B8 decides allowed relevance use after protected boundary.
-
-### N. Facebook reactions are not Popitai recommendations
-
-External Facebook comments/reactions/likes do not automatically become Q&A answers or B6 recommendation relations.
-
-### O. No invented analytics baseline
-
-Do not claim popularity/top/ranking from unavailable first-party Popitai metrics.
-
-### P. Performance remains hard gate
-
-No heavy framework/AI/vector/external SDK dependency by default; bounded requests and graceful failure.
+No all-owner mega-query, no heavy AI/vector dependency by default, bounded result/candidate sets, deterministic client/server composition.
 
 ---
 
-## 6. PROTECTED DEFECT — SEPARATE
+## 6. B7 EXTERNAL EVIDENCE SNAPSHOT
 
-A2 confirmed Moderator own-business edit mismatch. It remains separate protected production defect scope and is not silently fixed during B7.
+As of 31.08.2026:
+- Web Share API remains non-universal/limited and requires secure context + user activation;
+- Clipboard write is broadly available but needs permission/error fallback;
+- current external platform evidence remains consistent that the old Facebook Groups API/direct third-party arbitrary-group posting capability removed in 2024 is not a safe dependency for V6 MVP.
+
+Exact Meta endpoints/policies are reverified immediately before production implementation.
 
 ---
 
-## 7. CURRENT EXACT TASK
+## 7. PROTECTED DEFECT — SEPARATE
 
-# `STAGE V6-B7 — FACEBOOK BRIDGE TECHNICAL / PRODUCT CONTRACT`
+A2 confirmed Moderator own-business edit mismatch. It remains a separate protected production defect scope and is not silently fixed during B8.
 
-B7 must define:
-1. Popitai → Facebook share flows by content type;
-2. share availability timing after moderation/publication;
-3. canonical URL + server-readable Open Graph/share metadata contract;
-4. safe share text and mutable-fact boundary;
-5. user-assisted Facebook → Popitai own-content prefill without scraping;
-6. current Meta/platform/group limitations and privacy constraints;
-7. no automatic arbitrary-group posting;
-8. no automatic external comments/reactions import as Q&A/recommendations;
-9. Web Share API / clipboard / Facebook fallback hierarchy;
-10. optional PWA/share-target later, not MVP dependency;
-11. behavior after content is edited/hidden/deleted after external sharing;
-12. attribution/UTM without leaking sensitive content;
-13. Health/sensitive-content safety;
-14. no Facebook SDK dependency by default;
-15. no schema/RLS/production implementation.
+---
+
+## 8. CURRENT EXACT TASK
+
+# `STAGE V6-B8 — LOCAL RELEVANCE / RANKING / PROTECTED PRIORITY CONTRACT`
+
+B8 must define:
+1. intent relevance before popularity;
+2. cross-owner group composition vs owner-local ordering;
+3. exact protected Admin/Ivanov/boost adapter semantics;
+4. Lom/location relevance;
+5. public status/availability/freshness signals;
+6. B6 recommendation signal use without trust inflation;
+7. Q&A answered/recency/usefulness boundaries;
+8. Article readiness/freshness influence;
+9. Health verified/reliability/freshness ordering;
+10. Firms/Listings/Shops/Events owner-local ordering boundaries;
+11. deterministic tie-breaking;
+12. no pay-to-rank implication unless separately approved/disclosed;
+13. no invented analytics popularity baseline;
+14. performance/query limits;
+15. explainability and regression test matrix;
+16. no schema/RLS/production implementation.
 
 Required artifact:
 
-`PUBLIC_PRODUCT_V6_B7_FACEBOOK_BRIDGE_TECHNICAL_PRODUCT_CONTRACT.md`
+`PUBLIC_PRODUCT_V6_B8_LOCAL_RELEVANCE_RANKING_PROTECTED_PRIORITY_CONTRACT.md`
 
-B7 exit gate:
+B8 exit gate:
 
-**Facebook is controlled distribution around canonical Popitai content—not a second owner/scraper/moderation/trust system; every supported share has safe canonical destination, preview, status lifecycle and lightweight fallback.**
+**for every major intent/result family ordering is deterministic/explainable; authoritative/relevant/current beats unrelated popularity; protected Admin/Ivanov/boost semantics remain exact where applicable; community/social signals cannot silently override trust/owner/safety rules.**
 
 ---
 
-## 8. EVIDENCE SCOPE FOR B7
+## 9. B8 EVIDENCE SCOPE
 
 Use:
-- current Popitai sharing/detail metadata evidence from A2;
-- B1 Health parity clarification;
-- B3/B4/B5/B6 truth/source/share boundaries;
-- current official Meta documentation where platform behavior matters;
-- Web Share API/clipboard browser standards where relevant.
+- `category-listings-v1.js` current listing priority order;
+- `supabase-businesses.js` current owner-first business ordering;
+- B2 search intent/group composition;
+- B3 Info reliability/freshness;
+- B4 article readiness/freshness;
+- B5 Q&A canonical/answered/unanswered;
+- B6 recommendation relation;
+- protected rules/Construction owner evidence.
 
-No broad unrelated audit.
-
----
-
-## 9. EXECUTION PROTOCOL
-
-Safe read/design/research autonomous. No production writes. At stage completion update B7 artifact, Master, Progress, Next; set one next task; state production impact.
+Do not broad-audit unrelated modules.
 
 ---
 
-## 10. HANDOFF
+## 10. EXECUTION PROTOCOL
 
-**Completed:** V6-0 + A1 + A2 + B1–B6.  
-**Current:** V6-B7 Facebook Bridge.  
-**Required artifact:** `PUBLIC_PRODUCT_V6_B7_FACEBOOK_BRIDGE_TECHNICAL_PRODUCT_CONTRACT.md`.  
+Safe read/design autonomous. No production writes. At stage completion update B8 artifact, Master, Progress, Next; set exactly one next task; state production impact.
+
+---
+
+## 11. HANDOFF
+
+**Completed:** V6-0 + A1 + A2 + B1–B7.  
+**Current:** V6-B8 Local Relevance / Ranking / Protected Priority.  
+**Required artifact:** `PUBLIC_PRODUCT_V6_B8_LOCAL_RELEVANCE_RANKING_PROTECTED_PRIORITY_CONTRACT.md`.  
 **Production impact:** NONE.
