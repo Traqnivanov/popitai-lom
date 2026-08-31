@@ -24,6 +24,7 @@ Branch: `v6-product-foundation-draft`
 6. `PROJECT_PROGRESS.md`
 7. `PUBLIC_PRODUCT_V6_MASTER_CONTROL.md`
 8. `PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md`
+9. `PUBLIC_PRODUCT_V6_B2_SEARCH_INTENT_RESULT_CONTRACT.md`
 
 После прочети само supporting V6 документите, които са нужни за текущата задача.
 
@@ -33,57 +34,59 @@ Branch: `v6-product-foundation-draft`
 - `V6-0 — CONTROL / CONTINUITY`;
 - `V6-A1 — CURRENT → TARGET OWNER / RELATIONSHIP MAP`;
 - `V6-A2 — EVIDENCE / COVERAGE / RUNTIME BASELINE`;
-- `V6-B1 — FINAL IA / TAXONOMY / OWNER CONTRACT`.
+- `V6-B1 — FINAL IA / TAXONOMY / OWNER CONTRACT`;
+- `V6-B2 — SEARCH V6 / RESULT COMPOSITION / INTENT ROUTING CONTRACT`.
 
 Основни artifacts:
 - `PUBLIC_PRODUCT_V6_CURRENT_TARGET_OWNER_MAP.md`;
 - `PUBLIC_PRODUCT_V6_A2_EVIDENCE_BASELINE.md`;
-- `PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md`.
+- `PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md`;
+- `PUBLIC_PRODUCT_V6_B2_SEARCH_INTENT_RESULT_CONTRACT.md`.
 
 Production е **непроменен от V6 planning track** и остава на approved Marketplace V3 + LOCKED backend/Admin/Moderator/owner rules.
 
 B1 е заключил stable 16-category taxonomy, shortcuts vs taxonomy, `Открий в Лом`, owner-aware Add routes, Jobs vs Services, specialized owner boundaries, backward URLs и Find/Add/Ask semantics.
 
+B2 е заключил един explicit Search owner, lightweight normalization/synonyms, B1 intent routing, exact result families и bounded owner queries, verified Info vs community separation, protected Ivanov/Admin/boost-safe composition, contextual no-result → `Попитай Лом`, performance/cache/failure/SEO/analytics contracts.
+
 ### 3. EXACT NEXT TASK
 
-# `STAGE V6-B2 — SEARCH V6 / RESULT COMPOSITION / INTENT ROUTING CONTRACT`
+# `STAGE V6-B3 — INFO SOURCE / FRESHNESS / SEO / SEARCH CONTRACT`
 
-Не прави нов broad audit. Не преотваряй B1 без доказан blocker. Не започвай production code.
+Не прави нов broad audit. Не преотваряй B1/B2 без доказан blocker. Не започвай production code.
 
 Изработи:
 
-`PUBLIC_PRODUCT_V6_B2_SEARCH_INTENT_RESULT_CONTRACT.md`
+`PUBLIC_PRODUCT_V6_B3_INFO_SOURCE_FRESHNESS_SEO_SEARCH_CONTRACT.md`
 
-B2 трябва да заключи:
-- един explicit Search owner вместо current legacy/new ambiguity;
-- normalization, Bulgarian/local synonyms и B1 taxonomy intent mapping;
-- exact result types и authoritative owner queries;
-- verified Info vs community opinion ordering;
-- local relevance, без да нарушава protected Ivanov/Admin/boost priority;
-- no-result → contextual `Попитай Лом`;
-- query limits, debounce, cancellation, pagination/show-more, cache и failure states;
-- URL/canonical/SEO последствия на filtered states;
-- полезни analytics events без измислен current baseline;
-- mobile/performance/render-ownership budget.
-
-No schema/RLS/production implementation.
+B3 трябва да заключи:
+- authoritative source за всяка Info category/subcategory;
+- DB vs hardcoded граница;
+- ownership на mutable local facts;
+- publication/reliability semantics;
+- freshness/recheck windows по data type;
+- stale state и public/search поведение;
+- correction/provenance contract;
+- exact searchable fields за Search V6;
+- canonical/detail/SEO/share contract за Info;
+- без schema/RLS/production implementation.
 
 ### 4. Работен режим
 
 - безопасните read-only/design стъпки изпълняваш автономно;
 - не искай от потребителя стария контекст;
-- не преотваряй V3/A1/A2/B1 без доказана причина;
+- не преотваряй V3/A1/A2/B1/B2 без доказана причина;
 - нови идеи записвай, без да разбиваш текущия stage;
 - protected/risky production промяна не прави без подходящо approval;
 - V6 production code не започва преди B/C/D/E gates.
 
-### 5. След B2
+### 5. След B3
 
 Преди да приключиш stage-а:
 
 1. update `PUBLIC_PRODUCT_V6_MASTER_CONTROL.md`;
 2. update `PROJECT_PROGRESS.md`;
-3. запиши B2 status/evidence/risks;
+3. запиши B3 status/evidence/risks;
 4. задай един exact next task;
 5. запиши production impact;
 6. актуализирай този `PUBLIC_PRODUCT_V6_NEXT_CHAT_START.md`.
