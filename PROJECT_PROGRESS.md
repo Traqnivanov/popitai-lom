@@ -10,27 +10,26 @@
 3. `PROJECT_RULES_ADMIN_MODERATOR.md`
 4. `PROJECT_RULES.md`
 5. `PROJECT_RULES_RENDER_OWNERSHIP.md`
-6. `PUBLIC_MARKETPLACE_V3_APPROVED_SPEC.md` за marketplace/public navigation
-7. `PUBLIC_SITE_INFORMATION_ARCHITECTURE_APPROVED_SPEC.md` за останалата public IA, доколкото не противоречи на Marketplace V3
-8. `ADMIN_PANEL_V2_APPROVED_SPEC.md` за Admin/Moderator панела.
+6. `PUBLIC_MARKETPLACE_V3_APPROVED_SPEC.md` за текущия production marketplace/public navigation
+7. `PUBLIC_SITE_INFORMATION_ARCHITECTURE_APPROVED_SPEC.md` за останалата current public IA, доколкото не противоречи на Marketplace V3
+8. `ADMIN_PANEL_V2_APPROVED_SPEC.md` за Admin/Moderator панела
+9. за V6: **`PUBLIC_PRODUCT_V6_MASTER_CONTROL.md`**.
 
-Marketplace V3 е каноничният public marketplace presentation source за production. LOCKED backend/roles/ownership/moderation/quota/status правила остават с по-висок приоритет.
+`PUBLIC_PRODUCT_V6_MASTER_CONTROL.md` е каноничният roadmap/handoff/exact-task source за V6. Supporting V6 документи се четат според текущия exact task.
 
-**За V6 design track след горния ред задължително се чете `PUBLIC_PRODUCT_V6_MASTER_CONTROL.md`.** Supporting V6 документи се четат според exact task.
+При конфликт LOCKED правилата и approved production правилата имат по-висок приоритет от V6 draft.
 
-## 2. ЗАЩИТЕНО ЯДРО — НЕПРОМЕНЕНО
+---
 
-Marketplace V3 и V6 design track не заменят и не променят firm owner, protected listings write/edit/media owner, RLS/schema/ownership/approval/status/quota semantics, Admin/Moderator boundaries, protected construction search / `Иванов Ремонти` priority, boost/admin priority ordering или специализираните Shops/Health/Info owners без отделно изрично approval.
+## 2. PRODUCTION — НЕПРОМЕНЕН ОТ V6 TRACK
 
-## 3. MARKETPLACE V3 — PRODUCTION
+Marketplace V3 остава текущият approved production model.
 
-Статус: **PRODUCTION PASS**.
+Production commits за затворения V3 етап:
+- `57997443b0539596425a5f8e375c56153d079f6d` — unified marketplace V3;
+- `6155921d6c76caaab3639bac6b2fb62c79d8bd4e` — search-layout hotfix.
 
-Основната реализация е merge-ната в `main` чрез **PR #106 — Unify public marketplace as Обяви и услуги**, merge commit `57997443b0539596425a5f8e375c56153d079f6d`.
-
-Search-layout hotfix е merge-нат чрез **PR #107 — Fix Marketplace V3 search form layout**, final production commit `6155921d6c76caaab3639bac6b2fb62c79d8bd4e`.
-
-Canonical shell за production:
+Canonical production navigation:
 
 Desktop:
 `Начало | Обяви и услуги | Фирми | Инфо Лом | Статии | Още ▼ | Профил | + Добави`
@@ -40,30 +39,55 @@ Mobile:
 
 `kategorii.html` е backward-compatible redirect към `obyavi.html`, не втори marketplace hub.
 
-Current production V3 groups остават действащи, докато няма финален approved V6 spec. V6 може да ги supersede-не само след B/C/D/E gates.
+V6 planning work до този checkpoint не е променял production UI/schema/RLS/roles/quotas/moderation/protected owners/URLs.
 
-## 4. PRODUCTION IMPLEMENTATION / REGRESSION — НЕПРОМЕНЕНО
+---
 
-`marketplace-v3.js` е presentation/orchestration + compatibility mapping; `marketplace-v3.css` е responsive V3 visual layer; `public-shell-v1.js` пази runtime shell/accessibility; `public-shell-template-v1.json` + sync script са canonical shell; `category-listings-v1.js` е read-only thematic owner; `supabase-listings.js` остава protected write owner.
+## 3. ЗАЩИТЕНО ЯДРО — НЕПРОМЕНЕНО
 
-Production QA за V3 е минал по записания scope без test writes. Protected schema/RLS/roles/ownership/moderation/quota/Admin/Moderator логика не е променяна от V6 planning track.
+V6 не bypass-ва:
+- Firms owner;
+- Listings write/edit/media owner;
+- Masters/Construction protected rules;
+- Shops specialized owner;
+- Health/Info specialized owners;
+- Admin/Moderator boundaries;
+- quotas/status/approval/direct-publish rules;
+- protected Admin/Ivanov/boost priority;
+- RLS/schema/security rules.
 
-## 5. ЛИМИТИ — НЕПРОМЕНЕНИ
+V6 target е orchestration/search/relationship/presentation layer върху правилните owners, не monolithic replacement.
 
-До 5 нови лични и до 5 нови фирмени обяви на одобрена фирма за календарен месец; квотите са отделни; edit не използва нова квота; подадена нова обява използва квота независимо от последващо отхвърляне/изтриване; неизползвана квота не се прехвърля; admin профилите нямат тези лимити.
+---
 
-## 6. ADMIN / MODERATOR — НЕПРОМЕНЕНО PRODUCTION
+## 4. ЛИМИТИ — НЕПРОМЕНЕНИ
 
-Admin/Moderator Panel V2 остава текущият approved operational model. Role boundaries, self-moderation protection, Admin-only permanent delete и Admin-only role/access management не са променяни.
+До 5 нови лични и до 5 нови фирмени обяви на одобрена фирма за календарен месец; квотите са отделни; edit не използва нова квота; подадена нова обява използва квота независимо от последващо отхвърляне/изтриване; неизползвана квота не се прехвърля; Admin профилите нямат тези лимити.
 
-V6 нови canonical/relation/freshness states по-късно трябва да се приобщят към този model, не да създават втори admin system.
+---
 
-## 7. V6 DESIGN TRACK
+## 5. ADMIN / MODERATOR — CURRENT APPROVED MODEL
+
+Admin/Moderator Panel V2 остава current approved operational model.
+
+LOCKED:
+- Moderator не е почти Admin;
+- permanent delete е Admin-only;
+- role/access management е Admin-only;
+- Moderator не self-moderate-ва собствено съдържание;
+- Moderator own content следва normal non-Admin flow;
+- V6 нови states по-късно се интегрират в съществуващия Admin panel/role model.
+
+A2 намери отделен protected defect candidate при Moderator own-business edit; той е записан в Master Control/A2 и **не се поправя като странична IA промяна**.
+
+---
+
+## 6. V6 DESIGN TRACK
 
 Branch: `v6-product-foundation-draft`  
-Production impact от този planning track: **NONE**.
+Production impact: **NONE**.
 
-Създадени planning/control документи:
+Основни V6 planning документи:
 - `PUBLIC_PRODUCT_V6_WORKING_MODEL.md`;
 - `PUBLIC_PRODUCT_V6_GUARDRAILS.md`;
 - `PUBLIC_PRODUCT_V6_CONTENT_SEO_STRATEGY.md`;
@@ -72,63 +96,117 @@ Production impact от този planning track: **NONE**.
 - `PUBLIC_PRODUCT_V6_ADOPTION_LAUNCH.md`;
 - `PUBLIC_PRODUCT_V6_INTERACTION_FORM_LINK_CONTRACT.md`;
 - `PUBLIC_PRODUCT_V6_CURRENT_TARGET_OWNER_MAP.md`;
-- **`PUBLIC_PRODUCT_V6_MASTER_CONTROL.md` — current canonical roadmap/handoff/exact-task source.**
+- `PUBLIC_PRODUCT_V6_A2_EVIDENCE_BASELINE.md`;
+- **`PUBLIC_PRODUCT_V6_MASTER_CONTROL.md`**.
 
-V6 direction: запазваме protected owner-ите и добавяме по-добър search/relationship/content/distribution layer над тях. `Инфо Лом` е authoritative knowledge/SEO/trust pillar; Q&A е contextual community memory; Facebook е distribution; Articles не дублират authoritative data; performance е lightweight-by-default; forms/buttons/links се проверяват като пълен user flow.
+---
 
-## 8. V6 STAGE STATUS
+## 7. V6 STAGE STATUS
 
 ### `V6-0 — CONTROL / CONTINUITY`
 **DONE.**
 
 ### `V6-A1 — CURRENT → TARGET OWNER / RELATIONSHIP MAP`
-**DONE FOR STATIC PLANNING EVIDENCE.**
+**DONE.**
 
-Основен artifact:
+Artifact:
 `PUBLIC_PRODUCT_V6_CURRENT_TARGET_OWNER_MAP.md`
 
-A1 установи и записа owner/data/moderation/search/admin/interaction/SEO/performance ролите за shell/home, taxonomy, search, Info, Articles, Q&A, Firms, Listings, Masters, Cars, Services/Jobs, Property, Health, Shops, Restaurants, Events, Profile, Admin, dynamic detail/share/PWA/Analytics current evidence.
+### `V6-A2 — EVIDENCE / COVERAGE / RUNTIME BASELINE`
+**DONE.**
 
-Ключови A1 findings:
-- backend owner architecture е силна и не трябва да се заменя с monolithic model;
-- `Работа` и `Услуги` в текущата presentation са смесени: `rabota.html` е Services, а Jobs вече е protected Listing category;
-- `Имоти` вече има Listing semantics, но не dedicated write owner/page;
-- Restaurants в момента използват Firms owner;
-- Info/Health/Shops са специализирани owners и не се bypass-ват;
-- Home source още съдържа стара parallel category presentation и runtime decoration layering;
-- има legacy search в `script.js` и по-нов `public-search-v1.js`, но static audit не доказа, че по-новият файл е активиран live — това се проверява в A2;
-- dynamic detail pages за Question/Listing/Firm стартират с generic static metadata, което подкрепя нуждата от lightweight server-readable share/SEO layer;
-- current interaction ambiguities са записани за A2, без ad-hoc production fixes.
+Artifact:
+`PUBLIC_PRODUCT_V6_A2_EVIDENCE_BASELINE.md`
 
-## 9. EXACT NEXT TASK
+Key proven A2 facts:
+- current `tarsene.html` uses legacy `script.js` search owner, not `public-search-v1.js`;
+- current Info DB has 152 published `info_entries`, all with `confirmed_at`;
+- Info public source-of-truth is inconsistent: Health mostly DB-driven; Institutions layered; Banks/Education/Transport hardcode mutable local facts; Utilities is hybrid;
+- freshness needs data-type recheck rules;
+- current article `Как да избереш майстор...` exists but is `ЗА ПРЕРАБОТКА` under V6 readiness rules;
+- `Как се пенсионира човек` is `РАЗРАБОТВАНО` with NОИ/Info authoritative backbone;
+- Question/Listing/Firm detail pages begin with generic static metadata;
+- question detail has visible share CTA but no proven active share handler in the audited owner;
+- no current PWA/manifest/service-worker/share-target implementation was proven;
+- no reliable Popitai-specific first-party analytics baseline was proven;
+- Q&A Moderator self-content restrictions are consistent in audited DB/UI;
+- Moderator own-business edit is inconsistent with the LOCKED rule and is a separate protected defect candidate.
 
-# `STAGE V6-A2 — EVIDENCE / COVERAGE / RUNTIME BASELINE`
+### `V6-B — PRODUCT CONTRACTS`
+**CURRENT STAGE.**
 
-Следващият чат не започва production code и не преотваря A1.
+---
 
-Редът е:
-1. prove active global Search runtime owner;
-2. Info Lom coverage/freshness/SEO inventory;
-3. Article/Guide inventory по readiness rule;
-4. current dynamic detail SEO/share verification;
-5. read-only verification на Q&A Moderator self-content и Moderator own-business edit uncertainty;
-6. current PWA/service-worker/manifest verification;
-7. identify real Popitai analytics source and baseline, ако съществува;
-8. create `PUBLIC_PRODUCT_V6_A2_EVIDENCE_BASELINE.md`;
-9. update Master Control + this checkpoint.
+## 8. EXACT NEXT TASK
 
-След A2 → **V6-B PRODUCT CONTRACTS**: final taxonomy/IA, Search, Info/Content, Q&A canonical, recommendations, Facebook Bridge, ranking/freshness, exact interaction contracts.
+# `STAGE V6-B1 — FINAL IA / TAXONOMY / OWNER CONTRACT`
 
-## 10. РАБОТЕН РЕЖИМ / HANDOFF
+Нов чат продължава директно оттук. Не започва нов одит и не пита потребителя да обяснява проекта.
 
-Безопасните read-only/design стъпки се изпълняват автономно. При protected/risky/new business decision се спира преди промяната. Не се казва „готово“, ако stage exit criteria не са изпълнени; production feature не е готов преди live verification.
+B1 трябва да заключи в един договор:
+- desktop/mobile public IA;
+- final main marketplace categories;
+- subcategory ownership;
+- stable taxonomy vs first-screen shortcuts;
+- `Открий в Лом` като discovery layer, не втори taxonomy;
+- `Работа` vs `Услуги`;
+- `Строителство и ремонти` presentation при запазен protected Masters owner;
+- Автомобили;
+- Имоти;
+- Красота;
+- Дом и градина;
+- Магазини specialized owner integration;
+- Заведения/Firms integration;
+- Събития;
+- Health specialized owner integration;
+- точната роля на `Фирми`;
+- точната роля на `Инфо Лом`;
+- точната роля на `Статии`;
+- Q&A като contextual action/content memory, с `Още → Въпроси` като secondary archive/entry;
+- backward URLs/canonical mapping;
+- exact Add destination по owner;
+- key `Намери / Добави / Попитай` destinations;
+- `KEEP / ADAPT / REPLACE PRESENTATION / DEFER`;
+- performance consequences;
+- без ethnic segmentation.
+
+Required artifact:
+
+`PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md`
+
+B1 exit gate:
+
+**всеки major public entry има едно ясно потребителско значение, един authoritative owner/composition rule, един target Add path и няма category/owner ambiguity.**
+
+След B1 Master Control и този checkpoint се актуализират и се задава точният следващ B-stage.
+
+---
+
+## 9. РАБОТЕН РЕЖИМ / NEW CHAT HANDOFF
 
 Нов чат:
-- чете rules → progress → Master Control;
-- работи по exact next task;
-- не пита „какво правехме?“ ако е записано;
-- не започва стар одит наново;
-- не използва production bug като повод да нулира V6 roadmap.
+- чете rules → `PROJECT_PROGRESS.md` → `PUBLIC_PRODUCT_V6_MASTER_CONTROL.md`;
+- после чете A1/A2 само където са нужни за B1;
+- продължава по exact next task автономно;
+- не иска от потребителя повторно описание на проекта;
+- не преотваря V3/A1/A2 без доказана причина;
+- не започва V6 production code;
+- при нова добра идея я записва, но не разбива текущия stage;
+- при protected/risky production change спира преди промяната, ако липсва подходящо approval.
 
-**Текущ checkpoint:** V6-A1 complete; V6-A2 is next.  
-**Production:** untouched by this V6 planning work.
+В края на stage задължително:
+- update Master Control;
+- update `PROJECT_PROGRESS.md`;
+- status + evidence + risks;
+- exact next task;
+- production impact.
+
+---
+
+## 10. CURRENT HANDOFF
+
+**Completed:** V6-0, V6-A1, V6-A2.  
+**Current:** V6-B1.  
+**Next artifact:** `PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md`.  
+**Production:** unchanged by V6 planning.  
+**Do not do next:** production implementation before B/C/D/E approval gates.
