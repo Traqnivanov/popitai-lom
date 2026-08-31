@@ -4,17 +4,13 @@
 Branch: `v6-product-foundation-draft`  
 Актуализирано: 31.08.2026
 
-Този файл позволява нов чат да продължи без потребителят да обяснява отново проекта, историята, текущия stage или следващата задача.
-
-## Ако четеш това в нов чат
-
 Работим по:
 
 `Traqnivanov/popitai-lom`
 
 Не прави нов repo/clone и не започвай проекта отначало.
 
-### 1. Прочети първо
+## 1. Прочети първо
 
 1. `PROJECT_RULES_00_READ_FIRST.md`
 2. `PROJECT_RULES_PROTECTED_CORE.md`
@@ -24,83 +20,126 @@ Branch: `v6-product-foundation-draft`
 6. `PROJECT_PROGRESS.md`
 7. `PUBLIC_PRODUCT_V6_MASTER_CONTROL.md`
 8. `PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md`
-9. `PUBLIC_PRODUCT_V6_B2_SEARCH_INTENT_RESULT_CONTRACT.md`
-10. `PUBLIC_PRODUCT_V6_B3_INFO_SOURCE_FRESHNESS_SEO_SEARCH_CONTRACT.md`
+9. `PUBLIC_PRODUCT_V6_B1_HEALTH_PRESENTATION_PARITY_CLARIFICATION.md`
+10. `PUBLIC_PRODUCT_V6_B2_SEARCH_INTENT_RESULT_CONTRACT.md`
+11. `PUBLIC_PRODUCT_V6_B3_INFO_SOURCE_FRESHNESS_SEO_SEARCH_CONTRACT.md`
+12. `PUBLIC_PRODUCT_V6_B4_ARTICLE_GUIDE_CONTENT_ARCHITECTURE_CONTRACT.md`
 
-После прочети само supporting V6 документите, които са нужни за текущата задача.
+После чети само task-specific supporting docs/evidence.
 
-### 2. Текущо състояние
+При конфликт:
+
+**LOCKED rules > approved production specs > V6 Master Control > completed B-contracts > supporting drafts.**
+
+---
+
+## 2. Текущо състояние
 
 Завършени:
-- `V6-0 — CONTROL / CONTINUITY`;
-- `V6-A1 — CURRENT → TARGET OWNER / RELATIONSHIP MAP`;
-- `V6-A2 — EVIDENCE / COVERAGE / RUNTIME BASELINE`;
-- `V6-B1 — FINAL IA / TAXONOMY / OWNER CONTRACT`;
-- `V6-B2 — SEARCH V6 / RESULT COMPOSITION / INTENT ROUTING CONTRACT`;
-- `V6-B3 — INFO SOURCE / FRESHNESS / SEO / SEARCH CONTRACT`.
+- V6-0 Control/Continuity;
+- V6-A1 Current→Target Owner Map;
+- V6-A2 Evidence Baseline;
+- V6-B1 Final IA/Taxonomy/Owner;
+- V6-B2 Search V6 Intent/Results;
+- V6-B3 Info Source/Freshness/SEO/Search;
+- V6-B4 Article/Guide Content Architecture.
 
-Основни artifacts:
-- `PUBLIC_PRODUCT_V6_CURRENT_TARGET_OWNER_MAP.md`;
-- `PUBLIC_PRODUCT_V6_A2_EVIDENCE_BASELINE.md`;
-- `PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md`;
-- `PUBLIC_PRODUCT_V6_B2_SEARCH_INTENT_RESULT_CONTRACT.md`;
-- `PUBLIC_PRODUCT_V6_B3_INFO_SOURCE_FRESHNESS_SEO_SEARCH_CONTRACT.md`.
+Production е **непроменен от V6 planning track**.
 
-Production е **непроменен от V6 planning track** и остава на approved Marketplace V3 + LOCKED backend/Admin/Moderator/owner rules.
+### B1
 
-B1 заключи stable 16-category taxonomy, shortcuts vs taxonomy, `Открий в Лом`, owner-aware Add routes, Jobs vs Services, specialized owner boundaries, backward URLs и Find/Add/Ask semantics.
+Locked stable 16-category taxonomy, owner-aware Find/Add/Ask, Jobs vs Services, specialized owners and protected Construction boundaries.
 
-B2 заключи един explicit Search owner, lightweight normalization/synonyms, B1 intent routing, exact result families и bounded owner queries, verified Info vs community separation, protected Ivanov/Admin/boost-safe composition, contextual no-result → `Попитай Лом`, performance/cache/failure/SEO/analytics contracts.
+### Health clarification — LOCKED
 
-B3 заключи `info_entries`/Info flow като един authoritative owner за mutable local facts, DB-vs-hardcoded boundary, publication/reliability semantics, field-risk freshness windows, stale behavior, correction/provenance, exact Search V6 Info field whitelist и canonical/detail/SEO/share rules. Specialized Health/Banks/Transport/Education/Institutions/Utilities UX може да остане, но не и втори hardcoded data owner.
+`Здраве и лекари`:
+- участва в същата обща V6 визуална/category/mobile/search/share/Facebook система като другите категории;
+- current Health UI/групиране не е frozen target;
+- може да бъде визуално преструктурирано;
+- verified Health/Info owner, data, moderation, reliability и freshness остават specialized;
+- Facebook/share не става втори owner на health facts.
 
-### 3. EXACT NEXT TASK
+### B2
 
-# `STAGE V6-B4 — ARTICLE / GUIDE CONTENT ARCHITECTURE CONTRACT`
+One Search owner, bounded intent-aware owner queries, exact result families, verified Info vs community separation, protected ranking boundary, contextual no-result, performance/cache/failure/SEO contract.
 
-Не прави нов broad audit. Не преотваряй B1/B2/B3 без доказан blocker. Не започвай production code.
+### B3
+
+One target truth owner for mutable Info facts, publication/reliability semantics, freshness windows/stale behavior, correction/provenance, safe Search Info fields and canonical Info SEO/share rules.
+
+### B4
+
+Article/Guide explains process/choice/context; Info owns mutable verified facts; Q&A owns community experience.
+
+Only `ПРОВЕРЕНО ГОТОВО` articles are Search/SEO/feature eligible. One guide intent has one canonical guide. Honest author/source/review/freshness semantics, no thin/duplicate content, task-oriented internal links and Facebook/share participation are locked. Health guides use the common V6 shell/share model while health facts remain specialized.
+
+---
+
+## 3. EXACT NEXT TASK
+
+# `STAGE V6-B5 — Q&A CANONICAL / DUPLICATE / ALIAS / MODERATION CONTRACT`
+
+Не прави broad audit и не преотваряй B1–B4 без доказан blocker. Не започвай production code.
 
 Изработи:
 
-`PUBLIC_PRODUCT_V6_B4_ARTICLE_GUIDE_CONTENT_ARCHITECTURE_CONTRACT.md`
+`PUBLIC_PRODUCT_V6_B5_QA_CANONICAL_DUPLICATE_ALIAS_MODERATION_CONTRACT.md`
 
-B4 трябва да заключи:
-- exact role на Articles vs Info vs Q&A;
-- article readiness/quality gate;
-- evergreen vs mutable local facts;
-- topic/guide architecture;
-- author/source/freshness/update semantics;
-- internal linking към Info/entities/Q&A;
-- Search V6 article eligibility;
-- canonical/SEO/share structure;
-- duplicate/thin-content prevention;
-- initial content inventory priorities без измислен analytics baseline;
-- без schema/RLS/production implementation.
+B5 трябва да заключи:
+- canonical question identity;
+- duplicate detection before publish;
+- aliases/alternate phrasings;
+- non-destructive merge/redirect/history;
+- category/subcategory/topic relations;
+- verified Info vs community answer boundary;
+- best/accepted/useful answer semantics without fake authority;
+- Admin/Moderator/self-content boundaries;
+- old/stale Q&A behavior;
+- Search V6 Q&A eligibility;
+- canonical Q&A SEO/share/Facebook behavior;
+- contextual `Попитай Лом` prefill from Search/no-result/category;
+- privacy/performance constraints;
+- no schema/RLS/production implementation.
 
-### 4. Работен режим
+B5 exit gate:
 
-- безопасните read-only/design стъпки изпълняваш автономно;
-- не искай от потребителя стария контекст;
-- не преотваряй V3/A1/A2/B1/B2/B3 без доказана причина;
-- нови идеи записвай, без да разбиваш текущия stage;
-- protected/risky production промяна не прави без подходящо approval;
-- V6 production code не започва преди B/C/D/E gates.
+**един реален въпрос има един canonical knowledge center; duplicate formulations не създават конкуриращи се thin pages; moderation/trust boundaries са ясни; Search/SEO/share/Facebook водят към правилния canonical Q&A без community opinion да се представя като verified fact.**
 
-### 5. След B4
+---
 
-Преди да приключиш stage-а:
+## 4. B5 evidence scope
 
-1. update `PUBLIC_PRODUCT_V6_MASTER_CONTROL.md`;
-2. update `PROJECT_PROGRESS.md`;
-3. запиши B4 status/evidence/risks;
-4. задай един exact next task;
-5. запиши production impact;
-6. актуализирай този `PUBLIC_PRODUCT_V6_NEXT_CHAT_START.md`.
+Използвай само релевантното:
+- current questions/answers public/detail code;
+- A2 Q&A moderation/self-content evidence;
+- current question share/generic metadata evidence;
+- B2 Search contract;
+- B3 verified Info boundary;
+- B4 Article vs Q&A boundary;
+- `PUBLIC_PRODUCT_V6_WORKING_MODEL.md` canonical question/duplicate protection concepts.
 
-## Минимално съобщение от потребителя в нов чат
+Не прави side missions.
 
-Достатъчно е:
+---
 
-**`@GitHub Продължи Попитай.Лом по PUBLIC_PRODUCT_V6_NEXT_CHAT_START.md. Работи автономно.`**
+## 5. Работен режим
 
-Не изисквай друго обяснение, ако repo и документите са достъпни.
+- safe read/design стъпки — автономно;
+- не искай потребителят да повтаря контекст;
+- не променяй production/schema/RLS/roles/quotas/protected ranking;
+- нови идеи записвай, без да прекъсваш exact stage;
+- protected defect/production incident е отделен scope;
+- no V6 production code before B/C/D/E gates.
+
+В края на B5:
+1. update stage artifact;
+2. update Master Control;
+3. update `PROJECT_PROGRESS.md`;
+4. update този файл;
+5. status/evidence/risks;
+6. exactly one next task;
+7. production impact.
+
+## Минимално съобщение в нов чат
+
+`@GitHub Продължи Попитай.Лом по PUBLIC_PRODUCT_V6_NEXT_CHAT_START.md. Работи автономно.`
