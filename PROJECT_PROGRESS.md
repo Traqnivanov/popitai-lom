@@ -78,7 +78,7 @@ LOCKED:
 - Moderator own content следва normal non-Admin flow;
 - V6 нови states по-късно се интегрират в съществуващия Admin panel/role model.
 
-A2 намери отделен protected defect candidate при Moderator own-business edit; той е записан в Master Control/A2 и **не се поправя като странична IA/search промяна**.
+A2 намери отделен protected defect candidate при Moderator own-business edit; той е записан в Master Control/A2 и **не се поправя като странична V6 промяна**.
 
 ---
 
@@ -99,6 +99,7 @@ Production impact: **NONE**.
 - `PUBLIC_PRODUCT_V6_A2_EVIDENCE_BASELINE.md`;
 - `PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md`;
 - `PUBLIC_PRODUCT_V6_B2_SEARCH_INTENT_RESULT_CONTRACT.md`;
+- `PUBLIC_PRODUCT_V6_B3_INFO_SOURCE_FRESHNESS_SEO_SEARCH_CONTRACT.md`;
 - **`PUBLIC_PRODUCT_V6_MASTER_CONTROL.md`**.
 
 ---
@@ -122,8 +123,8 @@ Artifact:
 
 Key proven A2 facts:
 - current `tarsene.html` uses legacy `script.js` search owner, not `public-search-v1.js`;
-- current Info DB has 152 published `info_entries`, all with `confirmed_at`;
-- Info public source-of-truth is inconsistent: Health mostly DB-driven; Institutions layered; Banks/Education/Transport hardcode mutable local facts; Utilities is hybrid;
+- current Info DB has 152 published `info_entries`, all with `confirmed_at` към audit момента;
+- Info public source-of-truth е inconsistent: Health mostly DB-driven; Institutions layered; Banks/Education/Transport hardcode mutable local facts; Utilities hybrid;
 - freshness needs data-type recheck rules;
 - current article `Как да избереш майстор...` exists but is `ЗА ПРЕРАБОТКА` under V6 readiness rules;
 - `Как се пенсионира човек` is `РАЗРАБОТВАНО` with НОИ/Info authoritative backbone;
@@ -170,49 +171,75 @@ Locked:
 - protected Ivanov/Admin/boost-safe ranking boundary;
 - contextual no-result → `Попитай Лом` only after complete bounded fallback;
 - debounce/cancellation/pagination/cache/partial failure states;
-- `tarsene.html?q=...` search state with noindex parameter-search SEO policy;
-- future analytics event contract without inventing current baseline;
+- `tarsene.html?q=...` noindex parameter-search SEO policy;
+- future analytics event contract without invented baseline;
 - mobile/performance/network/render ownership budgets;
 - no schema/RLS/production implementation.
-
-Additional B2 evidence:
-- current `tarsene.html` still loads legacy `script.js` search;
-- `public-search-v1.js` is useful DB-backed candidate code but is not active current owner and does not cover granular Info/Shops/Events;
-- current listing presentation proves Admin/boost ordering that Search V6 must preserve rather than overwrite;
-- current Info/Shops/Events/Q&A sources support separate authoritative public result families.
 
 Production impact: **NONE**.
 
 ### `V6-B3 — INFO SOURCE / FRESHNESS / SEO / SEARCH CONTRACT`
+**DONE.**
+
+Artifact:
+`PUBLIC_PRODUCT_V6_B3_INFO_SOURCE_FRESHNESS_SEO_SEARCH_CONTRACT.md`
+
+Locked:
+- `info_entries` + controlled Info flow as single authoritative owner for mutable local Info facts;
+- `info_actions` as controlled owner for appropriate public action links;
+- specialized Info renderer UX may remain, but hardcoded local facts are migration debt, not second truth owner;
+- Health/Institutions/Transport/Education/Banks/Utilities source matrix;
+- `publication_status` = visibility and `reliability_status` = trust;
+- reliability classes `official/strong/secondary/conflict/unverified`;
+- field-risk freshness classes: 7 / 30 / 90 / 180 / 365 day default maximum recheck windows;
+- derived `fresh / due / stale` behavior without requiring a B3 schema change;
+- stale/conflict operational facts do not become verified Search V6 answers;
+- `confirmed_at` means real evidence reconfirmation, not generic edit timestamp;
+- correction/history/provenance contract;
+- exact safe Search V6 Info field whitelist;
+- stable Info canonical/category/detail eligibility and no thin/filter SEO tree;
+- share contract using only safe/fresh factual snippets;
+- no hardcoded stale fallback when the Info owner fails;
+- no schema/RLS/production implementation.
+
+Additional B3 source evidence:
+- current `health-catalog-v2.js` is DB-driven and uses reliability to suppress unsafe fields;
+- current `info-lom-banks-v7.js`, `info-lom-transport-v1.js` and `info-lom-education-v1.js` have single render ownership but embed mutable facts in JS;
+- current Admin generic entry edit refreshes `confirmed_at` on save, which is recorded as a semantic implementation risk for later V6-D design, not changed in B3.
+
+Production impact: **NONE**.
+
+### `V6-B4 — ARTICLE / GUIDE CONTENT ARCHITECTURE CONTRACT`
 **CURRENT STAGE.**
 
 ---
 
 ## 8. EXACT NEXT TASK
 
-# `STAGE V6-B3 — INFO SOURCE / FRESHNESS / SEO / SEARCH CONTRACT`
+# `STAGE V6-B4 — ARTICLE / GUIDE CONTENT ARCHITECTURE CONTRACT`
 
-B3 starts from A2 source evidence plus the locked B1/B2 contracts. It must not reopen B1/B2 or start production code.
+B4 starts from A2 content evidence plus locked B1/B2/B3 contracts. It must not reopen them or start production code.
 
-B3 must lock:
-- authoritative source за всяка Info category/subcategory;
-- DB vs hardcoded boundary;
-- owner на mutable local facts;
-- publication/reliability semantics;
-- freshness/recheck windows по data type;
-- stale state и public/search behavior;
-- correction/provenance contract;
-- exact searchable Info fields за Search V6;
-- Info canonical/detail/SEO/share contract;
+B4 must lock:
+- exact role на Articles vs Info vs Q&A;
+- article readiness/quality gate;
+- evergreen vs mutable local facts;
+- topic/guide architecture;
+- author/source/freshness/update semantics;
+- internal linking към Info/entities/Q&A;
+- Search V6 article eligibility;
+- canonical/SEO/share structure;
+- duplicate/thin-content prevention;
+- initial content inventory priorities without invented analytics baseline;
 - no schema/RLS/production implementation.
 
 Required artifact:
 
-`PUBLIC_PRODUCT_V6_B3_INFO_SOURCE_FRESHNESS_SEO_SEARCH_CONTRACT.md`
+`PUBLIC_PRODUCT_V6_B4_ARTICLE_GUIDE_CONTENT_ARCHITECTURE_CONTRACT.md`
 
-B3 exit gate:
+B4 exit gate:
 
-**всеки mutable Info факт има един authoritative source, ясна publication/reliability/freshness semantics, deterministic stale/search behavior и canonical SEO owner без hardcoded/DB ambiguity.**
+**всяка Article/Guide страница има ясна роля, readiness/source/freshness truth, правилна връзка към authoritative Info/Q&A/entity owners, Search eligibility и canonical SEO value без duplicated mutable facts или thin content.**
 
 ---
 
@@ -220,10 +247,10 @@ B3 exit gate:
 
 Нов чат:
 - чете rules → `PROJECT_PROGRESS.md` → `PUBLIC_PRODUCT_V6_MASTER_CONTROL.md`;
-- после B1/B2 и A2 само където са нужни за B3;
+- после B1/B2/B3 и A2/content supporting docs само където са нужни за B4;
 - продължава по exact next task автономно;
 - не иска от потребителя повторно описание на проекта;
-- не преотваря V3/A1/A2/B1/B2 без доказана причина;
+- не преотваря V3/A1/A2/B1/B2/B3 без доказана причина;
 - не започва V6 production code;
 - при нова добра идея я записва, но не разбива текущия stage;
 - при protected/risky production change спира преди промяната, ако липсва подходящо approval.
@@ -239,8 +266,8 @@ B3 exit gate:
 
 ## 10. CURRENT HANDOFF
 
-**Completed:** V6-0, V6-A1, V6-A2, V6-B1, V6-B2.  
-**Current:** V6-B3.  
-**Next artifact:** `PUBLIC_PRODUCT_V6_B3_INFO_SOURCE_FRESHNESS_SEO_SEARCH_CONTRACT.md`.  
+**Completed:** V6-0, V6-A1, V6-A2, V6-B1, V6-B2, V6-B3.  
+**Current:** V6-B4.  
+**Next artifact:** `PUBLIC_PRODUCT_V6_B4_ARTICLE_GUIDE_CONTENT_ARCHITECTURE_CONTRACT.md`.  
 **Production:** unchanged by V6 planning.  
 **Do not do next:** production implementation before B/C/D/E approval gates.
