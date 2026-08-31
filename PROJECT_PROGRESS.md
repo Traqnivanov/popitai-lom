@@ -97,6 +97,7 @@ Production impact: **NONE**.
 - `PUBLIC_PRODUCT_V6_INTERACTION_FORM_LINK_CONTRACT.md`;
 - `PUBLIC_PRODUCT_V6_CURRENT_TARGET_OWNER_MAP.md`;
 - `PUBLIC_PRODUCT_V6_A2_EVIDENCE_BASELINE.md`;
+- `PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md`;
 - **`PUBLIC_PRODUCT_V6_MASTER_CONTROL.md`**.
 
 ---
@@ -132,53 +133,54 @@ Key proven A2 facts:
 - Q&A Moderator self-content restrictions are consistent in audited DB/UI;
 - Moderator own-business edit is inconsistent with the LOCKED rule and is a separate protected defect candidate.
 
-### `V6-B — PRODUCT CONTRACTS`
+### `V6-B1 — FINAL IA / TAXONOMY / OWNER CONTRACT`
+**DONE.**
+
+Artifact:
+`PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md`
+
+Locked:
+- 16-category stable taxonomy;
+- shortcuts vs taxonomy;
+- `Открий в Лом`;
+- owner-aware Add routes;
+- Jobs vs Services;
+- protected Construction presentation;
+- Health/Shops/Events specialized boundaries;
+- Firms/Info/Articles/Q&A roles;
+- backward URLs and Find/Add/Ask destinations.
+
+Production impact: **NONE**.
+
+### `V6-B2 — SEARCH V6 / RESULT COMPOSITION / INTENT ROUTING CONTRACT`
 **CURRENT STAGE.**
 
 ---
 
 ## 8. EXACT NEXT TASK
 
-# `STAGE V6-B1 — FINAL IA / TAXONOMY / OWNER CONTRACT`
+# `STAGE V6-B2 — SEARCH V6 / RESULT COMPOSITION / INTENT ROUTING CONTRACT`
 
-Нов чат продължава директно оттук. Не започва нов одит и не пита потребителя да обяснява проекта.
-
-B1 трябва да заключи в един договор:
-- desktop/mobile public IA;
-- final main marketplace categories;
-- subcategory ownership;
-- stable taxonomy vs first-screen shortcuts;
-- `Открий в Лом` като discovery layer, не втори taxonomy;
-- `Работа` vs `Услуги`;
-- `Строителство и ремонти` presentation при запазен protected Masters owner;
-- Автомобили;
-- Имоти;
-- Красота;
-- Дом и градина;
-- Магазини specialized owner integration;
-- Заведения/Firms integration;
-- Събития;
-- Health specialized owner integration;
-- точната роля на `Фирми`;
-- точната роля на `Инфо Лом`;
-- точната роля на `Статии`;
-- Q&A като contextual action/content memory, с `Още → Въпроси` като secondary archive/entry;
-- backward URLs/canonical mapping;
-- exact Add destination по owner;
-- key `Намери / Добави / Попитай` destinations;
-- `KEEP / ADAPT / REPLACE PRESENTATION / DEFER`;
-- performance consequences;
-- без ethnic segmentation.
+B2 must lock:
+- one explicit Search owner;
+- query normalization/synonyms and B1 taxonomy intent routing;
+- exact owner queries/result types;
+- verified Info vs community result ordering;
+- protected Ivanov/Admin/boost-safe local ranking;
+- no-result → contextual Ask;
+- limits/debounce/cancel/pagination/cache/error states;
+- filtered URL/canonical/SEO consequences;
+- useful analytics contract without invented baseline;
+- mobile/performance/render ownership;
+- no production code.
 
 Required artifact:
 
-`PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md`
+`PUBLIC_PRODUCT_V6_B2_SEARCH_INTENT_RESULT_CONTRACT.md`
 
-B1 exit gate:
+B2 exit gate:
 
-**всеки major public entry има едно ясно потребителско значение, един authoritative owner/composition rule, един target Add path и няма category/owner ambiguity.**
-
-След B1 Master Control и този checkpoint се актуализират и се задава точният следващ B-stage.
+**one search owner, bounded authoritative queries, deterministic composition/ranking, correct no-result path and no protected/data-visibility ambiguity.**
 
 ---
 
@@ -205,8 +207,8 @@ B1 exit gate:
 
 ## 10. CURRENT HANDOFF
 
-**Completed:** V6-0, V6-A1, V6-A2.  
-**Current:** V6-B1.  
-**Next artifact:** `PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md`.  
+**Completed:** V6-0, V6-A1, V6-A2, V6-B1.  
+**Current:** V6-B2.  
+**Next artifact:** `PUBLIC_PRODUCT_V6_B2_SEARCH_INTENT_RESULT_CONTRACT.md`.  
 **Production:** unchanged by V6 planning.  
 **Do not do next:** production implementation before B/C/D/E approval gates.

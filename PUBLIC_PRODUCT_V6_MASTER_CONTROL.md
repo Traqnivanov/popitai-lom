@@ -80,6 +80,7 @@ Growth loop:
 
 - `PUBLIC_PRODUCT_V6_CURRENT_TARGET_OWNER_MAP.md` — **V6-A1 COMPLETE** owner/relationship/current→target map.
 - `PUBLIC_PRODUCT_V6_A2_EVIDENCE_BASELINE.md` — **V6-A2 COMPLETE** runtime/source/data/content/protected evidence baseline.
+- `PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md` — **V6-B1 COMPLETE** final public IA/taxonomy/owner/Add/backward-URL contract.
 
 ### Production truth until final V6 approval
 
@@ -119,7 +120,18 @@ A2 proved the important current-state uncertainties by GitHub source inspection 
 
 **CURRENT STAGE.**
 
-Next contract: `V6-B1 — FINAL IA / TAXONOMY / OWNER CONTRACT`.
+#### `V6-B1 — FINAL IA / TAXONOMY / OWNER CONTRACT`
+
+**DONE.**
+
+Artifact:
+`PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md`
+
+B1 locked the 16-category stable taxonomy, shortcuts vs taxonomy, `Открий в Лом`, owner-aware Add routes, Jobs vs Services, specialized Health/Shops/Events boundaries, backward URLs and key Find/Add/Ask semantics.
+
+#### `V6-B2 — SEARCH V6 / RESULT COMPOSITION / INTENT ROUTING CONTRACT`
+
+**CURRENT EXACT STAGE.**
 
 ---
 
@@ -218,6 +230,19 @@ A2 did not identify a proven current Popitai-specific first-party analytics sour
 
 Do not invent traffic/search/category metrics. Use external/local evidence only as supporting evidence until a real first-party baseline exists.
 
+### O. B1 final IA/taxonomy contract is locked for the next V6 stages
+
+B1 decided:
+- stable 16-category public taxonomy;
+- initial shortcuts: Construction, Health, Jobs, Cars, Property, Beauty;
+- `Открий в Лом`: Shops, Restaurants, Events, Firms;
+- `Работа` = Jobs/Listings intent;
+- `Други услуги` = bounded service leaves, not a giant catch-all;
+- specialized Health/Shops/Events owners are not bypassed;
+- current public Event submit flow is not proven, so no fake/generic Event Add action;
+- `rabota.html` remains compatibility deep view for Services, not a new Jobs owner;
+- no new backend owner or production code.
+
 ---
 
 ## 6. IMPORTANT PROTECTED DEFECT FOUND IN A2 — DO NOT SILENTLY FIX INSIDE V6-B
@@ -247,7 +272,7 @@ Q&A self-moderation, by contrast, was found correctly restricted for Moderator o
 
 ### V6-B product contracts
 
-- [ ] **B1 final IA/taxonomy/owner contract**;
+- [x] **B1 final IA/taxonomy/owner contract** — `PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md`;
 - [ ] B2 exact Search V6 contract;
 - [ ] B3 Info Source/Freshness/SEO/Search contract;
 - [ ] B4 Article/Guide content architecture contract;
@@ -271,62 +296,38 @@ Q&A self-moderation, by contrast, was found correctly restricted for Moderator o
 
 ## 8. EXACT NEXT TASK
 
-# `STAGE V6-B1 — FINAL IA / TAXONOMY / OWNER CONTRACT`
+# `STAGE V6-B2 — SEARCH V6 / RESULT COMPOSITION / INTENT ROUTING CONTRACT`
 
-A new chat must continue here directly.
+B2 starts from the B1 taxonomy and A2 search evidence. It must not reopen B1 or start production code.
 
-### B1 must produce one exact information-architecture contract covering:
+### B2 must define
 
-1. global desktop/mobile navigation role;
-2. one top-level `Обяви и услуги` marketplace entry without restoring a separate top-level `Категории`;
-3. stable main categories vs first-screen shortcuts;
-4. final main categories and subcategory ownership;
-5. exact distinction `Работа` vs `Услуги`;
-6. `Строителство и ремонти` presentation while preserving protected Masters/Construction owner/URL/backend rules;
-7. `Автомобили`;
-8. `Имоти`;
-9. `Красота`;
-10. `Дом и градина`;
-11. `Магазини` specialized owner integration;
-12. `Заведения` / Firms-owner integration;
-13. `Събития`;
-14. Health specialized owner integration;
-15. exact role of `Фирми` as separate owner/navigation entry vs marketplace result type;
-16. exact role of `Инфо Лом` and its categories;
-17. exact role of `Статии`;
-18. Q&A as contextual action/content type, while `Още → Въпроси` remains a secondary archive/entry;
-19. `Открий в Лом` definition — discovery shortcuts, not a second taxonomy;
-20. backward-compatible URLs and canonical mapping;
-21. which current presentation is `KEEP / ADAPT / REPLACE PRESENTATION / DEFER`;
-22. target Add destinations for every category without bypassing specialized/protected owners;
-23. exact interaction destination for key `Намери / Добави / Попитай` actions;
-24. no ethnic segmentation;
-25. lightweight-by-default implementation consequences.
+1. one explicit Search owner replacing the current legacy/new ambiguity;
+2. query normalization and a lightweight Bulgarian/local synonym model;
+3. mapping from query intent to the B1 stable taxonomy;
+4. exact result types and authoritative owner queries;
+5. verified Info vs community opinion separation and ordering;
+6. local relevance while preserving protected Ivanov/Admin/boost semantics;
+7. no-result → contextual `Попитай Лом` flow;
+8. limits, debounce, cancellation, pagination/show-more, cache and failure states;
+9. category-filter URL/canonical/SEO consequences;
+10. useful analytics events without inventing a current baseline;
+11. render ownership and mobile/performance budget;
+12. no schema/RLS/production implementation.
 
-### B1 design discipline
-
-- Work from A1/A2 evidence, not assumptions.
-- Preserve backend owners and protected rules.
-- Do not create duplicate owners merely for visual symmetry.
-- Do not use `Услуги` as a giant catch-all.
-- Taxonomy is stable architecture; shortcuts are flexible discovery presentation.
-- Q&A is contextual memory/action, not a competing main taxonomy.
-- Info verified facts remain separated from community opinion.
-- No production code in B1.
-
-### B1 artifact
+### B2 artifact
 
 Create:
 
-**`PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md`**
+**`PUBLIC_PRODUCT_V6_B2_SEARCH_INTENT_RESULT_CONTRACT.md`**
 
-Then update this Master Control and `PROJECT_PROGRESS.md` with B1 status and the exact next B-stage.
+Then update this Master Control, `PROJECT_PROGRESS.md` and `PUBLIC_PRODUCT_V6_NEXT_CHAT_START.md`.
 
-### B1 exit gate
+### B2 exit gate
 
-B1 is complete only when:
+B2 is complete only when:
 
-**every major public entry has one clear user meaning, one authoritative owner/composition rule, one target Add path, and no category/owner ambiguity remains.**
+**every supported query has one search owner, bounded owner queries, a deterministic result-composition/ranking contract, a correct no-result path and no protected ranking or data-visibility ambiguity.**
 
 ---
 
@@ -393,10 +394,10 @@ approved contract → implementation → tests/CI → protected regression → d
 
 ## 12. HANDOFF LINE
 
-**Completed:** V6-0 + V6-A1 + V6-A2.  
-**Current stage:** V6-B product contracts.  
-**Primary evidence artifacts:** `PUBLIC_PRODUCT_V6_CURRENT_TARGET_OWNER_MAP.md` + `PUBLIC_PRODUCT_V6_A2_EVIDENCE_BASELINE.md`.  
+**Completed:** V6-0 + V6-A1 + V6-A2 + V6-B1.  
+**Current stage:** V6-B2 Search contract.  
+**Primary evidence/contracts:** `PUBLIC_PRODUCT_V6_CURRENT_TARGET_OWNER_MAP.md` + `PUBLIC_PRODUCT_V6_A2_EVIDENCE_BASELINE.md` + `PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md`.  
 **Production impact:** NONE.  
-**Current exact next task:** `STAGE V6-B1 — FINAL IA / TAXONOMY / OWNER CONTRACT`.  
-**Required new artifact:** `PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md`.  
+**Current exact next task:** `STAGE V6-B2 — SEARCH V6 / RESULT COMPOSITION / INTENT ROUTING CONTRACT`.  
+**Required new artifact:** `PUBLIC_PRODUCT_V6_B2_SEARCH_INTENT_RESULT_CONTRACT.md`.  
 **Forbidden next action:** direct V6 production implementation before B/C/D/E gates.
