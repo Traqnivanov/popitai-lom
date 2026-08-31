@@ -78,7 +78,7 @@ LOCKED:
 - Moderator own content следва normal non-Admin flow;
 - V6 нови states по-късно се интегрират в съществуващия Admin panel/role model.
 
-A2 намери отделен protected defect candidate при Moderator own-business edit; той е записан в Master Control/A2 и **не се поправя като странична IA промяна**.
+A2 намери отделен protected defect candidate при Moderator own-business edit; той е записан в Master Control/A2 и **не се поправя като странична IA/search промяна**.
 
 ---
 
@@ -98,6 +98,7 @@ Production impact: **NONE**.
 - `PUBLIC_PRODUCT_V6_CURRENT_TARGET_OWNER_MAP.md`;
 - `PUBLIC_PRODUCT_V6_A2_EVIDENCE_BASELINE.md`;
 - `PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md`;
+- `PUBLIC_PRODUCT_V6_B2_SEARCH_INTENT_RESULT_CONTRACT.md`;
 - **`PUBLIC_PRODUCT_V6_MASTER_CONTROL.md`**.
 
 ---
@@ -125,7 +126,7 @@ Key proven A2 facts:
 - Info public source-of-truth is inconsistent: Health mostly DB-driven; Institutions layered; Banks/Education/Transport hardcode mutable local facts; Utilities is hybrid;
 - freshness needs data-type recheck rules;
 - current article `Как да избереш майстор...` exists but is `ЗА ПРЕРАБОТКА` under V6 readiness rules;
-- `Как се пенсионира човек` is `РАЗРАБОТВАНО` with NОИ/Info authoritative backbone;
+- `Как се пенсионира човек` is `РАЗРАБОТВАНО` with НОИ/Info authoritative backbone;
 - Question/Listing/Firm detail pages begin with generic static metadata;
 - question detail has visible share CTA but no proven active share handler in the audited owner;
 - no current PWA/manifest/service-worker/share-target implementation was proven;
@@ -153,34 +154,65 @@ Locked:
 Production impact: **NONE**.
 
 ### `V6-B2 — SEARCH V6 / RESULT COMPOSITION / INTENT ROUTING CONTRACT`
+**DONE.**
+
+Artifact:
+`PUBLIC_PRODUCT_V6_B2_SEARCH_INTENT_RESULT_CONTRACT.md`
+
+Locked:
+- one explicit Search owner and one render owner for search roots;
+- lightweight Bulgarian/local normalization and synonym contract;
+- B1 taxonomy → intent mapping;
+- exact result families: route, verified Info, firm, listing, shop, event, question, article;
+- bounded authoritative owner queries and two-phase query planner;
+- deterministic group ordering plus owner-local ranking;
+- verified Info vs community opinion separation;
+- protected Ivanov/Admin/boost-safe ranking boundary;
+- contextual no-result → `Попитай Лом` only after complete bounded fallback;
+- debounce/cancellation/pagination/cache/partial failure states;
+- `tarsene.html?q=...` search state with noindex parameter-search SEO policy;
+- future analytics event contract without inventing current baseline;
+- mobile/performance/network/render ownership budgets;
+- no schema/RLS/production implementation.
+
+Additional B2 evidence:
+- current `tarsene.html` still loads legacy `script.js` search;
+- `public-search-v1.js` is useful DB-backed candidate code but is not active current owner and does not cover granular Info/Shops/Events;
+- current listing presentation proves Admin/boost ordering that Search V6 must preserve rather than overwrite;
+- current Info/Shops/Events/Q&A sources support separate authoritative public result families.
+
+Production impact: **NONE**.
+
+### `V6-B3 — INFO SOURCE / FRESHNESS / SEO / SEARCH CONTRACT`
 **CURRENT STAGE.**
 
 ---
 
 ## 8. EXACT NEXT TASK
 
-# `STAGE V6-B2 — SEARCH V6 / RESULT COMPOSITION / INTENT ROUTING CONTRACT`
+# `STAGE V6-B3 — INFO SOURCE / FRESHNESS / SEO / SEARCH CONTRACT`
 
-B2 must lock:
-- one explicit Search owner;
-- query normalization/synonyms and B1 taxonomy intent routing;
-- exact owner queries/result types;
-- verified Info vs community result ordering;
-- protected Ivanov/Admin/boost-safe local ranking;
-- no-result → contextual Ask;
-- limits/debounce/cancel/pagination/cache/error states;
-- filtered URL/canonical/SEO consequences;
-- useful analytics contract without invented baseline;
-- mobile/performance/render ownership;
-- no production code.
+B3 starts from A2 source evidence plus the locked B1/B2 contracts. It must not reopen B1/B2 or start production code.
+
+B3 must lock:
+- authoritative source за всяка Info category/subcategory;
+- DB vs hardcoded boundary;
+- owner на mutable local facts;
+- publication/reliability semantics;
+- freshness/recheck windows по data type;
+- stale state и public/search behavior;
+- correction/provenance contract;
+- exact searchable Info fields за Search V6;
+- Info canonical/detail/SEO/share contract;
+- no schema/RLS/production implementation.
 
 Required artifact:
 
-`PUBLIC_PRODUCT_V6_B2_SEARCH_INTENT_RESULT_CONTRACT.md`
+`PUBLIC_PRODUCT_V6_B3_INFO_SOURCE_FRESHNESS_SEO_SEARCH_CONTRACT.md`
 
-B2 exit gate:
+B3 exit gate:
 
-**one search owner, bounded authoritative queries, deterministic composition/ranking, correct no-result path and no protected/data-visibility ambiguity.**
+**всеки mutable Info факт има един authoritative source, ясна publication/reliability/freshness semantics, deterministic stale/search behavior и canonical SEO owner без hardcoded/DB ambiguity.**
 
 ---
 
@@ -188,10 +220,10 @@ B2 exit gate:
 
 Нов чат:
 - чете rules → `PROJECT_PROGRESS.md` → `PUBLIC_PRODUCT_V6_MASTER_CONTROL.md`;
-- после чете A1/A2 само където са нужни за B1;
+- после B1/B2 и A2 само където са нужни за B3;
 - продължава по exact next task автономно;
 - не иска от потребителя повторно описание на проекта;
-- не преотваря V3/A1/A2 без доказана причина;
+- не преотваря V3/A1/A2/B1/B2 без доказана причина;
 - не започва V6 production code;
 - при нова добра идея я записва, но не разбива текущия stage;
 - при protected/risky production change спира преди промяната, ако липсва подходящо approval.
@@ -207,8 +239,8 @@ B2 exit gate:
 
 ## 10. CURRENT HANDOFF
 
-**Completed:** V6-0, V6-A1, V6-A2, V6-B1.  
-**Current:** V6-B2.  
-**Next artifact:** `PUBLIC_PRODUCT_V6_B2_SEARCH_INTENT_RESULT_CONTRACT.md`.  
+**Completed:** V6-0, V6-A1, V6-A2, V6-B1, V6-B2.  
+**Current:** V6-B3.  
+**Next artifact:** `PUBLIC_PRODUCT_V6_B3_INFO_SOURCE_FRESHNESS_SEO_SEARCH_CONTRACT.md`.  
 **Production:** unchanged by V6 planning.  
 **Do not do next:** production implementation before B/C/D/E approval gates.
