@@ -4,9 +4,9 @@
 Branch: `v6-product-foundation-draft`  
 Актуализирано: 31.08.2026
 
-Това е **единната контролна точка** за V6. Всеки V6 чат започва оттук след LOCKED правилата и `PROJECT_PROGRESS.md`, работи само по записания stage и преди clean handoff актуализира този документ.
+Това е **единната контролна точка** за V6. Всеки нов V6 чат започва оттук след LOCKED правилата и `PROJECT_PROGRESS.md`, продължава от записания `EXACT NEXT TASK` и не започва проекта отначало.
 
-Целта е да няма работа „по чатове“, повторни одити, преотваряне на вече затворени решения или нов код върху непроверена архитектура.
+Цел: да няма повторни одити, противоречиви чат решения, загуба на контекст или V6 production code преди архитектурата да е доказана и одобрена.
 
 ---
 
@@ -14,13 +14,24 @@ Branch: `v6-product-foundation-draft`
 
 ### Production
 
-Production остава на текущите approved правила и Marketplace V3. V6 е **design/research/prototype track**.
+Production остава на текущите approved правила и Marketplace V3.
 
-Този track не е променял production UI, schema, RLS, роли, quotas, moderation, protected owners, Admin/Ivanov priority, Health/Info ownership или production URLs.
+V6 е **design / research / prototype track**.
+
+Този V6 track до момента **НЕ е променял production**:
+- UI;
+- schema/RLS;
+- роли;
+- quotas;
+- moderation;
+- protected owners;
+- Admin/Ivanov priority;
+- Health/Info ownership;
+- production URLs.
 
 ### V6 цел
 
-V6 е надграждане върху съществуващата система, не нов сайт:
+V6 е надграждане върху съществуващата система, не нов сайт и не giant rewrite:
 
 **локална търсачка + marketplace + фирми/местни обекти + Инфо Лом + статии + contextual Q&A + структурирана памет на Лом + SEO/share/distribution layer.**
 
@@ -30,7 +41,7 @@ Growth loop:
 
 ---
 
-## 2. ЗАДЪЛЖИТЕЛЕН READ ORDER
+## 2. ЗАДЪЛЖИТЕЛЕН READ ORDER В НОВ ЧАТ
 
 1. `PROJECT_RULES_00_READ_FIRST.md`
 2. `PROJECT_RULES_PROTECTED_CORE.md`
@@ -38,30 +49,37 @@ Growth loop:
 4. `PROJECT_RULES.md`
 5. `PROJECT_RULES_RENDER_OWNERSHIP.md`
 6. `PROJECT_PROGRESS.md`
-7. `PUBLIC_PRODUCT_V6_MASTER_CONTROL.md`
+7. **`PUBLIC_PRODUCT_V6_MASTER_CONTROL.md` — този документ**
 8. task-specific V6 supporting docs.
 
 При конфликт:
 
-**LOCKED rules > approved production specs > V6 master control > V6 supporting drafts > prototypes/chat notes.**
+**LOCKED rules > approved production specs > V6 Master Control > V6 supporting drafts > prototypes/chat notes.**
+
+Нов чат НЕ пита потребителя:
+- „Какво правехме?“;
+- „Коя версия е последна?“;
+- „От къде да започна?“
+ако отговорът е записан тук.
 
 ---
 
 ## 3. V6 DOCUMENT REGISTRY
 
-### Product / strategy foundations
+### Основни product/strategy документи
 
-- `PUBLIC_PRODUCT_V6_WORKING_MODEL.md` — product architecture, Q&A memory, relationships, Facebook Bridge, search/ranking/SEO concepts.
-- `PUBLIC_PRODUCT_V6_GUARDRAILS.md` — Admin/Moderator, permission parity, lightweight-by-default, performance hard gate, SUPER IDEA exception.
-- `PUBLIC_PRODUCT_V6_CONTENT_SEO_STRATEGY.md` — evergreen/local content, SEO, internal linking, quality gate.
+- `PUBLIC_PRODUCT_V6_WORKING_MODEL.md` — продуктова архитектура, Q&A memory, relations, Facebook Bridge, search/ranking/SEO concepts.
+- `PUBLIC_PRODUCT_V6_GUARDRAILS.md` — Admin/Moderator, permission parity, performance hard gate, lightweight-by-default, SUPER IDEA exception.
+- `PUBLIC_PRODUCT_V6_CONTENT_SEO_STRATEGY.md` — content/SEO/internal linking/quality strategy.
 - `PUBLIC_PRODUCT_V6_CONTENT_INVENTORY_RULE.md` — readiness statuses; `има файл` ≠ `проверено готово`.
-- `PUBLIC_PRODUCT_V6_INFO_LOM_CORE_STRATEGY.md` — Info Lom positioning, SEO/trust/share/freshness/topic-cluster strategy.
-- `PUBLIC_PRODUCT_V6_ADOPTION_LAUNCH.md` — habit-change, positioning `Лом на едно място`, Facebook distribution, business/user value.
-- `PUBLIC_PRODUCT_V6_INTERACTION_FORM_LINK_CONTRACT.md` — button/link/form/state/end-to-end flow contract.
+- `PUBLIC_PRODUCT_V6_INFO_LOM_CORE_STRATEGY.md` — Info Lom authoritative/trust/SEO/share/freshness strategy.
+- `PUBLIC_PRODUCT_V6_ADOPTION_LAUNCH.md` — adoption/Facebook distribution/business-user value.
+- `PUBLIC_PRODUCT_V6_INTERACTION_FORM_LINK_CONTRACT.md` — buttons/forms/links/states/end-to-end flow contract.
 
 ### Current-system evidence
 
-- **`PUBLIC_PRODUCT_V6_CURRENT_TARGET_OWNER_MAP.md`** — V6-A1 current→target owner/relationship map with code/rules evidence, interaction findings and protected boundaries.
+- `PUBLIC_PRODUCT_V6_CURRENT_TARGET_OWNER_MAP.md` — **V6-A1 COMPLETE** owner/relationship/current→target map.
+- `PUBLIC_PRODUCT_V6_A2_EVIDENCE_BASELINE.md` — **V6-A2 COMPLETE** runtime/source/data/content/protected evidence baseline.
 
 ### Production truth until final V6 approval
 
@@ -75,228 +93,279 @@ Growth loop:
 
 ## 4. STAGE STATUS
 
-### `STAGE V6-0 — CONTROL / CONTINUITY`
+### `V6-0 — CONTROL / CONTINUITY`
 
 **DONE.**
 
-Established:
-- one master control;
-- canonical read order;
-- decision hierarchy;
-- clean handoff protocol;
-- interruption/no-side-mission rules;
-- Definition of Done.
+### `V6-A1 — CURRENT → TARGET OWNER / RELATIONSHIP MAP`
 
-### `STAGE V6-A1 — CURRENT → TARGET OWNER / RELATIONSHIP MAP`
-
-**DONE FOR STATIC PLANNING EVIDENCE.**
+**DONE.**
 
 Artifact:
 `PUBLIC_PRODUCT_V6_CURRENT_TARGET_OWNER_MAP.md`
 
-A1 mapped:
-- shell/navigation/home;
-- taxonomy;
-- public search implementations;
-- Info Lom + subowner model;
-- Articles;
-- Q&A;
-- Firms/basic+expanded/edit ownership;
-- Listings/Marketplace;
-- Masters/Construction;
-- Cars;
-- Services vs Jobs;
-- Property;
-- Health;
-- Shops;
-- Restaurants;
-- Events;
-- Profile;
-- Admin/Moderator;
-- SEO/detail rendering;
-- sharing;
-- PWA current evidence;
-- Analytics current evidence;
-- buttons/forms/links/states/render-ownership concerns.
+A1 mapped the current owner/data/moderation/search/admin/interaction/SEO/performance boundaries for all major public/backend domains.
 
-A1 exit gate is satisfied at owner level: no major public domain is left as an unexplained new owner. Remaining uncertainties require runtime/content evidence, so they are moved to A2 instead of reopening A1.
+### `V6-A2 — EVIDENCE / COVERAGE / RUNTIME BASELINE`
+
+**DONE.**
+
+Artifact:
+`PUBLIC_PRODUCT_V6_A2_EVIDENCE_BASELINE.md`
+
+A2 proved the important current-state uncertainties by GitHub source inspection and read-only Supabase evidence. No production writes were performed.
+
+### `V6-B — PRODUCT CONTRACTS`
+
+**CURRENT STAGE.**
+
+Next contract: `V6-B1 — FINAL IA / TAXONOMY / OWNER CONTRACT`.
 
 ---
 
-## 5. IMPORTANT A1 DISCOVERIES
+## 5. LOCKED WORKING TRUTH AFTER A1 + A2
 
-These findings are now part of the V6 working truth until disproved by A2 runtime evidence.
+These are current evidence-backed premises for V6-B. Do not reopen them casually.
 
 ### A. Preserve the owner architecture
 
-Firms, Listings, Health/Info, Shops and Events already have meaningful separate ownership/moderation. V6 should connect them; it should not collapse them into a universal table.
+Firms, Listings, Health/Info, Shops, Events and their protected moderation/business rules remain separate authoritative owners. V6 connects them through search, IA and relations; it does not collapse them into a universal table.
 
-### B. Info Lom is already structurally capable of being the authoritative core
+### B. Jobs and Services are different intents
 
-Current Info data/model includes publication/reliability/confirmation concepts and controlled correction/submission flows. Articles/Q&A should reference it rather than duplicate mutable verified facts.
+Current `rabota.html` represents Services, while real `Работа` already exists in protected Listings with job-specific listing types.
 
-### C. Health stays specialized
-
-Health catalog uses verified/published Info data and specialized submissions. Generic marketplace write must not replace this.
-
-### D. Shops stay specialized
-
-`shops` has its own catalog/tags/groups/submission/moderation flow. Global discovery/search may expose it, but generic Firms/Listings must not bypass the owner.
-
-### E. Restaurants currently use Firms owner
-
-`Заведения` is currently a category/read composition over approved `businesses` + Q&A. No separate restaurant write owner was proven. V6 should improve discovery before inventing another database.
-
-### F. Jobs vs Services must be separated in public IA
-
-Current `rabota.html` actually represents **Услуги**. Real `Работа` already exists as a protected Listing category with job-specific types. V6 target must distinguish:
+V6 must treat:
 
 **Работа = jobs intent / Listings owner.**  
-**Услуги = offer/seek service intent / existing service listing + firm owners.**
+**Услуги = service offer/seek intent / Listings + Firms composition.**
 
-### G. Property already has Listing semantics
+### C. Property already has protected listing semantics
 
-`Имоти` exists in the protected listing taxonomy with sell/rent/seek types; no dedicated property write owner is needed. A V6 `Имоти` page should be a read/presentation layer.
+`Имоти` already supports selling/renting/seeking through Listings. V6 can create a stronger read/presentation entry but does not need a new property write owner.
 
-### H. Home still carries old parallel category presentation
+### D. Restaurants currently use Firms owner
 
-`index.html` still contains the older equal-category hub and compatibility links through `kategorii.html`. V6 needs one approved landing presentation rather than more incremental patches.
+`Заведения` is currently discovery/composition over businesses; no separate restaurant write owner has been proven necessary.
 
-### I. Search activation is not yet proven
+### E. Health remains specialized
 
-Two implementations exist:
-- legacy search in `script.js`, which `tarsene.html` currently loads;
-- newer DB-backed `public-search-v1.js`.
+Health uses verified/published Info data and controlled health submissions. Generic marketplace write must not replace it.
 
-Static source audit did **not** find an activation reference for `public-search-v1.js` in `tarsene.html`, `index.html` or `public-shell-v1.js`. A2 must establish the real runtime owner before Search V6 is designed. Previous assumptions that the newer file is automatically active are not accepted without proof.
+### F. Shops remain specialized
 
-### J. Global Info search is not yet granular
+`shops` has its own catalog/submission/moderation owner. Global search/discovery may expose shops, but generic Firms/Listings must not bypass the specialized owner.
 
-The newer search implementation knows whole Info pages statically, while `info.html` has granular `info_entries` search. V6 should make verified Info records first-class global results with a controlled query budget.
+### G. Home/Marketplace presentation can change only through final V6 contract
 
-### K. Dynamic detail SEO/share needs a server-readable layer
+Production remains Marketplace V3 until V6-B/C/D/E are complete and one final approved V6 spec explicitly supersedes it.
 
-`vapros.html`, `obqva.html` and `firma.html` start with generic static title/description. Client rendering is not enough to guarantee correct per-record social previews/canonical metadata. The existing V6 edge/share-render idea is therefore technically justified, subject to performance design.
+### H. Current global search owner is legacy `script.js`
 
-### L. Render layering must not grow
+A2 proved that current `tarsene.html` loads `script.js`, not `public-search-v1.js`.
 
-Concrete consolidation candidates include:
-- home business cards rendered then decorated through MutationObserver/delayed lookup;
-- known Info Banks multi-render chain;
-- legacy/new search ambiguity;
-- shell source + runtime patches.
+The newer DB-backed `public-search-v1.js` exists but is not the current page owner according to current source.
 
-Do not add more patch layers in V6.
+V6 Search must have one explicit owner; no ambiguous legacy/new parallel renderers.
 
-### M. Interaction flow remains a first-class gate
+### I. Info Lom is strong but current source-of-truth is inconsistent
 
-A screen is not ready because it looks right. Every target flow must be traced:
+Read-only current DB evidence:
+- **152 published `info_entries`**;
+- 2 non-published;
+- all 152 published records have `confirmed_at`;
+- Health, Institutions, Banks, Education, Transport and Utilities have substantial current data.
 
-`ENTRY → CTA → destination/prefill → auth → owner → fields → validation → submit → status → success/error → back/cancel → mobile → accessibility → analytics → performance`.
+But current public rendering is mixed:
+- Health is largely DB-driven;
+- Institutions uses multi-stage render patches;
+- Banks contains hardcoded local data despite DB records;
+- Education contains hardcoded local data despite DB records;
+- Transport contains hardcoded local data despite DB records;
+- Utilities is hybrid DB + hardcoded facts.
+
+V6 needs an exact **Info Source Contract** so mutable local facts have one authoritative owner and code is used only for presentation/config where appropriate.
+
+### J. Freshness needs a real policy
+
+`confirmed_at` alone is insufficient. A2 found at least one published Health record with an old confirmation date compared with most August 2026 data.
+
+V6 must define recheck windows by data type.
+
+### K. Articles are not assumed ready because a file exists
+
+Current `Как да избереш майстор...` exists but is `ЗА ПРЕРАБОТКА` under the V6 content rule.
+
+`Как се пенсионира човек` is `РАЗРАБОТВАНО`, with `Инфо Лом → Институции → НОИ` as authoritative local backbone.
+
+### L. Dynamic detail SEO/share is currently incomplete
+
+Question/Listing/Firm detail pages begin with generic static metadata.
+
+Question detail has visible `Сподели`, but A2 did not find a bound share handler in the active audited question owner.
+
+V6 therefore has a justified need for a lightweight server-readable approved-record share/SEO preview layer, subject to V6-D technical design.
+
+### M. Current PWA evidence
+
+A2 did not find a current PWA manifest/service worker/share-target implementation in the audited current repository state.
+
+Do not design V6 assuming installed-PWA share target exists today.
+
+### N. Popitai first-party analytics baseline is not proven
+
+A2 did not identify a proven current Popitai-specific first-party analytics source suitable for prioritizing V6 IA/search/content.
+
+Do not invent traffic/search/category metrics. Use external/local evidence only as supporting evidence until a real first-party baseline exists.
 
 ---
 
-## 6. CURRENT OPEN GAPS BEFORE PRODUCTION CODE
+## 6. IMPORTANT PROTECTED DEFECT FOUND IN A2 — DO NOT SILENTLY FIX INSIDE V6-B
 
-### A2 evidence/inventory gaps
+### Moderator own-business edit mismatch
 
-- [ ] prove active global Search runtime owner;
-- [ ] Info Lom coverage/freshness/SEO inventory;
-- [ ] Article/Guide inventory by readiness status;
-- [ ] verify dynamic detail share/SEO behavior;
-- [ ] verify Q&A Moderator self-content backend/UI behavior read-only;
-- [ ] verify Moderator own-business edit behavior read-only;
-- [ ] verify Q/Firm/Info share handlers;
-- [ ] confirm current PWA/service-worker/manifest absence/presence;
-- [ ] identify Popitai first-party analytics source and baseline, if one exists.
+Canonical LOCKED rule:
+Moderator-owned firm/content follows normal non-Admin owner flow and Moderator does not become Admin for own content.
 
-### V6-B product contracts still missing
+A2 found a mismatch:
+- current `business-edit.js` blocks both `admin` and `moderator` from the user firm edit flow;
+- current Supabase business edit RPCs also reject `is_staff()`, therefore Moderator is backend-blocked too.
 
-- [ ] final IA/taxonomy/shortcuts/`Открий в Лом` contract;
-- [ ] exact Search V6 contract;
-- [ ] Info Lom SEO/search/content contract from A2 evidence;
-- [ ] Q&A canonical/duplicate/alias/moderation contract;
-- [ ] structured recommendation relation contract;
-- [ ] Facebook Bridge technical/product contract;
-- [ ] local relevance ranking preserving protected Admin/Ivanov/boost semantics;
-- [ ] freshness/recheck contract;
-- [ ] exact interaction/form/link/state contracts for target screens.
+This is a **real protected production-flow defect candidate**, not a V6 product idea.
+
+Rule:
+- do not hide it;
+- do not change it casually during IA work;
+- treat it as a separate narrow protected fix scope when implementation approval is appropriate;
+- any fix must preserve Admin special behavior and normal owner moderation/draft protections.
+
+Q&A self-moderation, by contrast, was found correctly restricted for Moderator own content in current DB/UI evidence.
+
+---
+
+## 7. OPEN GAPS BEFORE PRODUCTION CODE
+
+### V6-B product contracts
+
+- [ ] **B1 final IA/taxonomy/owner contract**;
+- [ ] B2 exact Search V6 contract;
+- [ ] B3 Info Source/Freshness/SEO/Search contract;
+- [ ] B4 Article/Guide content architecture contract;
+- [ ] B5 Q&A canonical/duplicate/alias/moderation contract;
+- [ ] B6 structured recommendation relation contract;
+- [ ] B7 Facebook Bridge technical/product contract;
+- [ ] B8 local relevance ranking preserving protected Admin/Ivanov/boost semantics;
+- [ ] B9 exact target interaction/forms/buttons/links/state contracts.
 
 ### Later gates
 
-- [ ] V6-C real desktop/mobile visual/interaction prototype + real mobile viewport QA;
-- [ ] V6-D schema/RLS/index/migration/rollback/performance/SEO render design;
-- [ ] V6-E one final canonical approved spec;
+- [ ] V6-C real desktop/mobile visual + interaction prototype;
+- [ ] real mobile viewport QA;
+- [ ] V6-D exact schema/RLS/index/migration/rollback/performance/SEO rendering design;
+- [ ] V6-E one final canonical approved V6 spec;
 - [ ] V6-F incremental implementation + CI/protected regression/live QA.
 
-No V6 production code before these gates.
+**No V6 production code before these gates.**
 
 ---
 
-## 7. EXACT NEXT TASK
+## 8. EXACT NEXT TASK
 
-# `STAGE V6-A2 — EVIDENCE / COVERAGE / RUNTIME BASELINE`
+# `STAGE V6-B1 — FINAL IA / TAXONOMY / OWNER CONTRACT`
 
-A new chat must continue in this exact order unless the user explicitly changes priority:
+A new chat must continue here directly.
 
-1. **Search runtime proof** — identify which search implementation actually owns current behavior; no writes.
-2. **Info Lom inventory** — topic/subowner/current coverage/source/freshness/status/SEO intent/share potential.
-3. **Article/Guide inventory** — existing, developed, Info-backed, missing; apply readiness rule.
-4. **SEO/share runtime current-state** — question/listing/firm/Info metadata and share handlers.
-5. **Protected interaction verification** — Q&A Moderator self-content and Moderator own-business edit, read-only evidence only.
-6. **PWA current state** — manifest/service worker/share target presence/absence.
-7. **Analytics source/baseline** — identify real Popitai first-party source; if unavailable, record it as unavailable rather than inventing metrics.
-8. Write `PUBLIC_PRODUCT_V6_A2_EVIDENCE_BASELINE.md`, update this Master Control and `PROJECT_PROGRESS.md`.
+### B1 must produce one exact information-architecture contract covering:
 
-A2 exit gate:
+1. global desktop/mobile navigation role;
+2. one top-level `Обяви и услуги` marketplace entry without restoring a separate top-level `Категории`;
+3. stable main categories vs first-screen shortcuts;
+4. final main categories and subcategory ownership;
+5. exact distinction `Работа` vs `Услуги`;
+6. `Строителство и ремонти` presentation while preserving protected Masters/Construction owner/URL/backend rules;
+7. `Автомобили`;
+8. `Имоти`;
+9. `Красота`;
+10. `Дом и градина`;
+11. `Магазини` specialized owner integration;
+12. `Заведения` / Firms-owner integration;
+13. `Събития`;
+14. Health specialized owner integration;
+15. exact role of `Фирми` as separate owner/navigation entry vs marketplace result type;
+16. exact role of `Инфо Лом` and its categories;
+17. exact role of `Статии`;
+18. Q&A as contextual action/content type, while `Още → Въпроси` remains a secondary archive/entry;
+19. `Открий в Лом` definition — discovery shortcuts, not a second taxonomy;
+20. backward-compatible URLs and canonical mapping;
+21. which current presentation is `KEEP / ADAPT / REPLACE PRESENTATION / DEFER`;
+22. target Add destinations for every category without bypassing specialized/protected owners;
+23. exact interaction destination for key `Намери / Добави / Попитай` actions;
+24. no ethnic segmentation;
+25. lightweight-by-default implementation consequences.
 
-**we know what content/evidence currently exists, which runtime paths are active, what is only planned, and which measurements are actually available.**
+### B1 design discipline
 
-Then move to V6-B product contracts.
+- Work from A1/A2 evidence, not assumptions.
+- Preserve backend owners and protected rules.
+- Do not create duplicate owners merely for visual symmetry.
+- Do not use `Услуги` as a giant catch-all.
+- Taxonomy is stable architecture; shortcuts are flexible discovery presentation.
+- Q&A is contextual memory/action, not a competing main taxonomy.
+- Info verified facts remain separated from community opinion.
+- No production code in B1.
+
+### B1 artifact
+
+Create:
+
+**`PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md`**
+
+Then update this Master Control and `PROJECT_PROGRESS.md` with B1 status and the exact next B-stage.
+
+### B1 exit gate
+
+B1 is complete only when:
+
+**every major public entry has one clear user meaning, one authoritative owner/composition rule, one target Add path, and no category/owner ambiguity remains.**
 
 ---
 
-## 8. NEW CHAT PROTOCOL
+## 9. NEW CHAT EXECUTION PROTOCOL
 
-At start:
-- read canonical rules/order;
-- read `PROJECT_PROGRESS.md`;
-- read this Master Control;
-- inspect current branch/code only where the exact task requires it;
-- execute `EXACT NEXT TASK` autonomously.
+At start the assistant:
 
-Do not ask “какво правехме?”, “коя версия е последна?” or restart old audits when the answer is recorded here.
+1. reads canonical rules;
+2. reads `PROJECT_PROGRESS.md`;
+3. reads this Master Control;
+4. reads A1/A2 artifacts where B1 evidence is needed;
+5. executes `EXACT NEXT TASK` autonomously.
 
-At end of a meaningful stage:
-- update status ledger;
+It does **not** ask the user to restate the project, old decisions, current branch, stage or next step.
+
+During work:
+- safe read-only/design actions are autonomous;
+- protected/risky production changes are not performed unless appropriate approval exists;
+- strong new ideas are recorded but do not derail the active stage unless they are blockers.
+
+At the end of a meaningful stage:
+- update Master Control;
+- update `PROJECT_PROGRESS.md`;
 - record confirmed vs inferred;
-- record new risks/decisions;
-- set exact next task;
-- record production untouched/changed;
-- link new supporting documents.
+- record defects/risks separately from product ideas;
+- set one exact next task;
+- state production impact truthfully.
 
-No clean handoff without this update.
-
----
-
-## 9. DECISION DISCIPLINE
-
-LOCKED/approved decisions reopen only for:
-- proven defect;
-- strong evidence-based new solution;
-- explicit protected/business approval when required.
-
-Working V6 ideas remain `WORKING` until inventory + contract + prototype + technical impact + approval.
-
-Rejected/replaced important ideas are documented with reason; they are not silently forgotten so another chat does not rediscover them.
+No clean handoff without these updates.
 
 ---
 
 ## 10. INTERRUPTION / NO SIDE-MISSION RULE
 
-A real production bug is a separate incident scope. Fixing it does not reset V6. After the incident, return to the recorded exact next task unless the bug disproves a V6 premise.
+A real production bug is a separate incident scope. It does not reset V6.
 
-A good new idea is recorded in the correct document/gap. It does not interrupt the current stage unless it is a blocker or architectural dependency.
+After an incident fix, return to the recorded exact task unless the bug disproves a V6 premise.
+
+A new idea is captured in the correct V6 document but does not interrupt B1 unless it changes a dependency required to define IA.
 
 ---
 
@@ -304,26 +373,30 @@ A good new idea is recorded in the correct document/gap. It does not interrupt t
 
 ### Planning stage
 
-Done only when key unknowns for that scope are closed, owner/rules contradictions are resolved or explicitly deferred, and the next dependency is exact.
+Done only when key unknowns for the scope are closed, owner/rule contradictions are resolved or explicitly deferred, and the next dependency is exact.
 
 ### User flow
 
-Done only when CTA/link/form/prefill/auth/validation/status/success/error/back/mobile/accessibility/performance behavior is defined and, at implementation stage, tested.
+Done only when CTA/link/form/prefill/auth/validation/status/success/error/back/mobile/accessibility/performance behavior is defined and later tested.
 
 ### Content
 
-Follows `PUBLIC_PRODUCT_V6_CONTENT_INVENTORY_RULE.md`. A file or prior chat discussion does not equal verified-ready content.
+Follows `PUBLIC_PRODUCT_V6_CONTENT_INVENTORY_RULE.md`. A file does not equal verified-ready content.
 
 ### Production feature
 
-Not done until approved contract → implementation → tests/CI → protected regression → desktop/mobile QA → live production verification → rollback path.
+Not done until:
+
+approved contract → implementation → tests/CI → protected regression → desktop/mobile QA → live production verification → rollback path.
 
 ---
 
 ## 12. HANDOFF LINE
 
-**Completed:** V6-0 control/continuity + V6-A1 owner/relationship static audit.  
-**Primary A1 artifact:** `PUBLIC_PRODUCT_V6_CURRENT_TARGET_OWNER_MAP.md`.  
+**Completed:** V6-0 + V6-A1 + V6-A2.  
+**Current stage:** V6-B product contracts.  
+**Primary evidence artifacts:** `PUBLIC_PRODUCT_V6_CURRENT_TARGET_OWNER_MAP.md` + `PUBLIC_PRODUCT_V6_A2_EVIDENCE_BASELINE.md`.  
 **Production impact:** NONE.  
-**Current exact next task:** `STAGE V6-A2 — EVIDENCE / COVERAGE / RUNTIME BASELINE`.  
-**Forbidden next action:** direct V6 production implementation before V6-B/C/D/E gates.
+**Current exact next task:** `STAGE V6-B1 — FINAL IA / TAXONOMY / OWNER CONTRACT`.  
+**Required new artifact:** `PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md`.  
+**Forbidden next action:** direct V6 production implementation before B/C/D/E gates.
