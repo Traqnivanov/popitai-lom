@@ -4,9 +4,7 @@
 Branch: `v6-product-foundation-draft`  
 Актуализирано: 31.08.2026
 
-Работим по:
-
-`Traqnivanov/popitai-lom`
+Работим по `Traqnivanov/popitai-lom`.
 
 Не прави нов repo/clone и не започвай проекта отначало.
 
@@ -25,6 +23,7 @@ Branch: `v6-product-foundation-draft`
 11. `PUBLIC_PRODUCT_V6_B3_INFO_SOURCE_FRESHNESS_SEO_SEARCH_CONTRACT.md`
 12. `PUBLIC_PRODUCT_V6_B4_ARTICLE_GUIDE_CONTENT_ARCHITECTURE_CONTRACT.md`
 13. `PUBLIC_PRODUCT_V6_B5_QA_CANONICAL_DUPLICATE_ALIAS_MODERATION_CONTRACT.md`
+14. `PUBLIC_PRODUCT_V6_B6_STRUCTURED_RECOMMENDATION_RELATION_CONTRACT.md`
 
 После чети само task-specific supporting docs/evidence.
 
@@ -36,105 +35,76 @@ Branch: `v6-product-foundation-draft`
 
 ## 2. Текущо състояние
 
-Завършени:
-- V6-0;
-- V6-A1;
-- V6-A2;
-- V6-B1;
-- V6-B2;
-- V6-B3;
-- V6-B4;
-- V6-B5.
+Завършени: V6-0, A1, A2, B1, B2, B3, B4, B5, B6.
 
 Production е **непроменен от V6 planning track**.
 
-### Health clarification — LOCKED
-
-`Здраве и лекари` участва в същия общ V6 category/mobile/search/share/Facebook system като останалите категории. Current Health UI не е frozen target; може да се прегрупира/redesign-не. Verified Health/Info owner/moderation/reliability/freshness остават specialized. Facebook/share не става втори health fact owner.
-
-### B2/B3/B4
-
-- Search V6 има един owner и bounded intent-aware composition;
-- Info държи mutable verified local facts + trust/freshness;
-- Articles/Guides обясняват process/choice/context и само `ПРОВЕРЕНО ГОТОВО` е normal Search/SEO/feature eligible.
-
-### B5 — locked Q&A model
-
-- one real question intent → one canonical knowledge center;
-- moderation state is separate from canonical state;
-- pre-submit bounded duplicate suggestions, max 3 visible candidates;
-- aliases resolve to canonical, not independent SEO pages;
-- merge is non-destructive/auditable;
-- Moderator cannot use moderation powers on own Q&A;
-- approved/community answer ≠ verified fact;
-- `Избран от автора`, `Полезен`, `Проверена информация` are distinct;
-- unanswered canonical may stay public/shareable and appear onsite to prevent duplicates, but default `noindex,follow` until useful answer/utility threshold;
-- one canonical Q&A SEO/share/Facebook destination;
-- sensitive/health share previews are conservative;
-- contextual Ask can prefill editable query/category, never auto-submit;
-- entity mention in answer is not automatically a structured recommendation.
+Ключово LOCKED:
+- common 16-category V6 shell;
+- Health uses same visual/category/mobile/search/share/Facebook system, but verified Health/Info owner remains specialized;
+- one Search owner;
+- Info owns mutable verified local facts;
+- Articles explain process/context and only `ПРОВЕРЕНО ГОТОВО` is normally Search/SEO eligible;
+- one real Q&A intent → one canonical knowledge center;
+- aliases/duplicate Q&A resolve non-destructively to canonical;
+- community approval/votes ≠ verified fact;
+- recommendation relation initially comes from approved Q&A answer and resolves to stable approved Business/Health provider/Shop target;
+- Restaurants use Firms target owner;
+- self-recommendation does not count;
+- one author contributes max one active positive unit per target;
+- recommendation counts are derived from valid relations, not manual protected counters;
+- external Facebook reactions/comments are not automatically Popitai recommendations;
+- protected Admin/Ivanov/boost ranking remains untouched until B8.
 
 ---
 
 ## 3. EXACT NEXT TASK
 
-# `STAGE V6-B6 — STRUCTURED RECOMMENDATION RELATION CONTRACT`
+# `STAGE V6-B7 — FACEBOOK BRIDGE TECHNICAL / PRODUCT CONTRACT`
 
-Не прави broad audit. Не преотваряй B1–B5 без доказан blocker. Не започвай production code.
+Не прави broad audit и не започвай production code.
 
 Изработи:
 
-`PUBLIC_PRODUCT_V6_B6_STRUCTURED_RECOMMENDATION_RELATION_CONTRACT.md`
+`PUBLIC_PRODUCT_V6_B7_FACEBOOK_BRIDGE_TECHNICAL_PRODUCT_CONTRACT.md`
 
-B6 трябва да заключи:
-- recommendation relation identity;
-- allowed source types/publication states;
-- allowed target entity owner types;
-- reliable entity resolution;
-- positive recommendation vs mention/neutral/negative context;
-- moderation/approval;
-- self-recommendation/conflict-of-interest;
-- dedupe / one-user-one-source signal semantics;
-- invalidation when source/target becomes nonpublic;
-- derived counts from valid relations only;
-- category/entity/Search presentation;
-- relation with future B8 ranking while preserving Admin/Ivanov/boost protected rules;
-- privacy/abuse/performance;
+B7 трябва да заключи:
+- Popitai → Facebook sharing for supported approved public content types;
+- share timing after moderation/publication;
+- canonical URL + server-readable OG/share metadata;
+- safe share text and mutable-fact boundaries;
+- Facebook → Popitai user-assisted own-content prefill without scraping;
+- current Meta/group/API/privacy limitations;
+- no automatic arbitrary-group posting;
+- no automatic external comments/reactions import as Q&A/recommendations;
+- Web Share API / clipboard / Facebook fallback hierarchy;
+- PWA/share-target optional later, not MVP dependency;
+- behavior after external share when source content changes/hides/deletes;
+- attribution/UTM without sensitive content leakage;
+- Health/sensitive content rules;
+- no Facebook SDK dependency by default;
 - no schema/RLS/production implementation.
 
-B6 exit gate:
+B7 exit gate:
 
-**всяка recommendation signal има traceable approved source, resolved target owner и clear polarity/validity; duplicate/self/removed content cannot inflate trust; counts are derived only from valid relations; relation layer cannot overwrite protected owner/ranking.**
+**Facebook is a controlled distribution bridge around canonical Popitai content—not a second owner/scraper/moderation/trust system; every supported share has safe canonical destination/preview/status behavior and lightweight fallback.**
 
 ---
 
-## 4. B6 evidence scope
+## 4. Evidence scope
 
-Използвай само релевантното:
-- current target owner identifiers for Firms/Health/Shops/Restaurants/etc.;
-- approved Q&A answer/source ownership;
-- B5 canonical Q&A model;
-- A1 owner map;
-- protected Construction/Admin/Ivanov/boost rules;
-- user/content ownership evidence where needed.
+Use only:
+- A2 current share/detail metadata evidence;
+- B1 Health clarification;
+- B3/B4/B5/B6 share/trust/source boundaries;
+- current official Meta docs for platform-specific constraints;
+- current Web Share/Clipboard standards where useful.
 
 ---
 
 ## 5. Работен режим
 
-- safe read/design steps autonomous;
-- no repeated context questions;
-- no side missions;
-- protected production changes require approval;
-- no V6 production code before B/C/D/E gates.
-
-В края на B6:
-1. create/update B6 artifact;
-2. update Master Control;
-3. update `PROJECT_PROGRESS.md`;
-4. update този file;
-5. set exactly one next task;
-6. record production impact.
+Safe read/design/research autonomous. No production/schema/RLS/protected ranking changes. At B7 completion update Master/Progress/Next and set exactly one next task.
 
 Минимално съобщение в нов чат:
 
