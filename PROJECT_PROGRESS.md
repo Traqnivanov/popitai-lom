@@ -55,7 +55,8 @@ Completed artifacts:
 - B3 `PUBLIC_PRODUCT_V6_B3_INFO_SOURCE_FRESHNESS_SEO_SEARCH_CONTRACT.md`;
 - B4 `PUBLIC_PRODUCT_V6_B4_ARTICLE_GUIDE_CONTENT_ARCHITECTURE_CONTRACT.md`;
 - B5 `PUBLIC_PRODUCT_V6_B5_QA_CANONICAL_DUPLICATE_ALIAS_MODERATION_CONTRACT.md`;
-- B6 `PUBLIC_PRODUCT_V6_B6_STRUCTURED_RECOMMENDATION_RELATION_CONTRACT.md`.
+- B6 `PUBLIC_PRODUCT_V6_B6_STRUCTURED_RECOMMENDATION_RELATION_CONTRACT.md`;
+- B7 `PUBLIC_PRODUCT_V6_B7_FACEBOOK_BRIDGE_TECHNICAL_PRODUCT_CONTRACT.md`.
 
 ---
 
@@ -87,85 +88,101 @@ Guide explains process/context; Info owns mutable facts; Q&A owns community expe
 ### B5 — Q&A Canonical/Duplicate/Alias/Moderation
 **DONE**
 
-One real question intent → one canonical knowledge center; bounded duplicate suggestions; non-destructive aliases/merge; approval ≠ verification; unanswered thin SEO prevention; canonical share/Facebook destination.
+One question intent → one canonical knowledge center; bounded duplicate prevention; aliases/merge non-destructive; moderation ≠ verification; thin unanswered SEO prevention; canonical share destination.
 
 ### B6 — Structured Recommendation Relation
 **DONE**
 
+Approved Q&A answer → stable approved entity relation; explicit positive polarity; self/duplicate/invalid signals excluded; counts derived from valid unique relations; recommendation cannot rewrite owner data/protected ranking.
+
+### B7 — Facebook Bridge Technical/Product Contract
+**DONE**
+
 Artifact:
-`PUBLIC_PRODUCT_V6_B6_STRUCTURED_RECOMMENDATION_RELATION_CONTRACT.md`
+`PUBLIC_PRODUCT_V6_B7_FACEBOOK_BRIDGE_TECHNICAL_PRODUCT_CONTRACT.md`
 
 Locked:
-- initial source = approved Q&A answer;
-- stable targets = approved Businesses/Firms (Restaurants included), provider-like published Health Info, approved Shops;
-- Listings/Events excluded from durable recommendation counts initially;
-- explicit positive polarity required; mere mention/negative/ambiguous text does not count;
-- target must resolve to stable owner ID;
-- free-text extraction alone cannot change reputation;
-- source and target must both be public;
-- self-recommendation is excluded from community count/ranking;
-- one source author contributes max one active positive unit per target;
-- same answer/target cannot multiply relations;
-- counts derive from valid unique positive non-self relations, not manual protected counters;
-- cache/materialized aggregate is allowed only if rebuildable from relations;
-- Health community recommendation remains separate from verified Health trust;
-- recommendation does not create new Search result owner;
-- protected Admin/Ivanov/boost ranking remains untouched until B8;
-- Facebook reactions/comments do not automatically become Popitai recommendations;
-- privacy/abuse/performance boundaries locked;
+- Facebook is distribution/reach only, never Popitai content/trust/moderation owner;
+- adoption loop = `Публикувай първо в Попитай → сподели към Facebook`;
+- share action only after owner says content is public/approved/published;
+- pending content does not receive fake public share CTA;
+- supported public share types include canonical Q&A, Firms/Restaurants, Shops, eligible Health/Info, public Listings/Jobs/Property, Events, B4-ready Articles/Guides;
+- every share points to stable canonical Popitai destination;
+- dynamic details later require server-readable title/canonical/Open Graph metadata; client-only title update is insufficient;
+- social preview is teaser, not duplicate datastore;
+- mutable Info/Health contacts/hours are not copied by default into permanent cached Facebook preview;
+- native Web Share is preferred enhancement only where supported, HTTPS + user activation required;
+- Clipboard `writeText`/manual copy are fallbacks;
+- no Facebook SDK dependency by default;
+- current Facebook Groups API limitations mean no automatic arbitrary-group posting/scraping/group-member/comment import in MVP;
+- group destination stays user-selected/manual/native-share controlled;
+- Facebook→Popitai is user-assisted own-content paste/prefill, not scraping;
+- no automatic external comments/reactions import as Q&A/answers/B6 recommendations;
+- no automatic Facebook media rehosting;
+- external share lifecycle handles edit/hide/expiry/Q&A merge safely through canonical Popitai state;
+- attribution/UTM cannot leak raw query/body/health/private identifiers;
+- Health/sensitive previews use conservative minimum public text;
+- PWA/Web Share Target remains optional later experiment, not MVP dependency;
+- Facebook Bridge does not change quotas/moderation/owner types;
+- exact Meta endpoint/API details must be reverified immediately before production implementation;
 - no schema/RLS/production implementation.
+
+External B7 design evidence checked 31.08.2026:
+- MDN: Web Share remains limited availability, secure-context/user-activation dependent;
+- MDN: Clipboard `writeText` is broadly available but permission/security errors need fallback;
+- current 2026 third-party/platform evidence remains consistent that the old Facebook Groups API/publish-to-groups capability removed in 2024 has no general direct replacement for arbitrary group automation.
 
 Production impact: **NONE**.
 
-### V6-B7 — FACEBOOK BRIDGE TECHNICAL / PRODUCT CONTRACT
+### V6-B8 — LOCAL RELEVANCE / RANKING / PROTECTED PRIORITY CONTRACT
 **CURRENT STAGE**
 
 ---
 
 ## 6. EXACT NEXT TASK
 
-# `STAGE V6-B7 — FACEBOOK BRIDGE TECHNICAL / PRODUCT CONTRACT`
+# `STAGE V6-B8 — LOCAL RELEVANCE / RANKING / PROTECTED PRIORITY CONTRACT`
 
-B7 must lock:
-- Popitai → Facebook share flow for approved public Q&A/entities/listings/jobs/property/events/guides/Health where appropriate;
-- when share actions become available relative to moderation/publication;
-- canonical URL and server-readable Open Graph/share preview requirements;
-- safe share text generation and mutable-fact boundaries;
-- Facebook → Popitai user-assisted import/prefill for the user’s own content without scraping;
-- current platform/group/API limitations and privacy boundaries;
-- no automatic posting to arbitrary groups;
-- no automatic external comments/reactions import as Q&A/recommendations;
-- mobile Web Share API / clipboard / Facebook fallback hierarchy;
-- PWA/share-target only as optional later experiment;
-- update/hide/delete behavior after content was already shared externally;
-- attribution/UTM without sensitive query/body leakage;
-- Health/sensitive content rules;
-- performance: no Facebook SDK dependency by default;
+B8 must lock:
+- intent relevance before popularity;
+- exact cross-owner composition vs owner-local ordering;
+- protected Admin/Ivanov/boost priority adapter;
+- Lom/local relevance;
+- status/availability/freshness signals;
+- B6 recommendation usage without count inflation/medical authority;
+- Q&A answer/recency/usefulness rules;
+- Article readiness/freshness rules;
+- Health verified/reliability/freshness ordering;
+- Firms/Listings/Shops/Events owner-local ordering boundaries;
+- deterministic tie-breaking;
+- no pay-to-rank implication unless separately approved/disclosed;
+- no invented first-party popularity baseline;
+- performance/query limits;
+- explainability/test matrix;
 - no schema/RLS/production implementation.
 
 Required artifact:
 
-`PUBLIC_PRODUCT_V6_B7_FACEBOOK_BRIDGE_TECHNICAL_PRODUCT_CONTRACT.md`
+`PUBLIC_PRODUCT_V6_B8_LOCAL_RELEVANCE_RANKING_PROTECTED_PRIORITY_CONTRACT.md`
 
-B7 exit gate:
+B8 exit gate:
 
-**Facebook is a controlled distribution bridge around canonical Popitai content—not a second data owner, scraper, moderation system or trust source; every share has safe canonical destination/preview/status behavior and works without requiring a heavy Facebook SDK or unsupported group automation.**
+**for every major intent/result family, ordering is deterministic and explainable; authoritative/relevant/current results beat unrelated popularity, protected Admin/Ivanov/boost rules are preserved exactly where applicable, and community recommendation cannot silently override owner/trust/safety rules.**
 
 ---
 
 ## 7. WORKING MODE
 
-- safe read/design/research autonomous;
-- current external platform rules may be verified from authoritative sources;
+- safe read/design autonomous;
 - no broad re-audit;
 - no production code before B/C/D/E gates;
-- at stage completion update Master/Progress/Next and set one exact next task.
+- at stage completion update Master/Progress/Next and set exactly one next task.
 
 ---
 
 ## 8. CURRENT HANDOFF
 
-**Completed:** V6-0, A1, A2, B1–B6.  
-**Current:** V6-B7.  
-**Next artifact:** `PUBLIC_PRODUCT_V6_B7_FACEBOOK_BRIDGE_TECHNICAL_PRODUCT_CONTRACT.md`.  
+**Completed:** V6-0, A1, A2, B1–B7.  
+**Current:** V6-B8.  
+**Next artifact:** `PUBLIC_PRODUCT_V6_B8_LOCAL_RELEVANCE_RANKING_PROTECTED_PRIORITY_CONTRACT.md`.  
 **Production:** unchanged by V6 planning.
