@@ -24,8 +24,9 @@ Branch: `v6-product-foundation-draft`
 12. `PUBLIC_PRODUCT_V6_B4_ARTICLE_GUIDE_CONTENT_ARCHITECTURE_CONTRACT.md`
 13. `PUBLIC_PRODUCT_V6_B5_QA_CANONICAL_DUPLICATE_ALIAS_MODERATION_CONTRACT.md`
 14. `PUBLIC_PRODUCT_V6_B6_STRUCTURED_RECOMMENDATION_RELATION_CONTRACT.md`
+15. `PUBLIC_PRODUCT_V6_B7_FACEBOOK_BRIDGE_TECHNICAL_PRODUCT_CONTRACT.md`
 
-После чети само task-specific supporting docs/evidence.
+После чети само task-specific evidence.
 
 При конфликт:
 
@@ -35,76 +36,79 @@ Branch: `v6-product-foundation-draft`
 
 ## 2. Текущо състояние
 
-Завършени: V6-0, A1, A2, B1, B2, B3, B4, B5, B6.
+Завършени: V6-0, A1, A2, B1, B2, B3, B4, B5, B6, B7.
 
 Production е **непроменен от V6 planning track**.
 
 Ключово LOCKED:
 - common 16-category V6 shell;
-- Health uses same visual/category/mobile/search/share/Facebook system, but verified Health/Info owner remains specialized;
-- one Search owner;
+- Health uses same visual/category/mobile/search/share/Facebook system, but verified Health/Info owner/trust remains specialized;
+- Search V6 has one explicit intent-aware owner;
 - Info owns mutable verified local facts;
-- Articles explain process/context and only `ПРОВЕРЕНО ГОТОВО` is normally Search/SEO eligible;
-- one real Q&A intent → one canonical knowledge center;
-- aliases/duplicate Q&A resolve non-destructively to canonical;
-- community approval/votes ≠ verified fact;
-- recommendation relation initially comes from approved Q&A answer and resolves to stable approved Business/Health provider/Shop target;
-- Restaurants use Firms target owner;
-- self-recommendation does not count;
-- one author contributes max one active positive unit per target;
-- recommendation counts are derived from valid relations, not manual protected counters;
-- external Facebook reactions/comments are not automatically Popitai recommendations;
-- protected Admin/Ivanov/boost ranking remains untouched until B8.
+- Articles/Guides are process/context content and only `ПРОВЕРЕНО ГОТОВО` is normal Search/SEO eligible;
+- one real Q&A intent → one canonical knowledge center; aliases/merge are non-destructive;
+- community approval/usefulness ≠ verified fact;
+- structured recommendations come from valid approved Q&A relation to stable approved entity; self/duplicates do not inflate counts;
+- recommendation counts are derived, not manual entity truth;
+- protected Admin/Ivanov/boost ranking is not changed by recommendations;
+- Facebook is distribution only: public approved canonical content → share; no automatic arbitrary-group posting/scraping/import;
+- Web Share is optional enhancement; Clipboard/manual fallback exists;
+- Facebook comments/reactions are not Popitai answers/recommendations;
+- no invented analytics popularity baseline.
 
 ---
 
 ## 3. EXACT NEXT TASK
 
-# `STAGE V6-B7 — FACEBOOK BRIDGE TECHNICAL / PRODUCT CONTRACT`
+# `STAGE V6-B8 — LOCAL RELEVANCE / RANKING / PROTECTED PRIORITY CONTRACT`
 
 Не прави broad audit и не започвай production code.
 
 Изработи:
 
-`PUBLIC_PRODUCT_V6_B7_FACEBOOK_BRIDGE_TECHNICAL_PRODUCT_CONTRACT.md`
+`PUBLIC_PRODUCT_V6_B8_LOCAL_RELEVANCE_RANKING_PROTECTED_PRIORITY_CONTRACT.md`
 
-B7 трябва да заключи:
-- Popitai → Facebook sharing for supported approved public content types;
-- share timing after moderation/publication;
-- canonical URL + server-readable OG/share metadata;
-- safe share text and mutable-fact boundaries;
-- Facebook → Popitai user-assisted own-content prefill without scraping;
-- current Meta/group/API/privacy limitations;
-- no automatic arbitrary-group posting;
-- no automatic external comments/reactions import as Q&A/recommendations;
-- Web Share API / clipboard / Facebook fallback hierarchy;
-- PWA/share-target optional later, not MVP dependency;
-- behavior after external share when source content changes/hides/deletes;
-- attribution/UTM without sensitive content leakage;
-- Health/sensitive content rules;
-- no Facebook SDK dependency by default;
+B8 трябва да заключи:
+- intent relevance before popularity;
+- cross-owner composition vs owner-local ordering;
+- exact protected Admin/Ivanov/boost adapter semantics;
+- Lom/local relevance;
+- public status/availability/freshness;
+- B6 recommendation usage without trust inflation;
+- Q&A answered/recency/usefulness boundaries;
+- Article readiness/freshness influence;
+- Health verified/reliability/freshness ordering;
+- Firms/Listings/Shops/Events owner-local boundaries;
+- deterministic tie-breaking;
+- no pay-to-rank implication unless separately approved/disclosed;
+- no invented popularity baseline;
+- performance/query limits;
+- explainability/regression test matrix;
 - no schema/RLS/production implementation.
 
-B7 exit gate:
+B8 exit gate:
 
-**Facebook is a controlled distribution bridge around canonical Popitai content—not a second owner/scraper/moderation/trust system; every supported share has safe canonical destination/preview/status behavior and lightweight fallback.**
+**for every major intent/result family ordering is deterministic and explainable; authoritative/relevant/current beats unrelated popularity; protected Admin/Ivanov/boost rules survive exactly where applicable; community/social signals cannot silently override trust/owner/safety rules.**
 
 ---
 
 ## 4. Evidence scope
 
 Use only:
-- A2 current share/detail metadata evidence;
-- B1 Health clarification;
-- B3/B4/B5/B6 share/trust/source boundaries;
-- current official Meta docs for platform-specific constraints;
-- current Web Share/Clipboard standards where useful.
+- current `category-listings-v1.js` listing priority;
+- current `supabase-businesses.js` owner-first ordering;
+- B2 intent/group composition;
+- B3 Info trust/freshness;
+- B4 Article readiness/freshness;
+- B5 Q&A canonical/answered/unanswered;
+- B6 recommendations;
+- protected Construction/Admin/Ivanov/boost rules.
 
 ---
 
 ## 5. Работен режим
 
-Safe read/design/research autonomous. No production/schema/RLS/protected ranking changes. At B7 completion update Master/Progress/Next and set exactly one next task.
+Safe read/design autonomous. No production/schema/RLS/protected changes. At B8 completion update Master/Progress/Next and set exactly one next task.
 
 Минимално съобщение в нов чат:
 
