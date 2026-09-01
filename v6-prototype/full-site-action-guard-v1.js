@@ -13,6 +13,7 @@ function cleanVisibleCopy(root){
     if(!node.nodeValue)continue;
     node.nodeValue=node.nodeValue
       .replace(/\bproduction\b/gi,'внедряване в живия сайт')
+      .replace(/\bbackend\b/gi,'системата')
       .replace(/\bapproved\s*\+\s*active\b/gi,'публикувани и активни')
       .replace(/\bapproved\b/gi,'одобрено')
       .replace(/\bpending\b/gi,'чака преглед')
