@@ -2,6 +2,26 @@
   "use strict";
 
   function injectPrototypeControls() {
+    const homeDescription = document.querySelector('[data-screen="home"] .hero-copy > p');
+    if (homeDescription) {
+      homeDescription.textContent = "Намери проверена информация, местни услуги, работа, имоти, фирми и полезни отговори — всичко за Лом на едно място.";
+    }
+
+    const trustTitle = document.querySelector('[data-screen="home"] .trust-card h2');
+    if (trustTitle) {
+      trustTitle.textContent = "Първо намираш нужната информация. Ако няма достатъчен отговор — питаш.";
+    }
+
+    const categoryDescription = document.querySelector('[data-screen="category"] .category-heading-row p');
+    if (categoryDescription) {
+      categoryDescription.textContent = "Намери майстор, фирма или активна обява. Ако не откриеш подходящ резултат, можеш да попиташ хората в Лом.";
+    }
+
+    const sidebarEyebrow = document.querySelector('[data-screen="category"] .context-sidebar .sidebar-card .eyebrow');
+    if (sidebarEyebrow && sidebarEyebrow.textContent.trim() === "Не намираш?") {
+      sidebarEyebrow.textContent = "Нужна ти е още информация?";
+    }
+
     const header = document.querySelector(".site-header");
     const nav = document.querySelector(".desktop-nav");
     if (nav) {
