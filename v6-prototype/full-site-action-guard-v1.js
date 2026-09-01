@@ -48,4 +48,10 @@ cleanVisibleCopy(app);
 if(app){
   new MutationObserver(function(){cleanVisibleCopy(app);}).observe(app,{childList:true,subtree:true});
 }
+if(!document.querySelector('script[data-v6-form-audit]')){
+  var audit=document.createElement('script');
+  audit.src='full-site-form-lifecycle-audit-v7.js?v=20260901-form-life-audit-1';
+  audit.setAttribute('data-v6-form-audit','');
+  document.body.appendChild(audit);
+}
 })();
