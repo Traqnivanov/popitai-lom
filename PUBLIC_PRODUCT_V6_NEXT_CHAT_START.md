@@ -18,7 +18,8 @@ Branch: `v6-product-foundation-draft`
 6. `PROJECT_PROGRESS.md`
 7. `PUBLIC_PRODUCT_V6_MASTER_CONTROL.md`
 8. completed B1–B9 contracts;
-9. `PUBLIC_PRODUCT_V6_C_VISUAL_INTERACTION_PROTOTYPE.md`.
+9. `PUBLIC_PRODUCT_V6_COPY_QUALITY_RULE.md`;
+10. `PUBLIC_PRODUCT_V6_C_VISUAL_INTERACTION_PROTOTYPE.md`.
 
 ---
 
@@ -44,7 +45,8 @@ Key truths:
 - Search/Info/Q&A/Recommendations/Facebook/Ranking/B9 interactions are represented;
 - no fake Event Add;
 - pending content has no public share;
-- prototype is isolated and not referenced by production pages.
+- prototype is isolated and not referenced by production pages;
+- public copy must be clean, confident and professional; no cheap conversational advertising, degrading metaphors or anti-Facebook phrasing such as `без да ровиш из стари публикации`.
 
 ---
 
