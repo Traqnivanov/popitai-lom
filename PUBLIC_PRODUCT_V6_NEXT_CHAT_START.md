@@ -21,7 +21,8 @@ Branch: `v6-product-foundation-draft`
 9. `PUBLIC_PRODUCT_V6_C_FULL_SITE_INTERFACE_BLUEPRINT.md`;
 10. `PUBLIC_PRODUCT_V6_C_PROTECTED_ADMIN_IVANOV_REGRESSION_GATE.md` — mandatory C→D→E protected checkpoint;
 11. `PUBLIC_PRODUCT_V6_C_FORMS_ROLES_VISIBILITY_LOCK.md` — mandatory forms/roles/publication/visibility/ranking contract;
-12. older C/Home documents only where they do not conflict with the three current C contracts above.
+12. `PUBLIC_PRODUCT_V6_C_FORM_GUIDANCE_VALIDATION_LOCK.md` — mandatory contextual hints/examples/errors contract;
+13. older C/Home documents only where they do not conflict with the current C contracts above.
 
 ---
 
@@ -34,7 +35,8 @@ Completed:
 - Full-site C interface blueprint;
 - protected Admin/Ivanov regression gate;
 - locked forms/roles/publication/visibility contract;
-- isolated full-site prototype with role-aware Firm/Listing review layer.
+- locked contextual form guidance/validation contract;
+- isolated full-site prototype with role-aware Firm/Listing review layer and contextual form guidance.
 
 Живият сайт е **непроменен от V6-C**.
 
@@ -62,13 +64,20 @@ Articles/Guides are a required product/SEO/share layer, but official production 
 
 Admin Firms/Listings and Ivanov/Construction special semantics are not generic records. V6 must preserve their direct-publication/access/quota/expanded-profile/owner/ranking relationships exactly unless the user explicitly re-approves a change.
 
-For forms/roles specifically, `PUBLIC_PRODUCT_V6_C_FORMS_ROLES_VISIBILITY_LOCK.md` is now the mandatory C presentation contract. Once accepted, later visual work may improve layout/accessibility/copy but must not silently remove or change fields, buttons, quotas, role differences, approval states, direct publication or protected ordering.
+For forms/roles specifically, `PUBLIC_PRODUCT_V6_C_FORMS_ROLES_VISIBILITY_LOCK.md` is the mandatory C presentation contract. Later visual work may improve layout/accessibility/copy but must not silently remove or change fields, buttons, quotas, role differences, approval states, direct publication or protected ordering.
 
-### Known protected technical mismatch — DO NOT FIX SILENTLY
+For form UX, `PUBLIC_PRODUCT_V6_C_FORM_GUIDANCE_VALIDATION_LOCK.md` is also mandatory: important forms keep inline field errors, blur-after-first-entry validation, live clearing after correction, first-invalid focus, preserved entered data and context-aware examples where the category changes what useful content looks like.
 
-LOCKED rules say Admin has no limit for listing images, while current `supabase-listings.js` sets the Admin uploader to 20 and normal users to 6.
+### Admin images — canonical truth clarified
 
-C does not change production. D/E must resolve this explicitly as a protected technical mismatch; do not turn 20 into a new business rule by assumption and do not change the LOCKED rule without user approval.
+The backend/Supabase migration `20260825012500_enforce_non_admin_media_limits.sql` is the current source of truth:
+- ordinary firm: 1 logo + up to 6 gallery images;
+- ordinary/firm listing: up to 6 images;
+- Admin-owned firm/listing media: **no image limit in backend**.
+
+Therefore the LOCKED rule and Supabase already agree.
+
+The existing `supabase-listings.js` frontend value of 20 Admin listing images is a legacy frontend mismatch, **not a business rule**. Do not change Supabase to 20 and do not redefine the rule as 20. When production V6 integration reaches this owner, remove/replace the contradictory frontend cap so it matches the canonical backend rule.
 
 ---
 
@@ -101,6 +110,7 @@ Primary review prototype:
 - `v6-prototype/full-site-functional-parity-v3.js`
 - `v6-prototype/full-site-functional-parity-v4.js` — protected Firm/Listing/role-aware review layer;
 - `v6-prototype/full-site-functional-parity-v4.css`;
+- `v6-prototype/full-site-form-guidance-validation-v5.js` — contextual examples/hints + V6 inline validation review layer;
 - `v6-prototype/full-site-action-guard-v1.js` — named safe demo behavior for static buttons.
 
 Older `v6-prototype/index.html` + Home-v2 files are reference/history, not current completeness authority.
@@ -164,6 +174,7 @@ Same non-Admin owner flow as normal user. No self-approval, no direct publicatio
 ### Listing — Admin
 - direct publication;
 - no normal monthly quota;
+- no backend image limit;
 - protected Admin options represented: urgent, reduced, top positioning, highlighted presentation in Bulgarian, statistics, floating contact buttons;
 - Admin edit = save/publish;
 - protected public ordering only after relevance.
@@ -192,41 +203,70 @@ Normal firm flow; no automatic expanded access, no direct publication, no self-a
 - direct publication;
 - automatic expanded access;
 - approved expanded sections represented;
+- Admin-owned media uses the backend Admin exception rather than the ordinary 6-image limit;
 - V6 must not downgrade protected expanded profile or lose its contact/gallery/Construction/Listings relationships.
 
 ---
 
-## 6. EXACT CURRENT TASK
+## 6. CONTEXTUAL FORM GUIDANCE / ERROR BASELINE
+
+The current production code already has strong dedicated validation in major forms:
+- Listings: `listing-form-validation-v2.js`;
+- Firms: `business-form-validation.js` + `business-form-live-validation.js`;
+- Health: `health-form-validation-v1.js`;
+- Shops: `shops-form-validation-v1.js`;
+- Questions/Answers: `question-answer-validation.js`;
+- Auth: `auth-form-validation.js`.
+
+Q&A already provides the preferred category-aware example pattern. V6 extends that principle to Listing/Firm presentation.
+
+In the current prototype:
+- Listing examples change by Offer/Seek + main group + subcategory;
+- Work, Property, Construction, Cars, Other Services and Other Listings receive different examples/help;
+- Firm examples change for Construction, Restaurants/Food, Beauty and other services;
+- examples remain placeholders/help only and are never user data;
+- fields show specific inline errors after the user leaves/has touched them;
+- after an error, correction is checked live and the error disappears when valid;
+- character counters are shown where useful;
+- form submission focuses the first invalid field;
+- entered data remains present.
+
+Do not regress this to generic browser-only validation.
+
+---
+
+## 7. EXACT CURRENT TASK
 
 # `V6-C FULL-SITE INTERFACE COMPLETENESS + VISUAL REVIEW GATE`
 
-Do NOT start production code or V6-D.
+Do NOT start V6-D.
 
 Review/continue in order:
 1. no approved screen/category/action/form is missing;
 2. every visible button/link goes to its correct destination or named non-live prototype action;
 3. protected Admin Firm/Admin Listing/Ivanov Construction states are represented and do not behave as generic semantics;
 4. Firm/Listing forms preserve `PUBLIC_PRODUCT_V6_C_FORMS_ROLES_VISIBILITY_LOCK.md`;
-5. Home hierarchy and first viewport;
-6. 16 categories + Marketplace relationship;
-7. six-family Info Lom + Health parity/trust;
-8. Firms/Listings/Specialized details;
-9. forms/auth/pending/error/dirty states;
-10. Search/Articles/Q&A/Profile connections;
-11. responsive desktop/mobile system;
-12. only after completeness passes, polish spacing/cards/typography/buttons per screen.
+5. form hints/errors preserve `PUBLIC_PRODUCT_V6_C_FORM_GUIDANCE_VALIDATION_LOCK.md`;
+6. Home hierarchy and first viewport;
+7. 16 categories + Marketplace relationship;
+8. six-family Info Lom + Health parity/trust;
+9. Firms/Listings/Specialized details;
+10. forms/auth/pending/error/dirty states;
+11. Search/Articles/Q&A/Profile connections;
+12. responsive desktop/mobile system;
+13. only after completeness passes, polish spacing/cards/typography/buttons per screen.
 
 Do not treat one polished Home block as C completion.
 
 ---
 
-## 7. CHANGE CONTROL FOR PROTECTED FORMS
+## 8. CHANGE CONTROL FOR PROTECTED FORMS
 
 After the current Firm/Listing form/role baseline is accepted:
 - visual polishing is allowed;
 - clearer Bulgarian copy is allowed;
 - accessibility/performance fixes are allowed;
-- a technical bug fix is allowed only if behavior remains protected and equivalent;
+- technical fixes are allowed when they restore the canonical protected behavior;
 - additive improvement is allowed only if it does not silently alter business semantics.
 
 If a proposed change affects a protected field, right, limit, approval rule, public state, Admin/Moderator difference, ranking or protected relationship:
@@ -235,24 +275,25 @@ If a proposed change affects a protected field, right, limit, approval rule, pub
 
 ---
 
-## 8. NEXT MAJOR STAGE
+## 9. NEXT MAJOR STAGE
 
 Only after full-site C completeness + visual direction is accepted/refined:
 
 # `V6-D — TECHNICAL DESIGN / SCHEMA / RLS / INDEX / MIGRATION / SEO RENDERING / PERFORMANCE`
 
-V6-D must map every protected behavior in both:
+V6-D must map every protected behavior in:
 - `PUBLIC_PRODUCT_V6_C_PROTECTED_ADMIN_IVANOV_REGRESSION_GATE.md`;
-- `PUBLIC_PRODUCT_V6_C_FORMS_ROLES_VISIBILITY_LOCK.md`
+- `PUBLIC_PRODUCT_V6_C_FORMS_ROLES_VISIBILITY_LOCK.md`;
+- `PUBLIC_PRODUCT_V6_C_FORM_GUIDANCE_VALIDATION_LOCK.md`
 
 to its real implementation owner before any V6-E code migration/merge.
 
 ---
 
-## 9. WORK MODE
+## 10. WORK MODE
 
 - safe review/refinement autonomous where objective;
-- no production deployment;
+- no production deployment during C;
 - no schema/RLS changes;
 - no protected owner/ranking/role changes;
 - preserve existing approved form capabilities;
