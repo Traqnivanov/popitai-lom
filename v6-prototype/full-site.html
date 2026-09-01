@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex,nofollow">
   <meta name="theme-color" content="#ffffff">
   <title>Попитай.Лом V6 — Full-site prototype</title>
-  <link rel="stylesheet" href="full-site.css?v=20260901-fullsite-1">
+  <link rel="stylesheet" href="full-site.css?v=20260901-fullsite-2">
 </head>
 <body>
   <div class="prototype-strip" role="status">
@@ -20,78 +20,47 @@
         <span class="brand-mark"><img src="../assets/popitai-lom-logo-mark-256.webp" alt=""></span>
         <span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span>
       </button>
-
       <nav class="desktop-nav" aria-label="Главна навигация">
         <button type="button" data-route="home" data-nav="home">Начало</button>
         <button type="button" data-route="marketplace" data-nav="marketplace">Обяви и услуги</button>
         <button type="button" data-route="firms" data-nav="firms">Фирми</button>
         <button type="button" data-route="info" data-nav="info">Инфо Лом</button>
         <button type="button" data-route="articles" data-nav="articles">Статии</button>
-        <details class="more-nav">
-          <summary>Още</summary>
-          <div class="more-menu">
-            <button type="button" data-route="questions">Въпроси</button>
-            <button type="button" data-route="events">Събития</button>
-            <button type="button" data-route="about">За сайта</button>
-            <button type="button" data-route="rules">Правила</button>
-            <button type="button" data-route="contact">Контакти</button>
-          </div>
-        </details>
+        <details class="more-nav"><summary>Още</summary><div class="more-menu"><button type="button" data-route="questions">Въпроси</button><button type="button" data-route="events">Събития</button><button type="button" data-route="about">За сайта</button><button type="button" data-route="rules">Правила</button><button type="button" data-route="contact">Контакти</button></div></details>
         <button type="button" data-route="profile" data-nav="profile">Профил</button>
       </nav>
-
       <div class="header-actions">
         <button class="add-trigger" type="button" data-open-add aria-haspopup="dialog" aria-controls="add-sheet">+ Добави</button>
         <button class="menu-trigger" id="menu-trigger" type="button" aria-label="Отвори менюто" aria-expanded="false">☰</button>
       </div>
     </div>
     <div class="mobile-drawer" id="mobile-drawer" hidden>
-      <button type="button" data-route="marketplace">Обяви и услуги</button>
-      <button type="button" data-route="firms">Фирми</button>
-      <button type="button" data-route="info">Инфо Лом</button>
-      <button type="button" data-route="articles">Статии</button>
-      <button type="button" data-route="questions">Въпроси</button>
-      <button type="button" data-route="events">Събития</button>
-      <button type="button" data-route="about">За сайта</button>
-      <button type="button" data-route="rules">Правила</button>
-      <button type="button" data-route="contact">Контакти</button>
+      <button data-route="marketplace">Обяви и услуги</button><button data-route="firms">Фирми</button><button data-route="info">Инфо Лом</button><button data-route="articles">Статии</button><button data-route="questions">Въпроси</button><button data-route="events">Събития</button><button data-route="about">За сайта</button><button data-route="rules">Правила</button><button data-route="contact">Контакти</button>
     </div>
   </header>
 
-  <main id="app" tabindex="-1"></main>
+  <main id="app" tabindex="-1">
+    <div class="page home-page">
+      <section class="hero"><div class="container hero-grid"><div><span class="kicker">Лом на едно място</span><h1>Какво търсиш в Лом?</h1><p>Намери проверена информация, местни услуги, работа, имоти, фирми и полезни отговори — всичко за Лом на едно място.</p><form class="search-box" data-search-form><input type="search" name="q" placeholder="Например: ВиК майстор, НОИ, работа, аптека..." aria-label="Търси в Попитай.Лом"><button type="submit">Търси</button></form></div><aside class="hero-side"><strong>Едно търсене, правилният източник</strong><p>Проверени факти, местни доставчици, обяви, въпроси и ръководства се намират от едно място.</p></aside></div></section>
 
-  <footer class="site-footer">
-    <div class="footer-grid">
-      <div class="footer-brand"><strong>Попитай<span>.Лом</span></strong><p>Местна информация, услуги, обяви и препоръки за Лом.</p></div>
-      <div><h2>Разгледай</h2><button data-route="marketplace">Обяви и услуги</button><button data-route="firms">Фирми</button><button data-route="info">Инфо Лом</button><button data-route="articles">Статии</button></div>
-      <div><h2>Общност</h2><button data-route="questions">Въпроси</button><button data-route="events">Събития</button><button data-route="report">Подай сигнал</button></div>
-      <div><h2>За сайта</h2><button data-route="about">За сайта</button><button data-route="rules">Правила</button><button data-route="contact">Контакти</button></div>
+      <section class="section"><div class="container"><div class="section-head"><div><span class="eyebrow">Бърз старт</span><h2>Основни категории</h2></div><button class="text-button" type="button" data-route="categories">Всички категории →</button></div><div class="category-grid home-priority"><button class="category-card featured" data-route="category" data-category="construction"><strong>Строителство и ремонти</strong><small>Майстори, ВиК, електро, покриви</small></button><button class="category-card health" data-route="health"><strong>Здраве и лекари</strong><small>Лекари, аптеки, лаборатории</small></button><button class="category-card" data-route="category" data-category="work"><strong>Работа</strong><small>Обяви за работа в Лом</small></button><button class="category-card" data-route="category" data-category="cars"><strong>Автомобили</strong><small>Коли, сервизи, гуми, части</small></button></div></div></section>
+
+      <section class="section soft"><div class="container"><div class="section-head"><div><span class="eyebrow">Местни места и профили</span><h2>Открий в Лом</h2></div></div><div class="discover-grid"><button class="discover-card" data-route="shops"><div><strong>Магазини</strong><small>Местни магазини по категории</small></div><span class="card-arrow">→</span></button><button class="discover-card" data-route="restaurants"><div><strong>Заведения</strong><small>Заведения и препоръки</small></div><span class="card-arrow">→</span></button><button class="discover-card" data-route="firms"><div><strong>Фирми</strong><small>Постоянни местни профили</small></div><span class="card-arrow">→</span></button><button class="discover-card" data-route="events"><div><strong>Събития</strong><small>Предстоящи одобрени събития</small></div><span class="card-arrow">→</span></button></div></div></section>
+
+      <section class="section"><div class="container"><div class="info-panel"><div class="info-panel-head"><div><span class="eyebrow">Инфо Лом</span><h2>Проверена информация</h2></div></div><div class="info-grid"><button class="info-card" data-route="health"><strong>Здраве и лекари</strong><small>Болница, лекари, аптеки</small></button><button class="info-card" data-route="info-detail" data-info="institutions"><strong>Институции</strong><small>Община, НОИ, полиция</small></button><button class="info-card" data-route="info-detail" data-info="transport"><strong>Транспорт</strong><small>Автогара, БДЖ, таксита</small></button><button class="info-card" data-route="info-detail" data-info="education"><strong>Образование и култура</strong><small>Училища и културни места</small></button><button class="info-card" data-route="info-detail" data-info="banks"><strong>Банки и банкомати</strong><small>Банки, ATM и услуги</small></button><button class="info-card" data-route="info-detail" data-info="utilities"><strong>Комунални услуги</strong><small>Вода, ток, куриери, интернет</small></button></div></div></div></section>
+
+      <section class="section soft"><div class="container"><div class="section-head"><div><span class="eyebrow">Стъпка по стъпка</span><h2>Полезни ръководства</h2></div><button class="text-button" type="button" data-route="articles">Всички статии →</button></div><div class="guide-grid"><button class="guide-card" data-route="article-detail" data-article="pension"><span class="topic">Институции</span><h3>Как да се пенсионираш в Лом</h3><p>Какво да провериш, какво да подготвиш и къде е актуалната информация.</p></button><button class="guide-card" data-route="article-detail" data-article="id-card"><span class="topic">Институции</span><h3>Как се подменя лична карта в Лом</h3><p>Стъпките и връзката към актуалната официална информация.</p></button><button class="guide-card" data-route="article-detail" data-article="signal"><span class="topic">Институции</span><h3>Как да подадеш сигнал до община или институция</h3><p>Кога, къде и как да опишеш проблема.</p></button></div></div></section>
+
+      <section class="section"><div class="container"><div class="section-head"><div><span class="eyebrow">Въпроси и препоръки</span><h2>Полезно от хората в Лом</h2></div><button class="text-button" type="button" data-route="questions">Всички въпроси →</button></div><div class="community-list"><button class="community-row" data-route="question-detail"><div class="body"><span class="badge">Строителство</span><strong>Кой препоръчва добър майстор за баня?</strong><small>4 одобрени отговора</small></div><span class="card-arrow">→</span></button><button class="community-row" data-route="question-detail"><div class="body"><span class="badge">Автомобили</span><strong>Къде в Лом правят добра диагностика?</strong><small>3 одобрени отговора</small></div><span class="card-arrow">→</span></button></div></div></section>
     </div>
-    <div class="footer-bottom">© 2026 Попитай.Лом · V6 prototype</div>
-  </footer>
+  </main>
 
-  <nav class="mobile-bottom-nav" aria-label="Мобилна навигация">
-    <button type="button" data-route="home" data-mobile-nav="home"><span data-icon="home"></span><small>Начало</small></button>
-    <button type="button" data-route="marketplace" data-mobile-nav="marketplace"><span data-icon="list"></span><small>Обяви</small></button>
-    <button class="mobile-add" type="button" data-open-add aria-label="Добави"><span>+</span><small>Добави</small></button>
-    <button type="button" data-route="info" data-mobile-nav="info"><span data-icon="info"></span><small>Инфо</small></button>
-    <button type="button" data-route="profile" data-mobile-nav="profile"><span data-icon="user"></span><small>Профил</small></button>
-  </nav>
+  <footer class="site-footer"><div class="footer-grid"><div class="footer-brand"><strong>Попитай<span>.Лом</span></strong><p>Местна информация, услуги, обяви и препоръки за Лом.</p></div><div><h2>Разгледай</h2><button data-route="marketplace">Обяви и услуги</button><button data-route="firms">Фирми</button><button data-route="info">Инфо Лом</button><button data-route="articles">Статии</button></div><div><h2>Общност</h2><button data-route="questions">Въпроси</button><button data-route="events">Събития</button><button data-route="report">Подай сигнал</button></div><div><h2>За сайта</h2><button data-route="about">За сайта</button><button data-route="rules">Правила</button><button data-route="contact">Контакти</button></div></div><div class="footer-bottom">© 2026 Попитай.Лом · V6 prototype</div></footer>
 
-  <div class="modal-layer" id="add-sheet" hidden>
-    <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="add-title">
-      <div class="sheet-head"><div><span class="kicker">Добави в Попитай.Лом</span><h2 id="add-title">Какво искаш да добавиш?</h2></div><button type="button" class="icon-button" data-close-modal aria-label="Затвори">×</button></div>
-      <div class="add-options">
-        <button type="button" data-route="form-listing" data-close-on-route><span data-icon="list"></span><div><strong>Добави обява</strong><small>Продажба, търсене, работа, имот или услуга</small></div><b>→</b></button>
-        <button type="button" data-route="form-firm" data-close-on-route><span data-icon="building"></span><div><strong>Добави фирма</strong><small>Постоянен профил на местна фирма или доставчик</small></div><b>→</b></button>
-        <button type="button" data-route="form-question" data-close-on-route><span data-icon="chat"></span><div><strong>Задай въпрос</strong><small>Съвет, опит или препоръка от общността</small></div><b>→</b></button>
-      </div>
-      <p class="sheet-note">Здраве и Магазини използват собствени специализирани действия в съответния раздел. Събития няма fake public Add flow.</p>
-    </section>
-  </div>
+  <nav class="mobile-bottom-nav" aria-label="Мобилна навигация"><button type="button" data-route="home" data-mobile-nav="home"><small>Начало</small></button><button type="button" data-route="marketplace" data-mobile-nav="marketplace"><small>Обяви</small></button><button class="mobile-add" type="button" data-open-add aria-label="Добави"><span>+</span><small>Добави</small></button><button type="button" data-route="info" data-mobile-nav="info"><small>Инфо</small></button><button type="button" data-route="profile" data-mobile-nav="profile"><small>Профил</small></button></nav>
 
+  <div class="modal-layer" id="add-sheet" hidden><section class="sheet" role="dialog" aria-modal="true" aria-labelledby="add-title"><div class="sheet-head"><div><span class="kicker">Добави в Попитай.Лом</span><h2 id="add-title">Какво искаш да добавиш?</h2></div><button type="button" class="icon-button" data-close-modal aria-label="Затвори">×</button></div><div class="add-options"><button type="button" data-route="form-listing"><div><strong>Добави обява</strong><small>Продажба, търсене, работа, имот или услуга</small></div><b>→</b></button><button type="button" data-route="form-firm"><div><strong>Добави фирма</strong><small>Постоянен местен профил</small></div><b>→</b></button><button type="button" data-route="form-question"><div><strong>Задай въпрос</strong><small>Съвет, опит или препоръка</small></div><b>→</b></button></div><p class="sheet-note">Здраве и Магазини използват собствени специализирани действия. Събития няма fake public Add flow.</p></section></div>
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
-
-  <script src="full-site.js?v=20260901-fullsite-1"></script>
+  <script src="full-site-runtime-v2.js?v=20260901-runtime-2"></script>
 </body>
 </html>
