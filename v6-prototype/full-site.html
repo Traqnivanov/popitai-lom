@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="full-site.css?v=20260901-fullsite-2">
   <link rel="stylesheet" href="full-site-functional-parity-v4.css?v=20260901-roles-1">
   <link rel="stylesheet" href="full-site-form-lifecycle-v6.css?v=20260901-form-life-1">
+  <link rel="stylesheet" href="full-site-parity-v8.css?v=20260901-parity-1">
 </head>
 <body>
   <div class="prototype-strip" role="status">
@@ -43,7 +44,7 @@
 
   <main id="app" tabindex="-1">
     <div class="page home-page">
-      <section class="hero"><div class="container hero-grid"><div><span class="kicker">Лом на едно място</span><h1>Какво търсиш в Лом?</h1><p>Намери проверена информация, местни услуги, работа, имоти, фирми и полезни отговори — всичко за Лом на едно място.</p><form class="search-box" data-search-form><input type="search" name="q" placeholder="Например: ВиК майстор, НОИ, работа, аптека..." aria-label="Търси в Попитай.Лом"><button type="submit">Търси</button></form></div><aside class="hero-side"><strong>Едно търсене, правилният източник</strong><p>Проверени факти, местни доставчици, обяви, въпроси и ръководства се намират от едно място.</p></aside></div></section>
+      <section class="hero"><div class="container hero-grid"><div><span class="kicker">Лом на едно място</span><h1>Какво търсиш в Лом?</h1><p>Намери проверена информация, местни услуги, работа, имоти, фирми и полезни отговори — всичко за Лом на едно място.</p><form class="search-box"><input type="search" name="q" placeholder="Например: ВиК майстор, НОИ, работа, аптека..." aria-label="Търси в Попитай.Лом"><button type="submit">Търси</button></form></div><aside class="hero-side"><strong>Едно търсене, правилният източник</strong><p>Проверени факти, местни доставчици, обяви, въпроси и ръководства се намират от едно място.</p></aside></div></section>
 
       <section class="section"><div class="container"><div class="section-head"><div><span class="eyebrow">Бърз старт</span><h2>Основни категории</h2></div><button class="text-button" type="button" data-route="categories">Всички категории →</button></div><div class="category-grid home-priority"><button class="category-card featured" data-route="category" data-category="construction"><strong>Строителство и ремонти</strong><small>Майстори, ВиК, електро, покриви</small></button><button class="category-card health" data-route="health"><strong>Здраве и лекари</strong><small>Лекари, аптеки, лаборатории</small></button><button class="category-card" data-route="category" data-category="work"><strong>Работа</strong><small>Обяви за работа в Лом</small></button><button class="category-card" data-route="category" data-category="cars"><strong>Автомобили</strong><small>Коли, сервизи, гуми, части</small></button></div></div></section>
 
@@ -63,11 +64,7 @@
 
   <div class="modal-layer" id="add-sheet" hidden><section class="sheet" role="dialog" aria-modal="true" aria-labelledby="add-title"><div class="sheet-head"><div><span class="kicker">Добави в Попитай.Лом</span><h2 id="add-title">Какво искаш да добавиш?</h2></div><button type="button" class="icon-button" data-close-modal aria-label="Затвори">×</button></div><div class="add-options"><button type="button" data-route="form-listing"><div><strong>Добави обява</strong><small>Продажба, търсене, работа, имот или услуга</small></div><b>→</b></button><button type="button" data-route="form-firm"><div><strong>Добави фирма</strong><small>Постоянен местен профил</small></div><b>→</b></button><button type="button" data-route="form-question"><div><strong>Задай въпрос</strong><small>Съвет, опит или препоръка</small></div><b>→</b></button></div><p class="sheet-note">За Здраве и Магазини използвай действията в съответния раздел. За Събития няма публична форма за добавяне.</p></section></div>
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
-  <script src="full-site-functional-parity-v4.js?v=20260901-roles-1"></script>
-  <script src="full-site-runtime-v2.js?v=20260901-runtime-2"></script>
-  <script src="full-site-functional-parity-v3.js?v=20260901-functional-1"></script>
-  <script src="full-site-form-guidance-validation-v5.js?v=20260901-form-ux-1"></script>
-  <script src="full-site-form-lifecycle-v6.js?v=20260901-form-life-1"></script>
-  <script src="full-site-action-guard-v1.js?v=20260901-actions-1"></script>
+  <script src="full-site-form-lifecycle-v8.js?v=20260901-parity-1"></script>
+  <script src="full-site-runtime-v8.js?v=20260901-parity-1"></script>
 </body>
 </html>
