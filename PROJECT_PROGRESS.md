@@ -1,6 +1,6 @@
 # Попитай.Лом — ТЕКУЩ CHECKPOINT
 
-Актуализирано: 31.08.2026
+Актуализирано: 01.09.2026
 
 ## 1. ПРАВИЛА ПРЕДИ РАБОТА
 
@@ -56,7 +56,8 @@ Completed artifacts:
 - B4 `PUBLIC_PRODUCT_V6_B4_ARTICLE_GUIDE_CONTENT_ARCHITECTURE_CONTRACT.md`;
 - B5 `PUBLIC_PRODUCT_V6_B5_QA_CANONICAL_DUPLICATE_ALIAS_MODERATION_CONTRACT.md`;
 - B6 `PUBLIC_PRODUCT_V6_B6_STRUCTURED_RECOMMENDATION_RELATION_CONTRACT.md`;
-- B7 `PUBLIC_PRODUCT_V6_B7_FACEBOOK_BRIDGE_TECHNICAL_PRODUCT_CONTRACT.md`.
+- B7 `PUBLIC_PRODUCT_V6_B7_FACEBOOK_BRIDGE_TECHNICAL_PRODUCT_CONTRACT.md`;
+- B8 `PUBLIC_PRODUCT_V6_B8_LOCAL_RELEVANCE_RANKING_PROTECTED_PRIORITY_CONTRACT.md`.
 
 ---
 
@@ -95,79 +96,71 @@ One question intent → one canonical knowledge center; bounded duplicate preven
 
 Approved Q&A answer → stable approved entity relation; explicit positive polarity; self/duplicate/invalid signals excluded; counts derived from valid unique relations; recommendation cannot rewrite owner data/protected ranking.
 
-### B7 — Facebook Bridge Technical/Product Contract
+### B7 — Facebook Bridge
+**DONE**
+
+Facebook is distribution only; public canonical Popitai content is shared outward; no arbitrary group automation/scraping/import; Health uses conservative safe previews; Web Share is enhancement with copy/manual fallback.
+
+### B8 — Local Relevance / Ranking / Protected Priority
 **DONE**
 
 Artifact:
-`PUBLIC_PRODUCT_V6_B7_FACEBOOK_BRIDGE_TECHNICAL_PRODUCT_CONTRACT.md`
+`PUBLIC_PRODUCT_V6_B8_LOCAL_RELEVANCE_RANKING_PROTECTED_PRIORITY_CONTRACT.md`
 
 Locked:
-- Facebook is distribution/reach only, never Popitai content/trust/moderation owner;
-- adoption loop = `Публикувай първо в Попитай → сподели към Facebook`;
-- share action only after owner says content is public/approved/published;
-- pending content does not receive fake public share CTA;
-- supported public share types include canonical Q&A, Firms/Restaurants, Shops, eligible Health/Info, public Listings/Jobs/Property, Events, B4-ready Articles/Guides;
-- every share points to stable canonical Popitai destination;
-- dynamic details later require server-readable title/canonical/Open Graph metadata; client-only title update is insufficient;
-- social preview is teaser, not duplicate datastore;
-- mutable Info/Health contacts/hours are not copied by default into permanent cached Facebook preview;
-- native Web Share is preferred enhancement only where supported, HTTPS + user activation required;
-- Clipboard `writeText`/manual copy are fallbacks;
-- no Facebook SDK dependency by default;
-- current Facebook Groups API limitations mean no automatic arbitrary-group posting/scraping/group-member/comment import in MVP;
-- group destination stays user-selected/manual/native-share controlled;
-- Facebook→Popitai is user-assisted own-content paste/prefill, not scraping;
-- no automatic external comments/reactions import as Q&A/answers/B6 recommendations;
-- no automatic Facebook media rehosting;
-- external share lifecycle handles edit/hide/expiry/Q&A merge safely through canonical Popitai state;
-- attribution/UTM cannot leak raw query/body/health/private identifiers;
-- Health/sensitive previews use conservative minimum public text;
-- PWA/Web Share Target remains optional later experiment, not MVP dependency;
-- Facebook Bridge does not change quotas/moderation/owner types;
-- exact Meta endpoint/API details must be reverified immediately before production implementation;
+- no universal popularity score;
+- ranking cascade = public/safety eligibility → intent/owner eligibility → relevance gate → protected/native priority → trust/freshness/locality → bounded secondary signals → deterministic tie-break;
+- protected Admin/Ivanov/boost priority applies only inside a valid relevant candidate set;
+- exact named entity/navigation cannot be hijacked by protected commercial ordering;
+- factual/safety intent can correctly put verified Info before provider promotion;
+- current Listing protected order remains Admin/owner-admin → boost → recency after eligibility/filtering;
+- `is_urgent`/`is_highlighted` ranking boost is not invented without evidence;
+- Firms preserve relevant-set protected owner-first semantics;
+- Health/Info ranking respects B3 reliability/freshness and community recommendations never become medical authority;
+- B6 recommendation tiers are bounded secondary signals only;
+- Q&A aliases return canonical cards and unanswered exact matches may remain visible for duplicate prevention;
+- Articles must pass B4 readiness before ranking;
+- Shops/Restaurants/Events keep owner-native deterministic order;
+- no invented analytics/popularity weighting;
+- no pay-to-rank implication unless separately approved and disclosed;
 - no schema/RLS/production implementation.
-
-External B7 design evidence checked 31.08.2026:
-- MDN: Web Share remains limited availability, secure-context/user-activation dependent;
-- MDN: Clipboard `writeText` is broadly available but permission/security errors need fallback;
-- current 2026 third-party/platform evidence remains consistent that the old Facebook Groups API/publish-to-groups capability removed in 2024 has no general direct replacement for arbitrary group automation.
 
 Production impact: **NONE**.
 
-### V6-B8 — LOCAL RELEVANCE / RANKING / PROTECTED PRIORITY CONTRACT
+### V6-B9 — EXACT INTERACTION / FORMS / BUTTONS / LINKS / STATES CONTRACT
 **CURRENT STAGE**
 
 ---
 
 ## 6. EXACT NEXT TASK
 
-# `STAGE V6-B8 — LOCAL RELEVANCE / RANKING / PROTECTED PRIORITY CONTRACT`
+# `STAGE V6-B9 — EXACT INTERACTION / FORMS / BUTTONS / LINKS / STATES CONTRACT`
 
-B8 must lock:
-- intent relevance before popularity;
-- exact cross-owner composition vs owner-local ordering;
-- protected Admin/Ivanov/boost priority adapter;
-- Lom/local relevance;
-- status/availability/freshness signals;
-- B6 recommendation usage without count inflation/medical authority;
-- Q&A answer/recency/usefulness rules;
-- Article readiness/freshness rules;
-- Health verified/reliability/freshness ordering;
-- Firms/Listings/Shops/Events owner-local ordering boundaries;
-- deterministic tie-breaking;
-- no pay-to-rank implication unless separately approved/disclosed;
-- no invented first-party popularity baseline;
-- performance/query limits;
-- explainability/test matrix;
+B9 must lock end-to-end behavior for every main V6 action:
+- Home/search/category/detail CTA hierarchy;
+- `Намери`, `Добави`, `Попитай`, `Сподели`, `Докладвай/Предложи корекция`;
+- exact owner-aware route for Listings/Firms/Health/Shops/Events/Q&A/Articles;
+- exact supported URL/prefill parameters and safe fallback when current forms do not support a parameter;
+- auth-required behavior;
+- form validation/submission/moderation/success/error/offline states;
+- pending vs approved share behavior;
+- back/cancel/unsaved-data behavior;
+- mobile sheet/modal/focus/accessibility behavior;
+- duplicate prevention handoff in Ask;
+- contextual no-result Search → Ask prefill;
+- Facebook Bridge post-publication share handoff;
+- Health common-shell interaction parity without generic owner bypass;
+- no fake Event Add flow;
+- no protected owner/quota/role change;
 - no schema/RLS/production implementation.
 
 Required artifact:
 
-`PUBLIC_PRODUCT_V6_B8_LOCAL_RELEVANCE_RANKING_PROTECTED_PRIORITY_CONTRACT.md`
+`PUBLIC_PRODUCT_V6_B9_EXACT_INTERACTION_FORMS_BUTTONS_LINKS_STATES_CONTRACT.md`
 
-B8 exit gate:
+B9 exit gate:
 
-**for every major intent/result family, ordering is deterministic and explainable; authoritative/relevant/current results beat unrelated popularity, protected Admin/Ivanov/boost rules are preserved exactly where applicable, and community recommendation cannot silently override owner/trust/safety rules.**
+**every main visible V6 CTA has one real owner-aware destination and deterministic auth/prefill/validation/moderation/success/error/back/share behavior; no dead button, fake flow, owner bypass or ambiguous state remains in the target contract.**
 
 ---
 
@@ -175,6 +168,7 @@ B8 exit gate:
 
 - safe read/design autonomous;
 - no broad re-audit;
+- inspect only current interaction/form owners needed to prove B9;
 - no production code before B/C/D/E gates;
 - at stage completion update Master/Progress/Next and set exactly one next task.
 
@@ -182,7 +176,7 @@ B8 exit gate:
 
 ## 8. CURRENT HANDOFF
 
-**Completed:** V6-0, A1, A2, B1–B7.  
-**Current:** V6-B8.  
-**Next artifact:** `PUBLIC_PRODUCT_V6_B8_LOCAL_RELEVANCE_RANKING_PROTECTED_PRIORITY_CONTRACT.md`.  
+**Completed:** V6-0, A1, A2, B1–B8.  
+**Current:** V6-B9.  
+**Next artifact:** `PUBLIC_PRODUCT_V6_B9_EXACT_INTERACTION_FORMS_BUTTONS_LINKS_STATES_CONTRACT.md`.  
 **Production:** unchanged by V6 planning.
