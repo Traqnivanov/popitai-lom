@@ -14,8 +14,9 @@
 7. `PUBLIC_SITE_INFORMATION_ARCHITECTURE_APPROVED_SPEC.md`
 8. `ADMIN_PANEL_V2_APPROVED_SPEC.md`
 9. `PUBLIC_PRODUCT_V6_MASTER_CONTROL.md`
+10. `PUBLIC_PRODUCT_V6_C_FULL_SITE_INTERFACE_BLUEPRINT.md`
 
-При конфликт: **LOCKED rules > approved production specs > V6 Master Control > completed V6 contracts > supporting drafts.**
+При конфликт: **LOCKED rules > approved production specs > V6 Master Control > completed V6 contracts > Full-site C Blueprint > older C/Home drafts.**
 
 ---
 
@@ -45,92 +46,104 @@ Moderator own-business edit mismatch от A2 остава отделен protect
 
 Completed:
 - V6-0;
-- A1;
-- A2;
-- B1 + Health companion;
-- B2;
-- B3;
-- B4;
-- B5;
-- B6;
-- B7;
-- B8;
-- B9.
+- A1/A2;
+- B1–B9.
 
-Latest B9 artifact:
-`PUBLIC_PRODUCT_V6_B9_EXACT_INTERACTION_FORMS_BUTTONS_LINKS_STATES_CONTRACT.md`
-
-B9 locks owner-aware CTA destinations, exact Listing prefill, specialized Health/Shops actions, no fake Event Add, Ask duplicate handoff, pending-vs-share behavior and deterministic auth/form/mobile states.
+B9 remains authority for exact CTA/form/owner/state semantics.
 
 ---
 
-## 5. V6-C — VISUAL / INTERACTION PROTOTYPE
+## 5. V6-C — PROCESS CORRECTION + FULL-SITE BLUEPRINT
 
-Artifact:
-`PUBLIC_PRODUCT_V6_C_VISUAL_INTERACTION_PROTOTYPE.md`
+New authority:
+`PUBLIC_PRODUCT_V6_C_FULL_SITE_INTERFACE_BLUEPRINT.md`
 
-Prototype files:
-- `v6-prototype/index.html`;
-- `v6-prototype/prototype.css`;
-- `v6-prototype/prototype.js`.
+Reason for reset:
+- rendered Home review showed only 4 Info Lom entries although authoritative current Info owner has 6;
+- `Открий в Лом` rendered as a narrow right-side column on mobile;
+- this confirmed that piecemeal Home patching could silently drop approved content/functions.
 
-Status:
+New rule:
 
-**SOURCE PROTOTYPE COMPLETE → VISUAL REVIEW GATE**
+**First complete the whole public product in one navigable prototype; only after completeness passes, polish individual blocks/screens.**
 
-Implemented in prototype:
-- Home search-first desktop/mobile;
-- B1 priority shortcuts + `Открий в Лом`;
-- common category shell;
-- Health inside the same shell while keeping specialized Health semantics;
-- grouped Construction results;
-- Search success/no-result/partial states;
-- global Add sheet;
-- Listing prefill example;
-- Ask duplicate suggestions;
-- pending vs public/share states;
-- Health proposal modal;
-- Shop proposal modal;
-- Event state with no fake Add CTA;
-- responsive <=720 px layout;
-- dialog focus/Escape/return-focus behavior;
-- separate prototype screen switcher.
+Canonical Info Lom six families:
+1. Здраве;
+2. Институции;
+3. Транспорт;
+4. Образование и култура;
+5. Банки и банкомати;
+6. Комунални и ежедневни услуги.
 
-C source QA found and fixed one important contradiction:
-- initial prototype reused site nav as screen switcher;
-- fixed by restoring canonical desktop navigation and moving prototype screen switching into a separate clearly marked bar;
-- mobile Profile no longer falsely routes to Ask;
-- non-live demo actions now return an explicit prototype status instead of silent dead buttons.
+---
+
+## 6. CURRENT FULL-SITE PROTOTYPE
+
+New isolated prototype files:
+- `v6-prototype/full-site.html`;
+- `v6-prototype/full-site.css`;
+- `v6-prototype/full-site.js`.
+
+The older `v6-prototype/index.html` / Home-v2 layer remains reference/history and is no longer the completeness authority.
+
+Current full-site prototype includes representative review flows for:
+- Home;
+- all 16 categories;
+- Marketplace/Listings;
+- listing detail;
+- Firms + firm detail;
+- Health;
+- Shops;
+- Restaurants;
+- Events;
+- all six Info Lom families;
+- Search success/partial/empty/offline/error;
+- Articles/Guides + detail;
+- Q&A + detail/unanswered;
+- Profile/Auth;
+- global Add;
+- Listing/Firm/Q&A/Health/Shop forms;
+- correction/report flows;
+- owner-aware share/contact semantics.
+
+Static prototype only; no production writes.
+
+---
+
+## 7. CURRENT EXACT TASK
+
+# `V6-C FULL-SITE INTERFACE COMPLETENESS + VISUAL REVIEW GATE`
+
+Do NOT begin V6-D yet.
+
+Review in this order:
+1. whole product coverage — no approved public capability silently lost;
+2. every visible CTA → correct owner/destination;
+3. Home: Search → priority categories → Discover → 6 Info → Guides → Q&A;
+4. 16 categories + Marketplace relationship;
+5. Info/Health structure/trust;
+6. Listing/Firm/Specialized detail actions;
+7. forms, auth, pending/error/dirty states;
+8. Search/Articles/Q&A/Profile connections;
+9. desktop/mobile responsive hierarchy;
+10. only then pixel-level visual polish.
 
 Production impact: **NONE**.
 
 ---
 
-## 6. CURRENT EXACT TASK
+## 8. NEXT MAJOR STAGE
 
-# `V6-C VISUAL REVIEW GATE`
-
-Before V6-D begins, inspect/refine the rendered prototype direction for:
-- Home first impression;
-- density/spacing;
-- category shell;
-- Health parity;
-- mobile hierarchy;
-- Search states;
-- Add/Ask modal interaction;
-- overall brand feel.
-
-No production implementation starts at this gate.
-
-If visual direction is accepted/refined, exact next major stage becomes:
+After C completeness + visual direction is accepted/refined:
 
 # `V6-D — TECHNICAL DESIGN / SCHEMA / RLS / INDEX / MIGRATION / SEO RENDERING / PERFORMANCE`
 
+No production implementation before D/E gates.
+
 ---
 
-## 7. CURRENT HANDOFF
+## 9. CURRENT HANDOFF
 
-**Completed:** V6-0, A1, A2, B1–B9; C source prototype.  
-**Current:** V6-C visual review gate.  
-**Production:** unchanged.  
-**Do not do next:** production implementation before C review + V6-D/E.
+**Completed:** V6-0, A1/A2, B1–B9, Full-site C Blueprint and initial full-site prototype source.  
+**Current:** V6-C full-site completeness + visual review.  
+**Production:** unchanged.
