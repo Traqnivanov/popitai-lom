@@ -17,82 +17,69 @@ Branch: `v6-product-foundation-draft`
 5. `PROJECT_RULES_RENDER_OWNERSHIP.md`
 6. `PROJECT_PROGRESS.md`
 7. `PUBLIC_PRODUCT_V6_MASTER_CONTROL.md`
-8. `PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md`
-9. `PUBLIC_PRODUCT_V6_B1_HEALTH_PRESENTATION_PARITY_CLARIFICATION.md`
-10. `PUBLIC_PRODUCT_V6_B2_SEARCH_INTENT_RESULT_CONTRACT.md`
-11. `PUBLIC_PRODUCT_V6_B3_INFO_SOURCE_FRESHNESS_SEO_SEARCH_CONTRACT.md`
-12. `PUBLIC_PRODUCT_V6_B4_ARTICLE_GUIDE_CONTENT_ARCHITECTURE_CONTRACT.md`
-13. `PUBLIC_PRODUCT_V6_B5_QA_CANONICAL_DUPLICATE_ALIAS_MODERATION_CONTRACT.md`
-14. `PUBLIC_PRODUCT_V6_B6_STRUCTURED_RECOMMENDATION_RELATION_CONTRACT.md`
-15. `PUBLIC_PRODUCT_V6_B7_FACEBOOK_BRIDGE_TECHNICAL_PRODUCT_CONTRACT.md`
-16. `PUBLIC_PRODUCT_V6_B8_LOCAL_RELEVANCE_RANKING_PROTECTED_PRIORITY_CONTRACT.md`
-17. `PUBLIC_PRODUCT_V6_B9_EXACT_INTERACTION_FORMS_BUTTONS_LINKS_STATES_CONTRACT.md`
-
-После чети само task-specific evidence.
+8. completed B1–B9 contracts;
+9. `PUBLIC_PRODUCT_V6_C_VISUAL_INTERACTION_PROTOTYPE.md`.
 
 ---
 
 ## 2. Текущо състояние
 
-Завършени: V6-0, A1, A2, B1–B9.
+Completed:
+- V6-0;
+- A1/A2;
+- B1–B9;
+- V6-C source-level visual/interaction prototype.
 
-Production е **непроменен от V6 planning track**.
+Prototype:
+- `v6-prototype/index.html`;
+- `v6-prototype/prototype.css`;
+- `v6-prototype/prototype.js`.
 
-Ключово LOCKED:
-- stable 16-category taxonomy;
-- Health е в същия visual/category/mobile/search/share/Facebook shell, но verified Health/Info owner/trust remains specialized;
-- Search V6 = one explicit intent-aware owner;
-- Info owns mutable verified local facts;
-- Articles only after readiness gate;
-- Q&A canonical/duplicate/alias model;
-- structured recommendation relation without self/count inflation;
-- Facebook is distribution only;
-- ranking relevance gate precedes protected/native priority;
-- every main CTA now has one owner-aware B9 destination/state contract;
+Production е **непроменен**.
+
+Key truths:
+- canonical desktop/mobile navigation preserved;
+- stable 16-category system preserved;
+- Health uses same V6 visual shell but specialized verified owner;
+- Search/Info/Q&A/Recommendations/Facebook/Ranking/B9 interactions are represented;
 - no fake Event Add;
-- pending content is not publicly shareable;
-- no production/schema/RLS/protected change yet.
+- pending content has no public share;
+- prototype is isolated and not referenced by production pages.
 
 ---
 
-## 3. EXACT NEXT TASK
+## 3. EXACT CURRENT TASK
 
-# `STAGE V6-C — REAL DESKTOP/MOBILE VISUAL + INTERACTION PROTOTYPE`
+# `V6-C VISUAL REVIEW GATE`
 
-Build an isolated non-production prototype from B1–B9.
+Do not start production code.
 
-Required:
-- coherent Popitai V6 visual system;
-- desktop/mobile Home;
-- common category shell;
-- Health inside the same shell with specialized actions;
+Review/refine rendered prototype for:
+- Home first impression;
+- category density/order;
+- Health visual parity;
+- desktop/mobile hierarchy;
 - Search success/no-result/partial states;
-- marketplace/category result composition;
-- global Add sheet;
-- Listing prefill example;
-- Ask duplicate suggestion state;
-- pending success vs approved/share state;
-- Health proposal and Shop proposal examples;
-- canonical Q&A detail/share/report example;
-- no Event Add CTA;
-- accessibility/focus/mobile hierarchy;
-- prototype files isolated and never referenced from production pages.
+- Add/Ask flows;
+- brand/spacing/copy consistency.
 
-C exit gate:
+C artifact:
+`PUBLIC_PRODUCT_V6_C_VISUAL_INTERACTION_PROTOTYPE.md`
 
-**the user can inspect one coherent desktop/mobile V6 experience and understand how Home, categories, Health, Search, Add, Ask and Facebook/share fit together before production implementation.**
+After visual direction is accepted/refined, next major stage:
+
+# `V6-D — TECHNICAL DESIGN / SCHEMA / RLS / INDEX / MIGRATION / SEO RENDERING / PERFORMANCE`
 
 ---
 
 ## 4. Работен режим
 
-- safe design/prototype autonomous;
+- safe review/refinement autonomous where objective;
+- visual preference changes can be surfaced for user review;
 - no production deployment;
 - no schema/RLS changes;
-- do not replace protected owner logic;
-- prototype may use static/mock data but must label it as prototype and must not invent live metrics;
-- after C, update Master/Progress/Next and set V6-D as exact next stage.
+- no protected owner/ranking/role changes.
 
-Минимално съобщение в нов чат:
+Минимално продължение:
 
 `@GitHub Продължи Попитай.Лом по PUBLIC_PRODUCT_V6_NEXT_CHAT_START.md. Работи автономно.`
