@@ -1,15 +1,20 @@
 (() => {
   "use strict";
 
+  function loadHomeV2Assets() {
+    if (!document.querySelector('link[data-home-v2]')) {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = "home-v2.css?v=20260901-home-v2";
+      link.dataset.homeV2 = "1";
+      document.head.appendChild(link);
+    }
+  }
+
   function injectPrototypeControls() {
     const homeDescription = document.querySelector('[data-screen="home"] .hero-copy > p');
     if (homeDescription) {
       homeDescription.textContent = "Намери проверена информация, местни услуги, работа, имоти, фирми и полезни отговори — всичко за Лом на едно място.";
-    }
-
-    const trustTitle = document.querySelector('[data-screen="home"] .trust-card h2');
-    if (trustTitle) {
-      trustTitle.textContent = "Първо намираш нужната информация. Ако няма достатъчен отговор — питаш.";
     }
 
     const categoryDescription = document.querySelector('[data-screen="category"] .category-heading-row p');
@@ -65,7 +70,7 @@
         .prototype-switcher button{border:1px solid rgba(255,255,255,.16);background:transparent;color:#dce8f7;border-radius:999px;padding:6px 9px;font-size:12px;font-weight:800;white-space:nowrap}
         .prototype-switcher button.active{background:#fff;color:#071c38}
         .prototype-toast{position:fixed;z-index:150;right:18px;bottom:22px;max-width:360px;background:#071c38;color:#fff;border:1px solid rgba(255,255,255,.16);box-shadow:0 18px 46px rgba(0,0,0,.22);border-radius:14px;padding:13px 15px;font-size:13px;line-height:1.45}
-        @media(max-width:720px){.prototype-switcher{top:59px;padding:7px 8px}.prototype-switcher strong{display:none}.prototype-toast{left:12px;right:12px;bottom:82px;max-width:none}.site-header{top:0}}
+        @media(max-width:720px){.prototype-toast{left:12px;right:12px;bottom:82px;max-width:none}.site-header{top:0}}
       `;
       document.head.appendChild(style);
     }
@@ -81,6 +86,7 @@
     }
   }
 
+  loadHomeV2Assets();
   injectPrototypeControls();
 
   const screens = [...document.querySelectorAll("[data-screen]")];
@@ -163,20 +169,13 @@
     open.forEach((modal, index) => closeModal(modal, restore && index === open.length - 1));
   }
 
-  function wireScreenButtons() {
-    screenButtons().forEach((button) => {
-      if (button.dataset.prototypeScreenWired === "1") return;
-      button.dataset.prototypeScreenWired = "1";
-      button.addEventListener("click", () => {
-        const target = button.dataset.screenTarget;
-        closeAllModals(false);
-        if (target) setScreen(target);
-      });
+  screenButtons().forEach((button) => {
+    button.addEventListener("click", () => {
+      closeAllModals(false);
+      if (button.dataset.screenTarget) setScreen(button.dataset.screenTarget);
     });
-    switcherButtons().forEach((button) => button.addEventListener("click", () => setScreen(button.dataset.prototypeScreen)));
-  }
-
-  wireScreenButtons();
+  });
+  switcherButtons().forEach((button) => button.addEventListener("click", () => setScreen(button.dataset.prototypeScreen)));
 
   document.querySelectorAll("[data-prototype-action]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -199,9 +198,7 @@
   document.querySelectorAll("[data-close-modal]").forEach((button) => button.addEventListener("click", () => closeModal(button.closest(".modal-layer"))));
 
   modals.forEach((modal) => {
-    modal.addEventListener("click", (event) => {
-      if (event.target === modal) closeModal(modal);
-    });
+    modal.addEventListener("click", (event) => { if (event.target === modal) closeModal(modal); });
     modal.addEventListener("keydown", (event) => {
       if (event.key === "Escape") {
         event.preventDefault();
@@ -321,4 +318,9 @@
   });
 
   setScreen("home", false);
+
+  const homeV2 = document.createElement("script");
+  homeV2.src = "home-v2.js?v=20260901-home-v2";
+  homeV2.dataset.homeV2 = "1";
+  document.body.appendChild(homeV2);
 })();
