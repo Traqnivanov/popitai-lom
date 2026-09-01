@@ -10,6 +10,8 @@
   let bypass = false;
   let pendingAction = null;
   let forceFailure = false;
+  let restoringHistory = false;
+  let allowNextHistoryMove = false;
 
   const typeOf = form => form?.getAttribute('data-v8-form') || 'form';
   const role = () => window.PopitaiV6?.role || 'user';
@@ -315,6 +317,29 @@
       askDiscard(() => document.dispatchEvent(new CustomEvent('v8-force-escape')));
     }
   },true);
+
+  window.addEventListener('popstate', event => {
+    if (allowNextHistoryMove) {
+      allowNextHistoryMove = false;
+      return;
+    }
+
+    if (restoringHistory) {
+      event.stopImmediatePropagation();
+      restoringHistory = false;
+      askDiscard(() => {
+        allowNextHistoryMove = true;
+        history.back();
+      });
+      return;
+    }
+
+    if (bypass || !dirtyForm()) return;
+
+    event.stopImmediatePropagation();
+    restoringHistory = true;
+    history.forward();
+  });
 
   window.addEventListener('beforeunload',event => {
     if (!dirtyForm()) return;
