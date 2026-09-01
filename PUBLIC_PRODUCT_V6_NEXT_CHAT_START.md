@@ -26,90 +26,72 @@ Branch: `v6-product-foundation-draft`
 14. `PUBLIC_PRODUCT_V6_B6_STRUCTURED_RECOMMENDATION_RELATION_CONTRACT.md`
 15. `PUBLIC_PRODUCT_V6_B7_FACEBOOK_BRIDGE_TECHNICAL_PRODUCT_CONTRACT.md`
 16. `PUBLIC_PRODUCT_V6_B8_LOCAL_RELEVANCE_RANKING_PROTECTED_PRIORITY_CONTRACT.md`
+17. `PUBLIC_PRODUCT_V6_B9_EXACT_INTERACTION_FORMS_BUTTONS_LINKS_STATES_CONTRACT.md`
 
 После чети само task-specific evidence.
-
-При конфликт:
-
-**LOCKED rules > approved production specs > V6 Master Control > completed B-contracts > supporting drafts.**
 
 ---
 
 ## 2. Текущо състояние
 
-Завършени: V6-0, A1, A2, B1–B8.
+Завършени: V6-0, A1, A2, B1–B9.
 
 Production е **непроменен от V6 planning track**.
 
 Ключово LOCKED:
-- common 16-category V6 shell;
-- Health uses same visual/category/mobile/search/share/Facebook system, but verified Health/Info owner/trust remains specialized;
-- Search V6 has one explicit intent-aware owner;
+- stable 16-category taxonomy;
+- Health е в същия visual/category/mobile/search/share/Facebook shell, но verified Health/Info owner/trust remains specialized;
+- Search V6 = one explicit intent-aware owner;
 - Info owns mutable verified local facts;
-- Articles/Guides are process/context content and only `ПРОВЕРЕНО ГОТОВО` is normal Search/SEO eligible;
-- one real Q&A intent → one canonical knowledge center; aliases/merge are non-destructive;
-- community approval/usefulness ≠ verified fact;
-- structured recommendations come from valid approved Q&A relation to stable approved entity; self/duplicates do not inflate counts;
-- Facebook is distribution only and points back to canonical Popitai URLs;
-- ranking uses relevance/eligibility before protected/native priority;
-- Admin/Ivanov/boost applies only inside valid relevant candidate sets;
-- factual/safety intent can correctly put verified Info before commercial/provider promotion;
-- no invented popularity analytics baseline.
+- Articles only after readiness gate;
+- Q&A canonical/duplicate/alias model;
+- structured recommendation relation without self/count inflation;
+- Facebook is distribution only;
+- ranking relevance gate precedes protected/native priority;
+- every main CTA now has one owner-aware B9 destination/state contract;
+- no fake Event Add;
+- pending content is not publicly shareable;
+- no production/schema/RLS/protected change yet.
 
 ---
 
 ## 3. EXACT NEXT TASK
 
-# `STAGE V6-B9 — EXACT INTERACTION / FORMS / BUTTONS / LINKS / STATES CONTRACT`
+# `STAGE V6-C — REAL DESKTOP/MOBILE VISUAL + INTERACTION PROTOTYPE`
 
-Не прави broad audit и не започвай production code.
+Build an isolated non-production prototype from B1–B9.
 
-Изработи:
+Required:
+- coherent Popitai V6 visual system;
+- desktop/mobile Home;
+- common category shell;
+- Health inside the same shell with specialized actions;
+- Search success/no-result/partial states;
+- marketplace/category result composition;
+- global Add sheet;
+- Listing prefill example;
+- Ask duplicate suggestion state;
+- pending success vs approved/share state;
+- Health proposal and Shop proposal examples;
+- canonical Q&A detail/share/report example;
+- no Event Add CTA;
+- accessibility/focus/mobile hierarchy;
+- prototype files isolated and never referenced from production pages.
 
-`PUBLIC_PRODUCT_V6_B9_EXACT_INTERACTION_FORMS_BUTTONS_LINKS_STATES_CONTRACT.md`
+C exit gate:
 
-B9 трябва да заключи:
-- exact CTA hierarchy for Home/Search/Category/Detail;
-- exact destination for `Намери`, `Добави`, `Попитай`, `Сподели`, `Докладвай/Предложи корекция`;
-- owner-aware routing for Listings/Firms/Health/Shops/Events/Q&A/Articles;
-- exact supported URL/prefill params and fallback rules;
-- auth-required behavior;
-- validation, submit, moderation, success, error, offline and retry states;
-- pending vs approved share behavior;
-- back/cancel/unsaved-data behavior;
-- mobile sheet/modal/focus/accessibility behavior;
-- Search no-result → Ask context;
-- Ask duplicate-prevention handoff;
-- Facebook Bridge post-publication handoff;
-- Health common-shell interaction parity without generic owner bypass;
-- no fake Event Add flow;
-- no protected owner/quota/role/schema/RLS changes.
-
-B9 exit gate:
-
-**every main visible V6 CTA has one real owner-aware destination and deterministic auth/prefill/validation/moderation/success/error/back/share behavior; no dead button, fake flow, owner bypass or ambiguous target state remains.**
+**the user can inspect one coherent desktop/mobile V6 experience and understand how Home, categories, Health, Search, Add, Ask and Facebook/share fit together before production implementation.**
 
 ---
 
-## 4. Evidence scope
+## 4. Работен режим
 
-Use only current interaction owners needed for B9:
-- `PUBLIC_PRODUCT_V6_INTERACTION_FORM_LINK_CONTRACT.md`;
-- `public-shell-v1.js` / current Add sheet;
-- `dobavi-obqva.html` + listing form owner;
-- `dobavi-firma.html` + firm form owner;
-- Health submission owner;
-- Shops proposal owner;
-- `nov-vapros.html` + Q&A form owner;
-- Events current public owner;
-- current share/report/correction flows where relevant;
-- B1–B8 locked routes/owners.
-
----
-
-## 5. Работен режим
-
-Safe read/design autonomous. No production/schema/RLS/protected changes. At B9 completion update Master/Progress/Next and set exactly one next task.
+- safe design/prototype autonomous;
+- no production deployment;
+- no schema/RLS changes;
+- do not replace protected owner logic;
+- prototype may use static/mock data but must label it as prototype and must not invent live metrics;
+- after C, update Master/Progress/Next and set V6-D as exact next stage.
 
 Минимално съобщение в нов чат:
 
