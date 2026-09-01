@@ -17,119 +17,131 @@ Branch: `v6-product-foundation-draft`
 5. `PROJECT_RULES_RENDER_OWNERSHIP.md`
 6. `PROJECT_PROGRESS.md`
 7. `PUBLIC_PRODUCT_V6_MASTER_CONTROL.md`
-8. completed B1–B9 contracts, особено B4 Articles/Guides и B7 Facebook Bridge;
-9. `PUBLIC_PRODUCT_V6_COPY_QUALITY_RULE.md`;
-10. `PUBLIC_PRODUCT_V6_C_VISUAL_INTERACTION_PROTOTYPE.md`;
-11. `PUBLIC_PRODUCT_V6_C_HOME_ARCHITECTURE_DECISION.md`.
+8. completed B1–B9 contracts, особено B3/B4/B7/B8/B9;
+9. `PUBLIC_PRODUCT_V6_C_FULL_SITE_INTERFACE_BLUEPRINT.md`;
+10. older C/Home documents only where they do not conflict with Full-site Blueprint.
 
 ---
 
-## 2. Текущо състояние
+## 2. CURRENT TRUTH
 
 Completed:
 - V6-0;
 - A1/A2;
 - B1–B9;
-- V6-C source-level visual/interaction prototype;
-- Home v2 holistic visual candidate;
-- Home article/guide layer + semantic destination correction candidate.
-
-Prototype files:
-- `v6-prototype/index.html`;
-- `v6-prototype/prototype.css`;
-- `v6-prototype/prototype.js`;
-- `v6-prototype/home-v2.css`;
-- `v6-prototype/home-v2.js`;
-- `v6-prototype/home-v2-content.css`.
+- Full-site C interface blueprint;
+- initial isolated full-site prototype source.
 
 Production е **непроменен**.
 
-Key truths:
-- canonical desktop/mobile navigation remains the product target;
-- stable 16-category system preserved;
-- Health uses same V6 visual shell but specialized verified owner;
-- no fake Event Add;
-- pending content has no public share;
-- prototype is isolated and not referenced by production pages;
-- public copy must be clean, confident and professional;
-- every reviewed Home card must open the correct semantic context, even when prototype data is static;
-- Articles/Guides are a required Home/SEO/share layer, not optional decoration;
-- only B4 `ПРОВЕРЕНО ГОТОВО` articles may be production-featured/search/share assets;
-- candidate guide titles in prototype do not change readiness status.
+Canonical navigation:
+- Desktop: `Начало | Обяви и услуги | Фирми | Инфо Лом | Статии | Още | Профил | + Добави`
+- Mobile: `Начало | Обяви | + | Инфо | Профил`
 
-## Home v2 — current canonical review hierarchy
+Stable B1 public taxonomy = 16 categories.
 
-`Search → Основни категории → Открий в Лом → Проверена информация → Полезни ръководства → Въпроси и препоръки`
+Canonical Info Lom top level = exactly 6 families:
+1. Здраве;
+2. Институции;
+3. Транспорт;
+4. Образование и култура;
+5. Банки и банкомати;
+6. Комунални и ежедневни услуги.
 
-Home v2 changes:
-- no giant tutorial card;
-- shorter Search-first hero;
-- categories immediately after Search;
-- 4 priority mobile categories: Construction, Health, Work, Cars;
-- unified SVG icon language;
-- dense Discover Lom;
-- compact verified Info;
-- required `Полезни ръководства` section before Q&A;
-- max two Q&A previews on Home;
-- prototype review controls separated from product hierarchy.
+Health remains specialized verified owner even when visually using the common V6 shell.
 
-Guide prototype candidates:
-- `Как да се пенсионираш в Лом`;
-- `Как се подменя лична карта в Лом`;
-- `Как да подадеш сигнал до община или институция`.
-
-Guide detail prototype must show full process structure and hand off mutable local facts to authoritative Info/official owners. Share buttons are visualized, but official share is only allowed after `ПРОВЕРЕНО ГОТОВО` and canonical public URL.
-
-## Destination correction
-
-Home prototype must no longer use unrelated placeholders:
-- Работа → Work context;
-- Автомобили → Cars context;
-- Имоти → Property context;
-- Красота → Beauty context;
-- Shops/Restaurants/Firms/Events → their correct discovery contexts;
-- Institutions/Transport/Utilities → their verified Info contexts;
-- article title → corresponding article detail;
-- `Виж всички въпроси` → Q&A context, not immediate new-question form.
-
-`PUBLIC_PRODUCT_V6_C_HOME_ARCHITECTURE_DECISION.md` is the authority for Home layout/flow decisions.
+No fake Event Add.
+Pending/private/rejected content has no public Share.
+Articles/Guides are a required product/SEO/share layer, but official production feature/search/share requires B4 `ПРОВЕРЕНО ГОТОВО`.
 
 ---
 
-## 3. EXACT CURRENT TASK
+## 3. WHY THE C PROCESS CHANGED
 
-# `V6-C HOME V2 + DESTINATION + GUIDE VISUAL REVIEW GATE`
+Rendered mobile review exposed that Home-only patching had:
+- dropped Education/Culture and Banks/ATMs from Info Lom;
+- produced a broken narrow/right-side `Открий в Лом` layout;
+- previously allowed unrelated prototype destinations.
 
-Do not start production code.
+User explicitly requires a different process:
 
-Review current prototype as a whole for:
-- first viewport / Search dominance;
-- category density/order;
-- exact semantic destination of every major Home card;
-- `Полезни ръководства` placement and density;
-- pension/article detail structure;
-- Share positioning without violating B4/B7 eligibility;
-- Health visual parity;
-- Search success/no-result/partial states;
-- Add/Ask flows;
-- mobile/desktop hierarchy;
-- brand/spacing/copy consistency.
+**First establish the whole site end-to-end with all approved functions/content/forms/buttons/links. Only after the complete product can be reviewed as one system do visual polishing and local improvements.**
 
-Do not accept Home while a major card routes to unrelated demo content.
+Do not revert to piecemeal Home polishing.
 
-After visual direction is accepted/refined, next major stage:
+---
+
+## 4. CURRENT PROTOTYPE
+
+Primary review prototype:
+- `v6-prototype/full-site.html`
+- `v6-prototype/full-site.css`
+- `v6-prototype/full-site.js`
+
+Older `v6-prototype/index.html` + Home-v2 files are reference/history, not current completeness authority.
+
+Full-site prototype represents:
+- Home Search-first flow;
+- main categories + all 16 categories;
+- full-width Discover Lom;
+- all six Info Lom families;
+- Marketplace/Listings + listing detail;
+- Firms + firm detail;
+- Health;
+- Shops;
+- Restaurants;
+- Events;
+- Search success/partial/empty/offline/error;
+- Articles/Guide detail including pension candidate;
+- Q&A index/detail/unanswered;
+- Profile/Auth;
+- global Add;
+- Listing/Firm/Q&A/Health/Shop forms;
+- Info correction and generic report;
+- owner-aware share/contact semantics.
+
+Static representative data only; no live writes.
+
+---
+
+## 5. EXACT CURRENT TASK
+
+# `V6-C FULL-SITE INTERFACE COMPLETENESS + VISUAL REVIEW GATE`
+
+Do NOT start production code or V6-D.
+
+Review/continue in order:
+1. no approved screen/category/action/form is missing;
+2. every visible button/link goes to its correct owner/destination;
+3. Home hierarchy and first viewport;
+4. 16 categories + Marketplace relationship;
+5. six-family Info Lom + Health parity/trust;
+6. Firms/Listings/Specialized details;
+7. forms/auth/pending/error/dirty states;
+8. Search/Articles/Q&A/Profile connections;
+9. responsive desktop/mobile system;
+10. only after completeness passes, polish spacing/cards/typography/buttons per screen.
+
+Do not treat one polished Home block as C completion.
+
+---
+
+## 6. NEXT MAJOR STAGE
+
+Only after full-site C completeness + visual direction is accepted/refined:
 
 # `V6-D — TECHNICAL DESIGN / SCHEMA / RLS / INDEX / MIGRATION / SEO RENDERING / PERFORMANCE`
 
 ---
 
-## 4. Работен режим
+## 7. WORK MODE
 
 - safe review/refinement autonomous where objective;
 - no production deployment;
 - no schema/RLS changes;
 - no protected owner/ranking/role changes;
-- do not claim candidate article facts are verified until content gate passes.
+- preserve existing approved form capabilities;
+- do not invent current analytics/statistics or article verification.
 
 Минимално продължение:
 
