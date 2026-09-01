@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#ffffff">
+  <title>Попитай.Лом V6 — Full-site prototype</title>
+  <link rel="stylesheet" href="full-site.css?v=20260901-fullsite-1">
+</head>
+<body>
+  <div class="prototype-strip" role="status">
+    <strong>V6 FULL-SITE ПРОТОТИП</strong>
+    <span>Само за преглед · статични примерни данни · production не е променен</span>
+  </div>
+
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      <button class="brand" type="button" data-route="home" aria-label="Попитай Лом — начало">
+        <span class="brand-mark"><img src="../assets/popitai-lom-logo-mark-256.webp" alt=""></span>
+        <span class="brand-text"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span>
+      </button>
+
+      <nav class="desktop-nav" aria-label="Главна навигация">
+        <button type="button" data-route="home" data-nav="home">Начало</button>
+        <button type="button" data-route="marketplace" data-nav="marketplace">Обяви и услуги</button>
+        <button type="button" data-route="firms" data-nav="firms">Фирми</button>
+        <button type="button" data-route="info" data-nav="info">Инфо Лом</button>
+        <button type="button" data-route="articles" data-nav="articles">Статии</button>
+        <details class="more-nav">
+          <summary>Още</summary>
+          <div class="more-menu">
+            <button type="button" data-route="questions">Въпроси</button>
+            <button type="button" data-route="events">Събития</button>
+            <button type="button" data-route="about">За сайта</button>
+            <button type="button" data-route="rules">Правила</button>
+            <button type="button" data-route="contact">Контакти</button>
+          </div>
+        </details>
+        <button type="button" data-route="profile" data-nav="profile">Профил</button>
+      </nav>
+
+      <div class="header-actions">
+        <button class="add-trigger" type="button" data-open-add aria-haspopup="dialog" aria-controls="add-sheet">+ Добави</button>
+        <button class="menu-trigger" id="menu-trigger" type="button" aria-label="Отвори менюто" aria-expanded="false">☰</button>
+      </div>
+    </div>
+    <div class="mobile-drawer" id="mobile-drawer" hidden>
+      <button type="button" data-route="marketplace">Обяви и услуги</button>
+      <button type="button" data-route="firms">Фирми</button>
+      <button type="button" data-route="info">Инфо Лом</button>
+      <button type="button" data-route="articles">Статии</button>
+      <button type="button" data-route="questions">Въпроси</button>
+      <button type="button" data-route="events">Събития</button>
+      <button type="button" data-route="about">За сайта</button>
+      <button type="button" data-route="rules">Правила</button>
+      <button type="button" data-route="contact">Контакти</button>
+    </div>
+  </header>
+
+  <main id="app" tabindex="-1"></main>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand"><strong>Попитай<span>.Лом</span></strong><p>Местна информация, услуги, обяви и препоръки за Лом.</p></div>
+      <div><h2>Разгледай</h2><button data-route="marketplace">Обяви и услуги</button><button data-route="firms">Фирми</button><button data-route="info">Инфо Лом</button><button data-route="articles">Статии</button></div>
+      <div><h2>Общност</h2><button data-route="questions">Въпроси</button><button data-route="events">Събития</button><button data-route="report">Подай сигнал</button></div>
+      <div><h2>За сайта</h2><button data-route="about">За сайта</button><button data-route="rules">Правила</button><button data-route="contact">Контакти</button></div>
+    </div>
+    <div class="footer-bottom">© 2026 Попитай.Лом · V6 prototype</div>
+  </footer>
+
+  <nav class="mobile-bottom-nav" aria-label="Мобилна навигация">
+    <button type="button" data-route="home" data-mobile-nav="home"><span data-icon="home"></span><small>Начало</small></button>
+    <button type="button" data-route="marketplace" data-mobile-nav="marketplace"><span data-icon="list"></span><small>Обяви</small></button>
+    <button class="mobile-add" type="button" data-open-add aria-label="Добави"><span>+</span><small>Добави</small></button>
+    <button type="button" data-route="info" data-mobile-nav="info"><span data-icon="info"></span><small>Инфо</small></button>
+    <button type="button" data-route="profile" data-mobile-nav="profile"><span data-icon="user"></span><small>Профил</small></button>
+  </nav>
+
+  <div class="modal-layer" id="add-sheet" hidden>
+    <section class="sheet" role="dialog" aria-modal="true" aria-labelledby="add-title">
+      <div class="sheet-head"><div><span class="kicker">Добави в Попитай.Лом</span><h2 id="add-title">Какво искаш да добавиш?</h2></div><button type="button" class="icon-button" data-close-modal aria-label="Затвори">×</button></div>
+      <div class="add-options">
+        <button type="button" data-route="form-listing" data-close-on-route><span data-icon="list"></span><div><strong>Добави обява</strong><small>Продажба, търсене, работа, имот или услуга</small></div><b>→</b></button>
+        <button type="button" data-route="form-firm" data-close-on-route><span data-icon="building"></span><div><strong>Добави фирма</strong><small>Постоянен профил на местна фирма или доставчик</small></div><b>→</b></button>
+        <button type="button" data-route="form-question" data-close-on-route><span data-icon="chat"></span><div><strong>Задай въпрос</strong><small>Съвет, опит или препоръка от общността</small></div><b>→</b></button>
+      </div>
+      <p class="sheet-note">Здраве и Магазини използват собствени специализирани действия в съответния раздел. Събития няма fake public Add flow.</p>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="full-site.js?v=20260901-fullsite-1"></script>
+</body>
+</html>
