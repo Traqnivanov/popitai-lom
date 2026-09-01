@@ -2,7 +2,7 @@
 
 Статус: **КАНОНИЧЕН КОНТРОЛЕН ДОКУМЕНТ ЗА V6 DRAFT / NO PRODUCTION CODE**  
 Branch: `v6-product-foundation-draft`  
-Актуализирано: 31.08.2026
+Актуализирано: 01.09.2026
 
 Нов чат започва от LOCKED rules → `PROJECT_PROGRESS.md` → този документ → completed B-contracts → task-specific evidence.
 
@@ -20,7 +20,7 @@ V6 е design/research/prototype track и до този checkpoint **не е пр
 
 V6 target:
 
-**local search + marketplace + Firms/entities + Info Lom + Articles/Guides + canonical Q&A + structured recommendations + Facebook distribution + deterministic local relevance + SEO/share + structured local memory.**
+**local search + marketplace + Firms/entities + Info Lom + Articles/Guides + canonical Q&A + structured recommendations + Facebook distribution + deterministic local relevance + exact owner-aware interactions + SEO/share + structured local memory.**
 
 ---
 
@@ -41,7 +41,8 @@ V6 target:
 13. `PUBLIC_PRODUCT_V6_B5_QA_CANONICAL_DUPLICATE_ALIAS_MODERATION_CONTRACT.md`
 14. `PUBLIC_PRODUCT_V6_B6_STRUCTURED_RECOMMENDATION_RELATION_CONTRACT.md`
 15. `PUBLIC_PRODUCT_V6_B7_FACEBOOK_BRIDGE_TECHNICAL_PRODUCT_CONTRACT.md`
-16. task-specific evidence.
+16. `PUBLIC_PRODUCT_V6_B8_LOCAL_RELEVANCE_RANKING_PROTECTED_PRIORITY_CONTRACT.md`
+17. task-specific evidence.
 
 ---
 
@@ -57,6 +58,7 @@ V6 target:
 - B5 — `PUBLIC_PRODUCT_V6_B5_QA_CANONICAL_DUPLICATE_ALIAS_MODERATION_CONTRACT.md`
 - B6 — `PUBLIC_PRODUCT_V6_B6_STRUCTURED_RECOMMENDATION_RELATION_CONTRACT.md`
 - B7 — `PUBLIC_PRODUCT_V6_B7_FACEBOOK_BRIDGE_TECHNICAL_PRODUCT_CONTRACT.md`
+- B8 — `PUBLIC_PRODUCT_V6_B8_LOCAL_RELEVANCE_RANKING_PROTECTED_PRIORITY_CONTRACT.md`
 
 Supporting strategy:
 - `PUBLIC_PRODUCT_V6_WORKING_MODEL.md`
@@ -81,8 +83,8 @@ Supporting strategy:
 - B5 — DONE
 - B6 — DONE
 - B7 — DONE
-- **B8 Local Relevance / Ranking / Protected Priority — CURRENT**
-- B9 Exact interaction/forms/buttons/links/states — OPEN
+- B8 — DONE
+- **B9 Exact interaction/forms/buttons/links/states — CURRENT**
 
 Later:
 - V6-C visual/interaction prototype;
@@ -127,8 +129,6 @@ Health joins the common V6 visual/category/mobile/search/share/Facebook system. 
 
 One Search owner. Result families: route, verified_info, business, listing, shop, event, question, article. Bounded relevant-owner queries only.
 
-Search group ordering is intent-first; owner-local ranking stays owner-aware.
-
 ### E. Verified Info truth
 
 Mutable local facts stay Info-owned. B3 publication/reliability/freshness/stale/provenance rules remain hard boundaries.
@@ -149,102 +149,96 @@ Positive valid non-self relation only; same author contributes max one unit per 
 
 ### I. Facebook Bridge
 
-Facebook is controlled distribution only.
+Facebook is controlled distribution only. Only public approved canonical content is share-eligible. One canonical Popitai URL, server-readable OG target later, Web Share enhancement + Clipboard/manual fallback, no arbitrary group scraping/import.
 
-Only public approved canonical content is share-eligible. One canonical Popitai URL, server-readable OG target later, Web Share enhancement + Clipboard/manual fallback, no Facebook SDK dependency by default, no arbitrary group automation/scraping/import.
+### J. Ranking cascade
 
-### J. External Facebook data is not trust signal
+B8 locks:
 
-Facebook likes/comments/reactions do not become Popitai answers/recommendations automatically.
+**public/safety eligibility → intent/owner eligibility → relevance gate → protected/native priority → trust/freshness/locality → bounded secondary signals → deterministic tie-break.**
 
-### K. Protected ranking survives all relation/share layers
+No universal popularity score.
 
-Admin/Ivanov/boost protected priority is not changed by Search orchestration, recommendations or Facebook distribution. B8 must now define exact adapter/order boundaries.
+### K. Protected priority is relevance-gated
 
-### L. No invented popularity analytics
+Admin/Ivanov/boost priority applies only inside a valid relevant candidate set. It cannot hijack explicit named-entity navigation or unrelated factual/safety intent.
 
-A2 proved no reliable Popitai first-party popularity/search baseline. B8 cannot invent `popular`, `most searched`, `top` weighting.
+Listings preserve current Admin/owner-admin → boost → recency after filtering. Firms preserve relevant-set protected owner-first semantics.
 
-### M. Performance remains hard gate
+### L. Community/social signals are secondary only
+
+B6 recommendations, Q&A usefulness and Facebook reach never override owner eligibility, protected semantics, trust/freshness or medical/factual safety.
+
+### M. No invented popularity analytics
+
+A2 proved no reliable Popitai first-party popularity/search baseline. V6 cannot invent `popular`, `most searched`, `top` weighting.
+
+### N. Performance remains hard gate
 
 No all-owner mega-query, no heavy AI/vector dependency by default, bounded result/candidate sets, deterministic client/server composition.
 
 ---
 
-## 6. B7 EXTERNAL EVIDENCE SNAPSHOT
+## 6. PROTECTED DEFECT — SEPARATE
 
-As of 31.08.2026:
-- Web Share API remains non-universal/limited and requires secure context + user activation;
-- Clipboard write is broadly available but needs permission/error fallback;
-- current external platform evidence remains consistent that the old Facebook Groups API/direct third-party arbitrary-group posting capability removed in 2024 is not a safe dependency for V6 MVP.
-
-Exact Meta endpoints/policies are reverified immediately before production implementation.
+A2 confirmed Moderator own-business edit mismatch. It remains a separate protected production defect scope and is not silently fixed during B9.
 
 ---
 
-## 7. PROTECTED DEFECT — SEPARATE
+## 7. CURRENT EXACT TASK
 
-A2 confirmed Moderator own-business edit mismatch. It remains a separate protected production defect scope and is not silently fixed during B8.
+# `STAGE V6-B9 — EXACT INTERACTION / FORMS / BUTTONS / LINKS / STATES CONTRACT`
 
----
-
-## 8. CURRENT EXACT TASK
-
-# `STAGE V6-B8 — LOCAL RELEVANCE / RANKING / PROTECTED PRIORITY CONTRACT`
-
-B8 must define:
-1. intent relevance before popularity;
-2. cross-owner group composition vs owner-local ordering;
-3. exact protected Admin/Ivanov/boost adapter semantics;
-4. Lom/location relevance;
-5. public status/availability/freshness signals;
-6. B6 recommendation signal use without trust inflation;
-7. Q&A answered/recency/usefulness boundaries;
-8. Article readiness/freshness influence;
-9. Health verified/reliability/freshness ordering;
-10. Firms/Listings/Shops/Events owner-local ordering boundaries;
-11. deterministic tie-breaking;
-12. no pay-to-rank implication unless separately approved/disclosed;
-13. no invented analytics popularity baseline;
-14. performance/query limits;
-15. explainability and regression test matrix;
-16. no schema/RLS/production implementation.
+B9 must define:
+1. exact CTA hierarchy for Home/Search/Category/Detail;
+2. exact destination for `Намери`, `Добави`, `Попитай`, `Сподели`, `Докладвай/Предложи корекция`;
+3. owner-aware routing for Listings/Firms/Health/Shops/Events/Q&A/Articles;
+4. exact supported URL/prefill parameters and fallback rules;
+5. auth-required behavior;
+6. validation/submission/moderation/success/error/offline/retry states;
+7. pending vs approved share behavior;
+8. back/cancel/unsaved-data behavior;
+9. mobile sheet/modal/focus/accessibility behavior;
+10. Search no-result → Ask context;
+11. Ask duplicate-prevention handoff;
+12. Facebook Bridge post-publication handoff;
+13. Health common-shell interaction parity without generic owner bypass;
+14. no fake Event Add flow;
+15. no protected owner/quota/role/schema/RLS changes.
 
 Required artifact:
 
-`PUBLIC_PRODUCT_V6_B8_LOCAL_RELEVANCE_RANKING_PROTECTED_PRIORITY_CONTRACT.md`
+`PUBLIC_PRODUCT_V6_B9_EXACT_INTERACTION_FORMS_BUTTONS_LINKS_STATES_CONTRACT.md`
 
-B8 exit gate:
+B9 exit gate:
 
-**for every major intent/result family ordering is deterministic/explainable; authoritative/relevant/current beats unrelated popularity; protected Admin/Ivanov/boost semantics remain exact where applicable; community/social signals cannot silently override trust/owner/safety rules.**
+**every main visible V6 CTA has one real owner-aware destination and deterministic auth/prefill/validation/moderation/success/error/back/share behavior; no dead button, fake flow, owner bypass or ambiguous target state remains.**
 
 ---
 
-## 9. B8 EVIDENCE SCOPE
+## 8. B9 EVIDENCE SCOPE
 
-Use:
-- `category-listings-v1.js` current listing priority order;
-- `supabase-businesses.js` current owner-first business ordering;
-- B2 search intent/group composition;
-- B3 Info reliability/freshness;
-- B4 article readiness/freshness;
-- B5 Q&A canonical/answered/unanswered;
-- B6 recommendation relation;
-- protected rules/Construction owner evidence.
+Use only:
+- `PUBLIC_PRODUCT_V6_INTERACTION_FORM_LINK_CONTRACT.md`;
+- `public-shell-v1.js` / global Add sheet;
+- current Listing/Firm/Health/Shops/Q&A form owners;
+- Events public owner;
+- current share/report/correction paths where relevant;
+- B1–B8 locked owner/routes.
 
 Do not broad-audit unrelated modules.
 
 ---
 
-## 10. EXECUTION PROTOCOL
+## 9. EXECUTION PROTOCOL
 
-Safe read/design autonomous. No production writes. At stage completion update B8 artifact, Master, Progress, Next; set exactly one next task; state production impact.
+Safe read/design autonomous. No production writes. At stage completion update B9 artifact, Master, Progress, Next; set exactly one next task; state production impact.
 
 ---
 
-## 11. HANDOFF
+## 10. HANDOFF
 
-**Completed:** V6-0 + A1 + A2 + B1–B7.  
-**Current:** V6-B8 Local Relevance / Ranking / Protected Priority.  
-**Required artifact:** `PUBLIC_PRODUCT_V6_B8_LOCAL_RELEVANCE_RANKING_PROTECTED_PRIORITY_CONTRACT.md`.  
+**Completed:** V6-0 + A1 + A2 + B1–B8.  
+**Current:** V6-B9 Exact Interaction / Forms / Buttons / Links / States.  
+**Required artifact:** `PUBLIC_PRODUCT_V6_B9_EXACT_INTERACTION_FORMS_BUTTONS_LINKS_STATES_CONTRACT.md`.  
 **Production impact:** NONE.
