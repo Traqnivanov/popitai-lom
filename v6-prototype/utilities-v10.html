@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#ffffff">
+  <title>Комунални и ежедневни услуги — V10 прототип</title>
+  <link rel="stylesheet" href="utilities-v10.css?v=20260901-1">
+</head>
+<body>
+  <div class="u10-qa">V10 ПРОТОТИП · живият сайт не е променен</div>
+
+  <header class="u10-header">
+    <div class="u10-header-inner">
+      <a class="u10-brand" href="full-site.html#home" aria-label="Попитай.Лом — начало">
+        <span class="u10-brand-mark"><img src="../assets/popitai-lom-logo-mark-256.webp" alt=""></span>
+        <span class="u10-brand-name">Попитай<span>.Лом</span></span>
+      </a>
+      <a class="u10-info-back" href="full-site.html#info">← Инфо Лом</a>
+    </div>
+  </header>
+
+  <section class="u10-hero">
+    <div class="u10-wrap">
+      <div class="u10-crumb">Начало › Инфо Лом › Комунални и ежедневни услуги</div>
+      <h1>Комунални и ежедневни услуги</h1>
+      <p>Аварии, плащания, пратки, интернет и местни контакти на едно място.</p>
+    </div>
+  </section>
+
+  <nav class="u10-subnav" aria-label="Раздели">
+    <div class="u10-subnav-scroll">
+      <a href="#water">Вода и ВиК</a>
+      <a href="#power">Електроенергия</a>
+      <a href="#payments">Плащания</a>
+      <a href="#couriers">Куриери</a>
+      <a href="#internet">Интернет и TV</a>
+      <a href="#insurance">Застраховки</a>
+    </div>
+  </nav>
+
+  <main class="u10-main">
+    <div class="u10-wrap">
+      <section class="u10-section" id="water">
+        <div class="u10-section-head">
+          <span class="u10-kicker">Приоритетни услуги</span>
+          <h2>Вода и електроенергия</h2>
+          <p>Най-важните аварийни действия са първи.</p>
+        </div>
+
+        <div class="u10-service-grid">
+          <article class="u10-service water">
+            <div class="u10-service-head">
+              <span class="u10-icon">💧</span>
+              <div class="u10-service-title"><div class="u10-title-line"><h3>Вода и ВиК в Лом</h3><span class="u10-sticker urgent">24/7</span></div><p>Аварии, спиране на водата и денонощен контакт.</p></div>
+            </div>
+            <div class="u10-highlight"><strong>Аварии 24/7</strong><span>0700 20 272 · опция 1</span></div>
+            <div class="u10-actions">
+              <a class="u10-action primary" href="#"><span>Виж аварии и спирания</span><small>1 стъпка</small></a>
+              <a class="u10-action soft" href="tel:070020272"><span>Обади се за авария</span><small>Директно</small></a>
+            </div>
+            <div class="u10-extra"><strong>Самоотчет за Лом по Viber</strong><a href="tel:0889129789">0889 129 789</a></div>
+            <div class="u10-trust"><span>Официален източник</span><strong>ВиК Монтана</strong><span class="u10-confirmed">Последно потвърдено</span></div>
+          </article>
+
+          <article class="u10-service power" id="power">
+            <div class="u10-service-head">
+              <span class="u10-icon">⚡</span>
+              <div class="u10-service-title"><h3>Електроенергия в Лом</h3><p>Прекъсвания, денонощна линия и център в Лом.</p></div>
+            </div>
+            <div class="u10-highlight"><strong>Център Лом</strong><span>ул. „Христо Ботев“ №13 · Пон.–Пет. 08:30–17:00</span></div>
+            <div class="u10-actions">
+              <a class="u10-action primary" href="#"><span>Провери прекъсване</span><small>1 стъпка</small></a>
+              <a class="u10-action soft" href="tel:070010010"><span>Обади се на Електрохолд</span><small>Директно</small></a>
+            </div>
+            <div class="u10-trust"><span>Официални източници</span><strong>ЕРМ Запад / Електрохолд</strong><span class="u10-confirmed">Последно потвърдено</span></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="u10-section" id="payments">
+        <div class="u10-section-head"><span class="u10-kicker">Плащания и каси</span><h2>Къде можеш да платиш</h2><p>Избери оператор и виж точките в Лом.</p></div>
+        <div class="u10-panel">
+          <div class="u10-switches" role="tablist" aria-label="Плащания">
+            <button class="u10-switch active" type="button" role="tab" aria-selected="true" data-pay-tab="0"><span class="u10-brandbox"><img src="../assets/brands/easypay-logo.webp" alt="EasyPay"></span><span class="u10-switch-copy"><strong>EasyPay</strong><small>13 точки в Лом</small></span></button>
+            <button class="u10-switch" type="button" role="tab" aria-selected="false" data-pay-tab="1"><span class="u10-brandbox">✉</span><span class="u10-switch-copy"><strong>Български пощи</strong><small>2 пощенски каси</small></span></button>
+            <button class="u10-switch" type="button" role="tab" aria-selected="false" data-pay-tab="2"><span class="u10-brandbox">🏦</span><span class="u10-switch-copy"><strong>Банкови каси</strong><small>2 банкови офиса</small></span></button>
+          </div>
+          <div class="u10-list" id="payment-list" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <section class="u10-section" id="couriers">
+        <div class="u10-section-head"><span class="u10-kicker">Куриери</span><h2>Пратки, офиси и автомати</h2><p>Проследяване и местни точки, без излишни стъпки.</p></div>
+        <div class="u10-provider-grid">
+          <article class="u10-provider econt">
+            <div class="u10-provider-head"><span class="u10-provider-logo"><img src="../assets/brands/econt.webp" alt="Еконт"></span><div><h3>Еконт</h3><p>Офиси и проследяване</p></div></div>
+            <div class="u10-provider-actions"><a href="#"><span>Проследи пратка</span><small>Директно</small></a><a href="#"><span>Всички офиси</span><small>1 стъпка</small></a></div>
+            <div class="u10-provider-trust"><span>Официален източник</span><strong>Еконт</strong></div>
+          </article>
+
+          <article class="u10-provider speedy">
+            <div class="u10-provider-head"><span class="u10-provider-logo text">Спиди</span><div><div class="u10-title-line"><h3>Спиди</h3><span class="u10-sticker neutral">Автомати 24/7</span></div><p>Офиси и автомати</p></div></div>
+            <div class="u10-provider-actions"><a href="#"><span>Проследи пратка</span><small>Директно</small></a><a href="#"><span>Всички офиси</span><small>1 стъпка</small></a></div>
+            <div class="u10-provider-trust"><span>Официален източник</span><strong>Спиди</strong></div>
+          </article>
+
+          <article class="u10-provider boxnow">
+            <div class="u10-provider-head"><span class="u10-provider-logo text">BOX<br>NOW</span><div><div class="u10-title-line"><h3>BOX NOW</h3><span class="u10-sticker green">Автомати</span></div><p>Автомати за пратки</p></div></div>
+            <div class="u10-provider-actions"><a href="#"><span>Проследи пратка</span><small>Директно</small></a><a href="#"><span>Намери автомат</span><small>1 стъпка</small></a></div>
+            <div class="u10-provider-trust"><span>Официален източник</span><strong>BOX NOW</strong></div>
+          </article>
+
+          <article class="u10-provider sameday">
+            <div class="u10-provider-head"><span class="u10-provider-logo text">Sameday</span><div><h3>Sameday</h3><p>Точки и автомати</p></div></div>
+            <div class="u10-provider-actions"><a href="#"><span>Виж точки</span><small>1 стъпка</small></a></div>
+            <div class="u10-provider-trust"><span>Проверени местни точки</span></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="u10-section" id="internet">
+        <div class="u10-section-head"><span class="u10-kicker">Интернет и телевизия</span><h2>Доставчици в Лом</h2><p>Покритие, магазини и директни контакти.</p></div>
+        <div class="u10-provider-grid">
+          <article class="u10-provider netsurf">
+            <div class="u10-provider-head"><span class="u10-provider-logo text">NetSurf</span><div><div class="u10-title-line"><h3>NetSurf</h3><span class="u10-sticker local">Местен доставчик</span></div><p>Интернет и поддръжка</p></div></div>
+            <div class="u10-provider-actions"><a href="#"><span>Виж покритието</span><small>1 стъпка</small></a><a href="tel:0882991603"><span>Лом офис</span><small>Директно</small></a><a href="tel:0885250000"><span>Поддръжка</span><small>Директно</small></a></div>
+            <div class="u10-provider-trust"><span>Лом офис</span><strong>0882 991 603</strong></div>
+          </article>
+
+          <article class="u10-provider a1">
+            <div class="u10-provider-head"><span class="u10-provider-logo"><img src="../assets/brands/a1-logo.webp" alt="A1"></span><div><h3>A1</h3><p>Интернет, телевизия и магазин</p></div></div>
+            <div class="u10-provider-actions"><a href="#"><span>Провери покритие</span><small>1 стъпка</small></a><a href="#"><span>Виж магазин</span><small>1 стъпка</small></a><a href="tel:+35988123"><span>Обади се</span><small>Директно</small></a></div>
+            <div class="u10-provider-trust"><span>Официален източник</span><strong>A1</strong></div>
+          </article>
+
+          <article class="u10-provider vivacom">
+            <div class="u10-provider-head"><span class="u10-provider-logo"><img src="../assets/brands/vivacom-logo.webp" alt="Vivacom"></span><div><h3>Vivacom</h3><p>Интернет, телевизия и магазин</p></div></div>
+            <div class="u10-provider-actions"><a href="#"><span>Провери покритие</span><small>1 стъпка</small></a><a href="#"><span>Виж магазин</span><small>1 стъпка</small></a><a href="tel:097161311"><span>Лом офис</span><small>Директно</small></a></div>
+            <div class="u10-provider-trust"><span>Магазин в Лом</span><strong>ул. „Славянска“ №7В</strong></div>
+          </article>
+
+          <article class="u10-provider yettel">
+            <div class="u10-provider-head"><span class="u10-provider-logo"><img src="../assets/brands/yettel-logo.webp" alt="Yettel"></span><div><h3>Yettel</h3><p>Интернет, TV и магазин</p></div></div>
+            <div class="u10-provider-actions"><a href="#"><span>Интернет и TV</span><small>1 стъпка</small></a><a href="#"><span>Виж магазин</span><small>1 стъпка</small></a><a href="tel:089123"><span>Обади се</span><small>Директно</small></a></div>
+            <div class="u10-provider-trust"><span>Официален източник</span><strong>Yettel</strong></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="u10-section" id="insurance">
+        <div class="u10-section-head"><span class="u10-kicker">Застраховки</span><h2>Офиси и контакти</h2><p>Име, адрес, телефон и източник — без изкуствено оцветяване.</p></div>
+        <div class="u10-insurance-grid">
+          <article class="u10-insurance-card">
+            <div class="u10-insurance-head"><div><h3>ASSET INSURANCE</h3><p>Регионален представител — Лом</p></div><span class="u10-sticker source">Официален източник</span></div>
+            <dl><div><dt>Адрес</dt><dd>ул. „Георги Манавски“ №19</dd></div><div><dt>Телефон</dt><dd><a href="tel:0884062207">0884 062 207</a></dd></div><div><dt>Работно време</dt><dd>Непотвърдено</dd></div></dl>
+          </article>
+          <article class="u10-insurance-card">
+            <div class="u10-insurance-head"><div><h3>Амарант България</h3><p>Застрахователен брокер — Лом</p></div><span class="u10-sticker confirmed">Локално потвърждение</span></div>
+            <dl><div><dt>Адрес</dt><dd>ул. „Цар Петър“ №1</dd></div><div><dt>Телефон</dt><dd><a href="tel:097161111">0971 61 111</a></dd></div><div><dt>Работно време</dt><dd>Пон.–Пет. 08:30–18:00 · Съб. 09:00–14:00</dd></div></dl>
+          </article>
+          <article class="u10-insurance-card">
+            <div class="u10-insurance-head"><div><h3>Мусала Иншурънс Брокер</h3><p>Застрахователен брокер — Лом</p></div><span class="u10-sticker confirmed">Локално потвърждение</span></div>
+            <dl><div><dt>Адрес</dt><dd>ул. „Хан Аспарух“ №12</dd></div><div><dt>Телефон</dt><dd><a href="tel:0877999813">087 799 9813</a></dd></div><div><dt>Работно време</dt><dd>Пон.–Пет. 09:00–18:00 · Съб. 09:00–13:00</dd></div></dl>
+          </article>
+        </div>
+      </section>
+
+      <section class="u10-correction"><div><strong>Виждаш грешка или липсваща информация?</strong><span>Предложението се изпраща за преглед, без да променя директно проверения запис.</span></div><a href="full-site.html#correction">Предложи корекция</a></section>
+    </div>
+  </main>
+
+  <nav class="u10-bottom" aria-label="Мобилна навигация">
+    <a href="full-site.html#home">Начало</a>
+    <a href="full-site.html#marketplace">Обяви</a>
+    <a class="add" href="full-site.html#home"><span>+</span><small>Добави</small></a>
+    <a class="active" href="full-site.html#info">Инфо</a>
+    <a href="full-site.html#profile">Профил</a>
+  </nav>
+
+  <div class="u10-toast" id="u10-toast" role="status" aria-live="polite" hidden></div>
+  <script src="utilities-v10.js?v=20260901-1"></script>
+</body>
+</html>
