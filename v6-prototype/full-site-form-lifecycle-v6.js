@@ -323,14 +323,13 @@
   function initForm(form) {
     if (initialized.has(form)) return;
     initialized.add(form);
+    // Custom V6 validation owns the message/focus lifecycle in the prototype.
+    // Disable browser bubbles so every form gets the same visible red summary.
+    form.noValidate = true;
     statusBox(form);
     addContextHints(form);
 
     fieldsForValidation(form).forEach(function (field) {
-      field.addEventListener('blur', function () {
-        field.dataset.v6Touched = 'true';
-        setFieldState(form, field, validationMessage(form, field), true);
-      });
       var liveEvent = field.tagName === 'SELECT' || field.type === 'checkbox' || field.type === 'radio' ? 'change' : 'input';
       field.addEventListener(liveEvent, function () {
         if (field.dataset.v6Touched === 'true' || field.getAttribute('aria-invalid') === 'true') {
@@ -586,6 +585,22 @@
     injectContactForm();
     Array.from(document.querySelectorAll(FORM_SELECTOR)).forEach(initForm);
   }
+
+  // Capture blur before older prototype validators. Defer visual errors until
+  // after the pointer click completes so inserting an error cannot move the
+  // next control between pointer-down and pointer-up.
+  window.addEventListener('blur', function (event) {
+    var field = event.target;
+    if (!field || !field.closest) return;
+    var form = field.closest(FORM_SELECTOR);
+    if (!form || field.type === 'hidden' || field.type === 'button' || field.type === 'submit') return;
+    event.stopImmediatePropagation();
+    window.setTimeout(function () {
+      if (!field.isConnected || form.dataset.completed === 'true') return;
+      field.dataset.v6Touched = 'true';
+      setFieldState(form, field, validationMessage(form, field), true);
+    }, 0);
+  }, true);
 
   window.addEventListener('submit', function (event) {
     var form = event.target && event.target.closest ? event.target.closest(FORM_SELECTOR) : null;
