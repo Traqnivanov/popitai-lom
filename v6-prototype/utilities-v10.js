@@ -49,11 +49,16 @@
 
   const navLinks=[...document.querySelectorAll('.u10-subnav a[href^="#"]')];
   const sections=navLinks.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
-  function setActive(id){
+  function setActive(id,shouldCenter=true){
     navLinks.forEach(link=>{
       const active=link.getAttribute('href')===`#${id}`;
       link.classList.toggle('active',active);
-      if(active){link.setAttribute('aria-current','true');link.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});}else link.removeAttribute('aria-current');
+      link.style.background=active?'#e6f2fb':'#f3f7fb';
+      link.style.color=active?'#0d6ea8':'#284a68';
+      if(active){
+        link.setAttribute('aria-current','true');
+        if(shouldCenter) link.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});
+      }else link.removeAttribute('aria-current');
     });
   }
   if('IntersectionObserver' in window){
@@ -64,9 +69,12 @@
     sections.forEach(section=>observer.observe(section));
   }
   navLinks.forEach(link=>link.addEventListener('click',()=>setActive(link.getAttribute('href').slice(1))));
-  setActive(location.hash.replace('#','')||'water');
+  setActive(location.hash.replace('#','')||'water',false);
 
   const toast=document.getElementById('u10-toast');
+  if(toast){
+    Object.assign(toast.style,{position:'fixed',left:'50%',bottom:'96px',transform:'translateX(-50%)',zIndex:'120',width:'min(92vw,520px)',padding:'11px 14px',borderRadius:'13px',background:'#0f2747',color:'#fff',fontWeight:'800',fontSize:'.76rem',lineHeight:'1.4',boxShadow:'0 10px 28px rgba(15,39,71,.2)'});
+  }
   function showMessage(message){
     if(!toast) return;
     toast.textContent=message;
