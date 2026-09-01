@@ -1,9 +1,25 @@
 (function(){
 'use strict';
 var toast=document.getElementById('toast');
+var app=document.getElementById('app');
 var timer=null;
 if(!toast)return;
 function show(message){toast.textContent=message;toast.hidden=false;clearTimeout(timer);timer=setTimeout(function(){toast.hidden=true;},3200);}
+function cleanVisibleCopy(root){
+  if(!root)return;
+  var walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+  var node;
+  while((node=walker.nextNode())){
+    if(!node.nodeValue)continue;
+    node.nodeValue=node.nodeValue
+      .replace(/\bproduction\b/gi,'внедряване в живия сайт')
+      .replace(/\bapproved\s*\+\s*active\b/gi,'публикувани и активни')
+      .replace(/\bapproved\b/gi,'одобрено')
+      .replace(/\bpending\b/gi,'чака преглед')
+      .replace(/\bauthoritative owner\b/gi,'актуалната проверена информация')
+      .replace(/\bspecialized owner\b/gi,'специализиран раздел');
+  }
+}
 var messages={
   'Избери снимки':'Прототип: тук се отваря изборът на снимки. В този преглед не се качват реални файлове.',
   'Избери лого':'Прототип: тук се избира логото. В този преглед не се качват реални файлове.',
@@ -27,4 +43,8 @@ document.addEventListener('click',function(event){
   event.stopImmediatePropagation();
   show(messages[text]);
 },true);
+cleanVisibleCopy(app);
+if(app){
+  new MutationObserver(function(){cleanVisibleCopy(app);}).observe(app,{childList:true,subtree:true});
+}
 })();
