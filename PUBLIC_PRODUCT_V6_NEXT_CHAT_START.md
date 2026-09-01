@@ -19,7 +19,8 @@ Branch: `v6-product-foundation-draft`
 7. `PUBLIC_PRODUCT_V6_MASTER_CONTROL.md`
 8. completed B1–B9 contracts, особено B3/B4/B7/B8/B9;
 9. `PUBLIC_PRODUCT_V6_C_FULL_SITE_INTERFACE_BLUEPRINT.md`;
-10. older C/Home documents only where they do not conflict with Full-site Blueprint.
+10. `PUBLIC_PRODUCT_V6_C_PROTECTED_ADMIN_IVANOV_REGRESSION_GATE.md` — mandatory C→D→E protected checkpoint;
+11. older C/Home documents only where they do not conflict with Full-site Blueprint.
 
 ---
 
@@ -54,6 +55,8 @@ No fake Event Add.
 Pending/private/rejected content has no public Share.
 Articles/Guides are a required product/SEO/share layer, but official production feature/search/share requires B4 `ПРОВЕРЕНО ГОТОВО`.
 
+**LOCKED protected checkpoint:** Admin Firms/Listings and Ivanov/Construction special semantics are not generic records. V6 must preserve their direct-publish/access/quota/expanded-profile/owner/ranking relationships exactly unless the user explicitly re-approves a change. `PUBLIC_PRODUCT_V6_C_PROTECTED_ADMIN_IVANOV_REGRESSION_GATE.md` remains OPEN through C/D and must be regression-proven before V6 production rollout.
+
 ---
 
 ## 3. WHY THE C PROCESS CHANGED
@@ -77,6 +80,7 @@ Primary review prototype:
 - `v6-prototype/full-site.html`
 - `v6-prototype/full-site.css`
 - `v6-prototype/full-site.js`
+- `v6-prototype/full-site-runtime-v2.js` / current functional parity layer where referenced by `full-site.html`.
 
 Older `v6-prototype/index.html` + Home-v2 files are reference/history, not current completeness authority.
 
@@ -113,14 +117,15 @@ Do NOT start production code or V6-D.
 Review/continue in order:
 1. no approved screen/category/action/form is missing;
 2. every visible button/link goes to its correct owner/destination;
-3. Home hierarchy and first viewport;
-4. 16 categories + Marketplace relationship;
-5. six-family Info Lom + Health parity/trust;
-6. Firms/Listings/Specialized details;
-7. forms/auth/pending/error/dirty states;
-8. Search/Articles/Q&A/Profile connections;
-9. responsive desktop/mobile system;
-10. only after completeness passes, polish spacing/cards/typography/buttons per screen.
+3. protected Admin Firm/Admin Listing/Ivanov Construction states are represented and do not look/behave as generic semantics in the review model;
+4. Home hierarchy and first viewport;
+5. 16 categories + Marketplace relationship;
+6. six-family Info Lom + Health parity/trust;
+7. Firms/Listings/Specialized details;
+8. forms/auth/pending/error/dirty states;
+9. Search/Articles/Q&A/Profile connections;
+10. responsive desktop/mobile system;
+11. only after completeness passes, polish spacing/cards/typography/buttons per screen.
 
 Do not treat one polished Home block as C completion.
 
@@ -132,6 +137,8 @@ Only after full-site C completeness + visual direction is accepted/refined:
 
 # `V6-D — TECHNICAL DESIGN / SCHEMA / RLS / INDEX / MIGRATION / SEO RENDERING / PERFORMANCE`
 
+V6-D must map every protected behavior in `PUBLIC_PRODUCT_V6_C_PROTECTED_ADMIN_IVANOV_REGRESSION_GATE.md` to its real implementation owner before any V6-E code migration/merge.
+
 ---
 
 ## 7. WORK MODE
@@ -141,6 +148,7 @@ Only after full-site C completeness + visual direction is accepted/refined:
 - no schema/RLS changes;
 - no protected owner/ranking/role changes;
 - preserve existing approved form capabilities;
+- preserve Admin/Ivanov/Construction protected semantics and regression matrix;
 - do not invent current analytics/statistics or article verification.
 
 Минимално продължение:
