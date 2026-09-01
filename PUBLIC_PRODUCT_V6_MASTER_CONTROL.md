@@ -6,7 +6,7 @@ Branch: `v6-product-foundation-draft`
 
 При конфликт:
 
-**LOCKED rules > approved production specs > V6 Master Control > completed V6 contracts > supporting drafts.**
+**LOCKED rules > approved production specs > V6 Master Control > completed V6 contracts > `PUBLIC_PRODUCT_V6_C_FULL_SITE_INTERFACE_BLUEPRINT.md` > older C/Home prototype decisions.**
 
 ---
 
@@ -20,13 +20,15 @@ Completed product contracts:
 - A1/A2;
 - B1–B9.
 
-Current prototype artifact:
-- `PUBLIC_PRODUCT_V6_C_VISUAL_INTERACTION_PROTOTYPE.md`.
+Current C authority:
+- `PUBLIC_PRODUCT_V6_C_FULL_SITE_INTERFACE_BLUEPRINT.md`.
 
-Prototype files:
-- `v6-prototype/index.html`;
-- `v6-prototype/prototype.css`;
-- `v6-prototype/prototype.js`.
+Current isolated full-site prototype:
+- `v6-prototype/full-site.html`;
+- `v6-prototype/full-site.css`;
+- `v6-prototype/full-site.js`.
+
+Older C/Home prototype files remain reference/history, not the completeness authority.
 
 ---
 
@@ -40,8 +42,9 @@ Prototype files:
 6. `PROJECT_PROGRESS.md`
 7. `PUBLIC_PRODUCT_V6_MASTER_CONTROL.md`
 8. completed B1–B9 contracts;
-9. `PUBLIC_PRODUCT_V6_C_VISUAL_INTERACTION_PROTOTYPE.md`;
-10. task-specific evidence only.
+9. `PUBLIC_PRODUCT_V6_C_FULL_SITE_INTERFACE_BLUEPRINT.md`;
+10. `PUBLIC_PRODUCT_V6_C_HOME_ARCHITECTURE_DECISION.md` only where not superseded;
+11. task-specific evidence only.
 
 ---
 
@@ -59,9 +62,9 @@ Prototype files:
 - B7 — DONE
 - B8 — DONE
 - B9 — DONE
-- **V6-C source prototype — COMPLETE**
-- **V6-C visual review gate — CURRENT**
-- V6-D — BLOCKED until C visual direction is accepted/refined
+- older V6-C source/Home candidates — superseded as completeness authority
+- **V6-C FULL-SITE INTERFACE COMPLETENESS GATE — CURRENT**
+- V6-D — BLOCKED until full-site C completeness + visual direction are accepted/refined
 - V6-E — OPEN after D
 - V6-F — OPEN after E
 
@@ -70,108 +73,133 @@ Prototype files:
 ## 4. LOCKED WORKING TRUTH
 
 ### IA / taxonomy
+Stable 16-category public taxonomy remains B1 truth.
 
-Stable 16-category public taxonomy remains B1 truth. Canonical desktop/mobile navigation remains unchanged until final approved V6 spec.
+### Navigation
+Desktop: `Начало | Обяви и услуги | Фирми | Инфо Лом | Статии | Още | Профил | + Добави`.
+Mobile: `Начало | Обяви | + | Инфо | Профил`.
+
+### Marketplace
+Marketplace V3 remains current approved production presentation and protected owner mapping.
 
 ### Health
+Same V6 visual/category shell, specialized verified Health/Info owner/trust/moderation/freshness.
 
-Health uses the same V6 visual/category/mobile/search/share/Facebook shell, but verified Health/Info owner/trust/moderation/freshness remain specialized.
-
-### Search
-
-One intent-aware owner, bounded queries, verified-vs-community separation, true no-result distinct from partial failure.
-
-### Info
+### Info Lom
+Canonical six top-level families remain visible:
+1. Здраве;
+2. Институции;
+3. Транспорт;
+4. Образование и култура;
+5. Банки и банкомати;
+6. Комунални и ежедневни услуги.
 
 Mutable local facts stay Info-owned.
 
-### Articles
+### Search
+One intent-aware owner; verified-vs-community separation; no false empty from partial failure.
 
-Only V6-ready content is Search/SEO eligible.
+### Articles
+Guides are a real product/SEO/share layer. Only B4 `ПРОВЕРЕНО ГОТОВО` content is production Search/share eligible.
 
 ### Q&A
+One intent → one canonical question center; duplicate gate precedes create.
 
-One intent → one canonical knowledge center; duplicate suggestions precede create.
-
-### Recommendations
-
-Approved structured relations only; self/duplicates excluded; counts derived; no trust/ranking override.
-
-### Facebook
-
-Distribution only; public canonical content only; no arbitrary group scraping/import.
+### Facebook/share
+Distribution only; public canonical eligible content only; pending content has no public share.
 
 ### Ranking
+Eligibility/relevance precedes protected/native priority. Protected Admin/Ivanov/boost semantics remain intact inside relevant candidate sets.
 
-Eligibility/relevance precedes protected/native priority. Admin/Ivanov/boost applies only in valid relevant candidate sets.
-
-### Interactions
-
-Each CTA has one owner-aware target. Listings use proven V3 prefill; Health/Shops remain specialized; Events have no fake public Add; pending content has no public share.
+### Interactions/forms
+Each CTA has one owner-aware destination. Existing Listing/Firm/Q&A capabilities remain represented; Health/Shops remain specialized; Events have no fake Add.
 
 ---
 
-## 5. V6-C PROTOTYPE TRUTH
+## 5. WHY C WAS RESET TO FULL-SITE COMPLETENESS
 
-The isolated prototype now shows:
-- search-first Home;
-- B1 shortcuts;
-- `Открий в Лом`;
-- common Construction category shell;
-- Health in the same shell with verified semantics;
-- grouped Search success;
-- true no-result → Ask;
-- partial failure;
-- global Add sheet;
-- Listing public prefill example;
-- Ask duplicate gate;
-- pending vs public/share;
-- Health specialized proposal;
-- Shop specialized proposal;
-- Event state without Add CTA;
-- responsive mobile layout.
+Rendered mobile review on 01.09.2026 exposed a process problem, not just two CSS bugs:
+- newer Home prototype dropped two canonical Info Lom families, showing 4 instead of 6;
+- `Открий в Лом` rendered as a narrow right-side column, visually disconnected from the category system;
+- earlier prototype buttons had also used unrelated sample destinations.
 
-C source QA found one contradiction in the first draft: site desktop nav had been reused as a prototype screen switcher. It was corrected by restoring canonical site navigation and moving prototype controls to a separate clearly labeled bar.
+Decision:
 
-Prototype files are not referenced from production pages.
+**Do not polish individual Home blocks before the whole public product is represented end-to-end.**
+
+C must first prove the complete product shell, owners, destinations, forms and important states; pixel polish follows only after completeness.
 
 ---
 
-## 6. CURRENT EXACT TASK
+## 6. CURRENT FULL-SITE PROTOTYPE SCOPE
 
-# `V6-C VISUAL REVIEW GATE`
+The new isolated prototype opens on Home and represents:
+- Search-first Home;
+- priority categories;
+- all 16 categories;
+- full-width `Открий в Лом` discovery grid;
+- all 6 Info Lom families;
+- Marketplace V3 landing + category shell + listing detail;
+- Firms hub + representative expanded firm detail;
+- Health specialized shell;
+- Shops, Restaurants and Events;
+- Search success/partial/empty/offline/error states;
+- Articles index + guide detail including pension candidate;
+- Q&A index/detail/unanswered state;
+- Profile/Auth;
+- global Add router;
+- Listing form;
+- Firm form;
+- Ask form;
+- Health proposal;
+- Shop proposal;
+- Info correction;
+- generic report;
+- owner-aware Share/contact demo semantics.
+
+Static representative data only. No live writes.
+
+---
+
+## 7. CURRENT EXACT TASK
+
+# `V6-C FULL-SITE INTERFACE COMPLETENESS + VISUAL REVIEW GATE`
 
 Before V6-D:
-- inspect Home first impression;
-- inspect category hierarchy/density;
-- inspect Health parity;
-- inspect desktop/mobile direction;
-- inspect Search/Add/Ask states;
-- refine visual/copy details if needed.
+1. review full product flow, not one Home block;
+2. verify no approved screen/category/action/form disappeared;
+3. verify every visible CTA has the correct semantic destination/owner;
+4. review Home first viewport and full section order;
+5. review 16 categories and Marketplace relation;
+6. review 6-family Info Lom structure;
+7. review Firms/Listing/Health/Shops/Events detail/action logic;
+8. review forms and pending/error/dirty/auth states;
+9. review Search/Articles/Q&A/Profile connections;
+10. then polish visual density, spacing, typography and card/button details.
 
-This is a visual approval/refinement gate, not a production deployment step.
+No production implementation starts at this gate.
 
 ---
 
-## 7. NEXT MAJOR STAGE AFTER C REVIEW
+## 8. NEXT MAJOR STAGE AFTER C
 
 # `V6-D — TECHNICAL DESIGN / SCHEMA / RLS / INDEX / MIGRATION / SEO RENDERING / PERFORMANCE`
 
-D will translate approved B-contracts + C visual direction into exact implementation architecture and migration/rollback plan.
+D translates the accepted complete interface + B-contracts into exact implementation architecture and migration/rollback plan.
 
 No implementation before D/E gates.
 
 ---
 
-## 8. PROTECTED DEFECT — SEPARATE
+## 9. PROTECTED DEFECT — SEPARATE
 
 Moderator own-business edit mismatch from A2 remains separate protected production scope. Do not silently fix it through C/D side work.
 
 ---
 
-## 9. HANDOFF
+## 10. HANDOFF
 
-**Completed:** V6-0 + A1/A2 + B1–B9 + C source prototype.  
-**Current:** V6-C visual review gate.  
+**Completed:** V6-0 + A1/A2 + B1–B9 + full-site C blueprint + isolated full-site prototype source.  
+**Current:** V6-C full-site completeness + visual review.  
 **Production impact:** NONE.  
-**Blocked:** V6-D until C visual direction is reviewed/refined.
+**Blocked:** V6-D until C completeness and visual direction are reviewed/refined.
