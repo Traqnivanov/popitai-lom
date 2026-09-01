@@ -1,0 +1,239 @@
+/* Попитай.Лом V6-C — V9 holistic visual system. Prototype only. */
+:root{
+  --v9-navy:#0c2742;
+  --v9-navy-2:#071d32;
+  --v9-blue:#0878cf;
+  --v9-blue-strong:#006bbd;
+  --v9-gold:#b88a19;
+  --v9-green:#14765f;
+  --v9-ink:#10283f;
+  --v9-muted:#6f7e8d;
+  --v9-line:rgba(12,39,66,.10);
+  --v9-line-strong:rgba(12,39,66,.16);
+  --v9-soft:#f8fbff;
+  --v9-soft-blue:#f2f8fd;
+  --v9-soft-green:#f2faf7;
+  --v9-soft-gold:#fffaf0;
+  --v9-shadow-xs:0 1px 2px rgba(7,29,50,.03),0 5px 16px rgba(7,29,50,.04);
+  --v9-shadow-sm:0 2px 4px rgba(7,29,50,.03),0 10px 28px rgba(7,29,50,.055);
+  --v9-shadow-md:0 8px 22px rgba(7,29,50,.06),0 22px 55px rgba(7,29,50,.07);
+  --v9-radius-xl:28px;
+  --v9-radius-lg:21px;
+  --v9-radius-md:16px;
+}
+
+html{background:#fff}
+body{background:#fff;color:var(--v9-ink);letter-spacing:-.006em}
+button,input,select,textarea{letter-spacing:normal}
+
+/* Prototype controls stay visibly separate from the public product. */
+.prototype-strip{background:#0d1d2d;border:0;box-shadow:none;padding-block:6px}
+.prototype-strip strong{color:#e8bd54}
+.v8-qa-controls button,.v8-qa-toggle{border-color:rgba(255,255,255,.24);background:rgba(255,255,255,.035);padding:5px 11px}
+.v8-qa-controls button[aria-pressed="true"],.v8-qa-toggle[aria-pressed="true"]{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.52)}
+
+/* Header: lighter, calmer, more product-like. */
+.site-header{background:rgba(255,255,255,.94);border-bottom:1px solid rgba(12,39,66,.075);box-shadow:0 1px 0 rgba(255,255,255,.75),0 5px 20px rgba(7,29,50,.035);backdrop-filter:blur(18px) saturate(1.15)}
+.header-inner{min-height:72px}
+.brand{gap:12px}
+.brand-mark{width:47px;height:47px;border-radius:14px;box-shadow:0 5px 18px rgba(7,29,50,.16)}
+.brand-text strong{color:var(--v9-navy);font-weight:780}
+.desktop-nav>button,.more-nav>summary{border-radius:12px;font-weight:720}
+.desktop-nav>button:hover,.more-nav>summary:hover,.desktop-nav>button.active{background:var(--v9-soft-blue);color:var(--v9-blue)}
+.add-trigger{background:var(--v9-blue);border-radius:14px;box-shadow:0 7px 18px rgba(8,120,207,.18)}
+.menu-trigger{border-color:var(--v9-line);border-radius:14px;box-shadow:var(--v9-shadow-xs)}
+.mobile-drawer{border-color:var(--v9-line);box-shadow:var(--v9-shadow-md)}
+
+/* Typography hierarchy: strong but not oversized. */
+h1,h2,h3{color:var(--v9-navy)}
+h1{font-weight:760;letter-spacing:-.046em}
+h2{font-weight:735;letter-spacing:-.035em}
+h3{font-weight:720;letter-spacing:-.02em}
+.kicker{color:var(--v9-gold);letter-spacing:.085em}
+.eyebrow{color:#76899d;letter-spacing:.09em}
+.hero p,.lede,.page-head p{color:var(--v9-muted)}
+
+/* Hero: white-first with a very light atmospheric wash, not a grey block. */
+.hero{position:relative;overflow:hidden;padding:54px 0 50px;background:
+  radial-gradient(circle at 88% 8%,rgba(8,120,207,.075),transparent 31%),
+  radial-gradient(circle at 8% 110%,rgba(184,138,25,.055),transparent 29%),
+  linear-gradient(180deg,#fff 0%,#fbfdff 100%);border-bottom:0}
+.hero:after{content:"";position:absolute;inset:auto 0 0;height:1px;background:linear-gradient(90deg,transparent,rgba(12,39,66,.08),transparent)}
+.hero-grid{gap:52px}
+.hero-side{border:0;border-radius:var(--v9-radius-lg);box-shadow:var(--v9-shadow-sm);background:rgba(255,255,255,.90)}
+
+/* Search is the main product object. */
+.search-box{border:1px solid var(--v9-line-strong);border-radius:20px;padding:7px;background:#fff;box-shadow:0 3px 8px rgba(7,29,50,.04),0 16px 42px rgba(7,29,50,.085)}
+.search-box:focus-within{border-color:rgba(8,120,207,.42);box-shadow:0 0 0 4px rgba(8,120,207,.08),0 16px 42px rgba(7,29,50,.085)}
+.search-box input{color:var(--v9-ink);padding:13px 14px}
+.search-box input::placeholder{color:#8a96a2}
+.search-box button,.primary{background:var(--v9-blue);border-radius:14px;box-shadow:0 4px 12px rgba(8,120,207,.14)}
+.search-box button:hover,.primary:hover{background:var(--v9-blue-strong);filter:none}
+.secondary{border-color:var(--v9-line-strong);border-radius:14px;box-shadow:0 1px 2px rgba(7,29,50,.025)}
+.text-button{color:var(--v9-blue);font-weight:780}
+
+/* Section rhythm: distinction through spacing/surface, not grey borders everywhere. */
+.section{padding:44px 0}
+.section.soft{background:var(--v9-soft);border:0}
+.section-head{margin-bottom:19px}
+.section-head h2{font-size:clamp(26px,2.8vw,34px)}
+
+/* Shared card language. */
+.category-card,.discover-card,.info-card,.guide-card,.owner-card,.market-card,
+.community-row,.result-card,.profile-row,.detail-card,.side-card,.form-shell,
+.v8-rich-card,.v8-status-card,.v8-task-card,.v8-state-panel{
+  border:0;
+  box-shadow:inset 0 0 0 1px var(--v9-line),var(--v9-shadow-xs);
+}
+.category-card,.discover-card,.info-card,.guide-card,.owner-card,.market-card{
+  border-radius:var(--v9-radius-lg);
+  transition:transform .18s ease,box-shadow .18s ease,background-color .18s ease;
+}
+.category-card:hover,.discover-card:hover,.info-card:hover,.guide-card:hover,.owner-card:hover,.market-card:hover{
+  transform:translateY(-2px);border-color:transparent;box-shadow:inset 0 0 0 1px var(--v9-line-strong),var(--v9-shadow-sm)
+}
+
+/* Main categories: clear identity, compact geometry. */
+.category-card{min-height:150px;padding:22px;background:#fff}
+.category-card.featured{background:linear-gradient(145deg,#f5f9fe,#edf6fd);box-shadow:inset 0 0 0 1px rgba(8,120,207,.14),var(--v9-shadow-xs)}
+.category-card.health{background:linear-gradient(145deg,#f5fbf8,#edf8f4);box-shadow:inset 0 0 0 1px rgba(20,118,95,.13),var(--v9-shadow-xs)}
+.category-card strong{font-size:19px;font-weight:735}
+.category-card small{color:#758493}
+
+/* Discover: visually lighter and shorter than primary categories. */
+.discover-grid{gap:13px}
+.discover-card{display:grid;grid-template-columns:minmax(0,1fr) 36px;align-items:center;gap:14px;min-height:92px;padding:18px 17px;background:#fff}
+.discover-card>div{min-width:0}
+.discover-card strong{font-size:18px}
+.discover-card small{max-width:22ch;color:#7a8794}
+.discover-card>.card-arrow,.discover-card>span:last-child{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;margin:0;background:var(--v9-soft-blue);color:var(--v9-blue);font-size:18px;font-weight:850}
+
+/* Info: trusted surface, dense 2x3 mobile target, not another generic card group. */
+.info-panel{border:0;background:linear-gradient(145deg,#fbfdff,#f5faff);border-radius:var(--v9-radius-xl);box-shadow:inset 0 0 0 1px rgba(8,120,207,.08),var(--v9-shadow-sm);padding:27px}
+.info-card{min-height:102px;background:rgba(255,255,255,.86);border-radius:18px;padding:18px;box-shadow:inset 0 0 0 1px rgba(12,39,66,.09)}
+.info-card strong{font-size:17px;font-weight:735}
+.info-card small{color:#758493}
+
+/* Guides: editorial but compact; brand gold is used only as a small signal. */
+.guide-grid{gap:14px}
+.guide-card{position:relative;overflow:hidden;background:#fff;padding:22px 22px 21px;box-shadow:var(--v9-shadow-xs)}
+.guide-card:before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--v9-gold),rgba(184,138,25,.28))}
+.guide-card .topic{color:#7b8794;margin-bottom:9px}
+.guide-card h3{font-size:20px;font-weight:725;margin-bottom:7px}
+.guide-card p{color:#778593;line-height:1.48}
+
+/* Community: almost list-like, intentionally secondary. */
+.community-list{gap:10px}
+.community-row{border-radius:18px;padding:17px 18px;background:#fff;box-shadow:inset 0 0 0 1px var(--v9-line)}
+.community-row:hover{background:#fcfdff;box-shadow:inset 0 0 0 1px var(--v9-line-strong),var(--v9-shadow-xs)}
+.community-row>.card-arrow,.community-row>span:last-child{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#f5f8fb;color:var(--v9-navy);flex:0 0 auto}
+.badge{background:#f1f5f8;color:#5e7183}
+.badge.verified{background:var(--v9-soft-green);color:var(--v9-green)}
+
+/* Inner pages inherit the same system. */
+.page-hero,.page-head{background:linear-gradient(180deg,#fff,#fbfdff);border-bottom:1px solid rgba(12,39,66,.06)}
+.page-hero{padding:32px max(20px,calc((100% - var(--max))/2)) 30px}
+.breadcrumbs{color:#8995a1}
+.breadcrumbs button{color:var(--v9-blue)}
+.result-card,.profile-row,.detail-card,.side-card,.v8-rich-card,.v8-status-card,.v8-task-card,.v8-state-panel{border-radius:18px;background:#fff}
+.result-card,.profile-row{padding:17px}
+.detail-card{border-radius:22px;padding:24px}
+.result-card .logo{background:var(--v9-navy);box-shadow:0 5px 14px rgba(7,29,50,.13)}
+.v8-rich-card .trust span{background:var(--v9-soft-blue);color:#285776}
+.v8-rich-card .official{border-left-color:var(--v9-blue);background:#f5faff}
+.v8-context-note{background:#f3f8fd;color:#315878}
+.v8-task-card:hover,.v8-status-card:hover{box-shadow:inset 0 0 0 1px var(--v9-line-strong),var(--v9-shadow-xs)}
+.v8-filterbar button,.v8-subnav button,.tabs button,.filter-row button{border-color:var(--v9-line-strong);background:#fff;color:#617385}
+.v8-filterbar button.active,.v8-subnav button.active,.tabs button.active,.filter-row button.active{background:var(--v9-navy);border-color:var(--v9-navy);color:#fff}
+
+/* Forms: calm, premium, obvious focus and statuses. */
+.form-shell{border-radius:24px;background:#fff;box-shadow:var(--v9-shadow-sm);padding:28px}
+.field label{color:#263f57;font-weight:780}
+.field input,.field select,.field textarea{border-color:var(--v9-line-strong);border-radius:13px;background:#fff;transition:border-color .15s ease,box-shadow .15s ease,background .15s ease}
+.field input:hover,.field select:hover,.field textarea:hover{border-color:rgba(12,39,66,.24)}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:rgba(8,120,207,.48);box-shadow:0 0 0 4px rgba(8,120,207,.07);outline:none}
+.choice-grid button{border-color:var(--v9-line-strong);border-radius:15px}
+.choice-grid button.active{border-color:rgba(8,120,207,.30);background:var(--v9-soft-blue);color:var(--v9-blue)}
+.v8-media{border:0;border-radius:18px;background:#fbfdff;box-shadow:inset 0 0 0 1px var(--v9-line);padding:16px}
+.v8-media-drop{border-color:rgba(12,39,66,.20);background:#fff;border-radius:16px}
+.v8-media-card{border:0;box-shadow:inset 0 0 0 1px var(--v9-line);border-radius:14px}
+.v8-duplicate-warning{border:0;border-left:4px solid #d4a231;background:var(--v9-soft-gold);box-shadow:inset 0 0 0 1px rgba(184,138,25,.12)}
+
+/* Modal and footer. */
+.modal-layer{background:rgba(7,29,50,.48);backdrop-filter:blur(3px)}
+.sheet{border-radius:28px;box-shadow:0 28px 90px rgba(7,29,50,.22)}
+.add-options>button{border:0;box-shadow:inset 0 0 0 1px var(--v9-line);border-radius:17px}
+.add-options>button:hover{background:var(--v9-soft)}
+.site-footer{background:var(--v9-navy-2);margin-top:0;padding-top:42px}
+.footer-grid button{color:#b9c8d6}
+
+/* Bottom navigation: floating feeling without gimmicks. */
+.mobile-bottom-nav{background:rgba(255,255,255,.95);border-top:1px solid rgba(12,39,66,.08);box-shadow:0 -8px 28px rgba(7,29,50,.065);backdrop-filter:blur(18px) saturate(1.15)}
+.mobile-bottom-nav button{color:#738190}
+.mobile-bottom-nav button.active{color:var(--v9-blue)}
+.mobile-bottom-nav .mobile-add{box-shadow:0 8px 24px rgba(8,120,207,.25)}
+
+@media(max-width:1000px){
+  .category-card{min-height:142px}
+}
+
+@media(max-width:720px){
+  body{padding-bottom:calc(100px + var(--safe-bottom))}
+  #app{padding-bottom:12px}
+  .header-inner{min-height:68px}
+  .brand-mark{width:43px;height:43px}
+  .menu-trigger{width:46px;height:46px}
+  .hero{padding:28px 0 31px;background:radial-gradient(circle at 90% 0,rgba(8,120,207,.065),transparent 34%),linear-gradient(180deg,#fff,#fbfdff)}
+  .hero h1{font-size:37px;line-height:1.04;margin-bottom:13px}
+  .hero p{font-size:16px;line-height:1.52}
+  .search-box{margin-top:18px;border-radius:18px;padding:6px;box-shadow:0 3px 8px rgba(7,29,50,.035),0 13px 32px rgba(7,29,50,.075)}
+  .search-box input{padding:12px 10px;font-size:15px}
+  .search-box button{padding:12px 15px}
+  .section{padding:31px 0}
+  .section.soft{background:#f8fbff}
+  .section-head{align-items:flex-end;margin-bottom:15px;gap:12px}
+  .section-head h2{font-size:26px;line-height:1.08}
+  .text-button{font-size:14px;line-height:1.25;text-align:right;max-width:110px}
+  .category-grid,.category-grid.home-priority{gap:11px}
+  .category-card{min-height:142px;padding:18px;border-radius:19px;display:flex;flex-direction:column;justify-content:center}
+  .category-card strong{font-size:17px;line-height:1.18}
+  .category-card small{font-size:13px;line-height:1.42;margin-top:7px}
+  .discover-grid{gap:10px}
+  .discover-card{grid-template-columns:minmax(0,1fr) 32px;min-height:94px;padding:15px 14px;border-radius:18px;gap:8px}
+  .discover-card strong{font-size:16px;line-height:1.2}
+  .discover-card small{font-size:12.5px;line-height:1.35;margin-top:5px}
+  .discover-card>.card-arrow,.discover-card>span:last-child{width:30px;height:30px;font-size:16px}
+  .info-panel{padding:18px;border-radius:23px;box-shadow:inset 0 0 0 1px rgba(8,120,207,.075),0 8px 24px rgba(7,29,50,.045)}
+  .info-panel-head{margin-bottom:14px}
+  .info-panel-head h2{font-size:26px}
+  .info-grid{gap:9px}
+  .info-card{min-height:96px;padding:15px;border-radius:16px;display:flex;flex-direction:column;justify-content:center}
+  .info-card strong{font-size:15.5px;line-height:1.18}
+  .info-card small{font-size:12.5px;line-height:1.36}
+  .guide-grid{gap:10px}
+  .guide-card{padding:18px 17px 17px;border-radius:18px}
+  .guide-card h3{font-size:18px;line-height:1.25;margin-bottom:6px}
+  .guide-card p{font-size:14px;line-height:1.45}
+  .community-row{padding:15px 16px;border-radius:17px;gap:12px}
+  .community-row strong{font-size:16px;line-height:1.3}
+  .community-row small{font-size:13px}
+  .page-hero{padding:24px 15px 22px}
+  .page-hero h1,.page-head h1{font-size:32px}
+  .form-shell{padding:19px;border-radius:20px;box-shadow:0 6px 20px rgba(7,29,50,.05)}
+  .detail-card,.v8-rich-card,.v8-status-card{padding:17px;border-radius:18px}
+  .site-footer{padding-bottom:calc(92px + var(--safe-bottom))}
+  .mobile-bottom-nav{min-height:78px;padding-bottom:max(5px,var(--safe-bottom))}
+}
+
+@media(max-width:390px){
+  .category-card{min-height:132px;padding:15px}
+  .category-card strong{font-size:16px}
+  .category-card small{font-size:12.5px}
+  .discover-card{min-height:88px;padding:13px}
+  .info-card{min-height:90px;padding:13px}
+  .section-head h2{font-size:25px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .category-card,.discover-card,.info-card,.guide-card,.owner-card,.market-card{transition:none}
+}
