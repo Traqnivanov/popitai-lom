@@ -1,0 +1,115 @@
+/* Попитай.Лом V6-C — V11 brighter modern visual pass. Prototype only.
+   Keeps V9 structure; removes the washed-grey feeling through cleaner surfaces,
+   stronger contrast and restrained semantic accents. */
+:root{
+  --v11-navy:#0a2947;
+  --v11-navy-deep:#061f36;
+  --v11-blue:#0785d1;
+  --v11-blue-strong:#006fba;
+  --v11-gold:#b98a14;
+  --v11-green:#138467;
+  --v11-ink:#102d49;
+  --v11-muted:#607487;
+  --v11-line:rgba(10,41,71,.105);
+  --v11-line-strong:rgba(10,41,71,.17);
+  --v11-blue-wash:#f2f9ff;
+  --v11-blue-wash-2:#eaf6ff;
+  --v11-green-wash:#f0fbf7;
+  --v11-gold-wash:#fff9ec;
+  --v11-shadow:0 7px 24px rgba(6,31,54,.065),0 1px 2px rgba(6,31,54,.035);
+  --v11-shadow-raised:0 12px 34px rgba(6,31,54,.09),0 2px 6px rgba(6,31,54,.035);
+}
+
+html,body{background:#fff;color:var(--v11-ink)}
+body{background-image:none}
+h1,h2,h3{color:var(--v11-navy)}
+.hero p,.lede,.page-head p,.category-card small,.discover-card small,.info-card small,.guide-card p,.community-row small{color:var(--v11-muted)}
+.eyebrow{color:#6f8497}
+.kicker{color:var(--v11-gold)}
+.text-button{color:var(--v11-blue)}
+
+/* Header and bottom navigation: pure white, crisp and visibly separate. */
+.site-header{background:rgba(255,255,255,.98);border-bottom-color:rgba(10,41,71,.08);box-shadow:0 7px 24px rgba(6,31,54,.045)}
+.mobile-bottom-nav{background:rgba(255,255,255,.985);border-top-color:rgba(10,41,71,.10);box-shadow:0 -10px 32px rgba(6,31,54,.075)}
+.mobile-bottom-nav button{color:#5f7182}
+.mobile-bottom-nav button.active{color:var(--v11-blue)}
+.mobile-bottom-nav .mobile-add{background:var(--v11-blue);box-shadow:0 9px 26px rgba(7,133,209,.28)}
+
+/* Hero stays light, but no grey haze. */
+.hero{background:
+  radial-gradient(circle at 91% 2%,rgba(7,133,209,.11),transparent 30%),
+  radial-gradient(circle at 6% 106%,rgba(185,138,20,.075),transparent 27%),
+  #fff}
+.search-box{border-color:rgba(10,41,71,.16);box-shadow:0 12px 38px rgba(6,31,54,.105),0 2px 5px rgba(6,31,54,.04)}
+.search-box:focus-within{border-color:rgba(7,133,209,.5);box-shadow:0 0 0 4px rgba(7,133,209,.09),0 14px 40px rgba(6,31,54,.105)}
+.search-box button,.primary,.add-trigger{background:var(--v11-blue)}
+.search-box button:hover,.primary:hover{background:var(--v11-blue-strong)}
+
+/* Section rhythm: color is semantic and restrained, never a blanket grey. */
+.section{background:#fff;border:0}
+.section.soft{background:linear-gradient(180deg,#f5faff 0%,#fbfdff 100%)}
+.home-page>.section:nth-of-type(3){background:linear-gradient(180deg,#f4faff 0%,#fbfdff 100%)}
+.home-page>.section:nth-of-type(5){background:linear-gradient(180deg,#fffaf1 0%,#fffdf8 100%)}
+.home-page>.section:nth-of-type(6){background:#fff}
+.section-head h2{color:var(--v11-navy)}
+
+/* Primary categories: cleaner white cards + small purposeful accent, not grey boxes. */
+.category-card{position:relative;overflow:hidden;background:#fff;box-shadow:inset 0 0 0 1px var(--v11-line),var(--v11-shadow)}
+.category-card:after{content:"";position:absolute;left:20px;right:20px;top:0;height:3px;border-radius:0 0 6px 6px;background:#c7d9e8}
+.category-card.featured{background:linear-gradient(145deg,#f7fbff 0%,#eaf6ff 100%);box-shadow:inset 0 0 0 1px rgba(7,133,209,.18),var(--v11-shadow)}
+.category-card.featured:after{background:linear-gradient(90deg,#0785d1,#49a9e3)}
+.category-card.health{background:linear-gradient(145deg,#f7fdfa 0%,#ecfaf5 100%);box-shadow:inset 0 0 0 1px rgba(19,132,103,.17),var(--v11-shadow)}
+.category-card.health:after{background:linear-gradient(90deg,#138467,#54b79c)}
+.home-priority .category-card:nth-child(3):after{background:linear-gradient(90deg,#b98a14,#dfbd5b)}
+.home-priority .category-card:nth-child(4):after{background:linear-gradient(90deg,#315f86,#69a3cf)}
+.category-card strong{color:var(--v11-navy)}
+.category-card:hover{box-shadow:inset 0 0 0 1px var(--v11-line-strong),var(--v11-shadow-raised)}
+
+/* Discover cards: white product surfaces on a blue-tinted section. */
+.discover-card{background:#fff;box-shadow:inset 0 0 0 1px rgba(10,41,71,.10),var(--v11-shadow)}
+.discover-card strong{color:var(--v11-navy)}
+.discover-card>.card-arrow,.discover-card>span:last-child{background:#eaf6ff;color:var(--v11-blue);box-shadow:inset 0 0 0 1px rgba(7,133,209,.06)}
+.discover-card:hover{background:#fff;box-shadow:inset 0 0 0 1px rgba(7,133,209,.18),var(--v11-shadow-raised)}
+
+/* Trusted Info is distinctly blue/clean, rather than another grey panel. */
+.info-panel{background:linear-gradient(145deg,#f7fcff 0%,#edf8ff 100%);box-shadow:inset 0 0 0 1px rgba(7,133,209,.105),0 10px 32px rgba(6,31,54,.055)}
+.info-card{background:#fff;box-shadow:inset 0 0 0 1px rgba(10,41,71,.095),0 2px 8px rgba(6,31,54,.025)}
+.info-card:hover{box-shadow:inset 0 0 0 1px rgba(7,133,209,.20),var(--v11-shadow)}
+
+/* Guides get a warm editorial surface to create rhythm without loud colour. */
+.guide-card{background:#fff;box-shadow:inset 0 0 0 1px rgba(185,138,20,.11),var(--v11-shadow)}
+.guide-card:before{height:4px;background:linear-gradient(90deg,#b98a14 0%,#e5c76f 62%,rgba(229,199,111,.25) 100%)}
+.guide-card .topic{color:#8b753b}
+
+/* Community returns to crisp white and stronger readable text. */
+.community-row{background:#fff;box-shadow:inset 0 0 0 1px var(--v11-line),0 2px 9px rgba(6,31,54,.025)}
+.community-row>.card-arrow,.community-row>span:last-child{background:#edf7fd;color:var(--v11-blue)}
+.badge{background:#edf3f7;color:#506b80}
+
+/* Inner pages/forms use the same brighter foundation. */
+.page-hero,.page-head{background:#fff;border-bottom-color:rgba(10,41,71,.07)}
+.result-card,.profile-row,.detail-card,.side-card,.form-shell,.v8-rich-card,.v8-status-card,.v8-task-card,.v8-state-panel{background:#fff;box-shadow:inset 0 0 0 1px var(--v11-line),0 3px 14px rgba(6,31,54,.035)}
+.form-shell{box-shadow:inset 0 0 0 1px rgba(10,41,71,.08),var(--v11-shadow)}
+.field input,.field select,.field textarea{background:#fff;border-color:var(--v11-line-strong)}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:rgba(7,133,209,.52);box-shadow:0 0 0 4px rgba(7,133,209,.085)}
+.v8-media{background:#f7fbfe}
+.v8-context-note{background:#edf8ff;color:#255a7d}
+.v8-filterbar button.active,.v8-subnav button.active,.tabs button.active,.filter-row button.active{background:var(--v11-navy);border-color:var(--v11-navy)}
+
+/* Footer remains the deliberate dark anchor. */
+.site-footer{background:var(--v11-navy-deep)}
+
+@media(max-width:720px){
+  .section{padding-top:38px;padding-bottom:38px}
+  .category-card{background:#fff}
+  .category-card.featured{background:linear-gradient(145deg,#f8fcff 0%,#eaf6ff 100%)}
+  .category-card.health{background:linear-gradient(145deg,#f8fdfa 0%,#ecfaf5 100%)}
+  .discover-card{background:#fff}
+  .info-panel{background:linear-gradient(155deg,#f7fcff 0%,#edf8ff 100%)}
+  .guide-card{background:#fff}
+  .community-row{background:#fff}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .category-card,.discover-card,.info-card,.guide-card{transition:none}
+}
