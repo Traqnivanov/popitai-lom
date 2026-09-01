@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Попитай.Лом V6 — Visual Prototype</title>
+  <link rel="stylesheet" href="prototype.css">
+</head>
+<body>
+  <div class="prototype-banner" role="status">
+    <strong>V6 ПРОТОТИП</strong>
+    <span>Не е production · статични примерни данни · без реални записи</span>
+  </div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <button class="brand" type="button" data-screen-target="home" aria-label="Към прототип начало">
+        <span class="brand-mark"><img src="../assets/popitai-lom-logo-mark-256.webp" alt=""></span>
+        <span class="brand-copy"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span>
+      </button>
+      <nav class="desktop-nav" aria-label="Прототип навигация">
+        <button type="button" class="active" data-screen-target="home">Начало</button>
+        <button type="button" data-screen-target="category">Обяви и услуги</button>
+        <button type="button" data-screen-target="search">Търсене</button>
+        <button type="button" data-screen-target="health">Здраве</button>
+        <button type="button" data-screen-target="ask">Въпроси</button>
+      </nav>
+      <div class="header-actions">
+        <button class="ghost-btn" type="button" data-screen-target="states">Примерни states</button>
+        <button class="primary-btn" type="button" data-open-add aria-haspopup="dialog" aria-controls="prototype-add-sheet">+ Добави</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="screen active" data-screen="home" aria-labelledby="home-title">
+      <div class="hero home-hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <span class="eyebrow">Лом на едно място</span>
+            <h1 id="home-title">Какво търсиш в Лом?</h1>
+            <p>Намери проверена информация, местни услуги, работа, имоти, фирми и полезни отговори — без да ровиш из стари публикации.</p>
+            <form class="main-search" data-demo-search>
+              <label class="sr-only" for="home-search">Търси в Попитай.Лом</label>
+              <span class="search-icon" aria-hidden="true">⌕</span>
+              <input id="home-search" type="search" placeholder="Например: зъболекар в неделя, ВиК майстор, работа...">
+              <button type="submit">Търси</button>
+            </form>
+            <div class="hero-hints" aria-label="Примерни търсения">
+              <button type="button" data-demo-query="ВиК майстор">ВиК майстор</button>
+              <button type="button" data-demo-query="аптека Лом">Аптека</button>
+              <button type="button" data-demo-query="работа Лом">Работа</button>
+            </div>
+          </div>
+          <aside class="trust-card" aria-label="Как работи Попитай.Лом">
+            <span class="trust-badge">Проверено + местно</span>
+            <h2>Първо намираш. Ако не стига — питаш.</h2>
+            <ol>
+              <li><span>1</span>Търсим в правилните местни източници.</li>
+              <li><span>2</span>Разделяме проверени факти от мнения.</li>
+              <li><span>3</span>Ако няма готов отговор — Попитай Лом.</li>
+            </ol>
+          </aside>
+        </div>
+      </div>
+
+      <div class="container content-stack">
+        <section class="section-block" aria-labelledby="quick-title">
+          <div class="section-head"><div><span class="eyebrow">Бърз старт</span><h2 id="quick-title">Най-полезните входове</h2></div><button class="text-btn" type="button" data-screen-target="category">Всички категории →</button></div>
+          <div class="shortcut-grid">
+            <button class="shortcut-card featured" type="button" data-screen-target="category"><span class="shortcut-icon">🛠</span><strong>Строителство и ремонти</strong><small>Майстори, ВиК, електро, покриви</small></button>
+            <button class="shortcut-card health" type="button" data-screen-target="health"><span class="shortcut-icon">✚</span><strong>Здраве и лекари</strong><small>Проверени лекари, аптеки, лаборатории</small></button>
+            <button class="shortcut-card" type="button" data-screen-target="category"><span class="shortcut-icon">💼</span><strong>Работа</strong><small>Предлага и търси работа</small></button>
+            <button class="shortcut-card" type="button" data-screen-target="category"><span class="shortcut-icon">🚗</span><strong>Автомобили</strong><small>Коли, сервизи, гуми, части</small></button>
+            <button class="shortcut-card desktop-extra" type="button" data-screen-target="category"><span class="shortcut-icon">⌂</span><strong>Имоти</strong><small>Продажби, наеми и търсене</small></button>
+            <button class="shortcut-card desktop-extra" type="button" data-screen-target="category"><span class="shortcut-icon">✦</span><strong>Красота</strong><small>Фризьори, козметика, грижа</small></button>
+          </div>
+        </section>
+
+        <section class="section-block discover-block" aria-labelledby="discover-title">
+          <div class="section-head"><div><span class="eyebrow">Открий в Лом</span><h2 id="discover-title">Места и местни профили</h2></div></div>
+          <div class="discover-grid">
+            <article><span>🛒</span><div><strong>Магазини</strong><small>Хранителни, строителни, техника и още</small></div><button type="button" data-open-shop>Разгледай</button></article>
+            <article><span>🍽</span><div><strong>Заведения</strong><small>Местни профили и препоръки</small></div><button type="button" data-screen-target="search">Разгледай</button></article>
+            <article><span>📅</span><div><strong>Събития</strong><small>Предстоящи одобрени събития</small></div><button type="button" data-screen-target="states">Разгледай</button></article>
+            <article><span>🏪</span><div><strong>Фирми</strong><small>Постоянни местни профили</small></div><button type="button" data-screen-target="search">Разгледай</button></article>
+          </div>
+        </section>
+
+        <section class="split-grid">
+          <article class="verified-panel">
+            <div class="panel-head"><span class="verified-dot">✓</span><div><span class="eyebrow">Инфо Лом</span><h2>Проверена информация</h2></div></div>
+            <div class="utility-list">
+              <button type="button" data-screen-target="health"><strong>Здраве и лекари</strong><span>Лекари, аптеки, болница →</span></button>
+              <button type="button"><strong>Институции</strong><span>Община, НОИ, полиция →</span></button>
+              <button type="button"><strong>Транспорт</strong><span>Автогара, БДЖ, таксита →</span></button>
+              <button type="button"><strong>Комунални</strong><span>Вода, ток, куриери →</span></button>
+            </div>
+          </article>
+          <article class="community-panel">
+            <span class="eyebrow">Общността помага</span>
+            <h2>Последни полезни въпроси</h2>
+            <div class="mini-question"><span>Строителство</span><strong>Кой препоръчва добър майстор за баня?</strong><small>4 одобрени отговора</small></div>
+            <div class="mini-question"><span>Автомобили</span><strong>Къде в Лом правят добра диагностика?</strong><small>3 одобрени отговора</small></div>
+            <button class="secondary-btn" type="button" data-screen-target="ask">Виж въпросите</button>
+          </article>
+        </section>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="category" aria-labelledby="category-title">
+      <div class="category-hero">
+        <div class="container">
+          <nav class="breadcrumbs" aria-label="Навигационна пътека"><button type="button" data-screen-target="home">Начало</button><span>›</span><button type="button">Обяви и услуги</button><span>›</span><strong>Строителство и ремонти</strong></nav>
+          <div class="category-heading-row">
+            <div><span class="eyebrow">Категория</span><h1 id="category-title">Строителство и ремонти</h1><p>Намери майстор, фирма или активна обява. Ако не намираш подходящо — попитай хората в Лом.</p></div>
+            <div class="category-actions"><button class="primary-btn" type="button" data-open-listing>+ Добави обява</button><button class="secondary-btn" type="button" data-screen-target="ask">Попитай Лом</button></div>
+          </div>
+          <form class="category-search" data-demo-search><input type="search" placeholder="Търси: ВиК, боядисване, покриви..."><button type="submit">Намери</button></form>
+          <div class="filter-chips" role="navigation" aria-label="Подкатегории">
+            <button class="active" type="button">Всички</button><button type="button">Цялостни ремонти</button><button type="button">Бани и плочки</button><button type="button">ВиК</button><button type="button">Електро</button><button type="button">Покриви</button><button type="button">Боядисване</button><button type="button">Още</button>
+          </div>
+        </div>
+      </div>
+      <div class="container results-layout">
+        <section class="results-main">
+          <div class="result-section-head"><div><span class="result-label">Фирми</span><h2>Местни изпълнители</h2></div><button class="text-btn" type="button">Всички фирми →</button></div>
+          <article class="result-card protected-card"><div class="entity-logo">ИР</div><div class="result-body"><div class="result-topline"><span class="verified-chip">Проверен профил</span><span class="protected-chip">Приоритетен</span></div><h3>Иванов Ремонти</h3><p>Цялостни ремонти, шпакловка, боядисване и довършителни дейности.</p><div class="meta-row"><span>📍 Лом</span><span>Фирмен профил</span></div></div><div class="card-actions"><button class="primary-mini" type="button">Виж профила</button><button type="button">Обади се</button></div></article>
+          <article class="result-card"><div class="entity-logo neutral">М</div><div class="result-body"><span class="result-label">Фирма</span><h3>Местен майстор — пример</h3><p>Примерен prototype запис за визуален тест на реда и картата.</p><div class="meta-row"><span>📍 Лом</span><span>ВиК</span></div></div><div class="card-actions"><button class="primary-mini" type="button">Виж профила</button></div></article>
+
+          <div class="result-section-head spaced"><div><span class="result-label warm">Обяви</span><h2>Активни предложения</h2></div></div>
+          <article class="listing-card"><div><span class="pill">Предлага услуга</span><h3>Ремонт на баня и полагане на плочки</h3><p>Примерна активна обява · Лом</p></div><strong>Договаряне</strong></article>
+          <article class="listing-card"><div><span class="pill outline">Търси услуга</span><h3>Търся майстор за малък ВиК ремонт</h3><p>Примерна активна заявка · Лом</p></div><strong>Нова</strong></article>
+        </section>
+        <aside class="context-sidebar">
+          <div class="sidebar-card"><span class="eyebrow">Не намираш?</span><h2>Попитай Лом</h2><p>Опиши какво ти трябва. Преди публикуване ще проверим дали вече има подобен отговор.</p><button class="primary-btn full" type="button" data-screen-target="ask">Задай въпрос</button></div>
+          <div class="sidebar-card subtle"><span class="eyebrow">Полезно ръководство</span><h3>Как да избереш майстор</h3><p>Преди оферта, плащане и започване на ремонта.</p><button class="text-btn" type="button">Прочети →</button></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="health" aria-labelledby="health-title">
+      <div class="category-hero health-theme">
+        <div class="container">
+          <nav class="breadcrumbs" aria-label="Навигационна пътека"><button type="button" data-screen-target="home">Начало</button><span>›</span><strong>Здраве и лекари</strong></nav>
+          <div class="category-heading-row">
+            <div><span class="eyebrow">Категория · проверени данни</span><h1 id="health-title">Здраве и лекари</h1><p>Същата обща V6 структура като другите категории, но резултатите идват от специализирания проверен Health/Info owner.</p></div>
+            <div class="category-actions"><button class="primary-btn health-primary" type="button" data-open-health>+ Предложи лекар/практика</button><button class="secondary-btn" type="button" data-screen-target="ask">Попитай Лом</button></div>
+          </div>
+          <form class="category-search" data-demo-search><input type="search" placeholder="Търси лекар, стоматолог, аптека, лаборатория..."><button type="submit">Намери</button></form>
+          <div class="filter-chips" role="navigation"><button class="active" type="button">Всички</button><button type="button">Лични лекари</button><button type="button">Специалисти</button><button type="button">Стоматолози</button><button type="button">Лаборатории</button><button type="button">Аптеки</button><button type="button">Болнична помощ</button></div>
+        </div>
+      </div>
+      <div class="container results-layout">
+        <section class="results-main">
+          <div class="trust-note"><span>✓</span><div><strong>Проверена информация</strong><p>Контактите и фактите се показват според source/freshness правилата. Мненията от общността са отделно.</p></div></div>
+          <div class="result-section-head"><div><span class="result-label verified">Проверена информация</span><h2>Стоматолози</h2></div></div>
+          <article class="result-card health-card"><div class="entity-logo health-logo">Д</div><div class="result-body"><div class="result-topline"><span class="verified-chip">✓ Проверено</span><span class="fresh-chip">Актуално</span></div><h3>Д-р Примерова — стоматолог</h3><p>Примерен prototype запис. Реалните данни ще идват от Health/Info owner.</p><div class="meta-row"><span>📍 Лом</span><span>Последно потвърдено: пример</span></div></div><div class="card-actions"><button class="primary-mini health-mini" type="button">Виж информацията</button><button type="button">Предложи корекция</button></div></article>
+          <article class="result-card health-card"><div class="entity-logo health-logo">К</div><div class="result-body"><div class="result-topline"><span class="verified-chip">✓ Проверено</span></div><h3>Дентален кабинет — пример</h3><p>Специализиран verified result, не generic фирмена карта.</p><div class="meta-row"><span>📍 Лом</span><span>Стоматология</span></div></div><div class="card-actions"><button class="primary-mini health-mini" type="button">Виж информацията</button></div></article>
+
+          <div class="result-section-head spaced"><div><span class="result-label community">Въпроси и мнения</span><h2>Какво споделя общността</h2></div></div>
+          <article class="question-row"><div><span>Мнение, не проверен факт</span><h3>Кой стоматолог бихте препоръчали за дете?</h3><small>5 одобрени отговора</small></div><button type="button" data-screen-target="ask">Отвори</button></article>
+        </section>
+        <aside class="context-sidebar"><div class="sidebar-card health-side"><span class="eyebrow">Важно</span><h2>Спешна помощ</h2><p>При спешност показваме authoritative action/contact, а не community ranking.</p><button class="primary-btn full health-primary" type="button">Виж спешна информация</button></div><div class="sidebar-card"><span class="eyebrow">Грешна информация?</span><h3>Предложи корекция</h3><p>Корекцията се проверява преди public промяна.</p><button class="secondary-btn full" type="button" data-open-health>Отвори формата</button></div></aside>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="search" aria-labelledby="search-title">
+      <div class="search-page-head"><div class="container"><span class="eyebrow">Търсене в Попитай.Лом</span><h1 id="search-title">Резултати за „ВиК майстор“</h1><form class="main-search compact" data-demo-search><input type="search" value="ВиК майстор"><button type="submit">Търси</button></form><div class="state-tabs"><button class="active" type="button" data-search-state="success">Резултати</button><button type="button" data-search-state="empty">Няма резултат</button><button type="button" data-search-state="partial">Частична грешка</button></div></div></div>
+      <div class="container search-state active" data-search-panel="success">
+        <div class="search-summary"><strong>Намерихме няколко вида полезни резултати.</strong><span>Подредени по intent и owner, не по един общ popularity score.</span></div>
+        <section class="group-block"><div class="group-title"><div><span class="result-label">Фирми</span><h2>Местни изпълнители</h2></div><button class="text-btn" type="button">Покажи още</button></div><article class="result-card protected-card"><div class="entity-logo">ИР</div><div class="result-body"><span class="protected-chip">Релевантен защитен приоритет</span><h3>Иванов Ремонти</h3><p>ВиК и ремонтни дейности · пример за protected provider intent.</p></div><button class="primary-mini" type="button">Отвори</button></article></section>
+        <section class="group-block"><div class="group-title"><div><span class="result-label warm">Обяви</span><h2>Активни предложения</h2></div></div><article class="listing-card"><div><span class="pill">Предлага услуга</span><h3>ВиК ремонт в Лом</h3><p>Примерна активна обява</p></div><button class="primary-mini" type="button">Отвори</button></article></section>
+        <section class="group-block"><div class="group-title"><div><span class="result-label community">Въпроси и мнения</span><h2>Полезни отговори</h2></div></div><article class="question-row"><div><span>Canonical въпрос</span><h3>Кой препоръчва ВиК майстор в Лом?</h3><small>6 одобрени отговора</small></div><button type="button">Отвори</button></article></section>
+      </div>
+      <div class="container search-state" data-search-panel="empty">
+        <div class="empty-state"><span class="empty-icon">?</span><h2>Не намерихме готов отговор</h2><p>Не намерихме usable резултат за „ремонт на стара печка модел X“. Можеш да попиташ хората в Лом — заявката вече ще е подготвена.</p><button class="primary-btn" type="button" data-screen-target="ask" data-prefill-ask>Попитай Лом</button><button class="secondary-btn" type="button" data-screen-target="category">Разгледай категории</button></div>
+      </div>
+      <div class="container search-state" data-search-panel="partial">
+        <div class="partial-banner"><strong>Част от резултатите не се заредиха.</strong><span>Показваме успешните групи. Това не е „няма резултат“.</span><button type="button">Опитай отново само неуспешната група</button></div>
+        <section class="group-block"><div class="group-title"><div><span class="result-label verified">Проверена информация</span><h2>Успешно заредена група</h2></div></div><article class="result-card"><div class="entity-logo health-logo">✓</div><div class="result-body"><h3>Примерен проверен резултат</h3><p>Остава видим, докато друга owner заявка е failed/timed out.</p></div></article></section>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="ask" aria-labelledby="ask-title">
+      <div class="form-page-head"><div class="container narrow"><span class="eyebrow">Попитай Лом</span><h1 id="ask-title">Задай въпрос</h1><p>Преди публикуване проверяваме дали вече има същия или много близък въпрос.</p></div></div>
+      <div class="container narrow ask-layout">
+        <form class="prototype-form" id="ask-form">
+          <label for="ask-question">Въпрос</label><input id="ask-question" value="Кой препоръчва ВиК майстор в Лом?" minlength="10" maxlength="120">
+          <div class="two-fields"><div><label for="ask-category">Категория</label><select id="ask-category"><option>Строителство и ремонти</option><option>Здраве и лекари</option><option>Автомобили</option></select></div><div><label for="ask-leaf">Подкатегория</label><select id="ask-leaf"><option>ВиК</option><option>Бани и плочки</option><option>Електро</option></select></div></div>
+          <label for="ask-detail">Подробности</label><textarea id="ask-detail" rows="5">Търся човек за малък ремонт и искам препоръки от хора с реален опит.</textarea>
+          <div class="duplicate-gate" id="duplicate-gate"><div class="duplicate-head"><span>Преди да публикуваш</span><strong>Възможно е вече да има отговор</strong></div><article><div><span>Canonical въпрос · 6 отговора</span><h3>Кой препоръчва добър ВиК майстор в Лом?</h3></div><button type="button">Отвори този въпрос</button></article><article><div><span>Подобен · 3 отговора</span><h3>Търся майстор за теч в банята — препоръки?</h3></div><button type="button">Виж</button></article><label class="continue-check"><input type="checkbox" id="ask-continue"> Не е същото — искам да продължа с нов въпрос.</label></div>
+          <label class="consent-row"><input type="checkbox" checked> Приемам правилата на общността.</label>
+          <div class="form-actions"><button class="primary-btn" type="submit">Изпрати за преглед</button><button class="secondary-btn" type="button" data-screen-target="search">Назад към резултатите</button></div>
+          <p class="form-message" id="ask-message" aria-live="polite"></p>
+        </form>
+        <aside class="form-side-note"><span class="eyebrow">Какво ще стане?</span><ol><li>Въпросът се изпраща към Q&A owner.</li><li>При нормален профил чака одобрение.</li><li>След одобрение получава canonical URL.</li><li>Тогава може да се сподели към Facebook.</li></ol></aside>
+      </div>
+    </section>
+
+    <section class="screen" data-screen="states" aria-labelledby="states-title">
+      <div class="form-page-head"><div class="container"><span class="eyebrow">Interaction states</span><h1 id="states-title">Как изглеждат важните състояния</h1><p>Не само happy path — pending, public/share, Event без Add и dirty form behavior.</p></div></div>
+      <div class="container state-grid">
+        <article class="state-card pending"><span class="state-icon">⏳</span><span class="eyebrow">След submit</span><h2>Изпратено за преглед</h2><p>Съдържанието още не е публично. Затова няма Facebook share CTA.</p><div class="state-actions"><button class="primary-mini" type="button">Виж статуса</button><button type="button">Към профила</button></div></article>
+        <article class="state-card public"><span class="state-icon">✓</span><span class="eyebrow">След approval</span><h2>Публикувано</h2><p>Вече има canonical Popitai URL и може да се използва share pack.</p><div class="share-pack"><button class="primary-mini" type="button">Сподели</button><button type="button">Копирай линк</button><button type="button">Facebook</button></div></article>
+        <article class="state-card event"><span class="state-icon">📅</span><span class="eyebrow">Събития</span><h2>Няма fake „Добави събитие“</h2><p>Докато няма approved public Event submission owner, CTA остава „Попитай за събитие“.</p><button class="secondary-btn" type="button" data-screen-target="ask">Попитай за събитие</button></article>
+        <article class="state-card dirty"><span class="state-icon">✎</span><span class="eyebrow">Unsaved data</span><h2>Не губим въведеното</h2><p>При close/back с реални непратени данни показваме предупреждение.</p><button class="secondary-btn" type="button" data-open-dirty>Покажи предупреждението</button></article>
+      </div>
+    </section>
+  </main>
+
+  <nav class="mobile-bottom-nav" aria-label="Мобилен prototype navigation">
+    <button class="active" type="button" data-screen-target="home"><span>⌂</span><small>Начало</small></button>
+    <button type="button" data-screen-target="category"><span>▤</span><small>Обяви</small></button>
+    <button class="mobile-add" type="button" data-open-add><span>+</span><small>Добави</small></button>
+    <button type="button" data-screen-target="health"><span>ⓘ</span><small>Инфо</small></button>
+    <button type="button" data-screen-target="ask"><span>◉</span><small>Профил</small></button>
+  </nav>
+
+  <div class="modal-layer" id="prototype-add-sheet" hidden>
+    <section class="sheet-card" role="dialog" aria-modal="true" aria-labelledby="add-title">
+      <div class="sheet-head"><div><span class="eyebrow">Добави в Попитай.Лом</span><h2 id="add-title">Какво искаш да добавиш?</h2></div><button class="icon-btn" type="button" data-close-modal aria-label="Затвори">×</button></div>
+      <div class="add-options">
+        <button type="button" data-open-listing><span>▤</span><div><strong>Добави обява</strong><small>Продажба, търсене, работа, имот или услуга</small></div><b>→</b></button>
+        <button type="button"><span>🏪</span><div><strong>Добави фирма</strong><small>Постоянен профил на местна фирма или доставчик</small></div><b>→</b></button>
+        <button type="button" data-screen-target="ask"><span>?</span><div><strong>Задай въпрос</strong><small>Съвет, опит или препоръка от общността</small></div><b>→</b></button>
+      </div>
+      <p class="sheet-note">Специализирани действия като Health/Shop се показват в правилния category context, а не като generic обход.</p>
+    </section>
+  </div>
+
+  <div class="modal-layer" id="listing-modal" hidden>
+    <section class="modal-card wide" role="dialog" aria-modal="true" aria-labelledby="listing-modal-title">
+      <div class="sheet-head"><div><span class="eyebrow">Prefilled Listing flow</span><h2 id="listing-modal-title">Добави обява</h2></div><button class="icon-btn" type="button" data-close-modal>×</button></div>
+      <div class="prefill-summary"><span>Предлагам</span><span>Строителство и ремонти</span><span>ВиК</span></div>
+      <div class="prototype-form compact-form"><label>Заглавие</label><input placeholder="Например: ВиК ремонти в Лом"><label>Описание</label><textarea rows="3" placeholder="Опиши услугата..."></textarea><div class="two-fields"><div><label>Град</label><input value="Лом"></div><div><label>Цена</label><input placeholder="По желание"></div></div><button class="primary-btn full" type="button" data-demo-pending>Изпрати за преглед</button></div>
+      <p class="sheet-note">Prototype показва B9 public prefill `main=maistori · subcategory=ВиК · intent=offer`; protected storage mapping остава owner responsibility.</p>
+    </section>
+  </div>
+
+  <div class="modal-layer" id="health-modal" hidden>
+    <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="health-modal-title">
+      <div class="sheet-head"><div><span class="eyebrow">Health specialized owner</span><h2 id="health-modal-title">Предложи лекар или практика</h2></div><button class="icon-btn" type="button" data-close-modal>×</button></div>
+      <div class="type-grid"><button class="active" type="button">Лекар</button><button type="button">Стоматолог</button><button type="button">Ветеринар</button></div>
+      <div class="prototype-form compact-form"><label>Име</label><input placeholder="Име на лекар / практика"><label>Специалност</label><input placeholder="Например: кардиология"><div class="two-fields"><div><label>Телефон</label><input type="tel"></div><div><label>Адрес</label><input></div></div><button class="primary-btn full health-primary" type="button" data-demo-pending>Изпрати за одобрение</button></div>
+      <p class="sheet-note">Не създава Firm/Listing. Отива към specialized Health/Info submission owner.</p>
+    </section>
+  </div>
+
+  <div class="modal-layer" id="shop-modal" hidden>
+    <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="shop-modal-title">
+      <div class="sheet-head"><div><span class="eyebrow">Shops specialized owner</span><h2 id="shop-modal-title">Предложи магазин</h2></div><button class="icon-btn" type="button" data-close-modal>×</button></div>
+      <div class="prototype-form compact-form"><label>Име на магазина</label><input><label>Категория</label><select><option>Строителни</option><option>Хранителни</option><option>Техника</option></select><div class="two-fields"><div><label>Телефон</label><input type="tel"></div><div><label>Адрес</label><input></div></div><button class="primary-btn full" type="button" data-demo-pending>Изпрати за проверка</button></div>
+      <p class="sheet-note">Shop proposal остава при Shops owner. Не е generic Firm create.</p>
+    </section>
+  </div>
+
+  <div class="modal-layer" id="dirty-modal" hidden>
+    <section class="modal-card small" role="alertdialog" aria-modal="true" aria-labelledby="dirty-title">
+      <div class="danger-icon">!</div><h2 id="dirty-title">Имаш непратени данни</h2><p>Ако затвориш сега, въведеното в този prototype form ще бъде изчистено.</p><div class="form-actions"><button class="danger-btn" type="button" data-close-modal>Затвори и изчисти</button><button class="secondary-btn" type="button" data-close-modal>Остани</button></div>
+    </section>
+  </div>
+
+  <script src="prototype.js"></script>
+</body>
+</html>
