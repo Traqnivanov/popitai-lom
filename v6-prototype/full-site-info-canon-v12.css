@@ -1,0 +1,350 @@
+/* Попитай.Лом V6-C — Info Lom approved visual canon.
+   Prototype only. Loaded AFTER generic V9/V11 visual systems.
+   Preserve-first: this file must not become a generic redesign layer. */
+
+:root{
+  --info-canon-navy:#102a4c;
+  --info-canon-navy-deep:#0b213e;
+  --info-canon-blue:#086fc5;
+  --info-canon-blue-soft:#eaf5fc;
+  --info-canon-ink:#172b40;
+  --info-canon-muted:#647384;
+  --info-canon-line:#d5dee7;
+  --info-canon-card-line:#14283d;
+  --info-canon-surface:#f6f8fb;
+  --info-canon-danger:#9d2525;
+  --info-canon-danger-bg:#fff1f1;
+}
+
+/* =========================================================
+   INFO LOM HUB — preserve approved production composition
+   ========================================================= */
+.page:has(.v8-task-grid) .breadcrumbs{display:none}
+
+.page:has(.v8-task-grid) .page-hero{
+  background:linear-gradient(155deg,var(--info-canon-navy-deep) 0%,#142f54 100%);
+  border:0;
+  padding-top:30px;
+  padding-bottom:24px;
+}
+.page:has(.v8-task-grid) .page-hero .kicker{color:#d8b45e}
+.page:has(.v8-task-grid) .page-hero h1{color:#fff;letter-spacing:-.035em}
+.page:has(.v8-task-grid) .page-hero p{color:#c7d2df;max-width:40rem}
+
+.page:has(.v8-task-grid) > .section{
+  padding-top:0;
+  background:linear-gradient(180deg,#142f54 0 94px,var(--info-canon-surface) 94px 100%);
+}
+.page:has(.v8-task-grid) > .section > .container{padding-top:0}
+
+.page:has(.v8-task-grid) .search-box{
+  position:relative;
+  z-index:2;
+  margin:0 0 20px;
+  border:0;
+  border-radius:18px;
+  background:#fff;
+  box-shadow:0 12px 28px rgba(5,27,52,.18);
+}
+.page:has(.v8-task-grid) .search-box button{
+  background:#fff;
+  color:var(--info-canon-blue);
+  border-left:1px solid #e5ebf1;
+  box-shadow:none;
+}
+
+.page:has(.v8-task-grid) .category-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+  margin-top:0!important;
+}
+.page:has(.v8-task-grid) .category-card{
+  position:relative;
+  display:grid;
+  grid-template-columns:52px minmax(0,1fr) 28px;
+  align-items:center;
+  gap:12px;
+  min-height:104px;
+  padding:17px 16px;
+  overflow:visible;
+  text-align:left;
+  background:#fff!important;
+  border:1px solid var(--info-canon-line)!important;
+  border-radius:22px;
+  box-shadow:0 4px 15px rgba(16,42,76,.045)!important;
+}
+.page:has(.v8-task-grid) .category-card:after{
+  content:'→';
+  position:static;
+  width:28px;
+  height:28px;
+  display:grid;
+  place-items:center;
+  color:var(--info-canon-blue);
+  background:transparent;
+  font-size:22px;
+  font-weight:850;
+}
+.page:has(.v8-task-grid) .category-card:before{
+  width:48px;
+  height:48px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  background:#edf5ff;
+  color:var(--info-canon-blue);
+  font-size:24px;
+  font-weight:800;
+}
+.page:has(.v8-task-grid) .category-card:nth-child(1):before{content:'✚'}
+.page:has(.v8-task-grid) .category-card:nth-child(2):before{content:'🏛';font-size:22px}
+.page:has(.v8-task-grid) .category-card:nth-child(3):before{content:'🚌';font-size:21px}
+.page:has(.v8-task-grid) .category-card:nth-child(4):before{content:'🎓';font-size:21px}
+.page:has(.v8-task-grid) .category-card:nth-child(5):before{content:'🏦';font-size:21px}
+.page:has(.v8-task-grid) .category-card:nth-child(6):before{content:'⚡';font-size:23px}
+.page:has(.v8-task-grid) .category-card strong{
+  grid-column:2;
+  color:var(--info-canon-ink);
+  font-size:17px;
+  line-height:1.18;
+  font-weight:760;
+}
+.page:has(.v8-task-grid) .category-card small{display:none}
+.page:has(.v8-task-grid) .category-card:hover{
+  transform:none;
+  border-color:#b8cce0!important;
+  box-shadow:0 7px 20px rgba(16,42,76,.07)!important;
+}
+.page:has(.v8-task-grid) .category-card:focus-visible{
+  outline:3px solid rgba(8,111,197,.22);
+  outline-offset:2px;
+}
+
+/* The task shortcuts remain one distinct white rounded panel. */
+.page:has(.v8-task-grid) .section-head:has(+ .v8-task-grid){
+  margin:34px 0 0!important;
+  padding:24px 24px 8px;
+  background:#fff;
+  border:1px solid var(--info-canon-line);
+  border-bottom:0;
+  border-radius:24px 24px 0 0;
+}
+.page:has(.v8-task-grid) .section-head:has(+ .v8-task-grid) .eyebrow{display:none}
+.page:has(.v8-task-grid) .section-head:has(+ .v8-task-grid) h2{
+  color:var(--info-canon-ink);
+  font-size:28px;
+  letter-spacing:-.025em;
+}
+.page:has(.v8-task-grid) .section-head:has(+ .v8-task-grid) h2:after{
+  content:'Бърз път по задача, дори да не знаеш коя институция ти трябва.';
+  display:block;
+  margin-top:8px;
+  color:var(--info-canon-muted);
+  font-size:15px;
+  line-height:1.45;
+  font-weight:500;
+  letter-spacing:0;
+}
+.page:has(.v8-task-grid) .v8-task-grid{
+  margin:0;
+  padding:10px 24px 24px;
+  gap:10px;
+  background:#fff;
+  border:1px solid var(--info-canon-line);
+  border-top:0;
+  border-radius:0 0 24px 24px;
+}
+.page:has(.v8-task-grid) .v8-task-card{
+  min-height:58px;
+  padding:12px 14px;
+  background:#f9fbfd;
+  border:1px solid #cfd9e4;
+  border-radius:15px;
+  box-shadow:none;
+  color:var(--info-canon-ink);
+}
+.page:has(.v8-task-grid) .v8-task-card strong{font-size:15px;line-height:1.25}
+.page:has(.v8-task-grid) .v8-task-card span{display:none}
+.page:has(.v8-task-grid) .v8-task-card:hover{background:#f3f8fd;box-shadow:none}
+
+/* =========================================================
+   INFO FAMILY DETAIL — priority cards + sticky contextual tabs
+   Health is excluded because it has its own approved specialist shell.
+   ========================================================= */
+.page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])){
+  background:var(--info-canon-surface);
+}
+.page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) > .page-hero{
+  display:none;
+}
+.page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) > .breadcrumbs{
+  display:flex;
+  align-items:center;
+  min-height:50px;
+  margin:0;
+  padding:11px max(20px,calc((100% - var(--max))/2));
+  background:#fff;
+  color:var(--info-canon-blue);
+  border-bottom:0;
+}
+.page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) > .breadcrumbs > *{display:none}
+.page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) > .breadcrumbs button[data-route='info']{
+  display:inline-flex;
+  padding:0;
+  border:0;
+  background:transparent;
+  color:var(--info-canon-blue);
+  font-size:0;
+  font-weight:800;
+}
+.page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) > .breadcrumbs button[data-route='info']:before{
+  content:'← Всички раздели';
+  font-size:16px;
+}
+
+.page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) > .section{
+  padding-top:0;
+  background:var(--info-canon-surface);
+}
+.page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) .v8-subnav{
+  position:sticky;
+  top:68px;
+  z-index:22;
+  display:flex;
+  gap:10px;
+  margin:0 -20px 16px;
+  padding:10px 20px 13px;
+  overflow-x:auto;
+  overscroll-behavior-inline:contain;
+  scrollbar-width:none;
+  background:rgba(255,255,255,.985);
+  border-bottom:1px solid #d9e2eb;
+  box-shadow:0 4px 12px rgba(16,42,76,.045);
+}
+.page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) .v8-subnav::-webkit-scrollbar{display:none}
+.page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) .v8-subnav button{
+  flex:0 0 auto;
+  min-height:44px;
+  padding:9px 17px;
+  border:1px solid #d2dbe4;
+  border-radius:999px;
+  background:#fff;
+  color:#5f6c7c;
+  font-weight:760;
+  box-shadow:none;
+}
+.page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) .v8-subnav button.active{
+  border-color:var(--info-canon-blue);
+  background:#eef6ff;
+  color:var(--info-canon-blue);
+}
+
+.page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) .v8-rich-card{
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  margin-top:0!important;
+  padding:24px;
+  background:#fff;
+  border:2px solid var(--info-canon-card-line);
+  border-radius:26px;
+  box-shadow:0 5px 18px rgba(16,42,76,.045);
+}
+.page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) .v8-rich-card h3{
+  order:1;
+  margin:0 0 14px;
+  color:#18283b;
+  font-size:28px;
+  line-height:1.22;
+  letter-spacing:-.025em;
+}
+.page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) .v8-rich-card .fact{
+  order:2;
+  margin:0 0 16px;
+  padding:15px 16px;
+  border:0;
+  border-radius:18px;
+  background:#fbfdff;
+  color:#314355;
+  font-size:16px;
+  line-height:1.45;
+}
+.page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) .v8-rich-card .actions{
+  order:3;
+  display:grid;
+  gap:10px;
+  margin:0 0 16px;
+}
+.page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) .v8-rich-card .actions button{
+  width:100%;
+  min-height:56px;
+  justify-content:flex-start;
+  padding:13px 18px;
+  border-radius:15px;
+  font-size:16px;
+  font-weight:780;
+}
+.page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) .v8-rich-card .actions .primary{
+  background:var(--info-canon-blue);
+  color:#fff;
+}
+.page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) .v8-rich-card .actions .secondary{
+  background:#f8fafc;
+  color:#294056;
+  border:1px solid #cfdae4;
+}
+.page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) .v8-rich-card .official{
+  order:4;
+  margin:0;
+  padding:16px 0;
+  border:0;
+  border-top:1px solid #dce3e9;
+  background:transparent;
+  color:#354659;
+}
+.page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) .v8-rich-card .official strong{color:#20354a}
+.page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) .v8-rich-card .trust{
+  order:5;
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px 9px;
+  margin:0;
+  padding:15px 0 0;
+  border-top:1px solid #dce3e9;
+  color:#687786;
+  font-size:13px;
+  line-height:1.45;
+}
+.page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) .v8-rich-card .trust span{
+  padding:0;
+  border:0;
+  background:transparent;
+  color:inherit;
+}
+
+@media(max-width:720px){
+  .page:has(.v8-task-grid) .page-hero{padding:24px 20px 20px}
+  .page:has(.v8-task-grid) > .section{background:linear-gradient(180deg,#142f54 0 78px,var(--info-canon-surface) 78px 100%)}
+  .page:has(.v8-task-grid) .search-box{margin-inline:0}
+  .page:has(.v8-task-grid) .category-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+  .page:has(.v8-task-grid) .category-card{grid-template-columns:48px minmax(0,1fr) 24px;min-height:96px;padding:14px 13px;gap:9px;border-radius:20px}
+  .page:has(.v8-task-grid) .category-card:before{width:44px;height:44px;border-radius:13px}
+  .page:has(.v8-task-grid) .category-card strong{font-size:15px}
+  .page:has(.v8-task-grid) .section-head:has(+ .v8-task-grid){padding:22px 20px 7px;border-radius:22px 22px 0 0}
+  .page:has(.v8-task-grid) .section-head:has(+ .v8-task-grid) h2{font-size:25px}
+  .page:has(.v8-task-grid) .v8-task-grid{grid-template-columns:repeat(2,minmax(0,1fr));padding:9px 20px 20px;border-radius:0 0 22px 22px}
+  .page:has(.v8-task-grid) .v8-task-card{min-height:56px;padding:11px 12px}
+
+  .page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) > .breadcrumbs{padding-inline:20px}
+  .page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) .v8-subnav{top:68px;margin-inline:-20px;padding-inline:20px}
+  .page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) .v8-rich-card{padding:22px 23px;border-width:2px;border-radius:25px}
+  .page:has(.breadcrumbs button[data-route='info']):has(.v8-subnav):not(:has([data-health-tab])) .v8-rich-card h3{font-size:25px}
+}
+
+@media(max-width:390px){
+  .page:has(.v8-task-grid) .category-card{grid-template-columns:42px minmax(0,1fr) 20px;padding-inline:11px}
+  .page:has(.v8-task-grid) .category-card:before{width:40px;height:40px;font-size:20px}
+  .page:has(.v8-task-grid) .category-card strong{font-size:14px}
+  .page:has(.v8-task-grid) .v8-task-grid{grid-template-columns:1fr}
+}
