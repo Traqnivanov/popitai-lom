@@ -1,20 +1,106 @@
 (() => {
   "use strict";
 
+  function injectPrototypeControls() {
+    const header = document.querySelector(".site-header");
+    const nav = document.querySelector(".desktop-nav");
+    if (nav) {
+      nav.innerHTML = `
+        <button type="button" class="active" data-screen-target="home">Начало</button>
+        <button type="button" data-screen-target="category">Обяви и услуги</button>
+        <button type="button" data-prototype-action="firms">Фирми</button>
+        <button type="button" data-prototype-action="info">Инфо Лом</button>
+        <button type="button" data-prototype-action="articles">Статии</button>
+        <button type="button" data-prototype-action="more">Още ▾</button>
+        <button type="button" data-prototype-action="profile">Профил</button>`;
+    }
+
+    const mobileProfile = document.querySelector('.mobile-bottom-nav button:last-child');
+    if (mobileProfile) {
+      mobileProfile.removeAttribute("data-screen-target");
+      mobileProfile.dataset.prototypeAction = "profile";
+    }
+
+    if (header && !document.querySelector(".prototype-switcher")) {
+      const switcher = document.createElement("nav");
+      switcher.className = "prototype-switcher";
+      switcher.setAttribute("aria-label", "Превключване между V6 prototype екрани");
+      switcher.innerHTML = `<div><strong>Преглед на прототипа:</strong>
+        <button type="button" class="active" data-prototype-screen="home">Home</button>
+        <button type="button" data-prototype-screen="category">Категория</button>
+        <button type="button" data-prototype-screen="health">Health</button>
+        <button type="button" data-prototype-screen="search">Search</button>
+        <button type="button" data-prototype-screen="ask">Ask</button>
+        <button type="button" data-prototype-screen="states">States</button></div>`;
+      header.insertAdjacentElement("afterend", switcher);
+    }
+
+    if (!document.getElementById("prototype-extra-style")) {
+      const style = document.createElement("style");
+      style.id = "prototype-extra-style";
+      style.textContent = `
+        .prototype-switcher{position:sticky;top:71px;z-index:35;background:#071c38;color:#fff;border-bottom:1px solid rgba(255,255,255,.12);padding:8px 14px}
+        .prototype-switcher>div{max-width:1180px;margin:auto;display:flex;align-items:center;gap:6px;overflow:auto;scrollbar-width:none}
+        .prototype-switcher strong{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#a9bdd6;white-space:nowrap;margin-right:4px}
+        .prototype-switcher button{border:1px solid rgba(255,255,255,.16);background:transparent;color:#dce8f7;border-radius:999px;padding:6px 9px;font-size:12px;font-weight:800;white-space:nowrap}
+        .prototype-switcher button.active{background:#fff;color:#071c38}
+        .prototype-toast{position:fixed;z-index:150;right:18px;bottom:22px;max-width:360px;background:#071c38;color:#fff;border:1px solid rgba(255,255,255,.16);box-shadow:0 18px 46px rgba(0,0,0,.22);border-radius:14px;padding:13px 15px;font-size:13px;line-height:1.45}
+        @media(max-width:720px){.prototype-switcher{top:59px;padding:7px 8px}.prototype-switcher strong{display:none}.prototype-toast{left:12px;right:12px;bottom:82px;max-width:none}.site-header{top:0}}
+      `;
+      document.head.appendChild(style);
+    }
+
+    if (!document.getElementById("prototype-toast")) {
+      const toast = document.createElement("div");
+      toast.id = "prototype-toast";
+      toast.className = "prototype-toast";
+      toast.setAttribute("role", "status");
+      toast.setAttribute("aria-live", "polite");
+      toast.hidden = true;
+      document.body.appendChild(toast);
+    }
+  }
+
+  injectPrototypeControls();
+
   const screens = [...document.querySelectorAll("[data-screen]")];
-  const screenButtons = [...document.querySelectorAll("[data-screen-target]")];
-  const desktopNav = [...document.querySelectorAll(".desktop-nav [data-screen-target]")];
-  const mobileNav = [...document.querySelectorAll(".mobile-bottom-nav [data-screen-target]")];
   const modals = [...document.querySelectorAll(".modal-layer")];
   let activeScreen = "home";
   let returnFocus = null;
+  let toastTimer = null;
+
+  function showToast(message) {
+    const toast = document.getElementById("prototype-toast");
+    if (!toast) return;
+    toast.textContent = message;
+    toast.hidden = false;
+    window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => { toast.hidden = true; }, 3200);
+  }
+
+  function screenButtons() {
+    return [...document.querySelectorAll("[data-screen-target]")];
+  }
+
+  function desktopNav() {
+    return [...document.querySelectorAll(".desktop-nav [data-screen-target]")];
+  }
+
+  function mobileNav() {
+    return [...document.querySelectorAll(".mobile-bottom-nav [data-screen-target]")];
+  }
+
+  function switcherButtons() {
+    return [...document.querySelectorAll("[data-prototype-screen]")];
+  }
 
   function setScreen(name, focus = true) {
     const next = screens.find((screen) => screen.dataset.screen === name) || screens[0];
     activeScreen = next?.dataset.screen || "home";
     screens.forEach((screen) => screen.classList.toggle("active", screen === next));
-    desktopNav.forEach((button) => button.classList.toggle("active", button.dataset.screenTarget === activeScreen));
-    mobileNav.forEach((button) => button.classList.toggle("active", button.dataset.screenTarget === activeScreen));
+    desktopNav().forEach((button) => button.classList.toggle("active", button.dataset.screenTarget === activeScreen));
+    mobileNav().forEach((button) => button.classList.toggle("active", button.dataset.screenTarget === activeScreen));
+    switcherButtons().forEach((button) => button.classList.toggle("active", button.dataset.prototypeScreen === activeScreen));
     window.scrollTo({ top: 0, behavior: "smooth" });
     if (focus) {
       requestAnimationFrame(() => {
@@ -57,11 +143,31 @@
     open.forEach((modal, index) => closeModal(modal, restore && index === open.length - 1));
   }
 
-  screenButtons.forEach((button) => {
+  function wireScreenButtons() {
+    screenButtons().forEach((button) => {
+      if (button.dataset.prototypeScreenWired === "1") return;
+      button.dataset.prototypeScreenWired = "1";
+      button.addEventListener("click", () => {
+        const target = button.dataset.screenTarget;
+        closeAllModals(false);
+        if (target) setScreen(target);
+      });
+    });
+    switcherButtons().forEach((button) => button.addEventListener("click", () => setScreen(button.dataset.prototypeScreen)));
+  }
+
+  wireScreenButtons();
+
+  document.querySelectorAll("[data-prototype-action]").forEach((button) => {
     button.addEventListener("click", () => {
-      const target = button.dataset.screenTarget;
-      closeAllModals(false);
-      if (target) setScreen(target);
+      const labels = {
+        firms: "Prototype: тук се отваря каноничният Firms owner / списък с фирми.",
+        info: "Prototype: Инфо Лом остава отделен top-level verified hub; Health е показан като пример за общия category shell.",
+        articles: "Prototype: тук се отварят само V6-ready статии и ръководства.",
+        more: "Prototype: менюто „Още“ съдържа Въпроси, Събития, За сайта, Правила и Контакти.",
+        profile: "Prototype: Профил остава canonical mobile/desktop entry за собствените активности и status-и."
+      };
+      showToast(labels[button.dataset.prototypeAction] || "Prototype navigation action.");
     });
   });
 
@@ -171,6 +277,23 @@
       if (!button) return;
       grid.querySelectorAll("button").forEach((item) => item.classList.toggle("active", item === button));
     });
+  });
+
+  document.querySelectorAll(".filter-chips").forEach((group) => {
+    group.addEventListener("click", (event) => {
+      const button = event.target.closest("button");
+      if (!button) return;
+      group.querySelectorAll("button").forEach((item) => item.classList.toggle("active", item === button));
+      showToast(`Prototype filter: ${button.textContent.trim()}`);
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    const button = event.target.closest("button");
+    if (!button || button.disabled) return;
+    if (button.matches('[data-screen-target],[data-prototype-screen],[data-prototype-action],[data-open-add],[data-open-listing],[data-open-health],[data-open-shop],[data-open-dirty],[data-close-modal],[data-demo-query],[data-search-state],[data-prefill-ask],[data-demo-pending],[type="submit"]')) return;
+    if (button.closest(".filter-chips,.type-grid")) return;
+    showToast(`Prototype action: „${button.textContent.trim()}“. Реалният destination/owner е заключен в B9; този prototype не прави live заявка.`);
   });
 
   document.addEventListener("keydown", (event) => {
