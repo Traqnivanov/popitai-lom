@@ -7,11 +7,13 @@
     const route=el.getAttribute('data-route');
     if(info!=='utilities' || route!=='info-detail') return null;
     const text=(el.textContent||'').toLowerCase();
-    if(text.includes('вода')) return 'utilities-v9.html#water';
-    if(text.includes('ток')) return 'utilities-v9.html#power';
-    if(text.includes('куриер')) return 'utilities-v9.html#couriers';
-    if(text.includes('интернет')) return 'utilities-v9.html#internet';
-    return 'utilities-v9.html';
+    if(text.includes('вода')) return 'utilities-v10.html#water';
+    if(text.includes('ток')) return 'utilities-v10.html#power';
+    if(text.includes('плащ')) return 'utilities-v10.html#payments';
+    if(text.includes('куриер')) return 'utilities-v10.html#couriers';
+    if(text.includes('интернет')) return 'utilities-v10.html#internet';
+    if(text.includes('застрах')) return 'utilities-v10.html#insurance';
+    return 'utilities-v10.html';
   }
 
   document.addEventListener('click',event=>{
