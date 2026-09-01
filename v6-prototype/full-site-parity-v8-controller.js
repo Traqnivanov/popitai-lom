@@ -32,10 +32,11 @@
 
   function currentMediaSection(root, label) {
     if (!root || root.previousElementSibling?.matches('[data-v8-current-media]')) return;
+    const key = `${root.id || 'media'}_current_action`;
     const section = document.createElement('section');
     section.className = 'v8-media';
     section.dataset.v8CurrentMedia = '';
-    section.innerHTML = `<div class="v8-media-head"><div><strong>${esc(label)}</strong><div class="v8-media-help">Текущата публикувана снимка остава, докато собственикът изрично не я премахне или замени.</div></div></div><article class="v8-media-card"><div style="aspect-ratio:4/3;display:grid;place-items:center;background:#eef2f7">Текуща снимка</div><div class="body"><span class="badge-main">Публикувана</span><strong>existing-image.webp</strong><small data-current-media-status>Запазва се</small><div class="form-actions"><button type="button" data-current-media-remove>Премахни при запис</button><button type="button" data-current-media-replace>Замени</button></div></div></article>`;
+    section.innerHTML = `<input type="hidden" name="${esc(key)}" value="" data-current-media-action><div class="v8-media-head"><div><strong>${esc(label)}</strong><div class="v8-media-help">Текущата публикувана снимка остава, докато собственикът изрично не я премахне или замени.</div></div></div><article class="v8-media-card"><div style="aspect-ratio:4/3;display:grid;place-items:center;background:#eef2f7">Текуща снимка</div><div class="body"><span class="badge-main">Публикувана</span><strong>existing-image.webp</strong><small data-current-media-status>Запазва се</small><div class="form-actions"><button type="button" data-current-media-remove>Премахни при запис</button><button type="button" data-current-media-replace>Замени</button></div></div></article>`;
     root.insertAdjacentElement('beforebegin',section);
   }
 
@@ -67,8 +68,7 @@
     const form = app.querySelector('form[data-v8-form="shop"]');
     if (!form || initialized.has(form)) return;
     initialized.add(form);
-    const select = form.querySelector('select[name="category"]');
-    select?.addEventListener('change',() => renderShopClassification(form));
+    form.querySelector('select[name="category"]')?.addEventListener('change',() => renderShopClassification(form));
   }
 
   function syncAddAria() {
@@ -84,7 +84,7 @@
     const links = document.createElement('div');
     links.dataset.v8LegalLinks = '';
     links.className = 'detail-actions';
-    links.innerHTML = '<button type="button" data-route="rules">Условия за ползване</button><button type="button" data-route="privacy">Поверителност</button>';
+    links.innerHTML = '<a class="secondary" href="../uslovia.html" target="_blank" rel="noopener">Условия за ползване</a><a class="secondary" href="../poveritelnost.html" target="_blank" rel="noopener">Поверителност</a>';
     consent.insertAdjacentElement('afterend',links);
   }
 
@@ -99,19 +99,30 @@
   document.addEventListener('click',event => {
     const remove = event.target.closest?.('[data-current-media-remove]');
     if (remove) {
+      const section = remove.closest('[data-v8-current-media]');
       const card = remove.closest('.v8-media-card');
       const status = card?.querySelector('[data-current-media-status]');
-      if (status) status.textContent = 'Ще бъде премахната при успешен запис';
+      const action = section?.querySelector('[data-current-media-action]');
       card?.classList.toggle('is-marked-remove');
-      remove.textContent = card?.classList.contains('is-marked-remove') ? 'Отмени премахването' : 'Премахни при запис';
+      const marked = Boolean(card?.classList.contains('is-marked-remove'));
+      if (status) status.textContent = marked ? 'Ще бъде премахната при успешен запис' : 'Запазва се';
+      if (action) {
+        action.value = marked ? 'remove' : '';
+        action.dispatchEvent(new Event('change',{bubbles:true}));
+      }
+      remove.textContent = marked ? 'Отмени премахването' : 'Премахни при запис';
       return;
     }
 
     const replace = event.target.closest?.('[data-current-media-replace]');
     if (replace) {
       const current = replace.closest('[data-v8-current-media]');
-      const uploader = current?.nextElementSibling;
-      uploader?.querySelector('[data-media-input]')?.click();
+      const action = current?.querySelector('[data-current-media-action]');
+      if (action) {
+        action.value = 'replace';
+        action.dispatchEvent(new Event('change',{bubbles:true}));
+      }
+      current?.nextElementSibling?.querySelector('[data-media-input]')?.click();
       return;
     }
 
