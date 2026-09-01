@@ -29,7 +29,7 @@ Desktop:
 Mobile:
 `Начало | Обяви | + | Инфо | Профил`
 
-V6 planning до този checkpoint **НЕ е променял production UI, schema/RLS, roles, quotas, moderation, protected owners/ranking или URLs**.
+V6 work до този checkpoint **НЕ е променял production UI, schema/RLS, roles, quotas, moderation, protected owners/ranking или URLs**.
 
 ---
 
@@ -41,86 +41,96 @@ Moderator own-business edit mismatch от A2 остава отделен protect
 
 ---
 
-## 4. V6 DESIGN TRACK
+## 4. COMPLETED V6 CONTRACTS
 
-Branch: `v6-product-foundation-draft`  
-Production impact: **NONE**.
+Completed:
+- V6-0;
+- A1;
+- A2;
+- B1 + Health companion;
+- B2;
+- B3;
+- B4;
+- B5;
+- B6;
+- B7;
+- B8;
+- B9.
 
-Completed artifacts:
-- A1 `PUBLIC_PRODUCT_V6_CURRENT_TARGET_OWNER_MAP.md`;
-- A2 `PUBLIC_PRODUCT_V6_A2_EVIDENCE_BASELINE.md`;
-- B1 `PUBLIC_PRODUCT_V6_B1_FINAL_IA_TAXONOMY_CONTRACT.md`;
-- B1 companion `PUBLIC_PRODUCT_V6_B1_HEALTH_PRESENTATION_PARITY_CLARIFICATION.md`;
-- B2 `PUBLIC_PRODUCT_V6_B2_SEARCH_INTENT_RESULT_CONTRACT.md`;
-- B3 `PUBLIC_PRODUCT_V6_B3_INFO_SOURCE_FRESHNESS_SEO_SEARCH_CONTRACT.md`;
-- B4 `PUBLIC_PRODUCT_V6_B4_ARTICLE_GUIDE_CONTENT_ARCHITECTURE_CONTRACT.md`;
-- B5 `PUBLIC_PRODUCT_V6_B5_QA_CANONICAL_DUPLICATE_ALIAS_MODERATION_CONTRACT.md`;
-- B6 `PUBLIC_PRODUCT_V6_B6_STRUCTURED_RECOMMENDATION_RELATION_CONTRACT.md`;
-- B7 `PUBLIC_PRODUCT_V6_B7_FACEBOOK_BRIDGE_TECHNICAL_PRODUCT_CONTRACT.md`;
-- B8 `PUBLIC_PRODUCT_V6_B8_LOCAL_RELEVANCE_RANKING_PROTECTED_PRIORITY_CONTRACT.md`;
-- B9 `PUBLIC_PRODUCT_V6_B9_EXACT_INTERACTION_FORMS_BUTTONS_LINKS_STATES_CONTRACT.md`.
+Latest B9 artifact:
+`PUBLIC_PRODUCT_V6_B9_EXACT_INTERACTION_FORMS_BUTTONS_LINKS_STATES_CONTRACT.md`
 
----
-
-## 5. STAGE STATUS
-
-V6-0 / A1 / A2 / B1 / B2 / B3 / B4 / B5 / B6 / B7 / B8 / B9: **DONE**.
-
-### B9 key lock
-
-- every main CTA has one owner-aware destination;
-- global Add remains compact owner router;
-- Listings use proven V3 `main/subcategory/intent` prefill and separate `edit` state;
-- Firm category prefill is not falsely claimed current until a bounded mapping adapter exists;
-- Health and Shops keep specialized Add owners;
-- Events have no fake public Add;
-- Search no-result → Ask carries bounded context and runs B5 duplicate gate;
-- pending content does not receive public Facebook share;
-- auth/validation/pending/success/error/back/mobile states are explicit;
-- Health common visual shell does not change Health truth owner;
-- no protected owner/quota/role/schema/RLS change.
-
-Production impact: **NONE**.
-
-### V6-C — REAL DESKTOP/MOBILE VISUAL + INTERACTION PROTOTYPE
-**CURRENT STAGE**
+B9 locks owner-aware CTA destinations, exact Listing prefill, specialized Health/Shops actions, no fake Event Add, Ask duplicate handoff, pending-vs-share behavior and deterministic auth/form/mobile states.
 
 ---
 
-## 6. EXACT NEXT TASK
+## 5. V6-C — VISUAL / INTERACTION PROTOTYPE
 
-# `STAGE V6-C — REAL DESKTOP/MOBILE VISUAL + INTERACTION PROTOTYPE`
+Artifact:
+`PUBLIC_PRODUCT_V6_C_VISUAL_INTERACTION_PROTOTYPE.md`
 
-C must turn B1–B9 into a coherent non-production prototype.
+Prototype files:
+- `v6-prototype/index.html`;
+- `v6-prototype/prototype.css`;
+- `v6-prototype/prototype.js`.
 
-Required:
-- common V6 visual system using existing Popitai brand direction;
-- real Home desktop + mobile;
+Status:
+
+**SOURCE PROTOTYPE COMPLETE → VISUAL REVIEW GATE**
+
+Implemented in prototype:
+- Home search-first desktop/mobile;
+- B1 priority shortcuts + `Открий в Лом`;
 - common category shell;
-- Health rendered inside the same shell while preserving specialized action semantics;
-- marketplace/category search/results/add states;
+- Health inside the same shell while keeping specialized Health semantics;
+- grouped Construction results;
 - Search success/no-result/partial states;
 - global Add sheet;
-- Ask duplicate suggestion state;
-- pending success vs approved/share state;
-- Health proposal and Shop proposal examples;
-- canonical Q&A detail/share/report state;
-- no Event Add CTA;
-- desktop/mobile accessibility/focus hierarchy;
-- no production deployment;
-- no schema/RLS changes.
+- Listing prefill example;
+- Ask duplicate suggestions;
+- pending vs public/share states;
+- Health proposal modal;
+- Shop proposal modal;
+- Event state with no fake Add CTA;
+- responsive <=720 px layout;
+- dialog focus/Escape/return-focus behavior;
+- separate prototype screen switcher.
 
-Prototype artifacts should be isolated from production, clearly marked V6 prototype, and must not be referenced by production pages.
+C source QA found and fixed one important contradiction:
+- initial prototype reused site nav as screen switcher;
+- fixed by restoring canonical desktop navigation and moving prototype screen switching into a separate clearly marked bar;
+- mobile Profile no longer falsely routes to Ask;
+- non-live demo actions now return an explicit prototype status instead of silent dead buttons.
 
-C exit gate:
+Production impact: **NONE**.
 
-**the user can inspect one coherent desktop/mobile V6 experience and understand exactly how Home, categories, Health, Search, Add, Ask and Facebook/share fit together before any production implementation starts.**
+---
+
+## 6. CURRENT EXACT TASK
+
+# `V6-C VISUAL REVIEW GATE`
+
+Before V6-D begins, inspect/refine the rendered prototype direction for:
+- Home first impression;
+- density/spacing;
+- category shell;
+- Health parity;
+- mobile hierarchy;
+- Search states;
+- Add/Ask modal interaction;
+- overall brand feel.
+
+No production implementation starts at this gate.
+
+If visual direction is accepted/refined, exact next major stage becomes:
+
+# `V6-D — TECHNICAL DESIGN / SCHEMA / RLS / INDEX / MIGRATION / SEO RENDERING / PERFORMANCE`
 
 ---
 
 ## 7. CURRENT HANDOFF
 
-**Completed:** V6-0, A1, A2, B1–B9.  
-**Current:** V6-C.  
-**Production:** unchanged by V6 planning.  
-**Do not do next:** production implementation before C review + V6-D/E gates.
+**Completed:** V6-0, A1, A2, B1–B9; C source prototype.  
+**Current:** V6-C visual review gate.  
+**Production:** unchanged.  
+**Do not do next:** production implementation before C review + V6-D/E.
