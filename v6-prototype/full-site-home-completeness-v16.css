@@ -1,0 +1,229 @@
+/* Popitai.Lom V6-C — Home V16 completeness + clarity pass.
+   Prototype only. No production impact.
+   Purpose: keep the approved Home order while making the three core products,
+   section meaning and destinations obvious without restoring old clutter. */
+
+:root{
+  --home16-navy:#082944;
+  --home16-blue:#087dcc;
+  --home16-gold:#c29a32;
+  --home16-muted:#5f7386;
+  --home16-line:rgba(8,41,68,.11);
+}
+
+/* =========================================================
+   1. HERO SHORTCUTS — the core products must not feel missing.
+   These are real route buttons injected by the existing V8 controller.
+   ========================================================= */
+.home-page .home-v16-shortcuts{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+  max-width:770px;
+  margin-top:15px;
+}
+.home-page .home-v16-shortcuts>span{
+  margin-right:2px;
+  color:rgba(255,255,255,.74);
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.01em;
+}
+.home-page .home-v16-shortcuts button{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  min-height:36px;
+  padding:8px 12px;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:11px;
+  background:rgba(5,30,51,.48);
+  color:#fff;
+  font-size:12.5px;
+  font-weight:800;
+  line-height:1;
+  box-shadow:none;
+  backdrop-filter:blur(5px);
+}
+.home-page .home-v16-shortcuts button:before{
+  content:"";
+  width:17px;
+  height:17px;
+  flex:0 0 17px;
+  background:currentColor;
+  -webkit-mask:var(--home16-shortcut-icon) center/contain no-repeat;
+  mask:var(--home16-shortcut-icon) center/contain no-repeat;
+  opacity:.92;
+}
+.home-page .home-v16-shortcuts button:nth-of-type(1){
+  --home16-shortcut-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='14' rx='2'/%3E%3Cpath d='M7 9h10M7 13h6M7 17h4'/%3E%3C/g%3E%3C/svg%3E");
+}
+.home-page .home-v16-shortcuts button:nth-of-type(2){
+  --home16-shortcut-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 21V7l8-4 8 4v14M8 21v-5h8v5M8 10h2M14 10h2M8 13h2M14 13h2'/%3E%3C/g%3E%3C/svg%3E");
+}
+.home-page .home-v16-shortcuts button:nth-of-type(3){
+  --home16-shortcut-icon:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 11v6M12 7h.01'/%3E%3C/g%3E%3C/svg%3E");
+}
+.home-page .home-v16-shortcuts button:hover,
+.home-page .home-v16-shortcuts button:focus-visible{
+  background:rgba(255,255,255,.14);
+  border-color:rgba(255,255,255,.48);
+  transform:none;
+}
+
+/* =========================================================
+   2. REAL SECTION EXPLANATIONS — no CSS-generated duplicate copy.
+   ========================================================= */
+.home-page .home-v16-section-lead{
+  max-width:650px;
+  margin:7px 0 0;
+  color:var(--home16-muted);
+  font-size:13.5px;
+  line-height:1.45;
+  font-weight:500;
+  letter-spacing:0;
+}
+
+/* V14/V15 used generated copy while we were testing wording.
+   V16 uses real DOM text so it remains accessible and editable. */
+.home-page>.section:nth-of-type(3) .section-head h2:after,
+.home-page>.section:nth-of-type(5) .section-head h2:after,
+.home-page>.section:nth-of-type(6) .section-head h2:after{
+  content:none!important;
+  display:none!important;
+}
+.home-page>.section:nth-of-type(3) .section-head .eyebrow,
+.home-page>.section:nth-of-type(6) .section-head .eyebrow{
+  font-size:11px!important;
+  color:#70869a;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+.home-page>.section:nth-of-type(3) .section-head .eyebrow:after,
+.home-page>.section:nth-of-type(6) .section-head .eyebrow:after{
+  content:none!important;
+  display:none!important;
+}
+.home-page>.section:nth-of-type(6) .section-head h2{
+  color:var(--home16-navy);
+  font-size:clamp(27px,3vw,36px)!important;
+  line-height:1.12;
+  letter-spacing:-.042em;
+}
+.home-page>.section:nth-of-type(6) .section-head h2:before{
+  content:none!important;
+  display:none!important;
+}
+.home-page>.section:nth-of-type(5) .text-button{
+  font-size:14px!important;
+}
+.home-page>.section:nth-of-type(5) .text-button:after{
+  content:none!important;
+  display:none!important;
+}
+
+/* =========================================================
+   3. DISCOVER LOM — user language, not database/profile language.
+   ========================================================= */
+.home-page .discover-card small{
+  font-size:0!important;
+}
+.home-page .discover-card small:after{
+  color:var(--home16-muted);
+  font-size:12.5px;
+  line-height:1.4;
+  font-weight:500;
+}
+.home-page .discover-card:nth-child(1) small:after{content:"Хранителни, строителни, техника и още"}
+.home-page .discover-card:nth-child(2) small:after{content:"Ресторанти, кафенета и храна"}
+.home-page .discover-card:nth-child(3) small:after{content:"Местни фирми и услуги"}
+.home-page .discover-card:nth-child(4) small:after{content:"Какво предстои в Лом"}
+
+/* Keep the four discovery targets visually secondary to the main task groups. */
+.home-page>.section:nth-of-type(3) .section-head{
+  margin-bottom:18px;
+}
+.home-page .discover-card{
+  min-height:104px;
+}
+
+/* =========================================================
+   4. MAIN CATEGORIES — clarify relation to Marketplace without adding a new block.
+   ========================================================= */
+.home-page>.section:nth-of-type(2) .section-head{
+  align-items:flex-start;
+}
+.home-page>.section:nth-of-type(2) .section-head .text-button{
+  margin-top:13px;
+}
+
+/* =========================================================
+   5. INFO / GUIDES / COMMUNITY — preserve approved hierarchy.
+   ========================================================= */
+.home-page>.section:nth-of-type(4) .info-panel{
+  margin-top:0;
+}
+.home-page>.section:nth-of-type(5) .section-head,
+.home-page>.section:nth-of-type(6) .section-head{
+  align-items:flex-start;
+}
+.home-page>.section:nth-of-type(5) .text-button,
+.home-page>.section:nth-of-type(6) .text-button{
+  margin-top:13px;
+}
+
+/* =========================================================
+   6. MOBILE — shortcuts stay compact; content remains scannable.
+   ========================================================= */
+@media(max-width:720px){
+  .home-page .home-v16-shortcuts{
+    gap:7px;
+    margin-top:13px;
+  }
+  .home-page .home-v16-shortcuts>span{
+    flex:0 0 100%;
+    margin:0 0 1px;
+    font-size:10.5px;
+  }
+  .home-page .home-v16-shortcuts button{
+    min-height:34px;
+    padding:7px 10px;
+    border-radius:10px;
+    font-size:11.5px;
+  }
+  .home-page .home-v16-shortcuts button:before{
+    width:15px;
+    height:15px;
+    flex-basis:15px;
+  }
+
+  .home-page .home-v16-section-lead{
+    max-width:35ch;
+    margin-top:6px;
+    font-size:12px;
+    line-height:1.42;
+  }
+
+  .home-page>.section:nth-of-type(2) .section-head,
+  .home-page>.section:nth-of-type(5) .section-head,
+  .home-page>.section:nth-of-type(6) .section-head{
+    align-items:flex-start;
+  }
+  .home-page>.section:nth-of-type(2) .section-head .text-button,
+  .home-page>.section:nth-of-type(5) .text-button,
+  .home-page>.section:nth-of-type(6) .text-button{
+    margin-top:8px;
+  }
+
+  .home-page>.section:nth-of-type(5) .section-head h2,
+  .home-page>.section:nth-of-type(6) .section-head h2{
+    font-size:25px!important;
+  }
+
+  .home-page .discover-card small:after{
+    font-size:11.5px;
+    line-height:1.35;
+  }
+}
