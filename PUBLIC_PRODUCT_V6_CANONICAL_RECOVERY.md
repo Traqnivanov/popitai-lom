@@ -1,521 +1,552 @@
 # Попитай.Лом — V6 CANONICAL RECOVERY
 
-Статус: **RECOVERY PACKAGE READY FOR USER REVIEW / NO IMPLEMENTATION / NO PRODUCTION CHANGE**
-Branch: `v6-product-foundation-draft`
-Проверен prototype baseline: `9add22055dfa663f585a48f094585d5bedced766`
-Актуализирано: 02.09.2026
+Статус: **UPDATED DRAFT FOR WHOLE-STRUCTURE APPROVAL / NO CODE / NO PRODUCTION CHANGE**  
+Branch: `v6-product-foundation-draft`  
+Recovery baseline before this revision: `d703ea9deddff54273c4d8427c72025204cff19b`  
+Актуализирано: 03.09.2026
 
 ## 1. ЦЕЛ И FREEZE
 
-Този документ възстановява една продуктова истина след отклонението на V6 prototype. Той не започва проекта отначало и не отменя работещата production основа.
+Този документ е актуализираният Recovery target след последното продуктово решение на собственика. Той не започва проекта отначало и не отменя работещата production основа.
 
-До изрично приемане на Recovery пакета:
+До изрично цялостно одобрение на структурата:
 
+- **няма код**;
 - не се започва V18 или нов visual layer;
-- не се пише production UI/backend/schema/RLS код;
-- не се merge-ва V6 към `main`;
-- не се променят категории, owners, роли, права, лимити, статуси, moderation или protected ranking;
-- не се изтриват стари документи или prototype файлове;
-- стар V6 документ не е самостоятелно разрешение за имплементация;
-- V6-C не е приет и няма доказан browser/rendered PASS за head `9add220`.
+- не се променя `main`;
+- не се merge-ва V6 към production;
+- не се променят роли, права, RLS, schema, ownership, status/approval flow, лимити, media или Admin/Moderator логика;
+- не се променя protected ranking на „Иванов Ремонти“;
+- не се изтрива и не се презаписва работещо Health/Info/Firms/Listings съдържание;
+- текущият V17 prototype не е продуктова истина и не е acceptance baseline.
 
-Production `main` не е променен от V6. V6 implementation остава изолиран в `v6-prototype/`.
+Този документ и `PUBLIC_PRODUCT_V6_IMPLEMENTATION_MATRIX.md` са **review package**, не разрешение за implementation.
 
-## 2. AUTHORITY И РАЗРЕШЕНИ ПРОТИВОРЕЧИЯ
+## 2. AUTHORITY И КАК СЕ ТРЕТИРА СТАРАТА 4-GROUP АРХИТЕКТУРА
 
-При конфликт важи:
+LOCKED правилата остават с най-висок приоритет:
 
 1. `PROJECT_RULES_00_READ_FIRST.md`;
 2. `PROJECT_RULES_PROTECTED_CORE.md`;
 3. `PROJECT_RULES_ADMIN_MODERATOR.md`;
 4. `PROJECT_RULES.md`;
-5. `PROJECT_RULES_RENDER_OWNERSHIP.md`;
-6. `PUBLIC_MARKETPLACE_V3_APPROVED_SPEC.md`;
-7. приложимите непротиворечащи решения от `PUBLIC_SITE_INFORMATION_ARCHITECTURE_APPROVED_SPEC.md`;
-8. последното ясно одобрено решение на собственика;
-9. този документ и `PUBLIC_PRODUCT_V6_IMPLEMENTATION_MATRIX.md`;
-10. останалите V6 документи само според `PUBLIC_PRODUCT_V6_DOCUMENT_INDEX.md`;
-11. prototype code никога не отменя договор само защото е по-нов.
+5. `PROJECT_RULES_RENDER_OWNERSHIP.md`.
 
-Разрешени конфликти:
+След последното решение на собственика, публичната 4-group структура от `PUBLIC_MARKETPLACE_V3_APPROVED_SPEC.md` и предишната Recovery версия **не е разрешение за нов код**. За текущия review се предлага следната по-ясна публична структура с 5 входа.
 
-| Конфликт | Канонично решение |
-|---|---|
-| Marketplace V3 има 4 главни групи, B1 по-късно предлага 16 равни категории | Запазват се **4 главни marketplace групи**. Полезните 16 тематични връзки се използват само като shortcuts/cross-links към правилния owner, не като второ дърво. |
-| Marketplace V3 казва един landing, prototype има `categories` и `marketplace` screen | Остава един landing `Обяви и услуги`. `kategorii.html` е compatibility вход. Prototype `categories` screen отпада при бъдеща consolidation. |
-| V3 казва category card = navigation, prototype отваря `form-listing` | Category/subcategory card отваря browse/filter results. Отделният `Добави обява` CTA отваря формата с bounded context. |
-| Protected form има 4 public групи, prototype показва 6 (`work`, `property` отделно) | Формата показва точно 4 групи. `Работа` и `Имоти` са под `Други обяви` и запазват specialized protected types. |
-| По-стари deep pages съдържат по два Add бутона под всяка карта | Runtime V3 вече ги заменя с navigation + един category Add. Не се връща старият модел. |
-| Generic V6 visual shell срещу одобрено Info/Health поведение | Info Lom и Health са preserve-first specialized surfaces. Generic V6 не ги редизайва и не добавя click depth. |
+Докато собственикът не одобри целия пакет, старите 4-group документи се третират само като compatibility/evidence source за:
 
-## 3. ПРОДУКТОВ МОДЕЛ В ЕДНО ИЗРЕЧЕНИЕ
+- един top-level вход `Обяви и услуги`;
+- един listings owner;
+- отделен Add flow;
+- category card = browse/navigation;
+- backward compatibility;
+- protected owners, ranking и edit safety.
 
-**Попитай.Лом е местен портал с водещ вход „Обяви и услуги“, където човек първо намира или добавя реална обява/услуга; фирмите, проверената информация, магазините, събитията, статиите и Q&A остават свързани, но при собствените си authoritative owners.**
+След цялостно одобрение трябва да има отделен documentation sync на `READ_FIRST`/Marketplace V3/Progress/Index **преди код**, така че да няма две конкуриращи се канонични презентационни истини.
 
-Водещото не е „въпроси навсякъде“. Q&A остава полезна community памет, но се показва след готовите резултати, при true no-result или в ясно вторичен контекст.
+## 3. КАНОНИЧЕН ПРОДУКТОВ МОДЕЛ
 
-## 4. GLOBAL NAVIGATION
+Основният публичен вход остава:
+
+**Обяви и услуги**
+
+В него човек вижда пет ясни публични входа:
+
+1. **Услуги**
+2. **Автомобили**
+3. **Работа**
+4. **Имоти**
+5. **Купува и продава**
+
+Публичните имена `Други услуги` и `Други обяви` отпадат.
+
+Основният модел е:
+
+`Обяви и услуги → публичен вход → категория/подкатегория → реални резултати`
+
+и отделно:
+
+`Добави обява → контекст → protected listing form`
+
+Въпросите са secondary/supporting, не водещо действие.
+
+## 4. GLOBAL NAVIGATION — НЕ СЕ ПРОМЕНЯ
 
 Desktop:
 
 `Начало | Обяви и услуги | Фирми | Инфо Лом | Статии | Още ▼ | Профил | + Добави`
 
-`Още` съдържа `Въпроси`, `Събития`, `За сайта`, `Правила`, `Контакти`.
-
-Mobile bottom navigation — точно пет позиции:
+Mobile:
 
 `Начало | Обяви | + | Инфо | Профил`
 
-Няма отделен top-level `Категории`. Няма едновременно `Категории` и `Обяви`. Няма дублиран `Вход` до `Профил`.
+Няма top-level `Категории`. `kategorii.html` остава compatibility вход към marketplace, не второ дърво.
 
-## 5. КАНОНИЧЕН SCREEN FLOW
+## 5. `ОБЯВИ И УСЛУГИ` LANDING
 
-```mermaid
-flowchart TD
-    H["Начало: търсене + Обяви и услуги"] --> M["Един landing: Обяви и услуги"]
-    M --> G["4 главни групи"]
-    G --> S["Подкатегория = филтрирани резултати"]
-    S --> D["Обява или фирмен профил"]
-    M --> A["Отделен Добави обява"]
-    S --> A
-    S --> Q["Попитай — вторично при нужда"]
-```
-
-Основното правило е:
-
-`разглеждам → избирам група → избирам подкатегория → виждам резултати`
-
-и отделно:
-
-`Добави обява → Предлагам/Търся → група → подкатегория → protected form`
-
-Подкатегорията никога не е скрит Add бутон.
-
-## 6. НАЧАЛНА СТРАНИЦА
-
-Каноничен ред:
-
-1. compact header + основно търсене `Какво търсиш в Лом?`;
-2. водещ блок `Обяви и услуги` с четирите главни групи и един `Добави обява`;
-3. малък блок с реални актуални обяви/услуги, зареден ограничено;
-4. `Открий в Лом` — Фирми, Магазини, Заведения, Събития;
-5. `Инфо Лом` — проверена информация и директни задачи;
-6. само `ПРОВЕРЕНО ГОТОВО` ръководства;
-7. полезни одобрени въпроси/отговори като вторично community съдържание.
-
-Home не показва 16 равни category карти и не прави `Задай въпрос` primary hero action.
-
-Mobile first view:
-
-- search;
-- кратко заглавие `Обяви и услуги`;
-- четирите групи в компактна 2×2 подредба;
-- един видим `Добави обява`;
-- без всички 32 leaf категории на първия екран.
-
-## 7. `ОБЯВИ И УСЛУГИ` LANDING
-
-Canonical URL: `obyavi.html`.
+Canonical landing: `obyavi.html`.
 
 Above the fold:
 
 1. breadcrumb;
 2. H1 `Обяви и услуги`;
-3. кратко обяснение без маркетингов шум;
-4. search `Какво търсиш?`;
-5. един primary CTA `Добави обява`;
-6. четири ясни group cards:
-   - Майстори и ремонти;
+3. search `Какво търсиш?`;
+4. един CTA `Добави обява`;
+5. пет public cards:
+   - Услуги;
    - Автомобили;
-   - Други услуги;
-   - Други обяви.
+   - Работа;
+   - Имоти;
+   - Купува и продава.
 
-След тях:
+Под тях:
 
-- `Всички категории` е secondary progressive disclosure, групирано под същите четири headings;
-- активни резултати;
-- content-type label `Обява` или `Фирма`;
-- filters/sort, когато са приложими;
-- true empty state с `Добави обява`, промяна на филтъра и secondary `Попитай`.
+- релевантни approved/active резултати;
+- content-type label `Обява` / `Фирма` / специализиран verified result, когато owner-ът е различен;
+- filters/sort само когато са приложими;
+- secondary Q&A/Guides след реалните резултати или при true no-result.
 
-Няма flat списък от raw database category стойности като главна IA.
+Няма raw DB category списък като главна IA.
 
-## 8. ЧЕТИРИ ГЛАВНИ ГРУПИ
+## 6. `УСЛУГИ` — PUBLIC GROUPING
 
-### 8.1 Майстори и ремонти
+`Услуги` е публичен discovery вход. Техническата listing category `Услуги` остава compatibility/storage стойност и не се показва като обяснение за backend-а.
 
-Leaves:
+В `Услуги` има осем ясни групи:
 
-`Цялостни ремонти · Бани и плочки · ВиК · Електро · Покриви · Боядисване · Дограма · Климатици`
+1. **Майстори и ремонти**
+2. **Здраве и грижа**
+3. **Домашни услуги**
+4. **Красота и лична грижа**
+5. **Компютърни и технически услуги**
+6. **Професионални услуги**
+7. **Обучение и уроци**
+8. **Транспорт и доставки**
 
-Deep view: `maistori.html`.
+### 6.1 Майстори и ремонти — protected
+
+Route: `maistori.html`.
+
+Подкатегории:
+
+- Цялостни ремонти
+- Бани и плочки
+- ВиК
+- Електро
+- Покриви
+- Боядисване
+- Дограма
+- Климатици
 
 Read composition:
 
-- approved active service Listings;
+- approved active Listings;
 - relevant approved Firms;
-- protected Construction/Masters/Ivanov presentation and priority after relevance;
-- Q&A/Articles само secondary.
+- protected Masters/Construction presentation;
+- protected Ivanov/Admin/boost priority **след relevance**.
 
-### 8.2 Автомобили
+Не се променя protected owner, ranking, write flow или SEO/detail логика.
 
-Leaves:
+### 6.2 Здраве и грижа — specialized + listings composition
 
-`Автомобили за продажба или търсене · Авточасти · Автосервизи · Диагностика · Гуми · Автомивки · Пътна помощ`
+Public entry label в `Услуги`: **Здраве и грижа**.
 
-Deep view: `avtomobili.html`.
+Destination: съществуващата `zdrave-i-lekari.html`.
 
-Автомобилите използват protected category `Автомобили и МПС`. Автомобилните услуги използват protected `Услуги + exact subcategory`.
+Самата страница запазва съществуващия specialized Health/Info content:
 
-### 8.3 Други услуги
+- реални лекари и практики;
+- лични лекари;
+- специалисти;
+- стоматолози;
+- ветеринари;
+- търсене и филтри;
+- адреси, телефони и практики;
+- status/source/freshness presentation;
+- `Обади се`, `Подробности`;
+- specialized add/correction/signal flows.
 
-Leaves:
+Страницата **не се превръща в generic listings page**.
 
-`Домашна помощ · Красота и грижа · Компютърни и технически услуги · Фото и видео · Професионални услуги · Обучение и уроци · Грижа · Транспорт, преместване и доставки`
+На същата public surface трябва ясно да има два вида съдържание:
 
-Deep view: `rabota.html` като compatibility URL с visible meaning `Други услуги`.
+1. **Проверени специалисти и практики** — Health/Info owner;
+2. **Временни частни обяви за предлагане или търсене на здравна услуга** — Listings owner.
 
-`Работа` не е част от тази група.
+Двата write потока са отделни:
 
-### 8.4 Други обяви
+- `Добави специалист или практика` → existing Health submission owner (`info_submissions` flow);
+- `Публикувай или потърси здравна услуга` → `dobavi-obqva.html` с public context `Услуги → Здраве и грижа`.
 
-Leaves:
+Един запис не се копира между Health/Info и Listings.
 
-`Електроника · Дом и градина · Дрехи и обувки · Деца и бебета · Спорт и хоби · Животни · Работа · Имоти · Друго`
+### 6.3 Домашни услуги
 
-Deep state: `obyavi.html?main=other`.
+Public leaves, без нов datastore:
 
-`Работа` и `Имоти` използват protected specialized listing type полета и semantics.
+- `Домашна помощ` → existing stored service value `Домашна помощ`;
+- `Грижа за деца, възрастни и домашни любимци` → existing stored service value със същото име.
 
-Пълното public→stored mapping е в `PUBLIC_PRODUCT_V6_IMPLEMENTATION_MATRIX.md`.
+Тази втора leaf е **обща/немедицинска грижа**. Медицинска или възстановителна грижа се намира през `Здраве и грижа`.
 
-## 9. DEEP GROUP И SUBCATEGORY PRESENTATION
+### 6.4 Красота и лична грижа
 
-Общ shell, без механично уеднаквяване на owner-specific съдържание:
+Public label: `Красота и лична грижа`.
 
-1. breadcrumb към `Обяви и услуги`;
-2. group title и кратко обяснение;
-3. group search;
-4. един contextual `Добави обява`;
-5. subcategory cards/chips — само navigation/filter;
-6. filters `Всички | Предлагат | Търсят | Фирми`, само когато са приложими;
-7. реални approved/active резултати;
-8. secondary guides/Q&A след резултатите.
+Compatibility stored service value:
 
-Desktop:
+`Красота и грижа`.
 
-- subcategories могат да бъдат видими в 2–4 колони;
-- result list/grid започва веднага след navigation/filter блока;
-- sidebar се допуска само ако помага на търсенето и не дублира основните действия.
+### 6.5 Компютърни и технически услуги
 
-Mobile:
+Public/stored value:
 
-- показват се приоритетните 4–5 leaves;
-- `Покажи всички` отваря останалите в същия контекст чрез accordion/sheet;
-- няма по два бутона под всяка leaf карта;
-- active leaf остава видим и има `aria-current`;
-- result list започва без огромна празна hero зона.
+`Компютърни и технически услуги`.
 
-## 10. ЕДИН ЗАПИС, НЯКОЛКО КОНТЕКСТА
+### 6.6 Професионални услуги
 
-Една обява се съхранява точно веднъж от Listings owner.
+Public leaves:
 
-Пример:
+- `Професионални услуги` → stored `Професионални услуги`;
+- `Фото и видео услуги` → stored `Фото, видео и събитийни услуги`.
 
-- обява `Полагане на плочки` се пази като `Услуги + Бани и плочки`;
-- може да се покаже в `Обяви и услуги`, `Майстори и ремонти`, search и свързана фирма;
-- не се копира в отделна таблица `Майстори` или `Услуги`.
+### 6.7 Обучение и уроци
 
-Фирменият профил е отделен permanent entity и също не се копира в Listings. Category results могат да покажат и `Обява`, и `Фирма`, но картата винаги казва какъв тип е резултатът.
+Public/stored value:
 
-Това премахва видимото усещане за „шест вида услуги“:
+`Обучение и уроци`.
 
-- `Майстори и ремонти` = service discovery group;
-- автомобилните услуги = част от `Автомобили`;
-- `Други услуги` = останалите service Listings;
-- `Фирми` = постоянни профили, не четвърта service форма;
-- `Комунални и ежедневни услуги` в Info Lom = проверена справочна информация, не marketplace;
-- raw stored category `Услуги` остава техническа compatibility стойност и не се показва като пета публична група.
+### 6.8 Транспорт и доставки
 
-## 11. ADD FLOW
+Public label:
 
-### 11.1 Global `+ Добави`
+`Транспорт и доставки`.
 
-Default options:
+Compatibility stored value:
+
+`Транспорт, преместване и доставки`.
+
+## 7. `ЗДРАВЕ И ГРИЖА` — CONTROLLED HEALTH SERVICE TAXONOMY
+
+За временните Listings health services се предлага следната контролирана public taxonomy:
+
+1. Домашни здравни грижи
+2. Медицинска сестра и манипулации
+3. Рехабилитация и кинезитерапия
+4. Физиотерапия
+5. Психологическо консултиране
+6. Логопед и специализирани терапии
+7. Диетолог и хранителни консултации
+8. Терапевтичен масаж и възстановяване
+9. Грижа за възрастни и болни
+10. Придружаване и помощ при лечение
+11. Друга здравна услуга
+
+При `Друга здравна услуга`:
+
+- има задължително поле за конкретно наименование;
+- свободният текст не става нова category/subcategory стойност;
+- остава под `Здраве и грижа → Друга здравна услуга`;
+- минава през moderation;
+- често повтаряща се услуга може по-късно да бъде предложена за official taxonomy amendment от Admin.
+
+### ВАЖЕН LOCKED DATA-CONTRACT КОНФЛИКТ
+
+Текущият `PUBLIC_IA_STAGE1_TAXONOMY_DECISION.md` и `public-category-dictionary-v1.js` разрешават точно 22 service subcategories. Новите 11 health listing values **не са в текущия protected validator/dictionary**.
+
+Следователно:
+
+- public health taxonomy може да бъде одобрена като продуктова структура;
+- **не може да се кодира като listing stored values** без отделен LOCKED taxonomy/data-integrity amendment;
+- не се променя тихо CHECK/trigger/RPC/dictionary;
+- не се измисля ново поле/schema само за да се заобиколи V1 validator.
+
+Това е реален stop condition преди implementation на health Listings taxonomy.
+
+### Регулирани медицински дейности
+
+За дейности, при които професионална квалификация/специалност/източник е съществена, трябва отделно LOCKED решение за verification/moderation contract.
+
+До такова решение:
+
+- не се показва непроверена listing обява като `потвърден специалист`;
+- не се създават нови права, credential полета или автоматично одобрение;
+- Health/Info verified dataset остава единственият verified specialist owner.
+
+## 8. `АВТОМОБИЛИ`
+
+Route: `avtomobili.html`.
+
+Public subcategories:
+
+1. Автомобили за продажба или търсене
+2. Авточасти
+3. Автосервизи
+4. Диагностика
+5. Гуми
+6. Автомивки
+7. Пътна помощ
+
+Storage compatibility:
+
+- vehicle listing → category `Автомобили и МПС`;
+- automotive services → category `Услуги` + exact existing service subcategory.
+
+Няма втори automotive datastore.
+
+## 9. `РАБОТА`
+
+Public entry: **Работа**.
+
+Canonical target state: marketplace filtered view за stored category `Работа`.
+
+Не се измисля нов profession taxonomy в този Recovery.
+
+Protected listing types остават:
+
+- `Предлага работа`
+- `Търси работа`
+
+Public filters могат да бъдат:
+
+- Всички
+- Предлагат работа
+- Търсят работа
+
+`Работа` вече не е leaf под `Други обяви`.
+
+## 10. `ИМОТИ`
+
+Public entry: **Имоти**.
+
+Canonical target state: marketplace filtered view за stored category `Имоти`.
+
+Не се измисля нов property subtype/category schema.
+
+Protected listing types остават:
+
+- `Продава имот`
+- `Отдава под наем`
+- `Търси под наем`
+- `Търси за купуване`
+
+`Имоти` вече не е leaf под `Други обяви`.
+
+## 11. `КУПУВА И ПРОДАВА`
+
+Public entry: **Купува и продава**.
+
+Под него остават general goods/listing categories:
+
+1. Електроника
+2. Дом и градина
+3. Дрехи и обувки
+4. Деца и бебета
+5. Спорт и хоби
+6. Животни
+7. Друго
+
+Те mapping-ват към съществуващите exact protected listing categories.
+
+Автомобили, Работа и Имоти не се дублират тук, защото вече имат собствен ясен public вход.
+
+## 12. BROWSE И ADD СА РАЗЛИЧНИ ДЕЙСТВИЯ
+
+Основно правило:
+
+- category/group/subcategory card → browse/filter results;
+- отделен `Добави обява` → form;
+- contextual Add може да носи валиден selected context;
+- prefill е видим и editable;
+- `edit=<id>` винаги има приоритет над create params;
+- presentation layer не задава owner/status/role/direct-publish.
+
+Няма по два `Предложи` / `Търся` primary бутона под всяка category card.
+
+## 13. ADD FLOW
+
+Global `+ Добави` запазва:
 
 1. `Добави обява`;
 2. `Добави фирма`;
 3. `Задай въпрос`.
 
-Specialized actions се показват в собствения owner context:
+Specialized actions остават в собствения context.
 
-- Health → `Добави лекар или здравна услуга` чрез Health/Info submission owner;
-- Shops → `Добави магазин` чрез Shops owner;
-- Info → `Предложи корекция/Сигнализирай грешка`;
-- Events → няма public Add;
-- Articles → няма public Add.
+### Listing create target
 
-### 11.2 Listing form
-
-Public create order:
+Public order:
 
 1. `Предлагам` / `Търся`;
-2. една от четирите главни групи;
-3. exact bounded subcategory;
+2. една от 5 public main entries;
+3. category/subcategory/owner-specific type;
 4. existing protected listing details.
 
-Contextual `Добави обява` може да prefill-не group/subcategory. Prefill е видим и editable. Не задава permission/status/owner. `edit=<id>` винаги има приоритет.
+Mappings:
 
-Формата не показва `Работа` и `Имоти` като пета и шеста главна група. Те са leaves под `Други обяви`; след избор се показват protected specialized types.
+- Services: existing service listing compatibility types;
+- Vehicles: vehicle vs auto-service semantics се различават и се пазят;
+- Work: `Предлага работа` / `Търси работа`;
+- Property: existing 4 protected property types;
+- Trade: existing standard listing types.
 
-### 11.3 Firm form
+Health specialized add е отделен от Health listing add.
 
-`Добави фирма` означава постоянен местен профил. Не се смесва с временно service offer. Bounded category prefill се допуска само когато е реално mapping-нат и видим; непознат URL param не се записва.
+## 14. OWNER BOUNDARIES
 
-## 12. FORMS, ROLES И LIFECYCLE
+| Content | Authoritative owner | Public composition rule |
+|---|---|---|
+| Temporary listing | Listings / `supabase-listings.js` | Stored once; може да се показва в релевантни contexts |
+| Permanent firm profile | Firms | Не се копира в Listings |
+| Masters/Construction | Protected Masters + Listings/Firms composition | Ivanov/protected rules preserved |
+| Verified Health specialist/practice | Health/Info (`info_entries`, Health render/submission owners) | Не се превръща в generic listing |
+| Temporary health service offer/seek | Listings | Separate content type, never auto-verified |
+| Shops | Shops owner | Не се route-ва към generic Firm/Listing |
+| Restaurants | Firms category `Заведения` | Няма втори restaurant datastore |
+| Events | Events | Няма fake public Add |
+| Q&A | Questions/Answers | Secondary community layer |
+| Guides | Editorial | Не дублира mutable verified facts |
 
-Protected business rules остават непроменени.
+## 15. SEARCH И RESULT LABELS
 
-| Роля/flow | Create result | Edit result | Ограничения |
-|---|---|---|---|
-| Normal listing/firm | Изпратено за преглед | Редакцията е изпратена; последната approved версия остава public | Quotas/media/protected validation остават |
-| Moderator own listing/firm | Същото като normal | Същото като normal | Без self-approval, direct publish или Admin options |
-| Admin listing/firm | Публикувано според protected owner | Запази и публикувай | Само съществуващите Admin exceptions |
+Cross-owner search трябва ясно да показва какъв е резултатът:
 
-Всеки write flow има:
+- Обява
+- Фирма
+- Проверен специалист/практика
+- Магазин
+- Инфо
+- Събитие
+- Въпрос/отговор
+- Ръководство
 
-- точен context и owner;
-- inline validation + видим error summary;
-- preservation на въведеното при validation/network error;
-- dirty-leave guard за дълги content форми;
-- submit lock срещу double submit;
-- explicit pending/public success receipt;
-- form body се заменя с completed receipt след потвърден success;
-- accessible focus/live-region поведение;
-- следващо логично действие.
+Health verified result има приоритет пред community opinion при търсене на конкретен лекар/стоматолог/специалист.
 
-Form coverage включва Listings create/edit, Firms create/edit/expanded, Question, Answer, Health add/correction/signal, Shop proposal, Info correction, Report, Contact, Login, Registration, Forgot и Reset password.
+Непроверена health listing не получава verified badge по presentation logic.
 
-Точната QA матрица остава в `PUBLIC_PRODUCT_V6_C_FORM_LIFECYCLE_AUDIT_MATRIX.md`; тя е task-specific acceptance source, не разрешение за нов owner.
+## 16. `ИНФО ЛОМ` НЕ СЕ ПРЕСТРУКТУРИРА
 
-## 13. SPECIALIZED OWNERS
+`Инфо Лом` остава отделен verified information продукт.
 
-### Info Lom и Health
+В тази задача не се променят:
 
-- preserve-first;
-- шестте Info families остават директни;
-- Health остава specialized verified dataset;
-- съществуващите sticky tabs, priority cards, emergency/contact actions, source/freshness и click depth не се редизайват generically;
-- частни лекари/практики се добавят само чрез current specialized Health submission flow;
-- community мнение не става verified Health факт.
+- шестте Info families;
+- `Инфо Лом → Здраве`;
+- source/freshness/correction flow;
+- Admin/Moderator Info права;
+- specialized owners.
 
-### Shops
+Връзката `zdrave-i-lekari.html → Инфо Лом → Здраве` остава полезна contextual връзка, не дублиран owner.
 
-- specialized Shops owner;
-- `Добави магазин` остава local modal/form;
-- не се route-ва към generic Firm/Listing;
-- tabs/tags/classification се запазват.
+## 17. PUBLIC LABELS ≠ STORED VALUES
 
-### Restaurants
+Публичният език е за хората. Stored values са compatibility/data contract.
 
-- read/add остава върху Firms owner с category `Заведения`;
-- няма втори restaurant datastore;
-- няма booking/payment promise.
+Примери:
 
-### Events
+- public `Красота и лична грижа` → stored `Красота и грижа`;
+- public `Фото и видео услуги` → stored `Фото, видео и събитийни услуги`;
+- public `Транспорт и доставки` → stored `Транспорт, преместване и доставки`;
+- public `Купува и продава` → няма една DB category; това е presentation group над 7 existing categories;
+- public `Здраве и грижа` → specialized Health route + бъдещ Listings context; не е една съществуваща stored listing subcategory.
 
-- read-only public discovery на approved current/upcoming events;
-- няма fake `Добави събитие`;
-- public submit изисква отделно owner/form/moderation решение.
+Никакъв public rename не мигрира DB стойности автоматично.
 
-## 14. SEARCH, Q&A, ARTICLES И RECOMMENDATIONS
+## 18. V17 PROTOTYPE — НЕ Е ACCEPTED
 
-### Search
+Потвърдените отклонения остават вход за бъдеща consolidation, не за piecemeal patch:
 
-- един explicit Search owner;
-- Supabase-backed owner queries, не localStorage/static-only truth;
-- result families ясно обозначават Info, Firm, Listing, Shop, Event, Q&A и Guide;
-- relevance преди protected priority;
-- partial owner failure не се показва като false no-result;
-- true no-result предлага промяна на търсенето, applicable Add и secondary contextual `Попитай`.
+1. отделни/дублирани category/marketplace presentation layers;
+2. category cards, които могат да отварят form вместо browse;
+3. incomplete/unsafe mapping;
+4. форма, построена по остарялата 4/6-group логика;
+5. fake filter values, които могат да попаднат като subcategory;
+6. натрупани render/CSS layers;
+7. липса на доказан rendered acceptance за current recovery target.
 
-### Q&A
+След одобрение R1 трябва да консолидира към **5-entry presentation**, а не към старата four-group Recovery.
 
-- secondary community knowledge owner;
-- canonical/duplicate suggestion не прави destructive auto-merge;
-- pending/hidden Q&A не е public;
-- community answer не се обозначава като verified Info;
-- category/search context може bounded да prefill-не Ask form.
+## 19. RECOVERY STAGES
 
-### Articles
+### R0 — Documentation recovery — текущо
 
-- само `ПРОВЕРЕНО ГОТОВО` се показва като готов guide;
-- mutable facts остават при Info/other authoritative owner;
-- guide свързва към актуалния owner, не копира phone/hours като вечна истина.
+- актуализиран Recovery;
+- актуализирана Implementation Matrix;
+- exact public/stored/owner map;
+- protected conflict check;
+- whole-structure review.
 
-### Recommendations
+### R1 — Prototype consolidation — само след whole approval
 
-- relation идва само от eligible approved source;
-- няма fake stars, `най-препоръчван` или ranking boost без методология и отделно одобрение;
-- protected Ivanov/Admin priority остава след relevance.
-
-## 15. FACEBOOK BRIDGE — ЗАДЪЛЖИТЕЛНО ЗАПАЗЕН
-
-Product loop:
-
-`Публикувай в Попитай → одобрено canonical съдържание → потребителят избира Сподели → Facebook носи reach → canonical URL връща към Попитай`.
-
-Правила:
-
-- Facebook е distribution, не data owner;
-- pending/rejected/private content няма public share CTA;
-- share сочи към един canonical Popitai URL;
-- preferred chain: native Share → explicit Facebook share → Copy link/text → manual fallback;
-- няма Facebook SDK по подразбиране;
-- няма scraping, arbitrary group auto-posting, Facebook credential/session cookie или import на comments/reactions;
-- Facebook→Popitai е user-assisted paste на собствен текст с visible suggested prefill и normal validation/moderation;
-- media се re-upload-ва през правилния Popitai owner;
-- external likes/comments не стават Q&A answers/recommendations;
-- dynamic OG трябва да е server/edge readable и да не копира volatile/private facts;
-- exact Meta endpoint се проверява отново непосредствено преди implementation.
-
-## 16. ВЪНШНИ МОДЕЛИ — ВЗЕМАМЕ / АДАПТИРАМЕ / ОТХВЪРЛЯМЕ
-
-Проверени официални public surfaces към 02.09.2026:
-
-| Модел | Какво доказва | Вземаме | Адаптираме за Попитай.Лом | Не копираме |
-|---|---|---|---|---|
-| [OLX Bulgaria](https://www.olx.bg/) | Search + един `Добави обява` + главни категории + реални listings | Един marketplace landing, видим Add, categories като browse вход | Четири ясни групи вместо голям национален flat каталог; местни owner-aware резултати | Promo density, бизнес upsell, огромна равнопоставена category решетка |
-| [Thumbtack](https://www.thumbtack.com/) | Task-first search и popular local pro categories | Естествен въпрос `Какво търсиш?`, бързи high-intent service входове | Резултатите включват и Listings, и Firms с ясен content label | Quote/lead marketplace, guarantees, bookings или review claims без backend |
-| [Taskrabbit services](https://www.taskrabbit.com/services) | Service families + nested concrete tasks + featured tasks | Progressive disclosure: group → конкретна услуга | Само 22 approved service leaves + 1 vehicle entry + 9 other listing categories; mobile показва приоритет и `Покажи всички` | Стотици unbounded task pages, booking/hourly/payment flow |
-| [Houzz professionals](https://www.houzz.com/professionals) | Search first, popular services, grouped all-professionals catalogue и provider results | Search + popular group shortcuts + grouped expansion + provider cards в същия discovery path | Firms и Listings остават отделни owners, но могат да се покажат заедно | Stars, verified hires, licensing, send-message or marketplace claims без доказан owner |
-
-Изводът не е „копираме един сайт“. Комбинацията е:
-
-- OLX clarity за browse/add;
-- Thumbtack task-first language;
-- Taskrabbit progressive grouping;
-- Houzz provider composition и guides/Q&A като secondary layer;
-- всички adapted към малък местен портал без измислени рейтинги, bookings или нови owners.
-
-## 17. VISUAL SYSTEM
-
-Целта е една разпознаваема система, не еднакви страници:
-
-- shared shell, typography, spacing, buttons, cards, states и focus language;
-- owner-specific Info/Health/Shops/Forms запазват необходимата структура;
-- един primary action на viewport context;
-- secondary actions имат по-ниска визуална тежест;
-- no giant hero, no empty vertical space, no four equal outline buttons в един ред;
-- cards са navigation surfaces, не button clusters;
-- mobile uses progressive disclosure, not hidden functionality;
-- copy е кратко, професионално и на естествен български;
-- няма internal думи `owner`, `protected`, `runtime`, `verified hire` в public copy.
-
-## 18. RENDER/PERFORMANCE ARCHITECTURE
-
-- един renderer/lifecycle owner на root;
-- не се наслагва V18 върху V17;
-- бъдещата prototype задача първо консолидира V8–V17 в bounded active files;
-- unused broken `full-site.js` се класифицира/премахва едва след coverage проверка;
-- category/route/form mapping идва от един canonical dictionary;
-- няма паралелни `categories`/`marketplace` trees;
-- no MutationObserver patch chain като production architecture;
-- mobile initial path няма all-owner mega-query;
-- exact fields/limits/pagination/show-more;
-- no heavy Facebook/AI/framework dependency за основния flow;
-- CI трябва изрично да включи `v6-prototype/` преди prototype acceptance.
-
-## 19. ПОТВЪРДЕНИ PROTOTYPE ОТКЛОНЕНИЯ
-
-Текущият V17 prototype не е acceptance baseline, защото:
-
-1. има отделен `categories` screen и втори marketplace category expansion;
-2. category/subcategory buttons route-ват директно към `form-listing`;
-3. 16 public IDs не са пълно mapping-нати към form groups;
-4. listing form има шест, а не четири public groups;
-5. default `Всички/Предлага/Търси` могат да попаднат като fake subcategory;
-6. docs описват V2–V7, а active HTML зарежда V8/V9/V17 layers;
-7. CSS е натрупан в много overriding layers, включително brittle positional selectors;
-8. active JavaScript минава syntax проверка, но старият unused `full-site.js` не минава;
-9. няма PR/status/workflow/browser evidence за head `9add220`;
-10. V6-C не е приет.
-
-## 20. RECOVERY И IMPLEMENTATION STAGES
-
-### R0 — Documentation recovery
-
-- full document index;
-- canonical structure;
-- implementation/acceptance matrix;
-- Master/Progress/Handoff sync;
-- user review.
-
-### R1 — Prototype consolidation, само след approval
-
-- един route/runtime/form lifecycle owner;
+- без V18/new layer;
 - един marketplace landing;
-- exact four-group mapping;
-- category cards browse, Add is separate;
-- current Info/Health parity preserved;
-- no new visual layer file.
+- 5 public entries;
+- category cards browse;
+- Add отделно;
+- current Health/Info parity preserved;
+- old compatibility routes accepted without duplicate tree;
+- no DB/schema/RLS changes.
 
-### R2 — Rendered design review
+**R1 не включва health taxonomy DB amendment**, докато няма отделно LOCKED решение.
 
-- desktop + mobile screenshots/interaction;
-- Home, landing, all 4 groups, representative subcategories, Add flow;
-- normal/Moderator/Admin form states;
-- Search success/empty/partial error;
-- Info/Health/Shops parity;
-- focus/loading/error/dirty/success.
+### R2 — Rendered desktop/mobile review
+
+Home, landing, Services, Autos, Work, Property, Trade, representative leaves, Health dual-content composition, Add flow, Search and empty states.
 
 ### R3 — Technical design
 
-- production file/owner map;
-- route/dictionary consolidation;
-- query budgets/index impacts;
-- login return/security;
-- OG/share edge strategy;
-- migration plan only if proven necessary;
-- protected regression plan.
+- exact production owner/file map;
+- route adapter;
+- query budgets;
+- compatibility redirects;
+- separate health taxonomy/verification locked decision if approved as product requirement.
 
 ### R4 — Incremental production implementation
 
-Само през approved slices, PR, CI, merge и production runtime QA. Няма big-bang rewrite.
+Само през approved slices, PR, CI, merge и production runtime QA.
 
-## 21. ACCEPTANCE GATES
+## 20. WHOLE-STRUCTURE APPROVAL GATE
 
-Recovery може да стане `READY FOR USER REVIEW` само ако:
+За цялостно одобрение собственикът трябва да приеме като пакет:
 
-- всички 4 groups и leaves имат exact stored mapping/owner;
-- всички 16 стари thematic concepts имат disposition и няма второ tree;
-- every visible CTA има owner/destination/prefill/state;
-- forms/roles/media/lifecycle coverage е отчетен;
-- Facebook Bridge е отчетен;
-- Info/Health/Shops/Events boundaries са отчетени;
-- external pattern matrix е source-backed;
-- Master, Progress, Handoff и Document Index не си противоречат;
-- `git diff --check` и documentation cross-reference checks минават.
+- един top-level `Обяви и услуги`;
+- петте public entries;
+- осемте groups под `Услуги`;
+- full Masters/Autos/Trade mappings;
+- Work/Property като отделни public entries;
+- Health dual-owner presentation;
+- 11-item public health service taxonomy;
+- browse ≠ Add;
+- public labels ≠ stored values;
+- no duplicate owner/data;
+- Q&A secondary;
+- Info Lom separate;
+- protected core unchanged.
 
-Prototype acceptance по-късно изисква:
+Това whole approval разрешава **само bounded prototype consolidation** по R1.
 
-- syntax/asset/reference checks;
-- CI coverage за prototype;
-- rendered desktop/mobile review;
-- keyboard/focus/modal review;
-- exact route/form mapping tests;
-- protected regression matrix;
-- no false PASS without real browser evidence.
+То **не** е автоматично разрешение за:
 
-## 22. STOP CONDITIONS
+- DB taxonomy V2;
+- CHECK/trigger/RPC/schema/RLS промяна;
+- regulated-health credential/verification model;
+- нов write owner;
+- production merge.
 
-Спира се за owner решение само при действително ново бизнес решение за:
+За тях остава отделен LOCKED decision.
 
-- роли/права/RLS/schema;
+## 21. STOP CONDITIONS
+
+Спира се само при реално ново/LOCKED решение за:
+
+- roles/rights/RLS/schema;
 - ownership/status/approval/direct publish;
-- limits/quotas/media;
+- quotas/media;
 - protected Firms/Listings/Masters/Admin/Ivanov behavior;
-- нов write owner или нова форма;
-- необратимо премахване на approved capability.
+- health listing taxonomy DB amendment;
+- regulated professional verification;
+- new write owner/form;
+- irreversible removal of approved capability.
 
-Остарял handoff, доказано prototype отклонение или конфликт с по-висок approved source не изисква ново „ОК“.
+Остарял prototype или стар 4-group presentation не е основание да се връща продуктът назад.
