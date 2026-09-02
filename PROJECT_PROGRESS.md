@@ -1,252 +1,190 @@
-# Попитай.Лом — ТЕКУЩ CHECKPOINT
+# Попитай.Лом — CURRENT PROJECT CHECKPOINT
 
-Актуализирано: 01.09.2026
+Актуализирано: 02.09.2026
+Branch: `v6-product-foundation-draft`
 
-## 1. ПРАВИЛА ПРЕДИ РАБОТА
+## 1. CURRENT STATUS
 
-Ред на четене:
+V6 Recovery пакетът е **готов за user review**.
+
+Не е разрешено:
+
+- V18 или нов visual layer;
+- нов prototype implementation преди одобрение на Recovery;
+- production UI/backend/schema/RLS промяна;
+- merge на V6 към `main`;
+- промяна на protected business logic като страничен ефект.
+
+Production `main` не е променен от V6. V6-C не е приет и head `9add22055dfa663f585a48f094585d5bedced766` няма доказан browser/rendered PASS.
+
+## 2. CURRENT AUTHORITY SET
+
+Minimum read order:
+
 1. `PROJECT_RULES_00_READ_FIRST.md`
 2. `PROJECT_RULES_PROTECTED_CORE.md`
-3. `PROJECT_RULES_ADMIN_MODERATOR.md`
-4. `PROJECT_RULES.md`
-5. `PROJECT_RULES_RENDER_OWNERSHIP.md`
+3. `PROJECT_RULES.md`
+4. `PROJECT_RULES_RENDER_OWNERSHIP.md`
+5. `PROJECT_RULES_ADMIN_MODERATOR.md` — само при roles/permissions/ownership/moderation/protected flow
 6. `PUBLIC_MARKETPLACE_V3_APPROVED_SPEC.md`
-7. `PUBLIC_SITE_INFORMATION_ARCHITECTURE_APPROVED_SPEC.md`
-8. `ADMIN_PANEL_V2_APPROVED_SPEC.md`
-9. `PUBLIC_PRODUCT_V6_MASTER_CONTROL.md`
-10. completed B1–B9 contracts
-11. `PUBLIC_PRODUCT_V6_C_FULL_SITE_INTERFACE_BLUEPRINT.md`
-12. `PUBLIC_PRODUCT_V6_C_PROTECTED_ADMIN_IVANOV_REGRESSION_GATE.md`
-13. `PUBLIC_PRODUCT_V6_C_FORMS_ROLES_VISIBILITY_LOCK.md`
-14. `PUBLIC_PRODUCT_V6_C_FORM_GUIDANCE_VALIDATION_LOCK.md`
-15. `PUBLIC_PRODUCT_V6_C_FORM_LIFECYCLE_COMPLETENESS_LOCK.md`
-16. `PUBLIC_PRODUCT_V6_C_FORM_LIFECYCLE_AUDIT_MATRIX.md`
-17. `PUBLIC_PRODUCT_V6_C_PRODUCTION_PARITY_AUDIT.md`
+7. `PUBLIC_PRODUCT_V6_CANONICAL_RECOVERY.md`
+8. `PUBLIC_PRODUCT_V6_IMPLEMENTATION_MATRIX.md`
+9. `PUBLIC_PRODUCT_V6_DOCUMENT_INDEX.md`
+10. този файл
 
 При конфликт:
 
-**LOCKED rules > approved production specs > V6 Master Control > completed B1–B9 > current V6-C contracts/audits > older C/Home drafts > prototype.**
+`LOCKED rules → Marketplace V3/approved production specs → latest owner decision → Recovery/Matrix → task-specific source → prototype`.
 
----
+## 3. RECOVERY DELIVERABLES
 
-## 2. PRODUCTION — НЕПРОМЕНЕН ОТ V6-C
+Готови:
 
-Marketplace V3 остава current approved production baseline на `main`.
+- `PUBLIC_PRODUCT_V6_CANONICAL_RECOVERY.md` — една product truth, screen flow, visual direction, conflict resolution, external patterns и stages;
+- `PUBLIC_PRODUCT_V6_IMPLEMENTATION_MATRIX.md` — exact groups/leaves/stored mapping/routes/owners/forms/roles/Facebook/acceptance;
+- `PUBLIC_PRODUCT_V6_DOCUMENT_INDEX.md` — classification и minimum read routing за всички root Markdown документи;
+- `PUBLIC_PRODUCT_V6_MASTER_CONTROL.md` — concise current roadmap;
+- `PUBLIC_PRODUCT_V6_NEXT_CHAT_START.md` — safe zero-explanation handoff.
 
-Desktop:
-`Начало | Обяви и услуги | Фирми | Инфо Лом | Статии | Още ▼ | Профил | + Добави`
+Static checks completed:
 
-Mobile:
+- all root Markdown files са отчетени в Document Index;
+- all referenced local Markdown files съществуват;
+- 22 protected service leaves + 9 other listing categories + vehicle entry са отчетени;
+- четирите production V3 keys `maistori / avtomobili / uslugi / other` са отчетени;
+- documentation diff check е clean.
+
+## 4. CANONICAL PRODUCT STRUCTURE
+
+Leading product:
+
+`Обяви и услуги`
+
+Един landing, четири главни групи:
+
+1. Майстори и ремонти;
+2. Автомобили;
+3. Други услуги;
+4. Други обяви.
+
+Rules:
+
+- category/subcategory cards browse/filter results;
+- separate `Добави обява` carries bounded context to the protected form;
+- form exposes exactly four public groups;
+- `Работа` and `Имоти` are leaves under `Други обяви` with protected specialized types;
+- Q&A is secondary/supporting;
+- one Listing is stored once and can be composed into relevant contexts;
+- Firms are permanent profiles;
+- Health/Info and Shops retain specialized owners;
+- Events has no fake public Add;
+- `kategorii.html` remains compatibility only.
+
+Desktop navigation:
+
+`Начало | Обяви и услуги | Фирми | Инфо Лом | Статии | Още | Профил | + Добави`
+
+Mobile navigation:
+
 `Начало | Обяви | + | Инфо | Профил`
 
-V6-C НЕ е променял production UI, Supabase schema/RLS, роли, квоти, moderation, protected owners/ranking или production URLs.
+## 5. PROTECTED CORE — UNCHANGED
 
----
-
-## 3. ЗАЩИТЕНО ЯДРО
-
-Непроменено:
-- Firms;
-- Listings;
-- Construction/Masters;
-- Admin/Moderator boundary;
-- quotas/status/approval/direct publication;
-- expanded access;
-- specialized Health/Info/Shops owners;
-- protected Admin/Ivanov priority after relevance;
+- Listings/Firms/Masters owners;
+- Admin/Moderator permissions and self-moderation boundary;
+- ownership/RLS/status/approval/direct publish;
+- monthly quotas;
+- media rules;
+- last approved public version during normal edits;
+- expanded firm access;
+- Work/Property specialized types;
+- Health/Info/Shops owner boundaries;
+- protected Admin/Ivanov/boost priority after relevance;
 - Firm ↔ Listing ↔ Construction/Ivanov relations.
 
-Admin media truth:
-- normal listing: до 6 снимки;
-- normal firm: 1 лого + до 6 gallery снимки;
-- Admin-owned firm/listing: backend/Supabase няма image limit;
-- frontend `20` = technical mismatch, not business rule.
+Admin media truth remains:
 
-Known separate protected defect:
-- Moderator-own-business edit mismatch remains unresolved and must not be copied into V6 canonical behavior.
+- normal listing: up to 6 images;
+- normal firm: 1 logo + up to 6 gallery images;
+- Admin-owned firm/listing: no backend/Supabase image limit;
+- old frontend `20` is a technical mismatch, not a new business rule.
 
----
+Known separate protected defect remains separate:
 
-## 4. COMPLETED V6 CONTRACTS / AUDITS
+- Moderator-own-business edit mismatch is not silently fixed during V6.
 
-Completed:
-- V6-0;
-- A1/A2;
-- B1–B9;
-- Full-site C Blueprint;
-- protected Admin/Ivanov regression gate;
-- forms/roles/publication/visibility lock;
-- contextual form guidance/validation lock;
-- full form lifecycle lock;
-- form-by-form lifecycle matrix;
-- **production parity audit** comparing the active V6 prototype with current `main` production code.
+## 6. CURRENT V17 PROTOTYPE AUDIT
 
-New authority:
-`PUBLIC_PRODUCT_V6_C_PRODUCTION_PARITY_AUDIT.md`.
+Confirmed:
 
----
+- branch is ahead of `main`; production app was not changed by V6;
+- `full-site.html` loads V8 runtime/controller, V9 utility route and visual layers through V17;
+- active JS syntax passes and referenced active assets exist;
+- no PR/status/workflow/browser evidence exists for the checked head;
+- existing CI does not cover `v6-prototype/`.
 
-## 5. CURRENT V6-C RESULT
+Confirmed deviations:
 
-# V6-C IS NOT YET ACCEPTED
+1. separate `categories` screen duplicates the marketplace tree;
+2. subcategory cards open `form-listing` instead of browse/filter;
+3. public category IDs are incompletely mapped and can default incorrectly;
+4. form has six public groups instead of four;
+5. fake `Всички/Предлага/Търси` values can reach subcategory context;
+6. old status/handoff documents described obsolete runtime layers;
+7. CSS/JS layering continued before C acceptance;
+8. unused legacy `v6-prototype/full-site.js` has a syntax error.
 
-The source-level audit found real parity gaps. Do not proceed to pixel polish or V6-D until they are closed.
+These are not permission for piecemeal patches. They are inputs to one future bounded consolidation task.
 
-### P0 blockers
+## 7. ADMIN/MODERATOR BASELINE
 
-1. Docs/runtime mismatch: `full-site-form-lifecycle-audit-v7.js` exists but is not loaded by `full-site.html`.
-2. Do not load v7 blindly; v6/v7 would create competing dirty/close lifecycle owners.
-3. Active prototype does not actually represent all required Search states claimed by docs.
-4. Profile is much too simplified versus production status/correction/resubmit flows.
-5. Health/Info is much too simplified versus current verified/source/freshness/official/admission capabilities.
-6. Listing/Firm media workflow is much too simplified versus current `image-upload.js` capabilities.
+Admin/Moderator Panel v2 is already completed and production-QA-checked. It is not restarted as part of V6.
 
-### P1 gaps
+Keep:
 
-- Listing duplicate warning;
-- Shop dynamic tabs/context/tags/classification;
-- rich Info family templates/subnavigation/actions/corrections;
-- Events browsing/search/Q&A/Info recovery;
-- Auth password show/hide;
-- bounded category/subcategory/type prefill with edit precedence;
-- Add sheet accessibility interaction verification;
-- Firm contextual report;
-- Q&A author/date/gallery.
+- Dashboard/menu/sidebar/mobile navigation/content shells;
+- role-correct UI and backend enforcement;
+- Moderator self-moderation protection;
+- Admin-only permanent delete;
+- Admin-only roles/expanded-access management;
+- Info Lom protected RPC/status boundaries;
+- live rollback-only security checks where applicable.
 
-Exact matrix and decisions are in `PUBLIC_PRODUCT_V6_C_PRODUCTION_PARITY_AUDIT.md`.
+Do not create fake QA records.
 
----
+## 8. EXACT NEXT TASK
 
-## 6. IMPORTANT PRODUCTION CAPABILITIES CONFIRMED BY AUDIT
+`USER REVIEW OF V6 RECOVERY PACKAGE — NO CODE`
 
-### Listings
-- publisher personal/approved firm;
-- quota info;
-- duplicate warning;
-- dependent categories/types;
-- Work/Property special types;
-- EUR/BGN price;
-- negotiable/free;
-- phone/city/street;
-- media uploader;
-- Admin protected controls;
-- filters/sort/protected ordering.
+Review together:
 
-### Media
-Current production already has:
-- JPG/PNG/WebP validation;
-- max file size;
-- client resize/optimization;
-- processing preview;
-- per-image errors;
-- count;
-- remove;
-- caption;
-- drag/drop;
-- multiple optimized sizes.
+1. `PUBLIC_PRODUCT_V6_CANONICAL_RECOVERY.md`;
+2. `PUBLIC_PRODUCT_V6_IMPLEMENTATION_MATRIX.md`.
 
-V6 must not reduce this capability to a decorative upload button.
+After explicit whole-package approval, the next bounded task is:
 
-### Firms
-- base profile + logo/gallery;
-- expanded profile fields/visibility controls;
-- current media edit;
-- cover/gallery/contact actions;
-- drafts while approved version remains;
-- contextual report.
+`R1 — CONSOLIDATE THE ISOLATED V6 PROTOTYPE TO THE APPROVED FOUR-GROUP STRUCTURE`
 
-### Profile
-Production has more than V6 currently shows:
-- own Questions/Firms/Listings;
-- pending/approved/rejected/needs changes;
-- moderation notes;
-- Q&A corrections/resubmit;
-- Info proposals/reports/statuses;
-- needs-more-info flows;
-- expanded firm edit/preview.
+R1 constraints:
 
-### Health / Info
-- seven Health groups;
-- last confirmed/source;
-- official references;
-- calls/official pages;
-- hospital admission/emergency/departments;
-- six Info families;
-- task shortcuts/subnavigation;
-- correction/report.
+- no V18/new visual layer;
+- no production changes;
+- one route/runtime/form lifecycle owner;
+- one marketplace landing;
+- category cards browse; Add is separate;
+- exact four-group mapping;
+- Info/Health parity preserved;
+- CI/static checks first, then real desktop/mobile rendered review.
 
-### Shops
-- six tabs;
-- category-specific copy/Add;
-- search/count/subcategories;
-- tags/classification/custom classification;
-- dirty/success lifecycle.
+## 9. STOP CONDITIONS
 
-### Auth / shell
-- password show/hide;
-- forgot/reset;
-- Add focus trap/Escape/backdrop/focus return;
-- specialized Shop/Health add bridges.
+Stop the owner only for a genuinely new decision affecting:
 
----
+- roles/rights/RLS/schema;
+- ownership/status/approval/direct publish;
+- quotas/media limits;
+- protected Firms/Listings/Masters/Admin/Ivanov behavior;
+- a new write owner/form;
+- removal of an approved capability.
 
-## 7. INTENTIONALLY NOT COPIED 1:1
-
-Do not restore automatically:
-- old production public taxonomy as V6 IA;
-- Admin frontend image cap 20;
-- Moderator own-business edit bug;
-- technical English labels;
-- old inline/layout patterns;
-- one-article limitation;
-- fake ratings/verification;
-- public Add Event.
-
-Current Home also has live Listing/Firm preview sections. V6 Home has an already approved cleaner order. Those preview sections are NOT an automatic parity requirement as long as Listings/Firms remain easily discoverable through their hubs/Search. Their possible return is a later presentation decision.
-
----
-
-## 8. CURRENT PROTOTYPE RUNTIME TRUTH
-
-`v6-prototype/full-site.html` currently loads:
-- `full-site-functional-parity-v4.js`;
-- `full-site-runtime-v2.js`;
-- `full-site-functional-parity-v3.js`;
-- `full-site-form-guidance-validation-v5.js`;
-- `full-site-form-lifecycle-v6.js`;
-- `full-site-action-guard-v1.js`;
-- lifecycle CSS.
-
-`full-site-form-lifecycle-audit-v7.js` exists but is **not loaded**.
-
-Therefore the current preview must NOT be described as having the v7 failure toggle/enhanced dirty/role-switch behavior.
-
-Permanent production architecture must not copy prototype layering; follow `PROJECT_RULES_RENDER_OWNERSHIP.md`.
-
----
-
-## 9. CURRENT EXACT TASK
-
-# `V6-C PRODUCTION PARITY REMEDIATION + FULL-SITE COMPLETENESS`
-
-Required order:
-1. consolidate prototype form lifecycle behavior into one owner;
-2. close P0 gaps;
-3. close P1 gaps;
-4. rerun source/integration parity audit;
-5. rendered mobile/desktop review;
-6. user full-site review;
-7. systematic visual polish;
-8. only after explicit C acceptance → V6-D.
-
-C acceptance requires P0=0 and P1=0 unexplained gaps.
-
-Production impact at this checkpoint: **NONE**.
-
----
-
-## 10. HANDOFF
-
-**Completed:** V6-0, A1/A2, B1–B9, C blueprint, protected regression gate, forms/roles lock, validation lock, lifecycle lock, lifecycle matrix, production parity audit.  
-**Current:** V6-C parity remediation; do not visually finalize yet.  
-**Production:** unchanged.
+Do not request repeated `OK` for already-authorized reading, reconciliation, documentation checks or behavior-preserving verification.
