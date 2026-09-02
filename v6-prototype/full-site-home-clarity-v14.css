@@ -1,0 +1,416 @@
+/* Popitai.Lom V6-C — Home-only V14 clarity pass.
+   Prototype only. Scope: .home-page.
+   Goal: instant orientation, local identity, clear section purpose.
+   Info Lom / Health internal screens remain protected and unchanged. */
+
+:root{
+  --home14-navy:#082944;
+  --home14-navy-deep:#061b31;
+  --home14-blue:#087dcc;
+  --home14-gold:#c29a32;
+  --home14-ink:#102c46;
+  --home14-muted:#607487;
+  --home14-line:rgba(8,41,68,.11);
+  --home14-soft:#f5f9fd;
+  --home14-shadow:0 12px 34px rgba(8,41,68,.075),0 2px 7px rgba(8,41,68,.035);
+}
+
+/* =========================================================
+   1. HERO — Lom is visible immediately; search remains the task.
+   ========================================================= */
+.home-page>.hero{
+  position:relative;
+  isolation:isolate;
+  min-height:440px;
+  display:flex;
+  align-items:center;
+  padding:72px 0 70px;
+  overflow:hidden;
+  background:
+    linear-gradient(90deg,rgba(5,24,43,.88) 0%,rgba(6,31,54,.82) 45%,rgba(7,41,70,.55) 72%,rgba(7,41,70,.34) 100%),
+    linear-gradient(180deg,rgba(3,19,34,.04) 0%,rgba(3,19,34,.18) 100%),
+    url('../assets/lom-cover-desktop-1536.webp') center 48%/cover no-repeat;
+}
+.home-page>.hero:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-1;
+  background:linear-gradient(180deg,rgba(0,0,0,.02) 55%,rgba(3,19,34,.22) 100%);
+  pointer-events:none;
+}
+.home-page>.hero:after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:3px;
+  background:linear-gradient(90deg,transparent 0%,rgba(194,154,50,.9) 25%,rgba(8,125,204,.85) 72%,transparent 100%);
+  opacity:.88;
+}
+.home-page>.hero .hero-grid{
+  position:relative;
+  z-index:1;
+  display:block;
+}
+.home-page>.hero .hero-grid>div:first-child{max-width:790px}
+.home-page>.hero .hero-side{display:none!important}
+.home-page>.hero .kicker{
+  display:inline-flex;
+  align-items:center;
+  margin-bottom:12px;
+  color:#f0d88d;
+  text-shadow:0 1px 16px rgba(0,0,0,.28);
+}
+.home-page>.hero h1{
+  max-width:730px;
+  margin-bottom:16px;
+  color:#fff;
+  font-size:clamp(42px,5.4vw,64px);
+  line-height:1;
+  letter-spacing:-.052em;
+  text-shadow:0 2px 22px rgba(0,0,0,.25);
+}
+.home-page>.hero p{
+  max-width:720px;
+  margin-bottom:0;
+  color:#e3ebf2;
+  font-size:18px;
+  line-height:1.52;
+  text-shadow:0 1px 14px rgba(0,0,0,.22);
+}
+.home-page>.hero .search-box{
+  max-width:770px;
+  margin-top:28px;
+  padding:7px;
+  border:1px solid rgba(255,255,255,.26);
+  border-radius:19px;
+  background:#fff;
+  box-shadow:0 18px 48px rgba(0,0,0,.24);
+}
+.home-page>.hero .search-box input{
+  min-height:52px;
+  padding-inline:15px;
+  color:var(--home14-ink);
+  font-size:16px;
+}
+.home-page>.hero .search-box input::placeholder{color:#718294}
+.home-page>.hero .search-box button{
+  min-width:112px;
+  min-height:52px;
+  border-radius:13px;
+  background:var(--home14-blue);
+  box-shadow:0 8px 18px rgba(8,125,204,.26);
+}
+.home-page>.hero .search-box:focus-within{
+  border-color:rgba(255,255,255,.6);
+  box-shadow:0 0 0 4px rgba(255,255,255,.11),0 20px 50px rgba(0,0,0,.24);
+}
+
+/* =========================================================
+   2. HOME RHYTHM — every section says what it is for.
+   ========================================================= */
+.home-page>.section{padding:52px 0}
+.home-page>.section .section-head{align-items:flex-end;margin-bottom:20px}
+.home-page>.section .section-head h2{color:var(--home14-navy)}
+.home-page>.section .section-head .eyebrow{color:#70869a}
+
+.home-page>.section:nth-of-type(3) .section-head h2:after,
+.home-page>.section:nth-of-type(5) .section-head h2:after,
+.home-page>.section:nth-of-type(6) .section-head h2:after{
+  display:block;
+  margin-top:7px;
+  max-width:620px;
+  color:var(--home14-muted);
+  font-size:14px;
+  line-height:1.45;
+  font-weight:500;
+  letter-spacing:0;
+}
+.home-page>.section:nth-of-type(3) .section-head h2:after{
+  content:"Магазини, заведения, фирми и събития — местата и профилите, които търсиш в Лом.";
+}
+.home-page>.section:nth-of-type(5) .section-head h2:after{
+  content:"Практични обяснения стъпка по стъпка — какво да направиш и къде да провериш актуалното.";
+}
+.home-page>.section:nth-of-type(6) .section-head h2:after{
+  content:"Въпроси, личен опит и местни препоръки от хората в Лом.";
+}
+
+/* =========================================================
+   3. PRIMARY CATEGORIES — scan first, understand before tapping.
+   ========================================================= */
+.home-page .home-priority .category-card{
+  min-height:184px;
+  padding:23px 22px 22px;
+  border-radius:23px;
+}
+.home-page .home-priority .category-card strong{
+  max-width:none;
+  font-size:20px;
+  line-height:1.16;
+}
+.home-page .home-priority .category-card small{
+  max-width:28ch;
+  margin-top:7px;
+  color:var(--home14-muted);
+  font-size:13.5px;
+  line-height:1.42;
+}
+
+/* Replace the decorative arrow with a clearer secondary cue row. */
+.home-page .home-priority .category-card:after{
+  position:static;
+  display:block;
+  width:auto;
+  height:auto;
+  margin-top:16px;
+  padding-top:13px;
+  border-radius:0;
+  border-top:1px solid rgba(8,41,68,.08);
+  background:none;
+  color:#47677f;
+  font-size:12px;
+  line-height:1.4;
+  font-weight:800;
+  letter-spacing:.01em;
+  text-align:left;
+}
+.home-page .home-priority .category-card:nth-child(1):after{content:"Ремонти  ·  ВиК  ·  Електро"}
+.home-page .home-priority .category-card:nth-child(2):after{content:"Лекари  ·  Аптеки  ·  Лаборатории"}
+.home-page .home-priority .category-card:nth-child(3):after{content:"Обяви  ·  Търся работа  ·  Предлага работа"}
+.home-page .home-priority .category-card:nth-child(4):after{content:"Сервизи  ·  Гуми  ·  Авточасти"}
+
+/* Keep the thin semantic accent; it helps recognition without turning cards into a rainbow. */
+.home-page .home-priority .category-card:before{
+  width:4px;
+  height:auto;
+  inset:0 auto 0 0;
+  border-radius:23px 0 0 23px;
+}
+
+/* =========================================================
+   4. DISCOVER — visibly a different job from categories.
+   ========================================================= */
+.home-page>.section:nth-of-type(3){
+  background:linear-gradient(180deg,#f3f9fd 0%,#f9fcfe 100%);
+}
+.home-page .discover-card{
+  min-height:108px;
+  border-radius:19px;
+}
+.home-page .discover-card strong{font-size:18px}
+.home-page .discover-card small{margin-top:4px}
+
+/* =========================================================
+   5. HOME INFO LOM PROMO — clear purpose.
+   Internal Info Lom screens are NOT touched here.
+   ========================================================= */
+.home-page>.section:nth-of-type(4){background:#fff}
+.home-page .info-panel{
+  padding:25px;
+  border:1px solid #dce5ed;
+  border-radius:25px;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(8,125,204,.09),transparent 34%),
+    linear-gradient(135deg,#fff 0%,#f6f9fc 100%);
+  box-shadow:var(--home14-shadow);
+}
+.home-page .info-panel-head{
+  display:block;
+  margin-bottom:19px;
+}
+.home-page .info-panel-head .eyebrow{
+  margin-bottom:5px;
+  font-size:0;
+}
+.home-page .info-panel-head .eyebrow:after{
+  content:"ПОЛЕЗНО ЗА ГРАДА";
+  color:#9c7a20;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+.home-page .info-panel-head h2{
+  margin:0;
+  font-size:0;
+}
+.home-page .info-panel-head h2:after{
+  content:"Инфо Лом";
+  color:var(--home14-navy);
+  font-size:31px;
+  line-height:1.08;
+  letter-spacing:-.035em;
+}
+.home-page .info-panel-head>div:after{
+  content:"Проверени контакти и полезна информация, когато ти трябва точен отговор бързо.";
+  display:block;
+  max-width:690px;
+  margin-top:8px;
+  color:var(--home14-muted);
+  font-size:14px;
+  line-height:1.48;
+}
+.home-page .info-grid{gap:10px}
+.home-page .info-card{
+  position:relative;
+  min-height:82px;
+  padding:16px 42px 16px 17px;
+  border:1px solid #dce5ed;
+  border-radius:16px;
+  background:rgba(255,255,255,.96);
+  box-shadow:0 4px 14px rgba(8,41,68,.035);
+}
+.home-page .info-card:after{
+  content:"→";
+  position:absolute;
+  right:16px;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--home14-blue);
+  font-size:20px;
+  font-weight:900;
+}
+.home-page .info-card strong{
+  color:var(--home14-navy);
+  font-size:16px;
+}
+.home-page .info-card small{
+  margin-top:4px;
+  color:var(--home14-muted);
+  font-size:12px;
+  line-height:1.35;
+}
+
+/* =========================================================
+   6. GUIDES + COMMUNITY — purpose stays explicit, visual weight drops.
+   ========================================================= */
+.home-page>.section:nth-of-type(5){
+  background:linear-gradient(180deg,#fffaf1 0%,#fffdf8 100%);
+}
+.home-page .guide-card{min-height:196px}
+.home-page>.section:nth-of-type(6){background:#fff}
+
+/* =========================================================
+   7. MOBILE — cover remains visible; every block remains easy to scan.
+   ========================================================= */
+@media(max-width:720px){
+  .home-page>.hero{
+    min-height:410px;
+    padding:46px 0 48px;
+    align-items:flex-end;
+    background:
+      linear-gradient(180deg,rgba(5,24,43,.46) 0%,rgba(5,24,43,.72) 40%,rgba(5,24,43,.91) 100%),
+      url('../assets/lom-cover-mobile-720.webp') center 42%/cover no-repeat;
+  }
+  .home-page>.hero .hero-grid>div:first-child{max-width:none}
+  .home-page>.hero h1{
+    max-width:11.8ch;
+    font-size:38px;
+    line-height:1.01;
+    margin-bottom:13px;
+  }
+  .home-page>.hero p{
+    max-width:36ch;
+    font-size:15.5px;
+    line-height:1.48;
+  }
+  .home-page>.hero .search-box{
+    margin-top:21px;
+    border-radius:17px;
+  }
+  .home-page>.hero .search-box input{
+    min-height:48px;
+    font-size:14.5px;
+  }
+  .home-page>.hero .search-box button{
+    min-width:86px;
+    min-height:48px;
+    padding-inline:14px;
+  }
+
+  .home-page>.section{padding:39px 0}
+  .home-page>.section .section-head{
+    align-items:flex-start;
+    margin-bottom:17px;
+  }
+  .home-page>.section .section-head h2{font-size:27px}
+  .home-page>.section:nth-of-type(3) .section-head h2:after,
+  .home-page>.section:nth-of-type(5) .section-head h2:after,
+  .home-page>.section:nth-of-type(6) .section-head h2:after{
+    max-width:34ch;
+    margin-top:6px;
+    font-size:12.5px;
+    line-height:1.42;
+  }
+
+  .home-page .home-priority{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
+  }
+  .home-page .home-priority .category-card{
+    min-height:178px;
+    padding:17px 15px 15px 18px;
+    border-radius:19px;
+  }
+  .home-page .home-priority .category-card strong{font-size:16.5px}
+  .home-page .home-priority .category-card small{
+    margin-top:6px;
+    font-size:12px;
+    line-height:1.36;
+  }
+  .home-page .home-priority .category-card:after{
+    margin-top:12px;
+    padding-top:10px;
+    font-size:10.5px;
+    line-height:1.45;
+  }
+
+  .home-page .discover-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:9px;
+  }
+  .home-page .discover-card{
+    min-height:108px;
+    padding:16px 14px;
+  }
+  .home-page .discover-card strong{font-size:15.5px}
+  .home-page .discover-card small{font-size:12px}
+
+  .home-page .info-panel{
+    padding:18px;
+    border-radius:21px;
+  }
+  .home-page .info-panel-head{margin-bottom:15px}
+  .home-page .info-panel-head h2:after{font-size:27px}
+  .home-page .info-panel-head>div:after{
+    margin-top:7px;
+    font-size:12.5px;
+    line-height:1.42;
+  }
+  .home-page .info-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+  }
+  .home-page .info-card{
+    min-height:88px;
+    padding:13px 30px 13px 13px;
+    border-radius:14px;
+  }
+  .home-page .info-card:after{right:11px;font-size:17px}
+  .home-page .info-card strong{font-size:13.5px;line-height:1.22}
+  .home-page .info-card small{font-size:10.5px;line-height:1.3}
+}
+
+@media(max-width:420px){
+  .home-page>.hero{min-height:400px}
+  .home-page>.hero h1{font-size:35px}
+  .home-page .home-priority .category-card{min-height:184px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .home-page .category-card,
+  .home-page .discover-card,
+  .home-page .info-card{transition:none}
+}
