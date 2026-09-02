@@ -6,12 +6,13 @@
 
 @media(max-width:720px){
   /* Adjacent sections previously accumulated ~78px of vertical padding.
-     Use asymmetric padding so section changes stay visible without wasting viewport. */
-  .home-page>.section:nth-of-type(2){padding:28px 0 20px}
-  .home-page>.section:nth-of-type(3){padding:24px 0 20px}
-  .home-page>.section:nth-of-type(4){padding:24px 0 20px}
-  .home-page>.section:nth-of-type(5){padding:25px 0 20px}
-  .home-page>.section:nth-of-type(6){padding:25px 0 24px}
+     Keep ~28px section entry padding while using a compact trailing edge,
+     so adjacent Home sections land at ~38px of real transition space. */
+  .home-page>.section:nth-of-type(2){padding:28px 0 10px}
+  .home-page>.section:nth-of-type(3){padding:28px 0 10px}
+  .home-page>.section:nth-of-type(4){padding:28px 0 10px}
+  .home-page>.section:nth-of-type(5){padding:28px 0 10px}
+  .home-page>.section:nth-of-type(6){padding:28px 0 20px}
 
   /* Headings should introduce content, not create a second empty band. */
   .home-page>.section .section-head{
@@ -102,11 +103,11 @@
 }
 
 @media(max-width:390px){
-  .home-page>.section:nth-of-type(2){padding-top:25px}
+  .home-page>.section:nth-of-type(2){padding-top:26px}
   .home-page>.section:nth-of-type(3),
   .home-page>.section:nth-of-type(4),
   .home-page>.section:nth-of-type(5),
-  .home-page>.section:nth-of-type(6){padding-top:22px}
+  .home-page>.section:nth-of-type(6){padding-top:26px}
 
   .home-page .home-priority .category-card{
     min-height:162px;
