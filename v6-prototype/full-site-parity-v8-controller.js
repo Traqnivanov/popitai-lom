@@ -157,6 +157,61 @@
     consent.insertAdjacentElement('afterend',links);
   }
 
+  function enhanceHome() {
+    const home = app.querySelector('.home-page');
+    if (!home || home.dataset.v16HomeEnhanced === 'true') return;
+    home.dataset.v16HomeEnhanced = 'true';
+
+    const search = home.querySelector('.hero .search-box');
+    if (search && !home.querySelector('[data-v16-home-shortcuts]')) {
+      const shortcuts = document.createElement('nav');
+      shortcuts.dataset.v16HomeShortcuts = '';
+      shortcuts.className = 'home-v16-shortcuts';
+      shortcuts.setAttribute('aria-label','Бърз достъп');
+      shortcuts.innerHTML = '<span>Бърз достъп:</span><button type="button" data-route="marketplace">Обяви и услуги</button><button type="button" data-route="firms">Фирми</button><button type="button" data-route="info">Инфо Лом</button>';
+      search.insertAdjacentElement('afterend',shortcuts);
+    }
+
+    const sections = home.querySelectorAll(':scope > .section');
+    const categoriesSection = sections[0];
+    const discoverSection = sections[1];
+    const guidesSection = sections[3];
+    const communitySection = sections[4];
+
+    const categoriesHead = categoriesSection?.querySelector('.section-head > div');
+    if (categoriesHead && !categoriesHead.querySelector('.home-v16-section-lead')) {
+      const lead = document.createElement('p');
+      lead.className = 'home-v16-section-lead';
+      lead.textContent = 'Бързи входове към най-търсените теми. Обявите, услугите, работата и автомобилите са част от общия раздел „Обяви и услуги“.';
+      categoriesHead.appendChild(lead);
+    }
+
+    const discoverEyebrow = discoverSection?.querySelector('.section-head .eyebrow');
+    if (discoverEyebrow) discoverEyebrow.textContent = 'МЕСТНО В ЛОМ';
+    const discoverHead = discoverSection?.querySelector('.section-head > div');
+    if (discoverHead && !discoverHead.querySelector('.home-v16-section-lead')) {
+      const lead = document.createElement('p');
+      lead.className = 'home-v16-section-lead';
+      lead.textContent = 'Магазини, заведения, фирми и предстоящи събития на едно място.';
+      discoverHead.appendChild(lead);
+    }
+
+    const guidesLink = guidesSection?.querySelector('.section-head .text-button');
+    if (guidesLink) guidesLink.textContent = 'Всички ръководства →';
+
+    const communityEyebrow = communitySection?.querySelector('.section-head .eyebrow');
+    if (communityEyebrow) communityEyebrow.textContent = 'ОБЩНОСТТА';
+    const communityTitle = communitySection?.querySelector('.section-head h2');
+    if (communityTitle) communityTitle.textContent = 'Въпроси и препоръки';
+    const communityHead = communitySection?.querySelector('.section-head > div');
+    if (communityHead && !communityHead.querySelector('.home-v16-section-lead')) {
+      const lead = document.createElement('p');
+      lead.className = 'home-v16-section-lead';
+      lead.textContent = 'Попитай, виж личен опит и местни препоръки от хората в Лом.';
+      communityHead.appendChild(lead);
+    }
+  }
+
   function cleanTechnicalCopy() {
     const walker = document.createTreeWalker(app,NodeFilter.SHOW_TEXT);
     const nodes = [];
@@ -176,6 +231,7 @@
     ensureListingCorrectionCard();
     wireShopForm();
     enhanceAuth();
+    enhanceHome();
     cleanTechnicalCopy();
     syncAddAria();
   }
