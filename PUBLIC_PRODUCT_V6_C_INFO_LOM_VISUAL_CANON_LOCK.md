@@ -159,3 +159,18 @@ Before Info Lom / Health is considered migrated to V6, perform a parity check of
 6. source/freshness placement;
 7. sticky tabs and back/recovery behavior;
 8. emergency-path accessibility.
+
+## 10. PRESERVE-FIRST FREEZE — 02.09.2026
+
+**Инфо Лом and Здраве are considered already designed and functionally structured. They are not targets for a new visual redesign.**
+
+From this point onward:
+
+- preserve the existing approved presentation, information architecture, content grouping, priority ordering, direct-action hierarchy, contextual colors/icons, sticky navigation, task shortcuts and click-depth;
+- do not rewrite, simplify, merge or replace specialized Info/Health components merely to make them match the generic V6/V11 visual language;
+- do not change an already-approved direct path, button, card order, tab order, visible key fact, source/freshness position or emergency path unless a concrete defect is demonstrated;
+- allowed work is limited to **minor, bounded improvements** such as typography consistency, optical spacing, line-height, small radius/shadow refinement, focus-visible, overflow, safe-area/bottom-nav clearance and comparable accessibility fixes;
+- any change beyond those bounded improvements must be reported first as a proposed change, with the exact reason and regression risk, before implementation;
+- if there is no demonstrated problem, **leave the existing Info/Health behavior and presentation unchanged**.
+
+This freeze applies to the V6 prototype and future production migration. The migration objective is parity/preservation, not redesign.
