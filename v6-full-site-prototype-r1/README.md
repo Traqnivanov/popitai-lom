@@ -1,35 +1,44 @@
 # Попитай.Лом — V6 Full-site Prototype R1
 
-Статус: **ИЗОЛИРАН ПРОТОТИП / NO PRODUCTION WRITE / NO SUPABASE**
+Статус: **READY FOR WHOLE-SITE REVIEW / ИЗОЛИРАН ПРОТОТИП / NO PRODUCTION WRITE / NO SUPABASE**
 
-Branch: `v6-full-site-prototype-r1`
-Baseline: `bdc333248a56060d6fa03565125a96ee5a52902d`
+Branch: `v6-full-site-prototype-r1`  
+Safety baseline: `bdc333248a56060d6fa03565125a96ee5a52902d`
 
 ## Защо съществува
 
 Това е цялостен navigable prototype преди реалната V6 implementation. Целта е собственикът на проекта да прегледа продукта като сайт — съдържание, навигация, бутони, форми, роли, състояния, mobile/desktop и owner boundaries — преди production кодът да бъде променян.
 
-## Изолация
+Това не е поредният V18/V19 visual patch. Старият layered `v6-prototype` остава непокътнат и не участва в runtime-а на R1.
+
+## Изолация / застраховка
 
 - Няма Supabase import.
 - Няма production API заявки.
 - Няма Firebase/analytics tracker.
 - Няма промяна на `main`.
 - Няма промяна на `v6-product-foundation-draft`.
+- Няма промяна на съществуващ production/public файл.
 - Старият layered `v6-prototype` не се променя и не се зарежда.
-- Всички submit действия са симулация в браузъра.
-- `localStorage` се използва само за prototype role/state selection.
+- Всички submit/moderation действия са симулация в браузъра.
+- `localStorage` се използва само за prototype role/state selection и симулирани status записи.
 
-## Един runtime
+## Консолидиран runtime
 
-Прототипът е умишлено консолидиран:
+R1 е разделен по функция/owner, а не по версии и пачове:
 
 - `index.html` — един public shell и modal roots;
 - `prototype.css` — един responsive visual system;
 - `prototype-data.js` — mock/demo данни;
-- `prototype-core.js`, `prototype-marketplace.js`, `prototype-content.js`, `prototype-app.js` — четири ясни source modules, които заедно образуват **един route/form/state runtime owner**; това са функционални модули, не version/patch слоеве.
+- `prototype-core.js` — Home + Marketplace discovery/browse core;
+- `prototype-listings.js` — Listings + Health dual-owner listing/form flows;
+- `prototype-local.js` — Firms + Shops + Restaurants + Events;
+- `prototype-info-community.js` — Info Lom + Guides + Q&A + Search;
+- `prototype-profile-admin.js` — Profile/Auth + Reports + Admin/Moderator;
+- `prototype-forms.js` — shared validation + submit/status simulation;
+- `prototype-app.js` — един router/event/modal/navigation owner.
 
-Няма V18/V19 patch files и няма competing renderers.
+Няма competing renderer за един и същ root, няма MutationObserver patch chain и няма V18/V19 слой.
 
 ## Представена продуктова структура
 
@@ -71,12 +80,15 @@ Health показва два различни owners в една публичн�
 - Property;
 - Buy & Sell;
 - listing browse/detail/create/edit simulation;
+- dynamic Listing form context при смяна на intent/main/group/leaf;
 - Firms hub/detail/create/edit;
 - expanded firm presentation, gallery and target Before/After view;
+- `Поискай оферта` target form за UX review без production write;
 - Shops hub/detail/proposal;
 - Restaurants as Firms-owned discovery;
 - Events read-only discovery/detail (без fake Add Event);
 - Info Lom + 6 primary families + detail + correction;
+- Info Health: Болница, Лекари, Аптеки, Стоматолози, Ветеринарни кабинети/ветеринари, Ветеринарни аптеки, Лаборатории;
 - Search composition + loading/partial/empty/error/offline/cancelled states;
 - Articles/Guides + readiness/share gate;
 - Q&A index/detail/ask/answer + duplicate warning;
@@ -85,13 +97,13 @@ Health показва два различни owners в една публичн�
 - Admin/Moderator role-aware panel simulation;
 - protected Moderator/Admin differences;
 - global Add owner router;
-- Facebook/share bridge (native share / copy link / user-controlled Facebook share);
+- public/canonical-only share gate + copy-link simulation;
 - legal/about/contact surfaces;
 - responsive desktop/mobile shell.
 
 ## Protected logic represented, not changed
 
-The prototype mirrors, but does not alter:
+Прототипът отразява, но не променя:
 
 - roles and permissions;
 - self-moderation boundaries;
@@ -105,13 +117,13 @@ The prototype mirrors, but does not alter:
 
 ## Prototype-only review controls
 
-Bottom-right `Прототип` button allows switching:
+Bottom-right `Прототип` позволява преглед като:
 - Guest;
 - User;
 - Moderator;
-- Admin;
+- Admin.
 
-and states:
+И състояния:
 - loaded;
 - loading;
 - empty;
@@ -120,8 +132,38 @@ and states:
 - partial;
 - cancelled/newer query.
 
-These controls are not proposed as production UI.
+Тези контроли са само за QA/review и не са proposed production UI.
 
-## Not an implementation permission
+## Как се преглежда
 
-Approval of this prototype means the product flow/presentation can move forward to bounded technical design/implementation. It does not silently authorize schema/RLS/role/limit changes, Health taxonomy V2 storage changes, regulated-health credential logic, or production merge.
+Entry file: `v6-full-site-prototype-r1/index.html`.
+
+Temporary browser preview:
+`https://raw.githack.com/Traqnivanov/popitai-lom/v6-full-site-prototype-r1/v6-full-site-prototype-r1/index.html`
+
+RawGitHack е само временен static preview host. При първо отваряне може да покаже собствен warning screen; избира се `Open the page`. Не се въвеждат реални пароли или лични данни — прототипът не се нуждае от тях.
+
+Препоръчителен whole-site review:
+1. Home → всичките 5 Marketplace входа.
+2. Услуги → всичките 8 групи, особено Health dual-owner.
+3. Listing/Firm/Question/Health/Shop form flows.
+4. Firms/Shops/Events/Info/Articles/Q&A/Search/Profile.
+5. `Прототип` → Guest/User/Moderator/Admin.
+6. `Прототип` → loading/empty/error/offline/partial/cancelled.
+7. Desktop + mobile layout/navigation.
+8. Проверка дали някой одобрен owner/action/field липсва спрямо основния сайт.
+
+## Нарочно НЕ е имплементирано като production промяна
+
+- Health 11-service stored mapping / `HEALTH LISTING TAXONOMY V2`;
+- regulated-health credential/verification model;
+- schema/RLS/CHECK/trigger/RPC промени;
+- нови роли/права/лимити/statuses;
+- public Event submission owner;
+- реален `Поискай оферта` delivery/write owner;
+- server-rendered canonical/Open Graph share layer;
+- production merge/deploy.
+
+## Approval boundary
+
+Одобрението на този прототип означава, че whole-site product flow/presentation може да продължи към bounded technical implementation. То не разрешава мълчаливо schema/RLS/role/limit промени, Health taxonomy V2 storage промени, regulated-health credential логика или production merge.
