@@ -1,72 +1,170 @@
 # Попитай.Лом — V6 IMPLEMENTATION / ACCEPTANCE MATRIX
 
-Статус: **READY FOR USER REVIEW / NO IMPLEMENTATION PERMISSION**
-Branch: `v6-product-foundation-draft`
-Актуализирано: 02.09.2026
+Статус: **UPDATED DRAFT FOR WHOLE-STRUCTURE APPROVAL / NO IMPLEMENTATION PERMISSION**  
+Branch: `v6-product-foundation-draft`  
+Актуализирано: 03.09.2026
 
-Тази матрица превежда каноничната продуктова структура до точни routes, owners, mappings, CTA и acceptance проверки. Тя не променя schema/RLS/roles/status/quotas или production code.
+Тази матрица превежда актуализирания Recovery target до public labels, routes/states, owners, add destinations и stored compatibility values.
+
+Тя **не променя** schema/RLS/roles/status/quotas/ownership и не е разрешение за код.
 
 ## 1. GLOBAL SCREEN MATRIX
 
-| Surface | Primary job | Primary action | Secondary actions | Owner/read source | Забранено |
+| Surface | Primary job | Primary action | Read owner/source | Add destination | Забранено |
 |---|---|---|---|---|---|
-| Home | Започни търсене или marketplace задача | Search / `Обяви и услуги` | Discover, Info, Guides, Q&A | Composition only | 16 равни cards; Ask като primary |
-| `obyavi.html` | Един marketplace landing | Browse/search + `Добави обява` | Filters, secondary Ask | Listings + relevant Firms | Втори `Категории` tree |
-| `maistori.html` | Ремонти и майстори | Browse exact leaf/results | Add listing, Firms, Ask | Listings + Firms + protected Masters | Add buttons под всяка card |
-| `avtomobili.html` | Автомобили и auto services | Browse exact leaf/results | Add listing, Firms, Ask | Listings + Firms | Смесване vehicle/service stored mapping |
-| `rabota.html` | Други услуги | Browse exact leaf/results | Add listing, Firms, Ask | Listings + Firms | Представяне като Jobs owner |
-| `obyavi.html?main=other` | Останалите обяви | Browse stored listing category | Add listing | Listings | Raw `Услуги` като leaf |
-| `firmi.html` | Постоянни профили | Find/open firm | Add firm | Firms | Да замени temporary listing |
-| `info.html` | Проверена local information | Search/task shortcut | Correction/report | Info owners | Generic marketplace Add |
-| Health | Проверена здравна информация | Find/direct trusted action | Specialized add/correction, Ask | Health/Info | Generic Firm/Listing add |
-| `magazini.html` | Местни магазини | Browse Shop owner | Specialized Add shop | Shops | Generic Firm fallback |
-| `zavedenia.html` | Заведения | Browse/open permanent profile | Add firm/venue, Ask | Firms category `Заведения` | Втори restaurant owner |
-| `sabitiya.html` | Approved events discovery | Browse/open event | Ask; share eligible event | Events | Fake public Add Event |
-| Search | Един cross-owner search | Open best result | Recover/filter/Add/Ask | Explicit Search owner | localStorage/static-only truth |
-| Q&A | Community memory | Read/answer/ask | Share/report | Questions/Answers | Да води taxonomy |
-| Articles | Process guidance | Read guide | Owner links/share | Editorial registry | Mutable facts като duplicate truth |
-| Profile | Status/own content | Resume/edit/view | Share when public | Cross-owner aggregation | Permission logic само във frontend |
+| Home | Започни local task | Search / `Обяви и услуги` | Composition only | Global `+` | 16 равни cards; Ask primary |
+| `obyavi.html` | Един marketplace landing | Browse/search 5 public entries | Listings + relevant specialized read owners | `dobavi-obqva.html` | Втори `Категории` tree |
+| Services | Browse service families | Group/leaf → results | Listings + Firms + specialized Masters/Health where applicable | Contextual listing Add | Raw stored `Услуги` като UX |
+| `avtomobili.html` | Vehicles + auto services | Subcategory → results | Listings + relevant Firms | Vehicle/service listing Add | Mixed stored semantics |
+| Work | Jobs discovery | Job result/type filter | Listings category `Работа` | Listing Add with Work context | Generic service owner |
+| Property | Property discovery | Property result/type filter | Listings category `Имоти` | Listing Add with Property context | New property schema |
+| Trade | General buy/sell discovery | Category → results | Listings | Listing Add with Trade context | Work/Property duplicated here |
+| `zdrave-i-lekari.html` | Verified health + health service discovery | Find/open trusted result or temporary listing | Health/Info + Listings composition | Two separate CTAs | Replace page with generic listings |
+| `firmi.html` | Permanent profiles | Find/open firm | Firms | `dobavi-firma.html` | Temporary offer stored as firm |
+| `info.html` | Verified local info | Find/direct action | Info owners | Owner-specific correction/proposal | Generic marketplace Add |
+| `magazini.html` | Shops | Browse/open shop | Shops | Specialized shop flow | Generic firm fallback |
+| `zavedenia.html` | Restaurants/venues | Browse/open profile | Firms `Заведения` | Add firm/venue | Second restaurant datastore |
+| `sabitiya.html` | Approved events | Browse/open event | Events | none | Fake Add Event |
+| Search | Cross-owner discovery | Open best result | Explicit Search composition | Contextual applicable Add | Static/localStorage truth |
+| Q&A | Community knowledge | Read/answer/ask | Q&A | Ask/Answer | Drive taxonomy |
+| Articles | Guides | Read | Editorial | none | Duplicate mutable facts |
 
-## 2. MARKETPLACE GROUP ROUTES
+## 2. FIVE PUBLIC MARKETPLACE ENTRIES
 
-| Public group | Key | Browse route | Add prefill | Stored owner |
+Това са **presentation keys**, не DB values.
+
+| Public entry | Presentation key | Browse target | Add context target | Stored owner/value |
 |---|---|---|---|---|
-| Майстори и ремонти | `maistori` | `maistori.html` | `dobavi-obqva.html?main=maistori` | Listings + read composition with Firms/Masters |
-| Автомобили | `avtomobili` | `avtomobili.html` | `dobavi-obqva.html?main=avtomobili` | Listings + relevant Firms |
-| Други услуги | `uslugi` | `rabota.html` | `dobavi-obqva.html?main=uslugi` | Listings + relevant Firms |
-| Други обяви | `other` | `obyavi.html?main=other` | `dobavi-obqva.html?main=other` | Listings |
+| Услуги | `services` | `rabota.html` compatibility surface, visible meaning `Услуги` | `dobavi-obqva.html?main=services` | Listings; usually category `Услуги`; specialized Health/Masters read composition |
+| Автомобили | `vehicles` | `avtomobili.html` | `dobavi-obqva.html?main=vehicles` | `Автомобили и МПС` or `Услуги` auto-service values |
+| Работа | `work` | `obyavi.html?main=work` target state | `dobavi-obqva.html?main=work` | category `Работа` |
+| Имоти | `property` | `obyavi.html?main=property` target state | `dobavi-obqva.html?main=property` | category `Имоти` |
+| Купува и продава | `trade` | `obyavi.html?main=trade` target state | `dobavi-obqva.html?main=trade` | 7 existing general listing categories |
 
-Правила:
+Notes:
 
-- тези четири keys вече са production V3 compatibility values;
-- формата не добавя отделни main values `work` или `property`;
-- unknown main/subcategory не default-ва към първата опция;
-- invalid context остава unselected и показва ясна validation грешка;
-- `edit=<id>` supersede-ва всички create params.
+- `main=*` тук е proposed presentation adapter state; не е DB column/value.
+- current production/branch runtime може още да няма тези query adapters; това е R1 target, не твърдение за implemented behavior.
+- `kategorii.html` остава compatibility entry към `obyavi.html`.
+- `rabota.html` запазва current visible meaning `Услуги`; filename не се използва като основание да върнем `Работа` там.
 
-## 3. МАЙСТОРИ И РЕМОНТИ — EXACT MAPPING
+## 3. `УСЛУГИ` — GROUP ROUTE MATRIX
 
-Всички rows използват stored `category=Услуги` и exact stored `subcategory`.
+| Public group | Group key | Browse target | Read composition | Add behavior |
+|---|---|---|---|---|
+| Майстори и ремонти | `masters` | `maistori.html` | Listings + Firms + protected Masters/Ivanov | Listing Add with exact leaf |
+| Здраве и грижа | `health` | `zdrave-i-lekari.html` | Health/Info verified + future Listings health services | **Two distinct flows**, see §5 |
+| Домашни услуги | `home` | `rabota.html?group=home` target state | Listings + relevant Firms | Listing Add |
+| Красота и лична грижа | `beauty` | `rabota.html?group=beauty` target state | Listings + relevant Firms | Listing Add |
+| Компютърни и технически услуги | `tech` | `rabota.html?group=tech` target state | Listings + relevant Firms | Listing Add |
+| Професионални услуги | `professional` | `rabota.html?group=professional` target state | Listings + relevant Firms | Listing Add |
+| Обучение и уроци | `education` | `rabota.html?group=education` target state | Listings + relevant Firms | Listing Add |
+| Транспорт и доставки | `transport` | `rabota.html?group=transport` target state | Listings + relevant Firms | Listing Add |
 
-| Public leaf | Browse | Add prefill | Stored subcategory |
+Group card = browse. It does not submit or open form.
+
+## 4. SERVICES — PUBLIC LABEL ↔ STORED VALUE
+
+### 4.1 Майстори и ремонти — exact existing values
+
+All rows: stored `category=Услуги`.
+
+| Public leaf | Browse target | Add context | Stored subcategory |
 |---|---|---|---|
-| Цялостни ремонти | `maistori.html?subcategory=Цялостни ремонти` | `?main=maistori&subcategory=Цялостни ремонти` | `Цялостни ремонти` |
-| Бани и плочки | `maistori.html?subcategory=Бани и плочки` | `?main=maistori&subcategory=Бани и плочки` | `Бани и плочки` |
-| ВиК | `maistori.html?subcategory=ВиК` | `?main=maistori&subcategory=ВиК` | `ВиК` |
-| Електро | `maistori.html?subcategory=Електро` | `?main=maistori&subcategory=Електро` | `Електро` |
-| Покриви | `maistori.html?subcategory=Покриви` | `?main=maistori&subcategory=Покриви` | `Покриви` |
-| Боядисване | `maistori.html?subcategory=Боядисване` | `?main=maistori&subcategory=Боядисване` | `Боядисване` |
-| Дограма | `maistori.html?subcategory=Дограма` | `?main=maistori&subcategory=Дограма` | `Дограма` |
-| Климатици | `maistori.html?subcategory=Климатици` | `?main=maistori&subcategory=Климатици` | `Климатици` |
+| Цялостни ремонти | `maistori.html?subcategory=Цялостни ремонти` | `main=services&group=masters&subcategory=Цялостни ремонти` | `Цялостни ремонти` |
+| Бани и плочки | `maistori.html?subcategory=Бани и плочки` | `main=services&group=masters&subcategory=Бани и плочки` | `Бани и плочки` |
+| ВиК | `maistori.html?subcategory=ВиК` | `main=services&group=masters&subcategory=ВиК` | `ВиК` |
+| Електро | `maistori.html?subcategory=Електро` | `main=services&group=masters&subcategory=Електро` | `Електро` |
+| Покриви | `maistori.html?subcategory=Покриви` | `main=services&group=masters&subcategory=Покриви` | `Покриви` |
+| Боядисване | `maistori.html?subcategory=Боядисване` | `main=services&group=masters&subcategory=Боядисване` | `Боядисване` |
+| Дограма | `maistori.html?subcategory=Дограма` | `main=services&group=masters&subcategory=Дограма` | `Дограма` |
+| Климатици | `maistori.html?subcategory=Климатици` | `main=services&group=masters&subcategory=Климатици` | `Климатици` |
 
-`?` в Add prefill означава suffix към `dobavi-obqva.html`.
-Route builder-ът URL-encode-ва стойностите; таблиците ги показват четимо, за да могат да се сверяват с protected dictionary.
+### 4.2 Existing general services redistributed under clearer public groups
 
-## 4. АВТОМОБИЛИ — EXACT MAPPING
+All rows: stored `category=Услуги`.
 
-| Public leaf | Browse route state | Stored category | Stored subcategory |
+| Public group | Public leaf | Exact stored subcategory |
+|---|---|---|
+| Домашни услуги | Домашна помощ | `Домашна помощ` |
+| Домашни услуги | Грижа за деца, възрастни и домашни любимци | `Грижа за деца, възрастни и домашни любимци` |
+| Красота и лична грижа | Красота и лична грижа | `Красота и грижа` |
+| Компютърни и технически услуги | Компютърни и технически услуги | `Компютърни и технически услуги` |
+| Професионални услуги | Професионални услуги | `Професионални услуги` |
+| Професионални услуги | Фото и видео услуги | `Фото, видео и събитийни услуги` |
+| Обучение и уроци | Обучение и уроци | `Обучение и уроци` |
+| Транспорт и доставки | Транспорт и доставки | `Транспорт, преместване и доставки` |
+
+No DB migration is required for the rows above because they are public grouping/alias changes over existing V1 values.
+
+## 5. HEALTH — DUAL OWNER / TWO CTA CONTRACT
+
+Destination: `zdrave-i-lekari.html`.
+
+Existing branch evidence already has:
+
+- Health verified results;
+- tabs/filters/search;
+- `health-catalog-v2.js`;
+- specialized add form;
+- `health-submissions-v1.js`;
+- write to `info_submissions`;
+- error report flow;
+- contextual link to `Инфо Лом → Здраве`.
+
+The target must preserve this.
+
+| User intent | Visible CTA | Destination/owner | Result |
 |---|---|---|---|
-| Автомобили за продажба или търсене | `avtomobili.html?subcategory=Автомобили за продажба или търсене` | `Автомобили и МПС` | empty |
+| Add permanent specialist/practice | `Добави специалист или практика` | Existing Health submission flow / `info_submissions` | Pending Health/Info review |
+| Offer temporary health service | `Публикувай или потърси здравна услуга` → `Предлагам` | Listings form with Health context | Normal Listings lifecycle |
+| Seek temporary health service | same CTA → `Търся` | Listings form with Health context | Normal Listings lifecycle |
+| Correct verified record | `Сигнализирай грешка` / correction | Health/Info error/correction owner | Pending review |
+| Ask community | `Задай въпрос` | Q&A | Secondary, not verified fact |
+
+No shared write owner. No auto-copy between `info_entries/info_submissions` and `listings`.
+
+## 6. HEALTH SERVICE PUBLIC TAXONOMY
+
+Proposed public leaves:
+
+| # | Public health service leaf | Public browse state | Stored listing mapping |
+|---:|---|---|---|
+| 1 | Домашни здравни грижи | Health service filter | **LOCKED V2 pending** |
+| 2 | Медицинска сестра и манипулации | Health service filter | **LOCKED V2 pending** |
+| 3 | Рехабилитация и кинезитерапия | Health service filter | **LOCKED V2 pending** |
+| 4 | Физиотерапия | Health service filter | **LOCKED V2 pending** |
+| 5 | Психологическо консултиране | Health service filter | **LOCKED V2 pending** |
+| 6 | Логопед и специализирани терапии | Health service filter | **LOCKED V2 pending** |
+| 7 | Диетолог и хранителни консултации | Health service filter | **LOCKED V2 pending** |
+| 8 | Терапевтичен масаж и възстановяване | Health service filter | **LOCKED V2 pending** |
+| 9 | Грижа за възрастни и болни | Health service filter | **LOCKED V2 pending** |
+| 10 | Придружаване и помощ при лечение | Health service filter | **LOCKED V2 pending** |
+| 11 | Друга здравна услуга | Health service filter | **LOCKED V2 pending** + required concrete-name field |
+
+### Why stored mapping is LOCKED
+
+Current Stage1 contract enforces:
+
+- exactly 11 listing categories;
+- category `Услуги` must use one of exactly 22 V1 subcategories;
+- arbitrary non-empty service subcategory is rejected by the protected validator/DB integrity contract.
+
+Therefore this Matrix does **not** pretend that the 11 health values are already valid stored values.
+
+Required later decision if the public structure is approved:
+
+`HEALTH LISTING TAXONOMY V2 — LOCKED AMENDMENT`
+
+It must explicitly decide how the 11 health leaves are represented in the existing Listings data contract and how DB validator/CHECK/trigger/RPC/frontend dictionary are versioned. No silent V1 edit.
+
+For regulated health activities, a separate professional-verification/moderation decision is also required before implementation.
+
+## 7. AUTOMOBILES — EXACT MAPPING
+
+| Public leaf | Browse target | Stored category | Stored subcategory |
+|---|---|---|---|
+| Автомобили за продажба или търсене | `avtomobili.html` vehicle state | `Автомобили и МПС` | empty |
 | Авточасти | `avtomobili.html?subcategory=Авточасти` | `Услуги` | `Авточасти` |
 | Автосервизи | `avtomobili.html?subcategory=Автосервизи` | `Услуги` | `Автосервизи` |
 | Диагностика | `avtomobili.html?subcategory=Диагностика` | `Услуги` | `Диагностика` |
@@ -74,284 +172,237 @@ Route builder-ът URL-encode-ва стойностите; таблиците г
 | Автомивки | `avtomobili.html?subcategory=Автомивки` | `Услуги` | `Автомивки` |
 | Пътна помощ | `avtomobili.html?subcategory=Пътна помощ` | `Услуги` | `Пътна помощ` |
 
-Add prefill е `dobavi-obqva.html?main=avtomobili&subcategory=<public leaf>`.
+Intent compatibility remains protected:
 
-Protected intent mapping:
+- vehicle offer → `Продава`;
+- vehicle seek → `Купува`;
+- auto-service offer → existing service compatibility type;
+- auto-service seek → `Търси`.
 
-- vehicle `offer` → `Продава`;
-- vehicle `seek` → `Купува`;
-- automotive service `offer` → `Продава` compatibility;
-- automotive service `seek` → `Търси`.
+## 8. WORK — EXACT OWNER/TYPE MAPPING
 
-## 5. ДРУГИ УСЛУГИ — EXACT MAPPING
+Public entry: `Работа`.
 
-Всички rows използват stored `category=Услуги`.
+Stored category: `Работа`.
 
-| Public label | Browse state | Add prefill | Exact stored subcategory |
-|---|---|---|---|
-| Домашна помощ | `rabota.html?subcategory=Домашна помощ` | `?main=uslugi&subcategory=Домашна помощ` | `Домашна помощ` |
-| Красота и грижа | `rabota.html?subcategory=Красота и грижа` | `?main=uslugi&subcategory=Красота и грижа` | `Красота и грижа` |
-| Компютърни и технически услуги | `rabota.html?subcategory=Компютърни и технически услуги` | `?main=uslugi&subcategory=Компютърни и технически услуги` | `Компютърни и технически услуги` |
-| Фото и видео | `rabota.html?subcategory=Фото, видео и събитийни услуги` | `?main=uslugi&subcategory=Фото, видео и събитийни услуги` | `Фото, видео и събитийни услуги` |
-| Професионални услуги | `rabota.html?subcategory=Професионални услуги` | `?main=uslugi&subcategory=Професионални услуги` | `Професионални услуги` |
-| Обучение и уроци | `rabota.html?subcategory=Обучение и уроци` | `?main=uslugi&subcategory=Обучение и уроци` | `Обучение и уроци` |
-| Грижа | `rabota.html?subcategory=Грижа за деца, възрастни и домашни любимци` | `?main=uslugi&subcategory=Грижа за деца, възрастни и домашни любимци` | `Грижа за деца, възрастни и домашни любимци` |
-| Транспорт, преместване и доставки | `rabota.html?subcategory=Транспорт, преместване и доставки` | `?main=uslugi&subcategory=Транспорт, преместване и доставки` | `Транспорт, преместване и доставки` |
+No new `subcategory` in this Recovery.
 
-Public alias се показва по-кратко, но URL adapter и form select записват exact protected value.
+| Public filter/intent | Protected `listing_type` |
+|---|---|
+| Предлагат работа | `Предлага работа` |
+| Търсят работа | `Търси работа` |
 
-## 6. ДРУГИ ОБЯВИ — EXACT MAPPING
+Browse target: `obyavi.html?main=work` target state.
 
-Тези leaves използват exact protected listing category и празна service subcategory.
+Add target: `dobavi-obqva.html?main=work`.
 
-| Public leaf | Browse state | Stored category | Specialized type |
-|---|---|---|---|
-| Електроника | `obyavi.html?main=other&subcategory=Електроника` | `Електроника` | normal listing type |
-| Дом и градина | `obyavi.html?main=other&subcategory=Дом и градина` | `Дом и градина` | normal listing type |
-| Дрехи и обувки | `obyavi.html?main=other&subcategory=Дрехи и обувки` | `Дрехи и обувки` | normal listing type |
-| Деца и бебета | `obyavi.html?main=other&subcategory=Деца и бебета` | `Деца и бебета` | normal listing type |
-| Спорт и хоби | `obyavi.html?main=other&subcategory=Спорт и хоби` | `Спорт и хоби` | normal listing type |
-| Животни | `obyavi.html?main=other&subcategory=Животни` | `Животни` | normal listing type |
-| Работа | `obyavi.html?main=other&subcategory=Работа` | `Работа` | `Предлага работа` / `Търси работа` |
-| Имоти | `obyavi.html?main=other&subcategory=Имоти` | `Имоти` | `Продава имот` / `Отдава под наем` / `Търси под наем` / `Търси за купуване` |
-| Друго | `obyavi.html?main=other&subcategory=Друго` | `Друго` | normal listing type |
+The adapter maps presentation state to protected category/type. It does not invent a new DB category.
 
-Add prefill е `dobavi-obqva.html?main=other&subcategory=<exact stored category>`.
+## 9. PROPERTY — EXACT OWNER/TYPE MAPPING
 
-## 7. DISPOSITION НА 16-ТЕ V6 THEMATIC CONCEPTS
+Public entry: `Имоти`.
 
-Това е compatibility/cross-link map, не втора public taxonomy.
+Stored category: `Имоти`.
 
-| B1 concept | Final place | Public behavior |
+No new `subcategory` in this Recovery.
+
+| Public action/filter | Protected `listing_type` |
+|---|---|
+| Продава | `Продава имот` |
+| Отдава под наем | `Отдава под наем` |
+| Търси под наем | `Търси под наем` |
+| Търси да купи | `Търси за купуване` |
+
+Browse target: `obyavi.html?main=property` target state.
+
+Add target: `dobavi-obqva.html?main=property`.
+
+## 10. `КУПУВА И ПРОДАВА` — EXACT CATEGORY MAPPING
+
+Presentation group only; no single stored category.
+
+| Public leaf | Stored category | Stored subcategory |
 |---|---|---|
-| Строителство и ремонти | Marketplace group `maistori` | Group/deep browse |
-| Здраве и лекари | Specialized Info/Health | Direct specialized surface |
-| Работа | `other → Работа` | Listing category with protected types |
-| Автомобили | Marketplace group `avtomobili` | Group/deep browse |
-| Имоти | `other → Имоти` | Listing category with protected types |
-| Красота | `uslugi → Красота и грижа` | Service leaf |
-| Дом и градина | `other → Дом и градина` | Listing leaf; contextual links to Shops/Construction |
-| Магазини | Specialized Shops | Direct specialized surface |
-| Заведения и храна | Firms category `Заведения` | Direct Restaurants/Firms surface |
-| Електроника | `other → Електроника` | Listing leaf |
-| Деца и бебета | `other → Деца и бебета` | Listing leaf; contextual Info/Health links |
-| Животни | `other → Животни` | Listing leaf; Vet Health/Griжа cross-links |
-| Мода | `other → Дрехи и обувки` | Public alias/cross-link |
-| Спорт и хоби | `other → Спорт и хоби` | Listing leaf |
-| Други услуги | Marketplace group `uslugi` | Group/deep browse |
-| Други обяви | Marketplace group `other` | Group browse |
+| Електроника | `Електроника` | empty |
+| Дом и градина | `Дом и градина` | empty |
+| Дрехи и обувки | `Дрехи и обувки` | empty |
+| Деца и бебета | `Деца и бебета` | empty |
+| Спорт и хоби | `Спорт и хоби` | empty |
+| Животни | `Животни` | empty |
+| Друго | `Друго` | empty |
 
-Acceptance: никой от тези concepts не създава нов write owner или duplicate record.
+Browse state: `obyavi.html?main=trade&category=<presentation leaf>` target adapter.
 
-## 8. CATEGORY CARD / CTA CONTRACT
+Add context: `dobavi-obqva.html?main=trade&category=<presentation leaf>`.
+
+Work/Property/Vehicles are not duplicated here.
+
+## 11. PUBLIC LABELS VS TECHNICAL VALUES
+
+| Public label | Technical meaning |
+|---|---|
+| Услуги | presentation entry; many rows still stored as category `Услуги` |
+| Здраве и грижа | public service group; specialized Health route + future listing context |
+| Красота и лична грижа | alias → stored `Красота и грижа` |
+| Фото и видео услуги | alias → stored `Фото, видео и събитийни услуги` |
+| Транспорт и доставки | alias → stored `Транспорт, преместване и доставки` |
+| Работа | public entry → stored category `Работа` |
+| Имоти | public entry → stored category `Имоти` |
+| Купува и продава | presentation group over 7 existing categories |
+| `services/vehicles/work/property/trade` | proposed presentation state keys, never DB category values |
+
+Technical/internal values are never shown as unexplained UI labels.
+
+## 12. CATEGORY CARD / CTA CONTRACT
 
 | Element | Click target | Carries context | Must not do |
 |---|---|---|---|
-| Main group card | Group browse page/state | main group | Open Add form |
-| Subcategory card/chip | Filtered browse results | main + subcategory | Submit/create or pass fake leaf |
-| `Добави обява` on landing | Listing form | none | Guess category |
-| `Добави обява` in group | Listing form | main; current valid subcategory if selected | Set role/status |
-| `Предлагат/Търсят` filter | Current result surface | intent filter | Become Add CTA |
-| `Фирми` filter | Relevant Firms results | current theme | Write to Firms |
-| `Попитай` | Ask form | bounded visible context | Become primary marketplace action |
+| Main public entry card | Browse surface/state | main presentation key | Open form |
+| Services group card | Group/specialized browse | main + group | Create record |
+| Leaf/subcategory card | Filtered results | bounded category/subcategory | Submit/create |
+| `Добави обява` landing | Listing form | none | Guess category |
+| Contextual `Добави обява` | Listing form | valid bounded context | Set role/status/owner |
+| Health specialist CTA | Health submission owner | Health context | Write Listings |
+| Health service CTA | Listings form | Health service context | Write Info/Health |
+| Ask | Q&A | optional context | Become verified result |
 
-No leaf named `Всички`, `Предлагат` or `Търсят` is ever passed as `subcategory`.
+`edit=<id>` supersedes every create prefill.
 
-## 9. RESULT COMPOSITION
+## 13. ADD FLOW MATRIX
 
-| Group | Listing results | Firm results | Special protected behavior |
-|---|---|---|---|
-| Майстори | Approved active `Услуги` matching 8 leaves | Relevant approved Firms | Construction/Ivanov priority only after eligibility/relevance |
-| Автомобили | Vehicle category or matching 6 service leaves | Relevant automotive Firms | Owner-native protected ordering |
-| Други услуги | Approved active `Услуги` matching 8 leaves | Relevant service Firms | No giant generic keyword fallback as authority |
-| Други обяви | Exact stored category | Only contextual links when useful | Work/Property specialized types preserved |
+| Public entry | Step after Offer/Seek | Required protected mapping |
+|---|---|---|
+| Services | service group → leaf | `Услуги` + exact valid subcategory, except specialized Health read owner |
+| Vehicles | vehicle vs auto-service leaf | `Автомобили и МПС` or `Услуги` + auto-service subcategory |
+| Work | Work | protected Work types |
+| Property | Property | protected Property types |
+| Trade | goods category | exact existing listing category |
 
-Result card minimum:
+Health service leaf mapping remains blocked by §6 until the separate locked amendment.
 
-- content type `Обява` or `Фирма`;
-- title/name;
-- relevant category/subcategory;
-- location/status-safe summary;
-- owner-native contact/detail CTA;
-- no fake rating/recommendation/verification.
+Form must preserve:
 
-## 10. FORM FIELD / ROLE COVERAGE
+- owner/publisher choice where already allowed;
+- quotas;
+- media;
+- edit safety;
+- title/description/price/phone/location;
+- Admin-only options only for Admin;
+- normal/Moderator pending;
+- Admin direct publish only where protected rules already allow it.
 
-### Listing must preserve
+## 14. COMPATIBILITY FROM OLD V3 / RECOVERY
 
-- personal vs own approved firm publisher where allowed;
-- normal/firm quota context;
-- public intent + four groups + bounded subcategory;
-- Work/Property specialized types;
-- title, description, EUR price + BGN orientation;
-- negotiable/free;
-- phone, city/area, optional street;
-- current media preview/remove/count/errors/optimization/edit behavior;
-- terms;
-- Admin-only protected options only for Admin.
-
-### Firm must preserve
-
-- name/category/phone;
-- optional city/address/hours;
-- description;
-- 1 logo + normal gallery up to protected limit;
-- expanded fields only when protected access exists;
-- normal edit draft + last approved public version;
-- Admin direct publication and access management only where locked.
-
-### Role matrix
-
-| Capability | Anonymous | Normal | Moderator own content | Admin |
-|---|---:|---:|---:|---:|
-| Browse public approved | Yes | Yes | Yes | Yes |
-| Inspect create form | Yes | Yes | Yes | Yes |
-| Submit own content | Login required | Yes | Yes, normal owner flow | Yes |
-| Direct publish listing/firm | No | No | No | Existing protected flow only |
-| Self-moderate | No | No | No | Admin flow |
-| Expanded access self-enable | No | No | No | Manage through protected flow |
-| Permanent delete | No | No | No | Existing Admin-only flow |
-
-## 11. FORM LIFECYCLE MATRIX
-
-Every applicable content form must pass:
-
-`open → context → dirty → validate → submit lock → error/retry or success receipt → next action`
-
-| Form family | Context owner | Pending/public truth | Dirty guard | Success replacement |
-|---|---|---|---|---|
-| Listing create/edit | Listings | Normal/Moderator pending; Admin protected direct | Required | Required |
-| Firm create/edit/expanded | Firms | Normal/Moderator pending; Admin protected direct | Required | Required |
-| Question/Answer | Q&A | Existing moderation truth | Required for written content | Required |
-| Health add/correction/signal | Health/Info | Pending/review | Already reference pattern; preserve | Required |
-| Shop proposal | Shops | Pending/review | Preserve | Required |
-| Info correction | Info | Pending/review | Preserve | Required |
-| Report/Contact | Current owners | Submitted, not published | Required for material message | Required |
-| Login/Forgot/Reset | Auth | Auth owner truth | No aggressive content guard | Clear result, no privacy leak |
-| Registration | Auth | Actual confirmation state | Validation-first | Clear completed state |
-
-System/network error after valid input must retain all safe entered data and re-enable retry without duplicate write.
-
-## 12. SPECIALIZED ACTION MATRIX
-
-| Context | Find | Add | Correction/report | Ask |
-|---|---|---|---|---|
-| Health | Health/Info | specialized `info_submissions` flow | specialized Info error/correction | secondary Health-context Q&A |
-| Shops | Shops | specialized Shop modal/form | Shop owner/report path | secondary Shop-context Q&A |
-| Restaurants | Firms | `Добави фирма/заведение` through Firms | Firm report/edit owner | secondary |
-| Events | Events read | **none** | Events/Admin report path if available | allowed |
-| Info | Info | owner-specific proposal only where real | correction/error report | secondary |
-| Articles | Editorial read | none | editorial issue/report | related Q&A only |
-
-## 13. SEARCH ACCEPTANCE
-
-Must test at least:
-
-| Query | Expected leading family |
+| Old presentation concept/key | New disposition |
 |---|---|
-| `ВиК майстор` | relevant Masters listings/firms |
-| `Автосервиз` | Automotive service listings/firms |
-| `търся работа шофьор` | Jobs listings |
-| `двустаен под наем` | Property listings |
-| `зъболекар` | verified Health before community opinion |
-| `НОИ телефон` | Info/Institution authoritative result |
-| `кой майстор препоръчвате` | relevant entities + Q&A/community context |
-| unknown query | true no-result recovery, not false result |
-| one owner failure | partial failure state, not `0 резултата` |
+| `maistori` main group | `services → masters`; `maistori.html` preserved |
+| `avtomobili` | `vehicles`; `avtomobili.html` preserved |
+| `uslugi` / `Други услуги` | renamed/reframed as `services`; label `Други услуги` removed |
+| `other` / `Други обяви` | split: Work → `work`, Property → `property`, remaining goods → `trade` |
+| `Работа` under other | now top-level public entry |
+| `Имоти` under other | now top-level public entry |
+| `rabota.html` as services compatibility URL | remains Services surface; does not define product label `Работа` |
+| `kategorii.html` | compatibility only → marketplace |
+| 4-group form presentation | superseded target; future R1 uses 5 public entries |
 
-One Search owner; no parallel legacy/new renderers.
+Old URL/deep-link acceptance should be preserved where it can be mapped safely without duplicate SEO/content trees.
 
-## 14. FACEBOOK BRIDGE ACCEPTANCE
+## 15. SPECIALIZED OWNERS
 
-| State | Share available | Expected behavior |
-|---|---:|---|
-| Pending/rejected/private | No | Exact status; no public-share promise |
-| Public canonical | Yes | Native/Facebook/copy fallback to canonical URL |
-| Expired listing | No promotional share | Honest unavailable/expired destination |
-| Canonical Q&A alias | Canonical winner only | Alias resolves; no duplicate share asset |
-| Stale high-risk Info | Restricted | Owner/freshness-safe presentation |
-| Facebook→Popitai | User-assisted only | Own text paste, visible suggestions, normal moderation |
+| Context | Read owner | Write owner | Notes |
+|---|---|---|---|
+| Health verified | Health/Info | `info_submissions` / correction owner | Preserve existing verified surface |
+| Health temporary service | Listings | Listings | Not auto-verified |
+| Shops | Shops | Shops | No generic fallback |
+| Restaurants | Firms | Firms | Category `Заведения` |
+| Events | Events | none public | No fake Add |
+| Info | Info | owner-specific proposal/correction | Separate from marketplace |
+| Masters | Listings/Firms + protected Masters composition | existing protected owners | Ivanov priority preserved |
+| Q&A | Q&A | Q&A | Secondary |
 
-Forbidden: scraping, arbitrary group automation, external comment/reaction import, hidden credentials/cookies, SDK loaded globally without need.
+## 16. PROTECTED CONFLICT CHECK
 
-## 15. DESKTOP / MOBILE PRESENTATION CHECKS
+| Checked rule/source | Finding | Decision |
+|---|---|---|
+| Protected Core | Listings/Firms/Masters/Admin behavior locked | **No change** |
+| Admin/Moderator | Moderator boundaries/permanent delete/roles locked | **No change** |
+| Render ownership | one renderer per root | R1 must consolidate, not layer |
+| Stage1 taxonomy V1 | exactly 22 service subcategories enforced | **Conflict with 11 health leaves; separate LOCKED V2 required** |
+| Current Health page | specialized verified content + specialized submission owner exists | **Preserve; add Listings as separate composition only** |
+| Current `rabota.html` | visible page is Services | Keep as Services compatibility surface |
+| Current `obyavi.html` | raw 11 category UI/current filters | R1 presentation adapter target; no DB category rewrite |
+| Marketplace V3 | 4 groups / old labels | presentation clauses superseded only after whole approval; protected invariants retained |
+| Info Lom | separate verified product | **No restructure** |
 
-### Desktop
+## 17. SEARCH ACCEPTANCE
 
-- canonical header fits supported widths;
-- landing shows 4 group cards without competing equal CTAs;
-- results are visible without oversized empty hero;
-- full leaf expansion is grouped, scannable and keyboard reachable;
-- no brittle content order based solely on `nth-of-type`.
+Must distinguish:
 
-### Mobile
+- `ВиК майстор` → Masters listings/firms;
+- `Автосервиз` → Automotive services;
+- `търся работа шофьор` → Work listings;
+- `двустаен под наем` → Property listings;
+- `зъболекар` → verified Health before community opinion;
+- health service query → verified specialists/practices plus temporary Listings with explicit content labels;
+- unknown query → true no-result recovery;
+- owner failure → partial failure, not false `0 резултата`.
+
+Protected relevance/Ivanov ordering remains.
+
+## 18. DESKTOP / MOBILE PRESENTATION CHECKS
+
+Desktop:
+
+- one marketplace landing;
+- five clear public entry cards;
+- Services expands to 8 groups;
+- results start without giant empty hero;
+- no duplicate Add clusters.
+
+Mobile:
 
 - exact five-item bottom nav;
-- search + 4 groups + Add are understandable in first task path;
-- initial screen does not render all leaves;
-- group page shows 4–5 priority leaves + `Покажи всички`;
-- active leaf and filters are horizontally/vertically safe;
-- bottom nav does not cover result/form CTA;
-- modal focus, Escape/back, keyboard and safe-area behavior pass.
+- marketplace landing shows search + five entries + one Add without rendering every leaf at once;
+- Services shows priority groups + `Покажи всички` if needed;
+- active context remains visible;
+- Health verified and temporary result types are distinguishable;
+- bottom nav does not cover CTA/results/forms.
 
-## 16. PROTOTYPE CONSOLIDATION CHECKLIST
+## 19. PROTOTYPE CONSOLIDATION CHECKLIST — AFTER APPROVAL ONLY
 
-Before any visual polish:
+- [ ] no independent `categories` marketplace tree;
+- [ ] landing uses 5 public entries;
+- [ ] `Услуги` uses 8 groups;
+- [ ] Masters/Autos existing routes preserved;
+- [ ] Work/Property are own public entries;
+- [ ] Trade excludes Work/Property/Vehicles;
+- [ ] category cards browse, not form;
+- [ ] Add carries bounded visible context;
+- [ ] no fake subcategory from `Всички/Предлага/Търси`;
+- [ ] one route/runtime/form lifecycle owner;
+- [ ] Health page preserved;
+- [ ] Health two CTA flows remain separate owners;
+- [ ] no health listing stored-value implementation before locked V2;
+- [ ] no new visual layer V18;
+- [ ] current Info/Health parity preserved;
+- [ ] CI/static checks and then real desktop/mobile review.
 
-- [ ] remove/disable separate `categories` route as independent screen;
-- [ ] route all category shortcuts to marketplace/group/specialized owners;
-- [ ] change subcategory click from `form-listing` to browse/filter;
-- [ ] listing form exposes exactly four public main groups;
-- [ ] Work/Property move under `other` with protected type fields;
-- [ ] every public category has explicit mapping; no default to Construction;
-- [ ] `Всички/Предлагат/Търсят` never become subcategory;
-- [ ] one active route/runtime owner;
-- [ ] one active form lifecycle owner;
-- [ ] consolidate visual layers instead of adding V18;
-- [ ] preserve Info/Health visual canon and click depth;
-- [ ] active scripts pass syntax;
-- [ ] every referenced asset exists;
-- [ ] CI includes `v6-prototype/`;
-- [ ] browser desktop/mobile review is recorded honestly.
+## 20. WHOLE-STRUCTURE READY CONDITION
 
-## 17. PROTECTED REGRESSION CHECKLIST
+This review package is ready for one whole-structure decision when:
 
-- [ ] Listings quotas unchanged;
-- [ ] normal media limits unchanged;
-- [ ] Admin media rule not silently redefined as `20`;
-- [ ] normal/Moderator content stays pending;
-- [ ] Moderator cannot self-moderate;
-- [ ] Admin direct publish preserved only where approved;
-- [ ] last approved version remains public during normal edit review;
-- [ ] Firms expanded access remains Admin-managed;
-- [ ] Health/Shops specialized owners preserved;
-- [ ] Events has no fake public Add;
-- [ ] Ivanov/Admin/boost priority applies only after relevance;
-- [ ] search does not lose protected ordering;
-- [ ] edit context never falls into create;
-- [ ] no new schema/RLS/write owner as presentation side effect.
+- 5 public entries are accepted/rejected as a set;
+- 8 Services groups are accepted/rejected as a set;
+- all existing V1 service values have one public home;
+- Autos/Work/Property/Trade mappings are explicit;
+- Health specialized owner is preserved;
+- 11 health public leaves are explicit;
+- the Stage1 V1 conflict is visible and **not silently solved**;
+- public labels and stored values are separated;
+- every CTA has one destination/owner;
+- no duplicate record/write owner is introduced;
+- no code has been changed.
 
-## 18. DOCUMENT-TO-TEST TRACEABILITY
+Whole approval authorizes bounded R1 prototype consolidation only.
 
-| Requirement family | Governing source | Test artifact |
-|---|---|---|
-| Four-group marketplace | Marketplace V3 + Canonical Recovery | route/category/form contract test |
-| Protected roles/owners | PROJECT_RULES + C protected/form locks | role regression matrix |
-| Form lifecycle | C lifecycle lock + audit matrix | manual + automated form state tests |
-| Search | B2/B8 applicable contracts | intent/result/failure cases |
-| Info/Health | B3 + Info visual canon | click-depth/source/freshness parity |
-| Q&A | B5/B6 applicable contracts | duplicate/moderation/share cases |
-| Facebook | B7 | share eligibility/fallback/privacy cases |
-| Articles | B4 + inventory/copy rules | readiness/content QA |
-| Render ownership | PROJECT_RULES_RENDER_OWNERSHIP | owner/static checks |
-
-## 19. READY CONDITION
-
-Тази матрица е complete за recovery review, когато:
-
-- всички rows са синхронизирани с Canonical Recovery;
-- Document Index класифицира всеки V6 документ;
-- Master/Progress/Handoff сочат към същата exact task;
-- няма placeholder route, fake Add или unmapped category;
-- docs checks минават;
-- user е получил ясна схема преди code approval.
+Separate LOCKED approval remains required for health listing taxonomy V2 and regulated professional verification/data-contract changes.
