@@ -35,6 +35,7 @@ Audit document branch: `v6-full-site-prototype-r1`
 9. `PUBLIC_PRODUCT_V6_IMPLEMENTATION_MATRIX.md` — draft review target, не implementation permission
 10. `PROJECT_PROGRESS.md`
 11. `LIVE_QA_FINDINGS_2026-08-22.md` като исторически regression/unfinished-task evidence.
+12. Текущите specialized Info owner-и в `v6-product-foundation-draft`, включително `info-lom-utilities-v1.js`, когато са по-конкретното доказателство за реално съществуващ flow.
 
 Критични invariants:
 
@@ -100,11 +101,17 @@ Approved visual language of Info Lom stays. Audit is only about whether the corr
 | Banks — ATM | generic config contains `Добави банкомат` | `info-lom-banks-v7.js` explicitly retains `Добави банкомат` → `InfoLom.openSubmission(...)` | **KEEP + RETEST** |
 | Banks — offices | generic config has no Add | specialized page only signal | **CORRECTLY NO ADD FORM** |
 | Institutions | generic owner has no Add configuration | current page has correction/signal infrastructure only | **CORRECTLY NO ADD FORM** |
-| Utilities | generic owner has no Add configuration | specialized Utilities page uses verified actions + signal | **CORRECTLY NO ADD FORM** |
+| Utilities — courier point | current specialized owner renders `Добави куриерска точка` and calls `InfoLom.openSubmission('komunalni','kurieri','courier_point')` | `info-lom-utilities-v1.js` | **KEEP + RETEST** |
+| Utilities — internet/TV provider | current specialized owner renders `Добави доставчик` and calls `InfoLom.openSubmission('komunalni','internet-tv','provider')` | `info-lom-utilities-v1.js` | **KEEP + RETEST** |
+| Utilities — payment point | current specialized owner has dedicated `Добави каса / място за плащане` form; authenticated submit → `info_submissions`, `status=pending` | `info-lom-utilities-v1.js` | **KEEP + RETEST** |
+| Utilities — insurance office | current specialized owner has dedicated `Добави застрахователен офис` form; authenticated submit → `info_submissions`, `status=pending` | `info-lom-utilities-v1.js` | **KEEP + RETEST** |
+| Utilities — Water/Power | verified actions and signal; no public Add entry in specialized owner | `info-lom-utilities-v1.js` | **CORRECTLY NO ADD FORM** |
 
 ### Important
 
 `Добави такси`, `Добави училище`, `Добави детска градина` are **not automatically approved for restoration by this audit**. They are evidence of capability present in the generic Info owner and absent after specialized single-owner rewrites. Before implementation we must resolve whether they remain intended public actions. If yes, restore them inside the specialized owner without reintroducing competing renderers.
+
+За разлика от тях, четирите Utility действия по-горе са доказани в **текущия specialized owner** и следователно не са „нови измислени форми“. Prototype може да моделира тези потоци като безопасна симулация на pending `info_submissions`, без Supabase write.
 
 ## 6. Search/filter forms — not write flows
 
@@ -146,7 +153,11 @@ Current evidence:
 - lost from Education specialized UI: `Добави детска градина`;
 - Banks proves the intended safe pattern: specialized renderer may keep the approved visual while calling the existing `InfoLom.openSubmission` owner.
 
-### F. Content completeness is separate from form completeness
+### F. Specialized Utilities add flows are real and current
+
+The previous audit line that treated Utilities as having no Add forms was too broad. Current `info-lom-utilities-v1.js` proves four specialized proposal flows: courier point, internet/TV provider, payment point and insurance office. These must be preserved in a content-complete prototype and must not be silently lost in a future renderer rewrite.
+
+### G. Content completeness is separate from form completeness
 
 `statii.html` currently contains one real article. Historical QA records home cards for two additional nonexistent articles as an OPEN defect. A finished-site prototype must therefore use real approved article content and cannot invent fake article cards to make the section look full.
 
@@ -179,9 +190,10 @@ The next content-complete prototype must:
 7. not change protected quotas/roles/moderation/ownership while simplifying public UX;
 8. keep a traceable checklist so every site surface can be compared against this audit before review.
 
-## 10. Next audit steps before prototype rebuild
+## 10. Next audit steps before whole-site review
 
-- close authority decision for the three Info candidate-lost actions (Taxi, School, Kindergarten);
-- benchmark modern marketplace listing-create UX before redesigning `dobavi-obqva.html` presentation;
-- complete content inventory, with Articles as a required first-class section;
-- then rebuild/consolidate the isolated prototype against this audit, not against mock assumptions.
+- keep the three unresolved candidate-lost Info actions (Taxi, School, Kindergarten) out of runtime until authority is reconciled;
+- model the four confirmed Utility proposal flows in the isolated prototype;
+- complete Info Lom content parity for Transport, Education, Banks, Utilities and Institutions;
+- run prototype lifecycle QA for Guest/User/Moderator/Admin;
+- compare the branch again against the safety baseline before review.
