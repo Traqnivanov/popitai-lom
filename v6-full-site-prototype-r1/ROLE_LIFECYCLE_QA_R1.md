@@ -88,7 +88,7 @@ Static evidence head at audit start: `ceee9cd0c6bd55df44785bb4df63d9716b60fe7a`
 | Role management | Не | **PASS — static** |
 | Expanded access grant/revoke | Не | **PASS — static** |
 | Moderation panel | Да, за разрешените задачи | **PASS — static representation** |
-| Self-moderation | Забранена | **PASS BY CURRENT FIXTURE / NEEDS INTERACTION + DYNAMIC RETEST** — текущата queue fixture съдържа чужди записи; role copy и правилото са правилни, но искаме отделен dynamic self-owned test case преди final acceptance. |
+| Self-moderation | Забранена | **PASS — static dynamic fixture** — `r-self` е маркиран `selfOwned:true`; при Модератор се филтрира от опашката и от listing брояча, а останалите чужди задачи остават видими. |
 
 ## 6. Администратор
 
@@ -103,6 +103,7 @@ Static evidence head at audit start: `ceee9cd0c6bd55df44785bb4df63d9716b60fe7a`
 | Role management | Видимо само за Admin | **PASS — static** |
 | Expanded access management | Видимо само за Admin | **PASS — static** |
 | Health/Shop/Info specialized proposals | Не се превръщат автоматично в generic direct-publish flows | **PASS — static representation** |
+| Self-owned QA fixture | Видимо за role comparison | **PASS — static** — Admin вижда тестовия запис, докато Moderator не го получава. |
 
 ## 7. Ownership / renderer findings
 
@@ -130,9 +131,17 @@ Static evidence head at audit start: `ceee9cd0c6bd55df44785bb4df63d9716b60fe7a`
 
 Същият клас проблем беше открит при Firm detail/form и е коригиран по същия двустранен модел.
 
+### FIXED — publish-as-firm visibility
+
+`Моя одобрена фирма` вече не се показва автоматично на всеки signed-in профил. Опцията се появява само при разрешен фирмен контекст.
+
 ### FIXED — mock share trust boundary
 
 Примерните Health/Firm/Shop/Event записи вече не се представят като готови canonical public записи за споделяне.
+
+### FIXED — Moderator self-moderation fixture
+
+Добавен е нарочен `selfOwned` запис. Модераторската опашка и броячите използват филтриран набор; Администраторският QA изглед запазва записа за сравнение.
 
 ## 8. Script dependency check
 
@@ -153,27 +162,19 @@ Static evidence head at audit start: `ceee9cd0c6bd55df44785bb4df63d9716b60fe7a`
 1. **Real browser interaction test** — BLOCKED, защото Opera Browser Connector не е свързан.
 2. **Mobile interaction test** — BLOCKED по същата причина.
 3. **Keyboard/focus trap interaction** — source изглежда правилно, но не се маркира interaction PASS без браузър.
-4. **Moderator self-owned queue dynamic fixture** — нуждае се от отделен self-owned test case, а не само от чуждите текущи fixtures.
-5. **Production behavior** — изобщо не се тества от R1; prototype approval не е production approval.
+4. **Production behavior** — изобщо не се тества от R1; prototype approval не е production approval.
 
 ## 10. Safety
 
-Последният сравнен diff към safety baseline `bdc333248a56060d6fa03565125a96ee5a52902d` показва:
-
-- branch е само ahead, не е behind;
-- всички променени файлове са под `v6-full-site-prototype-r1/`;
-- няма промяна в production/public files;
-- няма schema/RLS/CHECK/trigger/RPC промени;
-- няма промяна на реални роли, permissions, quotas или moderation backend;
-- няма промяна на `main`.
+Safety се затваря с нов compare към baseline след последните runtime/QA commits. Докато този compare не е изпълнен, старият резултат не се използва като финално доказателство.
 
 ## 11. Следващ acceptance gate
 
 Преди whole-site prototype да се нарече финално прегледан:
 
-1. dynamic Moderator self-moderation fixture;
-2. реален browser smoke test;
-3. mobile navigation/form interaction test;
+1. реален browser smoke test;
+2. mobile navigation/form interaction test;
+3. keyboard/focus interaction test;
 4. final visible-copy scan;
 5. final safety diff.
 
