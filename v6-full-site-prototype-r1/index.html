@@ -6,39 +6,48 @@
   <meta name="theme-color" content="#0b5fd7">
   <meta name="description" content="Изолиран R1 прототип на Попитай.Лом — без връзка с основния сайт или Supabase.">
   <title>Попитай.Лом — пълен R1 прототип</title>
+  <!-- Prototype-only components load first; approved public styles remain the final shell/Marketplace baseline. -->
   <link rel="stylesheet" href="prototype.css">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="../public-shell-v1.css">
+  <link rel="stylesheet" href="../marketplace-v3.css">
 </head>
-<body>
+<body class="r1-prototype">
   <a class="skip-link" href="#main">Към основното съдържание</a>
   <div class="prototype-ribbon" role="status">ПРОТОТИП · Няма реални записи · Основният сайт не се променя</div>
 
   <header class="site-header" id="site-header">
     <div class="header-inner">
-      <button class="brand route-link" type="button" data-route="home" aria-label="Попитай.Лом — начало">
-        <span class="brand-mark" aria-hidden="true">П</span>
-        <span class="brand-copy"><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span>
+      <button class="brand route-link prototype-brand" type="button" data-route="home" aria-label="Попитай.Лом — начало">
+        <img class="prototype-brand-logo" src="../assets/logo-full.svg" alt="Попитай.Лом">
       </button>
-      <nav class="desktop-nav" aria-label="Главна навигация">
-        <button class="route-link" data-route="home">Начало</button>
-        <button class="route-link" data-route="marketplace">Обяви и услуги</button>
-        <button class="route-link" data-route="firms">Фирми</button>
-        <button class="route-link" data-route="info">Инфо Лом</button>
-        <button class="route-link" data-route="articles">Статии</button>
-        <div class="nav-more">
-          <button type="button" id="more-toggle" aria-expanded="false">Още <span aria-hidden="true">⌄</span></button>
-          <div class="nav-more-menu" id="more-menu" hidden>
-            <button class="route-link" data-route="questions">Въпроси</button>
-            <button class="route-link" data-route="events">Събития</button>
-            <button class="route-link" data-route="about">За сайта</button>
-            <button class="route-link" data-route="rules">Правила</button>
-            <button class="route-link" data-route="contact">Контакти</button>
+
+      <nav class="main-nav prototype-main-nav" id="main-nav" aria-label="Главна навигация">
+        <div class="main-nav-primary">
+          <a class="route-link" href="#/home" data-route="home">Начало</a>
+          <a class="route-link" href="#/marketplace" data-route="marketplace">Обяви и услуги</a>
+          <a class="route-link" href="#/firms" data-route="firms">Фирми</a>
+          <a class="route-link" href="#/info" data-route="info">Инфо Лом</a>
+          <a class="route-link" href="#/articles" data-route="articles">Статии</a>
+          <div class="nav-more prototype-more">
+            <button type="button" id="more-toggle" aria-expanded="false">Още <span aria-hidden="true">⌄</span></button>
+            <div class="nav-more-menu" id="more-menu" hidden>
+              <a class="route-link" href="#/questions" data-route="questions">Въпроси</a>
+              <a class="route-link" href="#/events" data-route="events">Събития</a>
+              <a class="route-link" href="#/about" data-route="about">За сайта</a>
+              <a class="route-link" href="#/rules" data-route="rules">Правила</a>
+              <a class="route-link" href="#/contact" data-route="contact">Контакти</a>
+            </div>
           </div>
         </div>
-        <button class="route-link" data-route="profile">Профил</button>
       </nav>
+
       <div class="header-actions">
-        <button class="button button-primary add-trigger" type="button" aria-haspopup="dialog" aria-controls="add-layer">+ Добави</button>
-        <button class="icon-button" id="mobile-menu-toggle" type="button" aria-label="Отвори менюто" aria-expanded="false">☰</button>
+        <a class="login-link route-link" href="#/profile" data-route="profile">Профил</a>
+        <button class="ask-button add-trigger" type="button" aria-haspopup="dialog" aria-controls="add-layer">
+          <span aria-hidden="true">＋</span><span>Добави</span>
+        </button>
+        <button class="menu-button" id="mobile-menu-toggle" type="button" aria-label="Отвори менюто" aria-expanded="false"><span></span><span></span><span></span></button>
       </div>
     </div>
     <div class="mobile-drawer" id="mobile-drawer" hidden>
@@ -52,6 +61,7 @@
       <button class="route-link" data-route="about">За сайта</button>
       <button class="route-link" data-route="rules">Правила</button>
       <button class="route-link" data-route="contact">Контакти</button>
+      <button class="route-link" data-route="profile">Профил</button>
     </div>
   </header>
 
@@ -59,7 +69,7 @@
 
   <footer class="site-footer">
     <div class="footer-grid shell">
-      <div><strong class="footer-brand">Попитай<span>.Лом</span></strong><p>Местната общност на Лом за услуги, обяви, препоръки и проверена полезна информация.</p></div>
+      <div><img class="prototype-footer-logo" src="../assets/logo-full.svg" alt="Попитай.Лом"><p>Местната общност на Лом за услуги, обяви, препоръки и проверена полезна информация.</p></div>
       <div><h2>Разгледай</h2><button class="route-link" data-route="marketplace">Обяви и услуги</button><button class="route-link" data-route="firms">Фирми</button><button class="route-link" data-route="questions">Въпроси</button><button class="route-link" data-route="articles">Статии</button></div>
       <div><h2>За общността</h2><button class="route-link" data-route="about">За сайта</button><button class="route-link" data-route="rules">Правила</button><button class="route-link" data-route="contact">Контакти</button><button class="route-link" data-route="report">Подай сигнал</button></div>
       <div><h2>Правна информация</h2><button class="route-link" data-route="privacy">Поверителност</button><button class="route-link" data-route="terms">Условия за ползване</button><button class="route-link" data-route="cookies">Бисквитки</button></div>
