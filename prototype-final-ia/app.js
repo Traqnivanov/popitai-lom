@@ -85,8 +85,8 @@
   }
 
   function hub(query) {
-    const rows = `${demoRow('Примерна обява за услуга','Резултат от системата за обяви.','Услуга')}${demoRow('Примерен предмет за продажба','Резултат от системата за обяви.','Купува и продава')}${demoRow('Примерна позиция за работа','Резултат от системата за обяви.','Работа')}`;
-    return `<div class="page">${pageHead('Обяви и услуги','Един общ вход за задачите, без да смесваме системите, които управляват записите.')}<div class="shell"><div class="grid cols-3">${marketplace.map(card).join('')}</div><div class="section-head" style="margin-top:28px"><div><h2>Специализирани местни раздели</h2><p>Откриват се от същия общ вход, но запазват собствената си система.</p></div></div><div class="special-grid">${specialist.map(x=>`<a class="special-card" href="#${x.id}"><span>${x.icon}</span>${x.title}</a>`).join('')}</div><div class="section-head" style="margin-top:32px"><div><h2>Последни резултати</h2><p>Примерни записи само за проверка на композицията.</p></div></div>${stateContent(query,`<div class="result-list">${rows}</div>`)}</div></div>`;
+    const rows = `${demoRow('Примерна обява за услуга','Кратко описание на услугата, район и основна информация.','Услуга')}${demoRow('Примерен предмет за продажба','Заглавие, състояние и цена се виждат още в списъка.','Купува и продава')}${demoRow('Примерна позиция за работа','Тип работа и най-важните условия са видими без излишни стъпки.','Работа')}`;
+    return `<div class="page">${pageHead('Обяви и услуги','Намери обява, услуга, работа, имот, автомобил или друго на едно място.')}<div class="shell"><div class="grid cols-3">${marketplace.map(card).join('')}</div><div class="section-head compact-head"><div><h2>Още местни раздели</h2><p>Магазини, заведения и здравни услуги са на един клик разстояние.</p></div></div><div class="special-grid">${specialist.map(x=>`<a class="special-card" href="#${x.id}"><span>${x.icon}</span>${x.title}</a>`).join('')}</div><div class="section-head compact-head"><div><h2>Последни</h2><p>Примерни карти за визуална проверка — не са реални обяви.</p></div></div>${stateContent(query,`<div class="result-list">${rows}</div>`)}</div></div>`;
   }
 
   function familyPage(title, desc, groups, opts={}) {
@@ -105,15 +105,17 @@
   function work(){return familyPage('Работа','Първо избери широка област, после конкретната професия.',['Строителство, ремонти и техници','Производство, склад и общи работници','Транспорт, шофьори и доставки','Търговия и продажби','Заведения, хотели и туризъм','Почистване, домашна помощ и грижи','Здраве, красота и социални дейности','Офис, администрация, IT и специалисти','Друга / сезонна работа'],{placeholder:'Напр. шофьор, строителство, продавач…',context:'Работа',quick:['Строителство','Шофьори','Търговия','Заведения','Производство'],add:'#add/listing?category=Работа&type=Предлага работа',addLabel:'Добави обява за работа'});}
   function properties(){return `<div class="page">${pageHead('Имоти','Първо избери намерението, после вида имот.','Обяви и услуги')}<div class="shell"><div class="tabs">${['Продава','Отдава под наем','Купува','Търси под наем'].map((x,i)=>`<button class="tab ${i===0?'active':''}" type="button" data-demo-tab>${x}</button>`).join('')}</div><div class="grid cols-4">${propertyKinds.map(x=>`<a class="family-card" href="#results?context=Имоти&group=${encodeURIComponent(x)}&detail=listing&owner=Listings"><div class="icon">🏠</div><h3>${x}</h3><p>Резултати за избраното намерение.</p></a>`).join('')}</div><div class="page-tools"><a class="btn primary" href="#add/listing?category=Имоти&type=Продава имот">＋ Добави имот</a></div></div></div>`;}
   function goods(){return familyPage('Купува и продава','Стоките са групирани широко; конкретното се намира с търсене и подкатегории.',goodsGroups,{placeholder:'Какво купуваш или продаваш?',quick:['Телефони','Дом и градина','Дрехи','Инструменти'],context:'Купува и продава',add:'#add/listing',addLabel:'Добави обява'});}
-  function auto(){return familyPage('Автомобили','МПС, части и услуги са един тематичен вход, но не една обща база данни.',autoGroups,{placeholder:'Напр. автомобил, гуми, диагностика…',quick:['Автомобили','Гуми','Части','Диагностика','Пътна помощ'],context:'Автомобили',notice:'<div class="notice">„Автомобилни услуги“ води към същите записи от „Услуги“ — не се създава дублиран списък.</div>',add:'#add/listing?category=Автомобили и МПС',addLabel:'Добави обява'});}
+  function auto(){return familyPage('Автомобили','Купи или продай МПС, намери части или избери автомобилна услуга.',autoGroups,{placeholder:'Напр. автомобил, гуми, диагностика…',quick:['Автомобили','Гуми','Части','Диагностика','Пътна помощ'],context:'Автомобили',notice:'<div class="notice">Търсиш сервиз, гуми, диагностика или пътна помощ? Същите услуги се намират и през „Услуги“.</div>',add:'#add/listing?category=Автомобили и МПС',addLabel:'Добави обява'});}
   function animals(){return familyPage('Животни','Без платена продажба на живи животни на първия етап.',animalGroups,{placeholder:'Осиновяване, изгубено животно, стоки…',quick:['Кучета','Котки','Птици','Селскостопански'],context:'Животни',notice:'<div class="notice danger"><strong>Платена продажба на живи животни не е налична.</strong> Ветеринарите са в „Здраве“, а гледането и грумингът — в „Услуги“.</div>',add:'#add/listing?category=Животни',addLabel:'Добави допустима обява'});}
-  function shops(){return familyPage('Магазини','Специализираната система за магазини използва шест широки семейства и по-конкретни уточнения.',shopGroups,{placeholder:'Какъв магазин търсиш?',context:'Магазини',owner:'Shops',resultDetail:'firm',quick:shopGroups.slice(0,4),add:'#add/shop',addLabel:'Добави магазин',notice:'<div class="owner-box"><strong>Система:</strong> Магазини. Обикновена обява или фирмен профил не заобикаля специализираната форма за магазин.</div>'});}
-  function restaurants(){return familyPage('Заведения','Заведенията са фирмени профили с категория „Заведения“.',restaurantGroups,{placeholder:'Ресторант, кафе, пица, доставка…',context:'Заведения',owner:'Firms',resultDetail:'firm',quick:restaurantGroups.slice(0,5),add:'#add/firm?category=Заведения',addLabel:'Добави заведение',notice:'<div class="owner-box"><strong>Система:</strong> Фирми → категория „Заведения“. Няма второ отделно хранилище за заведения.</div>'});}
-  function health(){return familyPage('Здраве и лекари','Частните практики минават през специализираната здравна форма; проверената здравна информация остава в Инфо Лом.',healthGroups,{placeholder:'Лекар, специалист, стоматолог…',context:'Здраве и лекари',owner:'Health/Info',resultDetail:'health',quick:healthGroups,add:'#add/health',addLabel:'Добави лекар / здравна услуга',notice:'<div class="owner-box"><strong>Система:</strong> Здраве / Инфо Лом. Не се използват обикновени медицински обяви.</div>'});}
+  function shops(){return familyPage('Магазини','Намери местен магазин по вид или по това, което търсиш.',shopGroups,{placeholder:'Какъв магазин търсиш?',context:'Магазини',owner:'Shops',resultDetail:'firm',quick:shopGroups.slice(0,4),add:'#add/shop',addLabel:'Добави магазин'});}
+  function restaurants(){return familyPage('Заведения','Ресторанти, кафенета, пицарии, сладкарници и храна за вкъщи.',restaurantGroups,{placeholder:'Ресторант, кафе, пица, доставка…',context:'Заведения',owner:'Firms',resultDetail:'firm',quick:restaurantGroups.slice(0,5),add:'#add/firm?category=Заведения',addLabel:'Добави заведение'});}
+  function health(){return familyPage('Здраве и лекари','Намери лекар, специалист, стоматолог или ветеринар. Проверената справочна информация остава в Инфо Лом.',healthGroups,{placeholder:'Лекар, специалист, стоматолог…',context:'Здраве и лекари',owner:'Health/Info',resultDetail:'health',quick:healthGroups,add:'#add/health',addLabel:'Добави лекар / здравна услуга'});}
 
-  function info(){return `<div class="page">${pageHead('Инфо Лом','Проверена местна информация с източник и дата на последна проверка.')}<div class="shell"><div class="grid cols-3">${['Здраве','Транспорт','Институции','Образование','Комунални услуги','Полезни телефони'].map((x,i)=>`<a class="info-card" href="#detail/info"><h3>${['⚕️','🚌','🏛️','🎓','💡','☎️'][i]} ${x}</h3><p>Проверен справочен запис. Мнението на общността не става проверен факт.</p></a>`).join('')}</div><div class="notice" style="margin-top:16px">Прототипът не измисля реални телефони, адреси или работно време. В реалния сайт те идват само от проверените данни на Инфо Лом.</div></div></div>`;}
+  function info(){return `<div class="page">${pageHead('Инфо Лом','Проверена местна информация с източник и дата на последна проверка.')}<div class="shell"><div class="grid cols-3">${['Здраве','Транспорт','Институции','Образование','Комунални услуги','Полезни телефони'].map((x,i)=>`<a class="info-card" href="#detail/info"><h3>${['⚕️','🚌','🏛️','🎓','💡','☎️'][i]} ${x}</h3><p>Контакти, работно време, услуги, източник и последна проверка.</p></a>`).join('')}</div></div></div>`;}
+
   function firms(query){return `<div class="page">${pageHead('Фирми','Постоянни местни профили. Фирмата не е обява.')}<div class="shell"><div class="page-tools"><a class="btn primary" href="#add/firm">＋ Добави фирма</a></div><div class="section-head" style="margin-top:24px"><div><h2>Фирмени профили</h2><p>Без фалшиви оценки и популярност.</p></div></div>${stateContent(query,`<div class="result-list">${demoRow('Фирма за ремонти — демо','Постоянен профил с услуги, район и контакти.','Фирма','#detail/firm','Майстори')}${demoRow('Местен сервиз — демо','Постоянен фирмен профил, който може да се открива и през „Автомобили“.','Фирма','#detail/firm','Автомобили')}</div>`)}</div></div>`;}
-  function current(){return `<div class="page">${pageHead('Актуално','Публикации и събития в един общ екран за откриване, но като различни видове съдържание.')}<div class="shell"><div class="grid cols-2"><a class="content-card" href="#detail/publication"><span class="demo-label">ПРОТОТИП</span><h3><span class="badge gold">Публикация</span> Кратка местна актуализация</h3><p>Публикациите се създават само от администратор при старта. Могат да водят към статия, Инфо Лом, обява, фирма, събитие или въпрос.</p></a><a class="content-card" href="#detail/event"><span class="demo-label">ПРОТОТИП</span><h3><span class="badge green">Събитие</span> Предстоящо местно събитие</h3><p>Събитията остават в съществуващата система за събития. Няма публично „Добави събитие“.</p></a></div><div class="notice" style="margin-top:16px">В реалния сайт приключило събитие не се представя като предстоящо. Чакащо или скрито съдържание не се споделя публично.</div></div></div>`;}
+  function current(){return `<div class="page">${pageHead('Актуално','Кратки местни публикации и предстоящи събития на едно място.')}<div class="shell"><div class="grid cols-2"><a class="content-card" href="#detail/publication"><span class="demo-label">ПРИМЕР</span><h3><span class="badge gold">Публикация</span> Кратка местна актуализация</h3><p>Една конкретна промяна, полезно съобщение или местна тема — кратко и ясно.</p><small class="card-link">Прочети →</small></a><a class="content-card" href="#detail/event"><span class="demo-label">ПРИМЕР</span><h3><span class="badge green">Събитие</span> Предстоящо местно събитие</h3><p>При реален запис тук се виждат най-важните дата, час и място.</p><small class="card-link">Виж събитието →</small></a></div></div></div>`;}
+
   function articles(){return `<div class="page">${pageHead('Статии','Пълни практични ръководства с местната информация на първо място.')}<div class="shell"><div class="result-list">${demoRow('Как да решиш конкретна местна задача','Пълно ръководство: какво се прави в Лом, подготовка, изключения и проверени източници.','Статия','#detail/article','Ръководство')}${demoRow('Практично ръководство за местна услуга','Демонстрира дългосрочно полезно съдържание за търсачки, не кратка публикация.','Статия','#detail/article','Местната информация първо')}</div></div></div>`;}
   function questions(){return `<div class="page">${pageHead('Въпроси','Помощ от общността, когато няма готов отговор.')}<div class="shell"><div class="page-tools"><a class="btn primary" href="#add/question">＋ Задай въпрос</a></div><div class="result-list" style="margin-top:18px">${demoRow('Къде мога да намеря…?','Примерен въпрос. Отговорът от общността не се представя като проверена информация.','Въпрос','#detail/question','Общност')}</div></div></div>`;}
 
@@ -123,52 +125,93 @@
     const detailType=query.get('detail')||'listing';
     const owner=query.get('owner')||'Listings';
     const addTarget = owner==='Shops'?'#add/shop':owner==='Firms'?'#add/firm':owner==='Health/Info'?'#add/health':`#add/listing?category=${encodeURIComponent(context)}&subcategory=${encodeURIComponent(group)}`;
-    return `<div class="page">${pageHead(`Резултати: ${group}`,`${context} → ${group}. Това е прототипният екран с резултати между разглеждането и детайлната страница.`,'Обяви и услуги')}<div class="shell"><div class="owner-box"><strong>Система:</strong> ${esc(ownerLabel(owner))}. Начинът, по който е намерен записът, не създава негово копие.</div><div class="result-list">${demoRow(`${group} — примерен резултат 1`,`Прототипен резултат от ${ownerLabel(owner)}.`,'Резултат',`#detail/${detailType}`,context)}${demoRow(`${group} — примерен резултат 2`,`Втори пример за плътност на списъка и пътя към детайлната страница.`,'Резултат',`#detail/${detailType}`,context)}</div><div class="page-tools"><a class="btn primary" href="${addTarget}">＋ Публикувай през правилната форма</a><a class="btn" href="#add/question">Не намираш? Задай въпрос</a></div></div></div>`;
+    const noun = owner==='Shops'?'магазини':owner==='Firms'?'профили':owner==='Health/Info'?'здравни профили':'обяви';
+    return `<div class="page">${pageHead(group,`Разгледай ${noun} в „${context}“.`,'Обяви и услуги')}<div class="shell"><div class="result-list">${demoRow(`${group} — пример 1`,`Най-важната информация се вижда още в списъка.`,context,`#detail/${detailType}`,'Пример')}${demoRow(`${group} — пример 2`,`Втори примерен запис за проверка на плътността и подредбата.`,context,`#detail/${detailType}`,'Пример')}</div><div class="page-tools"><a class="btn primary" href="${addTarget}">＋ Публикувай в тази категория</a><a class="btn" href="#add/question">Не намираш? Задай въпрос</a></div></div></div>`;
   }
 
   function detail(kind){
     const map={
-      listing:['Обява — прототипен детайл','Обява','Listings','Състояние, описание, цена и публичен контакт според системата за обяви.'],
-      firm:['Фирма — прототипен профил','Фирма','Firms','Постоянен профил със запазена граница между базов и разширен профил.'],
-      article:['Статия — прототип','Статия','Статии','Пълно практично ръководство с местната информация на първо място и проверени източници.'],
-      publication:['Публикация — прототип','Публикация','Публикации','Кратка конкретна местна актуализация; при старта се създава само от администратор.'],
-      event:['Събитие — прототип','Събитие','Събития','В реалния сайт се показва само одобрено текущо или предстоящо събитие.'],
-      question:['Въпрос — прототип','Въпрос','Въпроси','Знание от общността, не проверена информация.'],
-      health:['Здравен профил — прототип','Здраве','Health/Info','Специализираната здравна система, не обикновена обява.'],
-      info:['Инфо Лом — прототипен запис','Инфо','Инфо Лом','Проверен запис с източник и дата на последна проверка.']
+      listing:{title:'Примерна обява',type:'Обява',desc:'Публичната обява показва най-важното без излишни технически подробности.',heading:'Примерно заглавие на обява',body:'Тук стои ясно описание на предложението, състоянието или търсенето. Реалният запис показва само данните, които потребителят е публикувал.',rows:[['Категория','Услуги'],['Район','Лом'],['Цена','По договаряне']],contact:true},
+      firm:{title:'Примерен фирмен профил',type:'Фирма',desc:'Постоянен профил с услуги, район, контакти и работно време.',heading:'Примерен местен фирмен профил',body:'Профилът представя фирмата постоянно, а конкретните обяви остават отделни.',rows:[['Категория','Майстори и ремонти'],['Район','Лом'],['Работно време','Показва се при реален запис']],contact:true},
+      article:{title:'Примерна статия',type:'Статия',desc:'Пълно практично ръководство с местната информация на първо място.',heading:'Как да решиш конкретна задача в Лом',body:'Статията започва с практичната местна стъпка, след това дава подготовка, важни изключения и проверени източници.',rows:[['Вид','Ръководство'],['Фокус','Лом и региона'],['Източници','Посочват се в реалната статия']]},
+      publication:{title:'Примерна публикация',type:'Публикация',desc:'Кратка конкретна местна актуализация.',heading:'Кратка местна актуализация',body:'Публикацията има една ясна причина да съществува и може да води към статия, Инфо Лом, обява, фирма, събитие или въпрос.',rows:[['Вид','Публикация'],['Тема','Местна актуализация']]},
+      event:{title:'Примерно събитие',type:'Събитие',desc:'Предстоящо местно събитие с ясни дата, час и място.',heading:'Предстоящо местно събитие',body:'При реален запис тук се показват описанието, организаторът и само актуалната публична информация.',rows:[['Дата и час','Показват се при реален запис'],['Място','Показва се при реален запис']]},
+      question:{title:'Примерен въпрос',type:'Въпрос',desc:'Помощ от общността, когато няма готов отговор.',heading:'Къде в Лом мога да намеря…?',body:'Отговорите от общността са ясно различени от проверената информация в Инфо Лом.',rows:[['Категория','Общност'],['Отговори','Показват се само реалните']]},
+      health:{title:'Примерен здравен профил',type:'Здраве',desc:'Лекар, специалист, стоматолог или ветеринар в специализирания здравен раздел.',heading:'Примерен здравен профил',body:'При реален запис тук се виждат специалност, кабинет, публичен контакт и последно потвърдена информация.',rows:[['Тип','Специалист'],['Район','Лом'],['Последно потвърдено','Показва се при реален запис']],contact:true},
+      info:{title:'Примерен запис в Инфо Лом',type:'Инфо',desc:'Проверена местна справочна информация с източник и последна проверка.',heading:'Примерен справочен запис',body:'При реален запис тук се показват точният контакт, работното време, услугите, източникът и датата на последна проверка.',rows:[['Източник','Показва се при реален запис'],['Последно проверено','Показва се при реален запис']]}
     };
-    const [title,type,owner,desc]=map[kind]||map.listing;
-    const gallery = ['listing','firm'].includes(kind)?`<div class="gallery-demo"><div>Примерна медия</div><div>Снимка</div><div>Снимка</div></div>`:'';
-    const sideAction = kind==='event'?'<div class="notice">Няма публично „Добави събитие“.</div>':kind==='publication'?'<div class="admin-note">При старта публикацията се създава само от администратор.</div>':kind==='info'?'<div class="notice ok">Примерно състояние „проверено по източник“ — не е реален факт.</div>':'<button class="btn primary" type="button">Основно действие</button>';
-    return `<div class="page">${pageHead(title,desc)}<div class="shell detail"><article class="detail-main"><span class="demo-label">ПРОТОТИПЕН ЗАПИС — НЕ Е РЕАЛНО СЪДЪРЖАНИЕ</span><h2>${type}: пример за цялостен детайлен екран</h2>${gallery}<p>Този екран проверява информационната йерархия и правилната система. Не съдържа измислен рейтинг, популярност или реални контактни данни.</p><h3>Описание</h3><p>${desc}</p><h3>Следваща стъпка</h3><p>Действията се определят от системата, която управлява записа, а не от категорията, през която е намерен.</p></article><aside class="detail-side"><div class="kv"><strong>Тип</strong><span>${type}</span></div><div class="kv"><strong>Система</strong><span>${ownerLabel(owner)}</span></div><div class="kv"><strong>Статус</strong><span>Публично прототипно състояние</span></div><div style="margin-top:16px">${sideAction}</div></aside></div></div>`;
+    const c=map[kind]||map.listing;
+    const gallery = ['listing','firm'].includes(kind)?`<div class="gallery-demo"><div>Основна снимка</div><div>Снимка</div><div>Снимка</div></div>`:'';
+    const rows=c.rows.map(([k,v])=>`<div class="kv"><strong>${esc(k)}</strong><span>${esc(v)}</span></div>`).join('');
+    const contact=c.contact?`<button class="btn primary" type="button" data-demo-contact>Покажи контакт</button><p class="contact-demo-message" aria-live="polite"></p>`:'';
+    const special=kind==='event'?'<div class="notice">Публично се показват само текущи и предстоящи събития.</div>':kind==='publication'?'<div class="admin-note">Публична форма за добавяне на публикация няма.</div>':kind==='info'?'<div class="notice ok">Всеки реален запис показва източник и дата на последна проверка.</div>':'';
+    return `<div class="page">${pageHead(c.title,c.desc)}<div class="shell detail"><article class="detail-main"><span class="demo-label">ПРИМЕР — НЕ Е РЕАЛНО СЪДЪРЖАНИЕ</span><h2>${esc(c.heading)}</h2>${gallery}<h3>Описание</h3><p>${esc(c.body)}</p></article><aside class="detail-side">${rows}<div class="detail-action">${contact}${special}</div></aside></div></div>`;
   }
 
+  const listingCategories=['Електроника','Дом и градина','Дрехи и обувки','Деца и бебета','Спорт и хоби','Автомобили и МПС','Животни','Работа','Имоти','Услуги','Друго'];
   const formConfig={
-    listing:{title:'Добави обява',owner:'Listings',note:'Същата форма за обяви обслужва стоки, услуги, работа, имоти, автомобили и допустимите обяви за животни.',fields:[['Заглавие','text'],['Категория','select'],['Подкатегория / вид','select'],['Тип обява','select'],['Описание','textarea'],['Цена','number'],['Телефон','tel'],['Град / район','text']]},
-    firm:{title:'Добави фирма',owner:'Firms',note:'Постоянен профил. Не се превръща автоматично в обява.',fields:[['Име на фирмата','text'],['Категория','select'],['Телефон','tel'],['Кратко описание','textarea']]},
-    shop:{title:'Добави магазин',owner:'Shops',note:'Специализираната форма за магазин остава отделна.',fields:[['Име на магазина','text'],['Категория','select'],['Телефон','tel'],['Адрес','text'],['Работно време','text'],['Какво предлага','textarea']]},
-    health:{title:'Добави лекар / здравна услуга',owner:'Health/Info',note:'Специализирано здравно предложение. Не се използва обикновена медицинска обява.',fields:[['Тип','select'],['Име','text'],['Специалност / услуга','text'],['Телефон','tel'],['Адрес / кабинет','text'],['Източник / уточнение','textarea']]},
-    question:{title:'Задай въпрос',owner:'Въпроси',note:'Въпросите и отговорите са резервната стъпка, когато няма готов отговор.',fields:[['Категория','select'],['Заглавие на въпроса','text'],['Подробности','textarea']]}
+    listing:{title:'Добави обява',subtitle:'Публикувай продажба, търсене, работа, имот или услуга.',owner:'Listings',fields:[['Заглавие','text'],['Категория','select'],['Подкатегория / вид','select'],['Тип обява','select'],['Описание','textarea'],['Цена','number'],['Телефон','tel'],['Град / район','text']]},
+    firm:{title:'Добави фирма',subtitle:'Създай постоянен профил на местна фирма или доставчик.',owner:'Firms',fields:[['Име на фирмата','text'],['Категория','select'],['Телефон','tel'],['Кратко описание','textarea']]},
+    shop:{title:'Добави магазин',subtitle:'Предложи местен магазин за преглед и публикуване.',owner:'Shops',fields:[['Име на магазина','text'],['Категория','select'],['Телефон','tel'],['Адрес','text'],['Работно време','text'],['Какво предлага','textarea']]},
+    health:{title:'Добави лекар / здравна услуга',subtitle:'Предложи лекар, специалист, стоматолог или ветеринар.',owner:'Health/Info',fields:[['Тип','select'],['Име','text'],['Специалност / услуга','text'],['Телефон','tel'],['Адрес / кабинет','text'],['Източник / уточнение','textarea']]},
+    question:{title:'Задай въпрос',subtitle:'Попитай общността, ако не намираш готов отговор.',owner:'Въпроси',fields:[['Категория','select'],['Заглавие на въпроса','text'],['Подробности','textarea']]}
   };
+
+  function selectOptions(values,current=''){
+    return `<option value="">Избери</option>`+values.map(v=>`<option value="${esc(v)}" ${String(v)===String(current)?'selected':''}>${esc(v)}</option>`).join('');
+  }
+
+  function optionsFor(kind,label,query){
+    if(kind==='listing' && label==='Категория') return listingCategories;
+    if(kind==='listing' && label==='Подкатегория / вид'){
+      const cat=query.get('category')||'';
+      if(cat==='Услуги') return serviceFamilies.flatMap(x=>x.slice(1));
+      if(cat==='Имоти') return propertyKinds;
+      if(cat==='Животни') return animalGroups;
+      if(cat==='Автомобили и МПС') return autoGroups;
+      return ['Друго'];
+    }
+    if(kind==='listing' && label==='Тип обява'){
+      const cat=query.get('category')||'';
+      if(cat==='Работа') return ['Предлага работа','Търси работа'];
+      if(cat==='Имоти') return ['Продава имот','Отдава под наем','Търси под наем','Търси за купуване'];
+      if(cat==='Животни') return ['Осиновяване','Изгубено','Намерено','Стоки за животни'];
+      return ['Продава','Купува','Търси','Дава'];
+    }
+    if(kind==='shop' && label==='Категория') return shopGroups;
+    if(kind==='health' && label==='Тип') return healthGroups;
+    if(kind==='firm' && label==='Категория') return ['Майстори и ремонти','Автомобили','Заведения','Работа и услуги','Здраве и лекари'];
+    if(kind==='question' && label==='Категория') return [...marketplace.map(x=>x.title),...specialist.map(x=>x.title),'Инфо Лом','Събития и град'];
+    return ['Примерна стойност','Друго'];
+  }
+
+  function currentForField(kind,label,query){
+    if(kind!=='listing') return label==='Категория'?query.get('category')||'':'';
+    if(label==='Категория') return query.get('category')||'';
+    if(label==='Подкатегория / вид') return query.get('subcategory')||'';
+    if(label==='Тип обява') return query.get('type')||'';
+    return '';
+  }
 
   function formPage(kind,query){
     const c=formConfig[kind]||formConfig.listing;
     const state=query.get('state');
     const edit=state==='edit';
-    if(state==='pending') return `<div class="page">${pageHead(c.title,'Прототипно състояние: чака преглед.')}<div class="shell form-wrap"><div class="notice"><strong>Изпратено за преглед.</strong> Последната одобрена публична версия остава видима там, където съответната система го изисква.</div></div></div>`;
-    if(state==='success') return `<div class="page">${pageHead(c.title,'Прототипно състояние: успешно изпращане.')}<div class="shell form-wrap"><div class="notice ok"><strong>Успешно изпратено.</strong> Това е само прототипно състояние — няма реален запис в системата.</div><a class="btn" href="#home" style="margin-top:14px">Към началото</a></div></div>`;
+    if(state==='pending') return `<div class="page">${pageHead(c.title,'Изпратено е за преглед.')}<div class="shell form-wrap"><div class="notice"><strong>Чака преглед.</strong> Ще стане публично след одобрение според правилата за този тип съдържание.</div></div></div>`;
+    if(state==='success') return `<div class="page">${pageHead(c.title,'Успешно изпращане.')}<div class="shell form-wrap"><div class="notice ok"><strong>Успешно изпратено.</strong> Това е прототип и не е създаден реален запис.</div><a class="btn" href="#home" style="margin-top:14px">Към началото</a></div></div>`;
     const fields=c.fields.map(([label,type],i)=>{
-      if(type==='textarea') return `<div class="field"><label>${label}</label><textarea rows="5" ${i<2?'required':''} placeholder="Прототипно поле"></textarea><span class="help">Въведеното не се изпраща никъде.</span></div>`;
-      if(type==='select') return `<div class="field"><label>${label}</label><select ${i<2?'required':''}><option value="">Избери</option><option>Примерна стойност</option><option>Друго</option></select></div>`;
-      return `<div class="field"><label>${label}</label><input type="${type}" ${i<2?'required':''} placeholder="${type==='tel'?'0876 123 456':'Прототипно поле'}"></div>`;
+      const current=currentForField(kind,label,query);
+      if(type==='textarea') return `<div class="field"><label>${esc(label)}</label><textarea rows="5" ${i<2?'required':''} placeholder="Опиши най-важното ясно и конкретно"></textarea></div>`;
+      if(type==='select') return `<div class="field"><label>${esc(label)}</label><select ${i<2?'required':''} ${kind==='listing'&&label==='Категория'?'id="listing-category"':''} ${kind==='listing'&&label==='Подкатегория / вид'?'id="listing-subcategory"':''} ${kind==='listing'&&label==='Тип обява'?'id="listing-type"':''}>${selectOptions(optionsFor(kind,label,query),current)}</select></div>`;
+      const placeholder=type==='tel'?'Напр. 0876 123 456':label==='Заглавие'?'Напр. Боядисване на апартаменти в Лом':label==='Град / район'?'Лом':'';
+      return `<div class="field"><label>${esc(label)}</label><input type="${type}" ${i<2?'required':''} placeholder="${esc(placeholder)}"></div>`;
     }).join('');
-    const animalWarning=kind==='listing'?'<div class="notice danger">При категория „Животни“ платена продажба на живи животни не се предлага. Достъпни са осиновяване, изгубени/намерени и стоки.</div>':'';
-    const prefill = [['Категория',query.get('category')],['Подкатегория',query.get('subcategory')],['Тип',query.get('type')]].filter(([,v])=>v);
-    const prefillBox = prefill.length?`<div class="owner-box"><strong>Предварително попълване:</strong> ${prefill.map(([k,v])=>`${esc(k)} = ${esc(v)}`).join(' · ')}. В реалния сайт стойностите остават редактируеми; при редакция запазеният запис има приоритет.</div>`:'';
-    return `<div class="page">${pageHead(edit?`Редактирай — ${c.title}`:c.title,'Пълна прототипна форма.')}<div class="shell form-wrap"><div class="owner-box"><strong>Система:</strong> ${ownerLabel(c.owner)}. ${c.note}</div>${prefillBox}${animalWarning}<form class="proto-form" data-proto-form novalidate>${fields}<div class="field"><label><input type="checkbox" required> Приемам правилата на общността</label></div><div class="form-actions"><button class="btn primary" type="submit">${edit?'Изпрати редакцията':'Изпрати за преглед'}</button><a class="btn" href="#home">Отказ</a></div><div class="form-message" aria-live="polite"></div></form></div></div>`;
+    const animalVisible=kind==='listing' && query.get('category')==='Животни';
+    const animalWarning=kind==='listing'?`<div class="notice danger" id="animal-warning" ${animalVisible?'':'hidden'}><strong>За живи животни:</strong> платена продажба не се предлага. Достъпни са осиновяване, изгубени/намерени и стоки.</div>`:'';
+    return `<div class="page">${pageHead(edit?`Редактирай — ${c.title}`:c.title,c.subtitle)}<div class="shell form-wrap">${animalWarning}<form class="proto-form" data-proto-form data-form-kind="${kind}" novalidate>${fields}<div class="field check-field"><label><input type="checkbox" required> Приемам правилата на общността</label></div><div class="form-actions"><button class="btn primary" type="submit">${edit?'Изпрати редакцията':'Изпрати за преглед'}</button><a class="btn" href="#home">Отказ</a></div><div class="form-message" aria-live="polite"></div></form></div></div>`;
   }
 
-  function staticPage(title,text){return `<div class="page">${pageHead(title,text)}<div class="shell"><div class="content-card"><p>${esc(text)}</p><p>Този екран е включен, за да няма навигационен линк към несвързан временен екран.</p></div></div></div>`;}
+  function staticPage(title,text){return `<div class="page">${pageHead(title,text)}<div class="shell"><div class="content-card"><p>${esc(text)}</p><p>Съдържанието тук ще използва действащите текстове и правила при реалната интеграция.</p></div></div></div>`;}
 
   function render(){
     const {path,query}=parseHash();
@@ -217,6 +260,25 @@
     if(e.target===addLayer) closeAdd();
     const tab=e.target.closest('[data-demo-tab]');
     if(tab){tab.parentElement.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));tab.classList.add('active');}
+    const contact=e.target.closest('[data-demo-contact]');
+    if(contact){const msg=contact.parentElement.querySelector('.contact-demo-message');if(msg) msg.textContent='Прототипът не съдържа реален телефон или лични данни.';}
+  });
+  document.addEventListener('change',e=>{
+    if(e.target.id==='listing-category'){
+      const cat=e.target.value;
+      const warn=document.getElementById('animal-warning');
+      if(warn) warn.hidden=cat!=='Животни';
+      const sub=document.getElementById('listing-subcategory');
+      const type=document.getElementById('listing-type');
+      if(sub){
+        const vals=cat==='Услуги'?serviceFamilies.flatMap(x=>x.slice(1)):cat==='Имоти'?propertyKinds:cat==='Животни'?animalGroups:cat==='Автомобили и МПС'?autoGroups:['Друго'];
+        sub.innerHTML=selectOptions(vals,'');
+      }
+      if(type){
+        const vals=cat==='Работа'?['Предлага работа','Търси работа']:cat==='Имоти'?['Продава имот','Отдава под наем','Търси под наем','Търси за купуване']:cat==='Животни'?['Осиновяване','Изгубено','Намерено','Стоки за животни']:['Продава','Купува','Търси','Дава'];
+        type.innerHTML=selectOptions(vals,'');
+      }
+    }
   });
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!addLayer.hidden)closeAdd();});
   document.addEventListener('submit',e=>{
