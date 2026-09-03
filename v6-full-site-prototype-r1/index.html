@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0b5fd7">
-  <meta name="description" content="Изолиран R1 прототип на Попитай.Лом — без връзка с production или Supabase.">
+  <meta name="description" content="Изолиран R1 прототип на Попитай.Лом — без връзка с основния сайт или Supabase.">
   <title>Попитай.Лом — пълен R1 прототип</title>
   <link rel="stylesheet" href="prototype.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Към основното съдържание</a>
-  <div class="prototype-ribbon" role="status">ПРОТОТИП · Няма реални записи · Production не се променя</div>
+  <div class="prototype-ribbon" role="status">ПРОТОТИП · Няма реални записи · Основният сайт не се променя</div>
 
   <header class="site-header" id="site-header">
     <div class="header-inner">
@@ -101,7 +101,7 @@
     <div class="prototype-tools-panel" id="prototype-tools-panel" hidden>
       <strong>Роля за преглед</strong>
       <div class="segmented" id="role-switcher">
-        <button data-role="guest">Гост</button><button data-role="user">Потребител</button><button data-role="moderator">Moderator</button><button data-role="admin">Admin</button>
+        <button data-role="guest">Гост</button><button data-role="user">Потребител</button><button data-role="moderator">Модератор</button><button data-role="admin">Администратор</button>
       </div>
       <label>Състояние на данните<select id="data-state"><option value="loaded">Заредено</option><option value="loading">Зареждане</option><option value="empty">Празно</option><option value="error">Грешка</option><option value="offline">Офлайн</option><option value="partial">Частичен резултат</option><option value="cancelled">Отменена / по-нова заявка</option></select></label>
       <button class="button button-soft" id="reset-prototype" type="button">Нулирай симулацията</button>
@@ -112,6 +112,7 @@
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
   <script src="prototype-data.js"></script>
+  <script src="prototype-info-data.js"></script>
   <script src="prototype-core.js"></script>
   <script src="prototype-listings.js"></script>
   <script src="prototype-listing-form.js"></script>
