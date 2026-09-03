@@ -1,17 +1,17 @@
 # Попитай.Лом — V6 Full-site Prototype R1
 
-Статус: **ACTIVE WHOLE-SITE PARITY REVIEW / ИЗОЛИРАН ПРОТОТИП / NO PRODUCTION WRITE / NO SUPABASE**
+Статус: **STATICALLY CONSOLIDATED / ACTIVE WHOLE-SITE REVIEW / INTERACTION QA BLOCKED / NO PRODUCTION CHANGE**
 
 Branch: `v6-full-site-prototype-r1`  
 Safety baseline: `bdc333248a56060d6fa03565125a96ee5a52902d`
 
 ## Защо съществува
 
-Това е цялостен navigable prototype преди реалната V6 implementation. Целта е собственикът на проекта да прегледа продукта като сайт — съдържание, навигация, бутони, форми, роли, състояния, mobile/desktop и owner boundaries — преди production кодът да бъде променян.
+Това е цялостен navigable prototype преди реалната V6 implementation. Целта е собственикът на проекта да прегледа продукта като сайт — съдържание, навигация, бутони, форми, роли, състояния, mobile/desktop и ownership boundaries — преди production кодът да бъде променян.
 
 Това не е поредният V18/V19 visual patch. Старият layered `v6-prototype` остава непокътнат и не участва в runtime-а на R1.
 
-Текущият етап е **content/form parity audit**, затова R1 още не се обявява за финално приет whole-site prototype. Когато реалният owner е динамичен и офлайн R1 няма authoritative записи, примерните записи са обозначени изрично като примери вместо да изглеждат като реални текущи данни.
+Текущият етап е **whole-site parity + role/lifecycle review**. Когато реалният източник е динамичен и офлайн R1 няма authoritative записи, примерните записи са обозначени изрично като примери вместо да изглеждат като реални текущи данни.
 
 ## Изолация / застраховка
 
@@ -34,16 +34,23 @@ R1 е разделен по функция, а не по версии и пач�
 - `prototype-data.js` — representative/mock данни за interaction QA;
 - `prototype-info-data.js` — статични реални review данни от current specialized Info surfaces;
 - `prototype-core.js` — Home + Marketplace discovery/browse core;
-- `prototype-listings.js` — Listings + Health dual-owner listing/form flows;
-- `prototype-listing-form.js` — progressive Listing create/edit presentation върху protected semantics;
+- `prototype-listings.js` — Health browse/detail/proposal + Listing detail + shared helpers;
+- `prototype-listing-form.js` — **единственият Listing create/edit renderer**;
 - `prototype-local.js` — Firms + Shops + Restaurants + Events;
 - `prototype-info-community.js` — Info base + Articles + Q&A + Search;
 - `prototype-info-parity.js` — specialized Transport/Education/Banks/Utilities/Institutions parity + доказаните Info proposal flows;
-- `prototype-profile-admin.js` — Profile/Auth + Reports + Admin/Moderator review simulation;
+- `prototype-profile-admin.js` — Profile/Auth + Reports + role-aware moderation simulation;
 - `prototype-forms.js` — shared validation + dirty/submitting/success lifecycle;
 - `prototype-app.js` — един router/event/modal/navigation owner.
 
-Няма competing renderer за един и същ root, няма MutationObserver patch chain и няма V18/V19 слой.
+Старият дублиран `renderListingForm()` е премахнат от `prototype-listings.js`. Няма load-order override за Listing формата, няма MutationObserver patch chain и няма V18/V19 слой.
+
+## QA документи
+
+- `FORM_FLOW_AUDIT_R1.md` — реалните write/search flows и authority gaps;
+- `CONTENT_PARITY_INVENTORY_R1.md` — content coverage и real-vs-example граници;
+- `LISTING_UX_BENCHMARK_R1.md` — аргументация за progressive Listing UX;
+- `ROLE_LIFECYCLE_QA_R1.md` — Guest/User/Moderator/Admin, edit ownership, self-moderation и form lifecycle.
 
 ## Представена продуктова структура
 
@@ -83,7 +90,7 @@ Health показва два различни типа съдържание в �
 
 ### Инфо Лом
 
-R1 вече представя реалния обхват на current specialized source-овете:
+R1 представя реалния обхват на current specialized source-овете:
 
 - Transport: Автогара, ЖП гара, текущо потвърдено такси + официални действия;
 - Education: 8 училища, 7 детски градини, 4 читалища, 1 библиотека, 1 музей, 3 школи/курсове;
@@ -106,7 +113,7 @@ R1 вече представя реалния обхват на current speciali
 - Добави училище;
 - Добави детска градина.
 
-## Form lifecycle target — вече моделиран в R1
+## Form lifecycle target — моделиран в R1
 
 Content forms имат:
 
@@ -123,6 +130,17 @@ Content forms имат:
 - credential forms са изключени от aggressive content dirty guard.
 
 Listing form запазва protected fields/semantics и показва progressive context-specific questions, а не raw backend structure. Admin не получава изкуствен normal-user photo cap в prototype presentation.
+
+## Ownership / role защити, вече моделирани
+
+- Listing edit бутонът и самият `?edit=` route проверяват разрешения ownership context.
+- Firm edit бутонът и самият `?edit=` route правят същото.
+- `Моя одобрена фирма` се предлага като publisher само при разрешен фирмен контекст.
+- Moderator own content остава normal-user lifecycle.
+- Нарочен `selfOwned` QA запис се филтрира от Moderator queue и от съответния брояч.
+- Admin вижда self-owned QA записа за сравнение на ролите.
+- Permanent delete / role management / expanded access controls са Admin-only в R1.
+- Примерните Health/Firm/Shop/Event/Q&A записи нямат активен canonical share.
 
 ## Покритие
 
@@ -150,7 +168,7 @@ Listing form запазва protected fields/semantics и показва progres
 - Q&A index/detail/ask/answer + duplicate warning;
 - Profile + auth/register/recovery + content statuses;
 - Report vs Correction semantics;
-- Admin/Moderator role-aware panel simulation;
+- role-aware moderation panel simulation;
 - protected Moderator/Admin differences;
 - global Add routing;
 - public/canonical-only share preview + copy-link simulation;
@@ -222,7 +240,7 @@ RawGitHack е само временен static preview host. При първо �
 
 ## QA ограничения на този чат
 
-Source/dependency проверката е извършена през GitHub. Автоматичният browser interaction test не може да бъде стартиран от този чат, защото свързаният Opera Browser Connector в момента не е разрешен (`Allow AI connection` не е включено). Това **не се маркира като PASS**; interaction/mobile review остава отделна проверка.
+Source/dependency/role/lifecycle проверките са извършени през GitHub. Автоматичният browser interaction test не може да бъде стартиран от този чат, защото свързаният Opera Browser Connector в момента не е разрешен (`Allow AI connection` не е включено). Това **не се маркира като PASS**; interaction/mobile/keyboard review остава отделна проверка.
 
 ## Approval boundary
 
