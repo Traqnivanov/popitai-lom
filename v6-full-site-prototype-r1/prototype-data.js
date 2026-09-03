@@ -44,7 +44,7 @@ window.POPITAI_PROTO_DATA = {
     {id:"f1",name:"Иванов Ремонти",category:"Строителство и ремонти",city:"Лом",phone:"0876 000 000",address:"Лом и района",hours:"Пон–Съб: 08:00–18:00",description:"Цялостни ремонти и довършителни дейности.",expanded:true,admin:true,services:["Цялостни ремонти","Бани и плочки","Шпакловка и боядисване","ВиК и довършителни работи"],area:"Лом, Монтана и района",website:"ivanov-remonti.com",status:"approved"},
     {id:"f2",name:"Авто Сервиз Лом",category:"Автомобили",city:"Лом",phone:"0878 456 789",address:"гр. Лом",hours:"Пон–Пет: 09:00–18:00",description:"Автодиагностика и сервизни услуги.",expanded:false,status:"approved"},
     {id:"f3",name:"Фото Студио Дунав",category:"Професионални услуги",city:"Лом",phone:"0888 332 211",address:"Център, Лом",hours:"С предварително записване",description:"Фото и видео услуги за семейни и местни събития.",expanded:false,status:"approved"},
-    {id:"f4",name:"Ресторант Дунав",category:"Заведения",city:"Лом",phone:"0877 222 333",address:"край Дунав, Лом",hours:"Всеки ден: 11:00–23:00",description:"Примерен ресторант за демонстрация на Firms-owned ресторантски профил.",expanded:true,status:"approved",services:["Обяд","Вечеря","Събития"]}
+    {id:"f4",name:"Ресторант Дунав",category:"Заведения",city:"Лом",phone:"0877 222 333",address:"край Дунав, Лом",hours:"Всеки ден: 11:00–23:00",description:"Примерен ресторант за преглед на фирмения профил на заведение.",expanded:true,status:"approved",services:["Обяд","Вечеря","Събития"]}
   ],
   healthProviders:[
     {id:"h1",name:"Д-р Мария Иванова",kind:"Лекар",specialty:"Обща медицина",phone:"0971 00 001",address:"Лом",status:"confirmed",confirmed:"Последно потвърдено: примерна дата",source:"Health/Info owner"},
@@ -57,7 +57,7 @@ window.POPITAI_PROTO_DATA = {
     {id:"s3",name:"Техника Лом",category:"Техника",phone:"0877 303 303",address:"Лом",hours:"09:00–18:30",tags:["Телефони","Електроника"],status:"approved"}
   ],
   events:[
-    {id:"e1",title:"Градско културно събитие",date:"12 септември 2026",time:"18:30",place:"Лом",description:"Примерно одобрено предстоящо събитие за преглед на Event owner-а.",status:"approved"},
+    {id:"e1",title:"Градско културно събитие",date:"12 септември 2026",time:"18:30",place:"Лом",description:"Примерно одобрено предстоящо събитие за преглед на изгледа за събития.",status:"approved"},
     {id:"e2",title:"Детска работилница",date:"19 септември 2026",time:"11:00",place:"Лом",description:"Примерно събитие за семейства и деца.",status:"approved"}
   ],
   infoRecords:[
@@ -85,8 +85,9 @@ window.POPITAI_PROTO_DATA = {
     questions:[{title:"Има ли препоръки за транспорт при преместване?",status:"approved"}],
     corrections:[{title:"Корекция на телефон в Инфо Лом",status:"pending"}]
   },
-  adminCounts:{listings:2,firms:1,shops:1,info:2,reports:1,edits:2,expanded:1,events:0},
+  adminCounts:{listings:3,firms:1,shops:1,info:2,reports:1,edits:2,expanded:1,events:0},
   adminQueue:[
+    {id:"r-self",type:"Обява",title:"Моя обява — тест за self-moderation",owner:"Тестов потребител",selfOwned:true,status:"pending"},
     {id:"r1",type:"Обява",title:"Продавам диван",owner:"Чужд потребител",status:"pending"},
     {id:"r2",type:"Обява",title:"Предлагам домашна помощ",owner:"Чужд потребител",status:"pending"},
     {id:"r3",type:"Фирма",title:"Нова фирма в Лом",owner:"Чужд потребител",status:"pending"},
