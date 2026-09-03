@@ -67,37 +67,43 @@
 - protected relevance/Иванов Ремонти приоритетът;
 - render ownership правилата.
 
-Новата публична IA се адаптира към тези owners и flows. Не създава паралелни таблици, форми, owners или Admin опашки по удобство.
+Одобрената публична IA се адаптира към тези owners и flows. Тя не създава паралелни таблици, форми, owners или Admin опашки по удобство.
 
 ## 5. Текуща продуктова граница
 
-- `Обяви и услуги` е одобрено общо направление, но точната marketplace taxonomy, ред, first-screen видимост и navigation още не са финално одобрени.
+- Public discovery/marketplace IA е **ОДОБРЕНА** и е описана точно в `POPITAI_LOM_MASTER_CURRENT.md`.
+- Основните marketplace входове са `Услуги`, `Купува и продава`, `Работа`, `Имоти`, `Автомобили`, `Животни`, плюс специализираните `Магазини`, `Заведения`, `Здраве и лекари`.
+- Решението за `Услуги`, first-screen структурата, Home, desktop/mobile navigation и route картата са част от одобрения Master.
+- Платена продажба на живи животни не се активира на първия етап.
 - Info Lom остава отделна проверена справочна система, не marketplace.
 - Фирми, Магазини, Заведения, Health и Събития запазват съществуващите си owner правила според Master-а.
+- Публикациите имат одобрена отделна editorial owner посока с Admin-only authoring при launch, но реалният backend/schema/RLS още не е разрешен за implementation.
 - Статии, Публикации, Q&A, Facebook/share и SEO се следват според текущия Master, а не според отменен prototype или стар handoff.
 
 ## 6. Текущо разрешение за работа
 
-До финално одобрение на цялата discovery/marketplace IA са разрешени:
+Разрешени са:
 
-- read-only repo/production/prototype одит;
-- извличане и съгласуване на решения;
+- read-only repo/production одит;
+- документационна консолидация;
 - form/owner/category/route inventory;
-- benchmark проучване;
-- една финална IA схема;
-- content-complete prototype specification;
-- документационни промени за премахване на конфликтни/отменени инструкции.
+- benchmark/UX проверка;
+- **изолиран content-complete prototype** по одобрената IA;
+- prototype HTML/CSS/JS, mock/static data и реалистични states без production writes;
+- desktop/mobile user journeys и accessibility проверка.
 
 Не са разрешени на този етап:
 
-- production code;
-- Supabase/schema/RLS промени;
-- нов owner или нова форма;
-- промяна на protected semantics;
-- нов визуален prototype layer преди финалната IA схема.
+- merge/deploy към production `main`;
+- Supabase/schema/RLS/policy/migration промени;
+- нов production owner/form/backend без приложимото отделно техническо разрешение;
+- промяна на Admin/Moderator, quotas, ownership, direct-publish или approval semantics;
+- промяна на protected Firms/Listings/Masters internals като страничен ефект;
+- production route/canonical migration преди отделен implementation/SEO audit;
+- нов слой върху старите V/V3 renderers вместо един ясен prototype owner.
 
 ## 7. Основно правило за следващ чат/агент
 
 Не карай собственика да възстановява проекта от паметта си.
 
-Първо прочети `POPITAI_LOM_MASTER_CURRENT.md`, запази вече одобреното и protected ядро, а старите документи използвай само като доказателство при конкретна нужда. Ако нещо наистина остава нерешено, събери само действително отворените решения за едно общо одобрение преди код.
+Първо прочети `POPITAI_LOM_MASTER_CURRENT.md`, запази вече одобреното и protected ядро. Следващата продуктова acceptance граница е **content-complete prototype**, не ново преразглеждане на вече одобрената IA. Старите документи използвай само като доказателство при конкретна нужда. Ако излезе истински нов бизнес избор, спри само за него; техническите и UX решения в рамките на одобрения Master се изпълняват автономно.
