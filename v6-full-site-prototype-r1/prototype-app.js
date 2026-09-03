@@ -53,9 +53,9 @@ function contextualAddOptions(){
     ["Добави фирма", "Постоянен профил на местна фирма или доставчик", "firm-form"],
     ["Задай въпрос", "Потърси съвет, опит или препоръка", "ask"]
   ];
-  if (isHealth) base.unshift(["Добави специалист или практика", "Специализирано Health/Info предложение за проверка", "health-proposal"]);
-  if (isHealth) base.splice(1, 0, ["Публикувай или потърси здравна услуга", "Временна обява през Listings owner", "listing-form?main=services&group=health"]);
-  if (isShops) base.unshift(["Предложи магазин", "Специализиран Shops owner; предложението чака проверка", "shop-proposal"]);
+  if (isHealth) base.unshift(["Добави специалист или практика", "Предложението се проверява преди да стане част от здравния справочник", "health-proposal"]);
+  if (isHealth) base.splice(1, 0, ["Публикувай или потърси здравна услуга", "Временна обява за предлагане или търсене на услуга", "listing-form?main=services&group=health"]);
+  if (isShops) base.unshift(["Предложи магазин", "Предложението чака проверка преди публично показване", "shop-proposal"]);
   return base;
 }
 
@@ -82,7 +82,7 @@ function openShare(trigger){
   const title = trigger.dataset.shareTitle || "Попитай.Лом";
   const url = safePrototypeUrl(route);
   if (shareContent) shareContent.innerHTML = `
-    <div class="notice notice-info"><strong>Прототипен share pack</strong>В production това действие ще използва публичен canonical URL само когато owner-ът потвърждава, че съдържанието е одобрено и публично.</div>
+    <div class="notice notice-info"><strong>Преглед на споделянето</strong>В истинския сайт се споделя публичният адрес само след като съдържанието е одобрено и има публична страница.</div>
     <div class="detail-block mt-16"><h3>${esc(title)}</h3><p class="muted">${esc(url)}</p></div>
     <div class="form-actions mt-16"><button class="button button-primary" type="button" data-action="copy-share" data-copy="${esc(url)}">Копирай линк</button><button class="button button-soft" type="button" data-close-modal>Затвори</button></div>`;
   openModal(shareLayer, trigger);
@@ -97,7 +97,7 @@ async function copyText(value){
       document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove();
     }
     toast("Линкът е копиран.");
-  } catch { toast("Копирането не е достъпно в този preview. Линкът остава видим."); }
+  } catch { toast("Копирането не е достъпно в този преглед. Линкът остава видим."); }
 }
 
 function refreshRoleUI(){
@@ -108,7 +108,7 @@ function refreshRoleUI(){
 
 function updateActiveNavigation(){
   const r = routeInfo();
-  const top = ({marketplace:"marketplace",listing:"marketplace","listing-form":"marketplace",firms:"firms",firm:"firms","firm-form":"firms",restaurants:"firms",info:"info","info-detail":"info","health-provider":"marketplace","health-proposal":"marketplace",articles:"articles",article:"articles",questions:"questions",question:"questions",ask:"questions",events:"events",event:"events",profile:"profile",auth:"profile"})[r.parts[0]] || (r.parts[0] === "home" ? "home" : "");
+  const top = ({marketplace:"marketplace",listing:"marketplace","listing-form":"marketplace",firms:"firms",firm:"firms","firm-form":"firms",restaurants:"firms",info:"info","info-detail":"info","info-proposal":"info","health-provider":"marketplace","health-proposal":"marketplace",articles:"articles",article:"articles",questions:"questions",question:"questions",ask:"questions",events:"events",event:"events",profile:"profile",auth:"profile"})[r.parts[0]] || (r.parts[0] === "home" ? "home" : "");
   document.querySelectorAll(".desktop-nav .route-link, .mobile-bottom-nav .route-link").forEach(btn => {
     const active = btn.dataset.route === top;
     btn.classList.toggle("active", active);
@@ -137,6 +137,7 @@ function render(){
     case "event": renderEventDetail(r.parts[1]); break;
     case "info": renderInfo(); break;
     case "info-detail": renderInfoDetail(r.parts[1]); break;
+    case "info-proposal": renderInfoProposal(); break;
     case "correction": renderCorrection(); break;
     case "articles": renderArticles(); break;
     case "article": renderArticle(r.parts[1]); break;
@@ -236,13 +237,13 @@ document.addEventListener("click", e => {
     case "website": toast("Симулация: отваряне на публичния сайт на фирмата."); break;
     case "copy-share": copyText(action.dataset.copy || ""); break;
     case "logout": state.role = "guest"; saveState(); renderProfile(); refreshRoleUI(); break;
-    case "profile-edit": toast("В реалния поток бутонът отваря правилния owner edit/resubmit екран. Прототипът не променя статуса."); break;
-    case "review-open": toast("Симулация: отворен е detail review без промяна на данни."); break;
-    case "review-approve": toast("Симулация: Одобрено. Няма реален database write."); break;
-    case "review-return": toast("Симулация: Върнато за корекция. Няма реален database write."); break;
-    case "review-hide": toast("Симулация: Скрито/отказано чрез обратим moderation flow."); break;
-    case "admin-hard-delete": if (isAdmin()) toast("Admin-only permanent delete е представен, но е изключен в прототипа."); else toast("Permanent delete е Admin-only."); break;
-    case "admin-manage-roles": case "admin-expanded": case "admin-system": toast("Admin-only management surface — без реална промяна в прототипа."); break;
+    case "profile-edit": toast("В реалния поток бутонът отваря правилния екран за редакция. Прототипът не променя статуса."); break;
+    case "review-open": toast("Симулация: отворен е прегледът на записа без промяна на данните."); break;
+    case "review-approve": toast("Симулация: Одобрено. Няма реален запис в базата."); break;
+    case "review-return": toast("Симулация: Върнато за корекция. Няма реален запис в базата."); break;
+    case "review-hide": toast("Симулация: Скрито/отказано чрез обратимо модераторско действие."); break;
+    case "admin-hard-delete": if (isAdmin()) toast("Окончателното изтриване е действие само за администратор и е изключено в прототипа."); else toast("Окончателното изтриване е само за администратор."); break;
+    case "admin-manage-roles": case "admin-expanded": case "admin-system": toast("Администраторска функция — без реална промяна в прототипа."); break;
   }
 });
 
