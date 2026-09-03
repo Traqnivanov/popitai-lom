@@ -137,11 +137,15 @@ Static evidence head at audit start: `ceee9cd0c6bd55df44785bb4df63d9716b60fe7a`
 
 ### FIXED — mock share trust boundary
 
-Примерните Health/Firm/Shop/Event записи вече не се представят като готови canonical public записи за споделяне.
+Примерните Health/Firm/Shop/Event/Q&A записи вече не се представят като готови canonical public записи за споделяне.
 
 ### FIXED — Moderator self-moderation fixture
 
 Добавен е нарочен `selfOwned` запис. Модераторската опашка и броячите използват филтриран набор; Администраторският QA изглед запазва записа за сравнение.
+
+### PASS — visible runtime copy scan
+
+Прегледани са основните runtime surfaces и success/error states. Премахнати са видими технически етикети като `owner`, `flow`, `Listings-owned`, `content parity`, `prototype data` и английските role-management формулировки, без да се променя вътрешната техническа стойност на route/data полетата.
 
 ## 8. Script dependency check
 
@@ -163,19 +167,30 @@ Static evidence head at audit start: `ceee9cd0c6bd55df44785bb4df63d9716b60fe7a`
 2. **Mobile interaction test** — BLOCKED по същата причина.
 3. **Keyboard/focus trap interaction** — source изглежда правилно, но не се маркира interaction PASS без браузър.
 4. **Production behavior** — изобщо не се тества от R1; prototype approval не е production approval.
+5. **Local Node syntax fetch-check** — опитът е блокиран от DNS на container средата (`raw.githubusercontent.com` не може да се resolve-не), затова не се отчита като проведен тест.
 
 ## 10. Safety
 
-Safety се затваря с нов compare към baseline след последните runtime/QA commits. Докато този compare не е изпълнен, старият резултат не се използва като финално доказателство.
+Последният compare след всички runtime промени и преди този documentation-only sync е:
+
+- baseline: `bdc333248a56060d6fa03565125a96ee5a52902d`;
+- branch status: **ahead**;
+- **46 commits ahead / 0 behind**;
+- точно **18 променени файла**;
+- всички 18 файла са под `v6-full-site-prototype-r1/`;
+- няма production/public файл извън изолирания prototype directory;
+- няма промяна на `main`;
+- няма schema/RLS/CHECK/trigger/RPC промени;
+- няма промяна на реални роли, permissions, quotas или moderation backend.
+
+Този файл е последващ documentation-only sync в същата изолирана директория; финалният branch compare след него трябва да остане със същата file boundary.
 
 ## 11. Следващ acceptance gate
 
-Преди whole-site prototype да се нарече финално прегледан:
+Статичната консолидация е приключена. Преди whole-site prototype да се нарече **interaction-tested** остават само:
 
 1. реален browser smoke test;
 2. mobile navigation/form interaction test;
-3. keyboard/focus interaction test;
-4. final visible-copy scan;
-5. final safety diff.
+3. keyboard/focus interaction test.
 
 До тогава статусът остава **STATICALLY CONSOLIDATED / INTERACTION NOT YET PASSED**.
