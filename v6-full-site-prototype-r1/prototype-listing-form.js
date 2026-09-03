@@ -44,20 +44,27 @@
     }
     return rows.map((x,i)=>choice("simple_action",x[0],x[1],x[2],i,current===x[0])).join("");
   }
-  function serviceStep(groupValue,leafValue,actionValue){
+  function serviceStep(groupValue,leafValue,actionValue,{lockGroup=false,lockLeaf=false}={}){
     const groupOptions=D.serviceGroups.map(g=>({value:g.key,label:g.title}));
     const group=D.serviceGroups.find(g=>g.key===groupValue);
     const leafOptions=group?.leaves||[];
     const otherHealth=groupValue==="health"&&leafValue==="Друга здравна услуга";
-    return `<div class="form-section"><h3>2. Уточни услугата</h3><p class="muted">Не е нужно да знаеш вътрешните категории на сайта — избери най-близкото описание.</p><div class="choice-grid">${actionChoices("services",actionValue,leafValue)}</div><div class="form-grid mt-16">${selectField("Каква услуга е?","simple_group",groupOptions,groupValue,{required:true,full:true,placeholder:"Избери вид услуга"})}${groupValue?selectField("Уточни услугата","simple_leaf",leafOptions,leafValue,{required:true,full:true,placeholder:"Избери конкретна услуга"}):""}${otherHealth?field("Каква точно е здравната услуга?","custom_service_name",{required:true,min:3,full:true,placeholder:"Например: домашна смяна на превръзка"}):""}</div>${groupValue==="health"?`<div class="notice notice-warn mt-16"><strong>Здравна услуга ≠ потвърден специалист</strong>Това е временна обява. Новите здравни видове тук са за преглед на бъдещата структура; преди внедряване в реалния сайт е нужна отделна защитена промяна на допустимите стойности.</div>`:""}</div>`;
+    const selects=[
+      !lockGroup?selectField("Каква услуга е?","simple_group",groupOptions,groupValue,{required:true,full:true,placeholder:"Избери вид услуга"}):"",
+      groupValue&&!lockLeaf?selectField("Уточни услугата","simple_leaf",leafOptions,leafValue,{required:true,full:true,placeholder:"Избери конкретна услуга"}):"",
+      otherHealth?field("Каква точно е здравната услуга?","custom_service_name",{required:true,min:3,full:true,placeholder:"Например: домашна смяна на превръзка"}):""
+    ].filter(Boolean).join("");
+    return `<div class="form-section"><h3>Уточни услугата</h3><p class="muted">Избери само това, което още не е известно от мястото, от което дойде.</p><div class="choice-grid">${actionChoices("services",actionValue,leafValue)}</div>${selects?`<div class="form-grid mt-16">${selects}</div>`:""}${groupValue==="health"?`<div class="notice notice-warn mt-16"><strong>Здравна услуга ≠ потвърден специалист</strong>Това е временна обява. Новите здравни видове тук са за преглед на бъдещата структура; преди внедряване в реалния сайт е нужна отделна защитена промяна на допустимите стойности.</div>`:""}</div>`;
   }
-  function vehicleStep(leafValue,actionValue){
-    return `<div class="form-section"><h3>2. Какво точно публикуваш?</h3><div class="form-grid">${selectField("Автомобил или автомобилна услуга","simple_leaf",D.autoLeaves,leafValue,{required:true,full:true,placeholder:"Избери"})}</div>${leafValue?`<div class="choice-grid mt-16">${actionChoices("vehicles",actionValue,leafValue)}</div>`:""}</div>`;
+  function vehicleStep(leafValue,actionValue,{lockLeaf=false}={}){
+    const leafSelect=!lockLeaf?`<div class="form-grid">${selectField("Автомобил или автомобилна услуга","simple_leaf",D.autoLeaves,leafValue,{required:true,full:true,placeholder:"Избери"})}</div>`:"";
+    return `<div class="form-section"><h3>Какво точно публикуваш?</h3>${leafSelect}${leafValue?`<div class="choice-grid${leafSelect?" mt-16":""}">${actionChoices("vehicles",actionValue,leafValue)}</div>`:""}</div>`;
   }
-  function workStep(actionValue){return `<div class="form-section"><h3>2. Какво искаш да направиш?</h3><div class="choice-grid">${actionChoices("work",actionValue,"")}</div></div>`}
-  function propertyStep(actionValue){return `<div class="form-section"><h3>2. Какво искаш да направиш?</h3><div class="choice-grid">${actionChoices("property",actionValue,"")}</div></div>`}
-  function tradeStep(leafValue,actionValue){
-    return `<div class="form-section"><h3>2. Уточни обявата</h3><div class="choice-grid">${actionChoices("trade",actionValue,leafValue)}</div><div class="form-grid mt-16">${selectField("Каква стока е?","simple_leaf",D.tradeLeaves,leafValue,{required:true,full:true,placeholder:"Избери категория"})}</div></div>`;
+  function workStep(actionValue){return `<div class="form-section"><h3>Какво искаш да направиш?</h3><div class="choice-grid">${actionChoices("work",actionValue,"")}</div></div>`}
+  function propertyStep(actionValue){return `<div class="form-section"><h3>Какво искаш да направиш?</h3><div class="choice-grid">${actionChoices("property",actionValue,"")}</div></div>`}
+  function tradeStep(leafValue,actionValue,{lockLeaf=false}={}){
+    const leafSelect=!lockLeaf?`<div class="form-grid mt-16">${selectField("Каква стока е?","simple_leaf",D.tradeLeaves,leafValue,{required:true,full:true,placeholder:"Избери категория"})}</div>`:"";
+    return `<div class="form-section"><h3>Уточни обявата</h3><div class="choice-grid">${actionChoices("trade",actionValue,leafValue)}</div>${leafSelect}</div>`;
   }
   function classificationReady(form){
     const kind=selected(form,"simple_kind"),action=selected(form,"simple_action");
@@ -71,6 +78,10 @@
     const kindLabel=listingPublicMain(kind);
     const groupLabel=D.serviceGroups.find(x=>x.key===group)?.title||"";
     return [action,kindLabel,groupLabel,leaf].filter(Boolean).join(" → ");
+  }
+  function contextLabel(kind,group,leaf){
+    const groupLabel=D.serviceGroups.find(x=>x.key===group)?.title||"";
+    return [listingPublicMain(kind),groupLabel,leaf].filter(Boolean).join(" → ");
   }
   function technicalIntent(action){return /Търси|Купува/.test(action)?"seek":"offer"}
 
@@ -112,28 +123,34 @@
     const currentAction=preserveAction?selected(form,"simple_action"):"";
     const groupValue=form.elements.simple_group?.value||form.dataset.prefGroup||"";
     const leafValue=form.elements.simple_leaf?.value||form.dataset.prefLeaf||"";
+    const contextUnlocked=form.dataset.contextUnlocked==="1";
+    const lockGroup=!contextUnlocked&&form.dataset.lockGroup==="1";
+    const lockLeaf=!contextUnlocked&&form.dataset.lockLeaf==="1";
     const step=document.getElementById("simple-listing-step2");
     if(!step)return;
-    let html=`<div class="notice notice-info"><strong>Първо избери какво публикуваш.</strong>След това ще покажем само нужните въпроси.</div>`;
-    if(kind==="services")html=serviceStep(groupValue,leafValue,currentAction||form.dataset.prefAction||"");
-    if(kind==="vehicles")html=vehicleStep(leafValue,currentAction||form.dataset.prefAction||"");
+    let html=`<div class="notice notice-info"><strong>Избери какво публикуваш.</strong>След това ще покажем само нужните въпроси.</div>`;
+    if(kind==="services")html=serviceStep(groupValue,leafValue,currentAction||form.dataset.prefAction||"",{lockGroup,lockLeaf});
+    if(kind==="vehicles")html=vehicleStep(leafValue,currentAction||form.dataset.prefAction||"",{lockLeaf});
     if(kind==="work")html=workStep(currentAction||form.dataset.prefAction||"");
     if(kind==="property")html=propertyStep(currentAction||form.dataset.prefAction||"");
-    if(kind==="trade")html=tradeStep(leafValue,currentAction||form.dataset.prefAction||"");
+    if(kind==="trade")html=tradeStep(leafValue,currentAction||form.dataset.prefAction||"",{lockLeaf});
     step.innerHTML=html;
     const action=selected(form,"simple_action");
-    const group=form.elements.simple_group?.value||"";
-    const leaf=form.elements.simple_leaf?.value||"";
+    const group=form.elements.simple_group?.value||groupValue||"";
+    const leaf=form.elements.simple_leaf?.value||leafValue||"";
     setHidden(form,"main",kind);
     setHidden(form,"service_group",kind==="services"?group:"");
     setHidden(form,"leaf",leaf);
     setHidden(form,"technical_type",action);
     setHidden(form,"technical_intent",technicalIntent(action));
-    const ready=classificationReady(form);
+    const ready=Boolean(action)&&(
+      kind==="services"?Boolean(group&&leaf):
+      (kind==="vehicles"||kind==="trade")?Boolean(leaf):Boolean(kind)
+    );
     const details=document.getElementById("simple-listing-details");
     const summary=document.getElementById("simple-listing-summary");
     if(details)details.hidden=!ready;
-    if(summary){summary.hidden=!ready;summary.innerHTML=ready?`<strong>Ти избра:</strong> ${esc(summaryText(form))}`:""}
+    if(summary){summary.hidden=!ready;summary.innerHTML=ready?`<strong>Ти избра:</strong> ${esc([action,listingPublicMain(kind),D.serviceGroups.find(x=>x.key===group)?.title||"",leaf].filter(Boolean).join(" → "))}`:""}
     const freeRow=document.getElementById("simple-free-row");
     const priceField=document.getElementById("simple-price-field");
     const negotiableRow=document.getElementById("simple-negotiable-row");
@@ -163,6 +180,14 @@
         refreshSimpleListing(form,{preserveAction:false});
       }else refreshSimpleListing(form,{preserveAction:true});
     });
+    document.getElementById("simple-change-kind")?.addEventListener("click",()=>{
+      form.dataset.contextUnlocked="1";
+      const context=document.getElementById("simple-kind-context");
+      const kindStep=document.getElementById("simple-kind-step");
+      if(context)context.hidden=true;
+      if(kindStep){kindStep.hidden=false;kindStep.scrollIntoView({behavior:"smooth",block:"center"});kindStep.querySelector("input:checked")?.focus();}
+      refreshSimpleListing(form,{preserveAction:true});
+    });
   }
 
   window.renderListingForm=function renderListingForm(){
@@ -174,11 +199,18 @@
       main.innerHTML=pageIntro("Обяви и услуги","Нямаш право да редактираш тази обява","Редакцията е достъпна само за собственика на обявата или за изрично разрешен защитен административен запис.",button("Към обявите","marketplace","button button-primary"));
       return;
     }
-    const mainPref=existingKind(existing,r.params.get("main")||"");
-    const groupPref=existing?.group||r.params.get("group")||"";
-    const leafPref=existing?publicSubcategory(existing.subcategory||existing.category):r.params.get("leaf")||"";
+    const routeMain=r.params.get("main")||"";
+    const routeGroup=r.params.get("group")||"";
+    const routeLeaf=r.params.get("leaf")||"";
+    const mainPref=existingKind(existing,routeMain);
+    const groupPref=existing?.group||routeGroup;
+    const leafPref=existing?publicSubcategory(existing.subcategory||existing.category):routeLeaf;
     const intentPref=existing?(/Търси|Купува/.test(existing.type)?"seek":"offer"):(r.params.get("intent")||"");
     const actionPref=initialAction(existing,mainPref,intentPref,leafPref);
+    const contextualCreate=!existing&&Boolean(routeMain);
+    const lockGroup=contextualCreate&&mainPref==="services"&&Boolean(routeGroup);
+    const lockLeaf=contextualCreate&&Boolean(routeLeaf);
+    const contextCopy=contextualCreate?contextLabel(mainPref,groupPref,leafPref):"";
     const hasApprovedOwnFirm=D.profile.firms.some(x=>x.status==="approved");
     const canPublishAsFirm=isAdmin()||hasApprovedOwnFirm||Boolean(existing?.ownerType==="firm"&&canEdit);
     const publisherOptions=canPublishAsFirm?["Лична обява","Моя одобрена фирма"]:["Лична обява"];
@@ -190,7 +222,7 @@
     const submitLabel=isAdmin()?(existing?"Запази и публикувай":"Публикувай обявата"):(existing?"Изпрати редакцията":"Изпрати за преглед");
     const photoText=isAdmin()?"Администраторът не използва обикновения лимит за снимки":"Добави до 6 снимки";
 
-    main.innerHTML=pageIntro("Обяви и услуги",existing?"Редактирай обявата":"Публикувай обява",existing?"Промени само необходимото. Редакцията не използва нова квота.":"Избери какво публикуваш. Ще ти покажем само полетата, които са нужни.")+`<section class="section"><div class="shell form-wrap">${crumb([["Обяви и услуги","marketplace"],[existing?"Редактирай":"Публикувай обява",""]])}<div class="form-card">${quota}<form class="proto-form" data-form="listing" data-edit-id="${esc(editId||"")}" data-pref-group="${esc(groupPref)}" data-pref-leaf="${esc(leafPref)}" data-pref-action="${esc(actionPref)}"><input type="hidden" name="main" value="${esc(mainPref)}"><input type="hidden" name="service_group" value="${esc(groupPref)}"><input type="hidden" name="leaf" value="${esc(leafPref)}"><input type="hidden" name="technical_type" value="${esc(actionPref)}"><input type="hidden" name="technical_intent" value="${esc(intentPref)}"><fieldset class="field field-full"><legend>1. Какво публикуваш? *</legend><p class="muted small">Избери най-близкото. Няма технически термин, който трябва да знаеш.</p><div class="choice-grid">${kindChoices(mainPref)}</div><small class="field-error" data-error-for="simple_kind"></small></fieldset><div id="simple-listing-step2" class="mt-16"></div><div id="simple-listing-summary" class="notice notice-ok mt-16" hidden></div><div id="simple-listing-details" hidden><div class="form-section"><h3>3. Опиши обявата</h3><div class="form-grid">${field("Заглавие","title",{required:true,min:5,max:120,full:true,value:existing?.title||"",placeholder:"Кратко и конкретно заглавие"})}${field("Описание","description",{textarea:true,required:true,min:20,full:true,value:existing?.description||"",placeholder:"Напиши най-важното, което другият човек трябва да знае"})}<div class="field" id="simple-price-field"><label id="simple-price-label" for="f-price">Цена в евро (по желание)</label><input id="f-price" name="price" type="number" min="0" step="0.01" placeholder="0.00"><small class="muted">В реалния сайт до сумата може да се показва и ориентировъчната стойност в лева.</small><small class="field-error" data-error-for="price"></small></div><div class="field"><label>Условия</label><label class="check-row" id="simple-negotiable-row"><input type="checkbox" name="negotiable"> Договаряне</label><label class="check-row" id="simple-free-row" hidden><input type="checkbox" name="free"> Подарява / безплатно</label></div>${field("Телефон","phone",{required:true,type:"tel",value:existing?.phone||"",placeholder:"0... или +359..."})}${field("Град / район","city",{required:true,min:2,value:existing?.city||"Лом"})}${field("Улица (по желание)","street",{full:true,placeholder:"Само ако е полезно за обявата"})}<div class="field field-full"><label for="listing-photos">Снимки (по желание)</label><div class="photo-drop"><input id="listing-photos" name="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple><strong>${esc(photoText)}</strong><br><small>В прототипа файловете не се качват никъде.</small><div class="photo-preview" id="listing-photo-preview"></div></div></div></div></div><details class="form-section"><summary><strong>Публикувай като</strong></summary><p class="muted small">Фирмена обява може да се избере само ако профилът има собствена одобрена фирма.</p><div class="form-grid mt-16">${selectField("Кой публикува?","publisher",publisherOptions,publisherValue,{required:true,full:true})}</div>${!canPublishAsFirm?`<div class="notice notice-info mt-12"><strong>Лична обява</strong>В този профил няма потвърдена собствена фирма, затова фирмено публикуване не се предлага.</div>`:""}</details>${adminExtras}<label class="check-row field-full"><input type="checkbox" name="consent" required> Прочетох и приемам правилата за публикуване.</label><div class="form-actions"><button class="button button-outline" type="button" data-route="marketplace">Отказ</button><button class="button button-primary" type="submit">${esc(submitLabel)}</button></div></div></form></div></div></section>`;
+    main.innerHTML=pageIntro("Обяви и услуги",existing?"Редактирай обявата":"Публикувай обява",existing?"Промени само необходимото. Редакцията не използва нова квота.":"Ще питаме само за информацията, която още не знаем от избрания контекст.")+`<section class="section"><div class="shell form-wrap">${crumb([["Обяви и услуги","marketplace"],[existing?"Редактирай":"Публикувай обява",""]])}<div class="form-card">${quota}<form class="proto-form" data-form="listing" data-edit-id="${esc(editId||"")}" data-pref-group="${esc(groupPref)}" data-pref-leaf="${esc(leafPref)}" data-pref-action="${esc(actionPref)}" data-lock-group="${lockGroup?"1":"0"}" data-lock-leaf="${lockLeaf?"1":"0"}" data-context-unlocked="0"><input type="hidden" name="main" value="${esc(mainPref)}"><input type="hidden" name="service_group" value="${esc(groupPref)}"><input type="hidden" name="leaf" value="${esc(leafPref)}"><input type="hidden" name="technical_type" value="${esc(actionPref)}"><input type="hidden" name="technical_intent" value="${esc(intentPref)}">${contextualCreate?`<div id="simple-kind-context" class="notice notice-info"><div class="flex"><strong>Публикуваш в: ${esc(contextCopy)}</strong><button class="button button-soft" type="button" id="simple-change-kind">Промени</button></div></div>`:""}<fieldset id="simple-kind-step" class="field field-full" ${contextualCreate?"hidden":""}><legend>Какво публикуваш? *</legend><p class="muted small">Избери най-близкото. Няма технически термин, който трябва да знаеш.</p><div class="choice-grid">${kindChoices(mainPref)}</div><small class="field-error" data-error-for="simple_kind"></small></fieldset><div id="simple-listing-step2" class="mt-16"></div><div id="simple-listing-summary" class="notice notice-ok mt-16" hidden></div><div id="simple-listing-details" hidden><div class="form-section"><h3>Опиши обявата</h3><div class="form-grid">${field("Заглавие","title",{required:true,min:5,max:120,full:true,value:existing?.title||"",placeholder:"Кратко и конкретно заглавие"})}${field("Описание","description",{textarea:true,required:true,min:20,full:true,value:existing?.description||"",placeholder:"Напиши най-важното, което другият човек трябва да знае"})}<div class="field" id="simple-price-field"><label id="simple-price-label" for="f-price">Цена в евро (по желание)</label><input id="f-price" name="price" type="number" min="0" step="0.01" placeholder="0.00"><small class="muted">В реалния сайт до сумата може да се показва и ориентировъчната стойност в лева.</small><small class="field-error" data-error-for="price"></small></div><div class="field"><label>Условия</label><label class="check-row" id="simple-negotiable-row"><input type="checkbox" name="negotiable"> Договаряне</label><label class="check-row" id="simple-free-row" hidden><input type="checkbox" name="free"> Подарява / безплатно</label></div>${field("Телефон","phone",{required:true,type:"tel",value:existing?.phone||"",placeholder:"0... или +359..."})}${field("Град / район","city",{required:true,min:2,value:existing?.city||"Лом"})}${field("Улица (по желание)","street",{full:true,placeholder:"Само ако е полезно за обявата"})}<div class="field field-full"><label for="listing-photos">Снимки (по желание)</label><div class="photo-drop"><input id="listing-photos" name="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple><strong>${esc(photoText)}</strong><br><small>В прототипа файловете не се качват никъде.</small><div class="photo-preview" id="listing-photo-preview"></div></div></div></div></div><details class="form-section"><summary><strong>Публикувай като</strong></summary><p class="muted small">Фирмена обява може да се избере само ако профилът има собствена одобрена фирма.</p><div class="form-grid mt-16">${selectField("Кой публикува?","publisher",publisherOptions,publisherValue,{required:true,full:true})}</div>${!canPublishAsFirm?`<div class="notice notice-info mt-12"><strong>Лична обява</strong>В този профил няма потвърдена собствена фирма, затова фирмено публикуване не се предлага.</div>`:""}</details>${adminExtras}<label class="check-row field-full"><input type="checkbox" name="consent" required> Прочетох и приемам правилата за публикуване.</label><div class="form-actions"><button class="button button-outline" type="button" data-route="marketplace">Отказ</button><button class="button button-primary" type="submit">${esc(submitLabel)}</button></div></div></form></div></div></section>`;
     const form=document.querySelector('form[data-form="listing"]');
     if(!form)return;
     bindSimpleListing(form);
