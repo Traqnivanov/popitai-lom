@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Попитай.Лом — IA прототип</title>
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#0f2847">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#app-main">Към съдържанието</a>
+  <header class="site-header">
+    <div class="shell header-row">
+      <a class="brand" href="#home" aria-label="Попитай.Лом — начало">
+        <img src="../assets/popitai-lom-logo-mark-256.webp" width="44" height="44" alt="">
+        <span><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span>
+      </a>
+      <nav class="desktop-nav" aria-label="Главна навигация">
+        <a data-nav="home" href="#home">Начало</a>
+        <a data-nav="obyavi" href="#obyavi">Обяви и услуги</a>
+        <a data-nav="firmi" href="#firmi">Фирми</a>
+        <a data-nav="info" href="#info">Инфо Лом</a>
+        <a data-nav="aktualno" href="#aktualno">Актуално</a>
+        <details>
+          <summary>Още</summary>
+          <div class="more-menu">
+            <a href="#statii">Статии</a>
+            <a href="#vaprosi">Въпроси</a>
+            <a href="#about">За сайта</a>
+            <a href="#rules">Правила</a>
+            <a href="#contacts">Контакти</a>
+          </div>
+        </details>
+        <a href="#profile">Профил</a>
+      </nav>
+      <button class="add-top" type="button" data-open-add>＋ Добави</button>
+    </div>
+  </header>
+
+  <div class="prototype-strip" role="note">
+    <div class="shell"><strong>Прототип</strong> — не е production и не записва реални данни.</div>
+  </div>
+
+  <main id="app-main" tabindex="-1"></main>
+
+  <footer class="site-footer">
+    <div class="shell footer-grid">
+      <div><strong>Попитай.Лом</strong><p>Местен портал за Лом и региона.</p></div>
+      <div><strong>Разгледай</strong><a href="#obyavi">Обяви и услуги</a><a href="#info">Инфо Лом</a><a href="#firmi">Фирми</a></div>
+      <div><strong>Съдържание</strong><a href="#aktualno">Актуално</a><a href="#statii">Статии</a><a href="#vaprosi">Въпроси</a></div>
+    </div>
+  </footer>
+
+  <nav class="mobile-bottom" aria-label="Мобилна навигация">
+    <a data-nav="home" href="#home"><span>⌂</span>Начало</a>
+    <a data-nav="obyavi" href="#obyavi"><span>▦</span>Обяви</a>
+    <button type="button" data-open-add><span>＋</span>Добави</button>
+    <a data-nav="info" href="#info"><span>ⓘ</span>Инфо</a>
+    <a href="#profile"><span>●</span>Профил</a>
+  </nav>
+
+  <div class="modal-layer" id="add-layer" hidden>
+    <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="add-title">
+      <div class="modal-head"><div><small>Добави в Попитай.Лом</small><h2 id="add-title">Какво искаш да добавиш?</h2></div><button type="button" data-close-add aria-label="Затвори">×</button></div>
+      <div class="add-grid">
+        <a href="#add/listing" data-close-add><strong>Добави обява</strong><span>Продажба, услуга, работа, имот или допустима обява за животни</span></a>
+        <a href="#add/firm" data-close-add><strong>Добави фирма</strong><span>Постоянен местен фирмен профил</span></a>
+        <a href="#add/shop" data-close-add><strong>Добави магазин</strong><span>Специализираният Shop flow</span></a>
+        <a href="#add/health" data-close-add><strong>Добави лекар / здравна услуга</strong><span>Специализираният Health flow</span></a>
+        <a href="#add/question" data-close-add><strong>Задай въпрос</strong><span>Когато не намираш готов отговор</span></a>
+      </div>
+      <p class="modal-note">Няма публично „Добави събитие“, „Добави статия“ или „Добави публикация“.</p>
+    </section>
+  </div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
