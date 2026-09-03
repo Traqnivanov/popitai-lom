@@ -78,11 +78,39 @@
 .r1-marketplace-categories .category-icon{width:44px;height:44px;margin-bottom:12px;background:#fff8e7;border:1px solid #0b4c92;color:#08244a}
 .r1-marketplace-note{margin-top:18px;color:#66758a;font-size:14px}
 
+/* INFO LOM HUB — preserve the approved dark identity and short task paths. */
+.r1-info-hub{background:#f3f6fa}
+.r1-info-hero{padding:62px 0 72px;background:linear-gradient(112deg,#13233e 0%,#223858 100%);color:#fff}
+.r1-info-hero .eyebrow{color:#f0bd50;margin-bottom:8px}
+.r1-info-hero h1{margin:0;font-size:clamp(44px,5vw,64px);line-height:1;letter-spacing:-.035em;color:#fff}
+.r1-info-hero p{max-width:720px;margin:14px 0 0;color:#eef3fa;font-size:18px}
+.r1-info-search{max-width:900px;margin-top:24px;display:grid;grid-template-columns:1fr auto;gap:10px}
+.r1-info-search input{height:58px;border:0;border-radius:13px;padding:0 18px;background:#fff;color:#14223a;outline:0;font-size:17px}
+.r1-info-search button{min-width:126px;height:58px;background:#fff!important;color:#0b5fd7!important;border:0!important;font-size:17px}
+.r1-info-search input:focus{box-shadow:0 0 0 4px rgba(255,255,255,.18)}
+.r1-info-body{margin-top:-28px;padding-bottom:42px}
+.r1-info-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.r1-info-entry{min-height:116px;width:100%;display:grid;grid-template-columns:54px 1fr auto;align-items:center;gap:14px;padding:18px 20px;border:1px solid #d5dfeb;border-radius:17px;background:#fff;text-align:left;cursor:pointer;box-shadow:0 9px 24px rgba(13,34,63,.055)}
+.r1-info-entry:hover{border-color:#9ebae0;transform:translateY(-1px)}
+.r1-info-icon{width:54px;height:54px;display:grid;place-items:center;border-radius:14px;background:#eaf2ff;color:#0b5fd7;font-size:24px;font-weight:900}
+.r1-info-entry strong{display:block;font-size:17px;color:#0d1f3a}
+.r1-info-entry small{display:block;margin-top:3px;color:#66758a;line-height:1.35}
+.r1-info-arrow{color:#0b5fd7;font-size:24px}
+.r1-info-tasks{margin-top:26px;padding:24px 26px;border:1px solid #d7e0eb;border-radius:20px;background:#fff;box-shadow:0 8px 24px rgba(15,36,67,.04)}
+.r1-info-tasks h2{margin:0;font-size:27px;color:#0c1e38}
+.r1-info-tasks p{margin:5px 0 16px;color:#65748a}
+.r1-info-task-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:9px}
+.r1-info-task{border:1px solid #d7e1ec;background:#f9fbfd;border-radius:13px;padding:13px;text-align:left;cursor:pointer;font-weight:850;color:#203653}
+.r1-info-task:hover{border-color:#9db9df;background:#f2f7ff;color:#0b5fd7}
+.r1-info-note{margin-top:18px;color:#627188;font-size:13px}
+
 @media(max-width:900px){
   .r1-home-main-grid,.r1-home-discover-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .r1-home-info-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .r1-marketplace-search{grid-template-columns:1fr 1fr}
   .r1-marketplace-search .button{grid-column:1/-1}
+  .r1-info-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .r1-info-task-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(max-width:720px){
   .r1-home-hero{min-height:430px;background-image:url('../assets/lom-cover-mobile-720.webp');background-position:center 42%}
@@ -109,9 +137,24 @@
   .r1-marketplace-search{grid-template-columns:1fr;margin-top:20px}
   .r1-marketplace-search .button{grid-column:auto}
   .r1-marketplace-categories{padding:26px 0}
+  .r1-info-hero{padding:38px 0 54px}
+  .r1-info-hero h1{font-size:44px}
+  .r1-info-hero p{font-size:16px}
+  .r1-info-search{grid-template-columns:1fr}
+  .r1-info-search input,.r1-info-search button{height:52px;width:100%}
+  .r1-info-body{margin-top:-22px;padding-bottom:28px}
+  .r1-info-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .r1-info-entry{min-height:104px;grid-template-columns:44px 1fr auto;padding:13px 12px;gap:9px}
+  .r1-info-icon{width:44px;height:44px;border-radius:12px;font-size:20px}
+  .r1-info-entry strong{font-size:14px}
+  .r1-info-entry small{font-size:11px}
+  .r1-info-tasks{padding:18px 16px;margin-top:18px}
+  .r1-info-task-grid{grid-template-columns:1fr 1fr}
+  .r1-info-task{font-size:13px;padding:11px}
 }
 @media(max-width:430px){
   .r1-home-main-grid,.r1-home-discover-grid,.r1-home-info-grid{grid-template-columns:1fr 1fr}
   .r1-home-hero h1{font-size:38px}
   .r1-marketplace-hero h1{font-size:42px}
+  .r1-info-grid{grid-template-columns:1fr 1fr}
 }
