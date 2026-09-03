@@ -60,7 +60,7 @@ function validateControl(el) {
 
   if (!message && value && el.minLength > 0 && value.length < el.minLength) message = `Въведи поне ${el.minLength} знака.`;
   if (!message && value && el.maxLength > 0 && value.length > el.maxLength) message = `Максимум ${el.maxLength} знака.`;
-  if (!message && el.type === "email" && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) message = "Въведи валиден e-mail адрес.";
+  if (!message && el.type === "email" && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) message = "Въведи валиден имейл адрес.";
   if (!message && el.type === "url" && value) {
     try { new URL(value); } catch { message = "Въведи валиден адрес на сайт, например https://example.com."; }
   }
@@ -273,7 +273,7 @@ function requireSignIn(formType, form) {
 
 function successScreen(title, text, nextRoute = "home", nextLabel = "Към началото", shareNote = false) {
   state.dirty = false;
-  main.innerHTML = pageIntro("Успешно изпращане", title, text) + `<section class="section"><div class="shell form-wrap"><div class="form-card"><div class="notice notice-ok" id="prototype-success-receipt" role="status" tabindex="-1"><strong>✓ ${esc(title)}</strong>${esc(text)}</div>${shareNote ? `<div class="notice notice-info mt-12"><strong>Споделяне след одобрение</strong>Публичният линк става достъпен само след като owner-ът потвърди, че съдържанието е публикувано.</div>` : ""}<div class="form-actions mt-16"><button class="button button-primary" data-route="${esc(nextRoute)}">${esc(nextLabel)}</button><button class="button button-soft" data-route="profile">Виж профила / статуса</button></div></div></div></section>`;
+  main.innerHTML = pageIntro("Успешно изпращане", title, text) + `<section class="section"><div class="shell form-wrap"><div class="form-card"><div class="notice notice-ok" id="prototype-success-receipt" role="status" tabindex="-1"><strong>✓ ${esc(title)}</strong>${esc(text)}</div>${shareNote ? `<div class="notice notice-info mt-12"><strong>Споделяне след одобрение</strong>Публичният линк става достъпен само след като съдържанието бъде одобрено и публикувано.</div>` : ""}<div class="form-actions mt-16"><button class="button button-primary" data-route="${esc(nextRoute)}">${esc(nextLabel)}</button><button class="button button-soft" data-route="profile">Виж профила / статуса</button></div></div></div></section>`;
   const receipt = document.getElementById("prototype-success-receipt");
   receipt?.focus({ preventScroll: true });
   receipt?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -316,7 +316,7 @@ async function submitForm(form) {
     saveState();
     const draft = readPendingDraft();
     if (draft?.route) { navigate(draft.route, { force: true }); return; }
-    successScreen("Входът е успешен", "В прототипа си влязъл като обикновен потребител.", "profile", "Към профила");
+    successScreen("Входът е успешен", "За този преглед си влязъл като обикновен потребител.", "profile", "Към профила");
     refreshRoleUI();
     return;
   }
@@ -326,7 +326,7 @@ async function submitForm(form) {
     saveState();
     const draft = readPendingDraft();
     if (draft?.route) { navigate(draft.route, { force: true }); return; }
-    successScreen("Профилът е създаден", "Това е prototype симулация на успешна регистрация.", "profile", "Към профила");
+    successScreen("Профилът е създаден", "За този преглед регистрацията е симулирана успешно.", "profile", "Към профила");
     refreshRoleUI();
     return;
   }
@@ -352,19 +352,19 @@ async function submitForm(form) {
     const edit = Boolean(form.dataset.editId);
     state.submissions.push({ kind: "firm", status: isAdmin() ? "approved" : "pending", time: Date.now() });
     saveState();
-    if (isAdmin()) successScreen(edit ? "Промените по фирмата са публикувани" : "Фирмата е публикувана", "Администраторският flow публикува директно според защитените правила.", "firms", "Към фирмите");
+    if (isAdmin()) successScreen(edit ? "Промените по фирмата са публикувани" : "Фирмата е публикувана", "Администраторската промяна се публикува директно според защитените правила.", "firms", "Към фирмите");
     else successScreen(edit ? "Редакцията на фирмата е изпратена за преглед" : "Фирмата е изпратена за преглед", edit ? "Последната одобрена версия остава публична до одобряване на редакцията." : "Фирмата не става публична преди одобрение.", "firms", "Към фирмите", true);
     return;
   }
 
-  if (type === "health-proposal") { successScreen("Предложението е изпратено за преглед", "Специалистът или практиката няма да се покажат като потвърдени преди Health/Info проверка.", "marketplace/services?group=health", "Към Здраве и грижа", true); return; }
+  if (type === "health-proposal") { successScreen("Предложението е изпратено за преглед", "Специалистът или практиката няма да се покажат като потвърдени преди специализираната здравна проверка.", "marketplace/services?group=health", "Към Здраве и грижа", true); return; }
   if (type === "shop-proposal") { successScreen("Предложението за магазин е изпратено за проверка", "Магазинът няма да се показва публично преди одобрение.", "shops", "Към магазините", true); return; }
   if (type === "question") { successScreen("Въпросът е изпратен за преглед", "След одобрение въпросът може да получи публична страница.", "questions", "Към въпросите", true); return; }
   if (type === "answer") { successScreen("Отговорът е изпратен за преглед", "Отговорът ще се появи публично само след одобрение.", `question/${form.dataset.questionId}`, "Към въпроса"); return; }
   if (type === "correction") { successScreen("Корекцията е изпратена", "Публичният запис не е променен директно. Предложението чака проверка.", "info", "Към Инфо Лом"); return; }
   if (type === "report") { successScreen("Сигналът е изпратен", "Съдържанието не се изтрива автоматично. Сигналът влиза за преглед.", "home", "Към началото"); return; }
-  if (type === "offer-request") { successScreen("Запитването е подготвено", "Това е prototype preview на бъдещата истинска форма „Поискай оферта“; няма реално изпращане.", "firms", "Към фирмите"); return; }
-  if (type === "contact") { successScreen("Съобщението е изпратено", "Това е prototype симулация на контактната форма.", "home", "Към началото"); return; }
+  if (type === "offer-request") { successScreen("Запитването е подготвено", "Това е преглед на бъдещата истинска форма „Поискай оферта“; няма реално изпращане.", "firms", "Към фирмите"); return; }
+  if (type === "contact") { successScreen("Съобщението е изпратено", "В този прототип съобщението не се изпраща към реалния сайт.", "home", "Към началото"); return; }
 
   setSubmitting(form, false);
 }
