@@ -32,9 +32,10 @@ Prototype root: `prototype-final-ia/`
 14. Актуално — Publications + Events as distinct types.
 15. Статии — long-form local-first role.
 16. Въпроси — community fallback role.
-17. Detail screens — Listing, Firm, Article, Publication, Event, Question, Health, Info.
-18. Add screens — Listing, Firm, Shop, Health, Question only.
-19. Static destinations — About, Rules, Contacts, Profile so shell links never lead to unrelated placeholders.
+17. Results layer — задължителен междинен екран `group/subcategory → results → detail/add`, без директно прескачане от browse card към несвързан detail.
+18. Detail screens — Listing, Firm, Article, Publication, Event, Question, Health, Info.
+19. Add screens — Listing, Firm, Shop, Health, Question only.
+20. Static destinations — About, Rules, Contacts, Profile so shell links never lead to unrelated placeholders.
 
 ## 4. Owner matrix
 
@@ -100,6 +101,7 @@ Prototype QA routes use hash query states only because this branch is isolated a
 - No invented phone, address, rating, views, likes, answer counts or official status.
 - Info prototype describes record structure but does not fabricate current civic facts.
 - No content may imply a real person/business is offering something unless sourced from the real owner in a later integration phase.
+- User-facing prototype text is Bulgarian; technical owner identifiers may exist only internally in code/route parameters and are mapped to Bulgarian display labels.
 
 ## 9. Mobile requirements
 
@@ -107,19 +109,25 @@ Prototype QA routes use hash query states only because this branch is isolated a
 - Main tasks immediately visible.
 - Same functionality as desktop.
 - Five-item bottom nav fixed and usable.
-- Category cards may reduce to two columns and then one column at very narrow widths.
+- Core category grids stay two-column at normal phone width, including 390px; one column is reserved only for unusually narrow widths where readability requires it.
 - Form fields remain full-width and touch-friendly.
 
-## 10. Prototype QA completed before first branch upload
+## 10. Prototype QA — final pass after acceptance fixes
 
 - `node --check` passes for `app.js`.
+- Automated Chromium route traversal completed with **0 page JavaScript errors**.
+- **36 primary/QA routes** rendered non-empty content in the final pass.
 - Desktop render checked at 1440px width.
 - Mobile render checked at 390px width.
-- 33 primary/QA hash routes rendered non-empty content.
-- No page-level JavaScript errors during route traversal.
-- Add sheet opens and exposes exactly 5 public Add owner actions.
-- Form validation error is visible and does not clear entered values.
-- Mobile bottom navigation is visible at mobile breakpoint.
+- At 390px the main category grid resolves to **2 columns**, not one long vertical list.
+- Mobile bottom navigation is visible and uses the approved five actions.
+- Browse journey verified: `Услуги → Майстори, ремонти и дом → Резултати → правилен detail/Add flow`.
+- Results screen exposes the correct lifecycle owner as a Bulgarian user-facing label and does not create a duplicate record concept.
+- Add path from results carries visible category/subcategory prefill; production rule remains editable bounded prefill and edit-mode saved record has priority.
+- Add sheet opens and exposes exactly **5** public Add owner actions.
+- Form validation error is visible and does not clear entered values; test value remained present after failed submit.
+- `loading`, `empty`, `error`, `edit`, `pending` and `success` states render.
+- Automated visible-text scan found none of the disallowed prototype English UI leftovers checked in the final pass (`production`, `owner`, `generic listing`, `Shop flow`, `Health flow`, `Admin-only`, `marketplace`, `lifecycle`, `backend write`, `grooming`, `detailing`).
 
 ## 11. Not covered / still production-blocked
 
