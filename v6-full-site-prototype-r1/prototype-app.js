@@ -13,6 +13,7 @@ const shareContent = document.getElementById("share-content");
 const confirmContent = document.getElementById("confirm-content");
 const modalLayers = [addLayer, shareLayer, confirmLayer].filter(Boolean);
 let modalReturnFocus = null;
+let lastScrollRouteKey = "";
 
 function renderNotFound(){
   main.innerHTML = pageIntro("Не е намерено", "Тази прототипна страница не съществува", "Върни се към началото или използвай основната навигация.", button("Към началото", "home", "button button-primary"));
@@ -116,8 +117,17 @@ function updateActiveNavigation(){
   });
 }
 
+function routeScrollKey(r){
+  const params = new URLSearchParams(r.params);
+  params.delete("show");
+  return `${r.path}?${params.toString()}`;
+}
+
 function render(){
   const r = routeInfo();
+  const scrollKey = routeScrollKey(r);
+  const shouldResetScroll = Boolean(lastScrollRouteKey && scrollKey !== lastScrollRouteKey);
+  lastScrollRouteKey = scrollKey;
   closeMenus();
   switch (r.parts[0]) {
     case "": case "home": renderHome(); break;
@@ -158,6 +168,10 @@ function render(){
   updateActiveNavigation();
   refreshRoleUI();
   document.title = `${main.querySelector("h1")?.textContent || "Попитай.Лом"} | R1 прототип`;
+  if (shouldResetScroll) requestAnimationFrame(() => {
+    window.scrollTo({top:0,left:0,behavior:"auto"});
+    try { main?.focus({preventScroll:true}); } catch { main?.focus(); }
+  });
 }
 
 function applyFirmFilter(){
