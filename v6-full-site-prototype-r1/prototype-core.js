@@ -48,19 +48,41 @@ function listingBrowse({title,text,rows,baseRoute,showFilters=true}){
 }
 
 function renderHome(){
-  const infoCards=D.infoFamilies.map(x=>categoryCard(x,`info/${x.key}`)).join("");
-  const discover=[{icon:"▦",title:"Магазини",text:"Местни магазини и какво предлагат.",route:"shops"},{icon:"☰",title:"Заведения",text:"Ресторанти и места за храна.",route:"restaurants"},{icon:"▣",title:"Фирми",text:"Постоянни профили на местни доставчици.",route:"firms"},{icon:"○",title:"Събития",text:"Какво предстои в Лом.",route:"events"}];
-  main.innerHTML=`<section class="hero"><div class="hero-inner"><div><span class="eyebrow">Местното място за Лом</span><h1>Намери човек, услуга, обява или проверена информация.</h1><p>Един ясен вход към местните услуги, работа, имоти, фирми, препоръки и Инфо Лом.</p><form class="search-bar" data-form="home-search"><input name="q" aria-label="Търсене" placeholder="Какво търсиш в Лом?" autocomplete="off"><button class="button button-primary" type="submit">Търси</button></form></div><aside class="hero-aside"><h2>Бързи действия</h2><div class="hero-mini"><button data-route="marketplace"><strong>Разгледай обяви и услуги</strong><small>Услуги, автомобили, работа, имоти и стоки</small></button><button data-route="info"><strong>Инфо Лом</strong><small>Проверени местни контакти и информация</small></button><button data-route="questions"><strong>Попитай общността</strong><small>Съвети, опит и препоръки</small></button></div></aside></div></section>
-    <section class="section"><div class="shell"><div class="section-head"><div><h2>Обяви и услуги</h2><p>Пет ясни входа — без „други услуги“ и „други обяви“.</p></div>${button("Всички обяви","marketplace")}</div><div class="grid grid-5">${D.marketplace.map(x=>categoryCard(x,`marketplace/${x.key}`)).join("")}</div></div></section>
-    <section class="section section-tight"><div class="shell"><div class="section-head"><div><h2>Открий в Лом</h2><p>Постоянни места, фирми и местни събития.</p></div></div><div class="grid grid-4">${discover.map(x=>categoryCard(x,x.route)).join("")}</div></div></section>
-    <section class="section"><div class="shell"><div class="section-head"><div><h2>Проверена информация</h2><p>Шестте основни раздела на Инфо Лом.</p></div>${button("Инфо Лом","info")}</div><div class="grid grid-3">${infoCards}</div></div></section>
-    <section class="section section-tight"><div class="shell"><div class="section-head"><div><h2>Полезни ръководства</h2><p>Практични насоки, без да копират променливите факти от Инфо Лом.</p></div>${button("Всички статии","articles")}</div><div class="grid grid-3">${D.articles.slice(0,3).map(articleCard).join("")}</div></div></section>
-    <section class="section"><div class="shell"><div class="section-head"><div><h2>Въпроси и препоръки</h2><p>Когато търсиш опит от хората в Лом.</p></div>${button("Задай въпрос","ask","button button-primary")}</div><div class="grid grid-2">${D.questions.slice(0,2).map(questionCard).join("")}</div></div></section>`;
+  const mainCategories=[
+    {title:"Строителство и ремонти",text:"Майстори, ремонти, ВиК, електро, покриви и довършителни работи.",route:"marketplace/services?group=masters"},
+    {title:"Здраве и лекари",text:"Проверени здравни контакти и отделно временни здравни услуги.",route:"marketplace/services?group=health"},
+    {title:"Работа",text:"Предлагат работа и хора, които търсят работа в Лом и района.",route:"marketplace/work"},
+    {title:"Автомобили",text:"Автомобили, части, сервизи, гуми, диагностика и пътна помощ.",route:"marketplace/vehicles"}
+  ];
+  const discover=[
+    {title:"Магазини",text:"Местни магазини и какво предлагат.",route:"shops"},
+    {title:"Заведения",text:"Ресторанти и места за храна.",route:"restaurants"},
+    {title:"Фирми",text:"Постоянни профили на местни доставчици.",route:"firms"},
+    {title:"Събития",text:"Какво предстои в Лом.",route:"events"}
+  ];
+  const verified=[
+    {title:"Здраве",text:"Лекари, аптеки и здравна информация.",route:"info/health"},
+    {title:"Институции",text:"Община и важни местни контакти.",route:"info/institutions"},
+    {title:"Транспорт",text:"Автогара, ЖП/БДЖ и таксита.",route:"info/transport"},
+    {title:"Комунални",text:"Вода, ток и ежедневни услуги.",route:"info/utilities"}
+  ];
+  const guide=D.articles[0];
+  main.innerHTML=`<section class="r1-home-hero"><div class="shell"><div class="r1-home-hero-content"><div class="r1-home-brandline"><img src="../assets/logo-mark.svg" alt=""><span>Лом на едно място</span></div><span class="eyebrow">Попитай. Намери. Препоръчай.</span><h1>Какво търсиш в Лом?</h1><p>Намери проверена информация, местни услуги, работа, имоти, фирми и полезни отговори — всичко за Лом на едно място.</p><form class="r1-home-search proto-form" data-form="home-search"><input name="q" aria-label="Търсене" placeholder="Какво търсиш в Лом?" autocomplete="off"><button class="button button-primary" type="submit">Търси</button></form><div class="r1-home-suggestions" aria-label="Бързи предложения"><button type="button" data-route="marketplace/services?group=masters">Майстор</button><button type="button" data-route="marketplace/work">Работа</button><button type="button" data-route="info">Инфо Лом</button></div></div></div></section>
+    <section class="r1-home-section"><div class="shell"><div class="section-head"><div><h2>Основни категории</h2><p>Най-честите входове са веднага след търсенето.</p></div>${button("Всички категории","marketplace")}</div><div class="r1-home-main-grid">${mainCategories.map(x=>`<button class="r1-home-tile" type="button" data-route="${esc(x.route)}"><strong>${esc(x.title)}</strong><small>${esc(x.text)}</small><span class="r1-tile-link">Отвори →</span></button>`).join("")}</div></div></section>
+    <section class="r1-home-section r1-home-section-soft"><div class="shell"><div class="section-head"><div><h2>Открий в Лом</h2><p>Местни места, фирми и събития.</p></div></div><div class="r1-home-discover-grid">${discover.map(x=>`<button class="r1-home-tile" type="button" data-route="${esc(x.route)}"><strong>${esc(x.title)}</strong><small>${esc(x.text)}</small><span class="r1-tile-link">Разгледай →</span></button>`).join("")}</div></div></section>
+    <section class="r1-home-section"><div class="shell"><div class="section-head"><div><h2>Проверена информация</h2><p>Директни входове към най-важните раздели на Инфо Лом.</p></div>${button("Всички раздели","info")}</div><div class="r1-home-info-grid">${verified.map(x=>`<button class="r1-home-tile" type="button" data-route="${esc(x.route)}"><strong>${esc(x.title)}</strong><small>${esc(x.text)}</small><span class="r1-tile-link">Инфо →</span></button>`).join("")}</div></div></section>
+    <section class="r1-home-section r1-home-section-soft"><div class="shell"><div class="section-head"><div><h2>Полезни ръководства</h2><p>Практични материали; публикуваното и подготвяното не се смесват.</p></div>${button("Всички статии","articles")}</div>${guide?`<article class="r1-home-guide"><div><span class="badge badge-ok">Публикувана статия</span><h3>${esc(guide.title)}</h3><p>${esc(guide.summary)}</p></div><button class="button button-soft" type="button" data-route="article/${esc(guide.id)}">Прочети</button></article>`:`<div class="empty-state"><p>Все още няма публикуван материал.</p></div>`}</div></section>
+    <section class="r1-home-section"><div class="shell"><div class="section-head"><div><h2>Въпроси и препоръки</h2><p>Когато търсиш опит и препоръка от хората в Лом.</p></div>${button("Виж всички въпроси","questions")}</div><div class="r1-home-community">${D.questions.slice(0,2).map(questionCard).join("")}</div></div></section>`;
+  bindFormUX();
 }
 
 function renderMarketplace(){
   const r=routeInfo();const key=r.parts[1];
-  if(!key){main.innerHTML=pageIntro("Намери или публикувай","Обяви и услуги","Избери какво търсиш. Картите водят към разглеждане; добавянето е отделно действие.",button("Добави обява","listing-form","button button-primary"))+`<section class="section"><div class="shell"><div class="grid grid-5">${D.marketplace.map(x=>categoryCard(x,`marketplace/${x.key}`)).join("")}</div><div class="notice notice-info mt-16"><strong>Как работи</strong>Избираш раздел → разглеждаш резултати → при нужда натискаш отделното „Добави обява“. Въпросите са вторично действие, а не заместител на обявите.</div></div></section>`;return}
+  if(!key){
+    main.innerHTML=`<section class="r1-marketplace-hero"><div class="shell"><span class="eyebrow">Местният marketplace</span><h1>Обяви и услуги</h1><p class="lead">Майстори, услуги, автомобили, имоти, работа и местни обяви — на едно място.</p><form class="r1-marketplace-search proto-form" data-form="home-search"><input name="q" aria-label="Търсене в обяви и услуги" placeholder="Какво търсиш?" autocomplete="off"><select name="marketplace_section" aria-label="Раздел"><option value="">Всички категории</option><option>Услуги</option><option>Автомобили</option><option>Работа</option><option>Имоти</option><option>Купува и продава</option></select><button class="button button-primary" type="submit">Търси</button></form><button class="button r1-marketplace-add" type="button" data-route="listing-form">Добави обява</button></div></section><section class="r1-marketplace-categories"><div class="shell"><div class="section-head"><div><h2>Какво търсиш?</h2><p>Пет ясни входа. Добавянето остава отделно действие.</p></div></div><div class="grid grid-5">${D.marketplace.map(x=>categoryCard(x,`marketplace/${x.key}`)).join("")}</div><p class="r1-marketplace-note">Работа, Имоти и Автомобили имат собствени ясни входове. Няма отделни „Други услуги“ или „Други обяви“.</p></div></section>`;
+    bindFormUX();
+    return;
+  }
   if(key==="services")return renderServices();
   if(key==="vehicles")return renderVehicles();
   if(key==="work")return renderWork();
