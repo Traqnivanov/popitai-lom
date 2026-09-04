@@ -13,20 +13,28 @@ function shareOptions(title,description){
 }
 function contentActions(kind,title,description){
   const share=`<button class="btn" type="button" data-demo-share data-share-title="${esc(title)}" data-share-description="${esc(description)}">Сподели</button>${shareOptions(title,description)}`;
-  if(kind==='listing') return `<div class="content-actions"><button class="btn primary" type="button" data-demo-contact>Обади се</button>${share}<button class="btn soft" type="button" data-demo-report>Подай сигнал</button><p class="action-demo-message" aria-live="polite"></p></div>`;
-  if(kind==='firm') return `<div class="content-actions"><button class="btn primary" type="button" data-demo-contact>Обади се</button><button class="btn" type="button" data-demo-contact>Запитване</button>${share}<button class="btn soft" type="button" data-demo-report>Подай сигнал</button><p class="action-demo-message" aria-live="polite"></p></div>`;
-  if(kind==='shop') return `<div class="content-actions"><button class="btn primary" type="button" data-demo-contact>Обади се</button>${share}<p class="action-demo-message" aria-live="polite"></p></div>`;
-  if(kind==='health') return `<div class="content-actions"><button class="btn primary" type="button" data-demo-contact>Обади се</button>${share}<button class="btn soft" type="button" data-demo-correction>Сигнализирай грешка</button><p class="action-demo-message" aria-live="polite"></p></div>`;
-  if(kind==='info') return `<div class="content-actions"><button class="btn primary" type="button" data-demo-contact>Официална страница / услуга</button>${share}<button class="btn soft" type="button" data-demo-correction>Сигнализирай за грешка</button><p class="action-demo-message" aria-live="polite"></p></div>`;
-  if(kind==='question') return `<div class="content-actions"><button class="btn primary" type="button" data-demo-answer>Добави отговор</button>${share}<button class="btn soft" type="button" data-demo-report>Докладвай</button><p class="action-demo-message" aria-live="polite"></p></div>`;
-  if(kind==='article') return `<div class="content-actions"><a class="btn primary" href="#info">Към свързаната полезна информация</a>${share}<p class="action-demo-message" aria-live="polite"></p></div>`;
-  if(kind==='publication') return `<div class="content-actions">${share}<p class="action-demo-message" aria-live="polite"></p></div>`;
-  if(kind==='event') return `<div class="content-actions">${share}<p class="action-demo-message" aria-live="polite"></p></div>`;
+  if(kind==='listing') return `<div class="content-actions page-tools"><button class="btn primary" type="button" data-demo-contact>Обади се</button>${share}<button class="btn soft" type="button" data-demo-report>Подай сигнал</button><p class="action-demo-message" aria-live="polite"></p></div>`;
+  if(kind==='firm') return `<div class="content-actions page-tools"><button class="btn primary" type="button" data-demo-contact>Обади се</button><button class="btn" type="button" data-demo-contact>Запитване</button>${share}<button class="btn soft" type="button" data-demo-report>Подай сигнал</button><p class="action-demo-message" aria-live="polite"></p></div>`;
+  if(kind==='shop') return `<div class="content-actions page-tools"><button class="btn primary" type="button" data-demo-contact>Обади се</button>${share}<p class="action-demo-message" aria-live="polite"></p></div>`;
+  if(kind==='health') return `<div class="content-actions page-tools"><button class="btn primary" type="button" data-demo-contact>Обади се</button>${share}<button class="btn soft" type="button" data-demo-correction>Сигнализирай грешка</button><p class="action-demo-message" aria-live="polite"></p></div>`;
+  if(kind==='info') return `<div class="content-actions page-tools"><button class="btn primary" type="button" data-demo-contact>Официална страница / услуга</button>${share}<button class="btn soft" type="button" data-demo-correction>Сигнализирай за грешка</button><p class="action-demo-message" aria-live="polite"></p></div>`;
+  if(kind==='question') return `<div class="content-actions page-tools"><button class="btn primary" type="button" data-demo-answer>Добави отговор</button>${share}<button class="btn soft" type="button" data-demo-report>Докладвай</button><p class="action-demo-message" aria-live="polite"></p></div>`;
+  if(kind==='article') return `<div class="content-actions page-tools"><a class="btn primary" href="#info">Към свързаната полезна информация</a>${share}<p class="action-demo-message" aria-live="polite"></p></div>`;
+  if(kind==='publication') return `<div class="content-actions page-tools">${share}<p class="action-demo-message" aria-live="polite"></p></div>`;
+  if(kind==='event') return `<div class="content-actions page-tools">${share}<p class="action-demo-message" aria-live="polite"></p></div>`;
   return '';
 }
 
 function shopResultCard(group,index){
   return `<article class="result-row"><div><span class="demo-label">ПРОТОТИПЕН ЗАПИС</span><h3>${esc(group)} — пример ${index}</h3><p>Основната информация за магазина се вижда директно в каталога.</p><div class="result-meta"><span class="badge">Магазин</span><span class="badge gold">Лом</span></div></div><div class="page-tools"><button class="btn primary" type="button" data-demo-contact>Покажи контакт</button><a class="btn soft" href="#detail/shop">Отвори</a></div><p class="contact-demo-message" aria-live="polite"></p></article>`;
+}
+function animalSpeciesFilters(group,detailType,owner,selected=''){
+  const species=['Кучета','Котки','Птици','Селскостопански','Други'];
+  const hrefFor=(value)=>{
+    const q=new URLSearchParams({context:'Животни',group,detail:detailType,owner,species:value});
+    return `#results?${q}`;
+  };
+  return `<div class="filter-block"><strong>Вид животно</strong><div class="chips">${species.map(value=>`<a class="chip ${selected===value?'active':''}" href="${hrefFor(value)}">${esc(value)}</a>`).join('')}</div>${selected?`<p class="help">Филтър: ${esc(selected)}. Видът помага при търсенето и не се записва като подкатегория.</p>`:'<p class="help">Видът е допълнителен филтър и не променя категорията на обявата.</p>'}</div>`;
 }
 
 function results(query){
@@ -35,6 +43,7 @@ function results(query){
   const detailType=query.get('detail')||'listing';
   const owner=query.get('owner')||'Listings';
   const type=query.get('type')||'';
+  const species=query.get('species')||'';
   let addTarget=resultsAddTarget(context,group,owner,type);
   if(owner==='Shops') addTarget=`#add/shop?category=${encodeURIComponent(group)}`;
   if(owner==='Health/Info') addTarget=`#add/health?type=${encodeURIComponent(group)}`;
@@ -47,7 +56,8 @@ function results(query){
     ? `${shopResultCard(group,1)}${shopResultCard(group,2)}`
     : `${demoRow(`${group} — пример 1`,`Най-важната информация се вижда още в списъка.`,context,`#detail/${detailType}`,'Пример')}${demoRow(`${group} — пример 2`,`Втори примерен запис с различни примерни данни.`,context,`#detail/${detailType}`,'Пример')}`;
   const primaryLabel=owner==='Shops'?'＋ Добави магазин':owner==='Health/Info'?'＋ Добави лекар / здравна услуга':'＋ Публикувай в тази категория';
-  return `<div class="page">${pageHead(group,`Разгледай ${noun} в „${context}“.`,'Обяви и услуги')}<div class="shell"><div class="result-list">${rows}</div><div class="page-tools"><a class="btn primary" href="${addTarget}">${primaryLabel}</a><a class="btn" href="#add/question">Не намираш? Задай въпрос</a></div></div></div>`;
+  const filters=context==='Животни'?animalSpeciesFilters(group,detailType,owner,species):'';
+  return `<div class="page">${pageHead(group,`Разгледай ${noun} в „${context}“.`,'Обяви и услуги')}<div class="shell">${filters}<div class="result-list">${rows}</div><div class="page-tools"><a class="btn primary" href="${addTarget}">${primaryLabel}</a><a class="btn" href="#add/question">Не намираш? Задай въпрос</a></div></div></div>`;
 }
 
 function detail(kind){
