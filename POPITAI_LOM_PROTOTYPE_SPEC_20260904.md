@@ -12,7 +12,7 @@ Prototype root: `prototype-final-ia/`
 
 - Единствен prototype renderer owner: `prototype-final-ia/app.js`.
 - Няма Marketplace V3, V18, V19 или друг последващ renderer, който да прерисува същия root.
-- `index.html` държи shell-а; `app.js` държи routed content; `styles.css` държи prototype styles.
+- `index.html` държи shell-а; `app.js` държи routed content; `styles.css` е единственият prototype stylesheet.
 - Helper файловете могат да връщат данни/HTML функции, но не притежават отделен DOM lifecycle и не рендерират конкурентно в `#app-main`.
 
 ## 3. Основни екрани
@@ -33,7 +33,7 @@ Prototype root: `prototype-final-ia/`
 14. Актуално — Publications + Events as distinct types.
 15. Статии — long-form local-first role.
 16. Въпроси — community fallback role.
-17. Results layer — задължителен междинен екран `group/subcategory → results → detail/add`, освен когато protected owner реално няма отделен detail route. При Shops резултатът остава catalog card и не се измисля Firm detail.
+17. Results layer — `group/subcategory → results → detail/add`, освен когато protected owner реално няма отделен detail route. При Shops резултатът остава catalog card и не се измисля Firm detail.
 18. Detail screens — Listing, Firm, Article, Publication, Event, Question, Health, Info.
 19. Add screens — Listing, Firm, Shop, Health, Question only.
 20. Static destinations — About, Rules, Contacts, Profile so shell links never lead to unrelated placeholders.
@@ -67,6 +67,7 @@ Approved public groups are **discovery IA**. They do not automatically become ne
 - Public group names for Работа, Имоти, Автомобили, Животни and the broad Buy/Sell layer must be implemented through backward-compatible mapping and form-owner validation before any production persistence change.
 - Listing `Подкатегория` is visible/enabled in the prototype owner form only where the current owner form has it — `Услуги`.
 - Animals public intents are mapped onto current Listing types for prototype flow (`Дава`, `Търси`, `Продава` for goods) instead of inventing new persisted type values. Paid live-animal sales remain prohibited by the approved product rule.
+- Shop public category context is only editable prefill into the existing Shop owner form.
 - No new table, owner, form or Admin queue is implied by a public grouping.
 - Edit saved values remain stronger than create prefill; create context must not leak into edit options or overwrite saved data.
 
@@ -114,6 +115,7 @@ Prototype QA routes use hash query states only because this branch is isolated a
 - Info prototype describes record structure but does not fabricate current civic facts.
 - No content may imply a real person/business is offering something unless sourced from the real owner in a later integration phase.
 - User-facing prototype text is Bulgarian; technical owner identifiers may exist only internally in code/route parameters and are mapped to Bulgarian display labels.
+- Static public screens do not show developer/integration notes.
 
 ## 9. Mobile requirements
 
@@ -138,6 +140,8 @@ Prototype QA routes use hash query states only because this branch is isolated a
 - Results → Add mapping was corrected for Buy/Sell, Auto Services and Real Estate type context.
 - Shops stay on the specialized Shops owner: results render catalog-style cards directly and do not invent a Firm detail route.
 - Shop result context is preserved into Add Shop as editable category prefill; verified in Opera with `Хранителни`.
+- Add Shop now mirrors the current optional classification area without inventing live tag values: `Какво предлага магазинът — по желание` + `Друго уточнение` (max 80), placed before source fields as in the current owner flow.
+- Shop phone validation mirrors the current Bulgarian-number checks (allowed characters, +359 placement/length, local 0-prefix/length, repeated fake digits) while keeping phone optional.
 - Restaurant results stay on Firms; `Добави заведение` goes to Add Firm with `category=Заведения`.
 - Health results stay on Health/Info; result context is preserved into Add Health as editable Type prefill; verified in Opera with `Стоматолози`.
 - Animals public intents map onto real Listing type values instead of creating new owner values; verified in Opera with adoption → `Дава` and the normal Listing type options.
@@ -149,6 +153,7 @@ Prototype QA routes use hash query states only because this branch is isolated a
 - Prototype submit ignores a second submit after a successful first submit; no real backend success is claimed.
 - Form validation error is visible and does not clear entered values.
 - `loading`, `empty`, `error` states were re-verified in Opera on the current prototype flow (`Зареждане…`, `Няма резултати`, `Опитай отново`). `edit`, `pending` and `success` states also render.
+- Prototype root was cleaned of the temporary route/form controllers and the separate fidelity stylesheet; there is one DOM renderer owner and one stylesheet.
 - Icon choice is **not approved** and is outside this acceptance pass; temporary prototype icons must not be treated as final product truth.
 
 ## 11. Not covered / still production-blocked
