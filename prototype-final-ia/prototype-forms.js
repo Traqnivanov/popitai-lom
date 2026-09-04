@@ -70,9 +70,11 @@ function formPage(kind,query){
   if(state==='pending') return `<div class="page">${pageHead(c.title,'Изпратено е за преглед.')}<div class="shell form-wrap"><div class="notice"><strong>Чака преглед.</strong> Ще стане публично след одобрение според правилата за този тип съдържание.</div></div></div>`;
   if(state==='success') return `<div class="page">${pageHead(c.title,'Успешно изпращане.')}<div class="shell form-wrap"><div class="notice ok"><strong>Успешно изпратено.</strong> Това е прототип и не е създаден реален запис.</div><a class="btn" href="#home" style="margin-top:14px">Към началото</a></div></div>`;
 
+  const listingCat=kind==='listing'?listingCategory(query):'';
   const fields=c.fields.map(([label,type])=>{
     const current=currentForField(kind,label,query);
-    const required=fieldRequired(kind,label)?'required':'';
+    const isServiceSubcategory=kind==='listing'&&label==='Подкатегория / вид'&&listingCat==='Услуги';
+    const required=(fieldRequired(kind,label)||isServiceSubcategory)?'required':'';
     const editText=edit?editFieldValue(kind,label):'';
     const limits=kind==='question'&&label==='Заглавие на въпроса'?'minlength="10" maxlength="120"':kind==='listing'&&label==='Заглавие'?'minlength="5" maxlength="120"':(kind==='question'||kind==='listing')&&label==='Описание'?'minlength="20"':'';
     if(type==='textarea') return `<div class="field"><label>${esc(label)}</label><textarea rows="5" ${required} ${limits} placeholder="Опиши най-важното ясно и конкретно">${esc(editText)}</textarea></div>`;
