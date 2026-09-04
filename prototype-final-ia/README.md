@@ -6,6 +6,8 @@
 
 Stage 2 safety branch: `prototype/content-complete-ia-20260904-stage2-safety`.
 
+Round 2 code checkpoint преди този status commit: `002448bbab2bec4a68e6786198ec973fea1b108a`.
+
 ## Критична backend / LOCKED граница
 
 Предишно общо „одобрявам“ не се счита за LOCKED одобрение за нови persisted подкатегории.
@@ -77,7 +79,7 @@ Facebook остава distribution layer, не content owner.
 | Publication Share eligible / blocked | PASS — source | отделни positive/negative routes |
 | Shop Share eligible / blocked | PASS — source | отделни positive/negative routes |
 | Health Share eligible / blocked | PASS — source | trust/freshness/safe-preview условие |
-| Event Share eligible / blocked | PASS — source | public/current eligibility; blocked state без Share |
+| Event Share eligible / blocked | PASS — source | public/current eligibility; blocked state е pending/hidden/no canonical и не смесва ended state с „предстоящо“ |
 | 58/58 Service compatibility mapping coverage | PASS | coverage на mapping layer-а; не е persistence proof |
 | Exact discovery leaf persisted after submit | **OPEN / FAIL** | не се persist-ва отделно при текущия договор |
 | Exact leaf reconstruction from published record | **OPEN / FAIL** | не може надеждно да се гарантира само от canonical subcategory |
