@@ -22,14 +22,11 @@ function listingCategory(query){
 
 function optionsFor(kind,label,query){
   if(kind==='listing'&&label==='Категория') return listingCategories;
-  if(kind==='listing'&&label==='Подкатегория / вид'){
-    return listingCategory(query)==='Услуги' ? serviceFamilies.flatMap(x=>x.slice(1)) : [];
-  }
+  if(kind==='listing'&&label==='Подкатегория / вид') return listingCategory(query)==='Услуги' ? serviceFamilies.flatMap(x=>x.slice(1)) : [];
   if(kind==='listing'&&label==='Тип обява'){
     const cat=listingCategory(query);
     if(cat==='Работа') return ['Предлага работа','Търси работа'];
     if(cat==='Имоти') return ['Продава имот','Отдава под наем','Търси под наем','Търси за купуване'];
-    if(cat==='Животни') return ['Осиновяване','Изгубено','Намерено','Стоки за животни'];
     return ['Продава','Купува','Търси','Дава'];
   }
   if(kind==='firm'&&label==='Категория') return firmCategories;
@@ -48,6 +45,7 @@ function editFieldValue(kind,label){
 
 function currentForField(kind,label,query){
   if(query.get('state')==='edit') return editFieldValue(kind,label);
+  if(kind==='health'&&label==='Тип') return query.get('type')||'';
   if(kind!=='listing') return label==='Категория'?(query.get('category')||''):'';
   if(label==='Категория') return query.get('category')||'';
   if(label==='Подкатегория / вид') return listingCategory(query)==='Услуги'?(query.get('subcategory')||''):'';
@@ -90,7 +88,7 @@ function formPage(kind,query){
   }).join('');
 
   const animalVisible=kind==='listing'&&currentForField(kind,'Категория',query)==='Животни';
-  const animalWarning=kind==='listing'?`<div class="notice danger" id="animal-warning" ${animalVisible?'':'hidden'}><strong>За живи животни:</strong> платена продажба не се предлага. Достъпни са осиновяване, изгубени/намерени и стоки.</div>`:'';
+  const animalWarning=kind==='listing'?`<div class="notice danger" id="animal-warning" ${animalVisible?'':'hidden'}><strong>За живи животни:</strong> платена продажба не се предлага. „Продава“ е допустимо само за стоки за животни; за осиновяване, изгубени и намерени използвай съответния публичен вход.</div>`:'';
   const listingExtras=kind==='listing'?`<section class="upload-demo"><div><strong>Снимки</strong><span data-upload-count>0 / 6</span></div><p>Първата снимка е главна. До 6 снимки · JPG, PNG или WebP.</p><label class="btn upload-button">Избери снимки<input type="file" accept="image/jpeg,image/png,image/webp" multiple data-demo-upload data-max-files="6" hidden></label></section>`:'';
   const firmExtras=kind==='firm'?`<section class="upload-demo"><div><strong>Лого (по желание)</strong><span data-upload-count>0 / 1</span></div><p>JPG, PNG или WebP · до 10 MB.</p><label class="btn upload-button">Избери лого<input type="file" accept="image/jpeg,image/png,image/webp" data-demo-upload data-max-files="1" hidden></label></section><section class="upload-demo"><div><strong>Снимки на обекти и услуги</strong><span data-upload-count>0 / 6</span></div><p>До 6 снимки в основния профил.</p><label class="btn upload-button">Избери снимки<input type="file" accept="image/jpeg,image/png,image/webp" multiple data-demo-upload data-max-files="6" hidden></label></section>`:'';
   const terms=['listing','question'].includes(kind)?'<div class="field check-field"><label><input type="checkbox" required> Прочетох и приемам правилата на общността</label></div>':'';
