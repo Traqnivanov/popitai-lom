@@ -92,7 +92,8 @@ function formPage(kind,query){
     const displayLabel=kind==='shop'&&label==='Какво предлага'?'Кратко описание на магазина':label;
     if(type==='textarea'){
       const hint=kind==='question'?questionPlaceholder('Описание',query):kind==='listing'?listingTextHints(listingCat,listingType,listingSub)[1]:'Опиши най-важното ясно и конкретно';
-      return prefix+`<div class="field"><label>${esc(displayLabel)}</label><textarea rows="5" ${required} ${limits} placeholder="${esc(hint)}">${esc(editText)}</textarea></div>`;
+      const textValue=edit?editText:current;
+      return prefix+`<div class="field"><label>${esc(displayLabel)}</label><textarea rows="5" ${required} ${limits} placeholder="${esc(hint)}">${esc(textValue)}</textarea></div>`;
     }
     if(type==='select'){
       const wrapperId=isListingSubcategory?'id="listing-subcategory-field"':'';const hidden=isListingSubcategory&&!subRequired?'hidden':'';const disabled=isListingSubcategory&&!subRequired?'disabled':'';const shopCat=kind==='shop'&&label==='Категория'?'id="shop-category"':'';
@@ -106,16 +107,17 @@ function formPage(kind,query){
     else if(label.includes('Улица')||label.includes('Адрес')) placeholder='Напр. ул. Дунавска 12';
     else if(label.includes('Работно време')) placeholder='Напр. Пон–Пет: 8:00–18:00';
     const numeric=type==='number'?'min="0" step="0.01"':'';const phone=type==='tel'?'pattern="[0-9+ ()-]{6,20}"':'';const shopPhone=kind==='shop'&&label==='Телефон'?'id="shop-phone" data-shop-phone aria-describedby="shop-phone-error"':'';
-    const field=`<div class="field"><label>${esc(displayLabel)}</label><input type="${type}" ${required} ${limits} ${numeric} ${phone} ${shopPhone} value="${esc(editText)}" placeholder="${esc(placeholder)}">${shopPhone?'<p class="help" id="shop-phone-error" aria-live="polite"></p>':''}</div>`;
+    const inputValue=edit?editText:current;
+    const field=`<div class="field"><label>${esc(displayLabel)}</label><input type="${type}" ${required} ${limits} ${numeric} ${phone} ${shopPhone} value="${esc(inputValue)}" placeholder="${esc(placeholder)}">${shopPhone?'<p class="help" id="shop-phone-error" aria-live="polite"></p>':''}</div>`;
     const priceOptions=kind==='listing'&&label==='Цена в евро'?'<div class="form-inline-options"><label><input type="checkbox"> Договаряне</label><label><input type="checkbox"> Подарява (безплатно)</label></div>':'';
     return prefix+field+priceOptions;
   }).join('');
   const animalVisible=kind==='listing'&&listingCat==='Животни';const animalWarning=kind==='listing'?`<div class="notice danger" id="animal-warning" ${animalVisible?'':'hidden'}><strong>За живи животни:</strong> платена продажба не се предлага. „Продава“ е допустимо само при „Стоки за животни“.</div>`:'';
-  const mappingNote=kind==='listing'&&listingCat==='Услуги'&&query.get('subcategory')&&query.get('subcategory')!==listingSub?`<div class="notice"><strong>Избрана услуга:</strong> ${esc(query.get('subcategory'))}. За owner формата се използва каноничната подкатегория <strong>${esc(listingSub)}</strong>.</div>`:'';
+  const mappingNote=kind==='listing'&&listingCat==='Услуги'&&query.get('subcategory')&&query.get('subcategory')!==listingSub?`<div class="notice"><strong>Избрана услуга:</strong> ${esc(query.get('subcategory'))}. Ще бъде публикувана в група <strong>${esc(listingSub)}</strong>.</div>`:'';
   const listingExtras=kind==='listing'?`<section class="upload-demo"><div><strong>Снимки</strong><span data-upload-count>0 / 6</span></div><p>Първата снимка е главна. До 6 снимки · JPG, PNG или WebP.</p><label class="btn upload-button">Избери снимки<input type="file" accept="image/jpeg,image/png,image/webp" multiple data-demo-upload data-max-files="6" hidden></label></section>`:'';
   const firmExtras=kind==='firm'?`<section class="upload-demo"><div><strong>Лого (по желание)</strong><span data-upload-count>0 / 1</span></div><p>JPG, PNG или WebP · до 10 MB.</p><label class="btn upload-button">Избери лого<input type="file" accept="image/jpeg,image/png,image/webp" data-demo-upload data-max-files="1" hidden></label></section><section class="upload-demo"><div><strong>Снимки на обекти и услуги</strong><span data-upload-count>0 / 6</span></div><p>До 6 снимки в основния профил.</p><label class="btn upload-button">Избери снимки<input type="file" accept="image/jpeg,image/png,image/webp" multiple data-demo-upload data-max-files="6" hidden></label></section>`:'';
   const terms=['listing','question'].includes(kind)?'<div class="field check-field"><label><input type="checkbox" required> Прочетох и приемам правилата на общността</label></div>':'';
-  const editNote=edit?`<div class="notice"><strong>Редакция на примерен запазен запис.</strong> Запазените стойности имат приоритет пред параметрите за нова публикация.${kind==='firm'?' Град, адрес и работно време участват в същия edit draft; празна стойност означава съзнателно изчистване.':''}</div>`:'';
+  const editNote=edit?`<div class="notice">${kind==='firm'?'<strong>Редакция на запазен фирмен профил.</strong> Запазените стойности са попълнени във формата. Ако изчистиш незадължително поле, промяната ще бъде изпратена за одобрение.':'<strong>Редакция на примерен запазен запис.</strong> Запазените стойности имат приоритет пред параметрите за нова публикация.'}</div>`:'';
   return `<div class="page">${pageHead(edit?`Редактирай — ${c.title}`:c.title,c.subtitle)}<div class="shell form-wrap">${animalWarning}${mappingNote}${editNote}<form class="proto-form" data-proto-form data-form-kind="${kind}" novalidate>${fields}${listingExtras}${firmExtras}${terms}<div class="form-actions"><button class="btn primary" type="submit">${edit?'Изпрати редакцията':kind==='health'?'Изпрати за одобрение':'Изпрати за преглед'}</button><a class="btn" href="#home">Отказ</a></div><div class="form-message" aria-live="polite"></div></form></div></div>`;
 }
 function staticPage(title,text){return `<div class="page">${pageHead(title,text)}<div class="shell"><div class="content-card"><p>${esc(text)}</p></div></div></div>`;}
