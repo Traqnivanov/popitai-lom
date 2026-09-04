@@ -23,15 +23,7 @@ function listingCategory(query){
 function optionsFor(kind,label,query){
   if(kind==='listing'&&label==='Категория') return listingCategories;
   if(kind==='listing'&&label==='Подкатегория / вид'){
-    const cat=listingCategory(query);
-    if(cat==='Услуги') return serviceFamilies.flatMap(x=>x.slice(1));
-    if(query.get('state')==='edit') return ['Друго'];
-    if(cat==='Работа') return workGroups;
-    if(cat==='Имоти') return propertyKinds;
-    if(cat==='Животни') return animalGroups;
-    if(cat==='Автомобили и МПС') return autoListingGroups;
-    const requested=query.get('subcategory')||'';
-    return requested?[requested,'Друго']:['Друго'];
+    return listingCategory(query)==='Услуги' ? serviceFamilies.flatMap(x=>x.slice(1)) : [];
   }
   if(kind==='listing'&&label==='Тип обява'){
     const cat=listingCategory(query);
@@ -58,7 +50,7 @@ function currentForField(kind,label,query){
   if(query.get('state')==='edit') return editFieldValue(kind,label);
   if(kind!=='listing') return label==='Категория'?(query.get('category')||''):'';
   if(label==='Категория') return query.get('category')||'';
-  if(label==='Подкатегория / вид') return query.get('subcategory')||'';
+  if(label==='Подкатегория / вид') return listingCategory(query)==='Услуги'?(query.get('subcategory')||''):'';
   if(label==='Тип обява') return query.get('type')||'';
   return '';
 }
@@ -73,12 +65,18 @@ function formPage(kind,query){
   const listingCat=kind==='listing'?listingCategory(query):'';
   const fields=c.fields.map(([label,type])=>{
     const current=currentForField(kind,label,query);
-    const isServiceSubcategory=kind==='listing'&&label==='Подкатегория / вид'&&listingCat==='Услуги';
-    const required=(fieldRequired(kind,label)||isServiceSubcategory)?'required':'';
+    const isListingSubcategory=kind==='listing'&&label==='Подкатегория / вид';
+    const serviceSubcategory=isListingSubcategory&&listingCat==='Услуги';
+    const required=(fieldRequired(kind,label)||serviceSubcategory)?'required':'';
     const editText=edit?editFieldValue(kind,label):'';
     const limits=kind==='question'&&label==='Заглавие на въпроса'?'minlength="10" maxlength="120"':kind==='listing'&&label==='Заглавие'?'minlength="5" maxlength="120"':(kind==='question'||kind==='listing')&&label==='Описание'?'minlength="20"':'';
     if(type==='textarea') return `<div class="field"><label>${esc(label)}</label><textarea rows="5" ${required} ${limits} placeholder="Опиши най-важното ясно и конкретно">${esc(editText)}</textarea></div>`;
-    if(type==='select') return `<div class="field"><label>${esc(label)}</label><select ${required} ${kind==='listing'&&label==='Категория'?'id="listing-category"':''} ${kind==='listing'&&label==='Подкатегория / вид'?'id="listing-subcategory"':''} ${kind==='listing'&&label==='Тип обява'?'id="listing-type"':''}>${selectOptions(optionsFor(kind,label,query),current)}</select></div>`;
+    if(type==='select') {
+      const wrapperId=isListingSubcategory?'id="listing-subcategory-field"':'';
+      const hidden=isListingSubcategory&&!serviceSubcategory?'hidden':'';
+      const disabled=isListingSubcategory&&!serviceSubcategory?'disabled':'';
+      return `<div class="field" ${wrapperId} ${hidden}><label>${esc(label)}</label><select ${required} ${disabled} ${kind==='listing'&&label==='Категория'?'id="listing-category"':''} ${isListingSubcategory?'id="listing-subcategory"':''} ${kind==='listing'&&label==='Тип обява'?'id="listing-type"':''}>${selectOptions(optionsFor(kind,label,query),current)}</select></div>`;
+    }
 
     const cat=edit&&kind==='listing'?editFieldValue(kind,'Категория'):(query.get('category')||'');
     const examples={'Животни':'Напр. Котка търси дом в Лом','Услуги':'Напр. Предлагам ВиК услуги в Лом','Работа':'Напр. Търсим шофьор за доставки','Имоти':'Напр. Продавам двустаен апартамент в Лом','Автомобили и МПС':'Напр. Продавам автомобил в Лом'};
