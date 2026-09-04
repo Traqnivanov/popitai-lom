@@ -67,7 +67,7 @@ function shareScenario(kind,query){
     publication:'Няма public/share-eligible canonical публикация — например чака преглед или няма публичен постоянен адрес.',
     shop:'Магазинът не е approved/public или публичната canonical повърхност не е достъпна.',
     health:'Health повърхността не покрива public + trust/freshness + safe-preview условията.',
-    event:'Събитието не е share-eligible — например е приключило, скрито, pending или няма публичен canonical адрес.'
+    event:'Събитието не е share-eligible — например е pending, скрито или няма публичен canonical адрес.'
   };
   return {conditional:true,eligible,reason:reasons[kind]};
 }
