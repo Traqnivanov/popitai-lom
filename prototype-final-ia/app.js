@@ -23,6 +23,7 @@ function render(){
   if(path==='home') html=home(); else if(path==='obyavi') html=hub(query); else if(path==='uslugi') html=services(); else if(path==='service-group') html=serviceGroup(query); else if(path==='rabota') html=work(); else if(path==='imoti') html=properties(); else if(path==='stoki') html=goods(); else if(path==='avtomobili') html=auto(); else if(path==='zhivotni') html=animals(); else if(path==='magazini') html=shops(); else if(path==='zavedenia') html=restaurants(); else if(path==='zdrave') html=health(); else if(path==='firmi') html=firms(query); else if(path==='info') html=info(); else if(path==='aktualno') html=current(); else if(path==='statii') html=articles(); else if(path==='vaprosi') html=questions(); else if(path==='results') html=results(query); else if(path.startsWith('detail/')) html=detail(path.split('/')[1]); else if(path.startsWith('add/')) html=formPage(path.split('/')[1],query); else if(path==='about') html=staticPage('За сайта','Попитай.Лом е местен портал за намиране, публикуване и помощ от общността.'); else if(path==='rules') html=staticPage('Правила','Правилата на общността определят какво съдържание може да се публикува и как се преглежда.'); else if(path==='contacts') html=staticPage('Контакти','Свържи се с екипа на Попитай.Лом по въпроси за сайта или съдържанието.'); else if(path==='profile') html=staticPage('Профил','Тук се намират собственото съдържание, редакциите и статусите му.'); else html=staticPage('Страницата не е намерена','Този адрес не съществува.');
   main.innerHTML=html;
   if(path==='home') normalizeHomeComposition();
+  syncRenderedListingForm({preserve:true});
   main.focus({preventScroll:true});
   updateNav(path);
   window.scrollTo({top:0,behavior:'instant'});
@@ -60,25 +61,117 @@ function validateShopPhone(input=document.querySelector('[data-shop-phone]')){
   if(error){error.textContent=message;error.style.color=message?'#b42318':'';error.style.fontWeight=message?'800':'';}
   return !message;
 }
+function syncRenderedListingForm({categoryChanged=false,preserve=false}={}){
+  const category=document.getElementById('listing-category');
+  const sub=document.getElementById('listing-subcategory');
+  const subField=document.getElementById('listing-subcategory-field');
+  const type=document.getElementById('listing-type');
+  if(!category||!sub||!subField||!type) return;
+  const cat=category.value;
+  const subValues=listingSubcategories(cat);
+  const previousSub=preserve?sub.value:'';
+  sub.innerHTML=selectOptions(subValues,subValues.includes(previousSub)?previousSub:'');
+  const hasSubs=subValues.length>0;
+  subField.hidden=!hasSubs;
+  sub.disabled=!hasSubs;
+  sub.required=hasSubs;
+  const activeSub=hasSubs?sub.value:'';
+  const typeValues=listingTypes(cat,activeSub);
+  const previousType=preserve?type.value:'';
+  type.innerHTML=selectOptions(typeValues,typeValues.includes(previousType)?previousType:'');
+  type.disabled=cat==='Животни'&&hasSubs&&!activeSub;
+  const warning=document.getElementById('animal-warning');
+  if(warning) warning.hidden=cat!=='Животни';
+  const form=category.closest('form');
+  const title=form?.querySelector('.field input[type="text"]');
+  const description=form?.querySelector('textarea');
+  if(title) title.placeholder=listingTitlePlaceholder(cat,activeSub,type.value);
+  if(description) description.placeholder=window.PopitaiPrototypeStage2?.listingDescriptionHint?.(cat,activeSub,type.value)||'Опиши най-важното ясно и конкретно.';
+  if(categoryChanged){sub.dataset.userTouched='false';type.dataset.userTouched='false';}
+}
+function invalidFieldMessage(field,formKind){
+  const label=field.closest('.field')?.querySelector('label')?.textContent?.trim()||'полето';
+  if(field.validity?.valueMissing) return `Попълни „${label}“.`;
+  if(field.validity?.tooShort) return `„${label}“ е твърде кратко.`;
+  if(field.validity?.tooLong) return `„${label}“ е твърде дълго.`;
+  if(field.validity?.rangeUnderflow) return `Провери стойността в „${label}“.`;
+  if(field.validity?.patternMismatch) return formKind==='shop'&&field.matches('[data-shop-phone]')?'Провери телефона.':`Провери формата на „${label}“.`;
+  return `Провери „${label}“.`;
+}
+function markFormDirty(target){
+  const form=target.closest?.('[data-proto-form]');
+  if(form&&form.dataset.submitted!=='true') form.dataset.dirty='true';
+}
+function currentDirtyForm(){return document.querySelector('[data-proto-form][data-dirty="true"]');}
+function allowDirtyNavigation(){
+  const form=currentDirtyForm();
+  if(!form) return true;
+  return window.confirm('Има неизпратени данни. Ако напуснеш страницата, въведеното ще се загуби.');
+}
+function actionMessage(button,text){
+  const root=button.closest('.detail-action,.result-row,.content-actions')||button.parentElement;
+  const message=root?.querySelector('.action-demo-message,.contact-demo-message');
+  if(message) message.textContent=text;
+}
+function toggleShareOptions(button){
+  const root=button.closest('.detail-action,.content-actions')||button.parentElement;
+  const options=root?.querySelector('.share-demo-options');
+  if(options){options.hidden=!options.hidden;if(!options.hidden) options.querySelector('button')?.focus();}
+}
+async function copyPrototypeLink(button){
+  try{
+    await navigator.clipboard.writeText(location.href);
+    actionMessage(button,'Линкът към този прототипен екран е копиран.');
+  }catch(_){
+    actionMessage(button,'Копирай адреса от адресната лента.');
+  }
+}
 
 document.addEventListener('click',e=>{
+  const navLink=e.target.closest('a[href^="#"]');
+  if(navLink&&currentDirtyForm()&&!navLink.closest('.share-demo-options')){
+    if(!allowDirtyNavigation()){e.preventDefault();return;}
+    const dirty=currentDirtyForm();if(dirty) dirty.dataset.dirty='false';
+  }
   if(e.target.closest('[data-open-add]')) openAdd();
   if(e.target.closest('[data-close-add]')) closeAdd();
   if(e.target===addLayer) closeAdd();
   const propertyTab=e.target.closest('[data-property-type]');
   if(propertyTab){propertyType=propertyTab.dataset.propertyType||propertyType;propertyTab.parentElement.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===propertyTab));document.querySelectorAll('[data-property-kind]').forEach(card=>{card.href=propertyResultsHref(card.dataset.propertyKind||'');});const add=document.querySelector('[data-property-add]');if(add) add.href=listingAddUrl('Имоти','',propertyType);}
   const contact=e.target.closest('[data-demo-contact]');
-  if(contact){const msg=contact.parentElement.querySelector('.contact-demo-message');if(msg) msg.textContent='Прототипът не съдържа реален телефон или лични данни.';}
+  if(contact){actionMessage(contact,'При реален запис се показват само наличните публични канали за контакт.');}
+  const share=e.target.closest('[data-demo-share]');
+  if(share){toggleShareOptions(share);}
+  const copy=e.target.closest('[data-demo-copy]');
+  if(copy){copyPrototypeLink(copy);}
+  const facebook=e.target.closest('[data-demo-facebook]');
+  if(facebook){actionMessage(facebook,'Facebook ще получи постоянния публичен URL и неговия одобрен social preview. Прототипът не публикува реално.');}
+  const report=e.target.closest('[data-demo-report]');
+  if(report){actionMessage(report,'Сигналът е вторично действие и в реалния сайт използва съответния доказан moderation owner.');}
+  const correction=e.target.closest('[data-demo-correction]');
+  if(correction){actionMessage(correction,'Корекцията е за фактическа грешка и използва специализирания Health/Info correction flow.');}
+  const answer=e.target.closest('[data-demo-answer]');
+  if(answer){actionMessage(answer,'При реален въпрос тук се отваря съществуващият поток за отговор.');}
 });
-document.addEventListener('input',e=>{if(e.target.matches('[data-shop-phone]')) validateShopPhone(e.target);});
+document.addEventListener('input',e=>{markFormDirty(e.target);if(e.target.matches('[data-shop-phone]')) validateShopPhone(e.target);});
 document.addEventListener('blur',e=>{if(e.target.matches('[data-shop-phone]')) validateShopPhone(e.target);},true);
 document.addEventListener('change',e=>{
+  markFormDirty(e.target);
   if(e.target.matches('[data-demo-upload]')){const max=Number(e.target.dataset.maxFiles||1);const selected=Math.min(e.target.files?.length||0,max);const section=e.target.closest('.upload-demo');const count=section?.querySelector('[data-upload-count]');if(count) count.textContent=`${selected} / ${max}`;}
-  if(e.target.id==='listing-category'){
-    const cat=e.target.value;const warn=document.getElementById('animal-warning');if(warn) warn.hidden=cat!=='Животни';const sub=document.getElementById('listing-subcategory');const subField=document.getElementById('listing-subcategory-field');const type=document.getElementById('listing-type');
-    if(sub){const isServices=cat==='Услуги';const vals=isServices?serviceFamilies.flatMap(x=>x.slice(1)):[];sub.innerHTML=selectOptions(vals,'');sub.required=isServices;sub.disabled=!isServices;if(subField) subField.hidden=!isServices;}
-    const title=e.target.closest('form')?.querySelector('input[type="text"]');if(title){const examples={'Животни':'Напр. Котка търси дом в Лом','Услуги':'Напр. Предлагам ВиК услуги в Лом','Работа':'Напр. Търсим шофьор за доставки','Имоти':'Напр. Продавам двустаен апартамент в Лом','Автомобили и МПС':'Напр. Продавам автомобил в Лом'};title.placeholder=examples[cat]||'Напр. Продавам запазен велосипед в Лом';}
-    if(type){const vals=cat==='Работа'?['Предлага работа','Търси работа']:cat==='Имоти'?['Продава имот','Отдава под наем','Търси под наем','Търси за купуване']:['Продава','Купува','Търси','Дава'];type.innerHTML=selectOptions(vals,'');}
+  if(e.target.id==='listing-category') syncRenderedListingForm({categoryChanged:true});
+  if(e.target.id==='listing-subcategory'){
+    const type=document.getElementById('listing-type');
+    if(type) type.value='';
+    syncRenderedListingForm({preserve:true});
+  }
+  if(e.target.id==='listing-type'){
+    const category=document.getElementById('listing-category');
+    const sub=document.getElementById('listing-subcategory');
+    const form=e.target.closest('form');
+    const title=form?.querySelector('.field input[type="text"]');
+    const description=form?.querySelector('textarea');
+    if(title) title.placeholder=listingTitlePlaceholder(category?.value||'',sub?.value||'',e.target.value);
+    if(description) description.placeholder=window.PopitaiPrototypeStage2?.listingDescriptionHint?.(category?.value||'',sub?.value||'',e.target.value)||description.placeholder;
   }
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!addLayer.hidden)closeAdd();});
@@ -87,9 +180,18 @@ document.addEventListener('submit',e=>{
   if(e.target.matches('[data-proto-form]')){
     e.preventDefault();const form=e.target;const msg=form.querySelector('.form-message');if(form.dataset.submitted==='true') return;
     if(form.dataset.formKind==='shop'&&!validateShopPhone(form.querySelector('[data-shop-phone]'))){msg.innerHTML='<div class="notice danger"><strong>Провери телефона.</strong> Въведеното остава във формата.</div>';form.querySelector('[data-shop-phone]')?.reportValidity();return;}
-    if(!form.checkValidity()){msg.innerHTML='<div class="notice danger"><strong>Провери задължителните полета.</strong> Въведеното остава във формата.</div>';form.reportValidity();return;}
-    form.dataset.submitted='true';const submit=form.querySelector('button[type="submit"]');if(submit){submit.disabled=true;submit.textContent='Изпратено';}msg.innerHTML='<div class="notice ok"><strong>Успешно прототипно изпращане:</strong> няма реален запис в системата. Формата демонстрира успешно състояние.</div>';
+    if(!form.checkValidity()){
+      const invalid=form.querySelector(':invalid');
+      const detail=invalid?invalidFieldMessage(invalid,form.dataset.formKind):'Провери задължителните полета.';
+      msg.innerHTML=`<div class="notice danger"><strong>${detail}</strong> Въведеното остава във формата.</div>`;
+      invalid?.focus();invalid?.reportValidity();return;
+    }
+    form.dataset.submitted='true';form.dataset.dirty='false';
+    const submit=form.querySelector('button[type="submit"]');if(submit){submit.disabled=true;submit.textContent='Изпращане…';}
+    const kind=form.dataset.formKind||'listing';
+    location.hash=`#add/${kind}?state=pending`;
   }
 });
+window.addEventListener('beforeunload',e=>{if(currentDirtyForm()){e.preventDefault();e.returnValue='';}});
 window.addEventListener('hashchange',()=>{closeAdd();render();});
 if(!location.hash) location.hash='#home'; else render();
