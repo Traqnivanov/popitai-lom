@@ -12,12 +12,6 @@ function normalizeHomeComposition(){
     const shell=marketSection.querySelector('.shell');const specialGrid=specialistSection.querySelector('.special-grid');
     if(shell&&specialGrid){const head=document.createElement('div');head.className='section-head compact-head';head.innerHTML='<div><h2>Местни специализирани раздели</h2><p>Магазини, заведения и здравни услуги.</p></div>';shell.append(head,specialGrid);specialistSection.remove();}
   }
-  const infoSection=sections.find(section=>section.querySelector('.section-head h2')?.textContent.trim()==='Инфо Лом');
-  if(infoSection){
-    const cards=[...infoSection.querySelectorAll('.info-card h3')];
-    const live=['⚕️ Здраве','🏛️ Институции','🚌 Транспорт','🎓 Образование и култура','🏦 Банки и банкомати','⚡ Комунални услуги'];
-    cards.forEach((card,index)=>{if(live[index]) card.textContent=live[index];});
-  }
 }
 function render(){
   const {path,query}=parseHash();let html='';
