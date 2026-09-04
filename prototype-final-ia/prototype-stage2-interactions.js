@@ -101,7 +101,35 @@
     primary.dataset.canonicalService=canonical;
   }
 
-  function syncAfterRender(){queueMicrotask(()=>{syncListingForm({preserve:true});syncQuestionHints();syncHealthContext();syncResultsAddTarget();});}
+  function cleanVisibleCopy(){
+    document.querySelectorAll('.notice').forEach(note=>{
+      const text=note.textContent||'';
+      if(text.includes('За owner формата се използва каноничната подкатегория')){
+        note.innerHTML=note.innerHTML.replace('За owner формата се използва каноничната подкатегория','Ще бъде публикувана в група');
+      }
+      if(text.includes('edit draft')){
+        note.innerHTML='<strong>Редакция на запазен фирмен профил.</strong> Запазените стойности са попълнени във формата. Ако изчистиш незадължително поле, промяната ще бъде изпратена за одобрение.';
+      }
+    });
+
+    document.querySelectorAll('details.content-card').forEach(details=>{
+      if(details.querySelector('summary')?.textContent.trim()!=='Преглед при споделяне') return;
+      const label=details.querySelector('.demo-label');
+      if(label?.textContent.includes('SOCIAL PREVIEW')) label.textContent='ПРИМЕРЕН ПРЕГЛЕД ПРИ СПОДЕЛЯНЕ';
+      details.querySelectorAll('p').forEach(p=>{
+        p.innerHTML=p.innerHTML
+          .replaceAll('Health брандирана визуализация','Брандирана визуализация за здравния раздел')
+          .replaceAll('Брандирана Q&amp;A визуализация','Брандирана визуализация за въпрос')
+          .replaceAll('Брандирана Q&A визуализация','Брандирана визуализация за въпрос')
+          .replaceAll('брандиран fallback','брандирана резервна визуализация')
+          .replaceAll('Info Lom брандирана визуализация','Брандирана визуализация за Инфо Лом')
+          .replaceAll('Pending/скрито съдържание не участва.','Чакащо одобрение или скрито съдържание не участва.')
+          .replaceAll('собствен постоянен URL','собствен постоянен адрес');
+      });
+    });
+  }
+
+  function syncAfterRender(){queueMicrotask(()=>{syncListingForm({preserve:true});syncQuestionHints();syncHealthContext();syncResultsAddTarget();cleanVisibleCopy();});}
 
   document.addEventListener('change',e=>{
     if(e.target.id==='listing-category') syncListingForm({preserve:false});
@@ -128,7 +156,7 @@
     const share=e.target.closest?.('[data-demo-share]');
     if(share){
       const box=share.closest('.share-menu')?.querySelector('.share-demo-message');
-      const messages={native:'На телефон ще се отвори системното меню за споделяне.',facebook:'Facebook ще използва постоянния URL и неговия social preview.',copy:'Постоянният линк е копиран. (Прототип — няма реално копиране.)'};
+      const messages={native:'На телефон ще се отвори системното меню за споделяне.',facebook:'Facebook ще използва постоянния адрес и неговия преглед при споделяне.',copy:'Постоянният линк е копиран. (Прототип — няма реално копиране.)'};
       if(box) box.textContent=messages[share.dataset.demoShare]||'Готово за споделяне.';
     }
 
@@ -136,12 +164,12 @@
     if(action){
       const box=action.closest('.detail-action')?.querySelector('.action-demo-message');
       let text='';
-      if(action.matches('[data-demo-report]')) text='Сигналът е вторично действие и се изпраща към приложимия moderation/report flow.';
-      if(action.matches('[data-demo-correction]')) text='Корекцията е за фактическа грешка и използва специализирания correction flow.';
+      if(action.matches('[data-demo-report]')) text='Сигналът е вторично действие и се изпраща за преглед според правилата за този тип съдържание.';
+      if(action.matches('[data-demo-correction]')) text='Корекцията е за фактическа грешка и се изпраща за проверка.';
       if(action.matches('[data-demo-inquiry]')) text='Запитването е налично само когато профилът има такъв канал за контакт.';
       if(action.matches('[data-demo-site]')) text='Сайтът се показва само когато профилът има публичен уеб адрес.';
       if(action.matches('[data-demo-answer]')) text='Формата за отговор е водещото действие при въпрос.';
-      if(action.matches('[data-demo-official]')) text='Отваря се официалният публичен източник на конкретния Info Lom запис.';
+      if(action.matches('[data-demo-official]')) text='Отваря се официалният публичен източник на конкретния запис в Инфо Лом.';
       if(action.matches('[data-demo-event-info]')) text='Дата, час и място са водещите данни за събитието.';
       if(box) box.textContent=text;
     }
