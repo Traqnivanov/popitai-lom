@@ -15,14 +15,10 @@ const formConfig={
 function selectOptions(values,current=''){
   return '<option value="">Избери</option>'+values.map(v=>`<option value="${esc(v)}" ${String(v)===String(current)?'selected':''}>${esc(v)}</option>`).join('');
 }
-
-function listingCategory(query){
-  return query.get('state')==='edit' ? editValue('listing','Категория') : (query.get('category')||'');
-}
-
+function listingCategory(query){return query.get('state')==='edit'?editValue('listing','Категория'):(query.get('category')||'');}
 function optionsFor(kind,label,query){
   if(kind==='listing'&&label==='Категория') return listingCategories;
-  if(kind==='listing'&&label==='Подкатегория / вид') return listingCategory(query)==='Услуги' ? serviceFamilies.flatMap(x=>x.slice(1)) : [];
+  if(kind==='listing'&&label==='Подкатегория / вид') return listingCategory(query)==='Услуги'?serviceFamilies.flatMap(x=>x.slice(1)):[];
   if(kind==='listing'&&label==='Тип обява'){
     const cat=listingCategory(query);
     if(cat==='Работа') return ['Предлага работа','Търси работа'];
@@ -36,13 +32,11 @@ function optionsFor(kind,label,query){
   if(kind==='health'&&label==='Тип') return healthGroups;
   return ['Примерна стойност','Друго'];
 }
-
 function editFieldValue(kind,label){
   const value=editValue(kind,label);
   if(kind==='question'&&label==='Категория'&&value==='Услуги') return 'Работа и услуги';
   return value;
 }
-
 function currentForField(kind,label,query){
   if(query.get('state')==='edit') return editFieldValue(kind,label);
   if(kind==='health'&&label==='Тип') return query.get('type')||'';
@@ -52,14 +46,15 @@ function currentForField(kind,label,query){
   if(label==='Тип обява') return query.get('type')||'';
   return '';
 }
-
+function shopClassification(){
+  return `<fieldset class="field shop-classification"><legend>Какво предлага магазинът — по желание</legend><p class="help">Готовите видове идват от реалния каталог. В прототипа можеш да добавиш свое уточнение.</p><label for="shop-custom-tag">Друго уточнение</label><input id="shop-custom-tag" name="custom_tag" maxlength="80" placeholder="Например: местен специализиран продукт"></fieldset>`;
+}
 function formPage(kind,query){
   const c=formConfig[kind]||formConfig.listing;
   const state=query.get('state');
   const edit=state==='edit';
   if(state==='pending') return `<div class="page">${pageHead(c.title,'Изпратено е за преглед.')}<div class="shell form-wrap"><div class="notice"><strong>Чака преглед.</strong> Ще стане публично след одобрение според правилата за този тип съдържание.</div></div></div>`;
   if(state==='success') return `<div class="page">${pageHead(c.title,'Успешно изпращане.')}<div class="shell form-wrap"><div class="notice ok"><strong>Успешно изпратено.</strong> Това е прототип и не е създаден реален запис.</div><a class="btn" href="#home" style="margin-top:14px">Към началото</a></div></div>`;
-
   const listingCat=kind==='listing'?listingCategory(query):'';
   const fields=c.fields.map(([label,type])=>{
     const current=currentForField(kind,label,query);
@@ -69,31 +64,31 @@ function formPage(kind,query){
     const editText=edit?editFieldValue(kind,label):'';
     const limits=kind==='question'&&label==='Заглавие на въпроса'?'minlength="10" maxlength="120"':kind==='listing'&&label==='Заглавие'?'minlength="5" maxlength="120"':(kind==='question'||kind==='listing')&&label==='Описание'?'minlength="20"':'';
     if(type==='textarea') return `<div class="field"><label>${esc(label)}</label><textarea rows="5" ${required} ${limits} placeholder="Опиши най-важното ясно и конкретно">${esc(editText)}</textarea></div>`;
-    if(type==='select') {
+    if(type==='select'){
       const wrapperId=isListingSubcategory?'id="listing-subcategory-field"':'';
       const hidden=isListingSubcategory&&!serviceSubcategory?'hidden':'';
       const disabled=isListingSubcategory&&!serviceSubcategory?'disabled':'';
-      return `<div class="field" ${wrapperId} ${hidden}><label>${esc(label)}</label><select ${required} ${disabled} ${kind==='listing'&&label==='Категория'?'id="listing-category"':''} ${isListingSubcategory?'id="listing-subcategory"':''} ${kind==='listing'&&label==='Тип обява'?'id="listing-type"':''}>${selectOptions(optionsFor(kind,label,query),current)}</select></div>`;
+      const shopCat=kind==='shop'&&label==='Категория'?'id="shop-category"':'';
+      return `<div class="field" ${wrapperId} ${hidden}><label>${esc(label)}</label><select ${required} ${disabled} ${shopCat} ${kind==='listing'&&label==='Категория'?'id="listing-category"':''} ${isListingSubcategory?'id="listing-subcategory"':''} ${kind==='listing'&&label==='Тип обява'?'id="listing-type"':''}>${selectOptions(optionsFor(kind,label,query),current)}</select></div>`;
     }
-
     const cat=edit&&kind==='listing'?editFieldValue(kind,'Категория'):(query.get('category')||'');
     const examples={'Животни':'Напр. Котка търси дом в Лом','Услуги':'Напр. Предлагам ВиК услуги в Лом','Работа':'Напр. Търсим шофьор за доставки','Имоти':'Напр. Продавам двустаен апартамент в Лом','Автомобили и МПС':'Напр. Продавам автомобил в Лом'};
     const isTitle=['Заглавие','Заглавие на въпроса'].includes(label);
     const placeholder=type==='tel'?'Напр. 0876 123 456':isTitle?(examples[cat]||(kind==='question'?'Напр. Кой препоръчва добър електротехник?':'Напр. Продавам запазен велосипед в Лом')):label.includes('Град')?'Лом':label.includes('Улица')?'Напр. ул. Дунавска 12':label.includes('Адрес')?'Напр. ул. Дунавска 12':label.includes('Работно време')?'Напр. Пон–Пет: 8:00–18:00':'';
     const numeric=type==='number'?'min="0" step="0.01"':'';
     const phone=type==='tel'?'pattern="[0-9+ ()-]{6,20}"':'';
-    const field=`<div class="field"><label>${esc(label)}</label><input type="${type}" ${required} ${limits} ${numeric} ${phone} value="${esc(editText)}" placeholder="${esc(placeholder)}"></div>`;
+    const shopPhone=kind==='shop'&&label==='Телефон'?'id="shop-phone" data-shop-phone aria-describedby="shop-phone-error"':'';
+    const field=`<div class="field"><label>${esc(label)}</label><input type="${type}" ${required} ${limits} ${numeric} ${phone} ${shopPhone} value="${esc(editText)}" placeholder="${esc(placeholder)}">${shopPhone?'<p class="help" id="shop-phone-error" aria-live="polite"></p>':''}</div>`;
     const priceOptions=kind==='listing'&&label==='Цена в евро'?'<div class="form-inline-options"><label><input type="checkbox"> Договаряне</label><label><input type="checkbox"> Подарява (безплатно)</label></div>':'';
     return field+priceOptions;
   }).join('');
-
   const animalVisible=kind==='listing'&&currentForField(kind,'Категория',query)==='Животни';
   const animalWarning=kind==='listing'?`<div class="notice danger" id="animal-warning" ${animalVisible?'':'hidden'}><strong>За живи животни:</strong> платена продажба не се предлага. „Продава“ е допустимо само за стоки за животни; за осиновяване, изгубени и намерени използвай съответния публичен вход.</div>`:'';
   const listingExtras=kind==='listing'?`<section class="upload-demo"><div><strong>Снимки</strong><span data-upload-count>0 / 6</span></div><p>Първата снимка е главна. До 6 снимки · JPG, PNG или WebP.</p><label class="btn upload-button">Избери снимки<input type="file" accept="image/jpeg,image/png,image/webp" multiple data-demo-upload data-max-files="6" hidden></label></section>`:'';
   const firmExtras=kind==='firm'?`<section class="upload-demo"><div><strong>Лого (по желание)</strong><span data-upload-count>0 / 1</span></div><p>JPG, PNG или WebP · до 10 MB.</p><label class="btn upload-button">Избери лого<input type="file" accept="image/jpeg,image/png,image/webp" data-demo-upload data-max-files="1" hidden></label></section><section class="upload-demo"><div><strong>Снимки на обекти и услуги</strong><span data-upload-count>0 / 6</span></div><p>До 6 снимки в основния профил.</p><label class="btn upload-button">Избери снимки<input type="file" accept="image/jpeg,image/png,image/webp" multiple data-demo-upload data-max-files="6" hidden></label></section>`:'';
+  const shopExtras=kind==='shop'?shopClassification():'';
   const terms=['listing','question'].includes(kind)?'<div class="field check-field"><label><input type="checkbox" required> Прочетох и приемам правилата на общността</label></div>':'';
   const editNote=edit?'<div class="notice"><strong>Редакция на примерен запазен запис.</strong> Запазените стойности имат приоритет пред параметрите за нова публикация.</div>':'';
-  return `<div class="page">${pageHead(edit?`Редактирай — ${c.title}`:c.title,c.subtitle)}<div class="shell form-wrap">${animalWarning}${editNote}<form class="proto-form" data-proto-form data-form-kind="${kind}" novalidate>${fields}${listingExtras}${firmExtras}${terms}<div class="form-actions"><button class="btn primary" type="submit">${edit?'Изпрати редакцията':kind==='health'?'Изпрати за одобрение':'Изпрати за преглед'}</button><a class="btn" href="#home">Отказ</a></div><div class="form-message" aria-live="polite"></div></form></div></div>`;
+  return `<div class="page">${pageHead(edit?`Редактирай — ${c.title}`:c.title,c.subtitle)}<div class="shell form-wrap">${animalWarning}${editNote}<form class="proto-form" data-proto-form data-form-kind="${kind}" novalidate>${fields}${shopExtras}${listingExtras}${firmExtras}${terms}<div class="form-actions"><button class="btn primary" type="submit">${edit?'Изпрати редакцията':kind==='health'?'Изпрати за одобрение':'Изпрати за преглед'}</button><a class="btn" href="#home">Отказ</a></div><div class="form-message" aria-live="polite"></div></form></div></div>`;
 }
-
-function staticPage(title,text){return `<div class="page">${pageHead(title,text)}<div class="shell"><div class="content-card"><p>${esc(text)}</p><p>Съдържанието тук ще използва действащите текстове и правила при реалната интеграция.</p></div></div></div>`;}
+function staticPage(title,text){return `<div class="page">${pageHead(title,text)}<div class="shell"><div class="content-card"><p>${esc(text)}</p></div></div></div>`;}
