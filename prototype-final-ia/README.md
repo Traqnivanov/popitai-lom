@@ -1,39 +1,59 @@
 # Попитай.Лом — Content-complete IA prototype
 
-Статус: **ИЗОЛИРАН ПРОТОТИП / STAGE 2 ACCEPTANCE FAIL / REMEDIATION QA PASS / OWNER VISUAL ACCEPTANCE PENDING / STAGE 3 BLOCKED / НЕ Е PRODUCTION / НЕ ЗАПИСВА В SUPABASE**
+Статус: **ИЗОЛИРАН ПРОТОТИП / STAGE 2 ACCEPTANCE FAIL / ROUND 2 SOURCE QA PASS / BROWSER RECHECK PENDING / OWNER ACCEPTANCE PENDING / STAGE 3 BLOCKED / НЕ Е PRODUCTION / НЕ ЗАПИСВА В SUPABASE**
 
-Каноничен източник: `POPITAI_LOM_MASTER_CURRENT.md` от 04.09.2026, приложимите `PROJECT_RULES_*` и последните изрични решения на собственика.
+Канонична база за този prototype pass: `POPITAI_LOM_MASTER_CURRENT.md`, приложимите `PROJECT_RULES_*`, последните изрични решения на собственика и съдържателните правила от `POPITAI_LOM_MASTER_CONTENT_STRATEGY_V3_2026-09-03.md`, консултиран като източник, но **не добавян в този prototype-only diff**.
 
 Stage 2 safety branch: `prototype/content-complete-ia-20260904-stage2-safety`.
 
-## Критична корекция на договора — 04.09.2026
+## Критична backend / LOCKED граница
 
-Предишно общо „одобрявам“ не се счита за LOCKED одобрение за нови persisted подкатегории. Такова конкретно одобрение не е давано.
+Предишно общо „одобрявам“ не се счита за LOCKED одобрение за нови persisted подкатегории.
 
-Действащият backend contract за Stage 2 е:
+Действащият договор за Stage 2 остава:
 
 - persisted контролирана `subcategory` има само при `Обяви → Услуги`;
-- `Работа` пази `category=Работа` и само съществуващите `Предлага работа` / `Търси работа`; професионалните групи са discovery контекст;
+- `Работа` пази `category=Работа` и съществуващите `Предлага работа` / `Търси работа`; професионалните групи са discovery контекст;
 - `Имоти` пази `category=Имоти` и съществуващите специални listing types; видът имот е discovery контекст;
-- `Автомобили и МПС` не получава нов persisted taxonomy; автомобилните услуги остават `Услуги` + съществуваща service подкатегория;
+- `Автомобили и МПС` не получава нов persisted taxonomy; автомобилните услуги остават `Услуги` + съществуваща Service подкатегория;
 - `Животни` пази `category=Животни`; осиновяване/изгубено/намерено са discovery контекст;
-- `Авточасти` остава част от съществуващия Service contract и не се мигрира или преименува едностранно.
+- `Авточасти` остава част от съществуващия Service contract.
 
-Всяко бъдещо отклонение от тези правила е отделно LOCKED решение и изисква предварително описание на DB/RPC/RLS/validation/edit-flow последствията, риска и rollback-а.
+### Важно: 58/58 mapping НЕ е end-to-end persistence contract
 
-## Приложени Stage 2 remediation поправки
+Прототипът има compatibility mapping за всичките 58 service discovery leaves към съществуващи canonical Service стойности. Това доказва **coverage на adapter mapping-а**, но не доказва, че точният discovery leaf се записва и може да бъде възстановен след submit.
 
-1. Точният discovery контекст остава видим през discovery → results → add. Примерът `Кетъринг` остава видим като `Кетъринг`, а compatible Service subcategory стои отделно.
-2. Работа, Имоти, Автомобили и Животни не се представят с persisted `subcategory`; discovery контекстът се пази отделно в route/state.
-3. `Авточасти` е възстановено като текуща Service стойност.
-4. Shop tags са category-aware: релевантните са първи, останалите са в `Други предложения`, а custom `Друго` остава налично.
-5. Content Actions са data-aware и topic-aware; липсващ канал не получава фалшив CTA.
-6. Social Preview е отделна реалистична card композиция с изображение, title, description и доказан production host; QA бележките са извън картата.
-7. Формите имат field-level errors, коректни label/for връзки, aria-describedby, aria-invalid, focus към първата грешка, запазване на въведеното при грешка, dirty guard и заменен success state.
+Пример:
+
+`Кетъринг → canonical subcategory: Фото, видео и събитийни услуги`
+
+При действащия backend договор отделното `Кетъринг` не се persist-ва като собствено поле. След submit записът сам по себе си не съдържа достатъчно информация, за да върне надеждно потребителя обратно към exact leaf `Кетъринг`.
+
+Това е **OPEN / LOCKED граница**, не скрито разрешена migration задача. Ако в бъдеще продуктът изисква exact-leaf persistence/reconstruction, трябва отделно LOCKED решение с DB before/after, засегнати записи и форми, migration/RLS/RPC/validation/edit-flow последствия, рискове и rollback.
+
+## Round 2 поправки
+
+1. При ръчна смяна на Listing категорията несъвместимият discovery context се изчиства и техническият adapter се преизчислява по новата категория.
+2. Публикациите вече не се описват като задължително кратки. Те са отделен формат с конкретна причина и са толкова дълги, колкото е нужно за задачата; не се превръщат автоматично в пълно ръководство.
+3. `Публикация`, `Магазин`, `Health` и `Събитие` имат положителни и отрицателни conditional Share prototype states:
+   - `?share=eligible` → Share + social card;
+   - `?share=blocked` → няма Share CTA и няма social card, а се показва причината.
+4. `normalizeHomeComposition()` е премахнат. Home композицията се изгражда директно от `home()` като един render owner; няма post-render преместване на Home секции.
+
+## Conditional Share contract в прототипа
+
+Share се показва само когато примерът представлява public/share-eligible canonical съдържание с безопасен payload и приложимите status/freshness условия са изпълнени.
+
+- Publication: положителен пример при public canonical публикация; отрицателен при pending/non-public/no stable public URL.
+- Shop: положителен при approved/public Shop; отрицателен при non-public/non-approved или липсваща публична canonical повърхност.
+- Health: положителен само при public canonical Health surface + trust/freshness + safe preview; отрицателен при неспазено условие.
+- Event: положителен за approved/public current Event; отрицателен пример при pending/hidden/no public canonical surface. Приключило събитие не трябва да бъде представяно като „предстоящо“.
+
+Facebook остава distribution layer, не content owner.
 
 ## Инфо Лом — live parity
 
-Проверено директно в production. Шестте реални раздела са:
+Шестте реални раздела, сверени с production, са:
 
 - Здраве
 - Институции
@@ -44,32 +64,35 @@ Stage 2 safety branch: `prototype/content-complete-ia-20260904-stage2-safety`.
 
 `Полезни телефони` не е отделен раздел.
 
-## Remediation QA — 04.09.2026
+## Round 2 QA matrix — 04.09.2026
 
-| Проверка | Резултат | Доказателство |
+| Проверка | Статус | Бележка |
 |---|---|---|
-| Safety boundary | PASS | само isolated prototype branch; production/Supabase/LOCKED не са променяни |
-| 58 service discovery leaves | PASS | browser automation: 58/58 имат compatibility mapping |
-| Service discovery запазва точния избор | PASS | `Кетъринг` остава видим в results и form; Add URL носи отделно `discovery=Кетъринг` |
-| Current Service persistence | PASS | Service form пази canonical compatibility `subcategory`; `Авточасти` остава налично |
-| Работа / Имоти / Auto / Животни | PASS | browser automation: всички discovery groups генерират URL без `subcategory`; exact discovery остава отделно |
-| Edit priority | PASS | browser automation: запазеният edit record има приоритет пред create prefill |
-| Shop tags | PASS | визуално проверени `Хранителни` и `Техника`: релевантни първо, други зад disclosure |
-| Content Actions | PASS | Firm без site не показва `Сайт`; Article няма generic `Намери услуга`; Publication без relation няма related CTA |
-| Social card desktop | PASS | Opera: отделна card визуализация и отделна QA зона |
-| Social card mobile 390px | PASS | реален 390px iframe render: image + source + title + description без хоризонтален overflow |
-| Home mobile 390px | PASS | реален 390px render: header/hero/search/CTA и marketplace начало са четими |
-| Listing form mobile 390px | PASS | реален 390px render: discovery `Кетъринг` е видим; form layout не прелива |
-| Field validation | PASS | real browser automation: invalid submit е отказан, field errors се показват, въведеното остава |
-| Accessibility form wiring | PASS | real browser automation: labelsConnected, requiredDescribed, focusFirstError |
-| Dirty hash navigation | PASS | real browser automation: отказано напускане запазва текущия hash/form |
-| Refresh/close protection | PASS | real browser automation: beforeunload е предотвратен при dirty form |
-| Success lifecycle | PASS | success заменя активната форма и повторно submit действие липсва |
-| Diff isolation | PASS | compare спрямо `0b149238…`: само файлове в `prototype-final-ia/` |
+| Safety boundary | PASS | само safety prototype branch; без production/Supabase/LOCKED промени |
+| `normalizeHomeComposition()` | PASS | премахнат от `app.js` |
+| Home single render owner | PASS | marketplace + specialized block се връщат директно от `home()` |
+| Manual category change clears discovery | PASS — source | `listing-category` change извиква reset на discovery context |
+| Manual category change refreshes adapter | PASS — source | adapter чете текущата category/subcategory/listing_type след промяната |
+| Publication mandatory-short claim | PASS — source | няма продуктово правило, че Публикацията трябва да е кратка |
+| Publication Share eligible / blocked | PASS — source | отделни positive/negative routes |
+| Shop Share eligible / blocked | PASS — source | отделни positive/negative routes |
+| Health Share eligible / blocked | PASS — source | trust/freshness/safe-preview условие |
+| Event Share eligible / blocked | PASS — source | public/current eligibility; blocked state без Share |
+| 58/58 Service compatibility mapping coverage | PASS | coverage на mapping layer-а; не е persistence proof |
+| Exact discovery leaf persisted after submit | **OPEN / FAIL** | не се persist-ва отделно при текущия договор |
+| Exact leaf reconstruction from published record | **OPEN / FAIL** | не може надеждно да се гарантира само от canonical subcategory |
+| Content Master V3 в prototype diff | PASS — липсва по дизайн | не трябва да се добавя в този prototype-only diff |
+| Content Master V3 official repo checkpoint | **OPEN / REQUIRED** | следващ отделен docs-only checkpoint |
+| Повторен browser interaction QA за Round 2 | **PENDING** | Opera connector прекъсна при стартирания временен harness; harness е премахнат |
+| Повторен desktop/mobile visual QA за Round 2 | **PENDING** | не се обявява за изпълнен без реален browser render |
 
-Временният `mobile-qa.html`, използван за real-browser 390px и interaction automation, е изтрит след тестовете и не присъства в крайния diff.
+Предишните успешно изпълнени form validation / dirty-state / mobile 390px тестове не се заличават, но не се използват като доказателство, че новите Round 2 промени са повторно визуално проверени.
 
-**Важно: REMEDIATION QA PASS не означава Stage 2 acceptance. Stage 2 остава FAIL до независимата проверка и новото визуално приемане от собственика. Stage 3 остава BLOCKED.**
+## Задължителен следващ docs-only checkpoint
+
+`POPITAI_LOM_MASTER_CONTENT_STRATEGY_V3_2026-09-03.md` трябва да бъде качен официално в repo в отделен **docs-only checkpoint**, защото в момента липсва от текущия commit/branch. Това не се прави вътре в prototype-only remediation diff.
+
+Този docs checkpoint не дава автоматично разрешение за Stage 3, production deploy или LOCKED backend промяна.
 
 ## Основни prototype routes
 
@@ -78,8 +101,11 @@ Hash routes се използват само в изолирания прото�
 - `#home`, `#obyavi`, `#uslugi`, `#rabota`, `#imoti`, `#stoki`, `#avtomobili`, `#zhivotni`
 - `#magazini`, `#zavedenia`, `#zdrave`, `#firmi`, `#info`, `#aktualno`, `#statii`, `#vaprosi`
 - `#detail/listing`, `#detail/firm`, `#detail/shop`, `#detail/health`, `#detail/info`, `#detail/article`, `#detail/publication`, `#detail/event`, `#detail/question`
+- conditional Share examples: `#detail/publication?share=eligible|blocked`, `#detail/shop?share=eligible|blocked`, `#detail/health?share=eligible|blocked`, `#detail/event?share=eligible|blocked`
 - `#add/listing`, `#add/firm`, `#add/shop`, `#add/health`, `#add/question`
 
 ## Production boundary
+
+**Stage 2 остава FAIL. Owner acceptance остава pending. Stage 3 остава BLOCKED.**
 
 Този branch не разрешава merge/deploy към `main`, Supabase/schema/RLS/RPC промени или промяна на protected Firms/Listings/Masters semantics.
