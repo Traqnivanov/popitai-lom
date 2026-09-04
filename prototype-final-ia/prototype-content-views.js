@@ -80,7 +80,7 @@ function socialPreview(kind,c,query=new URLSearchParams()){
   }[kind];
   if(!config) return '';
   const mode=socialImageMode(query);
-  return `<section class="social-preview-section" aria-label="Пример при споделяне"><h3>Social Preview — UX пример, не production интеграция</h3><div class="og-image-label"><strong>og:image · 1200 × 630</strong><span>${mode==='real'?'Стъпка 1 — реална одобрена медия':mode==='lom'?'Стъпка 3 — общ fallback':'Стъпка 2 — тематичен шаблон'}</span></div>${socialOgImage(kind,mode)}<div class="facebook-preview-meta" aria-label="Текстови Open Graph данни, отделни от изображението"><small>traqnivanov.github.io · Попитай.Лом</small><strong>${esc(config.title)}</strong><p>${esc(config.desc)}</p></div><p class="social-separation-note">Заглавието, описанието и домейнът са отделни metadata елементи. Те не са нарисувани вътре в `og:image`.</p>${socialImageQa(kind,mode)}</section>`;
+  return `<section class="social-preview-section" aria-label="Пример при споделяне"><h3>Social Preview — UX пример, не production интеграция</h3><div class="og-image-label"><strong>og:image · 1200 × 630</strong><span>${mode==='real'?'Стъпка 1 — реална одобрена медия':mode==='lom'?'Стъпка 3 — общ fallback':'Стъпка 2 — тематичен шаблон'}</span></div>${socialOgImage(kind,mode)}<div class="facebook-preview-meta" aria-label="Текстови Open Graph данни, отделни от изображението"><small>traqnivanov.github.io · Попитай.Лом</small><strong>${esc(config.title)}</strong><p>${esc(config.desc)}</p></div><p class="social-separation-note">Заглавието, описанието и домейнът са отделни metadata елементи. Те не са нарисувани вътре в og:image.</p>${socialImageQa(kind,mode)}</section>`;
 }
 
 const conditionalShareKinds=new Set(['publication','shop','health','event']);
