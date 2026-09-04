@@ -73,11 +73,15 @@ document.addEventListener('change',e=>{
     const warn=document.getElementById('animal-warning');
     if(warn) warn.hidden=cat!=='Животни';
     const sub=document.getElementById('listing-subcategory');
+    const subField=document.getElementById('listing-subcategory-field');
     const type=document.getElementById('listing-type');
     if(sub){
-      const vals=cat==='Услуги'?serviceFamilies.flatMap(x=>x.slice(1)):cat==='Работа'?workGroups:cat==='Имоти'?propertyKinds:cat==='Животни'?animalGroups:cat==='Автомобили и МПС'?autoListingGroups:['Друго'];
+      const isServices=cat==='Услуги';
+      const vals=isServices?serviceFamilies.flatMap(x=>x.slice(1)):[];
       sub.innerHTML=selectOptions(vals,'');
-      sub.required=cat==='Услуги';
+      sub.required=isServices;
+      sub.disabled=!isServices;
+      if(subField) subField.hidden=!isServices;
     }
     const title=e.target.closest('form')?.querySelector('input[type="text"]');
     if(title){
