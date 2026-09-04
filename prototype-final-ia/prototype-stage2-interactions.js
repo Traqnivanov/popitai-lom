@@ -72,6 +72,18 @@
     if(!description.value) description.placeholder=pair[1];
   }
 
+  function syncHealthContext(){
+    const raw=(location.hash||'').slice(1);
+    const [path,queryString='']=raw.split('?');
+    if(path!=='add/health') return;
+    const q=new URLSearchParams(queryString);
+    if(q.get('type')!=='Лични лекари') return;
+    const form=document.querySelector('[data-proto-form][data-form-kind="health"]');
+    if(!form) return;
+    const specialty=[...form.querySelectorAll('.field')].find(field=>field.querySelector('label')?.textContent.trim()==='Специалност / основна услуга')?.querySelector('input');
+    if(specialty&&!specialty.value) specialty.value='Личен лекар / общопрактикуващ лекар';
+  }
+
   function syncResultsAddTarget(){
     const raw=(location.hash||'').slice(1);
     const [path,queryString='']=raw.split('?');
@@ -89,7 +101,7 @@
     primary.dataset.canonicalService=canonical;
   }
 
-  function syncAfterRender(){queueMicrotask(()=>{syncListingForm({preserve:true});syncQuestionHints();syncResultsAddTarget();});}
+  function syncAfterRender(){queueMicrotask(()=>{syncListingForm({preserve:true});syncQuestionHints();syncHealthContext();syncResultsAddTarget();});}
 
   document.addEventListener('change',e=>{
     if(e.target.id==='listing-category') syncListingForm({preserve:false});
