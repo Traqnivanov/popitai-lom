@@ -110,6 +110,12 @@ if (typeof servicePrefillMap === 'object' && servicePrefillMap) {
   Object.assign(servicePrefillMap, STAGE2_SERVICE_DISCOVERY_TO_CANONICAL);
 }
 
+// The visible Shop label changed, but the same existing description field remains required.
+if (typeof requiredFields === 'object' && requiredFields?.shop instanceof Set) {
+  requiredFields.shop.delete('Какво предлага');
+  requiredFields.shop.add('Кратко описание на магазина');
+}
+
 const STAGE2_LISTING_SUBCATEGORIES = Object.freeze({
   'Услуги': STAGE2_SERVICE_CANONICAL,
   'Работа': Object.freeze([...workGroups]),
