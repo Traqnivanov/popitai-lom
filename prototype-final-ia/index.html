@@ -24,16 +24,45 @@
     .other-tags{margin:8px 0 14px;padding:10px 12px;border:1px solid #dde4ec;border-radius:10px}
     .other-tags summary{cursor:pointer;font-weight:800}
     .share-options{margin-top:8px;display:grid;gap:8px;min-width:220px;padding:12px;border:1px solid #dce4ec;border-radius:12px;background:#fff}
-    .social-preview-section{margin-top:22px}
-    .social-card{display:grid;grid-template-columns:58% 42%;aspect-ratio:1200/630;overflow:hidden;border:1px solid #cfd7df;border-radius:14px;background:#f2f4f7;box-shadow:0 8px 24px rgba(16,35,55,.08)}
-    .social-card-image{min-width:0;background:linear-gradient(180deg,rgba(4,25,48,.05),rgba(4,25,48,.36)),url('../assets/lom-cover-share-1200x630.webp') center/cover no-repeat}
-    .social-card-copy{display:flex;flex-direction:column;justify-content:center;gap:8px;padding:22px;background:#fff}
-    .social-card-copy small{text-transform:uppercase;letter-spacing:.04em;color:#66717e;font-size:.74rem}
-    .social-card-copy strong{font-size:clamp(1.05rem,2vw,1.55rem);line-height:1.15;color:#112f50}
-    .social-card-copy p{margin:0;color:#4e5d6d;line-height:1.45}
+    .social-preview-section{margin-top:24px;padding-top:2px}
+    .social-preview-section>h3{margin-bottom:10px}
+    .og-image-label{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:0 0 8px;color:#526273;font-size:.82rem}
+    .og-image-label strong{color:#1c3858}
+    .og-image-frame{position:relative;aspect-ratio:1200/630;overflow:hidden;border:1px solid #cbd5e1;border-radius:15px;background:#eef3f8;color:#fff;isolation:isolate}
+    .og-image-template{background:linear-gradient(135deg,#0f2847 0%,#145fc4 62%,#c59a3d 180%)}
+    .og-image-template::before{content:"";position:absolute;z-index:-1;width:46%;aspect-ratio:1;border:1px solid rgba(255,255,255,.18);border-radius:50%;right:-9%;top:-34%;box-shadow:0 0 0 42px rgba(255,255,255,.035),0 0 0 86px rgba(255,255,255,.025)}
+    .og-image-template::after{content:"";position:absolute;z-index:-1;left:0;bottom:0;width:38%;height:7px;background:#c59a3d}
+    .og-image-template[data-kind="firm"],.og-image-template[data-kind="shop"]{background:linear-gradient(135deg,#102c4e 0%,#1c4c7c 62%,#c59a3d 165%)}
+    .og-image-template[data-kind="health"],.og-image-template[data-kind="info"]{background:linear-gradient(135deg,#123a5c 0%,#17689a 62%,#c59a3d 180%)}
+    .og-image-template[data-kind="event"],.og-image-template[data-kind="publication"]{background:linear-gradient(135deg,#172f52 0%,#315c8d 60%,#c59a3d 165%)}
+    .og-image-template[data-kind="article"],.og-image-template[data-kind="question"]{background:linear-gradient(135deg,#112b4b 0%,#274f7d 62%,#c59a3d 175%)}
+    .og-template-copy{position:absolute;left:7%;top:50%;transform:translateY(-50%);display:grid;gap:8px;max-width:66%}
+    .og-kicker{font-size:clamp(.7rem,1.5vw,.9rem);font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:#dbe8f8}
+    .og-template-copy strong{font-size:clamp(1.3rem,3.4vw,2.5rem);line-height:1.05;color:#fff}
+    .og-template-copy small{font-size:clamp(.68rem,1.5vw,.9rem);color:#d7e4f2;max-width:34em}
+    .og-brand{position:absolute;right:5%;bottom:7%;padding:5px 9px;border:1px solid rgba(255,255,255,.36);border-radius:999px;background:rgba(8,29,52,.34);font-size:clamp(.64rem,1.3vw,.82rem);font-weight:900;letter-spacing:.02em;color:#fff}
+    .og-image-real{display:grid;place-items:center;padding:8%;background:repeating-linear-gradient(135deg,#edf2f7 0,#edf2f7 24px,#f8fafc 24px,#f8fafc 48px);color:#334155}
+    .og-real-copy{display:grid;gap:8px;text-align:center;max-width:560px}
+    .og-real-copy .og-kicker{color:#64748b}
+    .og-real-copy strong{font-size:clamp(1.25rem,3vw,2rem);color:#183a60}
+    .og-real-copy p,.og-real-copy small{margin:0;color:#5d6b7a}
+    .og-image-lom{background:linear-gradient(180deg,rgba(5,24,44,.08),rgba(5,24,44,.58)),url('../assets/lom-cover-share-1200x630.webp') center/cover no-repeat}
+    .facebook-preview-meta{display:grid;gap:6px;padding:15px 17px;border:1px solid #cfd7df;border-top:0;border-radius:0 0 14px 14px;background:#fff}
+    .facebook-preview-meta small{text-transform:uppercase;letter-spacing:.04em;color:#66717e;font-size:.72rem}
+    .facebook-preview-meta strong{font-size:clamp(1.04rem,2vw,1.35rem);line-height:1.2;color:#112f50}
+    .facebook-preview-meta p{margin:0;color:#4e5d6d;line-height:1.42}
+    .social-separation-note{margin:9px 0 0;font-size:.8rem;color:#66717e}
+    .image-hierarchy{margin:10px 0;padding-left:20px}
+    .image-hierarchy li+li{margin-top:7px}
+    .qa-social-note .active-demo{outline:2px solid #145fc4;outline-offset:2px}
+    .social-example-links{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;padding-top:12px;border-top:1px solid #e4e9ef}
+    .social-example-links a{display:inline-flex;padding:6px 9px;border-radius:999px;background:#eef4fb;color:#174f93;text-decoration:none;font-weight:800;font-size:.78rem}
     @media(max-width:640px){
-      .social-card{display:block;aspect-ratio:auto}.social-card-image{aspect-ratio:1200/630}.social-card-copy{padding:16px}
       .tag-grid{grid-template-columns:1fr 1fr}
+      .og-image-label{align-items:flex-start;flex-direction:column;gap:2px}
+      .og-template-copy{left:6%;max-width:74%;gap:5px}
+      .og-brand{right:4%;bottom:6%}
+      .facebook-preview-meta{padding:13px 14px}
     }
     @media(max-width:390px) and (min-width:341px){.grid.cols-4,.grid.cols-3,.grid.cols-2{grid-template-columns:1fr 1fr}}
   </style>
