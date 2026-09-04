@@ -1,98 +1,82 @@
 # Попитай.Лом — Content-complete IA prototype
 
-Статус: **ИЗОЛИРАН ПРОТОТИП / STAGE 2 TECHNICAL QA COMPLETE / OWNER VISUAL ACCEPTANCE PENDING / НЕ Е PRODUCTION / НЕ ЗАПИСВА В SUPABASE**
+Статус: **ИЗОЛИРАН ПРОТОТИП / STAGE 2 ACCEPTANCE FAIL / REMEDIATION IN PROGRESS / STAGE 3 BLOCKED / НЕ Е PRODUCTION / НЕ ЗАПИСВА В SUPABASE**
 
-Каноничен източник: `POPITAI_LOM_MASTER_CURRENT.md` от 04.09.2026.
-
-Одобрен Stage 1 contract: Form Matrix + Content Actions Matrix + Social Preview Matrix и техническите mapping/contracts, одобрени от собственика на 04.09.2026.
+Каноничен източник: `POPITAI_LOM_MASTER_CURRENT.md` от 04.09.2026, приложимите `PROJECT_RULES_*` и последните изрични решения на собственика.
 
 Stage 2 safety branch: `prototype/content-complete-ia-20260904-stage2-safety`.
 
-Последен технически QA code checkpoint преди този README запис: `a81b8abf60d6ca4cd2070e8a9ae05a811c0f43a6`.
+## Критична корекция на договора — 04.09.2026
+
+Предишно общо „одобрявам“ не се счита за LOCKED одобрение за нови persisted подкатегории. Такова конкретно одобрение не е давано.
+
+Действащият backend contract за Stage 2 е:
+
+- persisted контролирана `subcategory` има само при `Обяви → Услуги`;
+- `Работа` пази `category=Работа` и само съществуващите `Предлага работа` / `Търси работа`; професионалните групи са discovery контекст;
+- `Имоти` пази `category=Имоти` и съществуващите специални listing types; видът имот е discovery контекст;
+- `Автомобили и МПС` не получава нов persisted taxonomy; автомобилните услуги остават `Услуги` + съществуваща service подкатегория;
+- `Животни` пази `category=Животни`; осиновяване/изгубено/намерено са discovery контекст;
+- `Авточасти` остава част от съществуващия Service contract и не се мигрира или преименува едностранно.
+
+Всяко бъдещо отклонение от тези правила е отделно LOCKED решение и изисква предварително описание на DB/RPC/RLS/validation/edit-flow последствията, риска и rollback-а.
 
 ## Цел
 
-Този прототип проверява одобрената public IA като една система, без да променя production owners, форми, RLS, роли, лимити или routes.
+Този прототип проверява public IA и формните journeys като една система, без да променя production owners, форми, schema, RLS, роли, moderation, ownership, лимити или routes.
 
-- една route/render pipeline; `app.js` оркестрира прототипа, а Stage 2 модулите подават договори, форми, content views и interactions без паралелен production renderer;
-- никакъв Marketplace V3/V18/V19 layer;
+- една route/render pipeline;
 - mock данните са означени като прототипни;
-- всички Add действия симулират съществуващия owner flow, но не изпращат реални заявки;
-- няма fake ratings, popularity или реални твърдения за фирми/институции;
-- платена продажба на живи животни не е налична;
-- Event няма public Add;
-- Publication authoring е Admin-only concept.
+- Add действията симулират owner flow, но не изпращат реални заявки;
+- няма public Add за Event/Article/Publication;
+- Stage 3 не започва преди нов independent acceptance и визуално приемане от собственика.
 
-## Stage 2 — приложени договори
+## Текущ Stage 2 remediation scope
 
-- пълният discovery services → canonical production service mapping;
-- category-specific `subcategory` за Работа, Имоти, Автомобили и Животни;
-- `Авточасти` не е нова Service стойност; Parts са в Автомобили;
-- Животни налага правилния type според подкатегорията;
-- Shop: `Кратко описание на магазина` + controlled tags + `Друго`;
-- Health discovery `Лични лекари` / `Специалисти` се адаптира към реалния owner type `Лекар`, без нов Health owner type;
-- Firm edit parity показва град, адрес и работно време;
-- contextual Listing и Question подсказки;
-- Content Actions са различни според content type; няма универсална еднаква action лента;
-- един Share вход с Facebook / Copy / native share като вторични опции;
-- Shop / Health / Event имат prototype read-only detail surfaces;
-- Social Preview е само prototype state и не е production rendering contract;
-- `Любими` и Q&A voting не се симулират като реални функции без backend owner;
-- `Инфо Лом` следва live шестте раздела: `Здраве`, `Институции`, `Транспорт`, `Образование и култура`, `Банки и банкомати`, `Комунални услуги`; `Полезни телефони` не е отделен раздел.
+Задължително се поправят и проверяват:
 
-## Stage 2 QA boundary
+1. точният discovery контекст остава видим през discovery → results → add/edit;
+2. current-backend persistence adapter не представя discovery групи като persisted subcategory извън `Услуги`;
+3. `Авточасти` остава backward-compatible Service стойност;
+4. Shop tags са category-aware: релевантни първо, останалите под `Други предложения`;
+5. Content Actions зависят от действително наличните канали/данни и темата;
+6. Social Preview е отделна реалистична карта с изображение, заглавие, описание и source/domain, а QA бележките са извън картата;
+7. формите имат field-level validation, label/for, aria-describedby, aria-invalid, focus към първата грешка, запазване на данните при validation error, dirty guard при всяко напускане и неактивна форма след success.
 
-Проверени върху Stage 2 code checkpoint до `a81b8ab…`:
+## Инфо Лом — live parity
 
-- service mapping journey, включително discovery услуга, която преди губеше контекст;
-- Работа / Имоти / Автомобили / Животни form contracts;
-- защита при Животни срещу несъвместим type prefill;
-- Shop controlled tags и разделяне на описание от класификация;
-- Health owner mapping и visible specialty prefill за `Лични лекари`;
-- Firm edit parity;
-- contextual Question примери;
-- Content Actions за Listing, Firm, Shop, Health, Info, Question, Article, Publication и Event;
-- Social Preview visible copy без вътрешни `owner`, `Pending`, `Q&A`, `fallback`, `edit draft` или подобни QA термини;
-- post-render content corrections са премахнати: interaction helper-ът остава само за реални form/share/dirty-state interactions;
-- responsive `styles.css` не е променян спрямо одобрения checkpoint, така че Stage 2 не добавя нов mobile layout layer;
-- live parity на `Инфо Лом` е проверен директно в production и прототипът е коригиран към същите шест раздела и ред.
+Проверено директно в production. Шестте реални раздела са:
 
-Opera потвърди критичните Stage 2 flows и live parity проверката за `Инфо Лом`. Локален Playwright download не беше възможен заради мрежовото ограничение на sandbox-а; това не се представя като извършен тест.
+- Здраве
+- Институции
+- Транспорт
+- Образование и култура
+- Банки и банкомати
+- Комунални услуги
 
-**Stage 2 не е production approval.** Следва owner visual acceptance на прототипа. Едва след такова приемане може да се отвори следващият production implementation етап.
+`Полезни телефони` не е отделен раздел.
+
+## Acceptance QA, който трябва да се повтори
+
+- contract/data-flow QA;
+- всички discovery → results → add/edit journeys;
+- form validation и dirty-state QA;
+- Content Actions и Social Preview QA;
+- desktop visual QA;
+- mobile visual QA;
+- diff isolation: само `prototype-final-ia/`.
+
+**Stage 2 остава FAIL до независимата проверка и новото визуално приемане. Stage 3 остава BLOCKED.**
 
 ## Основни prototype routes
 
-Hash routes се използват само вътре в изолирания прототип:
+Hash routes се използват само в изолирания прототип:
 
-- `#home`
-- `#obyavi`
-- `#uslugi`
-- `#rabota`
-- `#imoti`
-- `#stoki`
-- `#avtomobili`
-- `#zhivotni`
-- `#magazini`
-- `#zavedenia`
-- `#zdrave`
-- `#firmi`
-- `#info`
-- `#aktualno`
-- `#statii`
-- `#vaprosi`
+- `#home`, `#obyavi`, `#uslugi`, `#rabota`, `#imoti`, `#stoki`, `#avtomobili`, `#zhivotni`
+- `#magazini`, `#zavedenia`, `#zdrave`, `#firmi`, `#info`, `#aktualno`, `#statii`, `#vaprosi`
 - `#detail/listing`, `#detail/firm`, `#detail/shop`, `#detail/health`, `#detail/info`, `#detail/article`, `#detail/publication`, `#detail/event`, `#detail/question`
 - `#add/listing`, `#add/firm`, `#add/shop`, `#add/health`, `#add/question`
 
-QA states могат да се отворят с hash query, например:
-
-- `#obyavi?state=loading`
-- `#obyavi?state=empty`
-- `#obyavi?state=error`
-- `#add/listing?state=edit`
-- `#add/listing?state=pending`
-- `#add/listing?state=success`
-
 ## Production boundary
 
-Този prototype branch не разрешава merge/deploy към `main`, Supabase/schema/RLS промени или промяна на protected Firms/Listings/Masters semantics.
+Този branch не разрешава merge/deploy към `main`, Supabase/schema/RLS/RPC промени или промяна на protected Firms/Listings/Masters semantics.
