@@ -3,6 +3,21 @@
 const main = document.getElementById('app-main');
 const addLayer = document.getElementById('add-layer');
 
+function normalizeHomeComposition(){
+  const sections=Array.from(main.children).filter(el=>el.matches?.('section.section'));
+  const marketSection=sections.find(section=>section.querySelector('.section-head h2')?.textContent.trim()==='Обяви и услуги');
+  const specialistSection=sections.find(section=>section.querySelector('.section-head h2')?.textContent.trim()==='Местни специализирани раздели');
+  if(!marketSection||!specialistSection) return;
+  const shell=marketSection.querySelector('.shell');
+  const specialGrid=specialistSection.querySelector('.special-grid');
+  if(!shell||!specialGrid) return;
+  const head=document.createElement('div');
+  head.className='section-head compact-head';
+  head.innerHTML='<div><h2>Местни специализирани раздели</h2><p>Магазини, заведения и здравни услуги.</p></div>';
+  shell.append(head,specialGrid);
+  specialistSection.remove();
+}
+
 function render(){
   const {path,query}=parseHash();
   let html='';
@@ -32,6 +47,7 @@ function render(){
   else if(path==='profile') html=staticPage('Профил','Профилът е естественото място за собствено съдържание, редакции и статуси.');
   else html=staticPage('Страницата не е намерена','Този прототипен адрес не съществува.');
   main.innerHTML=html;
+  if(path==='home') normalizeHomeComposition();
   main.focus({preventScroll:true});
   updateNav(path);
   window.scrollTo({top:0,behavior:'instant'});
