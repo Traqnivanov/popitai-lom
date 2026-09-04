@@ -43,7 +43,30 @@ function actionBar(c){
   return parts.length?`<div class="detail-action">${parts.join('')}<p class="contact-demo-message" aria-live="polite"></p><p class="action-demo-message help" aria-live="polite"></p></div>`:'';
 }
 
-function socialPreview(kind,c){
+const socialImageConfigs={
+  listing:{label:'Обява',theme:'Услуги · ВиК',real:'първата одобрена снимка на обявата'},
+  firm:{label:'Фирма',theme:'Майстори и ремонти · Лом',real:'одобрено лого или основна снимка на фирмата'},
+  shop:{label:'Магазин',theme:'Хранителни · Лом',real:'одобрено лого или снимка на магазина'},
+  health:{label:'Здраве',theme:'Лекар · специалност · Лом',real:'одобрена снимка на практика/кабинет или допустимо лого, без измислено лице'},
+  event:{label:'Събитие',theme:'Дата · място · Лом',real:'одобрен афиш или основна снимка на събитието'},
+  article:{label:'Статия',theme:'Практично ръководство за Лом',real:'одобрена основна илюстрация/корица'},
+  publication:{label:'Публикация',theme:'Местна актуализация',real:'одобрена собствена снимка/илюстрация на публикацията'},
+  question:{label:'Въпрос',theme:'Общност · Лом',real:'одобрена снимка само когато е релевантна към самия въпрос'},
+  info:{label:'Инфо Лом',theme:'Проверена местна информация',real:'одобрена снимка или лого на конкретния запис, когато е приложимо'}
+};
+function socialImageMode(query){const value=query?.get('image')||'template';return ['real','template','lom'].includes(value)?value:'template';}
+function socialOgImage(kind,mode){
+  const cfg=socialImageConfigs[kind]||socialImageConfigs.listing;
+  if(mode==='real') return `<div class="og-image-frame og-image-real" data-image-level="real" role="img" aria-label="Демонстрация на стъпка 1 — реална одобрена медия"><div class="og-real-copy"><span class="og-kicker">СТЪПКА 1 · ПРИОРИТЕТ</span><strong>Реална одобрена медия</strong><p>${esc(cfg.real)}.</p><small>Прототипът умишлено не измисля снимка или лице.</small></div></div>`;
+  if(mode==='lom') return `<div class="og-image-frame og-image-lom" data-image-level="lom" role="img" aria-label="Стъпка 3 — общ panorama fallback за Лом"><div class="og-template-copy"><span class="og-kicker">${esc(cfg.label)}</span><strong>${esc(cfg.theme)}</strong><small>Общ fallback само когато няма реална медия и тематичен шаблон не е подходящ</small></div><span class="og-brand">Попитай.Лом</span></div>`;
+  return `<div class="og-image-frame og-image-template" data-image-level="template" data-kind="${esc(kind)}" role="img" aria-label="Стъпка 2 — тематичен брандиран social шаблон"><div class="og-template-copy"><span class="og-kicker">${esc(cfg.label)}</span><strong>${esc(cfg.theme)}</strong><small>Тематичен fallback според типа и категорията</small></div><span class="og-brand">Попитай.Лом</span></div>`;
+}
+function socialImageQa(kind,mode){
+  const cfg=socialImageConfigs[kind]||socialImageConfigs.listing;
+  const examples=[['listing','Обява'],['firm','Фирма'],['shop','Магазин'],['health','Лекар'],['event','Събитие'],['article','Статия'],['publication','Публикация'],['question','Въпрос'],['info','Инфо Лом']];
+  return `<details class="qa-social-note"><summary>Image hierarchy / QA</summary><ol class="image-hierarchy"><li><strong>1. Реална одобрена медия</strong> — ${esc(cfg.real)}.</li><li><strong>2. Тематичен брандиран шаблон</strong> — според content type и категория; всеки шаблон носи дискретно „Попитай.Лом“.</li><li><strong>3. Панорама на Лом</strong> — последен общ fallback.</li></ol><div class="page-tools"><a class="btn soft ${mode==='real'?'active-demo':''}" href="#detail/${esc(kind)}?share=eligible&image=real">Стъпка 1</a><a class="btn soft ${mode==='template'?'active-demo':''}" href="#detail/${esc(kind)}?share=eligible&image=template">Стъпка 2</a><a class="btn soft ${mode==='lom'?'active-demo':''}" href="#detail/${esc(kind)}?share=eligible&image=lom">Стъпка 3</a></div><p><strong>Важно:</strong> режим „Стъпка 1“ е неутрална демонстрация на правилото, не фалшива снимка. Няма измислени лица или stock изображения.</p><p><strong>Production граница:</strong> този прототип доказва UX и визуалното правило. Не доказва, че Facebook crawler ще получи тези данни. Реалният публичен URL трябва отделно да бъде проверен за crawlable Open Graph metadata; JavaScript симулация след зареждане не е достатъчна.</p><div class="social-example-links">${examples.map(([k,label])=>`<a href="#detail/${k}?share=eligible&image=template">${label}</a>`).join('')}</div></details>`;
+}
+function socialPreview(kind,c,query=new URLSearchParams()){
   const config={
     listing:{title:c.heading,desc:'Услуга в Лом и региона. Виж подробности и се свържи с публикувалия.'},
     firm:{title:c.heading,desc:'Местен фирмен профил с услуги, район и директни контакти.'},
@@ -56,7 +79,8 @@ function socialPreview(kind,c){
     info:{title:c.heading,desc:'Проверена информация за Лом с източник и последна проверка.'}
   }[kind];
   if(!config) return '';
-  return `<section class="social-preview-section" aria-label="Пример при споделяне"><h3>Как ще изглежда при споделяне</h3><div class="social-card"><div class="social-card-image" role="img" aria-label="Брандирана резервна снимка за Попитай.Лом"></div><div class="social-card-copy"><small>traqnivanov.github.io</small><strong>${esc(config.title)}</strong><p>${esc(config.desc)}</p></div></div><details class="qa-social-note"><summary>Правила за този пример</summary><p>Картата е отделена от QA текста. В реална интеграция се използват само public/share-eligible canonical данни и допустимо публично изображение.</p></details></section>`;
+  const mode=socialImageMode(query);
+  return `<section class="social-preview-section" aria-label="Пример при споделяне"><h3>Social Preview — UX пример, не production интеграция</h3><div class="og-image-label"><strong>og:image · 1200 × 630</strong><span>${mode==='real'?'Стъпка 1 — реална одобрена медия':mode==='lom'?'Стъпка 3 — общ fallback':'Стъпка 2 — тематичен шаблон'}</span></div>${socialOgImage(kind,mode)}<div class="facebook-preview-meta" aria-label="Текстови Open Graph данни, отделни от изображението"><small>traqnivanov.github.io · Попитай.Лом</small><strong>${esc(config.title)}</strong><p>${esc(config.desc)}</p></div><p class="social-separation-note">Заглавието, описанието и домейнът са отделни metadata елементи. Те не са нарисувани вътре в `og:image`.</p>${socialImageQa(kind,mode)}</section>`;
 }
 
 const conditionalShareKinds=new Set(['publication','shop','health','event']);
@@ -102,6 +126,6 @@ function detail(kind,query=new URLSearchParams()){
   const gallery=['listing','firm'].includes(kind)?`<div class="gallery-demo"><div>Основна снимка</div><div>Снимка</div><div>Снимка</div></div>`:'';
   const rows=c.rows.map(([k,v])=>`<div class="kv"><strong>${esc(k)}</strong><span>${esc(v)}</span></div>`).join('');
   const special=kind==='event'?'<div class="notice">Публично се показват само текущи и предстоящи събития.</div>':kind==='publication'?'<div class="admin-note">Публична форма за добавяне на публикация няма.</div>':kind==='info'?'<div class="notice ok">Всеки реален запис показва източник и дата на последна проверка.</div>':'';
-  const shareSurface=scenario.eligible?socialPreview(kind,c):`<div class="notice" style="margin-top:18px"><strong>Share не е наличен в този пример.</strong><p>${esc(scenario.reason)}</p></div>`;
+  const shareSurface=scenario.eligible?socialPreview(kind,c,query):`<div class="notice" style="margin-top:18px"><strong>Share не е наличен в този пример.</strong><p>${esc(scenario.reason)}</p></div>`;
   return `<div class="page">${pageHead(c.title,c.desc)}<div class="shell detail"><article class="detail-main"><span class="demo-label">ПРИМЕР — НЕ Е РЕАЛНО СЪДЪРЖАНИЕ</span><h2>${esc(c.heading)}</h2>${gallery}<h3>Описание</h3><p>${esc(c.body)}</p>${shareSurface}${shareScenarioPanel(kind,scenario)}</article><aside class="detail-side">${rows}${actionBar(c)}${special}</aside></div></div>`;
 }
