@@ -1,24 +1,16 @@
 'use strict';
 
 function info(){
-  const items=[
-    ['⚕️','Здраве'],['🏛️','Институции'],['🚌','Транспорт'],['🎓','Образование и култура'],['🏦','Банки и банкомати'],['⚡','Комунални услуги']
-  ];
+  const items=[['⚕️','Здраве'],['🏛️','Институции'],['🚌','Транспорт'],['🎓','Образование и култура'],['🏦','Банки и банкомати'],['⚡','Комунални услуги']];
   return `<div class="page">${pageHead('Инфо Лом','Проверена местна информация с източник и дата на последна проверка.')}<div class="shell"><div class="grid cols-3">${items.map(([icon,title])=>`<a class="info-card" href="#detail/info"><h3>${icon} ${title}</h3><p>Контакти, работно време, услуги, източник и последна проверка.</p></a>`).join('')}</div></div></div>`;
 }
-
 function firms(query){return `<div class="page">${pageHead('Фирми','Постоянни местни профили. Фирмата не е обява.')}<div class="shell"><div class="page-tools"><a class="btn primary" href="#add/firm">＋ Добави фирма</a></div><div class="section-head" style="margin-top:24px"><div><h2>Фирмени профили</h2><p>Услуги, район и директни контакти.</p></div></div>${stateContent(query,`<div class="result-list">${demoRow('Фирма за ремонти — демо','Постоянен профил с услуги, район и контакти.','Фирма','#detail/firm','Майстори')}${demoRow('Местен сервиз — демо','Постоянен фирмен профил, който може да се открива и през „Автомобили“.','Фирма','#detail/firm','Автомобили')}</div>`)}</div></div>`;}
 function current(){return `<div class="page">${pageHead('Актуално','Кратки местни публикации и предстоящи събития на едно място.')}<div class="shell"><div class="grid cols-2"><a class="content-card" href="#detail/publication"><span class="demo-label">ПРИМЕР</span><h3><span class="badge gold">Публикация</span> Кратка местна актуализация</h3><p>Една конкретна промяна, полезно съобщение или местна тема — кратко и ясно.</p><small class="card-link">Прочети →</small></a><a class="content-card" href="#detail/event"><span class="demo-label">ПРИМЕР</span><h3><span class="badge green">Събитие</span> Предстоящо местно събитие</h3><p>Дата, час и място са водещи още преди отваряне.</p><small class="card-link">Виж събитието →</small></a></div></div></div>`;}
 function articles(){return `<div class="page">${pageHead('Статии','Пълни практични ръководства с местната информация на първо място.')}<div class="shell"><div class="result-list">${demoRow('Как да решиш конкретна местна задача','Пълно ръководство: какво се прави в Лом, подготовка, изключения и проверени източници.','Статия','#detail/article','Ръководство')}${demoRow('Практично ръководство за местна услуга','Дългосрочно полезно съдържание, различно от кратка публикация.','Статия','#detail/article','Местната информация първо')}</div></div></div>`;}
 function questions(){return `<div class="page">${pageHead('Въпроси','Помощ от общността, когато няма готов отговор.')}<div class="shell"><div class="page-tools"><a class="btn primary" href="#add/question">＋ Задай въпрос</a></div><div class="result-list" style="margin-top:18px">${demoRow('Къде мога да намеря…?','Примерен въпрос. Отговорът от общността не се представя като проверена информация.','Въпрос','#detail/question','Общност')}</div></div></div>`;}
 
 function listingAddWithDiscovery(category='',subcategory='',type='',discovery=''){
-  const q=new URLSearchParams();
-  if(category) q.set('category',category);
-  if(subcategory) q.set('subcategory',subcategory);
-  if(type) q.set('type',type);
-  if(discovery) q.set('discovery',discovery);
-  return `#add/listing${q.size?`?${q}`:''}`;
+  const q=new URLSearchParams();if(category) q.set('category',category);if(subcategory) q.set('subcategory',subcategory);if(type) q.set('type',type);if(discovery) q.set('discovery',discovery);return `#add/listing${q.size?`?${q}`:''}`;
 }
 function stage2AddTarget(context,group,owner,type=''){
   if(owner==='Shops') return `#add/shop?category=${encodeURIComponent(group)}`;
@@ -28,28 +20,17 @@ function stage2AddTarget(context,group,owner,type=''){
   if(context==='Услуги') return listingAddWithDiscovery('Услуги',stage2?.serviceCanonical(group)||'',type,group);
   if(context==='Работа') return listingAddWithDiscovery('Работа','',type||'Предлага работа',group);
   if(context==='Имоти') return listingAddWithDiscovery('Имоти','',type||'Продава имот',group);
-  if(context==='Купува и продава'){
-    const [category]=goodsPrefillMap[group]||['Друго'];
-    return listingAddWithDiscovery(category,'','',group);
-  }
-  if(context==='Автомобили'){
-    if(group==='Автомобилни услуги') return '#uslugi';
-    return listingAddWithDiscovery('Автомобили и МПС','','',group);
-  }
-  if(context==='Животни'){
-    const suggested=stage2?.animalSuggestedTypeByDiscovery?.[group]||'';
-    return listingAddWithDiscovery('Животни','',suggested,group);
-  }
+  if(context==='Купува и продава'){const [category]=goodsPrefillMap[group]||['Друго'];return listingAddWithDiscovery(category,'','',group);}
+  if(context==='Автомобили'){if(group==='Автомобилни услуги') return '#uslugi';return listingAddWithDiscovery('Автомобили и МПС','','',group);}
+  if(context==='Животни'){const suggested=stage2?.animalSuggestedTypeByDiscovery?.[group]||'';return listingAddWithDiscovery('Животни','',suggested,group);}
   return listingAddWithDiscovery(context,'','',group);
 }
 
-function shareMenu(){
-  return `<details class="share-menu"><summary class="btn soft">Сподели</summary><div class="share-options"><button class="btn" type="button" data-demo-share="native">Споделяне от телефона</button><button class="btn" type="button" data-demo-share="facebook">Facebook</button><button class="btn" type="button" data-demo-share="copy">Копирай линк</button><p class="share-demo-message help" aria-live="polite"></p></div></details>`;
-}
+function shareMenu(){return `<details class="share-menu"><summary class="btn soft">Сподели</summary><div class="share-options"><button class="btn" type="button" data-demo-share="native">Споделяне от телефона</button><button class="btn" type="button" data-demo-share="facebook">Facebook</button><button class="btn" type="button" data-demo-share="copy">Копирай линк</button><p class="share-demo-message help" aria-live="polite"></p></div></details>`;}
 function correctionButton(label='Сигнализирай грешка'){return `<button class="btn soft" type="button" data-demo-correction>${esc(label)}</button>`;}
 function reportButton(){return `<button class="btn soft" type="button" data-demo-report>Подай сигнал</button>`;}
 function actionBar(c){
-  const a=c.actions||{};const parts=[];
+  const a=c.actions||{},parts=[];
   if(a.phone) parts.push('<button class="btn primary" type="button" data-demo-contact>Обади се</button>');
   if(a.inquiry) parts.push('<button class="btn" type="button" data-demo-inquiry>Запитване</button>');
   if(a.site) parts.push('<button class="btn soft" type="button" data-demo-site>Сайт</button>');
@@ -59,8 +40,7 @@ function actionBar(c){
   if(a.share) parts.push(shareMenu());
   if(a.report) parts.push(reportButton());
   if(a.correction) parts.push(correctionButton(a.correctionLabel||'Сигнализирай грешка'));
-  if(!parts.length) return '';
-  return `<div class="detail-action">${parts.join('')}<p class="contact-demo-message" aria-live="polite"></p><p class="action-demo-message help" aria-live="polite"></p></div>`;
+  return parts.length?`<div class="detail-action">${parts.join('')}<p class="contact-demo-message" aria-live="polite"></p><p class="action-demo-message help" aria-live="polite"></p></div>`:'';
 }
 
 function socialPreview(kind,c){
@@ -76,15 +56,13 @@ function socialPreview(kind,c){
     info:{title:c.heading,desc:'Проверена информация за Лом с източник и последна проверка.'}
   }[kind];
   if(!config) return '';
-  return `<section class="social-preview-section" aria-label="Пример при споделяне"><h3>Как ще изглежда при споделяне</h3><div class="social-card"><div class="social-card-image" role="img" aria-label="Брандирана резервна снимка за Попитай.Лом"></div><div class="social-card-copy"><small>popitai-lom.bg</small><strong>${esc(config.title)}</strong><p>${esc(config.desc)}</p></div></div><details class="qa-social-note"><summary>Правила за този пример</summary><p>Картата е отделена от QA текста. В реална интеграция се използват само публичната одобрена версия и допустимо одобрено изображение.</p></details></section>`;
+  return `<section class="social-preview-section" aria-label="Пример при споделяне"><h3>Как ще изглежда при споделяне</h3><div class="social-card"><div class="social-card-image" role="img" aria-label="Брандирана резервна снимка за Попитай.Лом"></div><div class="social-card-copy"><small>traqnivanov.github.io</small><strong>${esc(config.title)}</strong><p>${esc(config.desc)}</p></div></div><details class="qa-social-note"><summary>Правила за този пример</summary><p>Картата е отделена от QA текста. В реална интеграция се използват само публичната одобрена версия и допустимо одобрено изображение.</p></details></section>`;
 }
 
 function shopResultCard(group,index){return `<article class="result-row"><div><span class="demo-label">ПРОТОТИПЕН ЗАПИС</span><h3><a href="#detail/shop">${esc(group)} — пример ${index}</a></h3><p>Основната информация за магазина се вижда директно в каталога.</p><div class="result-meta"><span class="badge">Магазин</span><span class="badge gold">Лом</span></div></div><button class="btn primary" type="button" data-demo-contact>Обади се</button><p class="contact-demo-message" aria-live="polite"></p></article>`;}
-
 function results(query){
-  const context=query.get('context')||'Обяви и услуги';const group=query.get('group')||'Всички';const detailType=query.get('detail')||'listing';const owner=query.get('owner')||'Listings';const type=query.get('type')||'';
-  const addTarget=stage2AddTarget(context,group,owner,type);
-  const noun=owner==='Shops'?'магазини':owner==='Firms'?'профили':owner==='Health/Info'?'здравни профили':'обяви';
+  const context=query.get('context')||'Обяви и услуги',group=query.get('group')||'Всички',detailType=query.get('detail')||'listing',owner=query.get('owner')||'Listings',type=query.get('type')||'';
+  const addTarget=stage2AddTarget(context,group,owner,type),noun=owner==='Shops'?'магазини':owner==='Firms'?'профили':owner==='Health/Info'?'здравни профили':'обяви';
   const rows=owner==='Shops'?`${shopResultCard(group,1)}${shopResultCard(group,2)}`:`${demoRow(`${group} — пример 1`,`Резултатът запазва точния избран контекст „${group}“.`,context,`#detail/${detailType}`,'Пример')}${demoRow(`${group} — пример 2`,`Още един примерен запис за „${group}“.`,context,`#detail/${detailType}`,'Пример')}`;
   const primaryLabel=owner==='Shops'?'＋ Добави магазин':owner==='Health/Info'?'＋ Добави лекар / здравна услуга':'＋ Публикувай в тази категория';
   return `<div class="page">${pageHead(group,`Разгледай ${noun} в „${context}“.`,'Обяви и услуги')}<div class="shell"><div class="discovery-context"><span>Избран контекст</span><strong>${esc(group)}</strong></div><div class="result-list">${rows}</div><div class="page-tools"><a class="btn primary" href="${addTarget}">${primaryLabel}</a><a class="btn" href="#add/question">Не намираш? Задай въпрос</a></div></div></div>`;
