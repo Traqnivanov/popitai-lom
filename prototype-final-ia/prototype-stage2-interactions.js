@@ -83,11 +83,35 @@
   }
   window.validatePrototypeForm=validatePrototypeForm;
 
+  function clearDiscoveryContext(form){
+    if(!form) return;
+    form.dataset.discoveryContext='';
+    const visible=form.closest('.form-wrap')?.querySelector('.discovery-context');
+    if(visible) visible.hidden=true;
+  }
+  function syncAdapter(form){
+    if(!form) return;
+    const wrap=form.closest('.form-wrap');const adapter=wrap?.querySelector('.qa-adapter');
+    if(!adapter) return;
+    const category=form.querySelector('#listing-category')?.value||'';
+    const subcategory=category==='Услуги'?(form.querySelector('#listing-subcategory')?.value||''):'';
+    const type=form.querySelector('#listing-type')?.value||'';
+    const discovery=form.dataset.discoveryContext||'';
+    const payload=contract.compatibilityAdapter({category,subcategory,type,discovery});
+    const code=adapter.querySelector('code');
+    if(code) code.textContent=`category=${payload.category||'—'} · subcategory=${payload.subcategory||'—'} · listing_type=${payload.listing_type||'—'}`;
+    const oldNote=adapter.querySelector('[data-adapter-live-note]');if(oldNote) oldNote.remove();
+    if(category!=='Услуги'&&discovery){
+      const note=document.createElement('p');note.dataset.adapterLiveNote='true';note.textContent=`„${discovery}“ остава discovery контекст и не се представя като записана подкатегория.`;adapter.append(note);
+    }
+  }
   function listingHints(category,type,discovery,canonical){return listingTextHints(category,type,discovery,canonical);}
-  function syncListingForm({preserve=true}={}){
+  function syncListingForm({preserve=true,resetDiscovery=false}={}){
     const category=document.getElementById('listing-category');const subcategory=document.getElementById('listing-subcategory');const subcategoryField=document.getElementById('listing-subcategory-field');const type=document.getElementById('listing-type');
     if(!category||!subcategory||!subcategoryField||!type) return;
-    const form=category.closest('form');const discovery=form?.dataset.discoveryContext||'';const categoryValue=category.value;
+    const form=category.closest('form');
+    if(resetDiscovery) clearDiscoveryContext(form);
+    const discovery=form?.dataset.discoveryContext||'';const categoryValue=category.value;
     const previousSubcategory=preserve?subcategory.value:'';const subcategories=contract.listingSubcategories(categoryValue);const nextSubcategory=subcategories.includes(previousSubcategory)?previousSubcategory:'';
     subcategory.innerHTML=optionHtml(subcategories,nextSubcategory);subcategory.value=nextSubcategory;subcategoryField.hidden=categoryValue!=='Услуги';subcategory.disabled=categoryValue!=='Услуги';subcategory.required=categoryValue==='Услуги';
     const previousType=preserve?type.value:'';const allowedTypes=contract.listingTypes(categoryValue);const nextType=allowedTypes.includes(previousType)?previousType:'';
@@ -95,6 +119,7 @@
     const animalWarning=document.getElementById('animal-warning');if(animalWarning) animalWarning.hidden=categoryValue!=='Животни';
     const title=form?.querySelector('[name="Заглавие"]');const description=form?.querySelector('[name="Описание"]');const hints=listingHints(categoryValue,type.value,discovery,nextSubcategory);
     if(title&&!title.value) title.placeholder=hints[0];if(description&&!description.value) description.placeholder=hints[1];
+    syncAdapter(form);
   }
   window.syncPrototypeListingForm=syncListingForm;
 
@@ -123,7 +148,7 @@
   },true);
 
   document.addEventListener('change',event=>{
-    if(event.target.id==='listing-category') syncListingForm({preserve:false});
+    if(event.target.id==='listing-category') syncListingForm({preserve:false,resetDiscovery:true});
     if(event.target.id==='listing-subcategory'||event.target.id==='listing-type') syncListingForm({preserve:true});
     if(event.target.id==='shop-category') syncShopTags();
     if(event.target.closest?.('[data-proto-form][data-form-kind="question"]')) syncQuestionHints();
