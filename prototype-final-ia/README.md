@@ -8,7 +8,7 @@
 
 Stage 2 safety branch: `prototype/content-complete-ia-20260904-stage2-safety`.
 
-Последен технически QA code checkpoint преди този README запис: `eed96e8cb3379b3d0b72b6baac00a65ee363dba4`.
+Последен технически QA code checkpoint преди този README запис: `a81b8abf60d6ca4cd2070e8a9ae05a811c0f43a6`.
 
 ## Цел
 
@@ -37,11 +37,12 @@ Stage 2 safety branch: `prototype/content-complete-ia-20260904-stage2-safety`.
 - един Share вход с Facebook / Copy / native share като вторични опции;
 - Shop / Health / Event имат prototype read-only detail surfaces;
 - Social Preview е само prototype state и не е production rendering contract;
-- `Любими` и Q&A voting не се симулират като реални функции без backend owner.
+- `Любими` и Q&A voting не се симулират като реални функции без backend owner;
+- `Инфо Лом` следва live шестте раздела: `Здраве`, `Институции`, `Транспорт`, `Образование и култура`, `Банки и банкомати`, `Комунални услуги`; `Полезни телефони` не е отделен раздел.
 
 ## Stage 2 QA boundary
 
-Проверени върху exact Stage 2 code checkpoint `eed96e8…`:
+Проверени върху Stage 2 code checkpoint до `a81b8ab…`:
 
 - service mapping journey, включително discovery услуга, която преди губеше контекст;
 - Работа / Имоти / Автомобили / Животни form contracts;
@@ -53,9 +54,10 @@ Stage 2 safety branch: `prototype/content-complete-ia-20260904-stage2-safety`.
 - Content Actions за Listing, Firm, Shop, Health, Info, Question, Article, Publication и Event;
 - Social Preview visible copy без вътрешни `owner`, `Pending`, `Q&A`, `fallback`, `edit draft` или подобни QA термини;
 - post-render content corrections са премахнати: interaction helper-ът остава само за реални form/share/dirty-state interactions;
-- responsive `styles.css` не е променян спрямо одобрения checkpoint, така че Stage 2 не добавя нов mobile layout layer.
+- responsive `styles.css` не е променян спрямо одобрения checkpoint, така че Stage 2 не добавя нов mobile layout layer;
+- live parity на `Инфо Лом` е проверен директно в production и прототипът е коригиран към същите шест раздела и ред.
 
-Opera потвърди критичните Stage 2 flows на exact checkpoint преди Browser Connector да прекъсне. Локален Playwright download не беше възможен заради мрежовото ограничение на sandbox-а; това не се представя като извършен тест.
+Opera потвърди критичните Stage 2 flows и live parity проверката за `Инфо Лом`. Локален Playwright download не беше възможен заради мрежовото ограничение на sandbox-а; това не се представя като извършен тест.
 
 **Stage 2 не е production approval.** Следва owner visual acceptance на прототипа. Едва след такова приемане може да се отвори следващият production implementation етап.
 
