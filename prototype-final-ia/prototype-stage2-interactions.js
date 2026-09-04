@@ -50,11 +50,51 @@
     if(description&&!description.value) description.placeholder=hints[1];
   }
 
-  function syncAfterRender(){queueMicrotask(()=>syncListingForm({preserve:true}));}
+  function syncQuestionHints(){
+    const form=document.querySelector('[data-proto-form][data-form-kind="question"]');
+    if(!form) return;
+    const select=form.querySelector('select');
+    const title=form.querySelector('input[type="text"]');
+    const description=form.querySelector('textarea');
+    if(!select||!title||!description) return;
+    const examples={
+      'Майстори и ремонти':['Напр. Кой препоръчва добър ВиК майстор в Лом?','Опиши какъв ремонт или майстор търсиш, къде е обектът и какво е важно за теб.'],
+      'Здраве и лекари':['Напр. Кой кардиолог в Лом бихте препоръчали?','Опиши какъв лекар или здравна информация търсиш. Не публикувай чувствителни лични медицински данни.'],
+      'Автомобили':['Напр. Кой автосервиз в Лом препоръчвате?','Опиши автомобила, проблема или услугата, която търсиш.'],
+      'Магазини и покупки':['Напр. Къде в Лом мога да намеря този продукт?','Опиши какво търсиш и какви условия са важни.'],
+      'Заведения':['Напр. Къде в Лом има добра храна за вкъщи?','Опиши какъв тип заведение или услуга търсиш.'],
+      'Работа и услуги':['Напр. Кой предлага почистване на апартамент в Лом?','Опиши конкретната услуга, срок и район.'],
+      'Обяви':['Напр. Някой предлага ли това в Лом?','Опиши какво търсиш или искаш да намериш.'],
+      'Събития и град':['Напр. Какво се случва в Лом този уикенд?','Опиши каква местна информация или събитие търсиш.']
+    };
+    const pair=examples[select.value]||['Напр. Кой може да помогне с това в Лом?','Опиши ясно какво търсиш и какъв отговор би ти бил полезен.'];
+    if(!title.value) title.placeholder=pair[0];
+    if(!description.value) description.placeholder=pair[1];
+  }
+
+  function syncResultsAddTarget(){
+    const raw=(location.hash||'').slice(1);
+    const [path,queryString='']=raw.split('?');
+    if(path!=='results') return;
+    const q=new URLSearchParams(queryString);
+    if(q.get('context')!=='Услуги') return;
+    const discovery=q.get('group')||'';
+    const canonical=contract.serviceCanonical(discovery);
+    if(!canonical) return;
+    const primary=document.querySelector('.page-tools a.btn.primary');
+    if(!primary) return;
+    const params=new URLSearchParams({category:'Услуги',subcategory:canonical});
+    primary.setAttribute('href',`#add/listing?${params}`);
+    primary.dataset.discoveryService=discovery;
+    primary.dataset.canonicalService=canonical;
+  }
+
+  function syncAfterRender(){queueMicrotask(()=>{syncListingForm({preserve:true});syncQuestionHints();syncResultsAddTarget();});}
 
   document.addEventListener('change',e=>{
     if(e.target.id==='listing-category') syncListingForm({preserve:false});
     if(e.target.id==='listing-subcategory'||e.target.id==='listing-type') syncListingForm({preserve:true});
+    if(e.target.closest?.('[data-proto-form][data-form-kind="question"]')) syncQuestionHints();
   });
 
   document.addEventListener('input',e=>{
