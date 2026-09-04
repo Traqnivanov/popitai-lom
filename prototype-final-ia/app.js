@@ -77,6 +77,7 @@ document.addEventListener('change',e=>{
     if(sub){
       const vals=cat==='Услуги'?serviceFamilies.flatMap(x=>x.slice(1)):cat==='Работа'?workGroups:cat==='Имоти'?propertyKinds:cat==='Животни'?animalGroups:cat==='Автомобили и МПС'?autoListingGroups:['Друго'];
       sub.innerHTML=selectOptions(vals,'');
+      sub.required=cat==='Услуги';
     }
     const title=e.target.closest('form')?.querySelector('input[type="text"]');
     if(title){
@@ -102,12 +103,17 @@ document.addEventListener('submit',e=>{
   }
   if(e.target.matches('[data-proto-form]')){
     e.preventDefault();
-    const msg=e.target.querySelector('.form-message');
-    if(!e.target.checkValidity()){
+    const form=e.target;
+    const msg=form.querySelector('.form-message');
+    if(form.dataset.submitted==='true') return;
+    if(!form.checkValidity()){
       msg.innerHTML='<div class="notice danger"><strong>Провери задължителните полета.</strong> Въведеното остава във формата.</div>';
-      e.target.reportValidity();
+      form.reportValidity();
       return;
     }
+    form.dataset.submitted='true';
+    const submit=form.querySelector('button[type="submit"]');
+    if(submit){submit.disabled=true;submit.textContent='Изпратено';}
     msg.innerHTML='<div class="notice ok"><strong>Успешно прототипно изпращане:</strong> няма реален запис в системата. Формата демонстрира успешно състояние.</div>';
   }
 });
