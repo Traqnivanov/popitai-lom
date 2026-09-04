@@ -100,8 +100,10 @@
     const payload=contract.compatibilityAdapter({category,subcategory,type,discovery});
     const code=adapter.querySelector('code');
     if(code) code.textContent=`category=${payload.category||'—'} · subcategory=${payload.subcategory||'—'} · listing_type=${payload.listing_type||'—'}`;
-    const oldNote=adapter.querySelector('[data-adapter-live-note]');if(oldNote) oldNote.remove();
-    if(category!=='Услуги'&&discovery){
+    const paragraphs=[...adapter.querySelectorAll('p')];paragraphs.slice(1).forEach(p=>p.remove());
+    if(category==='Услуги'&&discovery&&payload.subcategory&&discovery!==payload.subcategory){
+      const note=document.createElement('p');note.dataset.adapterLiveNote='true';note.textContent=`Нерешена LOCKED граница: точният discovery избор „${discovery}“ не се persist-ва отделно. Текущият договор записва canonical subcategory „${payload.subcategory}“, затова след submit точният leaf не може надеждно да бъде възстановен само от записа.`;adapter.append(note);
+    }else if(category!=='Услуги'&&discovery){
       const note=document.createElement('p');note.dataset.adapterLiveNote='true';note.textContent=`„${discovery}“ остава discovery контекст и не се представя като записана подкатегория.`;adapter.append(note);
     }
   }
@@ -162,4 +164,7 @@
     const control=event.target.closest?.('[data-proto-form] input,[data-proto-form] textarea,[data-proto-form] select');if(control) setFieldError(control,validateControl(control));
   },true);
   window.addEventListener('beforeunload',event=>{if(activeDirtyForm()){event.preventDefault();event.returnValue='';}});
+
+  const initialListingForm=document.querySelector('[data-proto-form][data-form-kind="listing"]');
+  if(initialListingForm) syncAdapter(initialListingForm);
 })();
