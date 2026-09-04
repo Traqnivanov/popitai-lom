@@ -90,7 +90,7 @@ function resultsAddTarget(context,group,owner,type='') {
   if(owner==='Health/Info') return '#add/health';
   if(context==='Заведения') return '#add/firm?category=Заведения';
   if(owner==='Firms') return '#add/firm';
-  if(context==='Услуги') return listingAddUrl('Услуги',servicePrefillMap[group]||'');
+  if(context==='Услуги') return listingAddUrl('Услуги',window.PopitaiStage2Contracts?.serviceCanonical(group)||servicePrefillMap[group]||'');
   if(context==='Работа') return listingAddUrl('Работа',group,type||'Предлага работа');
   if(context==='Имоти') return listingAddUrl('Имоти',group,type||'Продава имот');
   if(context==='Купува и продава') {
