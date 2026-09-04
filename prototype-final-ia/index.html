@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Попитай.Лом — IA прототип</title>
   <meta name="robots" content="noindex,nofollow">
-  <meta name="theme-color" content="#0f2847">
+  <meta name="theme-color" content="#0b5fd7">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="approved-shell-fidelity.css">
   <style>@media(max-width:390px) and (min-width:341px){.grid.cols-4,.grid.cols-3,.grid.cols-2{grid-template-columns:1fr 1fr}}</style>
 </head>
 <body>
@@ -14,7 +15,7 @@
   <header class="site-header">
     <div class="shell header-row">
       <a class="brand" href="#home" aria-label="Попитай.Лом — начало">
-        <img src="../assets/popitai-lom-logo-mark-256.webp" width="44" height="44" alt="">
+        <img src="../assets/popitai-lom-logo-mark-256.webp" width="48" height="48" alt="">
         <span><strong>Попитай<span>.Лом</span></strong><small>Попитай. Намери. Препоръчай.</small></span>
       </a>
       <nav class="desktop-nav" aria-label="Главна навигация">
@@ -54,11 +55,11 @@
   </footer>
 
   <nav class="mobile-bottom" aria-label="Мобилна навигация">
-    <a data-nav="home" href="#home"><span>⌂</span>Начало</a>
-    <a data-nav="obyavi" href="#obyavi"><span>▦</span>Обяви</a>
-    <button type="button" data-open-add><span>＋</span>Добави</button>
-    <a data-nav="info" href="#info"><span>ⓘ</span>Инфо</a>
-    <a href="#profile"><span>●</span>Профил</a>
+    <a data-nav="home" href="#home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>Начало</span></a>
+    <a data-nav="obyavi" href="#obyavi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10a2 2 0 0 1 2 2v14H5V6a2 2 0 0 1 2-2Z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg><span>Обяви</span></a>
+    <button class="mobile-add" type="button" data-open-add aria-label="Добави"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Добави</span></button>
+    <a data-nav="info" href="#info"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7h.01"/></svg><span>Инфо</span></a>
+    <a href="#profile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Профил</span></a>
   </nav>
 
   <div class="modal-layer" id="add-layer" hidden>
