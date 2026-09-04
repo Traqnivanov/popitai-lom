@@ -98,6 +98,18 @@ function invalidFieldMessage(field,formKind){
   if(field.validity?.patternMismatch) return formKind==='shop'&&field.matches('[data-shop-phone]')?'Провери телефона.':`Провери формата на „${label}“.`;
   return `Провери „${label}“.`;
 }
+function formControlByLabel(form,labelText){
+  const field=[...form.querySelectorAll('.field')].find(item=>item.querySelector('label')?.textContent?.trim()===labelText);
+  return field?.querySelector('input,select,textarea')||null;
+}
+function validateHealthContact(form,msg){
+  const phone=formControlByLabel(form,'Телефон');
+  const address=formControlByLabel(form,'Адрес в Лом');
+  if(String(phone?.value||'').trim() || String(address?.value||'').trim()) return true;
+  msg.innerHTML='<div class="notice danger"><strong>Добави поне телефон или адрес.</strong> Въведеното остава във формата.</div>';
+  phone?.focus();
+  return false;
+}
 function markFormDirty(target){
   const form=target.closest?.('[data-proto-form]');
   if(form&&form.dataset.submitted!=='true') form.dataset.dirty='true';
@@ -180,6 +192,7 @@ document.addEventListener('submit',e=>{
   if(e.target.matches('[data-proto-form]')){
     e.preventDefault();const form=e.target;const msg=form.querySelector('.form-message');if(form.dataset.submitted==='true') return;
     if(form.dataset.formKind==='shop'&&!validateShopPhone(form.querySelector('[data-shop-phone]'))){msg.innerHTML='<div class="notice danger"><strong>Провери телефона.</strong> Въведеното остава във формата.</div>';form.querySelector('[data-shop-phone]')?.reportValidity();return;}
+    if(form.dataset.formKind==='health'&&!validateHealthContact(form,msg)) return;
     if(!form.checkValidity()){
       const invalid=form.querySelector(':invalid');
       const detail=invalid?invalidFieldMessage(invalid,form.dataset.formKind):'Провери задължителните полета.';
