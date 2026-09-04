@@ -13,6 +13,7 @@ Prototype root: `prototype-final-ia/`
 - Единствен prototype renderer owner: `prototype-final-ia/app.js`.
 - Няма Marketplace V3, V18, V19 или друг последващ renderer, който да прерисува същия root.
 - `index.html` държи shell-а; `app.js` държи routed content; `styles.css` държи prototype styles.
+- Helper файловете могат да връщат данни/HTML функции, но не притежават отделен DOM lifecycle и не рендерират конкурентно в `#app-main`.
 
 ## 3. Основни екрани
 
@@ -56,6 +57,16 @@ Prototype root: `prototype-final-ia/`
 | Publications | separate editorial owner concept | none public | Admin-only authoring concept; no backend yet |
 | Questions | Questions | Add Question | community fallback, not verified Info |
 | Info Lom | Info | correction/source flows only | verified data separate from community |
+
+### 4.1 Taxonomy / form-owner boundary
+
+Approved public groups are **discovery IA**. They do not automatically become new persisted Listing subcategory values just because the prototype can display them.
+
+- Current persisted Listing categories and existing owner validation remain authoritative until production implementation explicitly maps or extends them.
+- `Услуги` keeps the existing Listing subcategory behavior; a service subcategory is required in create mode, matching the current owner form.
+- Public group names for Работа, Имоти, Автомобили, Животни and the broad Buy/Sell layer must be implemented through backward-compatible mapping and form-owner validation before any production persistence change.
+- No new table, owner, form or Admin queue is implied by a public grouping.
+- Edit saved values remain stronger than create prefill; create context must not leak into edit options or overwrite saved data.
 
 ## 5. Home order
 
@@ -112,27 +123,33 @@ Prototype QA routes use hash query states only because this branch is isolated a
 - Core category grids stay two-column at normal phone width, including 390px; one column is reserved only for unusually narrow widths where readability requires it.
 - Form fields remain full-width and touch-friendly.
 
-## 10. Prototype QA — final pass after acceptance fixes
+## 10. Prototype QA — current accepted checks and continuing audit
 
-- `node --check` passes for `app.js`.
-- Automated Chromium route traversal completed with **0 page JavaScript errors**.
-- **36 primary/QA routes** rendered non-empty content in the final pass.
+- `node --check` passes for `app.js` in the checked prototype snapshots.
+- Automated Chromium route traversal completed with **0 page JavaScript errors** in the prior full route pass.
+- **36 primary/QA routes** rendered non-empty content in that pass.
 - Desktop render checked at 1440px width.
 - Mobile render checked at 390px width.
 - At 390px the main category grid resolves to **2 columns**, not one long vertical list.
 - Mobile bottom navigation is visible and uses the approved five actions.
 - Browse journey verified: `Услуги → Майстори, ремонти и дом → Резултати → правилен detail/Add flow`.
-- Results screen exposes the correct lifecycle owner as a Bulgarian user-facing label and does not create a duplicate record concept.
-- Add path from results carries visible category/subcategory prefill; production rule remains editable bounded prefill and edit-mode saved record has priority.
-- Add sheet opens and exposes exactly **5** public Add owner actions.
-- Form validation error is visible and does not clear entered values; test value remained present after failed submit.
+- Auto-services are one discovery path into the same Services records, not a duplicate owner.
+- Results → Add mapping was corrected for Buy/Sell, Auto Services and Real Estate type context.
+- Add sheet exposes exactly **5** public Add owner actions.
+- Firm and Question category dropdowns were reconciled to the current owner dictionaries.
+- Edit priority was verified in Opera: create prefill no longer enters the edit dropdown options or replaces saved values.
+- Listing service subcategory validation now matches the current owner form: required for `Услуги` create flow.
+- Prototype submit now ignores a second submit after a successful first submit; no real backend success is claimed.
+- Form validation error is visible and does not clear entered values.
 - `loading`, `empty`, `error`, `edit`, `pending` and `success` states render.
-- Automated visible-text scan found none of the disallowed prototype English UI leftovers checked in the final pass (`production`, `owner`, `generic listing`, `Shop flow`, `Health flow`, `Admin-only`, `marketplace`, `lifecycle`, `backend write`, `grooming`, `detailing`).
+- Visual QA is being performed in Opera against the current production/public surfaces; existing approved visual decisions are preserved unless explicitly superseded.
+- Icon choice is **not approved** and is outside this acceptance pass; temporary prototype icons must not be treated as final product truth.
 
 ## 11. Not covered / still production-blocked
 
 - Supabase writes;
 - schema/RLS/migrations;
+- persisted taxonomy expansion/mapping for new public groups beyond currently supported owner values;
 - real Publications backend;
 - production route/canonical redirects;
 - old Marketplace V3 removal from production pipeline;
