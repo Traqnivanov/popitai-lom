@@ -22,6 +22,7 @@
     'Автосервиз':'Автосервизи',
     'Диагностика':'Диагностика',
     'Гуми':'Гуми',
+    'Авточасти':'Авточасти',
     'Автоелектро и автоклиматици':'Автосервизи',
     'Автомивка и детайлинг':'Автомивки',
     'Пътна помощ':'Пътна помощ',
@@ -64,44 +65,43 @@
 
   const activeServiceCanonical = Object.freeze([
     'Цялостни ремонти','Бани и плочки','ВиК','Електро','Покриви','Боядисване','Дограма','Климатици',
-    'Автосервизи','Диагностика','Гуми','Автомивки','Пътна помощ','Домашна помощ','Красота и грижа',
+    'Автосервизи','Диагностика','Гуми','Авточасти','Автомивки','Пътна помощ','Домашна помощ','Красота и грижа',
     'Компютърни и технически услуги','Фото, видео и събитийни услуги','Професионални услуги','Обучение и уроци',
     'Грижа за деца, възрастни и домашни любимци','Транспорт, преместване и доставки'
   ]);
 
-  const workSubcategories = Object.freeze([
-    'Строителство, ремонти и техници','Производство, склад и общи работници','Транспорт, шофьори и доставки',
-    'Търговия и продажби','Заведения, хотели и туризъм','Почистване, домашна помощ и грижи',
-    'Здраве, красота и социални дейности','Офис, администрация, IT и специалисти','Друга / сезонна работа'
-  ]);
-
-  const propertySubcategories = Object.freeze([
-    'Апартамент','Къща / етаж','Парцел','Земеделска земя','Гараж / паркомясто','Бизнес имот','Склад / производствен имот','Друго'
-  ]);
-
-  const autoSubcategories = Object.freeze([
-    'Автомобили и джипове','Мотоциклети и ATV','Бусове и камиони','Агро/строителна техника',
-    'Ремаркета, каравани и други','Части, гуми и аксесоари'
-  ]);
-
-  const animalSubcategories = Object.freeze([
-    'Осиновяване / търси дом','Изгубени','Намерени','Стоки за животни'
-  ]);
-
-  const animalTypeBySubcategory = Object.freeze({
-    'Осиновяване / търси дом':'Дава',
-    'Изгубени':'Търси',
-    'Намерени':'Търси',
-    'Стоки за животни':''
+  const discoveryGroups = Object.freeze({
+    'Работа': Object.freeze([
+      'Строителство, ремонти и техници','Производство, склад и общи работници','Транспорт, шофьори и доставки',
+      'Търговия и продажби','Заведения, хотели и туризъм','Почистване, домашна помощ и грижи',
+      'Здраве, красота и социални дейности','Офис, администрация, IT и специалисти','Друга / сезонна работа'
+    ]),
+    'Имоти': Object.freeze([
+      'Апартамент','Къща / етаж','Парцел','Земеделска земя','Гараж / паркомясто','Бизнес имот','Склад / производствен имот','Друго'
+    ]),
+    'Автомобили и МПС': Object.freeze([
+      'Автомобили и джипове','Мотоциклети и ATV','Бусове и камиони','Агро/строителна техника',
+      'Ремаркета, каравани и други','Части, гуми и аксесоари'
+    ]),
+    'Животни': Object.freeze(['Осиновяване / търси дом','Изгубени','Намерени','Стоки за животни'])
   });
 
-  const shopTags = Object.freeze([
-    'Хранителни стоки','Месо и месни продукти','Млечни продукти','Плодове и зеленчуци','Напитки','Готова храна',
-    'Домашни потреби','Подаръци и сувенири','Цветя','Градина и земеделие','Храни и стоки за животни','Разнообразни стоки',
-    'Строителни материали','Железария и метали','Бои и покрития','Плочки и настилки','Санитария и ВиК','Инструменти и машини',
-    'Техника','Електроника','Телефони и аксесоари','Бяла техника','Черна техника','Сервиз',
-    'Мебели','Обзавеждане','Дрехи','Обувки','Бельо','Модни аксесоари','Парфюмерия и козметика','Детски стоки'
-  ]);
+  const animalSuggestedTypeByDiscovery = Object.freeze({
+    'Осиновяване / търси дом':'Дава',
+    'Изгубени':'Търси',
+    'Намерени':'Търси'
+  });
+
+  const shopTagsByCategory = Object.freeze({
+    'Хранителни': Object.freeze(['Хранителни стоки','Месо и месни продукти','Млечни продукти','Плодове и зеленчуци','Напитки','Готова храна']),
+    'Строителни': Object.freeze(['Строителни материали','Железария и метали','Бои и покрития','Плочки и настилки','Санитария и ВиК','Инструменти и машини']),
+    'Техника': Object.freeze(['Техника','Електроника','Телефони и аксесоари','Бяла техника','Черна техника','Сервиз']),
+    'Мебели': Object.freeze(['Мебели','Обзавеждане','Домашни потреби']),
+    'Дрехи': Object.freeze(['Дрехи','Обувки','Бельо','Модни аксесоари','Парфюмерия и козметика','Детски стоки']),
+    'Дом': Object.freeze(['Домашни потреби','Подаръци и сувенири','Цветя','Градина и земеделие','Храни и стоки за животни','Разнообразни стоки'])
+  });
+
+  const shopTags = Object.freeze(Array.from(new Set(Object.values(shopTagsByCategory).flat())));
 
   const shopLegacyAliases = Object.freeze({
     'Месо':'Месо и месни продукти','Месни продукти':'Месо и месни продукти','Месо и сирена':'Месо и месни продукти',
@@ -116,40 +116,44 @@
   });
 
   function listingSubcategories(category) {
-    if (category === 'Услуги') return [...activeServiceCanonical];
-    if (category === 'Работа') return [...workSubcategories];
-    if (category === 'Имоти') return [...propertySubcategories];
-    if (category === 'Автомобили и МПС') return [...autoSubcategories];
-    if (category === 'Животни') return [...animalSubcategories];
-    return [];
+    return category === 'Услуги' ? [...activeServiceCanonical] : [];
   }
 
-  function listingTypes(category, subcategory='') {
+  function listingTypes(category) {
     if (category === 'Работа') return ['Предлага работа','Търси работа'];
     if (category === 'Имоти') return ['Продава имот','Отдава под наем','Търси под наем','Търси за купуване'];
-    if (category === 'Животни') {
-      const forced = animalTypeBySubcategory[subcategory] || '';
-      return forced ? [forced] : ['Продава','Купува','Търси','Дава'];
-    }
     return ['Продава','Купува','Търси','Дава'];
   }
 
   function serviceCanonical(discovery) {
-    return serviceCanonicalMap[discovery] || '';
+    return serviceCanonicalMap[discovery] || (activeServiceCanonical.includes(discovery) ? discovery : '');
+  }
+
+  function shopTagsForCategory(category) {
+    const primary=[...(shopTagsByCategory[category]||[])];
+    const primarySet=new Set(primary);
+    return {primary, other: shopTags.filter(tag=>!primarySet.has(tag))};
+  }
+
+  function compatibilityAdapter({category='', discovery='', type='', subcategory=''}) {
+    if(category==='Услуги') {
+      return {category, subcategory: serviceCanonical(discovery)||subcategory||'', listing_type:type||''};
+    }
+    return {category, subcategory:'', listing_type:type||''};
   }
 
   window.PopitaiStage2Contracts = Object.freeze({
     serviceCanonicalMap,
     activeServiceCanonical,
-    workSubcategories,
-    propertySubcategories,
-    autoSubcategories,
-    animalSubcategories,
-    animalTypeBySubcategory,
+    discoveryGroups,
+    animalSuggestedTypeByDiscovery,
     shopTags,
+    shopTagsByCategory,
     shopLegacyAliases,
     listingSubcategories,
     listingTypes,
-    serviceCanonical
+    serviceCanonical,
+    shopTagsForCategory,
+    compatibilityAdapter
   });
 })();
