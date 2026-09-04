@@ -8,6 +8,10 @@ function current(){return `<div class="page">${pageHead('Актуално','Кр
 function articles(){return `<div class="page">${pageHead('Статии','Пълни практични ръководства с местната информация на първо място.')}<div class="shell"><div class="result-list">${demoRow('Как да решиш конкретна местна задача','Пълно ръководство: какво се прави в Лом, подготовка, изключения и проверени източници.','Статия','#detail/article','Ръководство')}${demoRow('Практично ръководство за местна услуга','Демонстрира дългосрочно полезно съдържание за търсачки, не кратка публикация.','Статия','#detail/article','Местната информация първо')}</div></div></div>`;}
 function questions(){return `<div class="page">${pageHead('Въпроси','Помощ от общността, когато няма готов отговор.')}<div class="shell"><div class="page-tools"><a class="btn primary" href="#add/question">＋ Задай въпрос</a></div><div class="result-list" style="margin-top:18px">${demoRow('Къде мога да намеря…?','Примерен въпрос. Отговорът от общността не се представя като проверена информация.','Въпрос','#detail/question','Общност')}</div></div></div>`;}
 
+function shopResultCard(group,index){
+  return `<article class="result-row"><div><span class="demo-label">ПРОТОТИПЕН ЗАПИС</span><h3>${esc(group)} — пример ${index}</h3><p>Магазинът показва основната информация директно в каталога, без измислен фирмен detail профил.</p><div class="result-meta"><span class="badge">Магазин</span><span class="badge gold">Лом</span></div></div><button class="btn soft" type="button" data-demo-contact>Покажи контакт</button><p class="contact-demo-message" aria-live="polite"></p></article>`;
+}
+
 function results(query){
   const context=query.get('context')||'Обяви и услуги';
   const group=query.get('group')||'Всички';
@@ -16,7 +20,11 @@ function results(query){
   const type=query.get('type')||'';
   const addTarget=resultsAddTarget(context,group,owner,type);
   const noun = owner==='Shops'?'магазини':owner==='Firms'?'профили':owner==='Health/Info'?'здравни профили':'обяви';
-  return `<div class="page">${pageHead(group,`Разгледай ${noun} в „${context}“.`,'Обяви и услуги')}<div class="shell"><div class="result-list">${demoRow(`${group} — пример 1`,`Най-важната информация се вижда още в списъка.`,context,`#detail/${detailType}`,'Пример')}${demoRow(`${group} — пример 2`,`Втори примерен запис за проверка на плътността и подредбата.`,context,`#detail/${detailType}`,'Пример')}</div><div class="page-tools"><a class="btn primary" href="${addTarget}">＋ Публикувай в тази категория</a><a class="btn" href="#add/question">Не намираш? Задай въпрос</a></div></div></div>`;
+  const rows=owner==='Shops'
+    ? `${shopResultCard(group,1)}${shopResultCard(group,2)}`
+    : `${demoRow(`${group} — пример 1`,`Най-важната информация се вижда още в списъка.`,context,`#detail/${detailType}`,'Пример')}${demoRow(`${group} — пример 2`,`Втори примерен запис за проверка на плътността и подредбата.`,context,`#detail/${detailType}`,'Пример')}`;
+  const primaryLabel=owner==='Shops'?'＋ Добави магазин':'＋ Публикувай в тази категория';
+  return `<div class="page">${pageHead(group,`Разгледай ${noun} в „${context}“.`,'Обяви и услуги')}<div class="shell"><div class="result-list">${rows}</div><div class="page-tools"><a class="btn primary" href="${addTarget}">${primaryLabel}</a><a class="btn" href="#add/question">Не намираш? Задай въпрос</a></div></div></div>`;
 }
 
 function detail(kind){
