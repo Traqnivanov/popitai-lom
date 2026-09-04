@@ -9,7 +9,7 @@ function articles(){return `<div class="page">${pageHead('Статии','Пъл�
 function questions(){return `<div class="page">${pageHead('Въпроси','Помощ от общността, когато няма готов отговор.')}<div class="shell"><div class="page-tools"><a class="btn primary" href="#add/question">＋ Задай въпрос</a></div><div class="result-list" style="margin-top:18px">${demoRow('Къде мога да намеря…?','Примерен въпрос. Отговорът от общността не се представя като проверена информация.','Въпрос','#detail/question','Общност')}</div></div></div>`;}
 
 function shopResultCard(group,index){
-  return `<article class="result-row"><div><span class="demo-label">ПРОТОТИПЕН ЗАПИС</span><h3>${esc(group)} — пример ${index}</h3><p>Магазинът показва основната информация директно в каталога, без измислен фирмен detail профил.</p><div class="result-meta"><span class="badge">Магазин</span><span class="badge gold">Лом</span></div></div><button class="btn soft" type="button" data-demo-contact>Покажи контакт</button><p class="contact-demo-message" aria-live="polite"></p></article>`;
+  return `<article class="result-row"><div><span class="demo-label">ПРОТОТИПЕН ЗАПИС</span><h3>${esc(group)} — пример ${index}</h3><p>Основната информация за магазина се вижда директно в каталога.</p><div class="result-meta"><span class="badge">Магазин</span><span class="badge gold">Лом</span></div></div><button class="btn soft" type="button" data-demo-contact>Покажи контакт</button><p class="contact-demo-message" aria-live="polite"></p></article>`;
 }
 
 function results(query){
@@ -18,12 +18,18 @@ function results(query){
   const detailType=query.get('detail')||'listing';
   const owner=query.get('owner')||'Listings';
   const type=query.get('type')||'';
-  const addTarget=resultsAddTarget(context,group,owner,type);
+  let addTarget=resultsAddTarget(context,group,owner,type);
+  if(owner==='Shops') addTarget=`#add/shop?category=${encodeURIComponent(group)}`;
+  if(owner==='Health/Info') addTarget=`#add/health?type=${encodeURIComponent(group)}`;
+  if(context==='Животни') {
+    const animalType={'Осиновяване / търси дом':'Дава','Изгубени':'Търси','Намерени':'Дава','Стоки за животни':'Продава'}[group]||'';
+    addTarget=`#add/listing?category=${encodeURIComponent('Животни')}${animalType?`&type=${encodeURIComponent(animalType)}`:''}`;
+  }
   const noun = owner==='Shops'?'магазини':owner==='Firms'?'профили':owner==='Health/Info'?'здравни профили':'обяви';
   const rows=owner==='Shops'
     ? `${shopResultCard(group,1)}${shopResultCard(group,2)}`
     : `${demoRow(`${group} — пример 1`,`Най-важната информация се вижда още в списъка.`,context,`#detail/${detailType}`,'Пример')}${demoRow(`${group} — пример 2`,`Втори примерен запис за проверка на плътността и подредбата.`,context,`#detail/${detailType}`,'Пример')}`;
-  const primaryLabel=owner==='Shops'?'＋ Добави магазин':'＋ Публикувай в тази категория';
+  const primaryLabel=owner==='Shops'?'＋ Добави магазин':owner==='Health/Info'?'＋ Добави лекар / здравна услуга':'＋ Публикувай в тази категория';
   return `<div class="page">${pageHead(group,`Разгледай ${noun} в „${context}“.`,'Обяви и услуги')}<div class="shell"><div class="result-list">${rows}</div><div class="page-tools"><a class="btn primary" href="${addTarget}">${primaryLabel}</a><a class="btn" href="#add/question">Не намираш? Задай въпрос</a></div></div></div>`;
 }
 
