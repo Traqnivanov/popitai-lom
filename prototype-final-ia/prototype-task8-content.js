@@ -125,7 +125,7 @@
 
         <div class="detail-action article-actions">
           <button class="btn soft" type="button" data-pension-helpful aria-pressed="false">♡ Полезно</button>
-          <a class="btn soft" href="#article-pension-comments">Коментирай</a>
+          <button class="btn soft" type="button" data-pension-comments>Коментирай</button>
           ${articleShare()}
           <button class="btn soft" type="button" data-demo-report>Има промяна?</button>
           <p class="action-demo-message help" aria-live="polite"></p>
@@ -158,6 +158,12 @@
   };
 
   document.addEventListener('click',event=>{
+    const comments=event.target.closest?.('[data-pension-comments]');
+    if(comments){
+      document.getElementById('article-pension-comments')?.scrollIntoView({behavior:'smooth',block:'start'});
+      document.getElementById('pension-comment')?.focus({preventScroll:true});
+      return;
+    }
     const button=event.target.closest?.('[data-pension-helpful]');
     if(!button) return;
     const next=button.getAttribute('aria-pressed')!=='true';
