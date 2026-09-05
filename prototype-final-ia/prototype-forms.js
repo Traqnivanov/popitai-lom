@@ -16,8 +16,9 @@
   };
 
   function selectOptions(values,current=''){
-    return '<option value="">Избери</option>'+values.map(v=>`<option value="${esc(v)}" ${String(v)===String(current)?'selected':''}>${esc(v)}</option>`).join('');
+    return '<option value="">Избери</option>'+values.map(item=>{const pair=typeof item==='object'?item:{value:item,label:item};return `<option value="${esc(pair.value)}" ${String(pair.value)===String(current)?'selected':''}>${esc(pair.label)}</option>`;}).join('');
   }
+  function serviceTypeOptions(){return [{value:'Дава',label:'Предлагам услуга'},{value:'Търси',label:'Търся изпълнител'}];}
   function listingCategory(query){return query.get('state')==='edit'?editValue('listing','Категория'):(query.get('category')||'');}
   function listingDiscovery(query){return query.get('discovery')||'';}
   function listingSubcategory(query){
@@ -51,7 +52,7 @@
   function optionsFor(kind,label,query){
     if(kind==='listing'&&label==='Категория') return listingCategories;
     if(kind==='listing'&&label==='Подкатегория / вид') return listingCategory(query)==='Услуги'?contracts.listingSubcategories('Услуги'):[];
-    if(kind==='listing'&&label==='Тип обява') return contracts.listingTypes(listingCategory(query));
+    if(kind==='listing'&&label==='Тип обява') return listingCategory(query)==='Услуги'?serviceTypeOptions():contracts.listingTypes(listingCategory(query));
     if(kind==='firm'&&label==='Категория') return firmCategories;
     if(kind==='question'&&label==='Категория') return questionCategories;
     if(kind==='shop'&&label==='Категория') return shopGroups;
@@ -104,8 +105,13 @@
   }
 
   function discoveryContext(kind,query){
-    const discovery=kind==='listing'?listingDiscovery(query):'';
-    return discovery?`<section class="discovery-context" aria-label="Избрано от предишната стъпка"><span>Избрано</span><strong>${esc(discovery)}</strong><p>Изборът е пренесен от предишната стъпка.</p></section>`:'';
+    if(kind!=='listing') return '';
+    const discovery=listingDiscovery(query);
+    const subcategory=listingSubcategory(query);
+    const other=query.get('other')==='1';
+    const exact=discovery||subcategory||(other?'Друга услуга':'');
+    if(!exact) return '';
+    return `<section class="service-context-summary" aria-label="Избрана услуга"><strong>Услуги → ${esc(exact)}</strong><a href="#uslugi">Смени услугата</a></section>`;
   }
 
   function adapterPreview(kind,query){
@@ -117,11 +123,11 @@
     const type=currentForField('listing','Тип обява',query);
     const payload=contracts.compatibilityAdapter({category,discovery,type,subcategory});
     const exactOpen=category==='Услуги'&&discovery&&payload.subcategory&&discovery!==payload.subcategory;
-    return `<details class="qa-adapter"><summary>Техническа проверка на съвместимостта</summary><p>Това не е потребителско поле и не променя базата.</p><code>category=${esc(payload.category||'—')} · subcategory=${esc(payload.subcategory||'—')} · listing_type=${esc(payload.listing_type||'—')}</code>${exactOpen?`<p><strong>OPEN / FAIL / LOCKED:</strong> exact discovery „${esc(discovery)}“ не се persist-ва отделно; текущият договор записва canonical „${esc(payload.subcategory)}“.</p>`:category!=='Услуги'&&discovery?`<p>„${esc(discovery)}“ остава discovery контекст и не се представя като persisted подкатегория.</p>`:''}</details>`;
+    return `<details class="qa-adapter qa-only"><summary>Техническа проверка на съвместимостта</summary><p>Това не е потребителско поле и не променя базата.</p><code>category=${esc(payload.category||'—')} · subcategory=${esc(payload.subcategory||'—')} · listing_type=${esc(payload.listing_type||'—')}</code>${exactOpen?`<p><strong>OPEN / FAIL / LOCKED:</strong> exact discovery „${esc(discovery)}“ не се persist-ва отделно; текущият договор записва canonical „${esc(payload.subcategory)}“.</p>`:category!=='Услуги'&&discovery?`<p>„${esc(discovery)}“ остава discovery контекст и не се представя като persisted подкатегория.</p>`:''}</details>`;
   }
 
   function healthContractNote(){
-    return `<details class="qa-adapter health-contract-note"><summary>QA: техническа проверка на здравната форма</summary><p>Production contract — read-only verification. Поддържани submission типове: лекар / медицинска практика, стоматолог / дентална практика, ветеринар / кабинет. Конкретна услуга може да се опише в „Специалност / основна услуга“ и описанието, но по-широкият backend flow за здравна услуга остава OPEN/LOCKED.</p></details>`;
+    return `<details class="qa-adapter qa-only health-contract-note"><summary>Техническа проверка на здравната форма</summary><p>Production contract — read-only verification. Поддържани submission типове: лекар / медицинска практика, стоматолог / дентална практика, ветеринар / кабинет. Конкретна услуга може да се опише в „Специалност / основна услуга“ и описанието, но по-широкият backend flow за здравна услуга остава OPEN/LOCKED.</p></details>`;
   }
 
   function attributesFor(kind,label,type){
@@ -140,8 +146,9 @@
     const id=fieldId(kind,label,index);
     const errorId=`${id}-error`;
     const current=currentForField(kind,label,query);
-    const displayLabel=kind==='shop'&&label==='Какво предлага'?'Кратко описание на магазина':label;
-    const required=(fieldRequired(kind,label)||(kind==='listing'&&label==='Подкатегория / вид'&&listingContext.category==='Услуги'))?'required':'';
+    const displayLabel=kind==='shop'&&label==='Какво предлага'?'Кратко описание на магазина':kind==='listing'&&label==='Тип обява'&&listingContext.category==='Услуги'?'Какво искаш да публикуваш?':label;
+    const otherService=kind==='listing'&&query.get('other')==='1';
+    const required=(fieldRequired(kind,label)||(kind==='listing'&&label==='Подкатегория / вид'&&listingContext.category==='Услуги'&&!otherService))?'required':'';
     const attrs=attributesFor(kind,label,type);
     const prefix=kind==='shop'&&label==='Източник на информацията'?`<div id="shop-classification-slot">${shopClassification(currentForField('shop','Категория',query))}</div>`:'';
 
@@ -152,8 +159,10 @@
 
     if(type==='select'){
       const isSub=kind==='listing'&&label==='Подкатегория / вид';
-      const showSub=!isSub||listingContext.category==='Услуги';
-      return prefix+`<div class="field" ${isSub?'id="listing-subcategory-field"':''} ${showSub?'':'hidden'}><label for="${id}">${esc(displayLabel)}</label><select id="${id}" name="${esc(label)}" ${required} ${showSub?'':'disabled'} aria-describedby="${errorId}">${selectOptions(optionsFor(kind,label,query),current)}</select>${fieldError(id)}</div>`;
+      const isClassification=kind==='listing'&&(label==='Категория'||isSub);
+      const showSub=!isSub||(listingContext.category==='Услуги'&&!otherService);
+      const fieldClass=isClassification?' classification-field':'';
+      return prefix+`<div class="field${fieldClass}" ${isSub?'id="listing-subcategory-field"':''} ${showSub?'':'hidden'}><label for="${id}">${esc(displayLabel)}</label><select id="${id}" name="${esc(label)}" ${required} ${showSub?'':'disabled'} aria-describedby="${errorId}">${selectOptions(optionsFor(kind,label,query),current)}</select>${fieldError(id)}</div>`;
     }
 
     let placeholder='';
@@ -197,6 +206,9 @@
       type:kind==='listing'?currentForField('listing','Тип обява',query):''
     };
     const fields=config.fields.map((f,i)=>renderField(kind,f[0],f[1],i,query,edit,listingContext)).join('');
+    const otherService=kind==='listing'&&query.get('other')==='1';
+    const otherFamily=query.get('family')||'';
+    const otherServiceFields=otherService?`<section class="other-service-fields" data-other-service-fields><h2>Друга услуга</h2><p>Избери най-близката група и опиши точно каква услуга предлагаш или търсиш.</p><div class="field"><label for="other-service-family">Най-близка група</label><select id="other-service-family" name="Най-близка група" required aria-describedby="other-service-family-error">${selectOptions(serviceFamilies.map(f=>f[0]),otherFamily)}</select>${fieldError('other-service-family')}</div><div class="field"><label for="other-service-text">Каква услуга?</label><input id="other-service-text" name="Каква услуга?" type="text" minlength="3" maxlength="120" required data-other-service-text aria-describedby="other-service-text-error" placeholder="Напр. монтаж на корнизи">${fieldError('other-service-text')}</div><p class="help">Точната услуга остава в потребителския текст. Не се представя като нова структурирана подкатегория.</p></section>`:'';
     const animalWarning=kind==='listing'?`<div class="notice" id="animal-warning" ${listingContext.category==='Животни'?'':'hidden'}><strong>Обяви за животни:</strong> избери най-подходящата група и опиши ясно ситуацията.</div>`:'';
     const listingExtras=kind==='listing'?uploadSection({label:'Снимки',maxFiles:6,id:'listing-photos'}):'';
     const firmExtras=kind==='firm'?uploadSection({label:'Лого (по желание)',maxFiles:1,id:'firm-logo'})+uploadSection({label:'Снимки на обекти и услуги',maxFiles:6,id:'firm-photos'}):'';
@@ -204,7 +216,10 @@
     const editNote=edit?'<div class="notice"><strong>Редакция на примерен запис.</strong> Попълнените стойности се запазват, ако има поле за корекция.</div>':'';
     const healthNote=kind==='health'?healthContractNote():'';
 
-    return `<div class="page">${pageHead(edit?`Редактирай — ${config.title}`:config.title,config.subtitle)}<div class="shell form-wrap">${discoveryContext(kind,query)}${healthNote}${animalWarning}${editNote}<form class="proto-form" data-proto-form data-form-kind="${kind}" data-discovery-context="${esc(listingContext.discovery)}" novalidate>${fields}${listingExtras}${firmExtras}${terms}<div class="form-actions"><button class="btn primary" type="submit">${edit?'Изпрати редакцията':kind==='health'?'Изпрати за одобрение':'Изпрати за преглед'}</button><a class="btn" href="#home">Отказ</a></div><div class="form-message" role="status" aria-live="polite"></div></form>${adapterPreview(kind,query)}</div></div>`;
+    const contextualService=kind==='listing'&&listingContext.category==='Услуги'&&(listingContext.discovery||listingContext.subcategory||otherService);
+    const pageTitle=contextualService?(edit?'Редактирай услуга':'Добави услуга'):(edit?`Редактирай — ${config.title}`:config.title);
+    const pageSubtitle=contextualService?'Публикувай конкретна услуга или заявка за изпълнител.':config.subtitle;
+    return `<div class="page">${pageHead(pageTitle,pageSubtitle)}<div class="shell form-wrap ${contextualService?'contextual-service-form':''}">${discoveryContext(kind,query)}${healthNote}${animalWarning}${editNote}<form class="proto-form" data-proto-form data-form-kind="${kind}" data-discovery-context="${esc(listingContext.discovery)}" novalidate>${otherServiceFields}${fields}${listingExtras}${firmExtras}${terms}<div class="form-actions"><button class="btn primary" type="submit">${edit?'Изпрати редакцията':kind==='health'?'Изпрати за одобрение':'Изпрати за преглед'}</button><a class="btn" href="#home">Отказ</a></div><div class="form-message" role="status" aria-live="polite"></div></form>${adapterPreview(kind,query)}</div></div>`;
   }
 
   function staticPage(title,text){return `<div class="page">${pageHead(title,text)}<div class="shell"><div class="content-card"><p>${esc(text)}</p></div></div></div>`;}

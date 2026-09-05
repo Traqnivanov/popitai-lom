@@ -10,8 +10,9 @@
     return String(value).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
   }
   function optionHtml(values,current=''){
-    return '<option value="">Избери</option>'+values.map(value=>`<option value="${escapeOption(value)}" ${value===current?'selected':''}>${escapeOption(value)}</option>`).join('');
+    return '<option value="">Избери</option>'+values.map(item=>{const pair=typeof item==='object'?item:{value:item,label:item};return `<option value="${escapeOption(pair.value)}" ${pair.value===current?'selected':''}>${escapeOption(pair.label)}</option>`;}).join('');
   }
+  function visibleListingTypes(category){return category==='Услуги'?[{value:'Дава',label:'Предлагам услуга'},{value:'Търси',label:'Търся изпълнител'}]:contracts.listingTypes(category);}
 
   function activeDirtyForm(){return document.querySelector('[data-proto-form][data-dirty="true"]:not([data-submitted="true"])');}
   function clearDirty(form=activeDirtyForm()){if(form) form.dataset.dirty='false';}
@@ -236,7 +237,7 @@
   function clearDiscoveryContext(form){
     if(!form) return;
     form.dataset.discoveryContext='';
-    const visible=form.closest('.form-wrap')?.querySelector('.discovery-context');
+    const visible=form.closest('.form-wrap')?.querySelector('.discovery-context,.service-context-summary');
     if(visible) visible.hidden=true;
   }
   function syncAdapter(form){
@@ -283,8 +284,9 @@
     subcategory.disabled=categoryValue!=='Услуги';
     subcategory.required=categoryValue==='Услуги';
     const previousType=preserve?type.value:'';
-    const allowedTypes=contracts.listingTypes(categoryValue);
-    const nextType=allowedTypes.includes(previousType)?previousType:'';
+    const allowedTypes=visibleListingTypes(categoryValue);
+    const allowedTypeValues=allowedTypes.map(item=>typeof item==='object'?item.value:item);
+    const nextType=allowedTypeValues.includes(previousType)?previousType:'';
     type.innerHTML=optionHtml(allowedTypes,nextType);
     type.value=nextType;
     const animalWarning=document.getElementById('animal-warning');
@@ -321,7 +323,25 @@
     if(!description.value) description.placeholder=pair[1];
   }
 
+  let shareReturnFocus=null;
+  function closeShareOverlay(overlay){
+    if(!overlay) return;
+    overlay.hidden=true;
+    document.body.classList.remove('share-open');
+    shareReturnFocus?.focus?.();
+    shareReturnFocus=null;
+  }
+
   document.addEventListener('click',event=>{
+    const openShare=event.target.closest?.('[data-open-share]');
+    if(openShare){
+      const overlay=openShare.parentElement?.querySelector('[data-share-overlay]');
+      if(overlay){shareReturnFocus=openShare;overlay.hidden=false;document.body.classList.add('share-open');overlay.querySelector('[data-close-share]')?.focus();}
+      return;
+    }
+    const closeShare=event.target.closest?.('[data-close-share]');
+    if(closeShare){closeShareOverlay(closeShare.closest('[data-share-overlay]'));return;}
+
     const link=event.target.closest?.('a[href^="#"]');
     if(link&&activeDirtyForm()){
       if(!confirmLeave()){
@@ -364,7 +384,7 @@
 
     const share=event.target.closest?.('[data-demo-share]');
     if(share){
-      const message=share.closest('.share-menu')?.querySelector('.share-demo-message');
+      const message=share.closest('.share-drawer')?.querySelector('.share-demo-message');
       const messages={native:'На телефон ще се отвори системното меню за споделяне.',facebook:'Facebook използва canonical URL и неговите crawler-visible metadata в production; тук е само UX пример.',copy:'Постоянният линк е копиран. (Прототип — няма реално копиране.)'};
       if(message) message.textContent=messages[share.dataset.demoShare]||'Готово за споделяне.';
     }
@@ -408,6 +428,13 @@
     const form=target.closest?.('[data-proto-form]');
     if(form) form.dataset.dirty='true';
     if(target.matches('input,textarea,select')) setFieldError(target,'');
+    if(form?.dataset.formKind==='listing'&&target.matches('[data-other-service-text]')){
+      const exact=target.value.trim();
+      const title=form.querySelector('[name="Заглавие"]');
+      const description=form.querySelector('[name="Описание"]');
+      if(exact&&title&&!title.value) title.placeholder=`${form.querySelector('#listing-type')?.value==='Търси'?'Търся изпълнител за':'Предлагам'} ${exact} в Лом`;
+      if(exact&&description&&!description.value) description.placeholder=`Опиши „${exact}“, район, срок и важни условия.`;
+    }
     if(form?.dataset.formKind==='listing'&&target.id==='listing-price') syncPriceState(form,target);
     if(form?.dataset.formKind==='health'&&(target.id==='health-phone'||target.id==='health-address')){
       validateHealthPair(form,false);
@@ -419,6 +446,12 @@
     const control=event.target.closest?.('[data-proto-form] input,[data-proto-form] textarea,[data-proto-form] select');
     if(control) setFieldError(control,validateControl(control));
   },true);
+
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Escape') closeShareOverlay(document.querySelector('[data-share-overlay]:not([hidden])'));
+  });
+
+  document.body?.classList.toggle('qa-mode',new URLSearchParams(location.search).get('qa')==='1');
 
   window.addEventListener('beforeunload',event=>{
     if(activeDirtyForm()){
