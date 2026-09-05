@@ -1,0 +1,26 @@
+name: Stage 2 final regression QA 3
+
+on:
+  push:
+    branches:
+      - prototype/stage2-final-regression-qa3-20260905-tmp
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Confirm exact candidate parent
+        run: |
+          test "$(git rev-parse HEAD^)" = "347859b2308e585136dfdd7cdf77c260f0bcc9aa"
+      - name: Run committed regression suite from exact candidate
+        run: |
+          git checkout --detach 347859b2308e585136dfdd7cdf77c260f0bcc9aa
+          test -z "$(git status --short)"
+          node --check prototype-final-ia/prototype-regression-audit.js
+          node prototype-final-ia/prototype-regression-audit.js
