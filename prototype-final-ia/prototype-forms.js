@@ -11,7 +11,7 @@
     listing:{title:'Добави обява',subtitle:'Публикувай продажба, търсене, работа, имот или услуга.',fields:[['Заглавие','text'],['Категория','select'],['Подкатегория / вид','select'],['Тип обява','select'],['Описание','textarea'],['Цена в евро','number'],['Телефон','tel'],['Град / район','text'],['Улица (по желание)','text']]},
     firm:{title:'Добави фирма',subtitle:'Създай постоянен профил на местна фирма или доставчик.',fields:[['Име на фирмата','text'],['Категория','select'],['Телефон','tel'],['Град (по желание)','text'],['Адрес (по желание)','text'],['Работно време (по желание)','text'],['Описание','textarea']]},
     shop:{title:'Добави магазин',subtitle:'Предложи местен магазин за преглед и публикуване.',fields:[['Име на магазина','text'],['Категория','select'],['Телефон','tel'],['Адрес в Лом','text'],['Работно време','text'],['Какво предлага','textarea'],['Източник на информацията','select'],['Уточнение за източника (по желание)','text']]},
-    health:{title:'Добави лекар / практика',subtitle:'Поддържаните production типове са лекар/медицинска практика, стоматолог/дентална практика и ветеринар/кабинет.',fields:[['Тип','select'],['Име на лекар / практика','text'],['Специалност / основна услуга','text'],['Телефон','tel'],['Адрес в Лом','text'],['Кратко описание','textarea']]},
+    health:{title:'Добави лекар / практика',subtitle:'Добави лекар, стоматолог или ветеринарна практика за преглед.',fields:[['Тип','select'],['Име на лекар / практика','text'],['Специалност / основна услуга','text'],['Телефон','tel'],['Адрес в Лом','text'],['Кратко описание','textarea']]},
     question:{title:'Задай въпрос',subtitle:'Опиши ясно какво търсиш, за да получиш полезни отговори.',fields:[['Заглавие на въпроса','text'],['Категория','select'],['Описание','textarea']]}
   };
 
@@ -105,7 +105,7 @@
 
   function discoveryContext(kind,query){
     const discovery=kind==='listing'?listingDiscovery(query):'';
-    return discovery?`<section class="discovery-context" aria-label="Избран контекст"><span>Избрано</span><strong>${esc(discovery)}</strong><p>Този UX контекст остава видим до формата.</p></section>`:'';
+    return discovery?`<section class="discovery-context" aria-label="Избрано от предишната стъпка"><span>Избрано</span><strong>${esc(discovery)}</strong><p>Изборът е пренесен от предишната стъпка.</p></section>`:'';
   }
 
   function adapterPreview(kind,query){
@@ -121,7 +121,7 @@
   }
 
   function healthContractNote(){
-    return `<div class="notice health-contract-note"><strong>Production contract — read-only verification</strong><p>Поддържани submission типове: лекар / медицинска практика, стоматолог / дентална практика, ветеринар / кабинет. Конкретна услуга може да се опише в „Специалност / основна услуга“ и описанието, но няма отделен backend тип „обща здравна услуга“ или безопасно „Друго“. Това остава OPEN/LOCKED.</p></div>`;
+    return `<details class="qa-adapter health-contract-note"><summary>QA: техническа проверка на здравната форма</summary><p>Production contract — read-only verification. Поддържани submission типове: лекар / медицинска практика, стоматолог / дентална практика, ветеринар / кабинет. Конкретна услуга може да се опише в „Специалност / основна услуга“ и описанието, но по-широкият backend flow за здравна услуга остава OPEN/LOCKED.</p></details>`;
   }
 
   function attributesFor(kind,label,type){
@@ -197,11 +197,11 @@
       type:kind==='listing'?currentForField('listing','Тип обява',query):''
     };
     const fields=config.fields.map((f,i)=>renderField(kind,f[0],f[1],i,query,edit,listingContext)).join('');
-    const animalWarning=kind==='listing'?`<div class="notice" id="animal-warning" ${listingContext.category==='Животни'?'':'hidden'}><strong>Обяви за животни:</strong> discovery контекстът насочва човека, но не променя backend договора.</div>`:'';
+    const animalWarning=kind==='listing'?`<div class="notice" id="animal-warning" ${listingContext.category==='Животни'?'':'hidden'}><strong>Обяви за животни:</strong> избери най-подходящата група и опиши ясно ситуацията.</div>`:'';
     const listingExtras=kind==='listing'?uploadSection({label:'Снимки',maxFiles:6,id:'listing-photos'}):'';
     const firmExtras=kind==='firm'?uploadSection({label:'Лого (по желание)',maxFiles:1,id:'firm-logo'})+uploadSection({label:'Снимки на обекти и услуги',maxFiles:6,id:'firm-photos'}):'';
     const terms=['listing','question'].includes(kind)?'<div class="field check-field"><label for="community-terms"><input id="community-terms" name="community_terms" type="checkbox" required aria-describedby="community-terms-error"> Прочетох и приемам правилата на общността</label><p class="field-error" id="community-terms-error" aria-live="polite"></p></div>':'';
-    const editNote=edit?'<div class="notice"><strong>Редакция на примерен запазен запис.</strong> Запазените стойности са попълнени и не се губят при validation грешка.</div>':'';
+    const editNote=edit?'<div class="notice"><strong>Редакция на примерен запис.</strong> Попълнените стойности се запазват, ако има поле за корекция.</div>':'';
     const healthNote=kind==='health'?healthContractNote():'';
 
     return `<div class="page">${pageHead(edit?`Редактирай — ${config.title}`:config.title,config.subtitle)}<div class="shell form-wrap">${discoveryContext(kind,query)}${healthNote}${animalWarning}${editNote}<form class="proto-form" data-proto-form data-form-kind="${kind}" data-discovery-context="${esc(listingContext.discovery)}" novalidate>${fields}${listingExtras}${firmExtras}${terms}<div class="form-actions"><button class="btn primary" type="submit">${edit?'Изпрати редакцията':kind==='health'?'Изпрати за одобрение':'Изпрати за преглед'}</button><a class="btn" href="#home">Отказ</a></div><div class="form-message" role="status" aria-live="polite"></div></form>${adapterPreview(kind,query)}</div></div>`;

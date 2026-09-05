@@ -12,7 +12,7 @@
       ['🏦','Банки и банкомати','info-banks'],
       ['⚡','Комунални услуги','info-utilities']
     ];
-    return `<div class="page">${pageHead('Инфо Лом','Проверена местна информация с източник и дата на последна проверка.')}<div class="shell"><div class="grid cols-3">${items.map(([icon,title,id])=>`<a class="info-card" href="#detail/info?record=${id}"><h3>${icon} ${title}</h3><p>Отделен prototype route и отделен Social Card context.</p></a>`).join('')}</div></div></div>`;
+    return `<div class="page">${pageHead('Инфо Лом','Проверена местна информация с източник и дата на последна проверка.')}<div class="shell"><div class="grid cols-3">${items.map(([icon,title,id])=>`<a class="info-card" href="#detail/info?record=${id}"><h3>${icon} ${title}</h3><p>Проверени записи с източник и дата на последна проверка.</p></a>`).join('')}</div></div></div>`;
   }
 
   function firms(query){
@@ -21,7 +21,7 @@
   }
 
   function current(){
-    return `<div class="page">${pageHead('Актуално','Местни публикации и предстоящи събития на едно място.')}<div class="shell"><div class="grid cols-2"><a class="content-card" href="#detail/publication?record=publication-update"><span class="demo-label">ПРИМЕР</span><h3><span class="badge gold">Публикация</span> Местна актуализация</h3><p>Отделен content record и Social Card.</p></a><a class="content-card" href="#detail/event?record=event-local"><span class="demo-label">ПРИМЕР</span><h3><span class="badge green">Събитие</span> Предстоящо местно събитие</h3><p>Дата, час и място са водещи.</p></a></div></div></div>`;
+    return `<div class="page">${pageHead('Актуално','Местни публикации и предстоящи събития на едно място.')}<div class="shell"><div class="grid cols-2"><a class="content-card" href="#detail/publication?record=publication-update"><span class="demo-label">ПРИМЕР</span><h3><span class="badge gold">Публикация</span> Местна актуализация</h3><p>Кратка местна актуализация с най-важното на едно място.</p></a><a class="content-card" href="#detail/event?record=event-local"><span class="demo-label">ПРИМЕР</span><h3><span class="badge green">Събитие</span> Предстоящо местно събитие</h3><p>Дата, час и място са водещи.</p></a></div></div></div>`;
   }
 
   function articles(){
@@ -71,8 +71,8 @@
     const addTarget=PopitaiStage2Contracts.contextualAddUrl({context,group,owner,type});
     const noun=owner==='Shops'?'магазини':owner==='Firms'?'профили':owner==='Health/Info'?'здравни профили':'обяви';
     const label=PopitaiSocialCardComposer.titleFor(record.social);
-    const row=demoRow(label,`Резултатът пази „${group}“ до detail, Social Card и Add.`,context,detailHref,'Пример');
-    const second=demoRow(`${label} — пример 2`,`Същият контекст е предаден контролирано, без общ #detail fallback.`,context,detailHref,'Пример');
+    const row=demoRow(label,`Примерен резултат за „${group}“.`,context,detailHref,'Пример');
+    const second=demoRow(`${label} — пример 2`,`Още един примерен резултат в същата категория.`,context,detailHref,'Пример');
     const primaryLabel=owner==='Shops'?'＋ Добави магазин':owner==='Health/Info'?'＋ Добави лекар / практика':'＋ Публикувай в тази категория';
     return `<div class="page">${pageHead(group,`Разгледай ${noun} в „${context}“.`,'Обяви и услуги')}<div class="shell"><div class="discovery-context"><span>Избран контекст</span><strong>${esc(group)}</strong>${type?`<p>Тип: ${esc(type)}</p>`:''}</div><div class="result-list">${row}${second}</div><div class="page-tools"><a class="btn primary" href="${addTarget}">${primaryLabel}</a><a class="btn" href="#add/question">Не намираш? Задай въпрос</a></div></div></div>`;
   }
@@ -80,13 +80,20 @@
   function detail(kind,query=new URLSearchParams()){
     const record=records.resolve(kind,query);
     const title=PopitaiSocialCardComposer.titleFor(record.social);
-    const rows=record.rows.map(([key,value])=>`<div class="kv"><strong>${esc(key)}</strong><span>${esc(value)}</span></div>`).join('');
+    const technicalPattern=/(protected|owner|canonical|discovery|persist|open\s*\/\s*locked|production contract|backend|social card|detail|fallback|qa)/i;
+    const visibleRows=record.rows.filter(([key])=>!technicalPattern.test(key)).map(([key,value])=>`<div class="kv"><strong>${esc(key==='Suggested тип'?'Тип':key)}</strong><span>${esc(value)}</span></div>`).join('');
+    const technicalRows=record.rows.filter(([key])=>technicalPattern.test(key));
+    const bodyIsTechnical=technicalPattern.test(record.body||'');
+    const publicBody=bodyIsTechnical?`${title} — примерна информация за Лом и региона.`:record.body;
+    const pageTitle=technicalPattern.test(record.pageTitle||'')?title:record.pageTitle;
     const gallery=['listing','firm'].includes(record.contentType)?`<div class="gallery-demo"><div>Основна снимка</div><div>Снимка</div><div>Снимка</div></div>`:'';
-    const special=record.special?`<div class="notice">${esc(record.special)}</div>`:record.contentType==='info'?'<div class="notice ok">Всеки реален Info Lom запис показва източник и дата на последна проверка.</div>':'';
+    const rawTechnical=(bodyIsTechnical||technicalRows.length)?`<details class="qa-adapter"><summary>QA: технически данни на примера</summary>${bodyIsTechnical?`<p>${esc(record.body)}</p>`:''}${technicalRows.map(([key,value])=>`<p><strong>${esc(key)}:</strong> ${esc(value)}</p>`).join('')}</details>`:'';
+    const specialIsTechnical=technicalPattern.test(record.special||'');
+    const special=record.special?(specialIsTechnical?`<details class="qa-adapter"><summary>QA: допълнителна техническа бележка</summary><p>${esc(record.special)}</p></details>`:`<div class="notice">${esc(record.special)}</div>`):record.contentType==='info'?'<div class="notice ok">Всеки реален Info Lom запис показва източник и дата на последна проверка.</div>':'';
     const social=record.social.shareEligible
       ? PopitaiSocialCardComposer.render(record.social)
-      : '<div class="notice social-blocked"><strong>Share не е наличен.</strong><p>Този конкретен mock record е shareEligible=false; няма Share action и няма Social Card.</p></div>';
-    return `<div class="page">${pageHead(record.pageTitle,record.pageDescription)}<div class="shell detail"><article class="detail-main"><span class="demo-label">ПРИМЕР — НЕ Е РЕАЛНО СЪДЪРЖАНИЕ</span><h2>${esc(title)}</h2>${record.social.discovery?`<div class="discovery-context"><span>Контекст от пътя</span><strong>${esc(record.social.discovery)}</strong><p>${esc(record.social.category)}</p></div>`:''}${gallery}<h3>Описание</h3><p>${esc(record.body)}</p>${social}</article><aside class="detail-side">${rows}${actionBar(record)}${special}</aside></div></div>`;
+      : '<details class="qa-adapter"><summary>QA: споделяне</summary><p>Този пример е shareEligible=false и не показва действие за споделяне.</p></details>';
+    return `<div class="page">${pageHead(pageTitle,record.pageDescription)}<div class="shell detail"><article class="detail-main"><span class="demo-label">ПРИМЕР — НЕ Е РЕАЛНО СЪДЪРЖАНИЕ</span><h2>${esc(title)}</h2>${record.social.discovery?`<div class="discovery-context"><span>Избрано</span><strong>${esc(record.social.discovery)}</strong><p>${esc(record.social.category)}</p></div>`:''}${gallery}<h3>Описание</h3><p>${esc(publicBody)}</p>${social}${rawTechnical}</article><aside class="detail-side">${visibleRows}${actionBar(record)}${special}</aside></div></div>`;
   }
 
   function iconCheckpoint(){

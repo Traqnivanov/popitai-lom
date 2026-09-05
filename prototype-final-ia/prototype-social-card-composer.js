@@ -81,31 +81,35 @@
 
   function imageBlock(input,mode,resolvedTitle){
     if(mode==='real'){
-      return `<div class="social-card-image social-card-image--real" data-image-level="real" role="img" aria-label="Реална одобрена медия"><div class="social-card-approved-media"><span>APPROVED MEDIA</span><strong>${escapeHtml(resolvedTitle)}</strong><p>${escapeHtml(input.mediaType||'approved media')}</p></div><div class="social-card-approved-brand">Попитай.Лом</div></div>`;
+      return `<div class="social-card-image social-card-image--real" data-image-level="real" role="img" aria-label="Одобрена снимка към съдържанието"><div class="social-card-approved-media"><strong>${escapeHtml(resolvedTitle)}</strong><p>Снимка към съдържанието</p></div><div class="social-card-approved-brand">Попитай.Лом</div></div>`;
     }
     if(mode==='lom'){
-      return `<div class="social-card-image social-card-image--lom" data-image-level="lom" role="img" aria-label="Панорама на Лом — последен fallback"><div class="social-card-copy"><span>${escapeHtml(input.contentType)}</span><strong>${escapeHtml(resolvedTitle)}</strong><small>Последен fallback · Лом</small></div><b>Попитай.Лом</b></div>`;
+      return `<div class="social-card-image social-card-image--lom" data-image-level="lom" role="img" aria-label="Визия на Лом"><div class="social-card-copy"><span>${escapeHtml(input.category)}</span><strong>${escapeHtml(resolvedTitle)}</strong><small>Лом</small></div><b>Попитай.Лом</b></div>`;
     }
-    return `<div class="social-card-image social-card-image--template" data-image-level="template" data-accent="${escapeHtml(input.accent)}" role="img" aria-label="Тематичен Social Card шаблон"><div class="social-card-template-icon" aria-hidden="true">${iconMarkup(input.icon)}</div><div class="social-card-copy"><span>${escapeHtml(input.category)}${input.discovery?` · ${escapeHtml(input.discovery)}`:''}</span><strong>${escapeHtml(resolvedTitle)}</strong><small>${escapeHtml(input.visualTheme)}</small></div><b>Попитай.Лом</b></div>`;
+    return `<div class="social-card-image social-card-image--template" data-image-level="template" data-accent="${escapeHtml(input.accent)}" role="img" aria-label="Тематична визия за споделяне"><div class="social-card-template-icon" aria-hidden="true">${iconMarkup(input.icon)}</div><div class="social-card-copy"><span>${escapeHtml(input.category)}${input.discovery?` · ${escapeHtml(input.discovery)}`:''}</span><strong>${escapeHtml(resolvedTitle)}</strong><small>${escapeHtml(input.visualTheme)}</small></div><b>Попитай.Лом</b></div>`;
   }
 
-  function qaSimulation(input,actualMode){
-    return `<details class="social-card-qa"><summary>QA симулация на image hierarchy</summary>
+  function qaSimulation(input,actualMode,resolvedTitle,domain){
+    return `<details class="social-card-qa"><summary>Техническа QA проверка</summary>
+      <div class="social-card-role"><strong>Content role / trust:</strong> ${escapeHtml(roleLabels[input.contentRole]||input.contentRole)}</div>
+      <div class="social-card-image-label"><strong>og:image · 1200 × 630</strong><span>${actualMode==='real'?'approved media':actualMode==='template'?'themed template':'Lom fallback'}</span></div>
       <p><strong>Production-like избор:</strong> <code>${escapeHtml(actualMode)}</code>. Той зависи само от валидирания record input.</p>
+      <code>${escapeHtml(input.canonicalUrl)}</code>
+      <p>Facebook teaser, og:image, title/description/domain и QA са отделни повърхности.</p>
       <div class="social-card-qa-controls" role="group" aria-label="Само QA симулация">
         <button type="button" class="btn soft" data-qa-image="real">Симулирай real</button>
         <button type="button" class="btn soft" data-qa-image="template">Симулирай template</button>
         <button type="button" class="btn soft" data-qa-image="lom">Симулирай Lom fallback</button>
       </div>
       <div class="social-card-qa-simulation" data-qa-image-output aria-live="polite">QA контролът не е активиран. Той не променя production-like избора.</div>
-      <p class="help">Дори при „Симулирай real“ record с <code>mediaAvailable=false</code> остава с действителен режим <code>${escapeHtml(actualMode)}</code>. Симулацията не доказва наличие на медия.</p>
+      <p class="help">Resolved title: ${escapeHtml(resolvedTitle)} · domain: ${escapeHtml(domain)}.</p>
     </details>`;
   }
 
   function render(rawInput){
     const checked=validate(rawInput);
     if(!checked.ok){
-      return `<div class="notice danger social-card-error"><strong>Social Card input error.</strong><p>Липсва или е невалидно: ${escapeHtml(checked.errors.join(', '))}</p></div>`;
+      return `<div class="notice danger social-card-error"><strong>Прегледът за споделяне не е наличен.</strong><details class="social-card-qa"><summary>Техническа QA проверка</summary><p>Невалидни полета: ${escapeHtml(checked.errors.join(', '))}</p></details></div>`;
     }
     const input=checked.input;
     if(!input.shareEligible) return '';
@@ -115,20 +119,16 @@
     let domain='';
     try { domain=new URL(input.canonicalUrl).host; } catch { domain=''; }
 
-    return `<section class="social-card-preview social-card-preview--${escapeHtml(input.composition)}" data-content-role="${escapeHtml(input.contentRole)}" aria-label="Social Card preview">
-      <h3>Social Card — UX прототип</h3>
-      <div class="facebook-human-text"><strong>Facebook текст над линка — пише се от човека</strong><p>${escapeHtml(input.facebookText)}</p></div>
-      <div class="social-card-role"><strong>Content role / trust:</strong> ${escapeHtml(roleLabels[input.contentRole]||input.contentRole)}</div>
-      <div class="social-card-image-label"><strong>og:image · 1200 × 630</strong><span>${mode==='real'?'approved media':mode==='template'?'тематичен template':'Lom fallback'}</span></div>
+    return `<section class="social-card-preview social-card-preview--${escapeHtml(input.composition)}" data-content-role="${escapeHtml(input.contentRole)}" aria-label="Преглед при споделяне">
+      <h3>Преглед при споделяне</h3>
+      <div class="facebook-human-text"><strong>Текст към споделения линк</strong><p>${escapeHtml(input.facebookText)}</p></div>
       ${imageBlock(input,mode,resolvedTitle)}
-      <div class="social-card-metadata" aria-label="Open Graph metadata preview">
+      <div class="social-card-metadata" aria-label="Преглед на линка">
         <small>${escapeHtml(domain)}</small>
         <strong>${escapeHtml(resolvedTitle)}</strong>
         <p>${escapeHtml(input.description)}</p>
-        <code>${escapeHtml(input.canonicalUrl)}</code>
       </div>
-      <p class="social-card-separation">Facebook teaser, <code>og:image</code>, title/description/domain и QA са отделни повърхности.</p>
-      ${qaSimulation(input,mode)}
+      ${qaSimulation(input,mode,resolvedTitle,domain)}
     </section>`;
   }
 

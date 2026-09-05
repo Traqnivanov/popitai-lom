@@ -180,7 +180,7 @@
       if(submit) submit.disabled=true;
       const kind=form.dataset.formKind;
       const title=kind==='health'?'Изпратено за одобрение.':'Успешно изпратено за преглед.';
-      form.innerHTML=`<div class="notice ok" tabindex="-1" data-success-card><strong>${title}</strong><p>Това е прототип и не е създаден реален запис. Повторен submit от същия lifecycle не е възможен.</p><a class="btn" href="#home">Към началото</a></div>`;
+      form.innerHTML=`<div class="notice ok" tabindex="-1" data-success-card><strong>${title}</strong><p>Това е прототип и не е създаден реален запис. Формата вече е изпратена и не може да бъде изпратена повторно.</p><a class="btn" href="#home">Към началото</a></div>`;
       form.querySelector('[data-success-card]')?.focus();
     }
   });
