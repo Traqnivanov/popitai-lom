@@ -86,6 +86,7 @@
       rows:Object.freeze(spec.rows||[]),
       actions:Object.freeze(spec.actions||{}),
       special:spec.special||'',
+      qaNotes:Object.freeze(spec.qaNotes||[]),
       addContext:addContext?Object.freeze({...addContext}):null,
       addUrl,
       social:social({...spec,id,contentType,title:spec.title??spec.heading??''})
@@ -105,7 +106,8 @@
     'listing-catering':record({
       id:'listing-catering',contentType:'listing',title:'Кетъринг в Лом',
       pageTitle:'Кетъринг — примерен резултат',heading:'Кетъринг в Лом',
-      body:'Примерна услуга, която пази exact discovery „Кетъринг“, докато compatibility adapter показва текущата canonical подкатегория.',
+      body:'Кетъринг за семейни тържества, фирмени събития и други поводи в Лом и региона.',
+      qaNotes:['Избраният контекст „Кетъринг“ се запазва по пътя, а compatibility mapping-ът остава отделна техническа проверка.'],
       category:'Услуги',discovery:'Кетъринг',visualTheme:'Услуги · Кетъринг',icon:'services',accent:'gold',
       rows:[['Категория','Услуги'],['Избран контекст','Кетъринг'],['Canonical подкатегория','Фото, видео и събитийни услуги'],['Район','Лом']],
       actions:{phone:true,share:true,report:true},
@@ -113,8 +115,9 @@
     }),
     'listing-cleaning':record({
       id:'listing-cleaning',contentType:'listing',title:'',
-      pageTitle:'Почистване — title fallback QA',heading:'',
-      body:'Този запис умишлено няма собствено заглавие. Реалният render route трябва да покаже „Почистване в Лом“ и в detail, и в Social Card.',
+      pageTitle:'Почистване — примерен резултат',heading:'',
+      body:'Почистване на домове и малки обекти в Лом и региона.',
+      qaNotes:['Записът е без собствено title, за да се проверява fallback заглавието „Почистване в Лом“ в detail и Social Card.'],
       category:'Услуги',discovery:'Почистване',visualTheme:'Услуги · Почистване',icon:'services',accent:'teal',
       rows:[['Категория','Услуги'],['Избран контекст','Почистване'],['Район','Лом']],
       actions:{share:true},
@@ -123,7 +126,8 @@
     'listing-work':record({
       id:'listing-work',contentType:'listing',title:'Работа — строителство и техници в Лом',
       pageTitle:'Работа — примерен резултат',heading:'Работа — строителство и техници в Лом',
-      body:'Примерната обява пази избраната работна област до detail и формата.',
+      body:'Обява за работа в строителството и техническите дейности в Лом с ясно посочена област и основни условия.',
+      qaNotes:['Избраната работна област се запазва до detail и формата.'],
       category:'Работа',discovery:'Строителство, ремонти и техници',visualTheme:'Работа · строителство',icon:'services',accent:'blue',
       rows:[['Категория','Работа'],['Област','Строителство, ремонти и техници'],['Тип','Предлага работа']],
       actions:{share:true,report:true},
@@ -132,7 +136,8 @@
     'listing-property':record({
       id:'listing-property',contentType:'listing',title:'Продава се апартамент в Лом',
       pageTitle:'Имоти — примерен резултат',heading:'Продава се апартамент в Лом',
-      body:'Намерението и видът имот се запазват до detail и contextual Add.',
+      body:'Обява за продажба на апартамент в Лом с основна информация за имота и условията.',
+      qaNotes:['Намерението и видът имот се запазват до detail и contextual Add.'],
       category:'Имоти',discovery:'Апартамент',visualTheme:'Имоти · Апартамент',icon:'services',accent:'blue',
       rows:[['Категория','Имоти'],['Намерение','Продава имот'],['Вид имот','Апартамент']],
       actions:{share:true,report:true},
@@ -141,7 +146,8 @@
     'listing-auto':record({
       id:'listing-auto',contentType:'listing',title:'Автомобили и джипове в Лом',
       pageTitle:'Автомобили — примерен резултат',heading:'Автомобили и джипове в Лом',
-      body:'Точният discovery избор остава видим до detail и формата.',
+      body:'Обява за автомобил или джип в Лом с основни данни за превозното средство и състоянието му.',
+      qaNotes:['Точният discovery избор остава видим до detail и формата.'],
       category:'Автомобили и МПС',discovery:'Автомобили и джипове',visualTheme:'Автомобили · МПС',icon:'cars',accent:'blue',
       rows:[['Категория','Автомобили и МПС'],['Избран контекст','Автомобили и джипове']],
       actions:{share:true,report:true},
@@ -150,7 +156,8 @@
     'listing-animal':record({
       id:'listing-animal',contentType:'listing',title:'Животно търси дом в Лом',
       pageTitle:'Животни — примерен резултат',heading:'Животно търси дом в Лом',
-      body:'Discovery „Осиновяване / търси дом“ остава видим, без да се представя като нова persisted подкатегория.',
+      body:'Обява за животно, което търси дом в Лом, с най-важната информация за осиновяване.',
+      qaNotes:['Discovery „Осиновяване / търси дом“ остава видим, без да се представя като нова persisted подкатегория.'],
       category:'Животни',discovery:'Осиновяване / търси дом',visualTheme:'Животни · Осиновяване',icon:'animals',accent:'green',
       rows:[['Категория','Животни'],['Избран контекст','Осиновяване / търси дом'],['Suggested тип','Дава']],
       actions:{share:true,report:true},
@@ -178,7 +185,8 @@
     'health-doctor':record({
       id:'health-doctor',contentType:'health',title:'Примерен лекар — специалист в Лом',
       pageTitle:'Здравен профил — пример',heading:'Примерен лекар — специалист в Лом',
-      body:'Production submission contract позволява лекар/медицинска практика, стоматолог/дентална практика или ветеринар/кабинет. Общ backend тип „здравна услуга“ не се обещава.',
+      body:'Профил на лекар специалист в Лом с основна специалност, контакт и местна информация.',
+      qaNotes:['Submission contract-ът поддържа лекар/медицинска практика, стоматолог/дентална практика и ветеринар/кабинет; по-широката „здравна услуга“ остава отделна OPEN тема.'],
       category:'Здраве и лекари',discovery:'Специалисти',visualTheme:'Здраве · Специалист',icon:'health',accent:'teal',
       rows:[['Тип','Лекар / медицинска практика'],['Специалност','Примерна специалност'],['Район','Лом']],
       actions:{phone:true,correction:true,share:true},
