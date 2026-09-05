@@ -92,6 +92,16 @@
     'Намерени':'Търси'
   });
 
+  const goodsCategoryByDiscovery = Object.freeze({
+    'Електроника и телефони':'Електроника',
+    'Дом и градина':'Дом и градина',
+    'Дрехи, обувки и аксесоари':'Дрехи и обувки',
+    'Деца и бебета':'Деца и бебета',
+    'Спорт, хоби и книги':'Спорт и хоби',
+    'Инструменти и оборудване':'Дом и градина',
+    'Друго':'Друго'
+  });
+
   const shopTagsByCategory = Object.freeze({
     'Хранителни': Object.freeze(['Хранителни стоки','Месо и месни продукти','Млечни продукти','Плодове и зеленчуци','Напитки','Готова храна']),
     'Строителни': Object.freeze(['Строителни материали','Железария и метали','Бои и покрития','Плочки и настилки','Санитария и ВиК','Инструменти и машини']),
@@ -102,7 +112,6 @@
   });
 
   const shopTags = Object.freeze(Array.from(new Set(Object.values(shopTagsByCategory).flat())));
-
   const shopLegacyAliases = Object.freeze({
     'Месо':'Месо и месни продукти','Месни продукти':'Месо и месни продукти','Месо и сирена':'Месо и месни продукти',
     'Сирене':'Млечни продукти','Кашкавал':'Млечни продукти','Кисело мляко':'Млечни продукти',
@@ -142,11 +151,58 @@
     return {category, subcategory:'', listing_type:type||''};
   }
 
+  function listingAddUrl({category='', subcategory='', type='', discovery=''}={}) {
+    const q=new URLSearchParams();
+    if(category) q.set('category',category);
+    if(category==='Услуги' && subcategory) q.set('subcategory',subcategory);
+    if(type) q.set('type',type);
+    if(discovery) q.set('discovery',discovery);
+    return `#add/listing${q.size?`?${q}`:''}`;
+  }
+
+  function contextualAddUrl({context='', group='', owner='Listings', type=''}={}) {
+    if(owner==='Shops') return `#add/shop${group?`?category=${encodeURIComponent(group)}`:''}`;
+    if(owner==='Health/Info') return `#add/health${group?`?type=${encodeURIComponent(group)}`:''}`;
+    if(context==='Заведения') return '#add/firm?category=Заведения';
+    if(owner==='Firms') return '#add/firm';
+
+    if(context==='Услуги') {
+      return listingAddUrl({
+        category:'Услуги',
+        subcategory:serviceCanonical(group),
+        type,
+        discovery:group
+      });
+    }
+    if(context==='Работа') {
+      return listingAddUrl({category:'Работа',type:type||'Предлага работа',discovery:group});
+    }
+    if(context==='Имоти') {
+      return listingAddUrl({category:'Имоти',type:type||'Продава имот',discovery:group});
+    }
+    if(context==='Купува и продава') {
+      return listingAddUrl({category:goodsCategoryByDiscovery[group]||'Друго',discovery:group});
+    }
+    if(context==='Автомобили') {
+      if(group==='Автомобилни услуги') return '#uslugi';
+      return listingAddUrl({category:'Автомобили и МПС',discovery:group});
+    }
+    if(context==='Животни') {
+      return listingAddUrl({
+        category:'Животни',
+        type:animalSuggestedTypeByDiscovery[group]||'',
+        discovery:group
+      });
+    }
+    return listingAddUrl({category:context,discovery:group,type});
+  }
+
   window.PopitaiStage2Contracts = Object.freeze({
     serviceCanonicalMap,
     activeServiceCanonical,
     discoveryGroups,
     animalSuggestedTypeByDiscovery,
+    goodsCategoryByDiscovery,
     shopTags,
     shopTagsByCategory,
     shopLegacyAliases,
@@ -154,6 +210,9 @@
     listingTypes,
     serviceCanonical,
     shopTagsForCategory,
-    compatibilityAdapter
+    compatibilityAdapter,
+    listingAddUrl,
+    contextualAddUrl,
+    serviceMappingCoverage:Object.keys(serviceCanonicalMap).filter(key=>key!=='Авточасти').length
   });
 })();

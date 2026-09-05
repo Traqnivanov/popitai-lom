@@ -1,230 +1,194 @@
-# Попитай.Лом — Content-complete IA prototype
+# Попитай.Лом — Stage 2 remediation
 
-Статус: **ИЗОЛИРАН ПРОТОТИП / STAGE 2 ACCEPTANCE FAIL / SOCIAL CARD COMPOSER QA PASS / PRODUCTION FACEBOOK-OG DELIVERY OPEN / OWNER ACCEPTANCE PENDING / STAGE 3 BLOCKED / НЕ Е PRODUCTION / НЕ ЗАПИСВА В SUPABASE**
+Статус: **REMEDIATION IMPLEMENTED / TECHNICAL QA REPORTED / OWNER ACCEPTANCE PENDING / НЕ Е PRODUCTION**
 
-Stage 2 safety branch: `prototype/content-complete-ia-20260904-stage2-safety`.
+Branch: `prototype/content-complete-ia-20260904-stage2-safety`
 
-Канонична база за този prototype pass: `POPITAI_LOM_MASTER_CURRENT.md`, приложимите `PROJECT_RULES_*`, последните изрични решения на собственика и съдържателните правила от `POPITAI_LOM_MASTER_CONTENT_STRATEGY_V3_2026-09-03.md`, консултиран като източник, но **не добавян в този prototype-only diff**.
+Remediation base: `b5d748fac93a70bd57adf22159a30defe5c3de50`
 
-## Критична backend / LOCKED граница
+Isolation owner checkpoint: `0b1492386b68b7f918685828c9fdd64079f24677`
 
-Предишно общо „одобрявам“ не се счита за LOCKED одобрение за нови persisted подкатегории.
+Този pass поправя потвърдените Stage 2 safety prototype дефекти. Не променя production файлове, Supabase, schema, migrations, RLS, RPC, роли, ownership, moderation, лимити, LOCKED договори или основната IA. Stage 3 не е започнат.
 
-Действащият договор за Stage 2 остава:
+## 1. Ownership след remediation
 
-- persisted контролирана `subcategory` има само при `Обяви → Услуги`;
-- `Работа` пази `category=Работа` и съществуващите `Предлага работа` / `Търси работа`; професионалните групи са discovery контекст;
-- `Имоти` пази `category=Имоти` и съществуващите специални listing types; видът имот е discovery контекст;
-- `Автомобили и МПС` не получава нов persisted taxonomy; автомобилните услуги остават `Услуги` + съществуваща Service подкатегория;
-- `Животни` пази `category=Животни`; осиновяване/изгубено/намерено са discovery контекст;
-- `Авточасти` остава част от съществуващия Service contract.
+- `prototype-social-card-composer.js` е единственият Social Card renderer.
+- `prototype-remediation.css` е единственият Social Card CSS owner.
+- Старите Social Preview renderer/CSS функции и runtime overwrite през `window.socialPreview` са премахнати.
+- `PopitaiStage2Contracts.contextualAddUrl()` е единственият owner за contextual Add URL.
+- Discovery дървото остава UX слой; backend compatibility mapping-ът остава отделен contract слой.
+- `58/58` е само coverage на реалните Stage 2 service discovery leaves. `Авточасти` е legacy/canonical helper в mapping object-а и не се брои като 59-и discovery leaf.
 
-### Важно: 58/58 mapping НЕ е end-to-end persistence contract
+## 2. Data-driven Social Card
 
-Прототипът има compatibility mapping за всички service discovery leaves към съществуващи canonical Service стойности. Това доказва **coverage на adapter mapping-а**, но не доказва, че точният discovery leaf се записва и може да бъде възстановен след submit.
+Mock content record-ите са отделени в `prototype-records.js`. Composer-ът не избира сам demo сценарий и не чете route/query параметри за content selection.
 
-Пример:
+Валидираният Social input съдържа:
 
-`Кетъринг → canonical subcategory: Фото, видео и събитийни услуги`
+`contentType`, `title`, `description`, `category`, `discovery`, `visualTheme`, `icon`, `accent`, `mediaAvailable`, `mediaType`, `canonicalUrl`, `location`, `shareEligible`, `facebookText`, `composition`.
 
-При действащия backend договор отделното `Кетъринг` не се persist-ва като собствено поле. След submit записът сам по себе си не съдържа достатъчно информация, за да върне надеждно потребителя обратно към exact leaf `Кетъринг`.
+Detail heading и Social title се получават от един и същ record. При празно title fallback-ът се изчислява от контекста; реалният route пример е `Почистване → Почистване в Лом`.
 
-Това е **OPEN / FAIL / LOCKED граница**. Ако в бъдеще продуктът изисква exact-leaf persistence/reconstruction, трябва отделно LOCKED решение с DB before/after, засегнати записи и форми, migration/RLS/RPC/validation/edit-flow последствия, рискове и rollback.
+Image selection е production-like и не може да бъде подменен от URL параметър:
 
-## Round 2 remediation — запазени решения
+1. `mediaAvailable=true` → approved media slot;
+2. иначе, ако има `visualTheme` → тематичен template;
+3. иначе → Lom fallback.
 
-- при ръчна смяна на Listing категорията несъвместимият discovery context се изчиства и техническият adapter се преизчислява;
-- Публикациите не се описват като задължително кратки;
-- Publication / Shop / Health / Event имат условни eligible/blocked Share prototype states;
-- `normalizeHomeComposition()` е премахнат; Home се изгражда директно от един render owner;
-- Info Lom следва live шестте раздела: Здраве, Институции, Транспорт, Образование и култура, Банки и банкомати, Комунални услуги.
+`shareEligible=false` връща нито Share action, нито Social Card. QA simulation бутоните са отделен disclosure control и само обясняват как би изглеждало друго ниво; не променят действителния selection алгоритъм и не създават медия.
 
-## Social Card Composer — текущ Stage 2 prototype contract
+Facebook teaser текстът остава отделен човешки текст над линка. `canonicalUrl`, домейнът и metadata се подават от record-а, а не са hardcoded в renderer-а.
 
-Social Preview вече се демонстрира чрез един **Social Card Composer**, който работи с контролирани данни на конкретното съдържание, а не гадае тема от свободен текст.
+## 3. Context path
 
-Composer input моделът съдържа:
+Резултатите носят контролиран record/context до detail, Social Card и Add:
 
-- content type;
-- конкретно заглавие;
-- основна категория;
-- точен discovery/subcategory контекст, когато съществува;
-- контролирана визуална тема;
-- наличие на реална одобрена медия;
-- местоположение;
-- public/approved/share-eligible status.
+`source category → results → detail record → social title/category → contextual Add URL/form`.
 
-Това е prototype visual contract, не production schema.
+Покритите критични примери са ВиК, Кетъринг, Работа, Имоти, Автомобили, Животни, Магазин, Health, Статия, Публикация, Събитие и шестте Info Lom раздела.
 
-### Пет общи композиции
+При service leaf exact leaf остава видим discovery context. Compatibility adapter отделно показва какво може да се запише в текущия production договор. При service family се пази поне family context. Не се заявява, че exact leaf persistence/reconstruction е решен.
 
-1. **Обява** — услуги, стоки, работа, имоти, автомобили и животни.
-2. **Профил** — фирма, магазин, заведение и лекар.
-3. **Редакционно съдържание** — Статия и Публикация с различни етикети и продуктови роли.
-4. **Събитие**.
-5. **Обществена информация** — Въпрос и Info Lom с различен trust статус.
+## 4. Forms
 
-Не се създава отделна ръчна картинка за всяка категория.
+Prototype forms имат действителни проверки за:
 
-Категорията/discovery контекстът могат да променят контролирано:
+- required, minlength, maxlength;
+- number/min/max/step;
+- български телефон;
+- checkbox consent и select;
+- focus към първата грешка;
+- `label/for`, `aria-describedby`, `aria-invalid`;
+- file count, размер до 10 MB на файл, JPG/PNG/WebP MIME и zero-byte файл;
+- upload грешка до upload секцията и focus към нея;
+- запазване на останалите въведени стойности;
+- dirty state при избор и премахване на файл;
+- `Подарява` / `Договаряне` / числова цена без противоречиви състояния;
+- Health: поне телефон или адрес, със синхронно изчистване на двете cross-field грешки;
+- success lifecycle и блокиране на повторен submit;
+- dirty protection при hash/link navigation и `beforeunload` за refresh/close.
 
-- SVG пиктограмата;
-- визуалния мотив;
-- акцентния цвят;
-- малкия етикет;
-- конкретното заглавие.
+## 5. Add modal accessibility
 
-## Професионална иконна посока в Social Card Composer
+Modal-ът:
 
-Social Card Composer **не използва emoji**. В него се използва една SVG line-icon посока:
+- запомня точния opener;
+- фокусира първия подходящ контрол;
+- има Tab/Shift+Tab focus trap;
+- се затваря с Escape и backdrop;
+- връща focus към същия opener;
+- поставя background областите в `inert` + `aria-hidden` докато е отворен;
+- заключва и възстановява body scroll;
+- не заобикаля общата dirty navigation protection при hash линкове.
 
-- тъмносин контур;
-- еднаква дебелина на линията;
-- еднакви пропорции;
-- ограничен акцентен цвят;
-- максимум два смислови символа в композиция; текущите примери използват по един.
+## 6. Инфо Лом
 
-Това е **prototype visual direction**, не окончателно одобрение на всеки asset.
+Има шест различими prototype records/routes и не е добавян раздел „Полезни телефони“:
 
-Общата подмяна на emoji/икони в останалия сайт е **отделен visual-system checkpoint след Stage 2**. Тази задача не прави масова подмяна.
+1. Здраве — `info-health`;
+2. Институции — `info-institutions`;
+3. Транспорт — `info-transport`;
+4. Образование и култура — `info-education`;
+5. Банки и банкомати — `info-banks`;
+6. Комунални услуги — `info-utilities`.
 
-## Image hierarchy
+Production Info Lom данните не са променяни.
 
-Composer следва този ред:
+## 7. Health production-contract граница
 
-1. **реална одобрена снимка / лого / корица / афиш** на конкретното съдържание;
-2. при липса — **тематичен брандиран 1200×630 шаблон** според content type + category/discovery;
-3. **панорама на Лом** само като последен общ fallback.
+Read-only проверката на действащия production owner потвърди три submission типа: лекар/медицинска практика (`doctor`), стоматолог/дентална практика (`dentist`) и ветеринар/кабинет (`vet`). Няма отделен backend тип за обща „здравна услуга“ и няма безопасен контролиран „Друго“.
 
-Не се използват измислени лица, stock снимки, фалшива реална медия или pending/неодобрени изображения.
+Затова prototype CTA е коригиран на **„Добави лекар / практика“**. Конкретна услуга се описва в съществуващото поле „Специалност / основна услуга“ и описанието. Няма schema/RLS/RPC промяна.
 
-При `media=real` Stage 2 показва неутрален **slot за реалната одобрена медия**, вместо да измисля asset. Production би трябвало да постави реалната approved media версия.
+## 8. Visual checkpoint — OWNER APPROVAL PENDING
 
-Във всички composer варианти присъства дискретно `Попитай.Лом`.
+`#visual-icons` показва само осемте критични понятия с реални локални **Phosphor Icons — Duotone** SVG файлове:
 
-## Видим текст вътре в 1200×630 изображението
+Услуги, Ремонти, Животни, Автомобили, Здраве, Комунални услуги, Статии, Публикации.
 
-В самото изображение има:
+SVG geometry идва от официалния Phosphor пакет; зададен е тъмносин основен цвят `#0b2f56`. Показани са увеличен размер и реален малък card размер. Файловете са MIT лицензирани; лицензът е запазен в `icons/LICENSE-PHOSPHOR.txt`.
 
-- малък етикет за вида;
-- голямо конкретно заглавие или контролиран fallback;
-- тематична SVG пиктограма/мотив;
-- малко `Попитай.Лом`.
+Това е ограничен checkpoint. Няма масова icon подмяна и тези икони не се обявяват за визуално одобрена финална система преди owner approval.
 
-Заглавието е ограничено до максимум две четими линии.
+## 9. Technical QA evidence matrix
 
-В изображението не се поставят телефон, работно време, цена, дълго описание, URL или инструкции.
+### A. Ownership — PASS
 
-## Заглавие и fallback
+- един Social Card renderer;
+- един Social Card CSS owner;
+- един contextual Add URL owner;
+- няма `window.socialPreview` overwrite или legacy Social renderer/CSS selectors.
 
-Заглавието не се измисля от генератора. Prototype примерите използват контролирани данни, които симулират правилния source contract:
+### B. End-to-end prototype paths — PASS за prototype route/context; persistence boundary остава OPEN
 
-- Статия/Публикация → редакционно заглавие;
-- Обява/услуга → заглавие на обявата;
-- Фирма/магазин/заведение → име на профила;
-- Лекар → публично допустимо име/роля + специалност;
-- Info Lom → официално име на записа;
-- Събитие → име на събитието;
-- Въпрос → самият въпрос.
+Проверени са контролирани records/routes за: ВиК, Кетъринг, Работа, Имоти, Автомобили, Животни, Магазин, Health, Статия, Публикация, Събитие и шестте Info Lom раздела.
 
-Ако няма подходящо заглавие, Composer използва контролиран fallback от category/discovery контекста, например `Почистване → Почистване в Лом`.
+### C. Share/media states — PASS за prototype selection
 
-Не се поддържа огромен ръчен списък със заглавия за всички бъдещи публикации.
+- eligible + approved media;
+- eligible + template;
+- eligible + Lom fallback;
+- blocked;
+- route/query параметър не може да създаде несъществуваща approved media.
 
-## Facebook текст, og:image и metadata са различни слоеве
+### D. Forms — PASS за prototype validation
 
-Prototype демонстрацията разделя четири различни неща:
+Проверени са required/field validation, file count/size/MIME/empty file, conflicting price states, Health cross-field state, dirty protection, success lifecycle и repeat-submit blocking.
 
-1. **Примерен Facebook текст — незадължителен.** Той е пример какво човекът може да напише над link preview; Попитай.Лом не го контролира автоматично.
-2. **`og:image` — 1200×630 asset.**
-3. **Metadata блок:** domain/site, title и description — отделно от самото изображение.
-4. **QA обяснения:** отделен disclosure извън изображението и metadata блока.
+### E. Accessibility — PASS за remediation DOM/keyboard contract
 
-Официалното заглавие може да се повтори в `og:image` и metadata; teaser/Facebook текстът има различна роля и не повтаря metadata description механично.
+Headless Chromium DOM/keyboard QA върху inlined remediation bundle потвърди initial focus, focus trap, Escape, backdrop, exact focus return, inert background, body-scroll restore, field-error focus и 390 px changed-layer без horizontal overflow. Базовият `styles.css` не е променян от този remediation pass.
 
-## Задължителни prototype примери
+### F. Isolation — трябва да се потвърди от final Git compare след commit
 
-### Един и същ Listing composition, различен контекст
+Final compare трябва да показва само `prototype-final-ia/`. Временните локални QA harness файлове не са част от commit-а.
 
-- ВиК — `#detail/listing?share=eligible&demo=vik`
-- Кетъринг — `#detail/listing?share=eligible&demo=catering`
-- Работа — `#detail/listing?share=eligible&demo=work`
-- Имоти — `#detail/listing?share=eligible&demo=property`
-- Автомобили — `#detail/listing?share=eligible&demo=auto`
+## 10. QA метод
 
-Тези пет примера използват един и същ Listing composition, но сменят контролирано тема, SVG, accent, label и заглавие.
+Доказателствата не се основават на брой тестове. Използвани са:
 
-### Допълнителни примери
+- `node --check` за всички променени JS модули;
+- VM contract/render assertions върху реалните prototype helpers/records/routes;
+- static ownership/legacy-symbol scan;
+- headless Chromium DOM/keyboard assertions върху действителните променени HTML/JS/CSS файлове.
 
-- лекар без снимка — `#detail/health?share=eligible&media=none`
-- фирма с място за реално лого/снимка — `#detail/firm?share=eligible&media=real`
-- магазин — `#detail/shop?share=eligible&media=none`
-- Статия без корица — **Как да се пенсираш в Лом** — `#detail/article?share=eligible&demo=pension&media=none`
-- Публикация с real-media slot — `#detail/publication?share=eligible&media=real`
-- Публикация без медия — `#detail/publication?share=eligible&media=none`
-- Събитие с approved-poster slot — `#detail/event?share=eligible&media=real`
-- Събитие без афиш — `#detail/event?share=eligible&media=none`
-- Въпрос — `#detail/question?share=eligible`
-- Info Lom / Община Лом — `#detail/info?share=eligible&demo=municipality`
-- общ Lom fallback — `#detail/info?share=eligible&demo=municipality&image=lom`
+## 11. Критични prototype routes
 
-## Social Card Composer QA — текущ резултат
+Отвори `prototype-final-ia/index.html` от този branch и добави съответния hash:
 
-Временен same-origin browser harness беше използван само за QA и след теста е изтрит.
+- ВиК: `#results?context=Услуги&group=ВиК&detail=listing&owner=Listings`
+- Кетъринг: `#results?context=Услуги&group=Кетъринг&detail=listing&owner=Listings`
+- Работа: `#results?context=Работа&group=Строителство%2C%20ремонти%20и%20техници&detail=listing&owner=Listings&type=Предлага%20работа`
+- Имоти: `#results?context=Имоти&group=Апартамент&detail=listing&owner=Listings&type=Продава%20имот`
+- Автомобили: `#results?context=Автомобили&group=Автомобили%20и%20джипове&detail=listing&owner=Listings`
+- Животни: `#results?context=Животни&group=Осиновяване%20%2F%20търси%20дом&detail=listing&owner=Listings`
+- Магазин: `#results?context=Магазини&group=Хранителни&detail=firm&owner=Shops`
+- Health: `#results?context=Здраве%20и%20лекари&group=Специалисти&detail=health&owner=Health%2FInfo`
+- Статия: `#detail/article?record=article-guide`
+- Публикация: `#detail/publication?record=publication-update`
+- Събитие: `#detail/event?record=event-local`
+- Почистване title fallback: `#detail/listing?record=listing-cleaning`
+- blocked Share: `#detail/publication?record=publication-blocked`
+- approved-media selection: `#detail/firm?record=firm-repairs`
+- template selection: `#detail/listing?record=listing-vik`
+- Lom fallback: `#detail/info?record=info-utilities`
+- Info Здраве: `#detail/info?record=info-health`
+- Info Институции: `#detail/info?record=info-institutions`
+- Info Транспорт: `#detail/info?record=info-transport`
+- Info Образование и култура: `#detail/info?record=info-education`
+- Info Банки и банкомати: `#detail/info?record=info-banks`
+- Info Комунални услуги: `#detail/info?record=info-utilities`
+- Icon checkpoint: `#visual-icons`
 
-QA не използва старото `27/27` като доказателство за category coverage. Вместо това са проверени **16 различни prototype случая**, включително пет различни listing категории/заглавия, real-media slots, template fallback-и и Lom panorama fallback.
+## 12. OPEN / FAIL / LOCKED — не са обявени за решени
 
-| QA критерий | Статус | Доказателство |
-|---|---|---|
-| Composition/layout coverage | **PASS** | 5/5 общи композиции са реално рендерирани |
-| Content-type coverage | **PASS** | 9 content types са покрити |
-| Category-aware Listing coverage | **PASS** | ВиК, Кетъринг, Работа, Имоти, Автомобили имат 5 различни theme/accent/title/SVG комбинации |
-| Title-source coverage | **PASS** | конкретните примерни titles идват от контролирания scenario data contract |
-| Title fallback coverage | **PASS** | празно title + discovery `Почистване` → `Почистване в Лом` |
-| Professional SVG consistency | **PASS** | една SVG line-icon система; еднакъв stroke width |
-| Emoji в Social Card Composer | **PASS — няма** | browser QA не намира emoji в composer DOM |
-| Real-media / template / Lom hierarchy | **PASS** | real slots без fake URL, template states и реалният Lom panorama fallback са проверени |
-| Mobile 390px | **PASS** | 16 случая без horizontal overflow |
-| Заглавие максимум 2 линии | **PASS** | всички 16 рендера са ≤2.15 изчислени линии |
-| Hardcoded несъответстваща категория | **PASS** | expected title + expected label + expected composition съвпадат за всеки тест |
-| Измислени assets | **PASS — няма** | Composer не поставя fake `<img>` content asset; real mode е placeholder slot |
-| `og:image` / metadata / QA separation | **PASS** | трите слоя са различни DOM зони |
-| Facebook текстът е отделен | **PASS** | маркиран е като незадължителен и неконтролиран от сайта; teaser ≠ metadata description |
-| Branding | **PASS** | `Попитай.Лом` е вътре във всеки composer image state |
+- exact service leaf persistence/reconstruction;
+- production Facebook/Open Graph crawlable delivery;
+- реално генериране и съхраняване на 1200×630 изображения;
+- избор на Edge Function / Worker / Storage / backend architecture;
+- production taxonomy migration;
+- Content Master V3 official docs-only checkpoint;
+- обща смяна на иконите в production;
+- Stage 3.
 
-## Production архитектурна посока — само посока, не implementation approval
-
-След като конкретна версия на съдържанието стане **approved / public / share-eligible**, бъдещата production система трябва автоматично да създаде и запази 1200×630 social card от одобрените данни.
-
-При одобрена редакция трябва да се създаде нова social-card версия. Pending, hidden или non-public съдържание не трябва да получава публична share карта.
-
-Това засега е само prototype contract.
-
-**Не е избрана и не е разрешена** конкретна production реализация чрез:
-
-- Supabase Edge Function;
-- Worker;
-- Storage промени;
-- нови schema полета;
-- backend generation;
-- production Open Graph delivery.
-
-Stage 2 **не доказва**, че Facebook crawler получава правилните данни. JavaScript визуализацията е само UX/prototype доказателство.
-
-## Оставащи OPEN граници
-
-- **Exact service leaf persistence/reconstruction:** OPEN / FAIL / LOCKED.
-- **Production Facebook/Open Graph crawlable delivery:** OPEN.
-- **Content Master V3 official repo checkpoint:** OPEN / REQUIRED docs-only checkpoint.
-- **Обща подмяна на emoji/иконите в целия интерфейс:** отделен visual-system checkpoint след Stage 2.
-- **Stage 3:** BLOCKED.
-
-## Задължителен следващ docs-only checkpoint
-
-`POPITAI_LOM_MASTER_CONTENT_STRATEGY_V3_2026-09-03.md` трябва да бъде качен официално в repo в отделен **docs-only checkpoint**. Това не се прави вътре в prototype-only diff и не отключва Stage 3.
-
-## Production boundary
-
-**Stage 2 остава FAIL. Owner acceptance остава pending. Stage 3 остава BLOCKED. Social Preview production integration остава OPEN.**
-
-Този branch не разрешава merge/deploy към `main`, Supabase/schema/RLS/RPC промени, taxonomy промени или промяна на protected Firms/Listings/Masters semantics.
+Owner acceptance остава pending. Този README не превръща Stage 2 в приет или production-ready.

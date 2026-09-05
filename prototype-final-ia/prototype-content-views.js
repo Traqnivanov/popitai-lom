@@ -1,131 +1,107 @@
 'use strict';
 
-function info(){
-  const items=[['⚕️','Здраве'],['🏛️','Институции'],['🚌','Транспорт'],['🎓','Образование и култура'],['🏦','Банки и банкомати'],['⚡','Комунални услуги']];
-  return `<div class="page">${pageHead('Инфо Лом','Проверена местна информация с източник и дата на последна проверка.')}<div class="shell"><div class="grid cols-3">${items.map(([icon,title])=>`<a class="info-card" href="#detail/info"><h3>${icon} ${title}</h3><p>Контакти, работно време, услуги, източник и последна проверка.</p></a>`).join('')}</div></div></div>`;
-}
-function firms(query){return `<div class="page">${pageHead('Фирми','Постоянни местни профили. Фирмата не е обява.')}<div class="shell"><div class="page-tools"><a class="btn primary" href="#add/firm">＋ Добави фирма</a></div><div class="section-head" style="margin-top:24px"><div><h2>Фирмени профили</h2><p>Услуги, район и директни контакти.</p></div></div>${stateContent(query,`<div class="result-list">${demoRow('Фирма за ремонти — демо','Постоянен профил с услуги, район и контакти.','Фирма','#detail/firm','Майстори')}${demoRow('Местен сервиз — демо','Постоянен фирмен профил, който може да се открива и през „Автомобили“.','Фирма','#detail/firm','Автомобили')}</div>`)}</div></div>`;}
-function current(){return `<div class="page">${pageHead('Актуално','Местни публикации и предстоящи събития на едно място.')}<div class="shell"><div class="grid cols-2"><a class="content-card" href="#detail/publication"><span class="demo-label">ПРИМЕР</span><h3><span class="badge gold">Публикация</span> Местна актуализация</h3><p>Публикацията има собствена причина. Дължината следва конкретната задача, а не фиксирано правило „кратко“.</p><small class="card-link">Прочети →</small></a><a class="content-card" href="#detail/event"><span class="demo-label">ПРИМЕР</span><h3><span class="badge green">Събитие</span> Предстоящо местно събитие</h3><p>Дата, час и място са водещи още преди отваряне.</p><small class="card-link">Виж събитието →</small></a></div></div></div>`;}
-function articles(){return `<div class="page">${pageHead('Статии','Пълни практични ръководства с местната информация на първо място.')}<div class="shell"><div class="result-list">${demoRow('Как да решиш конкретна местна задача','Пълно ръководство: какво се прави в Лом, подготовка, изключения и проверени източници.','Статия','#detail/article','Ръководство')}${demoRow('Практично ръководство за местна услуга','Дългосрочно полезно съдържание с роля на пълно ръководство, различна от ролята на Публикация.','Статия','#detail/article','Местната информация първо')}</div></div></div>`;}
-function questions(){return `<div class="page">${pageHead('Въпроси','Помощ от общността, когато няма готов отговор.')}<div class="shell"><div class="page-tools"><a class="btn primary" href="#add/question">＋ Задай въпрос</a></div><div class="result-list" style="margin-top:18px">${demoRow('Къде мога да намеря…?','Примерен въпрос. Отговорът от общността не се представя като проверена информация.','Въпрос','#detail/question','Общност')}</div></div></div>`;}
+(() => {
+  const records=window.PopitaiPrototypeRecords;
 
-function listingAddWithDiscovery(category='',subcategory='',type='',discovery=''){
-  const q=new URLSearchParams();if(category) q.set('category',category);if(subcategory) q.set('subcategory',subcategory);if(type) q.set('type',type);if(discovery) q.set('discovery',discovery);return `#add/listing${q.size?`?${q}`:''}`;
-}
-function stage2AddTarget(context,group,owner,type=''){
-  if(owner==='Shops') return `#add/shop?category=${encodeURIComponent(group)}`;
-  if(owner==='Health/Info') return `#add/health?type=${encodeURIComponent(group)}`;
-  if(context==='Заведения') return '#add/firm?category=Заведения';
-  if(owner==='Firms') return '#add/firm';
-  if(context==='Услуги') return listingAddWithDiscovery('Услуги',stage2?.serviceCanonical(group)||'',type,group);
-  if(context==='Работа') return listingAddWithDiscovery('Работа','',type||'Предлага работа',group);
-  if(context==='Имоти') return listingAddWithDiscovery('Имоти','',type||'Продава имот',group);
-  if(context==='Купува и продава'){const [category]=goodsPrefillMap[group]||['Друго'];return listingAddWithDiscovery(category,'','',group);}
-  if(context==='Автомобили'){if(group==='Автомобилни услуги') return '#uslugi';return listingAddWithDiscovery('Автомобили и МПС','','',group);}
-  if(context==='Животни'){const suggested=stage2?.animalSuggestedTypeByDiscovery?.[group]||'';return listingAddWithDiscovery('Животни','',suggested,group);}
-  return listingAddWithDiscovery(context,'','',group);
-}
+  function info(){
+    const items=[
+      ['⚕️','Здраве','info-health'],
+      ['🏛️','Институции','info-institutions'],
+      ['🚌','Транспорт','info-transport'],
+      ['🎓','Образование и култура','info-education'],
+      ['🏦','Банки и банкомати','info-banks'],
+      ['⚡','Комунални услуги','info-utilities']
+    ];
+    return `<div class="page">${pageHead('Инфо Лом','Проверена местна информация с източник и дата на последна проверка.')}<div class="shell"><div class="grid cols-3">${items.map(([icon,title,id])=>`<a class="info-card" href="#detail/info?record=${id}"><h3>${icon} ${title}</h3><p>Отделен prototype route и отделен Social Card context.</p></a>`).join('')}</div></div></div>`;
+  }
 
-function shareMenu(){return `<details class="share-menu"><summary class="btn soft">Сподели</summary><div class="share-options"><button class="btn" type="button" data-demo-share="native">Споделяне от телефона</button><button class="btn" type="button" data-demo-share="facebook">Facebook</button><button class="btn" type="button" data-demo-share="copy">Копирай линк</button><p class="share-demo-message help" aria-live="polite"></p></div></details>`;}
-function correctionButton(label='Сигнализирай грешка'){return `<button class="btn soft" type="button" data-demo-correction>${esc(label)}</button>`;}
-function reportButton(){return `<button class="btn soft" type="button" data-demo-report>Подай сигнал</button>`;}
-function actionBar(c){
-  const a=c.actions||{},parts=[];
-  if(a.phone) parts.push('<button class="btn primary" type="button" data-demo-contact>Обади се</button>');
-  if(a.inquiry) parts.push('<button class="btn" type="button" data-demo-inquiry>Запитване</button>');
-  if(a.site) parts.push('<button class="btn soft" type="button" data-demo-site>Сайт</button>');
-  if(a.answer) parts.push('<button class="btn primary" type="button" data-demo-answer>Добави отговор</button>');
-  if(a.official) parts.push('<button class="btn" type="button" data-demo-official>Официална страница</button>');
-  if(a.relatedHref&&a.relatedLabel) parts.push(`<a class="btn primary" href="${esc(a.relatedHref)}">${esc(a.relatedLabel)}</a>`);
-  if(a.share) parts.push(shareMenu());
-  if(a.report) parts.push(reportButton());
-  if(a.correction) parts.push(correctionButton(a.correctionLabel||'Сигнализирай грешка'));
-  return parts.length?`<div class="detail-action">${parts.join('')}<p class="contact-demo-message" aria-live="polite"></p><p class="action-demo-message help" aria-live="polite"></p></div>`:'';
-}
+  function firms(query){
+    const row=demoRow('Фирма за ремонти — демо','Постоянен профил с услуги, район и контакти.','Фирма','#detail/firm?record=firm-repairs','Майстори');
+    return `<div class="page">${pageHead('Фирми','Постоянни местни профили. Фирмата не е обява.')}<div class="shell"><div class="page-tools"><a class="btn primary" href="#add/firm">＋ Добави фирма</a></div><div class="section-head" style="margin-top:24px"><div><h2>Фирмени профили</h2><p>Услуги, район и директни контакти.</p></div></div>${stateContent(query,`<div class="result-list">${row}</div>`)}</div></div>`;
+  }
 
-const socialImageConfigs={
-  listing:{label:'Обява',theme:'Услуги · ВиК',real:'първата одобрена снимка на обявата'},
-  firm:{label:'Фирма',theme:'Майстори и ремонти · Лом',real:'одобрено лого или основна снимка на фирмата'},
-  shop:{label:'Магазин',theme:'Хранителни · Лом',real:'одобрено лого или снимка на магазина'},
-  health:{label:'Здраве',theme:'Лекар · специалност · Лом',real:'одобрена снимка на практика/кабинет или допустимо лого, без измислено лице'},
-  event:{label:'Събитие',theme:'Дата · място · Лом',real:'одобрен афиш или основна снимка на събитието'},
-  article:{label:'Статия',theme:'Практично ръководство за Лом',real:'одобрена основна илюстрация/корица'},
-  publication:{label:'Публикация',theme:'Местна актуализация',real:'одобрена собствена снимка/илюстрация на публикацията'},
-  question:{label:'Въпрос',theme:'Общност · Лом',real:'одобрена снимка само когато е релевантна към самия въпрос'},
-  info:{label:'Инфо Лом',theme:'Проверена местна информация',real:'одобрена снимка или лого на конкретния запис, когато е приложимо'}
-};
-function socialImageMode(query){const value=query?.get('image')||'template';return ['real','template','lom'].includes(value)?value:'template';}
-function socialOgImage(kind,mode){
-  const cfg=socialImageConfigs[kind]||socialImageConfigs.listing;
-  if(mode==='real') return `<div class="og-image-frame og-image-real" data-image-level="real" role="img" aria-label="Демонстрация на стъпка 1 — реална одобрена медия"><div class="og-real-copy"><span class="og-kicker">СТЪПКА 1 · ПРИОРИТЕТ</span><strong>Реална одобрена медия</strong><p>${esc(cfg.real)}.</p><small>Прототипът умишлено не измисля снимка или лице.</small></div></div>`;
-  if(mode==='lom') return `<div class="og-image-frame og-image-lom" data-image-level="lom" role="img" aria-label="Стъпка 3 — общ panorama fallback за Лом"><div class="og-template-copy"><span class="og-kicker">${esc(cfg.label)}</span><strong>${esc(cfg.theme)}</strong><small>Общ fallback само когато няма реална медия и тематичен шаблон не е подходящ</small></div><span class="og-brand">Попитай.Лом</span></div>`;
-  return `<div class="og-image-frame og-image-template" data-image-level="template" data-kind="${esc(kind)}" role="img" aria-label="Стъпка 2 — тематичен брандиран social шаблон"><div class="og-template-copy"><span class="og-kicker">${esc(cfg.label)}</span><strong>${esc(cfg.theme)}</strong><small>Тематичен fallback според типа и категорията</small></div><span class="og-brand">Попитай.Лом</span></div>`;
-}
-function socialImageQa(kind,mode){
-  const cfg=socialImageConfigs[kind]||socialImageConfigs.listing;
-  const examples=[['listing','Обява'],['firm','Фирма'],['shop','Магазин'],['health','Лекар'],['event','Събитие'],['article','Статия'],['publication','Публикация'],['question','Въпрос'],['info','Инфо Лом']];
-  return `<details class="qa-social-note"><summary>Image hierarchy / QA</summary><ol class="image-hierarchy"><li><strong>1. Реална одобрена медия</strong> — ${esc(cfg.real)}.</li><li><strong>2. Тематичен брандиран шаблон</strong> — според content type и категория; всеки шаблон носи дискретно „Попитай.Лом“.</li><li><strong>3. Панорама на Лом</strong> — последен общ fallback.</li></ol><div class="page-tools"><a class="btn soft ${mode==='real'?'active-demo':''}" href="#detail/${esc(kind)}?share=eligible&image=real">Стъпка 1</a><a class="btn soft ${mode==='template'?'active-demo':''}" href="#detail/${esc(kind)}?share=eligible&image=template">Стъпка 2</a><a class="btn soft ${mode==='lom'?'active-demo':''}" href="#detail/${esc(kind)}?share=eligible&image=lom">Стъпка 3</a></div><p><strong>Важно:</strong> режим „Стъпка 1“ е неутрална демонстрация на правилото, не фалшива снимка. Няма измислени лица или stock изображения.</p><p><strong>Production граница:</strong> този прототип доказва UX и визуалното правило. Не доказва, че Facebook crawler ще получи тези данни. Реалният публичен URL трябва отделно да бъде проверен за crawlable Open Graph metadata; JavaScript симулация след зареждане не е достатъчна.</p><div class="social-example-links">${examples.map(([k,label])=>`<a href="#detail/${k}?share=eligible&image=template">${label}</a>`).join('')}</div></details>`;
-}
-function socialPreview(kind,c,query=new URLSearchParams()){
-  const config={
-    listing:{title:c.heading,desc:'Услуга в Лом и региона. Виж подробности и се свържи с публикувалия.'},
-    firm:{title:c.heading,desc:'Местен фирмен профил с услуги, район и директни контакти.'},
-    shop:{title:c.heading,desc:'Местен магазин в Лом с категория и публично безопасно описание.'},
-    health:{title:c.heading,desc:'Здравен профил в Лом с консервативен публичен преглед без чувствителни данни.'},
-    article:{title:c.heading,desc:'Практично ръководство от Попитай.Лом.'},
-    publication:{title:c.heading,desc:'Местна публикация от Попитай.Лом с конкретна самостоятелна цел.'},
-    event:{title:c.heading,desc:'Дата, място и най-важното за текущото публично събитие.'},
-    question:{title:c.heading,desc:'Виж отговорите от общността в Попитай.Лом.'},
-    info:{title:c.heading,desc:'Проверена информация за Лом с източник и последна проверка.'}
-  }[kind];
-  if(!config) return '';
-  const mode=socialImageMode(query);
-  return `<section class="social-preview-section" aria-label="Пример при споделяне"><h3>Social Preview — UX пример, не production интеграция</h3><div class="og-image-label"><strong>og:image · 1200 × 630</strong><span>${mode==='real'?'Стъпка 1 — реална одобрена медия':mode==='lom'?'Стъпка 3 — общ fallback':'Стъпка 2 — тематичен шаблон'}</span></div>${socialOgImage(kind,mode)}<div class="facebook-preview-meta" aria-label="Текстови Open Graph данни, отделни от изображението"><small>traqnivanov.github.io · Попитай.Лом</small><strong>${esc(config.title)}</strong><p>${esc(config.desc)}</p></div><p class="social-separation-note">Заглавието, описанието и домейнът са отделни metadata елементи. Те не са нарисувани вътре в og:image.</p>${socialImageQa(kind,mode)}</section>`;
-}
+  function current(){
+    return `<div class="page">${pageHead('Актуално','Местни публикации и предстоящи събития на едно място.')}<div class="shell"><div class="grid cols-2"><a class="content-card" href="#detail/publication?record=publication-update"><span class="demo-label">ПРИМЕР</span><h3><span class="badge gold">Публикация</span> Местна актуализация</h3><p>Отделен content record и Social Card.</p></a><a class="content-card" href="#detail/event?record=event-local"><span class="demo-label">ПРИМЕР</span><h3><span class="badge green">Събитие</span> Предстоящо местно събитие</h3><p>Дата, час и място са водещи.</p></a></div></div></div>`;
+  }
 
-const conditionalShareKinds=new Set(['publication','shop','health','event']);
-function shareScenario(kind,query){
-  if(!conditionalShareKinds.has(kind)) return {conditional:false,eligible:true,reason:''};
-  const eligible=(query?.get('share')||'eligible')!=='blocked';
-  const reasons={
-    publication:'Няма public/share-eligible canonical публикация — например чака преглед или няма публичен постоянен адрес.',
-    shop:'Магазинът не е approved/public или публичната canonical повърхност не е достъпна.',
-    health:'Health повърхността не покрива public + trust/freshness + safe-preview условията.',
-    event:'Събитието не е share-eligible — например е pending, скрито или няма публичен canonical адрес.'
-  };
-  return {conditional:true,eligible,reason:reasons[kind]};
-}
-function shareScenarioPanel(kind,scenario){
-  if(!scenario.conditional) return '';
-  return `<details class="qa-social-note" style="margin-top:14px"><summary>Условни Share примери</summary><p><strong>Положителен:</strong> public/approved canonical съдържание с безопасен share payload → Share е наличен.</p><p><strong>Отрицателен:</strong> ${esc(scenario.reason)} → Share не се показва.</p><div class="page-tools"><a class="btn soft" href="#detail/${esc(kind)}?share=eligible">Покажи положителния пример</a><a class="btn soft" href="#detail/${esc(kind)}?share=blocked">Покажи блокирания пример</a></div></details>`;
-}
+  function articles(){
+    return `<div class="page">${pageHead('Статии','Пълни практични ръководства с местната информация на първо място.')}<div class="shell"><div class="result-list">${demoRow('Как да решиш конкретна местна задача','Пълно ръководство с местен процес и проверени източници.','Статия','#detail/article?record=article-guide','Ръководство')}</div></div></div>`;
+  }
 
-function shopResultCard(group,index){return `<article class="result-row"><div><span class="demo-label">ПРОТОТИПЕН ЗАПИС</span><h3><a href="#detail/shop">${esc(group)} — пример ${index}</a></h3><p>Основната информация за магазина се вижда директно в каталога.</p><div class="result-meta"><span class="badge">Магазин</span><span class="badge gold">Лом</span></div></div><button class="btn primary" type="button" data-demo-contact>Обади се</button><p class="contact-demo-message" aria-live="polite"></p></article>`;}
-function results(query){
-  const context=query.get('context')||'Обяви и услуги',group=query.get('group')||'Всички',detailType=query.get('detail')||'listing',owner=query.get('owner')||'Listings',type=query.get('type')||'';
-  const addTarget=stage2AddTarget(context,group,owner,type),noun=owner==='Shops'?'магазини':owner==='Firms'?'профили':owner==='Health/Info'?'здравни профили':'обяви';
-  const rows=owner==='Shops'?`${shopResultCard(group,1)}${shopResultCard(group,2)}`:`${demoRow(`${group} — пример 1`,`Резултатът запазва точния избран контекст „${group}“.`,context,`#detail/${detailType}`,'Пример')}${demoRow(`${group} — пример 2`,`Още един примерен запис за „${group}“.`,context,`#detail/${detailType}`,'Пример')}`;
-  const primaryLabel=owner==='Shops'?'＋ Добави магазин':owner==='Health/Info'?'＋ Добави лекар / здравна услуга':'＋ Публикувай в тази категория';
-  return `<div class="page">${pageHead(group,`Разгледай ${noun} в „${context}“.`,'Обяви и услуги')}<div class="shell"><div class="discovery-context"><span>Избран контекст</span><strong>${esc(group)}</strong></div><div class="result-list">${rows}</div><div class="page-tools"><a class="btn primary" href="${addTarget}">${primaryLabel}</a><a class="btn" href="#add/question">Не намираш? Задай въпрос</a></div></div></div>`;
-}
+  function questions(){
+    return `<div class="page">${pageHead('Въпроси','Помощ от общността, когато няма готов отговор.')}<div class="shell"><div class="page-tools"><a class="btn primary" href="#add/question">＋ Задай въпрос</a></div><div class="result-list" style="margin-top:18px">${demoRow('Къде в Лом мога да намеря добър ВиК майстор?','Примерен въпрос от общността.','Въпрос','#detail/question?record=question-community','Общност')}</div></div></div>`;
+  }
 
-function detail(kind,query=new URLSearchParams()){
-  const map={
-    listing:{title:'Примерна обява',desc:'Публичната обява показва най-важното без излишни технически подробности.',heading:'Предлагам ВиК услуги в Лом',body:'ВиК ремонти и аварийни услуги в Лом и региона.',rows:[['Категория','Услуги'],['Подкатегория','ВиК'],['Район','Лом'],['Цена','По договаряне']],actions:{phone:true,share:true,report:true}},
-    firm:{title:'Примерен фирмен профил',desc:'Постоянен профил с услуги, район, контакти и работно време.',heading:'Примерен местен фирмен профил',body:'Профилът представя фирмата постоянно, а конкретните обяви остават отделни.',rows:[['Категория','Майстори и ремонти'],['Район','Лом'],['Работно време','Показва се при реален запис']],actions:{phone:true,inquiry:true,site:false,share:true,report:true}},
-    shop:{title:'Примерен магазин',desc:'Постоянен профил на местен магазин с основната полезна информация.',heading:'Примерен местен магазин',body:'Основната категория, краткото описание, публичният адрес, работното време и уточненията идват от самия магазин.',rows:[['Категория','Хранителни'],['Адрес','Лом'],['Какво ще намерят клиентите','Хранителни стоки · Напитки']],actions:{phone:true,correction:true}},
-    article:{title:'Примерна статия',desc:'Пълно практично ръководство с местната информация на първо място.',heading:'Как да решиш конкретна задача в Лом',body:'Статията започва с практичната местна стъпка, след това дава подготовка, важни изключения и проверени източници.',rows:[['Вид','Ръководство'],['Фокус','Лом и региона'],['Източници','Посочват се в реалната статия']],actions:{share:true}},
-    publication:{title:'Примерна публикация',desc:'Отделен местен формат с една конкретна причина и без фиксирана максимална дължина.',heading:'Местна актуализация',body:'Публикацията е толкова дълга, колкото е необходимо, за да изпълни конкретната си цел. Този пример няма свързано съдържание, затова няма related CTA.',rows:[['Вид','Публикация'],['Тема','Местна актуализация']],actions:{}},
-    event:{title:'Примерно събитие',desc:'Подробности за текущо или предстоящо публично местно събитие.',heading:'Предстоящо местно събитие',body:'При реален запис тук се показват описанието, организаторът и само актуалната публична информация.',rows:[['Дата и час','12 септември · 18:00'],['Място','Лом']],actions:{}},
-    question:{title:'Примерен въпрос',desc:'Помощ от общността, когато няма готов отговор.',heading:'Къде в Лом мога да намеря добър ВиК майстор?',body:'Отговорите от общността са ясно различени от проверената информация в Инфо Лом.',rows:[['Категория','Майстори и ремонти'],['Отговори','Показват се само реалните']],actions:{answer:true,share:true,report:true}},
-    health:{title:'Примерен здравен профил',desc:'Лекар, стоматолог или ветеринар в специализирания здравен раздел.',heading:'Примерен лекар — специалност',body:'При реален запис тук се виждат типът, специалността, кабинетът, публичният контакт и последно потвърдената информация.',rows:[['Тип','Лекар'],['Специалност','Примерна специалност'],['Район','Лом'],['Последно потвърдено','Показва се при реален запис']],actions:{phone:true,correction:true}},
-    info:{title:'Примерен запис в Инфо Лом',desc:'Проверена местна справочна информация с източник и последна проверка.',heading:'Примерен справочен запис',body:'При реален запис тук се показват точният контакт, работното време, услугите, източникът и датата на последна проверка.',rows:[['Източник','Показва се при реален запис'],['Последно проверено','Показва се при реален запис']],actions:{phone:true,official:true,correction:true,share:true}}
-  };
-  const c=map[kind]||map.listing;
-  const scenario=shareScenario(kind,query);if(scenario.conditional) c.actions.share=scenario.eligible;
-  const gallery=['listing','firm'].includes(kind)?`<div class="gallery-demo"><div>Основна снимка</div><div>Снимка</div><div>Снимка</div></div>`:'';
-  const rows=c.rows.map(([k,v])=>`<div class="kv"><strong>${esc(k)}</strong><span>${esc(v)}</span></div>`).join('');
-  const special=kind==='event'?'<div class="notice">Публично се показват само текущи и предстоящи събития.</div>':kind==='publication'?'<div class="admin-note">Публична форма за добавяне на публикация няма.</div>':kind==='info'?'<div class="notice ok">Всеки реален запис показва източник и дата на последна проверка.</div>':'';
-  const shareSurface=scenario.eligible?socialPreview(kind,c,query):`<div class="notice" style="margin-top:18px"><strong>Share не е наличен в този пример.</strong><p>${esc(scenario.reason)}</p></div>`;
-  return `<div class="page">${pageHead(c.title,c.desc)}<div class="shell detail"><article class="detail-main"><span class="demo-label">ПРИМЕР — НЕ Е РЕАЛНО СЪДЪРЖАНИЕ</span><h2>${esc(c.heading)}</h2>${gallery}<h3>Описание</h3><p>${esc(c.body)}</p>${shareSurface}${shareScenarioPanel(kind,scenario)}</article><aside class="detail-side">${rows}${actionBar(c)}${special}</aside></div></div>`;
-}
+  function shareMenu(){
+    return `<details class="share-menu"><summary class="btn soft">Сподели</summary><div class="share-options"><button class="btn" type="button" data-demo-share="native">Споделяне от телефона</button><button class="btn" type="button" data-demo-share="facebook">Facebook</button><button class="btn" type="button" data-demo-share="copy">Копирай линк</button><p class="share-demo-message help" aria-live="polite"></p></div></details>`;
+  }
+  function correctionButton(label='Сигнализирай грешка'){return `<button class="btn soft" type="button" data-demo-correction>${esc(label)}</button>`;}
+  function reportButton(){return `<button class="btn soft" type="button" data-demo-report>Подай сигнал</button>`;}
+
+  function actionBar(record){
+    const a=record.actions||{};
+    const parts=[];
+    if(a.phone) parts.push('<button class="btn primary" type="button" data-demo-contact>Обади се</button>');
+    if(a.inquiry) parts.push('<button class="btn" type="button" data-demo-inquiry>Запитване</button>');
+    if(a.site) parts.push('<button class="btn soft" type="button" data-demo-site>Сайт</button>');
+    if(a.answer) parts.push('<button class="btn primary" type="button" data-demo-answer>Добави отговор</button>');
+    if(a.official) parts.push('<button class="btn" type="button" data-demo-official>Официална страница</button>');
+    if(record.addUrl) parts.push(`<a class="btn primary" href="${record.addUrl}">＋ Добави в същия контекст</a>`);
+    if(a.share&&record.social.shareEligible) parts.push(shareMenu());
+    if(a.report) parts.push(reportButton());
+    if(a.correction) parts.push(correctionButton(a.correctionLabel||'Сигнализирай грешка'));
+    return parts.length?`<div class="detail-action">${parts.join('')}<p class="contact-demo-message" aria-live="polite"></p><p class="action-demo-message help" aria-live="polite"></p></div>`:'';
+  }
+
+  function detailHrefFor(record,{context,group,owner,type,detailType}){
+    if(records.get(record.id)) return `#detail/${record.contentType}?record=${encodeURIComponent(record.id)}`;
+    const q=new URLSearchParams({context,group,owner,detail:detailType});
+    if(type) q.set('type',type);
+    return `#detail/${record.contentType}?${q}`;
+  }
+
+  function results(query){
+    const context=query.get('context')||'Обяви и услуги';
+    const group=query.get('group')||'Всички';
+    const detailType=query.get('detail')||'listing';
+    const owner=query.get('owner')||'Listings';
+    const type=query.get('type')||'';
+    const record=records.resultRecord({context,group,owner,type,detailType});
+    const detailHref=detailHrefFor(record,{context,group,owner,type,detailType});
+    const addTarget=PopitaiStage2Contracts.contextualAddUrl({context,group,owner,type});
+    const noun=owner==='Shops'?'магазини':owner==='Firms'?'профили':owner==='Health/Info'?'здравни профили':'обяви';
+    const label=PopitaiSocialCardComposer.titleFor(record.social);
+    const row=demoRow(label,`Резултатът пази „${group}“ до detail, Social Card и Add.`,context,detailHref,'Пример');
+    const second=demoRow(`${label} — пример 2`,`Същият контекст е предаден контролирано, без общ #detail fallback.`,context,detailHref,'Пример');
+    const primaryLabel=owner==='Shops'?'＋ Добави магазин':owner==='Health/Info'?'＋ Добави лекар / практика':'＋ Публикувай в тази категория';
+    return `<div class="page">${pageHead(group,`Разгледай ${noun} в „${context}“.`,'Обяви и услуги')}<div class="shell"><div class="discovery-context"><span>Избран контекст</span><strong>${esc(group)}</strong>${type?`<p>Тип: ${esc(type)}</p>`:''}</div><div class="result-list">${row}${second}</div><div class="page-tools"><a class="btn primary" href="${addTarget}">${primaryLabel}</a><a class="btn" href="#add/question">Не намираш? Задай въпрос</a></div></div></div>`;
+  }
+
+  function detail(kind,query=new URLSearchParams()){
+    const record=records.resolve(kind,query);
+    const title=PopitaiSocialCardComposer.titleFor(record.social);
+    const rows=record.rows.map(([key,value])=>`<div class="kv"><strong>${esc(key)}</strong><span>${esc(value)}</span></div>`).join('');
+    const gallery=['listing','firm'].includes(record.contentType)?`<div class="gallery-demo"><div>Основна снимка</div><div>Снимка</div><div>Снимка</div></div>`:'';
+    const special=record.special?`<div class="notice">${esc(record.special)}</div>`:record.contentType==='info'?'<div class="notice ok">Всеки реален Info Lom запис показва източник и дата на последна проверка.</div>':'';
+    const social=record.social.shareEligible
+      ? PopitaiSocialCardComposer.render(record.social)
+      : '<div class="notice social-blocked"><strong>Share не е наличен.</strong><p>Този конкретен mock record е shareEligible=false; няма Share action и няма Social Card.</p></div>';
+    return `<div class="page">${pageHead(record.pageTitle,record.pageDescription)}<div class="shell detail"><article class="detail-main"><span class="demo-label">ПРИМЕР — НЕ Е РЕАЛНО СЪДЪРЖАНИЕ</span><h2>${esc(title)}</h2>${record.social.discovery?`<div class="discovery-context"><span>Контекст от пътя</span><strong>${esc(record.social.discovery)}</strong><p>${esc(record.social.category)}</p></div>`:''}${gallery}<h3>Описание</h3><p>${esc(record.body)}</p>${social}</article><aside class="detail-side">${rows}${actionBar(record)}${special}</aside></div></div>`;
+  }
+
+  function iconCheckpoint(){
+    const candidates=[
+      ['Услуги','briefcase-duotone.svg','services'],
+      ['Ремонти','wrench-duotone.svg','repairs'],
+      ['Животни','paw-print-duotone.svg','animals'],
+      ['Автомобили','car-duotone.svg','cars'],
+      ['Здраве','first-aid-kit-duotone.svg','health'],
+      ['Комунални услуги','plug-duotone.svg','utilities'],
+      ['Статии','article-duotone.svg','articles'],
+      ['Публикации','newspaper-duotone.svg','publications']
+    ];
+    return `<div class="page">${pageHead('Visual checkpoint — Phosphor Duotone','Ограничен кандидат за owner visual approval. Не е масова подмяна на иконите.')}<div class="shell"><div class="notice"><strong>Само checkpoint.</strong> Това са реални SVG assets от Phosphor Icons Core (MIT), запазени локално в прототипа. Геометрията не е AI-генерирана и не е рисувана специално за този проект.</div><div class="icon-checkpoint-grid">${candidates.map(([label,file,key])=>`<article class="icon-checkpoint-card" data-icon-key="${key}"><div class="icon-large"><img src="icons/${file}" alt=""></div><h3>${label}</h3><div class="icon-real-size"><img src="icons/${file}" alt=""><span>${label}</span></div><p>Увеличено + реален малък размер.</p></article>`).join('')}</div><p class="help">Owner approval е задължителен преди обща подмяна в прототипа или production.</p></div></div>`;
+  }
+
+  Object.assign(window,{info,firms,current,articles,questions,results,detail,iconCheckpoint});
+})();
