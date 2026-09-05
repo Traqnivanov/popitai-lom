@@ -155,7 +155,9 @@ assert(!/\blocalStorage\s*[.[]|\bsessionStorage\s*[.[]/.test(task6),'Favorites p
 assert(task6.includes("type:'question'"));
 assert(!task6.includes("eligible=new Set(['question'"),'Questions must not be auto-eligible for Favorites');
 
-for(const marker of ['validatePrototypeForm','minlength','file','focus']) assert(task7.includes(marker),`Task 7 safeguard: ${marker}`);
+// Form safeguards are split between the Task 7 parity layer and the shared interaction owner.
+for(const marker of ['function setLimits','control.minLength=minLength','function validateParityForm','function parityMessage','firstInvalid.focus']) assert(task7.includes(marker),`Task 7 parity safeguard: ${marker}`);
+for(const marker of ['function validateFiles','maxBytes','allowed:new Set','function validatePriceState','function validateHealthPair','function validatePrototypeForm','beforeunload']) assert(interactions.includes(marker),`Shared form safeguard: ${marker}`);
 
 const detailDescriptions={
   'listing-catering':'Кетъринг за семейни тържества, фирмени събития и други поводи в Лом и региона.',
