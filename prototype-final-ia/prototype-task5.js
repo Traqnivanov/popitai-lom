@@ -47,7 +47,7 @@
     publications: Object.freeze([
       Object.freeze({
         title:'Местна актуализация',
-        description:'Кратка местна публикация с най-важното на едно място.',
+        description:'Местна актуализация с конкретна цел и най-важното на едно място.',
         type:'Публикация',
         meta:'Лом',
         href:'#detail/publication?record=publication-update'
