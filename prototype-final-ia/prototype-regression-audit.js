@@ -121,6 +121,7 @@ assert(forms.includes('other-service-family'));
 assert(interactions.includes("{value:'Дава',label:'Предлагам услуга'}"));
 assert(interactions.includes("{value:'Търси',label:'Търся изпълнител'}"));
 assert(interactions.includes("syncListingForm({preserve:false,resetDiscovery:true})"));
+assert(interactions.includes('beforeunload'),'Dirty protection owner must keep beforeunload protection');
 
 const detail=global.detail('listing',new URLSearchParams('record=listing-vik'));
 assert(detail.includes('data-open-share'));
@@ -154,7 +155,7 @@ assert(!/\blocalStorage\s*[.[]|\bsessionStorage\s*[.[]/.test(task6),'Favorites p
 assert(task6.includes("type:'question'"));
 assert(!task6.includes("eligible=new Set(['question'"),'Questions must not be auto-eligible for Favorites');
 
-for(const marker of ['beforeunload','validatePrototypeForm','minlength','file','focus']) assert(task7.includes(marker),`Task 7 safeguard: ${marker}`);
+for(const marker of ['validatePrototypeForm','minlength','file','focus']) assert(task7.includes(marker),`Task 7 safeguard: ${marker}`);
 
 const detailDescriptions={
   'listing-catering':'Кетъринг за семейни тържества, фирмени събития и други поводи в Лом и региона.',
