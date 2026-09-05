@@ -1,0 +1,31 @@
+/* Task 2 — services and masters */
+.stage2-services .service-search,.stage2-masters .masters-search{max-width:760px;margin-bottom:20px}
+.service-family-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.service-family-card{display:grid;align-content:start;gap:8px;min-height:150px;padding:18px;border:1px solid var(--line,#dbe3ee);border-radius:16px;background:#fff;text-decoration:none;color:inherit}
+.service-family-card h3{margin:0;font-size:1.05rem;line-height:1.25}
+.service-family-card p{margin:0;color:var(--muted,#667085);font-size:.9rem;line-height:1.4}
+.service-family-card small{margin-top:auto;font-weight:700;color:var(--primary,#0b5fd7)}
+.service-family-accordions{display:none}
+.question-fallback-inline{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:24px;padding:14px 16px;border-top:1px solid var(--line,#dbe3ee)}
+.question-fallback-inline a{font-weight:700}
+.master-chip-grid{display:flex;flex-wrap:wrap;gap:10px;margin:4px 0 18px}
+.master-chip{display:inline-flex;align-items:center;min-height:42px;padding:9px 13px;border:1px solid var(--line,#dbe3ee);border-radius:999px;background:#fff;text-decoration:none;color:inherit;font-weight:650}
+.masters-actions{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px}
+.masters-content-block{margin-top:26px}
+.masters-question{margin-top:28px}
+
+@media (max-width:720px){
+  .service-family-grid{display:none}
+  .service-family-accordions{display:grid;gap:8px}
+  .service-family-accordion{border:1px solid var(--line,#dbe3ee);border-radius:14px;background:#fff;overflow:hidden}
+  .service-family-accordion summary{cursor:pointer;padding:13px 14px;font-weight:750;line-height:1.3}
+  .service-family-accordion>div{padding:0 14px 14px}
+  .service-family-subchips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+  .service-family-subchips a{padding:7px 10px;border-radius:999px;background:var(--soft,#f4f7fb);font-size:.84rem;text-decoration:none;color:inherit}
+  .service-family-direct{display:inline-block;font-weight:700}
+  .master-chip-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .master-chip{justify-content:center;text-align:center;border-radius:12px;padding:9px 8px;font-size:.86rem}
+  .masters-actions{display:grid;grid-template-columns:1fr;gap:8px}
+  .masters-actions .btn{text-align:center}
+  .question-fallback-inline{display:grid;gap:8px;padding:12px 0}
+}
