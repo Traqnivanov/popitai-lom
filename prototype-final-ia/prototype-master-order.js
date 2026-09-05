@@ -38,9 +38,6 @@
 
   function categoryCard(item, extraClass=''){
     const inner=`<div class="icon" aria-hidden="true">${item.icon}</div><div class="category-copy"><h3>${esc(item.title)}</h3><p>${esc(item.desc)}</p><small>Разгледай →</small></div>`;
-    if(item.id==='uslugi'){
-      return `<article class="category-card unified-entry ${extraClass}"><a class="category-card-main" href="#uslugi">${inner}</a><a class="category-inline-link" href="#maistori">Майстори и ремонти →</a></article>`;
-    }
     return `<a class="category-card unified-entry ${extraClass}" href="#${item.id}">${inner}</a>`;
   }
 
