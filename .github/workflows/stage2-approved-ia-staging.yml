@@ -1,0 +1,59 @@
+name: Stage 2 approved IA staging
+
+on:
+  push:
+    branches:
+      - prototype/stage2-approved-ia-impl-staging-20260905
+    paths:
+      - .github/workflows/stage2-approved-ia-staging.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify exact base ancestry
+        run: |
+          test "$(git rev-list --max-parents=0 HEAD | head -1)" != ""
+          git merge-base --is-ancestor ed196284ab27a0f8567a6b5869a8bb0885798f4b HEAD
+      - name: Apply approved IA
+        run: python prototype-final-ia/_apply_approved_ia.py
+      - name: Syntax check changed JavaScript
+        run: |
+          node --check prototype-final-ia/prototype-marketplace-views.js
+          node --check prototype-final-ia/prototype-content-views.js
+          node --check prototype-final-ia/prototype-forms.js
+          node --check prototype-final-ia/prototype-stage2-interactions.js
+          node --check prototype-final-ia/prototype-regression-audit.js
+      - name: Create staging candidate with net prototype-only diff
+        run: |
+          git config user.name "stage2-ia-staging"
+          git config user.email "stage2-ia-staging@users.noreply.github.com"
+          git rm prototype-final-ia/_apply_approved_ia.py .github/workflows/stage2-approved-ia-staging.yml
+          git add prototype-final-ia/prototype-marketplace-views.js \
+                  prototype-final-ia/prototype-content-views.js \
+                  prototype-final-ia/prototype-forms.js \
+                  prototype-final-ia/prototype-stage2-interactions.js \
+                  prototype-final-ia/prototype-remediation.css \
+                  prototype-final-ia/prototype-regression-audit.js
+          git commit -m "Implement approved Stage 2 IA and UX"
+      - name: Run committed regression suite
+        run: node prototype-final-ia/prototype-regression-audit.js
+      - name: Enforce exact net scope
+        run: |
+          mapfile -t changed < <(git diff --name-only ed196284ab27a0f8567a6b5869a8bb0885798f4b HEAD)
+          printf '%s\n' "${changed[@]}"
+          test "${#changed[@]}" -eq 6
+          for f in "${changed[@]}"; do
+            case "$f" in
+              prototype-final-ia/prototype-marketplace-views.js|prototype-final-ia/prototype-content-views.js|prototype-final-ia/prototype-forms.js|prototype-final-ia/prototype-stage2-interactions.js|prototype-final-ia/prototype-remediation.css|prototype-final-ia/prototype-regression-audit.js) ;;
+              *) echo "Unexpected path: $f"; exit 1;;
+            esac
+          done
+      - name: Push staging candidate
+        run: git push origin HEAD:prototype/stage2-approved-ia-impl-staging-20260905
