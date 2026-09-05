@@ -1,0 +1,61 @@
+name: Stage 2 independent re-audit external exact-SHA QA
+
+on:
+  push:
+    branches:
+      - prototype/content-complete-ia-20260904-stage2-safety-remediation-tmp2
+    paths:
+      - .github/workflows/stage2-reaudit-exact-sha.yml
+
+permissions:
+  contents: read
+
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout final safety SHA
+        uses: actions/checkout@v4
+        with:
+          ref: dd69958f10d3d72df16d7b6d70f33017d7a62a24
+          fetch-depth: 2
+
+      - name: Verify exact SHA, clean status and isolation
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "dd69958f10d3d72df16d7b6d70f33017d7a62a24"
+          test -z "$(git status --short)"
+          git diff --name-only 73c2738167cb670378673b9385e2a45925e50e9c HEAD > /tmp/changed.txt
+          cat /tmp/changed.txt
+          test "$(wc -l < /tmp/changed.txt)" -eq 8
+          if grep -Ev '^prototype-final-ia/' /tmp/changed.txt; then
+            echo 'FAIL: path outside prototype-final-ia/' >&2
+            exit 1
+          fi
+          if grep -Ei '(^|/)(supabase|schema|migrations?|rls|rpc|content[-_ ]?master)(/|$)' /tmp/changed.txt; then
+            echo 'FAIL: protected/backend path in diff' >&2
+            exit 1
+          fi
+          echo 'git status --short: CLEAN'
+
+      - name: JavaScript syntax checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          find prototype-final-ia -maxdepth 1 -type f -name '*.js' -print0 | sort -z | xargs -0 -n1 node --check
+
+      - name: Independent re-audit regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          node prototype-final-ia/prototype-regression-audit.js
+
+      - name: README QA wording guard
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -F '0 attached commit statuses' prototype-final-ia/README.md
+          grep -F '0 attached workflow runs' prototype-final-ia/README.md
+          grep -F 'local/external QA' prototype-final-ia/README.md
+          ! grep -F 'GitHub Actions PASS' prototype-final-ia/README.md
