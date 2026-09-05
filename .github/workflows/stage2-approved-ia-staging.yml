@@ -18,11 +18,11 @@ jobs:
         with:
           fetch-depth: 0
       - name: Verify exact base ancestry
-        run: |
-          test "$(git rev-list --max-parents=0 HEAD | head -1)" != ""
-          git merge-base --is-ancestor ed196284ab27a0f8567a6b5869a8bb0885798f4b HEAD
+        run: git merge-base --is-ancestor ed196284ab27a0f8567a6b5869a8bb0885798f4b HEAD
       - name: Apply approved IA
-        run: python prototype-final-ia/_apply_approved_ia.py
+        run: |
+          python prototype-final-ia/_apply_approved_ia.py
+          python prototype-final-ia/_fix_approved_ia_patch.py
       - name: Syntax check changed JavaScript
         run: |
           node --check prototype-final-ia/prototype-marketplace-views.js
@@ -34,7 +34,7 @@ jobs:
         run: |
           git config user.name "stage2-ia-staging"
           git config user.email "stage2-ia-staging@users.noreply.github.com"
-          git rm prototype-final-ia/_apply_approved_ia.py .github/workflows/stage2-approved-ia-staging.yml
+          git rm prototype-final-ia/_apply_approved_ia.py prototype-final-ia/_fix_approved_ia_patch.py .github/workflows/stage2-approved-ia-staging.yml
           git add prototype-final-ia/prototype-marketplace-views.js \
                   prototype-final-ia/prototype-content-views.js \
                   prototype-final-ia/prototype-forms.js \
