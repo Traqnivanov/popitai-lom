@@ -1,4 +1,5 @@
 from pathlib import Path
+
 p=Path('prototype-final-ia/prototype-marketplace-views.js')
 s=p.read_text(encoding='utf-8')
 lines=s.splitlines()
@@ -10,4 +11,10 @@ for i,line in enumerate(lines):
 else:
     raise SystemExit('active row marker not found')
 p.write_text('\n'.join(lines)+'\n',encoding='utf-8')
-print('staging syntax patch fixed')
+
+a=Path('prototype-final-ia/prototype-regression-audit.js')
+t=a.read_text(encoding='utf-8')
+if t.startswith("\\'use strict\\';"):
+    t="'use strict';"+t[len("\\'use strict\\';"):]
+a.write_text(t,encoding='utf-8')
+print('staging syntax patches fixed')
