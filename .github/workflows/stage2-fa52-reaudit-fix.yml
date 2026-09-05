@@ -1,4 +1,4 @@
-name: Stage 2 fa52 re-audit fix staging
+name: Stage 2 fa52 exact candidate QA
 
 on:
   push:
@@ -6,44 +6,36 @@ on:
       - prototype/content-complete-ia-20260905-fa52-reaudit-fix-tmp
     paths:
       - .github/workflows/stage2-fa52-reaudit-fix.yml
-      - stage2_fa52_patch.py
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  patch:
+  qa:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout exact candidate SHA
+        uses: actions/checkout@v4
         with:
-          ref: prototype/content-complete-ia-20260905-fa52-reaudit-fix-tmp
-          fetch-depth: 10
-      - name: Apply patch
-        run: python3 stage2_fa52_patch.py
-      - name: Syntax and isolation
+          ref: ed196284ab27a0f8567a6b5869a8bb0885798f4b
+          fetch-depth: 2
+      - name: Verify exact SHA and clean status
         shell: bash
         run: |
           set -euo pipefail
-          node --check prototype-final-ia/prototype-marketplace-views.js
+          test "$(git rev-parse HEAD)" = "ed196284ab27a0f8567a6b5869a8bb0885798f4b"
+          test -z "$(git status --short)"
+          git diff --name-only fa52dc8b89006b7978e266dd846786e1a858a17f HEAD
+      - name: JavaScript syntax
+        shell: bash
+        run: |
+          set -euo pipefail
           node --check prototype-final-ia/prototype-content-views.js
+          node --check prototype-final-ia/prototype-marketplace-views.js
           node --check prototype-final-ia/prototype-records.js
           node --check prototype-final-ia/prototype-regression-audit.js
-          git diff --name-only fa52dc8b89006b7978e266dd846786e1a858a17f -- prototype-final-ia/ > /tmp/changed.txt
-          cat /tmp/changed.txt
-          test "$(wc -l < /tmp/changed.txt)" -eq 4
-          grep -Fx 'prototype-final-ia/prototype-content-views.js' /tmp/changed.txt
-          grep -Fx 'prototype-final-ia/prototype-marketplace-views.js' /tmp/changed.txt
-          grep -Fx 'prototype-final-ia/prototype-records.js' /tmp/changed.txt
-          grep -Fx 'prototype-final-ia/prototype-regression-audit.js' /tmp/changed.txt
-          git diff --quiet fa52dc8b89006b7978e266dd846786e1a858a17f -- prototype-final-ia/prototype-stage2-contracts.js
-          git diff --quiet fa52dc8b89006b7978e266dd846786e1a858a17f -- prototype-final-ia/prototype-forms.js
-      - name: Commit staged prototype result
+      - name: Run committed regression audit
         shell: bash
         run: |
           set -euo pipefail
-          git config user.name 'Traqnivanov'
-          git config user.email '81027881+Traqnivanov@users.noreply.github.com'
-          git add prototype-final-ia/prototype-content-views.js prototype-final-ia/prototype-marketplace-views.js prototype-final-ia/prototype-records.js prototype-final-ia/prototype-regression-audit.js
-          git commit -m 'Stage exact fa52 re-audit fixes'
-          git push origin HEAD:prototype/content-complete-ia-20260905-fa52-reaudit-fix-tmp
+          node prototype-final-ia/prototype-regression-audit.js
