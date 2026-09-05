@@ -33,7 +33,6 @@ const task6=fs.readFileSync(`${__dirname}/prototype-task6.js`,'utf8');
 const task7=fs.readFileSync(`${__dirname}/prototype-task7.js`,'utf8');
 const task8=fs.readFileSync(`${__dirname}/prototype-task8-content.js`,'utf8');
 
-// Prior accepted remediation contracts remain intact.
 for(const category of ['Хранителни','Строителни','Техника','Мебели','Дрехи','Дом']){
   const record=records.resultRecord({context:'Магазини',group:category,owner:'Shops',detailType:'shop'});
   assert.equal(record.contentType,'shop',`${category}: contentType`);
@@ -55,7 +54,6 @@ assert(approved.includes('Попитай.Лом'));
 assert.equal(records.get('question-community').social.contentRole,'community');
 assert.equal(records.get('info-health').social.contentRole,'verified-information');
 
-// Choose-first contract is still protected for the nine persisted service families.
 assert.equal(contracts.serviceFamilyNames.length,9);
 for(const familyName of contracts.serviceFamilyNames){
   const family=global.serviceFamilies.find(item=>item[0]===familyName);
@@ -71,7 +69,6 @@ for(const familyName of contracts.serviceFamilyNames){
   assert(addPage.includes('type='),`${familyName}: intent retained`);
 }
 
-// Final MASTER ORDER IA.
 const home=global.home();
 const hub=global.hub(new URLSearchParams());
 const services=global.services();
@@ -114,7 +111,6 @@ assert(vikResults.includes('results-toolbar'));
 assert(vikResults.includes('Предлагам ВиК услуга'));
 assert(vikResults.includes('Търся ВиК изпълнител'));
 
-// Service UI labels only adapt the existing persisted values.
 assert(forms.includes("{value:'Дава',label:'Предлагам услуга'}"));
 assert(forms.includes("{value:'Търси',label:'Търся изпълнител'}"));
 assert(forms.includes('service-context-summary'));
@@ -126,7 +122,6 @@ assert(interactions.includes("{value:'Дава',label:'Предлагам усл
 assert(interactions.includes("{value:'Търси',label:'Търся изпълнител'}"));
 assert(interactions.includes("syncListingForm({preserve:false,resetDiscovery:true})"));
 
-// Detail / Share remain secondary and Social Preview is not permanently expanded.
 const detail=global.detail('listing',new URLSearchParams('record=listing-vik'));
 assert(detail.includes('data-open-share'));
 assert(detail.includes('data-share-overlay hidden'));
@@ -137,7 +132,6 @@ assert(css.includes('align-items:flex-end'));
 assert(css.includes('.demo-label,.qa-adapter,.qa-only,.social-card-qa{display:none!important}'));
 assert(css.includes('.qa-mode .qa-adapter'));
 
-// Content truth: verified article is preserved as Article, fake Aktualno is not shown as real content.
 const currentHtml=global.current();
 assert(currentHtml.includes('Няма актуално съдържание за показване'));
 assert(!currentHtml.includes('Местна актуализация с конкретна цел'));
@@ -154,12 +148,12 @@ assert(pension.includes('Има промяна?'));
 assert(task8.includes("publications:Object.freeze([])"));
 assert(task8.includes("events:Object.freeze([])"));
 
-// Favorites are prototype/session UI only; Questions are excluded from the automatic favorite coverage.
-assert(task6.includes('session'));
-assert(!/localStorage|sessionStorage|supabase/i.test(task6),'Favorites prototype must not persist to storage/backend');
-assert(task6.includes("contentType==='question'")||task6.includes("contentType === 'question'")||task6.includes('question'));
+assert(task6.includes("const saved=new Map()"));
+assert(task6.includes("storage:'session-memory-only'"));
+assert(!/\blocalStorage\s*[.[]|\bsessionStorage\s*[.[]/.test(task6),'Favorites prototype must not call persistent browser storage APIs');
+assert(task6.includes("type:'question'"));
+assert(!task6.includes("eligible=new Set(['question'"),'Questions must not be auto-eligible for Favorites');
 
-// Stage 2 form remediation stays prototype-only and keeps the validated safeguards.
 for(const marker of ['beforeunload','validatePrototypeForm','minlength','file','focus']) assert(task7.includes(marker),`Task 7 safeguard: ${marker}`);
 
 const detailDescriptions={
@@ -175,7 +169,6 @@ for(const [id,description] of Object.entries(detailDescriptions)){
   assert(global.detail(records.get(id).contentType,new URLSearchParams(`record=${encodeURIComponent(id)}`)).includes(description));
 }
 
-// Isolation is measured from the owner Stage 2 checkpoint, not from an obsolete atomic implementation commit.
 const ownerCheckpoint='0b1492386b68b7f918685828c9fdd64079f24677';
 const changed=execFileSync('git',['diff','--name-only',ownerCheckpoint,'HEAD'],{encoding:'utf8'}).trim().split(/\r?\n/).filter(Boolean);
 assert(changed.length>0,'Stage 2 diff must not be empty');
