@@ -102,3 +102,21 @@
   .upload-file-chip .btn{width:100%}
   .social-card-copy{max-width:82%}
 }
+
+/* Independent re-audit remediation overrides. */
+.protected-entry{display:grid;gap:4px;margin:18px 0;padding:16px 18px;border:2px solid #0b2f56;border-radius:16px;background:#f8fbff;color:#0b2f56;text-decoration:none}
+.protected-entry span{font-size:.72rem;font-weight:900;letter-spacing:.06em;color:#6b7280}
+.protected-entry strong{font-size:1.2rem}
+.protected-entry small{color:#526273}
+.masters-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.masters-owner-summary{margin-top:22px}
+.social-card-role{margin:0 0 8px;font-size:.8rem;color:#526273}
+.social-card-template-icon{position:absolute;right:7%;top:14%;display:grid;place-items:center;width:19%;aspect-ratio:1;border-radius:22%;background:rgba(255,255,255,.94);box-shadow:0 12px 30px rgba(3,20,39,.18)}
+.social-card-template-icon img{width:72%;height:72%;display:block}
+.social-card-image--real{display:grid;grid-template-rows:minmax(0,1fr) auto;place-items:stretch;padding:0}
+.social-card-image--real>.social-card-approved-media{display:grid;place-items:center;align-content:center;gap:8px;padding:8%;text-align:center;min-height:0;max-width:none}
+.social-card-approved-media span{font-size:.78rem;font-weight:900;letter-spacing:.08em;color:#64748b}
+.social-card-approved-media strong{font-size:clamp(1.25rem,3vw,2rem)}
+.social-card-approved-media p{margin:0;color:#5d6b7a}
+.social-card-image--real>.social-card-approved-brand{display:block;max-width:none;padding:8px 14px;background:#0f2847;color:#fff;text-align:right;font-size:clamp(.64rem,1.3vw,.82rem);font-weight:800;letter-spacing:.02em}
+@media(max-width:640px){.social-card-template-icon{width:22%;right:6%;top:10%}.masters-actions{flex-direction:column}}

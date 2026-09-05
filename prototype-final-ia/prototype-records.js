@@ -16,6 +16,18 @@
     info:'community'
   });
 
+  const contentRoleByType=Object.freeze({
+    listing:'marketplace',
+    firm:'profile',
+    shop:'specialized',
+    health:'specialized',
+    article:'editorial',
+    publication:'editorial',
+    event:'event',
+    question:'community',
+    info:'verified-information'
+  });
+
   const descriptionByType=Object.freeze({
     listing:'Обява или услуга в Лом и региона с точен избран контекст.',
     firm:'Местен фирмен профил с услуги, район и директни контакти.',
@@ -35,10 +47,11 @@
   function social({
     id,contentType,title='',description='',category='',discovery='',visualTheme='',
     icon='',accent='blue',mediaAvailable=false,mediaType='',location='Лом',
-    shareEligible=true,facebookText='',composition=''
+    shareEligible=true,facebookText='',composition='',contentRole=''
   }){
     return Object.freeze({
       contentType,
+      contentRole:contentRole||contentRoleByType[contentType]||'marketplace',
       title,
       description:description||descriptionByType[contentType]||'',
       category,
@@ -64,6 +77,8 @@
     return Object.freeze({
       id,
       contentType,
+      contentRole:spec.contentRole||contentRoleByType[contentType]||'marketplace',
+      owner:spec.owner||(addContext?.owner||''),
       pageTitle:spec.pageTitle||spec.heading||'Примерен запис',
       pageDescription:spec.pageDescription||descriptionByType[contentType]||'',
       heading:spec.heading||spec.title||'',
@@ -282,16 +297,20 @@
   }
 
   function syntheticFromContext({context='Обяви и услуги',group='Всички',owner='Listings',type='',detailType='listing'}={}){
-    const contentType=detailType==='firm'?'firm':detailType==='health'?'health':'listing';
+    const isShop=owner==='Shops'||context==='Магазини'||detailType==='shop';
+    const contentType=isShop?'shop':detailType==='firm'?'firm':detailType==='health'?'health':'listing';
     const id=`synthetic-${encodeURIComponent(context)}-${encodeURIComponent(group)}-${encodeURIComponent(type||'default')}`;
     const category=context==='Автомобили'?'Автомобили и МПС':context;
     const title=`${group} в Лом`;
+    const actions=isShop
+      ? {phone:true,correction:true,share:true}
+      : {share:true,report:true};
     return record({
       id,contentType,title,pageTitle:`${group} — примерен резултат`,heading:title,
       body:`Контролираният mock record пази избрания контекст „${group}“ до detail, Social Card и Add.`,
       category,discovery:group,visualTheme:`${context} · ${group}`,icon:'services',accent:'blue',
       rows:[['Категория',category],['Избран контекст',group],...(type?[['Тип',type]]:[])],
-      actions:{share:true,report:true},
+      actions,
       addContext:{context,group,owner,type}
     });
   }
@@ -327,6 +346,7 @@
     idForContext,
     canonicalUrl,
     compositionByType,
+    contentRoleByType,
     infoIds:Object.freeze(['info-health','info-institutions','info-transport','info-education','info-banks','info-utilities'])
   });
 })();
