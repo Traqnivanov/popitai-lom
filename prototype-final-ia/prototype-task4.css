@@ -1,0 +1,17 @@
+/* Task 4 — Detail and Share presentation; no Social Card contract changes. */
+.detail-page .detail-main,.detail-page .detail-side{min-width:0}
+.detail-page .detail-main{align-content:start}
+.detail-page .detail-side{align-content:start}
+.detail-page .detail-action{display:grid;gap:9px}
+.detail-page .detail-action>.btn{width:100%;justify-content:center;text-align:center}
+.detail-page .favorite-pending{display:none!important}
+.detail-page .gallery-demo{margin-bottom:18px}
+.share-overlay .social-card-preview{margin-top:18px}
+.share-drawer{overscroll-behavior:contain}
+@media(min-width:641px){
+  .share-drawer{width:min(540px,42vw)}
+}
+@media(max-width:640px){
+  .detail-page .detail{gap:18px}
+  .share-drawer{max-height:90vh}
+}
