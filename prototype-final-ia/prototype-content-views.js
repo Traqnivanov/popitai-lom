@@ -5,7 +5,7 @@
 
   function info(){
     const items=[
-      ['⚕️','Здраве','info-health'],
+      ['⚕️','Здравна информация','info-health'],
       ['🏛️','Институции','info-institutions'],
       ['🚌','Транспорт','info-transport'],
       ['🎓','Образование и култура','info-education'],
@@ -32,8 +32,9 @@
     return `<div class="page">${pageHead('Въпроси','Помощ от общността, когато няма готов отговор.')}<div class="shell"><div class="page-tools"><a class="btn primary" href="#add/question">＋ Задай въпрос</a></div><div class="result-list" style="margin-top:18px">${demoRow('Къде в Лом мога да намеря добър ВиК майстор?','Примерен въпрос от общността.','Въпрос','#detail/question?record=question-community','Общност')}</div></div></div>`;
   }
 
-  function shareMenu(){
-    return `<details class="share-menu"><summary class="btn soft">Сподели</summary><div class="share-options"><button class="btn" type="button" data-demo-share="native">Споделяне от телефона</button><button class="btn" type="button" data-demo-share="facebook">Facebook</button><button class="btn" type="button" data-demo-share="copy">Копирай линк</button><p class="share-demo-message help" aria-live="polite"></p></div></details>`;
+  function sharePanel(record){
+    if(!record?.actions?.share||!record.social?.shareEligible) return '';
+    return `<button class="btn soft" type="button" data-open-share>Сподели</button><div class="share-overlay" data-share-overlay hidden><button class="share-backdrop" type="button" data-close-share aria-label="Затвори споделянето"></button><section class="share-drawer" role="dialog" aria-modal="true" aria-label="Сподели"><div class="share-drawer-head"><h2>Сподели</h2><button class="share-close" type="button" data-close-share aria-label="Затвори">×</button></div><div class="share-actions"><button class="btn" type="button" data-demo-share="facebook">Facebook</button><button class="btn" type="button" data-demo-share="native">Споделяне от устройството</button><button class="btn" type="button" data-demo-share="copy">Копирай линк</button></div><p class="share-demo-message help" aria-live="polite"></p>${PopitaiSocialCardComposer.render(record.social)}</section></div>`;
   }
   function correctionButton(label='Сигнализирай грешка'){return `<button class="btn soft" type="button" data-demo-correction>${esc(label)}</button>`;}
   function reportButton(){return `<button class="btn soft" type="button" data-demo-report>Подай сигнал</button>`;}
@@ -41,16 +42,20 @@
   function actionBar(record){
     const a=record.actions||{};
     const parts=[];
-    if(a.phone) parts.push('<button class="btn primary" type="button" data-demo-contact>Обади се</button>');
-    if(a.inquiry) parts.push('<button class="btn" type="button" data-demo-inquiry>Запитване</button>');
-    if(a.site) parts.push('<button class="btn soft" type="button" data-demo-site>Сайт</button>');
-    if(a.answer) parts.push('<button class="btn primary" type="button" data-demo-answer>Добави отговор</button>');
-    if(a.official) parts.push('<button class="btn" type="button" data-demo-official>Официална страница</button>');
-    if(record.addUrl) parts.push(`<a class="btn primary" href="${record.addUrl}">＋ Добави в същия контекст</a>`);
-    if(a.share&&record.social.shareEligible) parts.push(shareMenu());
-    if(a.report) parts.push(reportButton());
-    if(a.correction) parts.push(correctionButton(a.correctionLabel||'Сигнализирай грешка'));
-    return parts.length?`<div class="detail-action">${parts.join('')}<p class="contact-demo-message" aria-live="polite"></p><p class="action-demo-message help" aria-live="polite"></p></div>`:'';
+    let primaryUsed=false;
+    const addAction=(html,primary=false)=>{parts.push(html);if(primary) primaryUsed=true;};
+    if(a.phone) addAction(`<button class="btn ${primaryUsed?'soft':'primary'}" type="button" data-demo-contact>Обади се</button>`,!primaryUsed);
+    if(a.inquiry) addAction(`<button class="btn ${primaryUsed?'soft':'primary'}" type="button" data-demo-inquiry>Запитване</button>`,!primaryUsed);
+    if(a.answer) addAction(`<button class="btn ${primaryUsed?'soft':'primary'}" type="button" data-demo-answer>Добави отговор</button>`,!primaryUsed);
+    if(a.official) addAction(`<button class="btn ${primaryUsed?'soft':'primary'}" type="button" data-demo-official>Официална страница</button>`,!primaryUsed);
+    if(a.site) addAction('<button class="btn soft" type="button" data-demo-site>Сайт</button>');
+    if(record.addUrl) addAction(`<a class="btn soft" href="${record.addUrl}">＋ Добави в същия контекст</a>`);
+    parts.push(sharePanel(record));
+    if(['listing','firm','shop','health'].includes(record.contentType)) parts.push('<button class="btn soft favorite-pending" type="button" aria-disabled="true" title="Любими ще се активира след отделния login/storage checkpoint">Добави в любими</button>');
+    if(a.report) addAction(reportButton());
+    if(a.correction) addAction(correctionButton(a.correctionLabel||'Сигнализирай грешка'));
+    const clean=parts.filter(Boolean);
+    return clean.length?`<div class="detail-action">${clean.join('')}<p class="contact-demo-message" aria-live="polite"></p><p class="action-demo-message help" aria-live="polite"></p></div>`:'';
   }
 
   function detailHrefFor(record,{context,group,owner,type,detailType}){
@@ -68,31 +73,33 @@
     const type=query.get('type')||'';
     const record=records.resultRecord({context,group,owner,type,detailType});
     const detailHref=detailHrefFor(record,{context,group,owner,type,detailType});
-    const addTarget=PopitaiStage2Contracts.contextualAddUrl({context,group,owner,type});
-    const noun=owner==='Shops'?'магазини':owner==='Firms'?'профили':owner==='Health/Info'?'здравни профили':'обяви';
+    const serviceFamily=context==='Услуги'?serviceFamilies.find(f=>f.slice(1).includes(group)||f[0]===group):null;
+    const isService=context==='Услуги';
+    const otherService=group==='Друга ремонтна услуга'||group==='Друга услуга';
+    const offerTarget=otherService?`#add/listing?category=${encodeURIComponent('Услуги')}&other=1${group==='Друга ремонтна услуга'?`&family=${encodeURIComponent('Майстори, ремонти и дом')}`:''}`:PopitaiStage2Contracts.contextualAddUrl({context,group,owner,type:isService?'Дава':type});
+    const seekTarget=otherService?`${offerTarget}&type=${encodeURIComponent('Търси')}`:PopitaiStage2Contracts.contextualAddUrl({context,group,owner,type:isService?'Търси':type});
     const label=PopitaiSocialCardComposer.titleFor(record.social);
-    const row=demoRow(label,`Примерен резултат за „${group}“.`,context,detailHref,'Пример');
-    const second=demoRow(`${label} — пример 2`,`Още един примерен резултат в същата категория.`,context,detailHref,'Пример');
-    const primaryLabel=owner==='Shops'?'＋ Добави магазин':owner==='Health/Info'?'＋ Добави лекар / практика':'＋ Публикувай в тази категория';
-    return `<div class="page">${pageHead(group,`Разгледай ${noun} в „${context}“.`,'Обяви и услуги')}<div class="shell"><div class="discovery-context"><span>Избран контекст</span><strong>${esc(group)}</strong>${type?`<p>Тип: ${esc(type)}</p>`:''}</div><div class="result-list">${row}${second}</div><div class="page-tools"><a class="btn primary" href="${addTarget}">${primaryLabel}</a><a class="btn" href="#add/question">Не намираш? Задай въпрос</a></div></div></div>`;
+    const row=demoRow(label,`Местно предложение за „${group}“.`,context,detailHref,group);
+    const seekDetail=`#detail/listing?context=${encodeURIComponent(context)}&group=${encodeURIComponent(group)}&owner=${encodeURIComponent(owner)}&detail=listing&type=${encodeURIComponent('Търси')}`;
+    const second=isService?demoRow(`Търся ${group.toLocaleLowerCase('bg-BG')} изпълнител в Лом`,`Заявка от човек, който търси изпълнител за „${group}“.`,'Търся изпълнител',seekDetail,'Лом'):'';
+    const breadcrumb=isService?`<div class="breadcrumbs"><a href="#uslugi">Услуги</a> · ${serviceFamily?.[0]==='Майстори, ремонти и дом'?'<a href="#maistori">Майстори</a>':serviceFamily?`<a href="#service-group?group=${encodeURIComponent(serviceFamily[0])}">${esc(serviceFamily[0])}</a>`:''} · ${esc(group)}</div>`:'';
+    const head=isService?`<div class="shell page-head">${breadcrumb}<h1>${esc(group)} услуги в Лом</h1><p>Разгледай местните предложения и избери подходящото.</p></div>`:pageHead(group,`Разгледай резултатите в „${context}“.`,'Обяви и услуги');
+    const controls=`<div class="results-toolbar"><details><summary class="btn soft">Филтри</summary><div class="results-filter-panel"><label>Район<select><option>Лом и региона</option></select></label><label>Тип<select><option>Всички</option><option>Предлагам</option><option>Търся</option></select></label></div></details><label class="results-sort">Сортиране<select><option>Най-нови</option><option>Най-подходящи</option></select></label></div>`;
+    const actions=isService?`<div class="page-tools"><a class="btn primary" href="${offerTarget}">Предлагам ${esc(group)} услуга</a><a class="btn" href="${seekTarget}">Търся ${esc(group)} изпълнител</a></div><div class="results-question-fallback"><span>Не намираш необходимото?</span><a href="#add/question">Задай въпрос</a></div>`:`<div class="page-tools"><a class="btn primary" href="${offerTarget}">${owner==='Shops'?'＋ Добави магазин':owner==='Health/Info'?'＋ Добави лекар / практика':'＋ Публикувай'}</a><a class="btn" href="#add/question">Не намираш? Задай въпрос</a></div>`;
+    return `<div class="page results-page">${head}<div class="shell">${controls}<div class="result-list">${row}${second}</div>${actions}</div></div>`;
   }
 
   function detail(kind,query=new URLSearchParams()){
     const record=records.resolve(kind,query);
     const title=PopitaiSocialCardComposer.titleFor(record.social);
-    const technicalRowKeys=new Set(['Canonical подкатегория']);
+    const technicalRowKeys=new Set(['Canonical подкатегория','Избран контекст']);
     const visibleRows=record.rows.filter(([key])=>!technicalRowKeys.has(key)).map(([key,value])=>`<div class="kv"><strong>${esc(key==='Suggested тип'?'Тип':key)}</strong><span>${esc(value)}</span></div>`).join('');
     const technicalRows=record.rows.filter(([key])=>technicalRowKeys.has(key));
-    const publicBody=record.body;
-    const pageTitle=record.pageTitle;
-    const gallery=['listing','firm'].includes(record.contentType)?`<div class="gallery-demo"><div>Основна снимка</div><div>Снимка</div><div>Снимка</div></div>`:'';
     const qaNotes=Array.isArray(record.qaNotes)?record.qaNotes:[];
-    const rawTechnical=(qaNotes.length||technicalRows.length)?`<details class="qa-adapter"><summary>QA: технически данни на примера</summary>${qaNotes.map(note=>`<p>${esc(note)}</p>`).join('')}${technicalRows.map(([key,value])=>`<p><strong>${esc(key)}:</strong> ${esc(value)}</p>`).join('')}</details>`:'';
-    const special=record.special?`<div class="notice">${esc(record.special)}</div>`:record.contentType==='info'?'<div class="notice ok">Всеки реален Info Lom запис показва източник и дата на последна проверка.</div>':'';
-    const social=record.social.shareEligible
-      ? PopitaiSocialCardComposer.render(record.social)
-      : '<details class="qa-adapter"><summary>QA: споделяне</summary><p>Този пример е shareEligible=false и не показва действие за споделяне.</p></details>';
-    return `<div class="page">${pageHead(pageTitle,record.pageDescription)}<div class="shell detail"><article class="detail-main"><span class="demo-label">ПРИМЕР — НЕ Е РЕАЛНО СЪДЪРЖАНИЕ</span><h2>${esc(title)}</h2>${record.social.discovery?`<div class="discovery-context"><span>Избрано</span><strong>${esc(record.social.discovery)}</strong><p>${esc(record.social.category)}</p></div>`:''}${gallery}<h3>Описание</h3><p>${esc(publicBody)}</p>${social}${rawTechnical}</article><aside class="detail-side">${visibleRows}${actionBar(record)}${special}</aside></div></div>`;
+    const rawTechnical=(qaNotes.length||technicalRows.length)?`<details class="qa-adapter qa-only"><summary>Технически данни</summary>${qaNotes.map(note=>`<p>${esc(note)}</p>`).join('')}${technicalRows.map(([key,value])=>`<p><strong>${esc(key)}:</strong> ${esc(value)}</p>`).join('')}</details>`:'';
+    const gallery=record.social.mediaAvailable&&['listing','firm'].includes(record.contentType)?`<div class="gallery-demo"><div>Основна снимка</div><div>Снимка</div><div>Снимка</div></div>`:'';
+    const special=record.special?`<div class="notice">${esc(record.special)}</div>`:record.contentType==='info'?'<div class="notice ok">Всеки запис показва източник и дата на последна проверка.</div>':'';
+    return `<div class="page detail-page">${pageHead(title,record.pageDescription)}<div class="shell detail"><article class="detail-main">${gallery}<h2 class="detail-section-title">Описание</h2><p>${esc(record.body)}</p>${rawTechnical}</article><aside class="detail-side">${visibleRows}${actionBar(record)}${special}</aside></div></div>`;
   }
 
   function iconCheckpoint(){
