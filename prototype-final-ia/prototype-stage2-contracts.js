@@ -65,9 +65,21 @@
 
   const activeServiceCanonical = Object.freeze([
     'Цялостни ремонти','Бани и плочки','ВиК','Електро','Покриви','Боядисване','Дограма','Климатици',
-    'Автосервизи','Диагностика','Гуми','Авточасти','Автомивки','Пътна помощ','Домашна помощ','Красота и грижа',
+    'Автосервизи','Диагностика','Гуми','Автомивки','Пътна помощ','Домашна помощ','Красота и грижа',
     'Компютърни и технически услуги','Фото, видео и събитийни услуги','Професионални услуги','Обучение и уроци',
     'Грижа за деца, възрастни и домашни любимци','Транспорт, преместване и доставки'
+  ]);
+
+  const serviceFamilyNames = Object.freeze([
+    'Майстори, ремонти и дом',
+    'Почистване и поддръжка',
+    'Автомобилни услуги',
+    'Транспорт, преместване и доставки',
+    'Красота и лична грижа',
+    'Грижа за хора и животни',
+    'Обучение, уроци и спорт',
+    'Техника, дигитални и професионални услуги',
+    'Събития и творчески услуги'
   ]);
 
   const discoveryGroups = Object.freeze({
@@ -167,6 +179,10 @@
     if(owner==='Firms') return '#add/firm';
 
     if(context==='Услуги') {
+      if(serviceFamilyNames.includes(group)) {
+        const q=new URLSearchParams({group,mode:'add'});
+        return `#service-group?${q}`;
+      }
       return listingAddUrl({
         category:'Услуги',
         subcategory:serviceCanonical(group),
@@ -200,6 +216,7 @@
   window.PopitaiStage2Contracts = Object.freeze({
     serviceCanonicalMap,
     activeServiceCanonical,
+    serviceFamilyNames,
     discoveryGroups,
     animalSuggestedTypeByDiscovery,
     goodsCategoryByDiscovery,

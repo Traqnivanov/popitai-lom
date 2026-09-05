@@ -14,6 +14,7 @@
     if(path==='home') html=home();
     else if(path==='obyavi') html=hub(query);
     else if(path==='uslugi') html=services();
+    else if(path==='maistori') html=masters();
     else if(path==='service-group') html=serviceGroup(query);
     else if(path==='rabota') html=work();
     else if(path==='imoti') html=properties();
@@ -47,7 +48,7 @@
   function updateNav(path){
     const top=path.split('/')[0];
     document.querySelectorAll('[data-nav]').forEach(link=>{
-      link.classList.toggle('active',link.dataset.nav===top||(link.dataset.nav==='obyavi'&&['uslugi','service-group','rabota','imoti','stoki','avtomobili','zhivotni','magazini','zavedenia','zdrave'].includes(top)));
+      link.classList.toggle('active',link.dataset.nav===top||(link.dataset.nav==='obyavi'&&['uslugi','service-group','maistori','rabota','imoti','stoki','avtomobili','zhivotni','magazini','zavedenia','zdrave'].includes(top)));
     });
   }
 
