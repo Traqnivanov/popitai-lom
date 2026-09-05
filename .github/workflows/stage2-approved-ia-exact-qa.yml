@@ -1,0 +1,68 @@
+name: Stage 2 approved IA exact SHA QA
+
+on:
+  push:
+    branches:
+      - prototype/stage2-approved-ia-exact-qa-20260905
+    paths:
+      - .github/workflows/stage2-approved-ia-exact-qa.yml
+
+permissions:
+  contents: read
+
+jobs:
+  exact-sha-qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: a46cf45b06cd8f09ae11d812adae986e571b7b55
+          fetch-depth: 0
+      - name: Verify exact SHA and clean status
+        run: |
+          test "$(git rev-parse HEAD)" = "a46cf45b06cd8f09ae11d812adae986e571b7b55"
+          test -z "$(git status --short)"
+      - name: JavaScript syntax
+        run: |
+          node --check prototype-final-ia/prototype-marketplace-views.js
+          node --check prototype-final-ia/prototype-content-views.js
+          node --check prototype-final-ia/prototype-forms.js
+          node --check prototype-final-ia/prototype-stage2-interactions.js
+          node --check prototype-final-ia/prototype-regression-audit.js
+      - name: Run committed regression suite
+        run: node prototype-final-ia/prototype-regression-audit.js
+      - name: Exact atomic scope
+        run: |
+          mapfile -t changed < <(git diff --name-only ed196284ab27a0f8567a6b5869a8bb0885798f4b HEAD)
+          printf '%s\n' "${changed[@]}"
+          test "${#changed[@]}" -eq 6
+          for f in "${changed[@]}"; do
+            case "$f" in
+              prototype-final-ia/prototype-marketplace-views.js|prototype-final-ia/prototype-content-views.js|prototype-final-ia/prototype-forms.js|prototype-final-ia/prototype-stage2-interactions.js|prototype-final-ia/prototype-remediation.css|prototype-final-ia/prototype-regression-audit.js) ;;
+              *) echo "Unexpected path: $f"; exit 1;;
+            esac
+          done
+      - name: Desktop and mobile route smoke
+        run: |
+          cd prototype-final-ia
+          python3 -m http.server 8765 >/tmp/proto-http.log 2>&1 &
+          server=$!
+          trap 'kill $server || true' EXIT
+          sleep 1
+          chrome="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          test -n "$chrome"
+          check_route() {
+            route="$1"; needle="$2"; size="$3"
+            "$chrome" --headless --no-sandbox --disable-gpu --window-size="$size" --virtual-time-budget=1500 --dump-dom "http://127.0.0.1:8765/index.html#$route" > /tmp/route.html
+            grep -F "$needle" /tmp/route.html >/dev/null
+          }
+          check_route home "Нови обяви и услуги" 1440,1000
+          check_route obyavi "Здраве и частни лекари" 1440,1000
+          check_route uslugi "Друга услуга" 1440,1000
+          check_route maistori "Активни предложения и търсения" 1440,1000
+          check_route "results?context=%D0%A3%D1%81%D0%BB%D1%83%D0%B3%D0%B8&group=%D0%92%D0%B8%D0%9A&detail=listing&owner=Listings" "ВиК услуги в Лом" 1440,1000
+          check_route "add/listing?category=%D0%A3%D1%81%D0%BB%D1%83%D0%B3%D0%B8&subcategory=%D0%92%D0%B8%D0%9A&discovery=%D0%92%D0%B8%D0%9A&type=%D0%94%D0%B0%D0%B2%D0%B0" "Предлагам услуга" 1440,1000
+          check_route "detail/listing?record=listing-vik" "data-open-share" 1440,1000
+          check_route home "Всички категории" 390,844
+          check_route maistori "Търся изпълнител" 390,844
+          check_route "detail/listing?record=listing-vik" "data-share-overlay" 390,844
