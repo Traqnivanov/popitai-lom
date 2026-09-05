@@ -55,7 +55,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          grep -F '0 attached commit statuses' prototype-final-ia/README.md
-          grep -F '0 attached workflow runs' prototype-final-ia/README.md
-          grep -F 'local/external QA' prototype-final-ia/README.md
+          grep -F 'commit statuses: **0**' prototype-final-ia/README.md
+          grep -F 'commit workflow runs: **0**' prototype-final-ia/README.md
+          grep -F '**local QA**' prototype-final-ia/README.md
+          grep -F '**external exact-SHA QA**' prototype-final-ia/README.md
           ! grep -F 'GitHub Actions PASS' prototype-final-ia/README.md
