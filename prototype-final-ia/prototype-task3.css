@@ -1,0 +1,14 @@
+/* Task 3 — Results and contextual service Add presentation only. */
+.contextual-service-form .classification-field{display:none!important}
+.contextual-service-form .service-context-summary{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 18px;padding:12px 14px;border:1px solid #d7e2ef;border-radius:14px;background:#f8fbff}
+.contextual-service-form .service-context-summary strong{font-size:1rem;color:#0b2f56}
+.contextual-service-form .service-context-summary a{font-weight:800;white-space:nowrap}
+.results-page .page-head{padding-bottom:18px}
+.results-page .breadcrumbs{margin-bottom:8px}
+.results-page .result-list{margin-top:4px}
+.results-question-fallback{margin-top:22px;padding-top:16px;border-top:1px solid #d7e2ef}
+@media(max-width:720px){
+  .contextual-service-form .service-context-summary{align-items:flex-start;flex-direction:column}
+  .results-toolbar{align-items:stretch;flex-direction:column}
+  .results-sort{display:grid;gap:6px}
+}
