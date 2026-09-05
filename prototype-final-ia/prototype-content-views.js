@@ -21,7 +21,7 @@
   }
 
   function current(){
-    return `<div class="page">${pageHead('Актуално','Местни публикации и предстоящи събития на едно място.')}<div class="shell"><div class="grid cols-2"><a class="content-card" href="#detail/publication?record=publication-update"><span class="demo-label">ПРИМЕР</span><h3><span class="badge gold">Публикация</span> Местна актуализация</h3><p>Кратка местна актуализация с най-важното на едно място.</p></a><a class="content-card" href="#detail/event?record=event-local"><span class="demo-label">ПРИМЕР</span><h3><span class="badge green">Събитие</span> Предстоящо местно събитие</h3><p>Дата, час и място са водещи.</p></a></div></div></div>`;
+    return `<div class="page">${pageHead('Актуално','Местни публикации и предстоящи събития на едно място.')}<div class="shell"><div class="grid cols-2"><a class="content-card" href="#detail/publication?record=publication-update"><span class="demo-label">ПРИМЕР</span><h3><span class="badge gold">Публикация</span> Местна актуализация</h3><p>Местна актуализация с конкретна цел и най-важното на едно място.</p></a><a class="content-card" href="#detail/event?record=event-local"><span class="demo-label">ПРИМЕР</span><h3><span class="badge green">Събитие</span> Предстоящо местно събитие</h3><p>Дата, час и място са водещи.</p></a></div></div></div>`;
   }
 
   function articles(){
@@ -80,16 +80,15 @@
   function detail(kind,query=new URLSearchParams()){
     const record=records.resolve(kind,query);
     const title=PopitaiSocialCardComposer.titleFor(record.social);
-    const technicalPattern=/(protected|owner|canonical|discovery|persist|open\s*\/\s*locked|production contract|backend|social card|detail|fallback|qa)/i;
-    const visibleRows=record.rows.filter(([key])=>!technicalPattern.test(key)).map(([key,value])=>`<div class="kv"><strong>${esc(key==='Suggested тип'?'Тип':key)}</strong><span>${esc(value)}</span></div>`).join('');
-    const technicalRows=record.rows.filter(([key])=>technicalPattern.test(key));
-    const bodyIsTechnical=technicalPattern.test(record.body||'');
-    const publicBody=bodyIsTechnical?`${title} — примерна информация за Лом и региона.`:record.body;
-    const pageTitle=technicalPattern.test(record.pageTitle||'')?title:record.pageTitle;
+    const technicalRowKeys=new Set(['Canonical подкатегория']);
+    const visibleRows=record.rows.filter(([key])=>!technicalRowKeys.has(key)).map(([key,value])=>`<div class="kv"><strong>${esc(key==='Suggested тип'?'Тип':key)}</strong><span>${esc(value)}</span></div>`).join('');
+    const technicalRows=record.rows.filter(([key])=>technicalRowKeys.has(key));
+    const publicBody=record.body;
+    const pageTitle=record.pageTitle;
     const gallery=['listing','firm'].includes(record.contentType)?`<div class="gallery-demo"><div>Основна снимка</div><div>Снимка</div><div>Снимка</div></div>`:'';
-    const rawTechnical=(bodyIsTechnical||technicalRows.length)?`<details class="qa-adapter"><summary>QA: технически данни на примера</summary>${bodyIsTechnical?`<p>${esc(record.body)}</p>`:''}${technicalRows.map(([key,value])=>`<p><strong>${esc(key)}:</strong> ${esc(value)}</p>`).join('')}</details>`:'';
-    const specialIsTechnical=technicalPattern.test(record.special||'');
-    const special=record.special?(specialIsTechnical?`<details class="qa-adapter"><summary>QA: допълнителна техническа бележка</summary><p>${esc(record.special)}</p></details>`:`<div class="notice">${esc(record.special)}</div>`):record.contentType==='info'?'<div class="notice ok">Всеки реален Info Lom запис показва източник и дата на последна проверка.</div>':'';
+    const qaNotes=Array.isArray(record.qaNotes)?record.qaNotes:[];
+    const rawTechnical=(qaNotes.length||technicalRows.length)?`<details class="qa-adapter"><summary>QA: технически данни на примера</summary>${qaNotes.map(note=>`<p>${esc(note)}</p>`).join('')}${technicalRows.map(([key,value])=>`<p><strong>${esc(key)}:</strong> ${esc(value)}</p>`).join('')}</details>`:'';
+    const special=record.special?`<div class="notice">${esc(record.special)}</div>`:record.contentType==='info'?'<div class="notice ok">Всеки реален Info Lom запис показва източник и дата на последна проверка.</div>':'';
     const social=record.social.shareEligible
       ? PopitaiSocialCardComposer.render(record.social)
       : '<details class="qa-adapter"><summary>QA: споделяне</summary><p>Този пример е shareEligible=false и не показва действие за споделяне.</p></details>';
