@@ -124,21 +124,8 @@
         <div class="notice"><strong>Източник</strong><p>Национален осигурителен институт (НОИ). Условията са за пенсия за осигурителен стаж и възраст по общия ред; при специални случаи правилата и документите могат да бъдат различни.</p></div>
 
         <div class="detail-action article-actions">
-          <button class="btn soft" type="button" data-pension-helpful aria-pressed="false">♡ Полезно</button>
-          <button class="btn soft" type="button" data-pension-comments>Коментирай</button>
           ${articleShare()}
-          <button class="btn soft" type="button" data-demo-report>Има промяна?</button>
-          <p class="action-demo-message help" aria-live="polite"></p>
         </div>
-
-        <section class="content-card article-comments" id="article-pension-comments">
-          <div class="section-head compact-head"><div><h2>Коментари</h2><p>Местен опит и уточнения</p></div></div>
-          <form data-pension-comment-form>
-            <div class="field"><label for="pension-comment">Коментар</label><textarea id="pension-comment" rows="4" minlength="3" maxlength="2000" required placeholder="Напишете коментар…"></textarea></div>
-            <button class="btn primary" type="submit">Изпрати</button>
-            <p class="form-message" data-pension-comment-status role="status" aria-live="polite">Все още няма одобрени коментари.</p>
-          </form>
-        </section>
       </div>
     </div>`;
   }
@@ -156,35 +143,4 @@
     if(kind==='article'&&query.get('record')==='article-pension') return pensionDetail();
     return typeof previousDetail==='function'?previousDetail(kind,query):'';
   };
-
-  document.addEventListener('click',event=>{
-    const comments=event.target.closest?.('[data-pension-comments]');
-    if(comments){
-      document.getElementById('article-pension-comments')?.scrollIntoView({behavior:'smooth',block:'start'});
-      document.getElementById('pension-comment')?.focus({preventScroll:true});
-      return;
-    }
-    const button=event.target.closest?.('[data-pension-helpful]');
-    if(!button) return;
-    const next=button.getAttribute('aria-pressed')!=='true';
-    button.setAttribute('aria-pressed',String(next));
-    button.textContent=next?'♥ Полезно':'♡ Полезно';
-  });
-
-  document.addEventListener('submit',event=>{
-    const form=event.target.closest?.('[data-pension-comment-form]');
-    if(!form) return;
-    event.preventDefault();
-    const textarea=form.querySelector('textarea');
-    const status=form.querySelector('[data-pension-comment-status]');
-    if(!textarea?.checkValidity()){
-      textarea?.focus();
-      if(status) status.textContent='Напиши поне 3 знака, за да изпратиш коментар.';
-      return;
-    }
-    textarea.value='';
-    textarea.disabled=true;
-    form.querySelector('button[type="submit"]')?.setAttribute('disabled','');
-    if(status) status.textContent='Коментарът е изпратен за преглед.';
-  });
 })();
