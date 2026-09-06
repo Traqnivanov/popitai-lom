@@ -64,7 +64,7 @@
 
   function home(){
     const data=approved();
-    const mainSix=marketplaceEntries.slice(0,6).map((item,i)=>categoryCard(item,`home-main-card home-main-card-${i+1}`)).join('');
+    const mainSix=marketplaceEntries.slice(0,6).map((item,i)=>categoryCard(item,`home-main-card home-main-card-${i+1}${i>=4?' home-main-card--secondary':''}`)).join('');
     const secondary=marketplaceEntries.slice(6).map(item=>compactCategory(item)).join('');
     const mobileShortcuts=marketplaceEntries.slice(4,6).map(item=>compactCategory(item)).join('');
     const latest=renderContentSection(data.latest,'Последни обяви и услуги','Последните одобрени местни предложения.','#obyavi',4);
