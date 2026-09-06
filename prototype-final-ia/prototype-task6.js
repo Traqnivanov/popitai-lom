@@ -11,6 +11,7 @@
   function inferFromHref(href=''){
     const value=String(href);
     if(/detail\/question|vapros\.html/i.test(value)) return {type:'question',key:value};
+    if(/detail\/restaurant/i.test(value)) return {type:'restaurant',key:value};
     if(/detail\/firm|firma\.html/i.test(value)) return {type:'firm',key:value};
     if(/detail\/shop|magazini\.html/i.test(value)) return {type:'shop',key:value};
     if(/detail\/health|zdrave-i-lekari\.html/i.test(value)) return {type:'health',key:value};
@@ -39,12 +40,20 @@
     return button;
   }
 
+  function routeType(baseType='listing'){
+    const route=parseHash();
+    if((route.path==='zavedenia'||route.query.get('context')==='Заведения')&&baseType==='firm') return 'restaurant';
+    return baseType;
+  }
+
   function augmentRows(root=document){
+    const route=parseHash();
     root.querySelectorAll('.result-row').forEach((row,index)=>{
       if(row.querySelector('[data-favorite-toggle]')) return;
       const link=row.querySelector('a[href]');
       let info=inferFromHref(link?.getAttribute('href')||'');
-      if(location.hash.startsWith('#magazini')&&!link?.getAttribute('href')?.startsWith('#detail')) info={type:'shop',key:`shop:${titleFor(row)}:${index}`};
+      if(route.path==='magazini'&&!link?.getAttribute('href')?.startsWith('#detail')) info={type:'shop',key:`shop:${titleFor(row)}:${index}`};
+      if(route.path==='zavedenia'||route.query.get('context')==='Заведения') info={type:'restaurant',key:link?.getAttribute('href')||`restaurant:${titleFor(row)}:${index}`};
       if(!eligible.has(info.type)) return;
       row.classList.add('favorite-card-host');
       row.append(makeButton({type:info.type,key:info.key||`${info.type}:${titleFor(row)}:${index}`,title:titleFor(row)}));
@@ -64,12 +73,22 @@
   }
 
   function augmentDetail(root=document){
-    const page=root.querySelector('.detail-page');
+    const page=root.querySelector('.detail-page,.article-detail-page');
     if(!page) return;
     const path=parseHash().path;
-    const type=path.split('/')[1]||'listing';
-    const button=page.querySelector('.favorite-pending');
-    if(!button||!eligible.has(type)) return;
+    let type=routeType(path.split('/')[1]||'listing');
+    if(!eligible.has(type)) return;
+
+    let button=page.querySelector('[data-favorite-toggle],.favorite-pending');
+    if(!button){
+      const host=page.querySelector('.detail-action')||page.querySelector('.detail-side');
+      if(!host) return;
+      button=document.createElement('button');
+      button.type='button';
+      button.className='btn soft favorite-pending';
+      host.append(button);
+    }
+
     const key=location.hash||`${type}:${titleFor(page)}`;
     button.classList.remove('favorite-pending');
     button.removeAttribute('aria-disabled');
@@ -78,6 +97,7 @@
     button.dataset.favoriteType=type;
     button.dataset.favoriteKey=key;
     button.dataset.favoriteTitle=titleFor(page);
+    button.setAttribute('aria-label',saved.has(key)?'Премахни от любими':'Добави в любими');
     button.setAttribute('aria-pressed',String(saved.has(key)));
     button.textContent=saved.has(key)?'Премахни от любими':'Добави в любими';
   }
