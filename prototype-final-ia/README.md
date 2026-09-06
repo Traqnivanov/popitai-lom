@@ -20,7 +20,7 @@ Independent code re-audit беше потвърден като PASS за remedia
 
 1. **Shops 6/6** — шестте Shop категории (`Хранителни`, `Строителни`, `Техника`, `Мебели`, `Дрехи`, `Дом`) resolve-ват като Shop съдържание с owner `Shops` и правилните Shop actions.
 2. **Авточасти** — остава legacy/backward-compatible mapping за четене, но не е активна стойност за нова Service обява.
-3. **Майстори и ремонти** — `#maistori` е отделен силен prototype entry с осемте съществуващи подраздела и разделени Firms / Listings / Q&A роли.
+3. **Майстори и ремонти** — `#maistori` е отделен силен prototype entry; текущият Stage 2 flow използва одобрените девет ремонтни подкатегории.
 4. **Home order** — полезното съдържание и Q&A са разделени по предназначение; въпросите остават fallback, а не водещ вход.
 5. **Social Card icon** — тематичните икони идват само от controlled local registry.
 6. **Approved media brand** — approved-media композицията има отделена brand лента `Попитай.Лом`.
@@ -34,7 +34,7 @@ Independent code re-audit беше потвърден като PASS за remedia
 
 Техническите бележки са отделени в default-closed QA панели и се показват само при QA режим.
 
-`#maistori`, Service family chooser, Social Card preview и detail изгледите използват нормален потребителски език. Иконите и „Любими“ не са променяни по предположение.
+`#maistori`, Service family chooser, Social Card preview и detail изгледите използват нормален потребителски език.
 
 ## Task 7 — audit/presentation fixes
 
@@ -58,7 +58,23 @@ Prototype route:
 
 `#detail/article?record=article-pension`
 
-Той остава **Статия → Пенсии → Ръководство**, а не Публикация. Detail изгледът включва НОИ Лом, кога се налага Монтана, пенсионните условия, документи, важния срок, източника и article actions.
+Той остава **Статия → Пенсии → Ръководство**, а не Публикация. Detail изгледът включва НОИ Лом, кога се налага Монтана, пенсионните условия, документи, важния срок и източника. В текущия Stage 2 detail е оставено само вече одобреното Share действие; „Любими“ се добавя от отделния prototype Favorites слой.
+
+## Коментари — продуктово изискване
+
+**APPROVED REQUIREMENT / IMPLEMENTATION OPEN:** коментари трябва да има по принцип при съдържание, за което общностна дискусия е подходяща, включително статии и публикации.
+
+Това изискване **не е отхвърлено**. То умишлено не се представя като работеща система в текущия Stage 2 prototype, защото реалната реализация трябва първо да има изрично одобрен contract за:
+
+- кой може да коментира и дали е нужен вход;
+- moderation / approval / hide / delete / report;
+- ownership и права за редакция/изтриване;
+- статуси и видимост;
+- връзка `content_type + content_id + user_id` или друг окончателно одобрен модел;
+- известия и follow логика, ако изобщо бъдат включени;
+- backend, RLS и anti-abuse правила.
+
+Докато този contract не бъде одобрен, не се добавя фалшива comments форма и не се променят production moderation/backend правилата. Реализацията остава отделен бъдещ checkpoint.
 
 ## Service Add contract
 
@@ -101,6 +117,7 @@ Semantic ролите остават отделни, включително:
 
 Остават OPEN и не са имплементирани по предположение:
 
+- comments system contract и реална comments реализация;
 - exact service leaf persistence/reconstruction;
 - production Facebook/Open Graph crawlable delivery;
 - реално генериране/съхраняване на social изображения;
@@ -113,7 +130,7 @@ Semantic ролите остават отделни, включително:
 Отделни pending checkpoints:
 
 - **Икони** — owner visual approval pending; без mass replacement.
-- **Любими** — `APPROVED REQUIREMENT / COVERAGE, STORAGE AND LOGIN CONTRACT NOT YET AUDITED`; без имплементация по предположение.
+- **Любими** — prototype-only UI/session behavior; real storage/login/RLS contract остава отделен approval checkpoint.
 
 ## Финален статус
 
