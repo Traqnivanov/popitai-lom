@@ -43,7 +43,7 @@ const jsFiles=fs.readdirSync(__dirname).filter(name=>name.endsWith('.js')&&name!
 const rendererOwners=jsFiles.filter(name=>fs.readFileSync(`${__dirname}/${name}`,'utf8').includes('window.PopitaiSocialCardComposer=Object.freeze'));
 assert.deepEqual(rendererOwners,['prototype-social-card-composer.js']);
 const cssFiles=fs.readdirSync(__dirname).filter(name=>name.endsWith('.css'));
-const socialCssOwners=cssFiles.filter(name=>/\.social-card-preview\s*\{/.test(fs.readFileSync(`${__dirname}/${name}`,'utf8')));
+const socialCssOwners=cssFiles.filter(name=>/(^|\n)\.social-card-preview\s*\{/m.test(fs.readFileSync(`${__dirname}/${name}`,'utf8')));
 assert.deepEqual(socialCssOwners,['prototype-remediation.css']);
 const addOwnerFiles=jsFiles.filter(name=>/function\s+contextualAddUrl\s*\(/.test(fs.readFileSync(`${__dirname}/${name}`,'utf8')));
 assert.deepEqual(addOwnerFiles,['prototype-stage2-contracts.js']);
@@ -205,7 +205,8 @@ assert(task6.includes("type:'question'"));
 assert(!task6.includes("eligible=new Set(['question'"));
 assert(task6.includes("route.query.get('context')==='Заведения'"));
 assert(task6.includes(".detail-page,.article-detail-page"));
-assert(task6.includes("type='restaurant'"));
+assert(task6.includes("return 'restaurant'"));
+assert(task6.includes("info={type:'restaurant'"));
 
 // D. Forms safeguards.
 for(const marker of ['function setLimits','control.minLength=minLength','function validateParityForm','function parityMessage','firstInvalid.focus']) assert(task7.includes(marker),`Task7: ${marker}`);
