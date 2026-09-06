@@ -26,6 +26,10 @@
     return node?.querySelector?.('h1,h2,h3,strong')?.textContent?.trim() || 'Запазен запис';
   }
 
+  function clearLoginNote(){
+    document.querySelector('.favorite-login-note')?.remove();
+  }
+
   function makeButton({type,key,title}){
     const button=document.createElement('button');
     button.type='button';
@@ -137,9 +141,9 @@
 
   document.addEventListener('click',event=>{
     const login=event.target.closest('[data-favorite-demo-login]');
-    if(login){loggedIn=true;document.getElementById('app-main').innerHTML=profileMarkup();return;}
+    if(login){clearLoginNote();loggedIn=true;document.getElementById('app-main').innerHTML=profileMarkup();return;}
     const logout=event.target.closest('[data-favorite-demo-logout]');
-    if(logout){loggedIn=false;saved.clear();document.getElementById('app-main').innerHTML=profileMarkup();return;}
+    if(logout){clearLoginNote();loggedIn=false;saved.clear();document.getElementById('app-main').innerHTML=profileMarkup();return;}
     const remove=event.target.closest('[data-favorite-remove]');
     if(remove){saved.delete(remove.dataset.favoriteRemove);document.getElementById('app-main').innerHTML=profileMarkup();return;}
     const toggle=event.target.closest('[data-favorite-toggle]');
@@ -151,6 +155,7 @@
       note.innerHTML=`<span>${esc(message)}</span><a href="#profile">Към профила</a>`;
       return;
     }
+    clearLoginNote();
     const key=toggle.dataset.favoriteKey;
     if(saved.has(key)) saved.delete(key);
     else saved.set(key,{key,type:toggle.dataset.favoriteType,title:toggle.dataset.favoriteTitle});
@@ -160,7 +165,7 @@
   const observer=new MutationObserver(()=>queueMicrotask(refresh));
   const main=document.getElementById('app-main');
   if(main) observer.observe(main,{childList:true,subtree:true});
-  window.addEventListener('hashchange',()=>queueMicrotask(refresh));
+  window.addEventListener('hashchange',()=>{clearLoginNote();queueMicrotask(refresh);});
   window.PopitaiFavoritesPrototype=Object.freeze({eligible,storage:'session-memory-only'});
   queueMicrotask(refresh);
 })();
