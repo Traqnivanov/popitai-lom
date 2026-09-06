@@ -49,7 +49,6 @@
     if(a.answer) addAction(`<button class="btn ${primaryUsed?'soft':'primary'}" type="button" data-demo-answer>Добави отговор</button>`,!primaryUsed);
     if(a.official) addAction(`<button class="btn ${primaryUsed?'soft':'primary'}" type="button" data-demo-official>Официална страница</button>`,!primaryUsed);
     if(a.site) addAction('<button class="btn soft" type="button" data-demo-site>Сайт</button>');
-    if(record.addUrl) addAction(`<a class="btn soft" href="${record.addUrl}">＋ Добави в същия контекст</a>`);
     parts.push(sharePanel(record));
     if(['listing','firm','shop','health'].includes(record.contentType)) parts.push('<button class="btn soft favorite-pending" type="button" aria-disabled="true" title="Любими ще се активира след отделния login/storage checkpoint">Добави в любими</button>');
     if(a.report) addAction(reportButton());
