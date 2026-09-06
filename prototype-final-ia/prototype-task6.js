@@ -99,7 +99,8 @@
     button.dataset.favoriteTitle=titleFor(page);
     button.setAttribute('aria-label',saved.has(key)?'Премахни от любими':'Добави в любими');
     button.setAttribute('aria-pressed',String(saved.has(key)));
-    button.textContent=saved.has(key)?'Премахни от любими':'Добави в любими';
+    const nextText=saved.has(key)?'Премахни от любими':'Добави в любими';
+    if(button.textContent!==nextText) button.textContent=nextText;
   }
 
   function groupsHtml(){
