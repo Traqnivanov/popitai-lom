@@ -29,7 +29,6 @@ const social=global.PopitaiSocialCardComposer;
 const forms=fs.readFileSync(`${__dirname}/prototype-forms.js`,'utf8');
 const interactions=fs.readFileSync(`${__dirname}/prototype-stage2-interactions.js`,'utf8');
 const contentViews=fs.readFileSync(`${__dirname}/prototype-content-views.js`,'utf8');
-const task2=fs.readFileSync(`${__dirname}/prototype-task2.js`,'utf8');
 const task6=fs.readFileSync(`${__dirname}/prototype-task6.js`,'utf8');
 const task7=fs.readFileSync(`${__dirname}/prototype-task7.js`,'utf8');
 const task8=fs.readFileSync(`${__dirname}/prototype-task8-content.js`,'utf8');
@@ -63,6 +62,7 @@ for(const category of ['Хранителни','Строителни','Техни
 assert(!contracts.activeServiceCanonical.includes('Авточасти'));
 assert(!contracts.listingSubcategories('Услуги').includes('Авточасти'));
 assert.equal(contracts.serviceCanonicalMap['Авточасти'],'Авточасти');
+assert.equal(contracts.serviceMappingCoverage,58,'58/58 is mapping coverage only');
 
 // Social Card semantic states.
 const themed=social.render(records.get('listing-vik').social);
@@ -74,8 +74,6 @@ assert(approved.includes('social-card-approved-brand'));
 assert(approved.includes('Попитай.Лом'));
 assert.equal(records.get('question-community').social.contentRole,'community');
 assert.equal(records.get('info-health').social.contentRole,'verified-information');
-assert.equal(social.imageMode(records.get('publication-blocked').social),records.get('publication-blocked').social.mediaAvailable?'real':records.get('publication-blocked').social.visualTheme?'template':'lom');
-assert.equal(social.render(records.get('publication-blocked').social),'');
 
 // Service taxonomy: 9 structured families + explicit Other fallback; Masters exactly 9 groups.
 assert.equal(contracts.serviceFamilyNames.length,9);
@@ -125,11 +123,29 @@ for(const sub of expectedMasterGroups) assert(masters.includes(sub),`masters ${s
 assert(masters.indexOf('Активни предложения и търсения')<masters.indexOf('Местни фирми и майстори'));
 assert(masters.indexOf('Местни фирми и майстори')<masters.indexOf('Задай въпрос'));
 
-// B. End-to-end contextual paths, including canonical Results Add owner.
+// B. End-to-end prototype paths.
+const matrixCases=[
+  {name:'ВиК',context:'Услуги',group:'ВиК',owner:'Listings',detailType:'listing',id:'listing-vik',type:'Дава'},
+  {name:'Кетъринг',context:'Услуги',group:'Кетъринг',owner:'Listings',detailType:'listing',id:'listing-catering',type:'Дава'},
+  {name:'Работа',context:'Работа',group:'Строителство, ремонти и техници',owner:'Listings',detailType:'listing',id:'listing-work',type:'Предлага работа'},
+  {name:'Имоти',context:'Имоти',group:'Апартамент',owner:'Listings',detailType:'listing',id:'listing-property',type:'Продава имот'},
+  {name:'Автомобили',context:'Автомобили',group:'Автомобили и джипове',owner:'Listings',detailType:'listing',id:'listing-auto',type:''},
+  {name:'Животни',context:'Животни',group:'Осиновяване / търси дом',owner:'Listings',detailType:'listing',id:'listing-animal',type:''},
+  {name:'Магазин',context:'Магазини',group:'Хранителни',owner:'Shops',detailType:'shop',id:'shop-food',type:''},
+  {name:'Health',context:'Здраве и лекари',group:'Специалисти',owner:'Health/Info',detailType:'health',id:'health-doctor',type:''}
+];
+for(const c of matrixCases){
+  const rec=records.resultRecord(c);
+  assert.equal(rec.id,c.id,`${c.name}: result record`);
+  assert(rec.social.category,`${c.name}: social category`);
+  assert(rec.social.canonicalUrl.includes(`#detail/${rec.contentType}`),`${c.name}: social URL`);
+  const detailHtml=global.detail(rec.contentType,new URLSearchParams(`record=${encodeURIComponent(rec.id)}`));
+  assert(detailHtml.includes(social.titleFor(rec.social)),`${c.name}: detail/social title match`);
+  const expectedAdd=contracts.contextualAddUrl({context:c.context,group:c.group,owner:c.owner,type:c.type});
+  assert.equal(rec.addUrl,expectedAdd,`${c.name}: canonical Add URL`);
+}
 const vikResults=global.results(new URLSearchParams('context=%D0%A3%D1%81%D0%BB%D1%83%D0%B3%D0%B8&group=%D0%92%D0%B8%D0%9A&detail=listing&owner=Listings'));
 assert(vikResults.includes('<h1>ВиК услуги в Лом</h1>'));
-assert(vikResults.includes('Предлагам ВиК услуга'));
-assert(vikResults.includes('Търся ВиК изпълнител'));
 assert(vikResults.includes(contracts.contextualAddUrl({context:'Услуги',group:'ВиК',owner:'Listings',type:'Дава'})));
 assert(vikResults.includes(contracts.contextualAddUrl({context:'Услуги',group:'ВиК',owner:'Listings',type:'Търси'})));
 assert(forms.includes("{value:'Дава',label:'Предлагам услуга'}"));
@@ -139,6 +155,25 @@ assert(forms.includes('Смени услугата'));
 assert(forms.includes('other-service-text'));
 assert(forms.includes('Каква услуга?'));
 assert(interactions.includes("syncListingForm({preserve:false,resetDiscovery:true})"));
+
+// Editorial/event technical examples stay valid but are not exposed as fake current content.
+for(const [id,type,category] of [
+  ['article-guide','article','Статии'],
+  ['publication-update','publication','Публикации'],
+  ['event-local','event','Събития']
+]){
+  const rec=records.get(id);
+  assert(rec,`${id}: record`);
+  assert.equal(rec.contentType,type);
+  assert.equal(rec.social.category,category);
+  assert(global.detail(type,new URLSearchParams(`record=${id}`)).includes(social.titleFor(rec.social)),`${id}: detail title`);
+  assert.equal(rec.addUrl,'',`${id}: no invented public Add contract`);
+}
+
+// Title fallback through the real record/detail path.
+const fallbackRecord=records.get('listing-cleaning');
+assert.equal(social.titleFor(fallbackRecord.social),'Почистване в Лом');
+assert(global.detail('listing',new URLSearchParams('record=listing-cleaning')).includes('Почистване в Лом'));
 
 // Info Lom: six distinct routes/records/social contexts.
 const infoHtml=global.info();
@@ -153,8 +188,8 @@ for(const id of infoIds){
   assert.equal(rec.social.category,'Инфо Лом');
   assert(rec.social.discovery,`${id}: discovery`);
   infoUrls.add(rec.social.canonicalUrl);
-  const detail=global.detail('info',new URLSearchParams(`record=${id}`));
-  assert(detail.includes(rec.social.discovery),`${id}: distinct detail context`);
+  const detailHtml=global.detail('info',new URLSearchParams(`record=${id}`));
+  assert(detailHtml.includes(rec.social.discovery),`${id}: distinct detail context`);
 }
 assert.equal(infoUrls.size,6);
 assert(!infoHtml.includes('Полезни телефони'));
@@ -167,7 +202,18 @@ assert(forms.includes("const healthOwnerTypes=['Лекар','Стоматоло�
 assert(forms.includes('Production contract — read-only verification'));
 assert(forms.includes('по-широкият backend flow за здравна услуга остава OPEN/LOCKED'));
 
-// C. Share/media: Share is inside overlay; blocked stays blocked.
+// C. Share/media states.
+const approvedMedia=records.get('firm-repairs').social;
+const themedMedia=records.get('listing-vik').social;
+const lomFallback=records.get('info-utilities').social;
+const blockedMedia=records.get('publication-blocked').social;
+assert.equal(social.imageMode(approvedMedia),'real');
+assert.equal(social.imageMode(themedMedia),'template');
+assert.equal(social.imageMode(lomFallback),'lom');
+assert.equal(social.render(blockedMedia),'');
+const hostileQuery=records.resolve('listing',new URLSearchParams('record=listing-vik&mediaAvailable=1&mediaType=approved-photo'));
+assert.equal(hostileQuery.social.mediaAvailable,false,'query must not create approved media');
+assert.equal(social.imageMode(hostileQuery.social),'template');
 const listingDetail=global.detail('listing',new URLSearchParams('record=listing-vik'));
 assert(listingDetail.includes('data-open-share'));
 assert(listingDetail.includes('data-share-overlay hidden'));
@@ -207,15 +253,19 @@ assert(task6.includes("route.query.get('context')==='Заведения'"));
 assert(task6.includes(".detail-page,.article-detail-page"));
 assert(task6.includes("return 'restaurant'"));
 assert(task6.includes("info={type:'restaurant'"));
+assert(task6.includes("if(button.textContent!==nextText) button.textContent=nextText"),'Detail Favorites refresh must be idempotent');
 
-// D. Forms safeguards.
+// D. Forms safeguards and success lifecycle.
 for(const marker of ['function setLimits','control.minLength=minLength','function validateParityForm','function parityMessage','firstInvalid.focus']) assert(task7.includes(marker),`Task7: ${marker}`);
 for(const marker of ['function validateFiles','maxBytes','allowed:new Set','function validatePriceState','function validateHealthPair','function validatePrototypeForm','beforeunload']) assert(interactions.includes(marker),`Interactions: ${marker}`);
 assert(interactions.includes("eventTarget===free&&free.checked"));
 assert(interactions.includes("eventTarget===negotiable&&negotiable.checked"));
 assert(interactions.includes("eventTarget===price&&price.value.trim()"));
+for(const marker of ["if(form.dataset.submitted==='true') return","form.dataset.submitted='true'","form.dataset.dirty='false'","submit.disabled=true","data-success-card"]) assert(appJs.includes(marker),`Form lifecycle: ${marker}`);
+assert(forms.includes('aria-describedby'));
+assert(forms.includes('data-demo-upload'));
 
-// E. Add modal accessibility contract.
+// E. Add modal accessibility contract + 390px static CSS guard.
 assert(indexHtml.includes('id="add-layer" hidden'));
 assert(indexHtml.includes('role="dialog" aria-modal="true" aria-labelledby="add-title"'));
 assert(indexHtml.includes('data-close-add aria-label="Затвори"'));
@@ -223,6 +273,8 @@ for(const marker of ['let modalOpener=null','previousBodyOverflow','function set
 assert(appJs.includes("if(event.target===addLayer)"));
 assert(appJs.includes("if(event.shiftKey&&document.activeElement===first)"));
 assert(appJs.includes("else if(!event.shiftKey&&document.activeElement===last)"));
+assert(css.includes('@media(max-width:390px)'));
+assert(css.includes('grid-template-columns:minmax(0,1fr)!important'));
 
 // User view hides technical QA text by default.
 assert(css.includes('.demo-label,.qa-adapter,.qa-only,.social-card-qa{display:none!important}'));
