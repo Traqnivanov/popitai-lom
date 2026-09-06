@@ -1,18 +1,8 @@
 'use strict';
 
 (() => {
-  const familyNames=Object.freeze([
-    'Майстори, ремонти и дом',
-    'Почистване и поддръжка',
-    'Автомобилни услуги',
-    'Транспорт, преместване и доставки',
-    'Красота и лична грижа',
-    'Грижа за хора и животни',
-    'Обучение, уроци и спорт',
-    'Техника, дигитални и професионални услуги',
-    'Събития и творчески услуги',
-    'Друга услуга'
-  ]);
+  const contracts=window.PopitaiStage2Contracts;
+  const familyNames=Object.freeze([...contracts.serviceFamilyNames,'Друга услуга']);
 
   const masterGroups=Object.freeze([
     'Цялостни ремонти',
@@ -26,13 +16,35 @@
     'Друга ремонтна услуга'
   ]);
 
+  const legacyFamilies=new Map((window.serviceFamilies||[]).map(row=>[row[0],[...row]]));
+  const structuredFamilies=Object.freeze(contracts.serviceFamilyNames.map(name=>{
+    if(name==='Майстори, ремонти и дом') return Object.freeze([name,...masterGroups]);
+    const source=legacyFamilies.get(name);
+    return Object.freeze(source?source:[name]);
+  }));
+
+  // Stage 2 presentation consumes one normalized structured-family list.
+  // „Друга услуга“ stays a fallback entry, not a structured family leaf.
+  window.serviceFamilies=structuredFamilies.map(row=>[...row]);
+  window.serviceSearchMatch=function serviceSearchMatch(value=''){
+    const q=String(value||'').toLocaleLowerCase('bg-BG').trim();
+    if(!q) return '';
+    const concrete=structuredFamilies.flatMap(f=>f.slice(1));
+    return concrete.find(name=>{
+      const n=name.toLocaleLowerCase('bg-BG');
+      return n.includes(q)||q.includes(n)||q.split(/\s+/).some(part=>part.length>3&&n.includes(part));
+    })||'';
+  };
+
   function familySubs(name){
-    const source=(window.serviceFamilies||[]).find(row=>row[0]===name);
+    const source=structuredFamilies.find(row=>row[0]===name);
     return source?source.slice(1):[];
   }
 
   function familyHref(name){
-    return name==='Майстори, ремонти и дом'?'#maistori':`#service-group?group=${encodeURIComponent(name)}`;
+    if(name==='Майстори, ремонти и дом') return '#maistori';
+    if(name==='Друга услуга') return contracts.contextualAddUrl({context:'Услуги',group:'Друга услуга',owner:'Listings'});
+    return `#service-group?group=${encodeURIComponent(name)}`;
   }
 
   function familyDesktopCard(name){
@@ -60,7 +72,7 @@
   function masters(){
     const data=window.PopitaiApprovedContent||{};
     const chips=masterGroups.map(name=>name==='Друга ремонтна услуга'
-      ? `<a class="master-chip" href="#add/listing?category=${encodeURIComponent('Услуги')}&other=1&family=${encodeURIComponent('Майстори, ремонти и дом')}">${esc(name)}</a>`
+      ? `<a class="master-chip" href="${contracts.contextualAddUrl({context:'Услуги',group:name,owner:'Listings'})}">${esc(name)}</a>`
       : `<a class="master-chip" href="${serviceResultsHref(name)}">${esc(name)}</a>`).join('');
     const active=(Array.isArray(data.masterActivity)?data.masterActivity:[]).filter(Boolean).slice(0,3);
     const firms=(Array.isArray(data.masterFirms)?data.masterFirms:[]).filter(Boolean).slice(0,3);
@@ -73,12 +85,13 @@
       : `<article class="empty-card"><p>Разгледай публикуваните местни фирми и майстори.</p><a class="btn soft" href="#firmi">Всички фирми →</a></article>`;
     const activityBlock=`<section class="masters-content-block"><div class="section-head compact-head"><div><h2>Активни предложения и търсения</h2><p>Текущи предложения и заявки за ремонтни услуги.</p></div><a href="#obyavi">Виж всички →</a></div>${activityContent}</section>`;
     const firmsBlock=`<section class="masters-content-block"><div class="section-head compact-head"><div><h2>Местни фирми и майстори</h2><p>Публични местни профили с директен достъп до подробности.</p></div><a href="#firmi">Виж всички →</a></div>${firmsContent}</section>`;
-    const seek=`#service-group?group=${encodeURIComponent('Майстори, ремонти и дом')}&mode=add&type=${encodeURIComponent('Търси')}`;
-    const offer=`#service-group?group=${encodeURIComponent('Майстори, ремонти и дом')}&mode=add&type=${encodeURIComponent('Дава')}`;
+    const seek=contracts.contextualAddUrl({context:'Услуги',group:'Майстори, ремонти и дом',owner:'Listings',type:'Търси'});
+    const offer=contracts.contextualAddUrl({context:'Услуги',group:'Майстори, ремонти и дом',owner:'Listings',type:'Дава'});
     return `<div class="page stage2-masters">${pageHead('Майстори и ремонти','Намери конкретна ремонтна услуга или публикувай какво предлагаш или търсиш.','Услуги')}<div class="shell"><form class="search-box masters-search" data-page-search><input name="q" aria-label="Търсене на майстор или ремонт" placeholder="Напр. ВиК, баня, покрив, боядисване…"><button>Търси</button></form><div class="master-chip-grid" aria-label="Подкатегории">${chips}</div><div class="masters-actions"><a class="btn primary" href="${seek}">Търся изпълнител</a><a class="btn" href="${offer}">Предлагам услуга</a></div>${activityBlock}${firmsBlock}<div class="question-fallback-inline masters-question"><span>Не намираш подходящ отговор?</span><a href="#add/question">Задай въпрос</a></div></div></div>`;
   }
 
   window.PopitaiStage2ServiceFamilies=familyNames;
+  window.PopitaiStage2StructuredServiceFamilies=structuredFamilies;
   window.PopitaiStage2MasterGroups=masterGroups;
   window.services=services;
   window.masters=masters;

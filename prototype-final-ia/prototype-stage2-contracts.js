@@ -172,6 +172,13 @@
     return `#add/listing${q.size?`?${q}`:''}`;
   }
 
+  function otherServiceAddUrl({family='',type=''}={}) {
+    const q=new URLSearchParams({category:'Услуги',other:'1'});
+    if(family) q.set('family',family);
+    if(type) q.set('type',type);
+    return `#add/listing?${q}`;
+  }
+
   function contextualAddUrl({context='', group='', owner='Listings', type=''}={}) {
     if(owner==='Shops') return `#add/shop${group?`?category=${encodeURIComponent(group)}`:''}`;
     if(owner==='Health/Info') return `#add/health${group?`?type=${encodeURIComponent(group)}`:''}`;
@@ -179,8 +186,11 @@
     if(owner==='Firms') return '#add/firm';
 
     if(context==='Услуги') {
+      if(group==='Друга ремонтна услуга') return otherServiceAddUrl({family:'Майстори, ремонти и дом',type});
+      if(group==='Друга услуга') return otherServiceAddUrl({type});
       if(serviceFamilyNames.includes(group)) {
         const q=new URLSearchParams({group,mode:'add'});
+        if(type) q.set('type',type);
         return `#service-group?${q}`;
       }
       return listingAddUrl({
