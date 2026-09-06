@@ -76,16 +76,15 @@
     const serviceFamily=context==='Услуги'?serviceFamilies.find(f=>f.slice(1).includes(group)||f[0]===group):null;
     const isService=context==='Услуги';
     const offerTarget=PopitaiStage2Contracts.contextualAddUrl({context,group,owner,type:isService?'Дава':type});
-    const seekTarget=PopitaiStage2Contracts.contextualAddUrl({context,group,owner,type:isService?'Търси':type});
     const label=PopitaiSocialCardComposer.titleFor(record.social);
     const row=demoRow(label,`Местно предложение за „${group}“.`,context,detailHref,group);
-    const seekDetail=`#detail/listing?context=${encodeURIComponent(context)}&group=${encodeURIComponent(group)}&owner=${encodeURIComponent(owner)}&detail=listing&type=${encodeURIComponent('Търси')}`;
-    const second=isService?demoRow(`Търся ${group.toLocaleLowerCase('bg-BG')} изпълнител в Лом`,`Заявка от човек, който търси изпълнител за „${group}“.`,'Търся изпълнител',seekDetail,'Лом'):'';
     const breadcrumb=isService?`<div class="breadcrumbs"><a href="#uslugi">Услуги</a> · ${serviceFamily?.[0]==='Майстори, ремонти и дом'?'<a href="#maistori">Майстори</a>':serviceFamily?`<a href="#service-group?group=${encodeURIComponent(serviceFamily[0])}">${esc(serviceFamily[0])}</a>`:''} · ${esc(group)}</div>`:'';
     const head=isService?`<div class="shell page-head">${breadcrumb}<h1>${esc(group)} услуги в Лом</h1><p>Разгледай местните предложения и избери подходящото.</p></div>`:pageHead(group,`Разгледай резултатите в „${context}“.`,'Обяви и услуги');
-    const controls=`<div class="results-toolbar"><details><summary class="btn soft">Филтри</summary><div class="results-filter-panel"><label>Район<select><option>Лом и региона</option></select></label><label>Тип<select><option>Всички</option><option>Предлагам</option><option>Търся</option></select></label></div></details><label class="results-sort">Сортиране<select><option>Най-нови</option><option>Най-подходящи</option></select></label></div>`;
-    const actions=isService?`<div class="page-tools"><a class="btn primary" href="${offerTarget}">Предлагам ${esc(group)} услуга</a><a class="btn" href="${seekTarget}">Търся ${esc(group)} изпълнител</a></div><div class="results-question-fallback"><span>Не намираш необходимото?</span><a href="#add/question">Задай въпрос</a></div>`:`<div class="page-tools"><a class="btn primary" href="${offerTarget}">${owner==='Shops'?'＋ Добави магазин':owner==='Health/Info'?'＋ Добави лекар / практика':'＋ Публикувай'}</a><a class="btn" href="#add/question">Не намираш? Задай въпрос</a></div>`;
-    return `<div class="page results-page">${head}<div class="shell">${controls}<div class="result-list">${row}${second}</div>${actions}</div></div>`;
+    const controls=isService
+      ? `<div class="results-toolbar"><details><summary class="btn soft">Филтри</summary><div class="results-filter-panel"><label>Район<select><option>Лом и региона</option></select></label></div></details><label class="results-sort">Сортиране<select><option>Най-нови</option><option>Най-подходящи</option></select></label></div>`
+      : `<div class="results-toolbar"><details><summary class="btn soft">Филтри</summary><div class="results-filter-panel"><label>Район<select><option>Лом и региона</option></select></label><label>Тип<select><option>Всички</option><option>Предлагам</option><option>Търся</option></select></label></div></details><label class="results-sort">Сортиране<select><option>Най-нови</option><option>Най-подходящи</option></select></label></div>`;
+    const actions=isService?`<div class="page-tools"><a class="btn primary" href="${offerTarget}">Предлагам ${esc(group)} услуга</a></div><div class="results-question-fallback"><span>Не намираш необходимото?</span><a href="#add/question">Задай въпрос</a></div>`:`<div class="page-tools"><a class="btn primary" href="${offerTarget}">${owner==='Shops'?'＋ Добави магазин':owner==='Health/Info'?'＋ Добави лекар / практика':'＋ Публикувай'}</a><a class="btn" href="#add/question">Не намираш? Задай въпрос</a></div>`;
+    return `<div class="page results-page">${head}<div class="shell">${controls}<div class="result-list">${row}</div>${actions}</div></div>`;
   }
 
   function detail(kind,query=new URLSearchParams()){

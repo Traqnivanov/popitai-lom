@@ -79,15 +79,14 @@
     const publicRow=window.PopitaiStage2MasterOrder?.publicRow||(()=> '');
     const activityContent=active.length
       ? `<div class="result-list">${active.map(publicRow).join('')}</div>`
-      : `<article class="empty-card"><h3>Няма активни предложения за ремонтни услуги</h3><p>В момента няма публикувани активни предложения или търсения в този раздел.</p></article>`;
+      : `<article class="empty-card"><h3>Няма активни предложения за ремонтни услуги</h3><p>В момента няма публикувани активни предложения в този раздел.</p></article>`;
     const firmsContent=firms.length
       ? `<div class="result-list">${firms.map(publicRow).join('')}</div>`
       : `<article class="empty-card"><p>Разгледай публикуваните местни фирми и майстори.</p><a class="btn soft" href="#firmi">Всички фирми →</a></article>`;
-    const activityBlock=`<section class="masters-content-block"><div class="section-head compact-head"><div><h2>Активни предложения и търсения</h2><p>Текущи предложения и заявки за ремонтни услуги.</p></div><a href="#obyavi">Виж всички →</a></div>${activityContent}</section>`;
+    const activityBlock=`<section class="masters-content-block"><div class="section-head compact-head"><div><h2>Активни предложения</h2><p>Текущи предложения за ремонтни услуги.</p></div><a href="#obyavi">Виж всички →</a></div>${activityContent}</section>`;
     const firmsBlock=`<section class="masters-content-block"><div class="section-head compact-head"><div><h2>Местни фирми и майстори</h2><p>Публични местни профили с директен достъп до подробности.</p></div><a href="#firmi">Виж всички →</a></div>${firmsContent}</section>`;
-    const seek=contracts.contextualAddUrl({context:'Услуги',group:'Майстори, ремонти и дом',owner:'Listings',type:'Търси'});
     const offer=contracts.contextualAddUrl({context:'Услуги',group:'Майстори, ремонти и дом',owner:'Listings',type:'Дава'});
-    return `<div class="page stage2-masters">${pageHead('Майстори и ремонти','Намери конкретна ремонтна услуга или публикувай какво предлагаш или търсиш.','Услуги')}<div class="shell"><form class="search-box masters-search" data-page-search><input name="q" aria-label="Търсене на майстор или ремонт" placeholder="Напр. ВиК, баня, покрив, боядисване…"><button>Търси</button></form><div class="master-chip-grid" aria-label="Подкатегории">${chips}</div><div class="masters-actions"><a class="btn primary" href="${seek}">Търся изпълнител</a><a class="btn" href="${offer}">Предлагам услуга</a></div>${activityBlock}${firmsBlock}<div class="question-fallback-inline masters-question"><span>Не намираш подходящ отговор?</span><a href="#add/question">Задай въпрос</a></div></div></div>`;
+    return `<div class="page stage2-masters">${pageHead('Майстори и ремонти','Намери конкретна ремонтна услуга или публикувай какво предлагаш.','Услуги')}<div class="shell"><form class="search-box masters-search" data-page-search><input name="q" aria-label="Търсене на майстор или ремонт" placeholder="Напр. ВиК, баня, покрив, боядисване…"><button>Търси</button></form><div class="master-chip-grid" aria-label="Подкатегории">${chips}</div><div class="masters-actions"><a class="btn primary" href="${offer}">Предлагам услуга</a></div>${activityBlock}${firmsBlock}<div class="question-fallback-inline masters-question"><span>Не намираш подходящ отговор?</span><a href="#add/question">Задай въпрос</a></div></div></div>`;
   }
 
   window.PopitaiStage2ServiceFamilies=familyNames;

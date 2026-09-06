@@ -17,7 +17,9 @@
     window.formPage=(kind,query)=>originalFormPage(kind,query)
       .replaceAll('ПРОТОТИП — ','')
       .replace('Редакция на примерен запис.','Редактираш запис.')
-      .replace('Това е прототип и не е създаден реален запис.','Формата е приключена и не може да бъде изпратена повторно.');
+      .replace('Това е прототип и не е създаден реален запис.','Формата е приключена и не може да бъде изпратена повторно.')
+      .replace('Публикувай конкретна услуга или заявка за изпълнител.','Публикувай конкретна услуга.')
+      .replace('Избери най-близката група и опиши точно каква услуга предлагаш или търсиш.','Избери най-близката група и опиши точно каква услуга предлагаш.');
   }
 
   function byName(form,name){return form?.querySelector(`[name="${CSS.escape(name)}"]`)||null;}
@@ -26,6 +28,22 @@
     if(!control) return;
     if(Number.isInteger(minLength)) control.minLength=minLength;
     if(Number.isInteger(maxLength)) control.maxLength=maxLength;
+  }
+
+  function normalizeServiceOfferOnly(form){
+    if(!form?.matches?.('[data-proto-form][data-form-kind="listing"]')) return;
+    const category=form.querySelector('#listing-category');
+    const type=form.querySelector('#listing-type');
+    const field=type?.closest('.field');
+    if(!type||!field) return;
+    if(category?.value==='Услуги'){
+      type.value='Дава';
+      field.hidden=true;
+      field.setAttribute('aria-hidden','true');
+    }else{
+      field.hidden=false;
+      field.removeAttribute('aria-hidden');
+    }
   }
 
   function applyFormParity(form){
@@ -169,6 +187,7 @@
 
   if(typeof originalValidate==='function'){
     window.validatePrototypeForm=form=>{
+      normalizeServiceOfferOnly(form);
       applyFormParity(form);
       const baseOk=originalValidate(form);
       const parityOk=validateParityForm(form,{focus:baseOk});
@@ -178,6 +197,7 @@
 
   function sanitizeRenderedCopy(){
     document.querySelectorAll('[data-proto-form]').forEach(form=>{
+      normalizeServiceOfferOnly(form);
       applyFormParity(form);
       form.querySelectorAll('input[type="text"],textarea').forEach(control=>{
         const cleaned=cleanExampleValue(control.value);
@@ -239,6 +259,8 @@
   });
 
   document.addEventListener('change',event=>{
+    const form=event.target.closest?.('[data-proto-form]');
+    if(form) normalizeServiceOfferOnly(form);
     const control=event.target.closest?.('[data-proto-form] select');
     if(!control||control.dataset.task7Touched!=='true') return;
     setParityError(control,parityMessage(control.closest('[data-proto-form]'),control));

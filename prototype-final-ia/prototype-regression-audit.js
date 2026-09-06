@@ -97,7 +97,7 @@ assert(global.PopitaiStage2ServiceFamilies.includes('Друга услуга'));
 const otherServiceAdd=contracts.contextualAddUrl({context:'Услуги',group:'Друга услуга',owner:'Listings',type:'Дава'});
 assert(otherServiceAdd.includes('other=1'));
 assert(otherServiceAdd.includes('type=%D0%94%D0%B0%D0%B2%D0%B0'));
-const otherRepairAdd=contracts.contextualAddUrl({context:'Услуги',group:'Друга ремонтна услуга',owner:'Listings',type:'Търси'});
+const otherRepairAdd=contracts.contextualAddUrl({context:'Услуги',group:'Друга ремонтна услуга',owner:'Listings',type:'Дава'});
 assert(otherRepairAdd.includes('other=1'));
 assert(otherRepairAdd.includes(`family=${encodeURIComponent('Майстори, ремонти и дом')}`));
 const mastersChoose=global.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Майстори, ремонти и дом')}&mode=add&type=${encodeURIComponent('Дава')}`));
@@ -120,8 +120,10 @@ assert(home.indexOf('Полезни статии')<home.indexOf('Не намер
 assert(!home.includes('Актуално в Лом'),'Do not show Home Aktualno without verified content');
 for(const family of [...contracts.serviceFamilyNames,'Друга услуга']) assert(services.includes(family),`service family ${family}`);
 for(const sub of expectedMasterGroups) assert(masters.includes(sub),`masters ${sub}`);
-assert(masters.indexOf('Активни предложения и търсения')<masters.indexOf('Местни фирми и майстори'));
+assert(masters.indexOf('Активни предложения')<masters.indexOf('Местни фирми и майстори'));
 assert(masters.indexOf('Местни фирми и майстори')<masters.indexOf('Задай въпрос'));
+assert(masters.includes('Предлагам услуга'));
+assert(!masters.includes('Търся изпълнител'));
 
 // B. End-to-end prototype paths.
 const matrixCases=[
@@ -147,9 +149,12 @@ for(const c of matrixCases){
 const vikResults=global.results(new URLSearchParams('context=%D0%A3%D1%81%D0%BB%D1%83%D0%B3%D0%B8&group=%D0%92%D0%B8%D0%9A&detail=listing&owner=Listings'));
 assert(vikResults.includes('<h1>ВиК услуги в Лом</h1>'));
 assert(vikResults.includes(contracts.contextualAddUrl({context:'Услуги',group:'ВиК',owner:'Listings',type:'Дава'})));
-assert(vikResults.includes(contracts.contextualAddUrl({context:'Услуги',group:'ВиК',owner:'Listings',type:'Търси'})));
+assert(!vikResults.includes('Търся ВиК изпълнител'));
+assert(!vikResults.includes('Заявка от човек, който търси изпълнител'));
 assert(forms.includes("{value:'Дава',label:'Предлагам услуга'}"));
-assert(forms.includes("{value:'Търси',label:'Търся изпълнител'}"));
+assert(task7.includes('function normalizeServiceOfferOnly'));
+assert(task7.includes("type.value='Дава'"));
+assert(task7.includes("field.hidden=true"));
 assert(forms.includes('service-context-summary'));
 assert(forms.includes('Смени услугата'));
 assert(forms.includes('other-service-text'));
