@@ -69,6 +69,25 @@ for(const familyName of contracts.serviceFamilyNames){
   assert(addPage.includes('type='),`${familyName}: intent retained`);
 }
 
+const expectedMasterGroups=['Цялостни ремонти','Бани и плочки','ВиК','Електро','Покриви','Шпакловка и боядисване','Дограма и врати','Климатици','Друга ремонтна услуга'];
+assert.deepEqual([...global.PopitaiStage2MasterGroups],expectedMasterGroups);
+assert.deepEqual(global.serviceFamilies.find(row=>row[0]==='Майстори, ремонти и дом').slice(1),expectedMasterGroups);
+assert.equal(global.PopitaiStage2ServiceFamilies.length,10);
+assert(global.PopitaiStage2ServiceFamilies.includes('Друга услуга'));
+const otherServiceAdd=contracts.contextualAddUrl({context:'Услуги',group:'Друга услуга',owner:'Listings',type:'Дава'});
+assert(otherServiceAdd.startsWith('#add/listing?'));
+assert(otherServiceAdd.includes('other=1'));
+assert(otherServiceAdd.includes('type=%D0%94%D0%B0%D0%B2%D0%B0'));
+const otherRepairAdd=contracts.contextualAddUrl({context:'Услуги',group:'Друга ремонтна услуга',owner:'Listings',type:'Търси'});
+assert(otherRepairAdd.startsWith('#add/listing?'));
+assert(otherRepairAdd.includes('other=1'));
+assert(otherRepairAdd.includes(`family=${encodeURIComponent('Майстори, ремонти и дом')}`));
+assert(otherRepairAdd.includes('type=%D0%A2%D1%8A%D1%80%D1%81%D0%B8'));
+const mastersChooseFirst=global.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Майстори, ремонти и дом')}&mode=add&type=${encodeURIComponent('Дава')}`));
+for(const sub of expectedMasterGroups) assert(mastersChooseFirst.includes(sub),`Masters choose-first: ${sub}`);
+assert(!mastersChooseFirst.includes('Монтажи и мебели'));
+assert(!mastersChooseFirst.includes('Къртене и извозване'));
+
 const home=global.home();
 const hub=global.hub(new URLSearchParams());
 const services=global.services();
@@ -92,8 +111,9 @@ for(const family of ['Майстори, ремонти и дом','Почист�
 assert(services.includes('service-family-grid'));
 assert(services.includes('service-family-accordion'));
 assert(services.includes('href="#maistori"'));
+assert(services.includes(otherServiceAdd),'Other service must open the controlled other-service form');
 
-for(const sub of ['Цялостни ремонти','Бани и плочки','ВиК','Електро','Покриви','Шпакловка и боядисване','Дограма и врати','Климатици','Друга ремонтна услуга']) assert(masters.includes(sub),`masters subcategory ${sub}`);
+for(const sub of expectedMasterGroups) assert(masters.includes(sub),`masters subcategory ${sub}`);
 assert(!masters.includes('Намери майстор'));
 assert(masters.includes('Търся изпълнител')&&masters.includes('Предлагам услуга'));
 assert(masters.indexOf('Активни предложения и търсения')<masters.indexOf('Местни фирми и майстори'));
