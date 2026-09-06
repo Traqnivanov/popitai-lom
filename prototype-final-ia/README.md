@@ -36,6 +36,8 @@ Independent code re-audit беше потвърден като PASS за remedia
 - `Майстори и ремонти` choose-first използва точно 9-те одобрени ремонтни подкатегории и не връща старите `Монтажи и мебели` / `Къртене и извозване`;
 - `Друга услуга` и `Друга ремонтна услуга` минават през controlled `other=1` flow;
 - Results няма собствен special-case Add URL builder; contextual Add URL идва от `PopitaiStage2Contracts.contextualAddUrl()`;
+- **новият публичен Service flow е offer-only** — `Търся изпълнител` е премахнат от `Майстори`, Service Results и новата Service форма; намирането на изпълнител става чрез browse/search на резултатите, а при липса на подходящ отговор остава fallback `Задай въпрос`;
+- legacy стойността `Търси` не се изтрива от compatibility contract-а и може да остане за backward-compatible read/edit на съществуващи данни, но не се предлага като нов публичен Service action;
 - Favorites покрива обяви/услуги, фирми, магазини, заведения, Health, събития, публикации, статии и Info Lom; Questions не са auto-favorite;
 - Favorites detail refresh е idempotent и не създава MutationObserver refresh loop;
 - logged-out Favorites prompt се чисти при navigation, login/logout и успешна favorite промяна;
@@ -52,7 +54,7 @@ Independent code re-audit беше потвърден като PASS за remedia
 
 `#maistori`, Service family chooser, Social Card preview и detail изгледите използват нормален потребителски език.
 
-Emoji и общата визуална icon система не са финализирани в този етап.
+Emoji и общата визуална icon система не са финализирани в този етап. При Opera QA е потвърден известен presentation defect: Health картите могат да получават несъответстващи emoji от общия индексен icon масив. Това остава за отделния visual/icon pass и не се поправя в текущия contract pass.
 
 ## Home / IA truth
 
@@ -124,10 +126,13 @@ Prototype route:
 
 `service family → choose-first family route → concrete service leaf → Listing form`
 
-Persisted type mapping остава:
+За **нова публична Service публикация** текущият Stage 2 flow има само:
 
-- `Предлагам услуга` → `Дава`
-- `Търся изпълнител` → `Търси`
+- `Предлагам услуга` → persisted compatibility value `Дава`.
+
+`Търся изпълнител` **не е нов публичен Service action**. Човекът намира изпълнител чрез Service browse/search/results; ако няма подходящ резултат, fallback е `Задай въпрос`.
+
+Legacy compatibility стойността `Търси` остава в underlying mapping само за backward-compatible четене/съвместимост със съществуващи данни. Не се изтрива и не се мигрира в Stage 2, но не се предлага при създаване на нова услуга.
 
 `Друга услуга` не се представя като нов structured leaf: избира се най-близка family група и задължително се попълва `Каква услуга?`.
 
@@ -200,6 +205,7 @@ Production Facebook/Open Graph delivery и реално image generation/storage
 
 - Ownership — Social Card renderer/CSS/contextual Add owner и load order;
 - end-to-end prototype paths — ВиК, Кетъринг, Работа, Имоти, Автомобили, Животни, Магазин, Health, Article, Publication, Event + шестте Info Lom routes;
+- публичният Service guard проверява, че ВиК Results и `Майстори` не връщат `Търся изпълнител`, а новата Service форма се нормализира до `Дава`;
 - Share/media states — approved, template, Lom fallback, blocked и hostile query;
 - Forms — field validation, uploads, price conflicts, Health cross-field, dirty protection, success lifecycle, repeat-submit block;
 - Accessibility — `+ Добави` modal contract и 390px static layout guards;
@@ -209,10 +215,12 @@ Production Facebook/Open Graph delivery и реално image generation/storage
 
 - **attached GitHub check** — само ако GitHub API показва check/status на конкретния SHA;
 - **external/staging QA** — runner или staging branch върху същите blobs/diff;
-- **browser QA** — реално отваряне и взаимодействие с exact-SHA preview;
+- **browser QA** — реално отваряне/render/screenshot на exact-SHA preview;
 - **independent re-audit** — отделна независима проверка.
 
-За последния runtime checkpoint преди този handoff (`4b9a3330e4b69470e5d7a10169be2ae16f9af65e`) GitHub API не показва attached workflow/check/status. В текущата среда headless Chromium няма DNS достъп до GitHub/raw.githack, затова **не е изпълнен нов exact-SHA interactive Chromium run на последния HEAD**. По-ранните browser/staging проверки не се прехвърлят автоматично като PASS към по-нов SHA.
+Runtime commit `b34cac74387d4b8ede2732c9a7b97fb7add49291` е проверен в Opera по exact-SHA preview за Home, Services, Masters, `Друга услуга`, ВиК Results, ВиК Add, Health, пенсионната статия и Profile/Favorites. FWD Tools в Opera е използван за `390×844` визуална проверка на Home, пенсионната статия и `Майстори`. След премахването на `Търся изпълнител` при `Майстори` на 390px остава един широк CTA `Предлагам услуга` без счупена подредба или празна колона.
+
+Текущият Opera Connector няма generic click action, затова този browser QA доказва route/render/accessibility-tree/screenshot състоянията, но не се описва като пълен click-interaction acceptance на всички бутони.
 
 ## Isolation
 
@@ -237,9 +245,9 @@ Production Facebook/Open Graph delivery и реално image generation/storage
 - избор на Edge Function / Worker / Storage / backend architecture за social images;
 - production taxonomy migration;
 - по-широк public flow за **„здравна услуга“** извън текущите doctor/dentist/vet owners;
-- production-wide icon replacement;
+- production-wide icon replacement и известният Health emoji mismatch;
 - real Favorites storage/login/RLS contract;
-- нов exact-SHA interactive browser acceptance за текущия HEAD;
+- full click-level browser acceptance за всички интеракции;
 - Stage 3.
 
 Отделни pending checkpoints:
