@@ -44,24 +44,8 @@
         href:'https://traqnivanov.github.io/popitai-lom/statia.html'
       })
     ]),
-    publications: Object.freeze([
-      Object.freeze({
-        title:'Местна актуализация',
-        description:'Местна актуализация с конкретна цел и най-важното на едно място.',
-        type:'Публикация',
-        meta:'Лом',
-        href:'#detail/publication?record=publication-update'
-      })
-    ]),
-    events: Object.freeze([
-      Object.freeze({
-        title:'Предстоящо местно събитие',
-        description:'12 септември · 18:00 · Лом',
-        type:'Събитие',
-        meta:'Предстоящо',
-        href:'#detail/event?record=event-local'
-      })
-    ]),
+    publications: Object.freeze([]),
+    events: Object.freeze([]),
     questions: Object.freeze([])
   });
 
