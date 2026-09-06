@@ -75,9 +75,8 @@
     const detailHref=detailHrefFor(record,{context,group,owner,type,detailType});
     const serviceFamily=context==='Услуги'?serviceFamilies.find(f=>f.slice(1).includes(group)||f[0]===group):null;
     const isService=context==='Услуги';
-    const otherService=group==='Друга ремонтна услуга'||group==='Друга услуга';
-    const offerTarget=otherService?`#add/listing?category=${encodeURIComponent('Услуги')}&other=1${group==='Друга ремонтна услуга'?`&family=${encodeURIComponent('Майстори, ремонти и дом')}`:''}`:PopitaiStage2Contracts.contextualAddUrl({context,group,owner,type:isService?'Дава':type});
-    const seekTarget=otherService?`${offerTarget}&type=${encodeURIComponent('Търси')}`:PopitaiStage2Contracts.contextualAddUrl({context,group,owner,type:isService?'Търси':type});
+    const offerTarget=PopitaiStage2Contracts.contextualAddUrl({context,group,owner,type:isService?'Дава':type});
+    const seekTarget=PopitaiStage2Contracts.contextualAddUrl({context,group,owner,type:isService?'Търси':type});
     const label=PopitaiSocialCardComposer.titleFor(record.social);
     const row=demoRow(label,`Местно предложение за „${group}“.`,context,detailHref,group);
     const seekDetail=`#detail/listing?context=${encodeURIComponent(context)}&group=${encodeURIComponent(group)}&owner=${encodeURIComponent(owner)}&detail=listing&type=${encodeURIComponent('Търси')}`;
