@@ -7,12 +7,12 @@
   <meta name="robots" content="noindex,nofollow">
   <meta name="theme-color" content="#0b5fd7">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="prototype-remediation.css">
-  <link rel="stylesheet" href="prototype-master-order.css">
-  <link rel="stylesheet" href="prototype-task2.css">
-  <link rel="stylesheet" href="prototype-task3.css">
-  <link rel="stylesheet" href="prototype-task4.css">
-  <link rel="stylesheet" href="prototype-task6.css">
+  <link rel="stylesheet" href="prototype-components.css">
+  <link rel="stylesheet" href="prototype-home.css">
+  <link rel="stylesheet" href="prototype-services.css">
+  <link rel="stylesheet" href="prototype-results-forms.css">
+  <link rel="stylesheet" href="prototype-detail-share.css">
+  <link rel="stylesheet" href="prototype-favorites.css">
 </head>
 <body>
   <a class="skip-link" href="#app-main">Към съдържанието</a>
@@ -29,35 +29,17 @@
         <a data-nav="firmi" href="#firmi">Фирми</a>
         <a data-nav="info" href="#info">Инфо Лом</a>
         <a data-nav="aktualno" href="#aktualno">Актуално</a>
-        <details>
-          <summary>Още</summary>
-          <div class="more-menu">
-            <a href="#statii">Статии</a>
-            <a href="#vaprosi">Въпроси</a>
-            <a href="#about">За сайта</a>
-            <a href="#rules">Правила</a>
-            <a href="#contacts">Контакти</a>
-          </div>
-        </details>
+        <details><summary>Още</summary><div class="more-menu"><a href="#statii">Статии</a><a href="#vaprosi">Въпроси</a><a href="#about">За сайта</a><a href="#rules">Правила</a><a href="#contacts">Контакти</a></div></details>
         <a href="#profile">Профил</a>
       </nav>
       <button class="add-top" type="button" data-open-add>＋ Добави</button>
     </div>
   </header>
 
-  <div class="prototype-strip qa-only" role="note">
-    <div class="shell"><strong>Прототип</strong> — не е реалният сайт и не записва реални данни.</div>
-  </div>
-
+  <div class="prototype-strip qa-only" role="note"><div class="shell"><strong>Прототип</strong> — не е реалният сайт и не записва реални данни.</div></div>
   <main id="app-main" tabindex="-1"></main>
 
-  <footer class="site-footer">
-    <div class="shell footer-grid">
-      <div><strong>Попитай.Лом</strong><p>Местен портал за Лом и региона.</p></div>
-      <div><strong>Разгледай</strong><a href="#obyavi">Обяви и услуги</a><a href="#info">Инфо Лом</a><a href="#firmi">Фирми</a></div>
-      <div><strong>Съдържание</strong><a href="#aktualno">Актуално</a><a href="#statii">Статии</a><a href="#vaprosi">Въпроси</a></div>
-    </div>
-  </footer>
+  <footer class="site-footer"><div class="shell footer-grid"><div><strong>Попитай.Лом</strong><p>Местен портал за Лом и региона.</p></div><div><strong>Разгледай</strong><a href="#obyavi">Обяви и услуги</a><a href="#info">Инфо Лом</a><a href="#firmi">Фирми</a></div><div><strong>Съдържание</strong><a href="#aktualno">Актуално</a><a href="#statii">Статии</a><a href="#vaprosi">Въпроси</a></div></div></footer>
 
   <nav class="mobile-bottom" aria-label="Мобилна навигация">
     <a data-nav="home" href="#home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 11 9-8 9 8v10h-6v-6H9v6H3V11Z"/></svg><span>Начало</span></a>
@@ -69,10 +51,7 @@
 
   <div class="modal-layer" id="add-layer" hidden>
     <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="add-title" tabindex="-1">
-      <div class="modal-head">
-        <div><small>Добави в Попитай.Лом</small><h2 id="add-title">Какво искаш да добавиш?</h2></div>
-        <button type="button" data-close-add aria-label="Затвори">×</button>
-      </div>
+      <div class="modal-head"><div><small>Добави в Попитай.Лом</small><h2 id="add-title">Какво искаш да добавиш?</h2></div><button type="button" data-close-add aria-label="Затвори">×</button></div>
       <div class="add-grid">
         <a href="#add/listing" data-close-add><strong>Добави обява</strong><span>Продажба, услуга, работа, имот или допустима обява за животни</span></a>
         <a href="#add/firm" data-close-add><strong>Добави фирма</strong><span>Постоянен местен фирмен профил</span></a>
@@ -85,19 +64,17 @@
   </div>
 
   <script src="prototype-stage2-contracts.js" defer></script>
-  <script src="prototype-records.js" defer></script>
   <script src="prototype-core.js" defer></script>
+  <script src="prototype-records.js" defer></script>
+  <script src="prototype-content-data.js" defer></script>
   <script src="prototype-social-card-composer.js" defer></script>
+  <script src="prototype-service-views.js" defer></script>
   <script src="prototype-marketplace-views.js" defer></script>
+  <script src="prototype-home.js" defer></script>
   <script src="prototype-forms.js" defer></script>
   <script src="prototype-content-views.js" defer></script>
-  <script src="prototype-master-order.js" defer></script>
-  <script src="prototype-task2.js" defer></script>
-  <script src="prototype-task5.js" defer></script>
-  <script src="prototype-task8-content.js" defer></script>
+  <script src="prototype-validators.js" defer></script>
+  <script src="prototype-interactions.js" defer></script>
   <script src="app.js" defer></script>
-  <script src="prototype-stage2-interactions.js" defer></script>
-  <script src="prototype-task6.js" defer></script>
-  <script src="prototype-task7.js" defer></script>
 </body>
 </html>
