@@ -3,6 +3,7 @@
 (() => {
   const contracts=window.PopitaiStage2Contracts;
   const validators=window.PopitaiValidators;
+  const formOwners=window.PopitaiFormOwners;
   const addLayer=document.getElementById('add-layer');
   const backgroundSelectors=['.site-header','.prototype-strip','#app-main','.site-footer','.mobile-bottom'];
   const uploadState=new WeakMap();
@@ -65,12 +66,28 @@
       }
     }
     const animal=document.getElementById('animal-warning');if(animal)animal.hidden=categoryValue!=='Животни';
+    syncPriceContext(form,{reset:!preserve});
     const discovery=form?.dataset.discoveryContext||'',title=form?.querySelector('[name="Заглавие"]'),description=form?.querySelector('[name="Описание"]'),hints=listingTextHints(categoryValue,type.value,discovery,nextSub);
     if(title&&!title.value)title.placeholder=hints[0];if(description&&!description.value)description.placeholder=hints[1];syncAdapter(form);
   }
   function syncShopTags(){const category=document.getElementById('shop-category'),slot=document.getElementById('shop-classification-slot');if(!category||!slot)return;const selected=[...slot.querySelectorAll('input[name="shop_tags"]:checked')].map(x=>x.value),custom=slot.querySelector('#shop-custom-tag')?.value||'';slot.innerHTML=shopClassification(category.value,selected);const next=slot.querySelector('#shop-custom-tag');if(next)next.value=custom;}
   function syncQuestionHints(){const form=document.querySelector('[data-proto-form][data-form-kind="question"]');if(!form)return;const category=form.querySelector('select'),title=form.querySelector('input[type="text"]'),description=form.querySelector('textarea');if(!category||!title||!description)return;const pair=questionExamples[category.value]||['Напр. Кой може да помогне с това в Лом?','Опиши ясно какво търсиш и какъв отговор би ти бил полезен.'];if(!title.value)title.placeholder=pair[0];if(!description.value)description.placeholder=pair[1];}
-  function syncPriceState(form,target=null){const price=form?.querySelector('#listing-price'),neg=form?.querySelector('#price-negotiable'),free=form?.querySelector('#price-free');if(!price||!neg||!free)return;if(target===free&&free.checked){neg.checked=false;price.value='';price.disabled=true;}else if(target===neg&&neg.checked){free.checked=false;price.disabled=false;}else if(target===price&&price.value.trim()){free.checked=false;price.disabled=false;}else if(!free.checked)price.disabled=false;}
+  function syncPriceContext(form,{reset=false}={}){
+    const category=form?.querySelector('#listing-category')?.value||'',price=form?.querySelector('#listing-price'),label=form?.querySelector('[data-price-label]'),fieldset=form?.querySelector('[data-price-options]');
+    if(!price||!label||!fieldset)return;const context=formOwners.listingPriceContext(category);
+    if(reset){price.value='';price.disabled=false;}
+    label.textContent=context.label;fieldset.dataset.priceContext=context.key;fieldset.hidden=!context.options.length;
+    const items=fieldset.querySelector('[data-price-option-items]');if(items)items.innerHTML=context.options.map(option=>`<label><input id="${option.id}" type="checkbox" name="${option.name}"> ${escapeOption(option.label)}</label>`).join('');
+    const error=fieldset.querySelector('#price-state-error');if(error)error.textContent='';
+  }
+  function syncPriceState(form,target=null){
+    const price=form?.querySelector('#listing-price'),neg=form?.querySelector('#price-negotiable'),free=form?.querySelector('#price-free'),onRequest=form?.querySelector('#price-on-request');if(!price)return;
+    const blockers=[free,onRequest].filter(Boolean);
+    if(target&&blockers.includes(target)&&target.checked){if(neg)neg.checked=false;blockers.forEach(control=>{if(control!==target)control.checked=false;});price.value='';price.disabled=true;return;}
+    if(target===neg&&neg?.checked){blockers.forEach(control=>{control.checked=false;});price.disabled=false;return;}
+    if(target===price&&price.value.trim()){blockers.forEach(control=>{control.checked=false;});price.disabled=false;return;}
+    price.disabled=blockers.some(control=>control.checked);
+  }
 
   function uploadConfig(input){return {maxFiles:Number(input.dataset.maxFiles||1),maxBytes:Number(input.dataset.maxBytes||10485760),allowed:new Set((input.dataset.allowedMime||'').split(',').filter(Boolean))};}
   function validateFiles(input,files){const cfg=uploadConfig(input);if(files.length>cfg.maxFiles)return `Можеш да избереш най-много ${cfg.maxFiles} ${cfg.maxFiles===1?'файл':'файла'}.`;for(const file of files){if(!file||file.size===0)return `Файлът „${file?.name||'без име'}“ е празен или невалиден.`;if(file.size>cfg.maxBytes)return `Файлът „${file.name}“ е над 10 MB.`;if(!cfg.allowed.has(file.type))return `Файлът „${file.name}“ не е JPG, PNG или WebP.`;}return '';}
@@ -109,7 +126,7 @@
     const share=event.target.closest('[data-demo-share]');if(share){const msg=share.closest('.share-drawer')?.querySelector('.share-demo-message');const messages={native:'На телефон ще се отвори системното меню за споделяне.',facebook:'Facebook ще използва линка към тази страница.',copy:'Линкът към страницата е готов за копиране.'};if(msg)msg.textContent=messages[share.dataset.demoShare]||'Готово за споделяне.';}
     const action=event.target.closest('[data-demo-report],[data-demo-correction],[data-demo-inquiry],[data-demo-site],[data-demo-answer],[data-demo-official]');if(action){const msg=action.closest('.detail-action')?.querySelector('.action-demo-message');if(msg){if(action.matches('[data-demo-report]'))msg.textContent='Сигналът се изпраща за преглед според правилата за този тип съдържание.';if(action.matches('[data-demo-correction]'))msg.textContent='Корекцията е за фактическа грешка и се изпраща за проверка.';if(action.matches('[data-demo-inquiry]'))msg.textContent='Запитването е налично, защото примерният профил има такъв канал.';if(action.matches('[data-demo-site]'))msg.textContent='Сайтът се показва само когато записът има публичен уеб адрес.';if(action.matches('[data-demo-answer]'))msg.textContent='Формата за отговор е водещото действие при въпрос.';if(action.matches('[data-demo-official]'))msg.textContent='Официалният публичен източник ще се отвори от този бутон.';}}
   }
-  function handleChange(event){const target=event.target,form=target.closest?.('[data-proto-form]');if(target.matches('[data-demo-upload]')){acceptUpload(target);if(form)form.dataset.dirty='true';return;}if(target.id==='listing-category')syncListingForm({preserve:false,resetDiscovery:true});if(target.id==='listing-subcategory'||target.id==='listing-type')syncListingForm({preserve:true});if(target.id==='shop-category')syncShopTags();if(target.closest?.('[data-proto-form][data-form-kind="question"]'))syncQuestionHints();if(form){form.dataset.dirty='true';if(target.id==='price-free'||target.id==='price-negotiable')syncPriceState(form,target);validators.validateControl(form,target);}}
+  function handleChange(event){const target=event.target,form=target.closest?.('[data-proto-form]');if(target.matches('[data-demo-upload]')){acceptUpload(target);if(form)form.dataset.dirty='true';return;}if(target.id==='listing-category')syncListingForm({preserve:false,resetDiscovery:true});if(target.id==='listing-subcategory'||target.id==='listing-type')syncListingForm({preserve:true});if(target.id==='shop-category')syncShopTags();if(target.closest?.('[data-proto-form][data-form-kind="question"]'))syncQuestionHints();if(form){form.dataset.dirty='true';if(['price-free','price-negotiable','price-on-request'].includes(target.id))syncPriceState(form,target);validators.validateControl(form,target);}}
   function handleInput(event){const target=event.target,form=target.closest?.('[data-proto-form]');if(form)form.dataset.dirty='true';if(form&&target.matches('input,textarea,select'))validators.setError(target,'');if(form?.dataset.formKind==='listing'&&target.matches('[data-other-service-text]')){const exact=target.value.trim(),title=form.querySelector('[name="Заглавие"]'),description=form.querySelector('[name="Описание"]');if(exact&&title&&!title.value)title.placeholder=`Предлагам ${exact} в Лом`;if(exact&&description&&!description.value)description.placeholder=`Опиши „${exact}“, район, срок и важни условия.`;}if(form?.dataset.formKind==='listing'&&target.id==='listing-price')syncPriceState(form,target);}
   function handleFocusOut(event){const control=event.target.closest?.('[data-proto-form] input,[data-proto-form] textarea,[data-proto-form] select');if(control)validators.validateControl(control.closest('[data-proto-form]'),control);}
   function handleKeydown(event){
@@ -122,7 +139,7 @@
     if(!event.target.matches('[data-proto-form]'))return;event.preventDefault();const form=event.target;if(form.dataset.submitted==='true')return;if(!validators.validateForm(form,{uploadValidator:validateUploads}))return;form.dataset.submitted='true';form.dataset.dirty='false';const submit=form.querySelector('button[type="submit"]');if(submit)submit.disabled=true;const title=form.dataset.formKind==='health'?'Изпратено за одобрение.':'Успешно изпратено за преглед.';form.innerHTML=`<div class="notice ok" tabindex="-1" data-success-card><strong>${title}</strong><p>Формата е приключена и не може да бъде изпратена повторно.</p><a class="btn" href="#home">Към началото</a></div>`;form.querySelector('[data-success-card]')?.focus();
   }
 
-  function afterRender(){document.querySelector('.favorite-login-note')?.remove();document.querySelectorAll('[data-demo-upload]').forEach(input=>{uploadState.set(input,{files:[],error:''});renderUpload(input);});const listing=document.querySelector('[data-proto-form][data-form-kind="listing"]');if(listing)syncAdapter(listing);augmentFavorites();}
+  function afterRender(){document.querySelector('.favorite-login-note')?.remove();document.querySelectorAll('[data-demo-upload]').forEach(input=>{uploadState.set(input,{files:[],error:''});renderUpload(input);});const listing=document.querySelector('[data-proto-form][data-form-kind="listing"]');if(listing){syncPriceContext(listing);syncPriceState(listing);syncAdapter(listing);}augmentFavorites();}
   function closeTransient(){closeMoreMenu();closeAdd({restoreFocus:false});closeShareOverlay(document.querySelector('[data-share-overlay]:not([hidden])'),{restoreFocus:false});}
 
   document.addEventListener('click',handleClick);

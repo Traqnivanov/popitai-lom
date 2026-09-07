@@ -105,13 +105,29 @@ assert(!services.masters().includes('Търся изпълнител'));
 
 const hostileCreate=forms.formPage('listing',new URLSearchParams(`category=${encodeURIComponent('Услуги')}&subcategory=${encodeURIComponent('ВиК')}&type=${encodedSeek}&discovery=${encodeURIComponent('ВиК')}`));
 assert(hostileCreate.includes('id="listing-type"'));
-assert(hostileCreate.includes('type="hidden" value="Дава"'),'service create source-level type is Dava');
+assert(hostileCreate.includes('value="Дава" selected'),'service create source-level type is Dava');
+assert(hostileCreate.includes('data-listing-type-field hidden'),'service create type selector stays non-public but can switch context safely');
 assert(!hostileCreate.includes('Търся изпълнител'),'service create has no seek choice');
 const legacyEdit=forms.formPage('listing',new URLSearchParams('state=edit&record=legacy-service-seek'));
 assert(legacyEdit.includes('value="Търси" selected'),'legacy seek value remains editable');
 assert(legacyEdit.includes('Търся изпълнител (стар запис)'),'legacy compatibility is labeled, not exposed as new flow');
 assert(legacyEdit.includes('data-form-mode="edit"'));
 assert(validators.includes("mode==='edit'&&category==='Услуги'&&type==='Търси'"),'validator retains legacy edit allowance');
+
+// 2b. Price context is category-aware; free is goods-only and service pricing has its own controls.
+const servicePrice=forms.listingPriceContext('Услуги');
+assert.deepEqual(servicePrice.options.map(x=>x.label),['По договаряне','Цена след оглед/запитване']);
+assert(!servicePrice.options.some(x=>x.id==='price-free'),'services never expose free');
+for(const category of ['Работа','Имоти','Автомобили и МПС','Животни']){
+  const ctx=forms.listingPriceContext(category);
+  assert(!ctx.options.some(x=>x.id==='price-free'),`${category}: no inherited free option`);
+}
+for(const category of ['Електроника','Дом и градина','Дрехи и обувки','Деца и бебета','Спорт и хоби','Друго']){
+  const ctx=forms.listingPriceContext(category);
+  assert(ctx.options.some(x=>x.id==='price-free'),`${category}: goods can be free`);
+}
+assert(!index.includes('prototype-price-context-browser-test.html'),'browser QA page must not load in runtime');
+assert(!index.includes('prototype-price-context-browser-test.js'),'browser QA script must not load in runtime');
 
 // 3. Persisted validators remain owner-specific.
 for(const owner of ['listing','firm','shop','health','question']) assert(new RegExp(`\\b${owner}\\(form,control\\)`).test(validators),`${owner}: persisted validator`);

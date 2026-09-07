@@ -89,6 +89,21 @@
     return `${kind}-field-${index}`;
   }
   function fieldError(id){return `<p class="field-error" id="${id}-error" aria-live="polite"></p>`;}
+  const goodsPriceCategories=new Set(['Електроника','Дом и градина','Дрехи и обувки','Деца и бебета','Спорт и хоби','Друго']);
+  function listingPriceContext(category=''){
+    const negotiable={id:'price-negotiable',name:'negotiable',label:'По договаряне'};
+    if(category==='Услуги') return {key:'service',label:'Цена в евро',options:[negotiable,{id:'price-on-request',name:'price_on_request',label:'Цена след оглед/запитване'}]};
+    if(category==='Работа') return {key:'work',label:'Възнаграждение в евро',options:[negotiable]};
+    if(category==='Имоти') return {key:'property',label:'Цена / наем в евро',options:[negotiable]};
+    if(category==='Автомобили и МПС') return {key:'vehicle',label:'Цена в евро',options:[negotiable]};
+    if(category==='Животни') return {key:'animal',label:'Цена в евро',options:[negotiable]};
+    if(goodsPriceCategories.has(category)) return {key:'goods',label:'Цена в евро',options:[negotiable,{id:'price-free',name:'free',label:'Подарява (безплатно)'}]};
+    return {key:'none',label:'Цена в евро',options:[]};
+  }
+  function priceOptionsMarkup(category=''){
+    const context=listingPriceContext(category),options=context.options.map(option=>`<label><input id="${option.id}" type="checkbox" name="${option.name}"> ${esc(option.label)}</label>`).join('');
+    return `<fieldset class="form-inline-options price-options" data-price-options data-price-context="${context.key}" ${options?'':'hidden'}><legend class="sr-only">Условия за цена</legend><div data-price-option-items>${options}</div><p class="field-error" id="price-state-error" aria-live="polite"></p></fieldset>`;
+  }
   function attributesFor(kind,label,type){
     const attrs=[];
     if(kind==='question'&&label==='Заглавие на въпроса') attrs.push('minlength="10"','maxlength="120"');
@@ -142,7 +157,7 @@
     const attrs=attributesFor(kind,label,type);
     const prefix=kind==='shop'&&label==='Източник на информацията'?`<div id="shop-classification-slot">${shopClassification(currentForField('shop','Категория',query))}</div>`:'';
     if(kind==='listing'&&label==='Тип обява'&&listingContext.category==='Услуги'&&!edit){
-      return `<input id="listing-type" name="Тип обява" type="hidden" value="Дава">`;
+      return `<div class="field" data-listing-type-field hidden aria-hidden="true"><label for="listing-type">Какво искаш да публикуваш?</label><select id="listing-type" name="Тип обява" required aria-describedby="listing-type-error">${selectOptions([{value:'Дава',label:'Предлагам услуга'}],'Дава')}</select>${fieldError('listing-type')}</div>`;
     }
     if(type==='textarea'){
       const hint=kind==='question'?questionPlaceholder('Описание',query):kind==='listing'?listingTextHints(listingContext.category,listingContext.type,listingContext.discovery,listingContext.subcategory)[1]:'Опиши най-важното ясно и конкретно';
@@ -162,8 +177,10 @@
     else if(label.includes('Улица')||label.includes('Адрес')) placeholder='Напр. ул. Дунавска 12';
     else if(label.includes('Работно време')) placeholder='Напр. Пон–Пет: 8:00–18:00';
     const value=edit?editFieldValue(kind,label,query):current;
-    const input=`<div class="field"><label for="${id}">${esc(label)}</label><input id="${id}" name="${esc(label)}" type="${type}" ${required} ${attrs} value="${esc(value)}" aria-describedby="${errorId}" placeholder="${esc(placeholder)}">${fieldError(id)}</div>`;
-    if(kind==='listing'&&label==='Цена в евро') return prefix+input+`<fieldset class="form-inline-options price-options"><legend class="sr-only">Условия за цена</legend><label><input id="price-negotiable" type="checkbox" name="negotiable"> Договаряне</label><label><input id="price-free" type="checkbox" name="free"> Подарява (безплатно)</label><p class="field-error" id="price-state-error" aria-live="polite"></p></fieldset>`;
+    const priceContext=kind==='listing'&&label==='Цена в евро'?listingPriceContext(listingContext.category):null;
+    const displayLabel=priceContext?.label||label;
+    const input=`<div class="field"><label for="${id}" ${priceContext?'data-price-label':''}>${esc(displayLabel)}</label><input id="${id}" name="${esc(label)}" type="${type}" ${required} ${attrs} value="${esc(value)}" aria-describedby="${errorId}" placeholder="${esc(placeholder)}">${fieldError(id)}</div>`;
+    if(kind==='listing'&&label==='Цена в евро') return prefix+input+priceOptionsMarkup(listingContext.category);
     return prefix+input;
   }
   function uploadSection({label,maxFiles,id}){
@@ -191,5 +208,5 @@
   function staticPage(title,text){return `<div class="page">${pageHead(title,text)}<div class="shell"><div class="content-card"><p>${esc(text)}</p></div></div></div>`;}
 
   Object.assign(window,{formPage,staticPage,shopClassification,questionExamples,listingTextHints,listingCategory,listingDiscovery,listingSubcategory,currentForField});
-  window.PopitaiFormOwners=Object.freeze({formConfig,listingTypeOptions,formPage,shopClassification});
+  window.PopitaiFormOwners=Object.freeze({formConfig,listingTypeOptions,formPage,shopClassification,listingPriceContext,priceOptionsMarkup});
 })();

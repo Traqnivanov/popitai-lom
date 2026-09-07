@@ -105,12 +105,15 @@
   }
   function validatePrice(form){
     if(form?.dataset.formKind!=='listing') return null;
-    const price=form.querySelector('#listing-price'), negotiable=form.querySelector('#price-negotiable'), free=form.querySelector('#price-free'), error=document.getElementById('price-state-error');
+    const price=form.querySelector('#listing-price'), negotiable=form.querySelector('#price-negotiable'), free=form.querySelector('#price-free'), onRequest=form.querySelector('#price-on-request'), error=document.getElementById('price-state-error');
     let message='';
-    if(free?.checked&&negotiable?.checked) message='„Подарява“ и „Договаряне“ не могат да са активни едновременно.';
+    if(free?.checked&&negotiable?.checked) message='„Подарява“ и „По договаряне“ не могат да са активни едновременно.';
+    else if(onRequest?.checked&&negotiable?.checked) message='„Цена след оглед/запитване“ и „По договаряне“ не могат да са активни едновременно.';
+    else if(free?.checked&&onRequest?.checked) message='Избери само едно условие за цена.';
     else if(free?.checked&&price?.value.trim()) message='При „Подарява“ цената трябва да е празна.';
+    else if(onRequest?.checked&&price?.value.trim()) message='При „Цена след оглед/запитване“ цената трябва да е празна.';
     if(error) error.textContent=message;
-    return message?(free||negotiable):null;
+    return message?(free||onRequest||negotiable):null;
   }
   function validateControl(form,control){
     const message=baseMessage(control)||ownerMessage(form,control);
