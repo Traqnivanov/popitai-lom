@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Stage 2 Work UX browser QA</title>
+  <style>
+    body{font:16px/1.45 system-ui,sans-serif;margin:24px;background:#f6f7f9;color:#14213d}
+    .ok{color:#08783e}.fail{color:#b42318}code{background:#fff;padding:2px 5px;border-radius:4px}
+    iframe{display:block;border:1px solid #ccd3dd;background:#fff;margin-top:18px;max-width:100%;height:844px}
+  </style>
+</head>
+<body>
+  <h1>Stage 2 — Работа browser QA</h1>
+  <p>Standalone QA page. Не се зарежда от runtime <code>index.html</code>.</p>
+  <h2 id="summary">RUNNING…</h2>
+  <ol id="results"></ol>
+  <iframe id="target" title="Попитай.Лом Work UX test target"></iframe>
+  <script src="prototype-work-browser-test.js"></script>
+</body>
+</html>

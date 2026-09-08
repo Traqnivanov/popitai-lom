@@ -33,7 +33,16 @@
   function listingCategory(query){return isEdit(query)?editValue('listing','Категория',editRecord(query)):(query.get('category')||'');}
   function listingDiscovery(query){return isEdit(query)?'':(query.get('discovery')||'');}
   function listingSubcategory(query){
-    if(listingCategory(query)!=='Услуги') return '';
+    const category=listingCategory(query);
+    if(category==='Работа'){
+      if(isEdit(query)){
+        const persisted=editValue('listing','Подкатегория / вид',editRecord(query))||'';
+        return workGroups.includes(persisted)?persisted:'';
+      }
+      const raw=query.get('subcategory')||listingDiscovery(query)||'';
+      return workGroups.includes(raw)?raw:'';
+    }
+    if(category!=='Услуги') return '';
     if(isEdit(query)) return editValue('listing','Подкатегория / вид',editRecord(query))||'';
     const raw=query.get('subcategory')||listingDiscovery(query)||'';
     return contracts.serviceCanonical(raw)||query.get('subcategory')||'';
@@ -69,7 +78,11 @@
   }
   function optionsFor(kind,label,query){
     if(kind==='listing'&&label==='Категория') return listingCategories;
-    if(kind==='listing'&&label==='Подкатегория / вид') return listingCategory(query)==='Услуги'?contracts.listingSubcategories('Услуги'):[];
+    if(kind==='listing'&&label==='Подкатегория / вид'){
+      const category=listingCategory(query);
+      if(category==='Работа') return workGroups;
+      return category==='Услуги'?contracts.listingSubcategories('Услуги'):[];
+    }
     if(kind==='listing'&&label==='Тип обява') return listingTypeOptions(query);
     if(kind==='firm'&&label==='Категория') return firmCategories;
     if(kind==='question'&&label==='Категория') return questionCategories;
@@ -136,7 +149,7 @@
     return ['Напр. Продавам запазен велосипед в Лом','Опиши състояние, размери, важни особености и условия.'];
   }
   function discoveryContext(kind,query){
-    if(kind!=='listing') return '';
+    if(kind!=='listing'||listingCategory(query)!=='Услуги') return '';
     const exact=listingDiscovery(query)||listingSubcategory(query)||(query.get('other')==='1'?'Друга услуга':'');
     if(!exact) return '';
     return `<section class="service-context-summary" aria-label="Избрана услуга"><strong>Услуги → ${esc(exact)}</strong><a href="#uslugi">Смени услугата</a></section>`;
@@ -166,8 +179,8 @@
     if(type==='select'){
       const isSub=kind==='listing'&&label==='Подкатегория / вид';
       const isClassification=kind==='listing'&&(label==='Категория'||isSub);
-      const showSub=!isSub||(listingContext.category==='Услуги'&&!otherService);
-      const displayLabel=kind==='shop'&&label==='Какво предлага'?'Кратко описание на магазина':kind==='listing'&&label==='Тип обява'&&listingContext.category==='Услуги'?'Какво искаш да публикуваш?':label;
+      const showSub=!isSub||((listingContext.category==='Услуги'&&!otherService)||listingContext.category==='Работа');
+      const displayLabel=kind==='shop'&&label==='Какво предлага'?'Кратко описание на магазина':kind==='listing'&&label==='Тип обява'&&listingContext.category==='Услуги'?'Какво искаш да публикуваш?':isSub&&listingContext.category==='Работа'?'Професионално направление':label;
       return prefix+`<div class="field${isClassification?' classification-field':''}" ${isSub?'id="listing-subcategory-field"':''} ${showSub?'':'hidden'}><label for="${id}">${esc(displayLabel)}</label><select id="${id}" name="${esc(label)}" ${required} ${showSub?'':'disabled'} aria-describedby="${errorId}">${selectOptions(optionsFor(kind,label,query),current)}</select>${fieldError(id)}</div>`;
     }
     let placeholder='';
@@ -203,7 +216,8 @@
     const contextualService=kind==='listing'&&listingContext.category==='Услуги'&&(listingContext.discovery||listingContext.subcategory||otherService);
     const pageTitle=contextualService?(edit?'Редактирай услуга':'Добави услуга'):(edit?`Редактирай — ${config.title}`:config.title);
     const pageSubtitle=contextualService?'Публикувай конкретна услуга.':config.subtitle;
-    return `<div class="page">${pageHead(pageTitle,pageSubtitle)}<div class="shell form-wrap ${contextualService?'contextual-service-form':''}">${discoveryContext(kind,query)}${kind==='health'?healthContractNote():''}${animalWarning}${editNote}<form class="proto-form" data-proto-form data-form-kind="${kind}" data-form-mode="${edit?'edit':'create'}" data-discovery-context="${esc(listingContext.discovery)}" novalidate>${otherServiceFields}${fields}${listingExtras}${firmExtras}${terms}<div class="form-actions"><button class="btn primary" type="submit">${edit?'Изпрати редакцията':kind==='health'?'Изпрати за одобрение':'Изпрати за преглед'}</button><a class="btn" href="#home">Отказ</a></div><div class="form-message" role="status" aria-live="polite"></div></form>${adapterPreview(kind,query)}</div></div>`;
+    const returnTarget=kind==='listing'&&query.get('return')?.startsWith('#rabota')?query.get('return'):'#home';
+    return `<div class="page">${pageHead(pageTitle,pageSubtitle)}<div class="shell form-wrap ${contextualService?'contextual-service-form':''}">${discoveryContext(kind,query)}${kind==='health'?healthContractNote():''}${animalWarning}${editNote}<form class="proto-form" data-proto-form data-form-kind="${kind}" data-form-mode="${edit?'edit':'create'}" data-discovery-context="${esc(listingContext.discovery)}" novalidate>${otherServiceFields}${fields}${listingExtras}${firmExtras}${terms}<div class="form-actions"><button class="btn primary" type="submit">${edit?'Изпрати редакцията':kind==='health'?'Изпрати за одобрение':'Изпрати за преглед'}</button><a class="btn" href="${esc(returnTarget)}">Отказ</a></div><div class="form-message" role="status" aria-live="polite"></div></form>${adapterPreview(kind,query)}</div></div>`;
   }
   function staticPage(title,text){return `<div class="page">${pageHead(title,text)}<div class="shell"><div class="content-card"><p>${esc(text)}</p></div></div></div>`;}
 

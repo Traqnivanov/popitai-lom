@@ -31,7 +31,7 @@
     if(path==='uslugi') return services();
     if(path==='maistori') return masters();
     if(path==='service-group') return serviceGroup(query);
-    if(path==='rabota') return work();
+    if(path==='rabota') return work(query);
     if(path==='imoti') return properties();
     if(path==='stoki') return goods();
     if(path==='avtomobili') return auto();
@@ -143,6 +143,15 @@
     navigate(href);
   }
   function handleSubmittedForm(event){
+    const workSearch=event.target.closest?.('[data-work-search]');
+    if(workSearch){
+      event.preventDefault();
+      const route=parseHash();if(route.path!=='rabota')return;
+      const query=new URLSearchParams(route.query),q=new FormData(workSearch).get('q')?.toString().trim()||'';
+      if(q)query.set('q',q);else query.delete('q');
+      navigate(`#rabota${query.size?`?${query}`:''}`);
+      return;
+    }
     const form=event.target.closest?.('[data-proto-form]');
     if(!form||form.dataset.submitted!=='true')return;
     completeSubmittedForm();

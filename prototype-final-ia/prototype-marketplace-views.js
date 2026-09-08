@@ -24,7 +24,50 @@
     return `<div class="page">${pageHead(title,desc,'Обяви и услуги')}<div class="shell">${opts.notice||''}<form class="search-box" data-page-search style="max-width:760px"><input name="q" aria-label="Търсене" placeholder="${esc(opts.placeholder||'Какво търсиш?')}"><button>Търси</button></form><div class="chips">${quick}</div><div class="grid cols-3">${cards}</div><div class="page-tools"><a class="btn primary" href="${opts.add||'#add/listing'}">＋ ${esc(opts.addLabel||'Публикувай')}</a><a class="btn" href="#add/question">Не намираш? Задай въпрос</a></div>${opts.after||''}</div></div>`;
   }
 
-  function work(){return familyPage('Работа','Първо избери широка област, после конкретната професия.',workGroups,{placeholder:'Напр. шофьор, строителство, продавач…',context:'Работа',quick:workGroups.slice(0,5),add:PopitaiStage2Contracts.listingAddUrl({category:'Работа',type:'Предлага работа'}),addLabel:'Добави обява за работа'});}
+  function workRoute(query,patch={}){
+    const next=new URLSearchParams(query||'');
+    for(const [key,value] of Object.entries(patch)){
+      if(value===null||value===undefined||value==='')next.delete(key);else next.set(key,value);
+    }
+    for(const key of [...next.keys()]) if(!['q','type','group'].includes(key)) next.delete(key);
+    const encoded=next.toString();
+    return `#rabota${encoded?`?${encoded}`:''}`;
+  }
+  function workTypeOf(item={}){return item.workType||item.listingType||item.listing_type||'';}
+  function workGroupOf(item={}){return item.workGroup||item.group||item.discovery||'';}
+  function workMatches(item,{q='',type='',group=''}={}){
+    const itemType=workTypeOf(item),itemGroup=workGroupOf(item);
+    if(type&&itemType!==type)return false;
+    if(group&&itemGroup!==group)return false;
+    if(!q)return true;
+    const haystack=[item.title,item.description,item.meta,itemType,itemGroup].filter(Boolean).join(' ').toLocaleLowerCase('bg-BG');
+    return haystack.includes(q.toLocaleLowerCase('bg-BG'));
+  }
+  function workRow(item){
+    const itemType=workTypeOf(item),group=workGroupOf(item);
+    const meta=[itemType,group,item.meta].filter(Boolean).filter((value,index,array)=>array.indexOf(value)===index).join(' · ');
+    return window.PopitaiHomeViews.publicRow({...item,type:'Работа',meta});
+  }
+  function work(query=new URLSearchParams()){
+    const type=['Предлага работа','Търси работа'].includes(query.get('type'))?query.get('type'):'';
+    const group=workGroups.includes(query.get('group'))?query.get('group'):'';
+    const q=(query.get('q')||'').trim();
+    const all=Array.isArray(window.PopitaiApprovedContent?.workListings)?window.PopitaiApprovedContent.workListings.filter(Boolean):[];
+    const filtered=all.filter(item=>workMatches(item,{q,type,group}));
+    const returnHref=workRoute(query);
+    const baseAddHref=PopitaiStage2Contracts.listingAddUrl({category:'Работа',discovery:group});
+    const addHref=`${baseAddHref}${baseAddHref.includes('?')?'&':'?'}return=${encodeURIComponent(returnHref)}`;
+    const typeTabs=[
+      ['', 'Всички'],
+      ['Предлага работа','Предлагат работа'],
+      ['Търси работа','Търсят работа']
+    ].map(([value,label])=>`<a class="tab ${type===value?'active':''}" href="${workRoute(query,{type:value})}">${label}</a>`).join('');
+    const directionFilters=[['','Всички направления'],...workGroups.map(value=>[value,value])].map(([value,label])=>`<a class="chip ${group===value?'active':''}" href="${workRoute(query,{group:value})}">${esc(label)}</a>`).join('');
+    const resultContent=filtered.length
+      ?`<div class="result-list">${filtered.map(workRow).join('')}</div>`
+      :`<article class="empty-card"><h2>${all.length?'Няма обяви по избраните критерии':'Няма активни обяви за работа'}</h2><p>${all.length?'Промени търсенето или филтрите, за да видиш други активни обяви.':'В момента няма налични активни обяви в този раздел.'}</p><a class="btn primary" href="${addHref}">＋ Добави обява</a></article>`;
+    return `<div class="page work-list-page">${pageHead('Работа','Активните обяви за работа са на едно място.','Обяви и услуги')}<div class="shell"><form class="search-box" data-work-search style="max-width:760px"><input name="q" aria-label="Търсене в Работа" value="${esc(q)}" placeholder="Напр. шофьор, продавач, строителство…"><button>Търси</button></form><div class="tabs" aria-label="Тип обява за работа">${typeTabs}</div><div class="page-tools"><a class="btn primary" data-work-add href="${addHref}">＋ Добави обява</a></div><div class="section-head compact-head"><div><h2>Професионално направление</h2><p>Филтрирай обявите по област.</p></div></div><div class="chips" data-work-groups>${directionFilters}</div><div class="section-head compact-head"><div><h2>Обяви</h2><p>${filtered.length?'Показват се наличните активни обяви.':'Показват се само налични активни обяви.'}</p></div></div>${resultContent}</div></div>`;
+  }
   function properties(){
     const labels={'Продава имот':'Продава','Отдава под наем':'Отдава под наем','Търси за купуване':'Купува','Търси под наем':'Търси под наем'};
     return `<div class="page">${pageHead('Имоти','Първо избери намерението, после вида имот.','Обяви и услуги')}<div class="shell"><div class="tabs">${Object.entries(labels).map(([type,label])=>`<button class="tab ${type===window.propertyType?'active':''}" type="button" data-property-type="${esc(type)}">${esc(label)}</button>`).join('')}</div><div class="grid cols-4">${propertyKinds.map(x=>`<a class="family-card" data-property-kind="${esc(x)}" href="${propertyResultsHref(x)}"><div class="icon">🏠</div><h3>${esc(x)}</h3><p>Резултати за избраното намерение.</p></a>`).join('')}</div><div class="page-tools"><a class="btn primary" data-property-add href="${PopitaiStage2Contracts.listingAddUrl({category:'Имоти',type:window.propertyType})}">＋ Добави имот</a></div></div></div>`;
@@ -45,5 +88,5 @@
   function health(){return familyPage('Здраве и частни лекари','Намери лекар, специалист, стоматолог или ветеринар. Проверената справочна информация остава в Инфо Лом.',healthGroups,{placeholder:'Лекар, специалист, стоматолог…',context:'Здраве и лекари',owner:'Health/Info',resultDetail:'health',quick:healthGroups,add:'#add/health',addLabel:'Добави лекар / практика'});}
 
   Object.assign(window,{familyPage,work,properties,goods,auto,animals,shops,restaurants,health});
-  window.PopitaiMarketplaceViews=Object.freeze({resultHref,familyPage,work,properties,goods,auto,animals,shops,restaurants,health});
+  window.PopitaiMarketplaceViews=Object.freeze({resultHref,familyPage,workRoute,workMatches,work,properties,goods,auto,animals,shops,restaurants,health});
 })();
