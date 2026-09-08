@@ -236,7 +236,7 @@
     const legacyWorkPeriod=kind==='listing'&&edit&&listingContext.category==='Работа';
     return `<div class="page">${pageHead(pageTitle,pageSubtitle)}<div class="shell form-wrap ${contextualService?'contextual-service-form':''}">${discoveryContext(kind,query)}${kind==='health'?healthContractNote():''}${animalWarning}${editNote}<form class="proto-form" data-proto-form data-form-kind="${kind}" data-form-mode="${edit?'edit':'create'}" data-discovery-context="${esc(listingContext.discovery)}" data-work-period-legacy="${legacyWorkPeriod?'true':'false'}" novalidate>${otherServiceFields}${fields}${listingExtras}${firmExtras}${terms}<div class="form-actions"><button class="btn primary" type="submit">${edit?'Изпрати редакцията':kind==='health'?'Изпрати за одобрение':'Изпрати за преглед'}</button><a class="btn" href="${esc(returnTarget)}">Отказ</a></div><div class="form-message" role="status" aria-live="polite"></div></form>${adapterPreview(kind,query)}</div></div>`;
   }
-  function staticPage(title,text){return `<div class="page">${pageHead(title,text)}<div class="shell"><div class="content-card"><p>${esc(text)}</p></div></div></div>`;}
+  function staticPage(title,text){return `<div class="page">${pageHead(title,text)}</div>`;}
 
   Object.assign(window,{formPage,staticPage,shopClassification,questionExamples,listingTextHints,listingCategory,listingDiscovery,listingSubcategory,currentForField});
   window.PopitaiFormOwners=Object.freeze({formConfig,listingTypeOptions,formPage,shopClassification,listingPriceContext,priceOptionsMarkup,workCompensationLabel,workCompensationPeriods});

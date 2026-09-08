@@ -2,7 +2,7 @@
 
 Тази папка е **prototype-only**. Не е production и не записва реални данни.
 
-Последен приет runtime baseline: `ba1c00ad64784e261107b902e6f8b8165bba3291`. По-късен docs-only commit върху safety branch-а не променя този runtime baseline.
+Consolidated runtime baseline преди ограничените follow-up корекции: `ba1c00ad64784e261107b902e6f8b8165bba3291`. По-късните docs-only и bounded follow-up commits не са автоматично общо Stage 2 acceptance.
 
 ## Runtime ownership
 
@@ -31,9 +31,9 @@ CSS е разделен по semantic ownership и се зарежда само 
 
 Prototype формата показва optional предлагано/желано възнаграждение и период `на час / на ден / на месец / за задача`, с `По договаряне`. Production `listings` няма поле за периода; той не се записва в description или compatibility adapter и изисква отделно production approval.
 
-## Известен малък presentation defect
+## Static page presentation
 
-`staticPage()` повтаря описанието от `pageHead()` още веднъж в content card. Това е отделен ограничен cleanup и не е taxonomy/owner проблем.
+`staticPage()` използва общия `pageHead()` и показва описанието само веднъж, без празна или дублираща content card.
 
 ## Regression audit
 

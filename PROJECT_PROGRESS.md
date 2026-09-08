@@ -11,8 +11,8 @@
 
 - Repo: `Traqnivanov/popitai-lom`
 - Safety branch: `prototype/content-complete-ia-20260904-stage2-safety`
-- Последен приет prototype code baseline: `ba1c00ad64784e261107b902e6f8b8165bba3291`
-- Последният docs-only checkpoint е HEAD на този safety branch и не променя runtime baseline-а
+- Consolidated Stage 2 baseline преди ограничените follow-up корекции: `ba1c00ad64784e261107b902e6f8b8165bba3291`
+- Текущият exact branch HEAD се проверява в Git преди работа; docs-only и bounded follow-up commits не се представят като ново общо Stage 2 acceptance
 - Production `main`: не е променян от тази Stage 2 работа
 - Supabase/schema/RLS/RPC: не са променяни
 - Stage 3: не е започван
@@ -25,6 +25,7 @@
 - опростеният директен results UX на `Работа`;
 - prototype-only Work compensation logic: optional сума, период при сума и `По договаряне`;
 - Work compensation period не се представя като production-persisted.
+- `staticPage()` показва описанието само веднъж; duplicate presentation defect е отстранен.
 
 ## Stage status
 
@@ -36,13 +37,12 @@
 
 ## Точен следващ ред
 
-1. малък prototype-only cleanup на двойното описание в `staticPage()`;
-2. Favorites contract checkpoint;
-3. icon visual-system checkpoint;
-4. content-complete/reality pass;
-5. финален Stage 2 audit на всички основни journeys, forms, actions и states на desktop и 390px;
-6. owner visual acceptance и freeze на exact SHA;
-7. едва след това — отделни production architecture checkpoints от §12.1 на Master-а.
+1. Favorites contract checkpoint;
+2. icon visual-system checkpoint;
+3. content-complete/reality pass;
+4. финален Stage 2 audit на всички основни journeys, forms, actions и states на desktop и 390px;
+5. owner visual acceptance и freeze на exact SHA;
+6. едва след това — отделни production architecture checkpoints от §12.1 на Master-а.
 
 ## Stop conditions
 

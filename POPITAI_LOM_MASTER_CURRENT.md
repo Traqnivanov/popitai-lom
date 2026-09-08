@@ -3,7 +3,7 @@
 Статус: **КАНОНИЧНА ПРОДУКТОВА ИСТИНА / PUBLIC IA ОДОБРЕНА / STAGE 2 ПРОТОТИПЪТ ОЩЕ НЕ Е ФИНАЛНО ПРИЕТ / НЕ Е PRODUCTION**
 Последна синхронизация: **08.09.2026**
 Текущ safety branch: `prototype/content-complete-ia-20260904-stage2-safety`
-Последен приет prototype code baseline: `ba1c00ad64784e261107b902e6f8b8165bba3291`
+Consolidated Stage 2 baseline преди ограничените follow-up корекции: `ba1c00ad64784e261107b902e6f8b8165bba3291`
 
 ## 0. Защо съществува този файл
 
@@ -616,8 +616,8 @@ Stage 2 демонстрира тази посока, но финалната и
 
 Публичната IA вече не е отворено бизнес решение. След docs-only синхронизацията работата продължава в този ред:
 
-1. **Малък Stage 2 presentation cleanup** — премахване на доказаното двойно описание в `staticPage()`; без taxonomy/owner промяна.
-2. **Favorites contract checkpoint** — coverage, позиция, login/return-to-action, storage/RLS и states; първо решение и prototype audit, без production migration.
+1. **Завършено: малък Stage 2 presentation cleanup** — доказаното двойно описание в `staticPage()` е премахнато без taxonomy/owner промяна.
+2. **Следва: Favorites contract checkpoint** — coverage, позиция, login/return-to-action, storage/RLS и states; първо решение и prototype audit, без production migration.
 3. **Icon visual-system checkpoint** — inventory и един професионален desktop/mobile макет; без масова production подмяна преди owner acceptance.
 4. **Content-complete / reality pass** — одобрено реално съдържание от живия сайт се представя вярно; където липсва съдържание има честно empty state, не fake records.
 5. **Финален Stage 2 независим audit** — Home, hub, всички категории, results/detail/Add/edit, actions, forms и states; desktop + 390px; оценка като млад, средна възраст и възрастен потребител, после професионален UX review.
@@ -728,13 +728,13 @@ Public IA е одобрена. Следващата acceptance граница е
 
 ### 15.1 Текущо състояние към 08.09.2026
 
-- последен приет prototype code baseline: `ba1c00ad64784e261107b902e6f8b8165bba3291`;
+- consolidated Stage 2 baseline преди ограничените follow-up корекции: `ba1c00ad64784e261107b902e6f8b8165bba3291`;
 - runtime consolidation: изпълнена;
 - Services offer-only drift remediation: изпълнена;
 - Work direct-results UX: независимо приет;
 - Work compensation prototype logic: независимо приета;
 - production persistence на Work периода: **OPEN**;
-- известен малък presentation defect: `staticPage()` показва описанието два пъти;
+- `staticPage()` duplicate description defect: **ОТСТРАНЕН**;
 - твърдението `Listing формата трябва да има старите 16 категории` е отхвърлено като смесване на public discovery IA с persisted Listing owner taxonomy;
 - Favorites: prototype-only, production contract **OPEN**;
 - icon system: owner visual checkpoint **OPEN**;

@@ -116,6 +116,12 @@ assert(legacyEdit.includes('Търся изпълнител (стар запис
 assert(legacyEdit.includes('data-form-mode="edit"'));
 assert(validators.includes("mode==='edit'&&category==='Услуги'&&type==='Търси'"),'validator retains legacy edit allowance');
 
+// Static pages expose their description once through the shared page head.
+const staticDescription='Попитай.Лом е местен портал за намиране, публикуване и помощ от общността.';
+const staticHtml=global.staticPage('За сайта',staticDescription);
+assert.equal((staticHtml.match(new RegExp(staticDescription.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'g'))||[]).length,1,'static page description is rendered once');
+assert(!staticHtml.includes('content-card'),'static page does not add an empty duplicate content card');
+
 // 2b. Price context is category-aware; free is goods-only and service pricing has its own controls.
 const servicePrice=forms.listingPriceContext('Услуги');
 assert.deepEqual(servicePrice.options.map(x=>x.label),['По договаряне','Цена след оглед/запитване']);
