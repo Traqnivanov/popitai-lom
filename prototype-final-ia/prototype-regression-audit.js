@@ -34,6 +34,7 @@ const data=global.PopitaiContentData;
 const index=read('index.html');
 const app=read('app.js');
 const interactions=read('prototype-interactions.js');
+const formsSource=read('prototype-forms.js');
 const validators=read('prototype-validators.js');
 const contentViews=read('prototype-content-views.js');
 const records=read('prototype-records.js');
@@ -73,9 +74,10 @@ for(const [marker,owner] of Object.entries(ownershipMarkers)){
 }
 assert.equal(runtimeJs.filter(file=>/function\s+home\s*\(/.test(read(file))).length,1,'one Home function owner');
 assert.equal(runtimeJs.filter(file=>/function\s+contextualAddUrl\s*\(/.test(read(file))).length,1,'one discovery/Add mapping owner');
-assert.equal(runtimeJs.filter(file=>read(file).includes('document.addEventListener')).length,1,'one delegated document interactions owner');
+assert.deepEqual(runtimeJs.filter(file=>read(file).includes('document.addEventListener')).sort(),['app.js','prototype-interactions.js'].sort(),'document listeners limited to router + interactions owners');
 assert(!runtimeJs.some(file=>read(file).includes('MutationObserver')),'no runtime MutationObserver patching');
-assert(app.includes("window.addEventListener('hashchange',handleHashChange)"),'router owns hash lifecycle');
+assert(app.includes("window.addEventListener('popstate',handlePopState)"),'router owns popstate lifecycle');
+assert(!app.includes("window.addEventListener('hashchange'"),'router does not duplicate history with hashchange lifecycle');
 assert(interactions.includes('function afterRender'),'interactions are attached to explicit render lifecycle');
 
 // 2. Offer-only service creation, including hostile/legacy input normalization.
@@ -126,8 +128,8 @@ for(const category of ['Електроника','Дом и градина','Др
   const ctx=forms.listingPriceContext(category);
   assert(ctx.options.some(x=>x.id==='price-free'),`${category}: goods can be free`);
 }
-assert(!index.includes('prototype-price-context-browser-test.html'),'browser QA page must not load in runtime');
-assert(!index.includes('prototype-price-context-browser-test.js'),'browser QA script must not load in runtime');
+assert(!index.includes('prototype-price-context-browser-test.html'),'price browser QA page must not load in runtime');
+assert(!index.includes('prototype-price-context-browser-test.js'),'price browser QA script must not load in runtime');
 
 // 3. Persisted validators remain owner-specific.
 for(const owner of ['listing','firm','shop','health','question']) assert(new RegExp(`\\b${owner}\\(form,control\\)`).test(validators),`${owner}: persisted validator`);
@@ -160,11 +162,23 @@ assert(contentViews.includes("if(!record?.actions?.share||!record.social?.shareE
 assert(records.includes("'publication-blocked':record"),'blocked share fixture remains available');
 assert(records.includes("infoIds:Object.freeze(['info-health','info-institutions','info-transport','info-education','info-banks','info-utilities'])"));
 
-// 6. Dirty guard, submit lifecycle, modal/share focus and Favorites remain lifecycle-owned.
+// 6. Dirty/history/success lifecycle stays explicit, single-owner and repeat-submit safe.
 for(const needle of ['function activeDirtyForm','function confirmLeave','form.dataset.submitted','form.dataset.dirty','function trapFocus','modalOpener','shareReturnFocus','augmentFavorites','favoriteLoggedIn']) assert(interactions.includes(needle),needle);
-assert(interactions.includes("if(form.dataset.submitted==='true')return"),'repeat submit blocked');
-assert(interactions.includes("form.dataset.dirty='false'"),'success clears dirty state');
+assert(interactions.includes("if(form.dataset.submitted==='true')return"),'repeat submit blocked before lifecycle handoff');
+assert(interactions.includes("form.dataset.dirty='false'"),'successful submit clears dirty before route replacement');
+assert(interactions.includes('function routeTo(target)'),'interaction-triggered routes delegate to router');
+assert(!/location\.hash\s*=/.test(interactions),'interactions do not create raw hash history entries');
+for(const needle of ['function canonicalHash','function navigate','function handlePopState','history.pushState','history.replaceState','history.go','function completeSubmittedForm']) assert(app.includes(needle),needle);
+assert(app.includes("document.addEventListener('click',handleRouteClick,true)"),'router guards internal hash navigation before browser history changes');
+assert(app.includes("document.addEventListener('submit',handleSubmittedForm)"),'router owns success route replacement after validated submit');
+assert(interactions.includes("if(!form.dataset.dirty)form.dataset.dirty='false'")&&interactions.includes("if(!form.dataset.submitted)form.dataset.submitted='false'"),'render lifecycle initializes forms clean and active without source hydration events');
+assert(app.includes("successCard.tabIndex=-1;successCard.dataset.successCard=''"),'success route creates an explicit focus target');
+assert(interactions.includes("title.placeholder='Напр. Предлагам ВиК в Лом'"),'ВиК placeholder correction is lifecycle-owned and exact');
 assert(!interactions.includes('firstInvalid'),'first-error focus state belongs to validators, not interactions');
 assert(validators.includes('first.focus?.({preventScroll:false})'),'validator owns first-error focus');
+assert(exists('prototype-lifecycle-browser-test.html'),'lifecycle browser QA page exists');
+assert(exists('prototype-lifecycle-browser-test.js'),'lifecycle browser QA script exists');
+assert(!index.includes('prototype-lifecycle-browser-test.html'),'lifecycle browser QA page must not load in runtime');
+assert(!index.includes('prototype-lifecycle-browser-test.js'),'lifecycle browser QA script must not load in runtime');
 
 console.log('prototype regression audit: ok');

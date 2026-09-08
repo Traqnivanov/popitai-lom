@@ -2,7 +2,28 @@
 
 (() => {
   const main=document.getElementById('app-main');
-  let lastRenderedHash=location.hash||'#home';
+  const ROUTE_INDEX_KEY='popitaiStage2RouteIndex';
+  let restoringHistory=false;
+  let lastRenderedHash='#home';
+  let currentIndex=0;
+
+  function canonicalHash(raw=location.hash){
+    const value=String(raw||'').trim();
+    if(!value||value==='#')return '#home';
+    const body=value.startsWith('#')?value.slice(1):value;
+    const splitAt=body.indexOf('?');
+    const pathRaw=splitAt===-1?body:body.slice(0,splitAt);
+    const queryRaw=splitAt===-1?'':body.slice(splitAt+1);
+    const route=(pathRaw||'home').replace(/^\/+/, '')||'home';
+    const query=new URLSearchParams(queryRaw);
+    const normalized=query.toString();
+    return `#${route}${normalized?`?${normalized}`:''}`;
+  }
+  function routeIndex(state=history.state){
+    const value=state?.[ROUTE_INDEX_KEY];
+    return Number.isInteger(value)?value:null;
+  }
+  function routeState(index){return {...(history.state||{}),[ROUTE_INDEX_KEY]:index};}
 
   function viewFor(path,query){
     if(path==='home') return home();
@@ -44,21 +65,99 @@
     main.innerHTML=viewFor(path,query);
     updateNav(path);
     window.PopitaiInteractions?.afterRender?.(path,query);
-    main.focus({preventScroll:true});
+    const successCard=query.get('state')==='success'?main.querySelector('[data-success-card],.form-wrap .notice.ok'):null;
+    if(successCard){successCard.tabIndex=-1;successCard.dataset.successCard='';}
+    (successCard||main).focus({preventScroll:true});
     window.scrollTo({top:0,behavior:'instant'});
   }
-  function handleHashChange(){
-    const nextHash=location.hash||'#home';
-    if(window.PopitaiInteractions&&!window.PopitaiInteractions.beforeRouteChange(nextHash,lastRenderedHash)){
-      history.replaceState(null,'',lastRenderedHash);return;
-    }
+  function commitRenderedRoute(nextHash){
+    lastRenderedHash=nextHash;
     window.PopitaiInteractions?.closeTransient?.();
     render();
-    lastRenderedHash=location.hash||'#home';
   }
+  function canLeave(nextHash){
+    return !window.PopitaiInteractions||window.PopitaiInteractions.beforeRouteChange(nextHash,lastRenderedHash)!==false;
+  }
+  function navigate(target,{replace=false,skipGuard=false}={}){
+    const nextHash=canonicalHash(target);
+    if(nextHash===lastRenderedHash)return true;
+    if(!skipGuard&&!canLeave(nextHash))return false;
+    if(replace){
+      history.replaceState(routeState(currentIndex),'',nextHash);
+    }else{
+      currentIndex+=1;
+      history.pushState(routeState(currentIndex),'',nextHash);
+    }
+    commitRenderedRoute(nextHash);
+    return true;
+  }
+  function completeSubmittedForm(){
+    const route=parseHash();
+    if(!route.path.startsWith('add/'))return false;
+    const query=new URLSearchParams(route.query);
+    query.set('state','success');
+    const target=`#${route.path}?${query}`;
+    return navigate(target,{replace:true,skipGuard:true});
+  }
+  function handlePopState(event){
+    if(restoringHistory){
+      restoringHistory=false;
+      const restored=routeIndex(event.state);
+      if(restored!==null)currentIndex=restored;
+      return;
+    }
+    const nextHash=canonicalHash(location.hash);
+    if(nextHash===lastRenderedHash){
+      const sameIndex=routeIndex(event.state);
+      if(sameIndex!==null)currentIndex=sameIndex;
+      if(location.hash!==nextHash)history.replaceState(routeState(currentIndex),'',nextHash);
+      return;
+    }
+    const nextIndex=routeIndex(event.state);
+    if(!canLeave(nextHash)){
+      if(nextIndex!==null&&nextIndex!==currentIndex){
+        restoringHistory=true;
+        history.go(currentIndex-nextIndex);
+      }else{
+        history.replaceState(routeState(currentIndex),'',lastRenderedHash);
+      }
+      return;
+    }
+    if(nextIndex!==null)currentIndex=nextIndex;
+    if(location.hash!==nextHash)history.replaceState(routeState(currentIndex),'',nextHash);
+    commitRenderedRoute(nextHash);
+  }
+  function handleRouteClick(event){
+    if(event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
+    const link=event.target.closest?.('a[href]');
+    if(!link||link.hasAttribute('download')||(link.target&&link.target!=='_self'))return;
+    const href=link.getAttribute('href')||'';
+    if(href==='#app-main'){
+      event.preventDefault();
+      main.focus({preventScroll:true});
+      main.scrollIntoView({block:'start'});
+      return;
+    }
+    if(!href.startsWith('#'))return;
+    event.preventDefault();
+    navigate(href);
+  }
+  function handleSubmittedForm(event){
+    const form=event.target.closest?.('[data-proto-form]');
+    if(!form||form.dataset.submitted!=='true')return;
+    completeSubmittedForm();
+  }
+  function getState(){return Object.freeze({index:currentIndex,hash:lastRenderedHash,restoring:restoringHistory});}
 
-  window.addEventListener('hashchange',handleHashChange);
-  window.PopitaiRouter=Object.freeze({render,viewFor});
-  if(!location.hash) location.hash='#home';
-  else {render();lastRenderedHash=location.hash;}
+  const initialHash=canonicalHash(location.hash);
+  const initialIndex=routeIndex();
+  currentIndex=initialIndex===null?0:initialIndex;
+  history.replaceState(routeState(currentIndex),'',initialHash);
+  lastRenderedHash=initialHash;
+
+  document.addEventListener('click',handleRouteClick,true);
+  document.addEventListener('submit',handleSubmittedForm);
+  window.addEventListener('popstate',handlePopState);
+  window.PopitaiRouter=Object.freeze({render,viewFor,navigate,canonicalHash,getState});
+  render();
 })();
