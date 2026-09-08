@@ -1,8 +1,10 @@
 # Попитай.Лом — Content-complete prototype specification — 04.09.2026
 
-Статус: **SUPPORTING SPEC / ПОДЧИНЕН НА `POPITAI_LOM_MASTER_CURRENT.md` / НЕ Е PRODUCTION РАЗРЕШЕНИЕ**
+Статус: **ИСТОРИЧЕСКИ BASELINE / SUPPORTING EVIDENCE / НЕ ИЗПОЛЗВАЙ КАТО ТЕКУЩА ПРОДУКТОВА ИСТИНА**
 Branch: `prototype/content-complete-ia-20260904`
 Prototype root: `prototype-final-ia/`
+
+> Този dated spec описва началната Stage 2 база. По-късните решения за Home, offer-only Services, опростения `Работа` UX, Work compensation, Favorites и runtime consolidation са в `POPITAI_LOM_MASTER_CURRENT.md` и текущия `PROJECT_PROGRESS.md`. При конфликт този файл не управлява нова работа.
 
 ## 1. Цел
 

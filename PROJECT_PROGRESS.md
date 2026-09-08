@@ -1,190 +1,63 @@
 # Попитай.Лом — CURRENT PROJECT CHECKPOINT
 
-Актуализирано: 02.09.2026
-Branch: `v6-product-foundation-draft`
+Актуализирано: **08.09.2026**
 
-## 1. CURRENT STATUS
+Този файл е кратък оперативен указател. Той **не е втори продуктов Master**.
+Текущите решения, заменените правила и точният ред на работа са в:
 
-V6 Recovery пакетът е **готов за user review**.
+`POPITAI_LOM_MASTER_CURRENT.md`
 
-Не е разрешено:
+## Exact current state
 
-- V18 или нов visual layer;
-- нов prototype implementation преди одобрение на Recovery;
-- production UI/backend/schema/RLS промяна;
-- merge на V6 към `main`;
-- промяна на protected business logic като страничен ефект.
+- Repo: `Traqnivanov/popitai-lom`
+- Safety branch: `prototype/content-complete-ia-20260904-stage2-safety`
+- Последен приет prototype code baseline: `ba1c00ad64784e261107b902e6f8b8165bba3291`
+- Последният docs-only checkpoint е HEAD на този safety branch и не променя runtime baseline-а
+- Production `main`: не е променян от тази Stage 2 работа
+- Supabase/schema/RLS/RPC: не са променяни
+- Stage 3: не е започван
 
-Production `main` не е променен от V6. V6-C не е приет и head `9add22055dfa663f585a48f094585d5bedced766` няма доказан browser/rendered PASS.
+## Прието до този checkpoint
 
-## 2. CURRENT AUTHORITY SET
+- public IA и деветте discovery входа;
+- prototype runtime consolidation и един owner на route/render lifecycle;
+- новите Services са offer-only: само `Предлагам услуга`; legacy `Търси` остава read/edit compatibility;
+- опростеният директен results UX на `Работа`;
+- prototype-only Work compensation logic: optional сума, период при сума и `По договаряне`;
+- Work compensation period не се представя като production-persisted.
 
-Minimum read order:
+## Stage status
 
-1. `PROJECT_RULES_00_READ_FIRST.md`
-2. `PROJECT_RULES_PROTECTED_CORE.md`
-3. `PROJECT_RULES.md`
-4. `PROJECT_RULES_RENDER_OWNERSHIP.md`
-5. `PROJECT_RULES_ADMIN_MODERATOR.md` — само при roles/permissions/ownership/moderation/protected flow
-6. `PUBLIC_MARKETPLACE_V3_APPROVED_SPEC.md`
-7. `PUBLIC_PRODUCT_V6_CANONICAL_RECOVERY.md`
-8. `PUBLIC_PRODUCT_V6_IMPLEMENTATION_MATRIX.md`
-9. `PUBLIC_PRODUCT_V6_DOCUMENT_INDEX.md`
-10. този файл
+Отделните Work UX/compensation checkpoints са приети като логика и код.
 
-При конфликт:
+**Целият Stage 2 остава НЕПРИЕТ.**
 
-`LOCKED rules → Marketplace V3/approved production specs → latest owner decision → Recovery/Matrix → task-specific source → prototype`.
+Остават owner visual acceptance, content-complete/reality pass и финален desktop/mobile независим audit. Production и Stage 3 остават блокирани.
 
-## 3. RECOVERY DELIVERABLES
+## Точен следващ ред
 
-Готови:
+1. малък prototype-only cleanup на двойното описание в `staticPage()`;
+2. Favorites contract checkpoint;
+3. icon visual-system checkpoint;
+4. content-complete/reality pass;
+5. финален Stage 2 audit на всички основни journeys, forms, actions и states на desktop и 390px;
+6. owner visual acceptance и freeze на exact SHA;
+7. едва след това — отделни production architecture checkpoints от §12.1 на Master-а.
 
-- `PUBLIC_PRODUCT_V6_CANONICAL_RECOVERY.md` — една product truth, screen flow, visual direction, conflict resolution, external patterns и stages;
-- `PUBLIC_PRODUCT_V6_IMPLEMENTATION_MATRIX.md` — exact groups/leaves/stored mapping/routes/owners/forms/roles/Facebook/acceptance;
-- `PUBLIC_PRODUCT_V6_DOCUMENT_INDEX.md` — classification и minimum read routing за всички root Markdown документи;
-- `PUBLIC_PRODUCT_V6_MASTER_CONTROL.md` — concise current roadmap;
-- `PUBLIC_PRODUCT_V6_NEXT_CHAT_START.md` — safe zero-explanation handoff.
+## Stop conditions
 
-Static checks completed:
+Спира се за owner/Work решение само при реален конфликт, който засяга:
 
-- all root Markdown files са отчетени в Document Index;
-- all referenced local Markdown files съществуват;
-- 22 protected service leaves + 9 other listing categories + vehicle entry са отчетени;
-- четирите production V3 keys `maistori / avtomobili / uslugi / other` са отчетени;
-- documentation diff check е clean.
-
-## 4. CANONICAL PRODUCT STRUCTURE
-
-Leading product:
-
-`Обяви и услуги`
-
-Един landing, четири главни групи:
-
-1. Майстори и ремонти;
-2. Автомобили;
-3. Други услуги;
-4. Други обяви.
-
-Rules:
-
-- category/subcategory cards browse/filter results;
-- separate `Добави обява` carries bounded context to the protected form;
-- form exposes exactly four public groups;
-- `Работа` and `Имоти` are leaves under `Други обяви` with protected specialized types;
-- Q&A is secondary/supporting;
-- one Listing is stored once and can be composed into relevant contexts;
-- Firms are permanent profiles;
-- Health/Info and Shops retain specialized owners;
-- Events has no fake public Add;
-- `kategorii.html` remains compatibility only.
-
-Desktop navigation:
-
-`Начало | Обяви и услуги | Фирми | Инфо Лом | Статии | Още | Профил | + Добави`
-
-Mobile navigation:
-
-`Начало | Обяви | + | Инфо | Профил`
-
-## 5. PROTECTED CORE — UNCHANGED
-
-- Listings/Firms/Masters owners;
-- Admin/Moderator permissions and self-moderation boundary;
-- ownership/RLS/status/approval/direct publish;
-- monthly quotas;
-- media rules;
-- last approved public version during normal edits;
-- expanded firm access;
-- Work/Property specialized types;
-- Health/Info/Shops owner boundaries;
-- protected Admin/Ivanov/boost priority after relevance;
-- Firm ↔ Listing ↔ Construction/Ivanov relations.
-
-Admin media truth remains:
-
-- normal listing: up to 6 images;
-- normal firm: 1 logo + up to 6 gallery images;
-- Admin-owned firm/listing: no backend/Supabase image limit;
-- old frontend `20` is a technical mismatch, not a new business rule.
-
-Known separate protected defect remains separate:
-
-- Moderator-own-business edit mismatch is not silently fixed during V6.
-
-## 6. CURRENT V17 PROTOTYPE AUDIT
-
-Confirmed:
-
-- branch is ahead of `main`; production app was not changed by V6;
-- `full-site.html` loads V8 runtime/controller, V9 utility route and visual layers through V17;
-- active JS syntax passes and referenced active assets exist;
-- no PR/status/workflow/browser evidence exists for the checked head;
-- existing CI does not cover `v6-prototype/`.
-
-Confirmed deviations:
-
-1. separate `categories` screen duplicates the marketplace tree;
-2. subcategory cards open `form-listing` instead of browse/filter;
-3. public category IDs are incompletely mapped and can default incorrectly;
-4. form has six public groups instead of four;
-5. fake `Всички/Предлага/Търси` values can reach subcategory context;
-6. old status/handoff documents described obsolete runtime layers;
-7. CSS/JS layering continued before C acceptance;
-8. unused legacy `v6-prototype/full-site.js` has a syntax error.
-
-These are not permission for piecemeal patches. They are inputs to one future bounded consolidation task.
-
-## 7. ADMIN/MODERATOR BASELINE
-
-Admin/Moderator Panel v2 is already completed and production-QA-checked. It is not restarted as part of V6.
-
-Keep:
-
-- Dashboard/menu/sidebar/mobile navigation/content shells;
-- role-correct UI and backend enforcement;
-- Moderator self-moderation protection;
-- Admin-only permanent delete;
-- Admin-only roles/expanded-access management;
-- Info Lom protected RPC/status boundaries;
-- live rollback-only security checks where applicable.
-
-Do not create fake QA records.
-
-## 8. EXACT NEXT TASK
-
-`USER REVIEW OF V6 RECOVERY PACKAGE — NO CODE`
-
-Review together:
-
-1. `PUBLIC_PRODUCT_V6_CANONICAL_RECOVERY.md`;
-2. `PUBLIC_PRODUCT_V6_IMPLEMENTATION_MATRIX.md`.
-
-After explicit whole-package approval, the next bounded task is:
-
-`R1 — CONSOLIDATE THE ISOLATED V6 PROTOTYPE TO THE APPROVED FOUR-GROUP STRUCTURE`
-
-R1 constraints:
-
-- no V18/new visual layer;
-- no production changes;
-- one route/runtime/form lifecycle owner;
-- one marketplace landing;
-- category cards browse; Add is separate;
-- exact four-group mapping;
-- Info/Health parity preserved;
-- CI/static checks first, then real desktop/mobile rendered review.
-
-## 9. STOP CONDITIONS
-
-Stop the owner only for a genuinely new decision affecting:
-
-- roles/rights/RLS/schema;
-- ownership/status/approval/direct publish;
+- production schema/RLS/RPC;
+- роли, ownership, moderation или status lifecycle;
 - quotas/media limits;
-- protected Firms/Listings/Masters/Admin/Ivanov behavior;
-- a new write owner/form;
-- removal of an approved capability.
+- protected Firms/Listings/Masters/Admin логика;
+- нов write owner/form;
+- премахване на одобрена възможност;
+- ново продуктово решение, което не е определено в Master-а.
 
-Do not request repeated `OK` for already-authorized reading, reconciliation, documentation checks or behavior-preserving verification.
+Без такъв конфликт безопасните проверки и ограничената текуща задача продължават без междинни отчети.
+
+## Историческа бележка
+
+Предишното съдържание на този файл описваше V6 Recovery и стар четиригрупов marketplace модел. То е заменено и остава достъпно в Git историята. Не управлява нова работа.

@@ -1,8 +1,9 @@
 # Попитай.Лом — CURRENT PRODUCT MASTER
 
-Статус: **КАНОНИЧНА ПРОДУКТОВА ИСТИНА / PUBLIC IA ОДОБРЕНА / РАЗРЕШЕН Е ИЗОЛИРАН ПРОТОТИП, НЕ PRODUCTION**
-Дата: **04.09.2026**
-Branch: `docs/master-reconciliation-20260903`
+Статус: **КАНОНИЧНА ПРОДУКТОВА ИСТИНА / PUBLIC IA ОДОБРЕНА / STAGE 2 ПРОТОТИПЪТ ОЩЕ НЕ Е ФИНАЛНО ПРИЕТ / НЕ Е PRODUCTION**
+Последна синхронизация: **08.09.2026**
+Текущ safety branch: `prototype/content-complete-ia-20260904-stage2-safety`
+Последен приет prototype code baseline: `ba1c00ad64784e261107b902e6f8b8165bba3291`
 
 ## 0. Защо съществува този файл
 
@@ -47,6 +48,15 @@ Branch: `docs/master-reconciliation-20260903`
 - **ОТХВЪРЛЕНО** — пази се само като история и не управлява работа;
 - **ИСТОРИЯ** — доказателство за извършена работа, не текущ източник на продуктова истина.
 
+### 2.1 Текуща acceptance граница
+
+- Public IA и описаните в този Master продуктови решения са **ОДОБРЕНИ**.
+- Stage 2 runtime consolidation е извършена: един route/render lifecycle, ясни owner модули и tests, които не променят runtime.
+- Опростеният UX на `Работа` и prototype-only логиката за възнаграждение са независимо приети като логика и код до checkpoint `ba1c00ad64784e261107b902e6f8b8165bba3291`.
+- Това **не е** приемане на целия Stage 2 и **не е** разрешение за production implementation.
+- Owner visual acceptance, финалният content-complete audit и общият desktop/mobile acceptance остават отворени.
+- Stage 3, production `main`, Supabase, schema, RLS/RPC и production migrations остават блокирани до отделно изрично одобрение.
+
 ## 3. ЗАПАЗЕНО / LOCKED техническо ядро
 
 Следното остава валидно, докато собственикът изрично не реши друго:
@@ -89,22 +99,23 @@ Branch: `docs/master-reconciliation-20260903`
 
 #### 5.1.1 Първо ниво
 
-Основните marketplace задачи са:
+Деветте public discovery входа в един общ блок `Обяви и услуги` са:
 
 1. `Услуги`;
 2. `Купува и продава`;
 3. `Работа`;
 4. `Имоти`;
 5. `Автомобили`;
-6. `Животни`.
-
-Непосредствено след тях се показват специализираните местни направления:
-
+6. `Здраве и частни лекари`;
 7. `Магазини`;
 8. `Заведения`;
-9. `Здраве и лекари`.
+9. `Животни`.
 
-На desktop могат да бъдат видими всички девет входа. На mobile шестте marketplace задачи са компактно видими първо, а трите специализирани направления стоят непосредствено под тях; основните категории не се погребват зад дълбоко меню.
+Това е един потребителски discovery блок, не отделни конкуриращи се секции. Различните lifecycle owners не диктуват визуално разделяне на Home.
+
+Текущият приоритетен presentation ред е `Услуги`, `Купува и продава`, `Работа`, `Имоти`, `Автомобили`, `Здраве и частни лекари`, следвани компактно от `Магазини`, `Заведения`, `Животни`. Това е UX приоритет, а не промяна на owner taxonomy: `Животни` остава Listings context, а Health/Shops/Firms запазват specialized owners.
+
+На desktop могат да бъдат видими всички девет входа. На mobile първите четири карти са най-силно видими, следващите входове са компактни редове с кратко обяснение; нито един основен вход не се превръща в неясна икона без текст или се погребва зад дълбоко меню.
 
 #### 5.1.2 Услуги — ОДОБРЕНО
 
@@ -122,7 +133,16 @@ Branch: `docs/master-reconciliation-20260903`
 
 `Авточасти` не е услуга: продажбата на част е обява в `Автомобили`, магазинът за части е Shop/Firm context, а монтажът/ремонтът е автомобилна услуга.
 
-Owner: `listings`, category `Услуги`. Съществуващата Listing форма остава owner form; category/subcategory/type се подават като видим editable bounded prefill. Фирми могат да се показват като релевантни providers, без да се копират като обяви. Protected `Майстори и ремонти` остава самостоятелен силен вход и не се пренаписва като страничен ефект от общия hub.
+Owner: `listings`, category `Услуги`. Съществуващата Listing форма остава owner form; category/subcategory/type се подават като видим editable bounded prefill. Фирми могат да се показват като релевантни providers, без да се копират като обяви. Protected `Майстори и ремонти` остава силен вход вътре в Services discovery и не се превръща в конкурираща се главна Home категория.
+
+**Новият public Service create flow е offer-only:**
+
+- единственият публикуващ CTA е `Предлагам услуга`;
+- production-compatible Listing стойността остава `listing_type = Дава`;
+- няма нов публичен CTA, форма или route `Търся изпълнител`;
+- човекът намира изпълнител чрез browse/search/results; ако няма готов отговор, Q&A остава fallback;
+- legacy Service записи с persisted `listing_type = Търси` не се изтриват или мигрират масово и остават четими/редактируеми за backward compatibility;
+- exact discovery leaf, например `Кетъринг`, остава видим UX context, но надеждното му отделно persistence/reconstruction след submit е **OPEN / LOCKED production checkpoint**.
 
 #### 5.1.3 Купува и продава — ОДОБРЕНО
 
@@ -138,9 +158,20 @@ Owner: `listings`, category `Услуги`. Съществуващата Listing
 
 `Подарява` е тип/състояние на обявата, не главна категория. Авточасти се намират в `Автомобили`, а стоките за животни — в `Животни`. Owner: `listings`; Add target: съществуващата Listing форма.
 
-#### 5.1.4 Работа — ОДОБРЕНО
+#### 5.1.4 Работа — ОДОБРЕНО И АКТУАЛИЗИРАНО
 
-Първи групи:
+`Работа` е проста директна results страница, защото в началото може да има малко съдържание. Редът е:
+
+1. заглавие;
+2. търсене;
+3. три основни филтъра: `Всички`, `Предлагат работа`, `Търсят работа`;
+4. директно реалните резултати или честно празно състояние;
+5. точно един видим CTA `Добави обява`;
+6. професионалните направления не стоят като девет големи входни карти преди съдържанието.
+
+Професионалните направления се запазват като компактни филтри след резултатите и като поле `Професионално направление` в единната Listing форма. При нула реални обяви direction filter не се показва.
+
+Направленията са:
 
 - Строителство, ремонти и техници;
 - Производство, склад и общи работници;
@@ -153,6 +184,17 @@ Owner: `listings`, category `Услуги`. Съществуващата Listing
 - Друга / сезонна работа.
 
 Owner: `listings`, category `Работа`; одобрените видими типове са `Предлага работа` и `Търси работа`. Не се създава отделна форма за професиите.
+
+В prototype формата възнаграждението е optional:
+
+- при `Предлага работа`: `Предлагано възнаграждение в евро (по желание)`;
+- при `Търси работа`: `Желано възнаграждение в евро (по желание)`;
+- период: `на час`, `на ден`, `на месец`, `за задача`;
+- запазва се `По договаряне`;
+- сума изисква период, период без сума е невалиден, а `По договаряне` изчиства и деактивира сума и период;
+- legacy Work edit без период остава отваряем и редактируем.
+
+Текущият production `public.listings` contract няма поле за периода. Периодът не се записва в `description` и не се представя като persisted. Production persistence изисква отделно schema/RLS/form/moderation approval.
 
 #### 5.1.5 Имоти — ОДОБРЕНО
 
@@ -194,7 +236,7 @@ Owner: `listings`, category `Имоти`; съществуващите persisted
 
 Публични групи: `Ресторанти`, `Кафенета`, `Пицарии`, `Бързо хранене`, `Сладкарници`, `Доставка / за вкъщи`. Owner остава Firms с категория `Заведения`; Add target е `Добави фирма` с приложим prefill. Не се създава restaurant datastore.
 
-#### 5.1.10 Здраве и лекари — ОДОБРЕНО
+#### 5.1.10 Здраве и частни лекари — ОДОБРЕНО
 
 Публичният вход към частни практики използва specialized Health flow: `Лекари`, `Лични лекари`, `Специалисти`, `Стоматолози`, `Ветеринари`. Verified `Инфо Лом → Здраве` остава отделният справочен owner за болница, аптеки, лаборатории и други проверени факти. Generic medical Listing flow не се създава.
 
@@ -213,7 +255,8 @@ Owner: `listings`, category `Имоти`; съществуващите persisted
 
 - Info Lom е проверен местен справочник, не marketplace;
 - показва актуални контакти, работно време, услуги, източник и freshness;
-- шестте основни Info семейства остават директно откриваеми;
+- шестте основни Info семейства остават директно откриваеми: `Здраве`, `Институции`, `Транспорт`, `Образование и култура`, `Банки и банкомати`, `Комунални услуги`;
+- `Полезни телефони` не е седма главна Info карта;
 - community мнение не става verified Info факт;
 - визуалната и interaction логика на работещите Info/Health повърхности се пази и не се заменя с generic marketplace карти.
 
@@ -239,9 +282,10 @@ Owner: `listings`, category `Имоти`; съществуващите persisted
 ### 5.6 Здраве и частни практики
 
 - проверената здравна информация остава при Health/Info owner;
-- частен лекар или здравна услуга се подава чрез съществуващия специализиран Health flow;
-- публичната структура може да даде разбираем вход към частни лекари и здравни услуги, без да превръща verified Health данните в generic обяви;
-- точният placement в marketplace/главните входове остава част от финалната IA задача.
+- лекар, стоматолог или ветеринарна практика се подава чрез съществуващия специализиран Health flow;
+- публичната структура може да даде разбираем вход към тези частни практики, без да превръща verified Health данните в generic обяви;
+- входът `Здраве и частни лекари` е част от одобрените девет public discovery входа;
+- провереният production submission contract в момента поддържа лекар, стоматолог и ветеринар; по-широк generic flow `здравна услуга` остава отделен OPEN production checkpoint.
 
 ### 5.7 Събития
 
@@ -260,16 +304,17 @@ Hero води с потребителската задача, не с Q&A:
 - tertiary fallback `Не намираш? Задай въпрос`;
 - слоганът `Попитай. Намери. Препоръчай.` остава част от бранда, но не променя action priority `Намери → Публикувай → Попитай`.
 
-Ред на Home секциите:
+Ред на Home секциите при текущото реално налично съдържание:
 
 1. Hero / search / publish / ask fallback;
 2. основните marketplace категории;
-3. `Инфо Лом` — шестте проверени семейства;
-4. нови обяви и услуги;
-5. `Актуално в Лом` — Публикации и Събития като ясно различени content types;
-6. местни Фирми;
-7. полезни Статии / Ръководства;
-8. Въпроси от общността.
+3. последни одобрени обяви и услуги, само когато има реални записи;
+4. `Инфо Лом` — шестте проверени семейства;
+5. местни Фирми, само когато има реални профили;
+6. полезни Статии / Ръководства, само когато има реално съдържание;
+7. `Не намери отговор? Попитай` като последен fallback.
+
+`Актуално в Лом` остава валидна discovery surface за различимите типове `Публикация` и `Събитие`, но Home не показва празен или симулиран блок. Блокът влиза в Home едва когато има реално public/approved текущо съдържание. Това не слива Публикация и Събитие и не отменя отделните им lifecycle owners.
 
 ### Desktop navigation
 
@@ -290,7 +335,7 @@ Global `+ Добави` показва само реални owner flows:
 - Добави обява;
 - Добави фирма;
 - Добави магазин;
-- Добави лекар / здравна услуга;
+- Добави лекар / практика;
 - Задай въпрос.
 
 Няма public `Добави събитие`, докато съществуващият Event owner няма одобрен public form/moderation flow. Няма public `Добави статия` или `Добави публикация` при launch; editorial authoring е Admin-only.
@@ -429,6 +474,27 @@ Global `+ Добави` показва само реални owner flows:
 
 Share UI различава unsupported, blocked, canceled, clipboard denied, offline, unavailable canonical и content no longer public. Copy link може да остане при offline, когато URL е известен; Facebook path изисква network.
 
+### 7.4 Social Card image hierarchy — ОДОБРЕНО НАПРАВЛЕНИЕ, PRODUCTION OPEN
+
+За shareable съдържание се използва обща контролирана йерархия:
+
+1. реална одобрена снимка, лого, корица или афиш на конкретния record;
+2. при липса — тематичен брандиран шаблон според content type/category;
+3. панорама на Лом само като последен общ fallback.
+
+Изображението е в подходящо social съотношение, съдържа дискретно `Попитай.Лом` и не измисля лице, фирмен asset, лого или реална снимка. Заглавието/категорията идват от контролирани record полета, не от AI гадаене по свободен текст. Facebook teaser, самото 1200×630 изображение, OG metadata и QA обяснението са четири различни слоя.
+
+Stage 2 демонстрира тази посока, но финалната иконография и owner visual acceptance остават отворени. Production generation, Storage/cache, public asset URL и crawler-readable OG delivery изискват отделен технически checkpoint.
+
+### 7.5 Facebook hooks и директен потребителски път
+
+- Facebook текстът води с реална местна полезност/любопитство, не с общо `Посети сайта`;
+- линкът води директно към конкретното public съдържание, не към Home;
+- човекът първо вижда публичната стойност;
+- при state-changing действие се иска вход с конкретна причина и се пази return URL + започнатото намерение;
+- след вход човекът се връща към същия record/action, не към Home;
+- външната кампания не създава нов owner, moderation flow, permission или fake metric.
+
 ## 8. SEO — ОДОБРЕНО
 
 - първо се решава реална местна нужда, после се оптимизира за Google;
@@ -442,6 +508,23 @@ Share UI различава unsupported, blocked, canceled, clipboard denied, of
 - вътрешното свързване води към правилния owner, без копиране на цялото съдържание.
 
 Не всяка страница се индексира автоматично. Thin, social-only, временна или твърде кратка Публикация може да бъде `noindex`; временни search/filter states, pending previews и duplicate aliases не са отделни canonical SEO страници.
+
+## 8A. Защита на съдържанието — ОДОБРЕН ПРИНЦИП
+
+Публичното съдържание не може честно да бъде обещано като `некопируемо`. Целта е Попитай.Лом да пази по-голямата стойност: актуалност, проверка, източник, история, структура, owners, moderation и действия.
+
+Затова:
+
+- не се забраняват copy/paste, маркиране или десен бутон;
+- не се превръща нормален текст в изображение и не се слагат натрапчиви водни знаци по UI картите;
+- важната public информация не се скрива зад login само заради копиране;
+- canonical URL, created/modified timestamps, freshness, source и version/audit history доказват първоизточника;
+- публичните API/read повърхности по-късно трябва да връщат само нужните полета, с pagination, разумни page limits, наблюдение и rate limiting при доказано масово извличане;
+- `robots.txt` е crawler инструкция, не security control;
+- Terms трябва да различават нормално споделяне/кратък цитат от системно извличане, но финалните правни текстове изискват юридически преглед;
+- не се твърди собственост върху отделен публичен факт само защото е публикуван в Попитай.Лом.
+
+Техническата API/rate-limit/monitoring реализация е бъдещ production security checkpoint и не се добавя като страничен ефект от Stage 2.
 
 ## 9. Форми, публикуване и moderation — ЗАПАЗЕНО
 
@@ -460,6 +543,15 @@ Share UI различава unsupported, blocked, canceled, clipboard denied, of
 
 Преди код се прави form-owner audit: къде има форма, коя е реалният owner, завършена ли е end-to-end, има ли излишна паралелна форма и какъв е moderation lifecycle.
 
+### 9.1 Публично разглеждане и auth gate
+
+- гостът може да разглежда допустимото публично съдържание;
+- публикуване, редакция, отговор/коментар, препоръка/глас, запазване/следене, корекция, кандидатстване/запитване и друго действие, което създава, променя, изпраща или пази данни в Попитай.Лом, изисква вход според реалния owner flow;
+- login съобщението казва конкретната причина: например `Влез, за да запазиш тази обява`;
+- след вход се възстановяват конкретният record, return URL и започнатото действие;
+- обикновената навигация и разглеждането не се третират като write action;
+- native share/copy link следват Share eligibility и privacy правилата и не създават вътрешен content record.
+
 ## 10. UX и визуална оценка — ОДОБРЕНИ ПРИНЦИПИ
 
 - първо се оценява като реален потребител, после като професионален продуктов/UX дизайнер, после спрямо техническите ограничения;
@@ -474,6 +566,29 @@ Share UI различава unsupported, blocked, canceled, clipboard denied, of
 - сходните действия имат общ визуален език, без механично уеднаквяване на различни owners;
 - прототипът преди production code трябва да е content-complete: реалните типове съдържание, важните форми, бутони, states и навигация са представени; placeholder, който води към несвързан екран, не се приема.
 
+### 10.1 Икони — ОДОБРЕНО НАПРАВЛЕНИЕ, ОТДЕЛЕН CHECKPOINT
+
+- иконите трябва да са професионални, красиви, ясни и разпознаваеми;
+- използва се една последователна icon система с обща геометрия/stroke и контролиран лек цветен акцент, когато помага;
+- не се смесват emoji, детски 3D символи и несъвместими line-icon стилове;
+- разпознаваемостта е по-важна от абстрактната `професионалност`;
+- ограничените SVG примери в Stage 2 са visual direction, не автоматично финален site-wide избор;
+- масова production подмяна не се прави преди отделен icon inventory, desktop/mobile визуален макет и owner acceptance.
+
+### 10.2 Любими — ЖЕЛАНО И ПРОТОТИПИРАНО, PRODUCTION CONTRACT OPEN
+
+`Добави в любими` е желана функция на логичното място при приложимото публично съдържание. Текущият Stage 2 вариант е session-only демонстрация и не доказва production storage/login/RLS договор.
+
+Преди production трябва отделно да се решат и тестват:
+
+- точните content types и местата, където Favorites е приложимо;
+- logged-out gate и return-to-action;
+- storage owner/schema/RLS;
+- add/remove, profile list, unavailable/removed record и error states;
+- дали Въпросите участват и при каква логика.
+
+Следователно наличен бутон в прототипа не се приема автоматично за окончателно production покритие.
+
 ## 11. ОТХВЪРЛЕНО / НЕ УПРАВЛЯВА НОВА РАБОТА
 
 Следното не е текуща продуктова истина:
@@ -483,6 +598,11 @@ Share UI различава unsupported, blocked, canceled, clipboard denied, of
 - четирите групи `Майстори и ремонти / Автомобили / Други услуги / Други обяви` като автоматично финална IA;
 - `Други услуги` и `Други обяви` като основни видими продуктови понятия без ясна потребителска логика;
 - отделен общ блок, който смесва без обща задача Фирми, Магазини, Заведения, Събития, Статии и Въпроси;
+- отделна конкурираща се Home карта `Майстори и ремонти` извън Services discovery;
+- нов Service create flow с два CTA `Предлагам услуга` и `Търся изпълнител`;
+- девет големи професионални карти преди съдържанието в `Работа`;
+- постоянно видим direction filter в `Работа`, когато няма реални обяви;
+- механично прехвърляне на стара 16-категорийна public IA в persisted Listing формата; текущият Listing owner има собствена доказана taxonomy;
 - по два primary Add бутона под всяка подкатегория;
 - category card, която директно отваря форма вместо първо да позволява разглеждане, когато човекът е дошъл да търси;
 - прототип с малко реално съдържание, скрити основни функции или links към несвързани екрани;
@@ -492,37 +612,69 @@ Share UI различава unsupported, blocked, canceled, clipboard denied, of
 
 Тези решения и прототипи се пазят като история и evidence, но не се използват за нова реализация.
 
-## 12. IA Е ОДОБРЕНА — оставащи технически задачи преди production
+## 12. Точен ред на работа от текущия checkpoint
 
-Публичната IA вече не е отворено бизнес решение. Следните точки са implementation/architecture задачи и не дават право на production промяна сами по себе си:
+Публичната IA вече не е отворено бизнес решение. След docs-only синхронизацията работата продължава в този ред:
 
-1. точните persisted taxonomy стойности и backward-compatible mapping към съществуващи Listings records/forms;
-2. route/canonical/redirect migration plan за `uslugi.html`, `rabota.html`, `kategorii.html` и останалите нови thematic routes;
-3. owner-driven Events public surface върху съществуващия Event owner;
-4. Articles lifecycle/authoring implementation, без промяна на одобрената content роля;
-5. **Публикации получават отделен editorial lifecycle owner**, с Admin-only authoring при launch; exact table/schema/API/RLS дизайн се прави отделно и не се имплементира в Supabase на prototype етап;
-6. общото търсене да интегрира Shops, Health и Events като реални result types без дублиране на owners;
-7. старите Marketplace V3 / V/B/Stage render guards да бъдат изключени от бъдещия production pipeline там, където биха наложили отхвърлена IA; не се наслагва нов renderer върху стар;
-8. form-owner matrix и moderation lifecycle да се проверят end-to-end за всяка Add точка преди production;
-9. SEO/canonical и structured-data audit за всяка нова discovery страница;
-10. accessibility, mobile density, loading/empty/error/success/edit/pending states и low-data/offline behavior да бъдат проверени в content-complete prototype.
+1. **Малък Stage 2 presentation cleanup** — премахване на доказаното двойно описание в `staticPage()`; без taxonomy/owner промяна.
+2. **Favorites contract checkpoint** — coverage, позиция, login/return-to-action, storage/RLS и states; първо решение и prototype audit, без production migration.
+3. **Icon visual-system checkpoint** — inventory и един професионален desktop/mobile макет; без масова production подмяна преди owner acceptance.
+4. **Content-complete / reality pass** — одобрено реално съдържание от живия сайт се представя вярно; където липсва съдържание има честно empty state, не fake records.
+5. **Финален Stage 2 независим audit** — Home, hub, всички категории, results/detail/Add/edit, actions, forms и states; desktop + 390px; оценка като млад, средна възраст и възрастен потребител, после професионален UX review.
+6. **Owner visual acceptance и freeze на exact SHA** — едва тук Stage 2 може да бъде обявен за приет.
+7. **Отделни production architecture checkpoints** — само след Stage 2 acceptance и по един owner/risk scope наведнъж.
 
-Нито една от тези технически задачи не разрешава промяна на Admin/Moderator, RLS, quotas, protected Firms/Listings/Masters semantics или production data без съответното отделно разрешение.
+### 12.1 Production checkpoints след Stage 2, без текущо разрешение за реализация
+
+1. exact Service discovery-leaf persistence/reconstruction и backward-compatible taxonomy mapping;
+2. Work compensation period storage/schema/RLS/form/moderation contract;
+3. route/canonical/redirect migration за `uslugi.html`, `rabota.html`, `kategorii.html` и останалите thematic routes;
+4. production Facebook/OG crawler-readable metadata, social-image generation/storage/cache и unavailable lifecycle;
+5. owner-driven Events public surface върху съществуващия Event owner;
+6. Articles lifecycle/authoring implementation;
+7. отделен Publications editorial owner с Admin-only authoring при launch и отделно одобрени schema/API/RLS;
+8. общото търсене да интегрира Shops, Health и Events без дублиране на owners;
+9. production Favorites storage/login/RLS, след приетия product contract;
+10. старите Marketplace V3/V/B/Stage render guards да бъдат изключени там, където противоречат на текущата IA; не се наслагва нов renderer;
+11. form-owner matrix и moderation lifecycle end-to-end за всяка Add/Edit точка;
+12. SEO/canonical/structured-data audit за всяка нова discovery страница;
+13. content-protection API surface, pagination/rate limits/monitoring и юридически преглед на Terms;
+14. по-широк Health submission flow извън доказаните doctor/dentist/vet owners, ако бъде отделно одобрен.
+
+Нито една точка не разрешава промяна на Admin/Moderator, RLS, quotas, protected Firms/Listings/Masters semantics или production data без съответното отделно разрешение.
+
+### 12.2 Регистър на важните заменени решения
+
+| Тема | Текущо решение | Заменено/история |
+|---|---|---|
+| Services publishing | Само `Предлагам услуга`; legacy `Търси` остава read/edit compatibility | Два нови CTA `Предлагам` + `Търся изпълнител` |
+| Работа | Директни резултати/empty; 3 type филтъра; directions компактно след резултатите | 9 големи професионални карти преди съдържанието |
+| Work compensation | Optional сума + задължителен период само ако има сума; `По договаряне`; prototype-only | Generic `Цена` без Work контекст или измислено persistence |
+| Home | Категории → реални последни → Info Lom → реални фирми → реални статии → Ask fallback | Постоянен празен `Актуално` блок и отделна Home карта Masters |
+| Listing taxonomy | Persisted Listing owner запазва доказаните 11 категории до отделна migration | Механично налагане на старата 16-категорийна IA върху формата |
+| Статия/Facebook | Preview описва самата Статия; canonical Popitai URL | Задължително `актуалният контакт е в Info Lom` във Facebook preview |
+| Публикация | Отделна content роля и бъдещ editorial owner; не е автоматичен teaser | Публикация = задължително кратко копие на Статия |
+| Social image | Approved media → тематичен брандиран template → Lom fallback | Една обща панорама за всичко или измислена снимка/лице |
+| Икони | Отделен професионален visual checkpoint | Emoji/детски картинки или автоматично приемане на първите SVG варианти |
+| Favorites | Желана функция; prototype session-only; production contract OPEN | Приемане, че наличният prototype бутон доказва production готовност |
 
 ## 13. Документна архитектура
 
 ### Задължителни текущи източници
 
 1. `POPITAI_LOM_MASTER_CURRENT.md` — текуща продуктова истина и отворени решения;
-2. `PROJECT_RULES_PROTECTED_CORE.md` — protected business/backend ядро;
-3. `PROJECT_RULES_ADMIN_MODERATOR.md` — точна ролева граница;
-4. `PROJECT_RULES.md` — действащи глобални технически правила;
-5. `PROJECT_RULES_RENDER_OWNERSHIP.md` — render ownership;
-6. task-specific технически договор само когато задачата реално засяга съответния owner.
+2. `PROJECT_PROGRESS.md` — кратък оперативен checkpoint и ред на следващите passes; не е втори Master;
+3. `PROJECT_RULES_PROTECTED_CORE.md` — protected business/backend ядро;
+4. `PROJECT_RULES_ADMIN_MODERATOR.md` — точна ролева граница;
+5. `PROJECT_RULES.md` — действащи глобални технически правила;
+6. `PROJECT_RULES_RENDER_OWNERSHIP.md` — render ownership;
+7. task-specific технически договор само когато задачата реално засяга съответния owner.
 
 ### Исторически и supporting документи
 
 Всички останали V1–V17, B1–B9, Stage, Recovery, Prototype, Handoff и dated QA документи остават в repo-то като evidence. Те не се четат по подразбиране и не могат самостоятелно да променят този Master.
+
+Одобрените и съвместими принципи от Content Strategy V3, Facebook Hooks Strategy и Content Protection Strategy са консолидирани в този Master. Тези supporting материали не се добавят като втори конкурентен `MASTER` и не могат автоматично да въвеждат нови функции, metrics, auth правила, schema или production работа.
 
 Когато съдържат необходим технически детайл, той се използва само ако:
 
@@ -573,3 +725,19 @@ Public IA е одобрена. Следващата acceptance граница е
 - `Намери → Публикувай → Попитай` се вижда в реалните journeys;
 - всеки rendered root има един prototype renderer owner и не се натрупва V18/V19 слой;
 - prototype review не е автоматично разрешение за production — production code започва след отделно owner acceptance.
+
+### 15.1 Текущо състояние към 08.09.2026
+
+- последен приет prototype code baseline: `ba1c00ad64784e261107b902e6f8b8165bba3291`;
+- runtime consolidation: изпълнена;
+- Services offer-only drift remediation: изпълнена;
+- Work direct-results UX: независимо приет;
+- Work compensation prototype logic: независимо приета;
+- production persistence на Work периода: **OPEN**;
+- известен малък presentation defect: `staticPage()` показва описанието два пъти;
+- твърдението `Listing формата трябва да има старите 16 категории` е отхвърлено като смесване на public discovery IA с persisted Listing owner taxonomy;
+- Favorites: prototype-only, production contract **OPEN**;
+- icon system: owner visual checkpoint **OPEN**;
+- production OG/social image delivery: **OPEN**;
+- целият Stage 2: **НЕПРИЕТ / owner visual acceptance pending**;
+- Stage 3 и production implementation: **BLOCKED**.

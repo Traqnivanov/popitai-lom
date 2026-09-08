@@ -7,11 +7,12 @@
 Преди нова работа се четат само необходимите текущи източници в този ред:
 
 1. `POPITAI_LOM_MASTER_CURRENT.md` — **единствената текуща продуктова истина**, включително кое е ОДОБРЕНО, ЗАПАЗЕНО/LOCKED, ОТВОРЕНО, ОТХВЪРЛЕНО и ИСТОРИЯ.
-2. `PROJECT_RULES_PROTECTED_CORE.md` — защитеното business/backend ядро.
-3. `PROJECT_RULES_ADMIN_MODERATOR.md` — точната граница Admin/Moderator.
-4. `PROJECT_RULES.md` — действащите глобални технически правила.
-5. `PROJECT_RULES_RENDER_OWNERSHIP.md` — render ownership.
-6. Task-specific технически договор се чете само когато задачата реално засяга съответния owner/module.
+2. `PROJECT_PROGRESS.md` — кратък текущ checkpoint, exact SHA и ред на следващите passes; не е втори Master.
+3. `PROJECT_RULES_PROTECTED_CORE.md` — защитеното business/backend ядро.
+4. `PROJECT_RULES_ADMIN_MODERATOR.md` — точната граница Admin/Moderator.
+5. `PROJECT_RULES.md` — действащите глобални технически правила.
+6. `PROJECT_RULES_RENDER_OWNERSHIP.md` — render ownership.
+7. Task-specific технически договор се чете само когато задачата реално засяга съответния owner/module.
 
 Не се започва от стар prototype, handoff, checkpoint или V/B/Stage документ.
 
@@ -72,13 +73,16 @@
 ## 5. Текуща продуктова граница
 
 - Public discovery/marketplace IA е **ОДОБРЕНА** и е описана точно в `POPITAI_LOM_MASTER_CURRENT.md`.
-- Основните marketplace входове са `Услуги`, `Купува и продава`, `Работа`, `Имоти`, `Автомобили`, `Животни`, плюс специализираните `Магазини`, `Заведения`, `Здраве и лекари`.
+- Деветте входа в общия Home discovery блок са `Услуги`, `Купува и продава`, `Работа`, `Имоти`, `Автомобили`, `Здраве и частни лекари`, `Магазини`, `Заведения`, `Животни`; различните owners не ги разделят визуално на конкуриращи се блокове.
+- Новите Services са offer-only: само `Предлагам услуга`; legacy `Търси` остава само backward-compatible read/edit.
+- `Работа` е директна results/empty страница, не девет големи входни карти; compensation period засега е prototype-only и няма production persistence contract.
 - Решението за `Услуги`, first-screen структурата, Home, desktop/mobile navigation и route картата са част от одобрения Master.
 - Платена продажба на живи животни не се активира на първия етап.
 - Info Lom остава отделна проверена справочна система, не marketplace.
 - Фирми, Магазини, Заведения, Health и Събития запазват съществуващите си owner правила според Master-а.
 - Публикациите имат одобрена отделна editorial owner посока с Admin-only authoring при launch, но реалният backend/schema/RLS още не е разрешен за implementation.
 - Статии, Публикации, Q&A, Facebook/share и SEO се следват според текущия Master, а не според отменен prototype или стар handoff.
+- Последният приет prototype code baseline е записан в `PROJECT_PROGRESS.md`; целият Stage 2 остава неприет и Stage 3/production са блокирани.
 
 ## 6. Текущо разрешение за работа
 
