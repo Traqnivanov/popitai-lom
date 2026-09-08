@@ -1,19 +1,21 @@
-/* Task 6 — Favorites prototype UI only. No persistence/backend contract. */
-.favorite-card-host{position:relative;padding-right:64px}
-.favorite-heart{position:absolute;top:14px;right:14px;width:42px;height:42px;border:1px solid #c9d7e9;border-radius:50%;background:#fff;color:#0b5fd7;font-size:1.55rem;line-height:1;cursor:pointer;box-shadow:0 4px 14px rgba(11,47,86,.08)}
-.favorite-heart[aria-pressed="true"]{background:#fff7e7;color:#b7791f;border-color:#e3c26d}
-.favorite-info-wrap{position:relative;min-width:0;display:block;height:100%}
-.favorite-info-wrap>.info-card{display:block;width:100%;height:100%;min-height:128px;padding-right:64px}
-.favorite-info-wrap>.favorite-heart{z-index:2}
-.detail-page .detail-action>[data-favorite-toggle]{display:inline-flex!important;opacity:1!important;cursor:pointer!important}
+/* Stage 2 — Favorites detail-only prototype UI. Session-only; no backend persistence. */
+.favorite-save{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;min-width:116px;white-space:nowrap}
+.favorite-bookmark-icon{width:19px;height:19px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.favorite-save[aria-pressed="true"] .favorite-bookmark-icon{fill:currentColor}
 .favorite-login-note{position:fixed;z-index:10020;right:20px;bottom:88px;display:flex;align-items:center;gap:12px;max-width:min(440px,calc(100vw - 32px));padding:12px 14px;border:1px solid #cbd9ea;border-radius:14px;background:#fff;box-shadow:0 12px 34px rgba(6,22,39,.18);font-weight:700;color:#183a60}
 .favorite-login-note a{font-weight:850;color:#0b5fd7}
 .favorites-profile .profile-card{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:26px;padding:20px;border:1px solid #d7e2ef;border-radius:18px;background:#fff}
-.saved-section{margin-top:24px}.saved-group{margin-top:24px}.saved-group>h2{font-size:1.15rem;margin-bottom:10px}.favorite-session-note{margin-top:22px;padding:11px 13px;border-radius:12px;background:#f6f8fb;color:#5c6c7c;font-size:.88rem}
+.saved-section{margin-top:24px}
+.saved-group{margin-top:24px}
+.saved-group>h2{font-size:1.15rem;margin-bottom:10px}
+.saved-entry{align-items:center}
+.saved-entry>div{min-width:0}
+.saved-entry-link{color:inherit;text-decoration:none}
+.saved-entry-link:hover h3,.saved-entry-link:focus-visible h3{text-decoration:underline}
+.favorite-session-note{margin-top:22px;padding:11px 13px;border-radius:12px;background:#f6f8fb;color:#5c6c7c;font-size:.88rem}
 @media(max-width:640px){
-  .favorite-card-host{padding-right:56px}
-  .favorite-heart{top:10px;right:10px;width:38px;height:38px}
-  .favorite-info-wrap>.info-card{min-height:118px;padding-right:56px}
+  .favorite-save{min-height:44px;min-width:0}
   .favorites-profile .profile-card{flex-direction:column}
   .favorite-login-note{left:12px;right:12px;bottom:78px;justify-content:space-between}
+  .saved-entry{align-items:flex-start}
 }

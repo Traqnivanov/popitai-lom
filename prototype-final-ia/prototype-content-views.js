@@ -3,6 +3,9 @@
 (() => {
   const records=window.PopitaiPrototypeRecords;
   const data=window.PopitaiContentData;
+  const favoriteEligible=new Set(['listing','firm','shop','restaurant','health','event','publication','article','info']);
+  const favoriteBlockedRecords=new Set(['publication-blocked']);
+  const favoriteBlockedStates=new Set(['pending','private','rejected','removed']);
 
   function info(){
     const items=[['⚕️','Здравна информация','info-health'],['🏛️','Институции','info-institutions'],['🚌','Транспорт','info-transport'],['🎓','Образование и култура','info-education'],['🏦','Банки и банкомати','info-banks'],['⚡','Комунални услуги','info-utilities']];
@@ -32,23 +35,47 @@
     if(!record?.actions?.share||!record.social?.shareEligible)return '';
     return `<button class="btn soft" type="button" data-open-share>Сподели</button><div class="share-overlay" data-share-overlay hidden><button class="share-backdrop" type="button" data-close-share aria-label="Затвори споделянето"></button><section class="share-drawer" role="dialog" aria-modal="true" aria-label="Сподели" tabindex="-1"><div class="share-drawer-head"><h2>Сподели</h2><button class="share-close" type="button" data-close-share aria-label="Затвори">×</button></div><div class="share-actions"><button class="btn" type="button" data-demo-share="facebook">Facebook</button><button class="btn" type="button" data-demo-share="native">Споделяне от устройството</button><button class="btn" type="button" data-demo-share="copy">Копирай линк</button></div><p class="share-demo-message help" aria-live="polite"></p>${PopitaiSocialCardComposer.render(record.social)}</section></div>`;
   }
-  function actionBar(record){
-    const a=record.actions||{},parts=[];let primaryUsed=false;
-    const add=(html,primary=false)=>{parts.push(html);if(primary)primaryUsed=true;};
-    if(a.phone)add(`<button class="btn ${primaryUsed?'soft':'primary'}" type="button" data-demo-contact>Обади се</button>`,!primaryUsed);
-    if(a.inquiry)add(`<button class="btn ${primaryUsed?'soft':'primary'}" type="button" data-demo-inquiry>Запитване</button>`,!primaryUsed);
-    if(a.answer)add(`<button class="btn ${primaryUsed?'soft':'primary'}" type="button" data-demo-answer>Добави отговор</button>`,!primaryUsed);
-    if(a.official)add(`<button class="btn ${primaryUsed?'soft':'primary'}" type="button" data-demo-official>Официална страница</button>`,!primaryUsed);
-    if(a.site)add('<button class="btn soft" type="button" data-demo-site>Сайт</button>');
-    parts.push(sharePanel(record));
-    if(['listing','firm','shop','health'].includes(record.contentType))parts.push('<button class="btn soft favorite-pending" type="button" aria-disabled="true">Добави в любими</button>');
-    if(a.report)add('<button class="btn soft" type="button" data-demo-report>Подай сигнал</button>');
-    if(a.correction)add(`<button class="btn soft" type="button" data-demo-correction>${esc(a.correctionLabel||'Сигнализирай грешка')}</button>`);
-    const clean=parts.filter(Boolean);return clean.length?`<div class="detail-action">${clean.join('')}<p class="contact-demo-message" aria-live="polite"></p><p class="action-demo-message help" aria-live="polite"></p></div>`:'';
+  function favoriteTypeFor(record){
+    if(record?.contentType==='firm'&&record?.addContext?.context==='Заведения')return 'restaurant';
+    return record?.contentType||'';
+  }
+  function favoriteTitleFor(record){return PopitaiSocialCardComposer.titleFor(record?.social)||record?.heading||record?.pageTitle||'Запис';}
+  function bookmarkSvg(){return '<svg class="favorite-bookmark-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 4.75A1.75 1.75 0 0 1 8.75 3h6.5A1.75 1.75 0 0 1 17 4.75v15l-5-3-5 3v-15Z"/></svg>';}
+  function favoriteControl(record,detailHref,query=new URLSearchParams()){
+    const type=favoriteTypeFor(record),state=query.get('state')||'';
+    if(!record?.id||!favoriteEligible.has(type)||favoriteBlockedRecords.has(record.id)||favoriteBlockedStates.has(state))return '';
+    const title=favoriteTitleFor(record),key=`${type}:${record.id}`;
+    return `<button class="btn soft favorite-save" type="button" data-favorite-toggle data-favorite-type="${esc(type)}" data-favorite-record-id="${esc(record.id)}" data-favorite-key="${esc(key)}" data-favorite-title="${esc(title)}" data-favorite-href="${esc(detailHref)}" aria-pressed="false" aria-label="Запази „${esc(title)}“">${bookmarkSvg()}<span data-favorite-label>Запази</span></button>`;
+  }
+  function utilityRow(record,detailHref,query=new URLSearchParams()){
+    const save=favoriteControl(record,detailHref,query),share=sharePanel(record);
+    if(!save&&!share)return '';
+    return `<div class="detail-utility-actions" data-favorite-utility aria-label="Полезни действия">${save}${share}<span class="sr-only" data-favorite-live aria-live="polite"></span></div>`;
+  }
+  function actionBar(record,{detailHref='',query=new URLSearchParams(),includeUtility=true}={}){
+    const a=record.actions||{},primary=[],trust=[];let primaryUsed=false;
+    const addPrimary=html=>{primary.push(html);primaryUsed=true;};
+    if(a.phone)addPrimary(`<button class="btn ${primaryUsed?'soft':'primary'}" type="button" data-demo-contact>Обади се</button>`);
+    if(a.inquiry)addPrimary(`<button class="btn ${primaryUsed?'soft':'primary'}" type="button" data-demo-inquiry>Запитване</button>`);
+    if(a.answer)addPrimary(`<button class="btn ${primaryUsed?'soft':'primary'}" type="button" data-demo-answer>Добави отговор</button>`);
+    if(a.official)addPrimary(`<button class="btn ${primaryUsed?'soft':'primary'}" type="button" data-demo-official>Официална страница</button>`);
+    if(a.site)primary.push('<button class="btn soft" type="button" data-demo-site>Сайт</button>');
+    if(a.report)trust.push('<button class="btn soft" type="button" data-demo-report>Подай сигнал</button>');
+    if(a.correction)trust.push(`<button class="btn soft" type="button" data-demo-correction>${esc(a.correctionLabel||'Сигнализирай грешка')}</button>`);
+    const utility=includeUtility?utilityRow(record,detailHref,query):'';
+    if(!primary.length&&!utility&&!trust.length)return '';
+    return `<div class="detail-action">${primary.length?`<div class="detail-primary-actions">${primary.join('')}</div>`:''}${utility}${trust.length?`<div class="detail-trust-actions">${trust.join('')}</div>`:''}<p class="contact-demo-message" aria-live="polite"></p><p class="action-demo-message help" aria-live="polite"></p></div>`;
   }
   function detailHrefFor(record,{context,group,owner,type,detailType}){
     if(records.get(record.id))return `#detail/${record.contentType}?record=${encodeURIComponent(record.id)}`;
     const q=new URLSearchParams({context,group,owner,detail:detailType});if(type)q.set('type',type);return `#detail/${record.contentType}?${q}`;
+  }
+  function stableDetailHref(record,kind,query=new URLSearchParams()){
+    if(record?.id==='article-pension'||records.get(record?.id))return `#detail/${kind}?record=${encodeURIComponent(record.id)}`;
+    const clean=new URLSearchParams();
+    for(const key of ['context','group','owner','type']){const value=query.get(key);if(value)clean.set(key,value);}
+    const encoded=clean.toString();
+    return `#detail/${kind}${encoded?`?${encoded}`:''}`;
   }
   function results(query){
     const context=query.get('context')||'Обяви и услуги',group=query.get('group')||'Всички',detailType=query.get('detail')||'listing',owner=query.get('owner')||'Listings',type=query.get('type')||'';
@@ -63,13 +90,11 @@
     return `<div class="page results-page">${head}<div class="shell">${controls}<div class="result-list">${row}</div>${actions}</div></div>`;
   }
 
-  function pensionShare(){
-    const record={contentType:'article',actions:{share:true},social:data.pension.social};
-    return sharePanel(record);
-  }
-  function pensionDetail(){
+  function pensionDetail(query=new URLSearchParams()){
     const a=data.pension.article;
-    return `<div class="page article-detail-page">${pageHead(a.title,a.description,'Статии · Пенсии')}<div class="shell article-detail-shell">
+    const record={id:'article-pension',contentType:'article',heading:a.title,pageTitle:a.title,actions:{share:true},social:data.pension.social};
+    const utility=utilityRow(record,'#detail/article?record=article-pension',query);
+    return `<div class="page article-detail-page">${pageHead(a.title,a.description,'Статии · Пенсии')}${utility?`<div class="shell detail-early-utility">${utility}</div>`:''}<div class="shell article-detail-shell">
       <div class="notice ok"><strong>Ръководство · Попитай.Лом</strong><p>Проверено по данни на НОИ · септември 2026</p></div>
       <section class="content-card article-detail-section"><h2>НОИ в Лом</h2><h3>Офис НОИ · Лом</h3><p><strong>Пенсионно обслужване</strong></p><div class="kv"><strong>Адрес</strong><span>ул. „Георги Манафски“ №19</span></div><div class="kv"><strong>Приемно време</strong><span>Четвъртък · 09:00–16:00 ч.</span></div><div class="kv"><strong>Телефон</strong><span>0882 91 23 84</span></div><p>Добре е да носите лична карта и наличните документи за трудов и осигурителен стаж. При конкретен пенсионен случай служителите ще ви кажат какво още е необходимо.</p></section>
       <section class="content-card article-detail-section"><h2>Кога се налага посещение в Монтана</h2><p>ТП НОИ – Монтана се посещава, когато услугата не се извършва в офиса в Лом или случаят трябва да бъде поет от специализиран отдел.</p><ul><li>болнични и краткосрочни плащания;</li><li>обезщетения за безработица;</li><li>осигурителен архив;</li><li>друг специализиран случай, за който НОИ ви насочи.</li></ul><div class="kv"><strong>Адрес</strong><span>бул. „Трети март“ №76</span></div><div class="kv"><strong>Работно време</strong><span>08:00–16:30 ч.</span></div><div class="kv"><strong>Пенсии</strong><span>096 39 41 37</span></div></section>
@@ -77,18 +102,21 @@
       <section class="content-card article-detail-section"><h2>Какво да подготвите</h2><ul><li>заявление УП-1;</li><li>трудова или служебна книжка;</li><li>осигурителна книжка, ако е приложимо;</li><li>документи за липсващи периоди от стажа;</li><li>други удостоверения, ако бъдат поискани за конкретния случай.</li></ul><p>Ако имате стар или непълен трудов стаж, проверете документите си предварително.</p></section>
       <section class="content-card article-detail-section"><h2>Важен срок</h2><p>Ако заявлението и необходимите документи бъдат подадени до <strong>2 месеца след придобиване на правото на пенсия</strong>, пенсията се отпуска от датата, на която правото е възникнало. При по-късно подаване — от датата на заявлението.</p></section>
       <section class="content-card article-detail-section"><h2>Ако не можете да отидете лично</h2><p>Заявлението може да бъде подадено и чрез упълномощено лице или по електронен път според изискванията на НОИ.</p></section>
-      <div class="notice"><strong>Източник</strong><p>Национален осигурителен институт (НОИ). Условията са за пенсия за осигурителен стаж и възраст по общия ред; при специални случаи правилата и документите могат да бъдат различни.</p></div><div class="detail-action article-actions">${pensionShare()}</div></div></div>`;
+      <div class="notice"><strong>Източник</strong><p>Национален осигурителен институт (НОИ). Условията са за пенсия за осигурителен стаж и възраст по общия ред; при специални случаи правилата и документите могат да бъдат различни.</p></div></div></div>`;
   }
 
   function detail(kind,query=new URLSearchParams()){
-    if(kind==='article'&&query.get('record')==='article-pension')return pensionDetail();
+    if(kind==='article'&&query.get('record')==='article-pension')return pensionDetail(query);
+    const requested=query.get('record');
+    if(requested&&!records.get(requested))return staticPage('Записът не е намерен','Този публичен запис не съществува или вече не е достъпен.');
     const record=records.resolve(kind,query),title=PopitaiSocialCardComposer.titleFor(record.social),technicalKeys=new Set(['Canonical подкатегория','Избран контекст']);
     const visibleRows=record.rows.filter(([key])=>!technicalKeys.has(key)).map(([key,value])=>`<div class="kv"><strong>${esc(key==='Suggested тип'?'Тип':key)}</strong><span>${esc(value)}</span></div>`).join('');
     const technicalRows=record.rows.filter(([key])=>technicalKeys.has(key)),qaNotes=Array.isArray(record.qaNotes)?record.qaNotes:[];
     const rawTechnical=(qaNotes.length||technicalRows.length)?`<details class="qa-adapter qa-only"><summary>Технически данни</summary>${qaNotes.map(note=>`<p>${esc(note)}</p>`).join('')}${technicalRows.map(([key,value])=>`<p><strong>${esc(key)}:</strong> ${esc(value)}</p>`).join('')}</details>`:'';
     const gallery=record.social.mediaAvailable&&['listing','firm'].includes(record.contentType)?`<div class="gallery-demo"><div>Основна снимка</div><div>Снимка</div><div>Снимка</div></div>`:'';
     const special=record.special?`<div class="notice">${esc(record.special)}</div>`:record.contentType==='info'?'<div class="notice ok">Всеки запис показва източник и дата на последна проверка.</div>':'';
-    return `<div class="page detail-page">${pageHead(title,record.pageDescription)}<div class="shell detail"><article class="detail-main">${gallery}<h2 class="detail-section-title">Описание</h2><p>${esc(record.body)}</p>${rawTechnical}</article><aside class="detail-side">${visibleRows}${actionBar(record)}${special}</aside></div></div>`;
+    const detailHref=stableDetailHref(record,kind,query),earlyUtility=['article','publication','event'].includes(record.contentType),utility=earlyUtility?utilityRow(record,detailHref,query):'',actions=actionBar(record,{detailHref,query,includeUtility:!earlyUtility});
+    return `<div class="page detail-page">${pageHead(title,record.pageDescription)}${utility?`<div class="shell detail-early-utility">${utility}</div>`:''}<div class="shell detail"><article class="detail-main">${gallery}<h2 class="detail-section-title">Описание</h2><p>${esc(record.body)}</p>${rawTechnical}</article><aside class="detail-side">${visibleRows}${actions}${special}</aside></div></div>`;
   }
   function iconCheckpoint(){
     const candidates=[['Услуги','briefcase-duotone.svg','services'],['Ремонти','wrench-duotone.svg','repairs'],['Животни','paw-print-duotone.svg','animals'],['Автомобили','car-duotone.svg','cars'],['Здраве','first-aid-kit-duotone.svg','health'],['Комунални услуги','plug-duotone.svg','utilities'],['Статии','article-duotone.svg','articles'],['Публикации','newspaper-duotone.svg','publications']];
