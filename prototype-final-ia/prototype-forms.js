@@ -5,6 +5,12 @@
   const firmCategories=['Майстори и ремонти','Здраве и лекари','Автомобили','Магазини и покупки','Заведения','Работа и услуги'];
   const questionCategories=['Майстори и ремонти','Здраве и лекари','Автомобили','Магазини и покупки','Заведения','Работа и услуги','Обяви','Събития и град'];
   const healthOwnerTypes=['Лекар','Стоматолог','Ветеринар'];
+  const workCompensationPeriods=[
+    {value:'hour',label:'на час'},
+    {value:'day',label:'на ден'},
+    {value:'month',label:'на месец'},
+    {value:'task',label:'за задача'}
+  ];
   const contracts=window.PopitaiStage2Contracts;
   const formConfig={
     listing:{title:'Добави обява',subtitle:'Публикувай продажба, търсене, работа, имот или услуга.',fields:[['Заглавие','text'],['Категория','select'],['Подкатегория / вид','select'],['Тип обява','select'],['Описание','textarea'],['Цена в евро','number'],['Телефон','tel'],['Град / район','text'],['Улица (по желание)','text']]},
@@ -129,6 +135,15 @@
     if(type==='tel') attrs.push('inputmode="tel"');
     return attrs.join(' ');
   }
+  function workCompensationLabel(type=''){
+    if(type==='Предлага работа') return 'Предлагано възнаграждение в евро (по желание)';
+    if(type==='Търси работа') return 'Желано възнаграждение в евро (по желание)';
+    return 'Възнаграждение в евро (по желание)';
+  }
+  function workPeriodMarkup(category=''){
+    const visible=category==='Работа';
+    return `<div class="field work-compensation-period" data-work-period-field ${visible?'':'hidden'}><label for="work-compensation-period">Период</label><select id="work-compensation-period" name="work_period_prototype" ${visible?'':'disabled'} aria-describedby="work-compensation-period-error">${selectOptions(workCompensationPeriods)}</select>${fieldError('work-compensation-period')}</div>`;
+  }
   function tagCheckbox(tag,selected=[]){return `<label class="tag-choice"><input type="checkbox" name="shop_tags" value="${esc(tag)}" ${selected.includes(tag)?'checked':''}> <span>${esc(tag)}</span></label>`;}
   function shopClassification(category='',selected=[]){
     if(!category) return `<fieldset class="field shop-classification" id="shop-tags-fieldset"><legend>Какво ще намерят клиентите?</legend><p class="help">Първо избери основна категория.</p><label for="shop-custom-tag">Друго</label><input id="shop-custom-tag" name="custom_tag" maxlength="80" placeholder="Само ако подходящо уточнение липсва"></fieldset>`;
@@ -159,7 +174,8 @@
     const category=listingCategory(query); if(!category) return '';
     const discovery=listingDiscovery(query), subcategory=listingSubcategory(query), type=currentForField('listing','Тип обява',query);
     const payload=contracts.compatibilityAdapter({category,discovery,type,subcategory});
-    return `<details class="qa-adapter qa-only"><summary>Техническа проверка на съвместимостта</summary><p>Това не е потребителско поле и не променя базата.</p><code>category=${esc(payload.category||'—')} · subcategory=${esc(payload.subcategory||'—')} · listing_type=${esc(payload.listing_type||'—')}</code></details>`;
+    const workPersistence=category==='Работа'?'<p data-work-persistence-note><strong>PRODUCTION PERSISTENCE APPROVAL REQUIRED</strong> — production listings няма поле за периода. Периодът в този прототип е UX contract и не се записва в description или в compatibility adapter.</p>':'';
+    return `<details class="qa-adapter qa-only"><summary>Техническа проверка на съвместимостта</summary><p>Това не е потребителско поле и не променя базата.</p><code>category=${esc(payload.category||'—')} · subcategory=${esc(payload.subcategory||'—')} · listing_type=${esc(payload.listing_type||'—')}</code>${workPersistence}</details>`;
   }
   function healthContractNote(){return `<details class="qa-adapter qa-only health-contract-note"><summary>Техническа проверка на здравната форма</summary><p>Production contract — read-only verification. Поддържани submission типове: лекар / медицинска практика, стоматолог / дентална практика, ветеринар / кабинет. Конкретна услуга може да се опише в „Специалност / основна услуга“ и описанието, но по-широкият backend flow за здравна услуга остава OPEN/LOCKED.</p></details>`;}
 
@@ -191,9 +207,9 @@
     else if(label.includes('Работно време')) placeholder='Напр. Пон–Пет: 8:00–18:00';
     const value=edit?editFieldValue(kind,label,query):current;
     const priceContext=kind==='listing'&&label==='Цена в евро'?listingPriceContext(listingContext.category):null;
-    const displayLabel=priceContext?.label||label;
+    const displayLabel=listingContext.category==='Работа'&&priceContext?workCompensationLabel(listingContext.type):(priceContext?.label||label);
     const input=`<div class="field"><label for="${id}" ${priceContext?'data-price-label':''}>${esc(displayLabel)}</label><input id="${id}" name="${esc(label)}" type="${type}" ${required} ${attrs} value="${esc(value)}" aria-describedby="${errorId}" placeholder="${esc(placeholder)}">${fieldError(id)}</div>`;
-    if(kind==='listing'&&label==='Цена в евро') return prefix+input+priceOptionsMarkup(listingContext.category);
+    if(kind==='listing'&&label==='Цена в евро') return prefix+input+workPeriodMarkup(listingContext.category)+priceOptionsMarkup(listingContext.category);
     return prefix+input;
   }
   function uploadSection({label,maxFiles,id}){
@@ -217,10 +233,11 @@
     const pageTitle=contextualService?(edit?'Редактирай услуга':'Добави услуга'):(edit?`Редактирай — ${config.title}`:config.title);
     const pageSubtitle=contextualService?'Публикувай конкретна услуга.':config.subtitle;
     const returnTarget=kind==='listing'&&query.get('return')?.startsWith('#rabota')?query.get('return'):'#home';
-    return `<div class="page">${pageHead(pageTitle,pageSubtitle)}<div class="shell form-wrap ${contextualService?'contextual-service-form':''}">${discoveryContext(kind,query)}${kind==='health'?healthContractNote():''}${animalWarning}${editNote}<form class="proto-form" data-proto-form data-form-kind="${kind}" data-form-mode="${edit?'edit':'create'}" data-discovery-context="${esc(listingContext.discovery)}" novalidate>${otherServiceFields}${fields}${listingExtras}${firmExtras}${terms}<div class="form-actions"><button class="btn primary" type="submit">${edit?'Изпрати редакцията':kind==='health'?'Изпрати за одобрение':'Изпрати за преглед'}</button><a class="btn" href="${esc(returnTarget)}">Отказ</a></div><div class="form-message" role="status" aria-live="polite"></div></form>${adapterPreview(kind,query)}</div></div>`;
+    const legacyWorkPeriod=kind==='listing'&&edit&&listingContext.category==='Работа';
+    return `<div class="page">${pageHead(pageTitle,pageSubtitle)}<div class="shell form-wrap ${contextualService?'contextual-service-form':''}">${discoveryContext(kind,query)}${kind==='health'?healthContractNote():''}${animalWarning}${editNote}<form class="proto-form" data-proto-form data-form-kind="${kind}" data-form-mode="${edit?'edit':'create'}" data-discovery-context="${esc(listingContext.discovery)}" data-work-period-legacy="${legacyWorkPeriod?'true':'false'}" novalidate>${otherServiceFields}${fields}${listingExtras}${firmExtras}${terms}<div class="form-actions"><button class="btn primary" type="submit">${edit?'Изпрати редакцията':kind==='health'?'Изпрати за одобрение':'Изпрати за преглед'}</button><a class="btn" href="${esc(returnTarget)}">Отказ</a></div><div class="form-message" role="status" aria-live="polite"></div></form>${adapterPreview(kind,query)}</div></div>`;
   }
   function staticPage(title,text){return `<div class="page">${pageHead(title,text)}<div class="shell"><div class="content-card"><p>${esc(text)}</p></div></div></div>`;}
 
   Object.assign(window,{formPage,staticPage,shopClassification,questionExamples,listingTextHints,listingCategory,listingDiscovery,listingSubcategory,currentForField});
-  window.PopitaiFormOwners=Object.freeze({formConfig,listingTypeOptions,formPage,shopClassification,listingPriceContext,priceOptionsMarkup});
+  window.PopitaiFormOwners=Object.freeze({formConfig,listingTypeOptions,formPage,shopClassification,listingPriceContext,priceOptionsMarkup,workCompensationLabel,workCompensationPeriods});
 })();

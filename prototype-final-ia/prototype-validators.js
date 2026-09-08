@@ -103,6 +103,19 @@
     if(!missing){if(errorElement(phone)?.textContent==='Въведи поне телефон или адрес.')setError(phone,'');if(errorElement(address)?.textContent==='Въведи поне телефон или адрес.')setError(address,'');}
     return null;
   }
+  const workAmountNeedsPeriod='Избери период за въведеното възнаграждение.';
+  const workPeriodNeedsAmount='Въведи сума за избрания период или избери „По договаряне“.';
+  function clearWorkPairError(control,message){if(errorElement(control)?.textContent===message)setError(control,'');}
+  function validateWorkCompensation(form){
+    if(form?.dataset.formKind!=='listing'||form.querySelector('#listing-category')?.value!=='Работа') return null;
+    const price=form.querySelector('#listing-price'),period=form.querySelector('#work-compensation-period'),negotiable=form.querySelector('#price-negotiable');
+    if(!price||!period)return null;
+    const amount=price.value.trim(),unit=period.value,legacy=form.dataset.formMode==='edit'&&form.dataset.workPeriodLegacy==='true';
+    if(negotiable?.checked){clearWorkPairError(price,workPeriodNeedsAmount);clearWorkPairError(period,workAmountNeedsPeriod);return null;}
+    if(amount&&!unit&&!legacy){setError(period,workAmountNeedsPeriod);clearWorkPairError(price,workPeriodNeedsAmount);return period;}
+    if(!amount&&unit){setError(price,workPeriodNeedsAmount);clearWorkPairError(period,workAmountNeedsPeriod);return price;}
+    clearWorkPairError(price,workPeriodNeedsAmount);clearWorkPairError(period,workAmountNeedsPeriod);return null;
+  }
   function validatePrice(form){
     if(form?.dataset.formKind!=='listing') return null;
     const price=form.querySelector('#listing-price'), negotiable=form.querySelector('#price-negotiable'), free=form.querySelector('#price-free'), onRequest=form.querySelector('#price-on-request'), error=document.getElementById('price-state-error');
@@ -122,12 +135,12 @@
   function validateForm(form,{uploadValidator=null}={}){
     let first=null;
     form.querySelectorAll('input,select,textarea').forEach(control=>{const message=validateControl(form,control);if(message&&!first)first=control;});
-    first=first||validateHealthPair(form,true)||validatePrice(form)||(uploadValidator?.(form)||null);
+    first=first||validateHealthPair(form,true)||validateWorkCompensation(form)||validatePrice(form)||(uploadValidator?.(form)||null);
     const msg=form.querySelector('.form-message');
     if(first){if(msg)msg.innerHTML='<div class="notice danger"><strong>Провери отбелязаните полета.</strong> Въведеното остава във формата.</div>';first.focus?.({preventScroll:false});first.scrollIntoView?.({block:'center',behavior:'smooth'});return false;}
     if(msg)msg.textContent=''; return true;
   }
   function legacyServiceEditAllowed({category,type,mode}){return mode==='edit'&&category==='Услуги'&&type==='Търси';}
 
-  window.PopitaiValidators=Object.freeze({validatorsByOwner,validateForm,validateControl,setError,errorElement,phoneMessage,validateHealthPair,legacyServiceEditAllowed});
+  window.PopitaiValidators=Object.freeze({validatorsByOwner,validateForm,validateControl,setError,errorElement,phoneMessage,validateHealthPair,validateWorkCompensation,legacyServiceEditAllowed});
 })();
