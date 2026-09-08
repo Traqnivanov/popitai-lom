@@ -52,15 +52,19 @@ const app=read('app.js');
 const interactions=read('prototype-interactions.js');
 const formSource=read('prototype-forms.js');
 
-// Direct Work list: no 9-card intermediate screen and no simulated runtime records.
+// Direct Work list: no 9-card intermediate screen, honest empty state, and no permanent direction wall.
 let html=marketplace.work(new URLSearchParams());
 assert(html.includes('data-work-search'),'Work has direct search');
 assert(!html.includes('family-card'),'Work has no intermediate family cards');
 assert.deepEqual([...html.matchAll(/class="tab[^>]*>([^<]+)<\/a>/g)].map(x=>x[1]),['Всички','Предлагат работа','Търсят работа']);
-assert.equal((html.match(/data-work-add/g)||[]).length,1,'one top Add button');
+assert.equal((html.match(/Добави обява/g)||[]).length,1,'zero-record state renders exactly one Add CTA');
+assert(html.includes('class="empty-card"'),'zero-record state renders empty card directly');
 assert(html.includes('Няма активни обяви за работа'),'honest empty state');
+assert(!html.includes('data-work-groups'),'direction control is hidden when there are zero available records');
 assert(!/извест|уведом/i.test(html),'no notification feature');
-for(const group of workGroups)assert(html.includes(group),`${group}: direction filter retained`);
+const emptyTabsAt=html.indexOf('aria-label="Тип обява за работа"');
+const emptyStateAt=html.indexOf('class="empty-card"');
+assert(emptyTabsAt>=0&&emptyStateAt>emptyTabsAt,'empty state follows type filters directly');
 
 // QA-only injected records verify type/direction/search filtering without shipping fake content.
 global.PopitaiApprovedContent={workListings:[
@@ -68,14 +72,30 @@ global.PopitaiApprovedContent={workListings:[
   {title:'Продавач-консултант',description:'Магазин в Лом',workType:'Предлага работа',workGroup:'Търговия и продажби'},
   {title:'Търся работа като шофьор',description:'Категория B',workType:'Търси работа',workGroup:'Транспорт, шофьори и доставки'}
 ]};
+html=marketplace.work(new URLSearchParams());
+assert.equal((html.match(/class="result-row"/g)||[]).length,3,'all QA fixtures render directly');
+assert.equal((html.match(/Добави обява/g)||[]).length,1,'results state renders exactly one Add CTA');
+assert(html.includes('<details class="work-direction-filter" data-work-groups>'),'direction filter is one compact closed details control');
+assert(!html.includes('<details class="work-direction-filter" data-work-groups open'),'direction filter is not expanded by default');
+assert(html.includes('<summary>Направление: Всички</summary>'),'compact direction summary defaults to All');
+for(const group of workGroups)assert(html.includes(group),`${group}: direction remains available inside compact control`);
+const resultsAt=html.indexOf('class="result-list"');
+const directionsAt=html.indexOf('data-work-groups');
+assert(resultsAt>=0&&directionsAt>resultsAt,'results render before expanded direction choices');
+
 html=marketplace.work(new URLSearchParams('type='+encodeURIComponent('Предлага работа')));
 assert.equal((html.match(/class="result-row"/g)||[]).length,2,'offer filter returns two QA fixtures');
 html=marketplace.work(new URLSearchParams('type='+encodeURIComponent('Търси работа')));
 assert.equal((html.match(/class="result-row"/g)||[]).length,1,'seek filter returns one QA fixture');
 html=marketplace.work(new URLSearchParams('q='+encodeURIComponent('продавач')));
 assert.equal((html.match(/class="result-row"/g)||[]).length,1,'search filters Work rows');
+html=marketplace.work(new URLSearchParams('q='+encodeURIComponent('няма-такъв-запис')));
+assert.equal((html.match(/class="result-row"/g)||[]).length,0,'no-match search returns zero rows');
+assert.equal((html.match(/Добави обява/g)||[]).length,1,'filtered-to-zero state still has one Add CTA');
+assert(html.indexOf('class="empty-card"')<html.indexOf('data-work-groups'),'filtered-to-zero empty state precedes compact direction control');
 html=marketplace.work(new URLSearchParams('group='+encodeURIComponent('Транспорт, шофьори и доставки')));
 assert.equal((html.match(/class="result-row"/g)||[]).length,2,'direction filter works');
+assert(html.includes('<summary>Направление: Транспорт, шофьори и доставки</summary>'),'selected direction is summarized compactly');
 
 // Existing Listing form remains the owner. Work direction reuses the existing classification field.
 const returnRoute='#rabota?type='+encodeURIComponent('Търси работа')+'&group='+encodeURIComponent('Транспорт, шофьори и доставки');
