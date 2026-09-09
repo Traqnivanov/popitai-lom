@@ -88,17 +88,59 @@
     const encoded=clean.toString();
     return `#detail/${kind}${encoded?`?${encoded}`:''}`;
   }
+  function approvedRecordForItem(item){
+    const href=String(item?.href||'');
+    const match=href.match(/^#detail\/([^?]+)\?record=([^&]+)$/);
+    if(!match)return null;
+    const kind=match[1],id=decodeURIComponent(match[2]),record=data.detailRecords?.[id]||null;
+    return record?.contentType===kind?record:null;
+  }
+  function recordRow(record,label){
+    const row=(record?.rows||[]).find(entry=>Array.isArray(entry)&&entry[0]===label);
+    return row?String(row[1]??''):'';
+  }
+  function listingResultMatch(record,{context,group,type}){
+    if(record?.contentType!=='listing')return false;
+    const category=recordRow(record,'Категория'),listingType=recordRow(record,'Тип');
+    if(type&&listingType!==type)return false;
+    if(context==='Купува и продава'){
+      const categoryForGroup=PopitaiStage2Contracts.goodsCategoryByDiscovery[group]||'';
+      return Boolean(categoryForGroup)&&category===categoryForGroup;
+    }
+    if(context==='Услуги'){
+      const canonical=PopitaiStage2Contracts.serviceCanonical(group),subcategory=recordRow(record,'Подкатегория')||recordRow(record,'Подкатегория / вид');
+      return category==='Услуги'&&Boolean(canonical)&&subcategory===canonical;
+    }
+    if(context==='Имоти')return category==='Имоти'&&record.social?.discovery===group;
+    if(context==='Автомобили')return category==='Автомобили и МПС'&&record.social?.discovery===group;
+    if(context==='Животни')return category==='Животни'&&record.social?.discovery===group;
+    return false;
+  }
+  function resultRecordMatches(record,{context,group,owner,type,detailType}){
+    if(!record||record.contentType!==detailType)return false;
+    if(owner==='Listings')return listingResultMatch(record,{context,group,type});
+    if(owner==='Shops')return context==='Магазини'&&record.contentType==='shop'&&record.social?.category==='Магазини'&&record.social?.discovery===group;
+    if(owner==='Firms')return context==='Заведения'&&record.contentType==='firm'&&record.social?.category==='Заведения'&&record.social?.discovery===group;
+    if(owner==='Health/Info')return context==='Здраве и лекари'&&record.contentType==='health'&&record.social?.category==='Здраве и лекари'&&record.social?.discovery===group;
+    return false;
+  }
+  function approvedResultItems(owner){
+    if(owner==='Shops')return data.approved.shops||[];
+    if(owner==='Firms')return data.approved.firms||[];
+    if(owner==='Health/Info')return data.approved.health||[];
+    return data.approved.latest||[];
+  }
   function results(query){
-    const context=query.get('context')||'Обяви и услуги',group=query.get('group')||'Всички',detailType=query.get('detail')||'listing',owner=query.get('owner')||'Listings',type=query.get('type')||'';
-    const record=records.resultRecord({context,group,owner,type,detailType}),detailHref=detailHrefFor(record,{context,group,owner,type,detailType}),isService=context==='Услуги';
+    const context=query.get('context')||'Обяви и услуги',group=query.get('group')||'Всички',detailType=query.get('detail')||'listing',owner=query.get('owner')||'Listings',type=query.get('type')||'',isService=context==='Услуги';
     const serviceFamily=isService?serviceFamilies.find(f=>f.slice(1).includes(group)||f[0]===group):null;
     const offerTarget=PopitaiStage2Contracts.contextualAddUrl({context,group,owner,type:isService?'Дава':type});
-    const label=PopitaiSocialCardComposer.titleFor(record.social),row=demoRow(label,`Местно предложение за „${group}“.`,context,detailHref,group);
+    const matched=approvedResultItems(owner).filter(item=>resultRecordMatches(approvedRecordForItem(item),{context,group,owner,type,detailType}));
+    const resultBody=matched.length?matched.map(window.PopitaiHomeViews.publicRow).join(''):'<article class="empty-card"><h2>Няма активни предложения</h2><p>В момента няма публикувани активни предложения в този раздел.</p></article>';
     const breadcrumb=isService?`<div class="breadcrumbs"><a href="#uslugi">Услуги</a> · ${serviceFamily?.[0]==='Майстори, ремонти и дом'?'<a href="#maistori">Майстори</a>':serviceFamily?`<a href="#service-group?group=${encodeURIComponent(serviceFamily[0])}">${esc(serviceFamily[0])}</a>`:''} · ${esc(group)}</div>`:'';
     const head=isService?`<div class="shell page-head">${breadcrumb}<h1>${esc(group)} услуги в Лом</h1><p>Разгледай местните предложения и избери подходящото.</p></div>`:pageHead(group,`Разгледай резултатите в „${context}“.`,'Обяви и услуги');
     const controls=isService?`<div class="results-toolbar"><details><summary class="btn soft">Филтри</summary><div class="results-filter-panel"><label>Район<select><option>Лом и региона</option></select></label></div></details><label class="results-sort">Сортиране<select><option>Най-нови</option><option>Най-подходящи</option></select></label></div>`:`<div class="results-toolbar"><details><summary class="btn soft">Филтри</summary><div class="results-filter-panel"><label>Район<select><option>Лом и региона</option></select></label><label>Тип<select><option>Всички</option><option>Предлагам</option><option>Търси</option></select></label></div></details><label class="results-sort">Сортиране<select><option>Най-нови</option><option>Най-подходящи</option></select></label></div>`;
     const actions=isService?`<div class="page-tools"><a class="btn primary" href="${offerTarget}">Предлагам ${esc(group)} услуга</a></div><div class="results-question-fallback"><span>Не намираш необходимото?</span><a href="#add/question">Задай въпрос</a></div>`:`<div class="page-tools"><a class="btn primary" href="${offerTarget}">${owner==='Shops'?'＋ Добави магазин':owner==='Health/Info'?'＋ Добави лекар / практика':'＋ Публикувай'}</a><a class="btn" href="#add/question">Не намираш? Задай въпрос</a></div>`;
-    return `<div class="page results-page">${head}<div class="shell">${controls}<div class="result-list">${row}</div>${actions}</div></div>`;
+    return `<div class="page results-page">${head}<div class="shell">${controls}<div class="result-list">${stateContent(query,resultBody)}</div>${actions}</div></div>`;
   }
 
   function pensionDetail(query=new URLSearchParams()){
