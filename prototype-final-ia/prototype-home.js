@@ -18,6 +18,78 @@
   ]);
 
   function approved(){return window.PopitaiApprovedContent||Object.freeze({});}
+  const ACTIVITY_TIME_ZONE='Europe/Sofia';
+  const activityFallback=Object.freeze([
+    Object.freeze({label:'Обяви и услуги',href:'#obyavi'}),
+    Object.freeze({label:'Полезни статии',href:'#statii'}),
+    Object.freeze({label:'Инфо Лом',href:'#info'})
+  ]);
+  function validDate(value){
+    if(typeof value!=='string'||!value.trim())return null;
+    const date=new Date(value);
+    return Number.isNaN(date.getTime())?null:date;
+  }
+  function sofiaDay(date){
+    const parts=new Intl.DateTimeFormat('en-CA',{timeZone:ACTIVITY_TIME_ZONE,year:'numeric',month:'2-digit',day:'2-digit',weekday:'short'}).formatToParts(date);
+    const part=type=>parts.find(item=>item.type===type)?.value||'';
+    return {key:`${part('year')}-${part('month')}-${part('day')}`,year:Number(part('year')),month:Number(part('month')),day:Number(part('day')),weekday:part('weekday')};
+  }
+  function localDayNumber(day){return Date.UTC(day.year,day.month-1,day.day)/86400000;}
+  function weekBounds(day){
+    const weekdayIndex={Mon:0,Tue:1,Wed:2,Thu:3,Fri:4,Sat:5,Sun:6}[day.weekday];
+    const current=localDayNumber(day);
+    return {start:current-(Number.isInteger(weekdayIndex)?weekdayIndex:0),end:current+(6-(Number.isInteger(weekdayIndex)?weekdayIndex:0))};
+  }
+  function isPublicApproved(item){
+    if(!item||typeof item!=='object')return false;
+    if(item.status&&item.status!=='approved')return false;
+    if(item.visibility&&item.visibility!=='public')return false;
+    return true;
+  }
+  function datedUnique(items,contentType,dateField,now){
+    const seen=new Set();
+    return (Array.isArray(items)?items:[]).filter(item=>{
+      if(!isPublicApproved(item))return false;
+      const id=String(item.id||'').trim();
+      const itemType=String(item.contentType||contentType).trim();
+      if(!id||!itemType)return false;
+      const date=validDate(item[dateField]||(dateField!=='startsAt'?(item.publishedAt||item.approvedAt):''));
+      if(!date)return false;
+      if(dateField!=='startsAt'&&date.getTime()>now.getTime())return false;
+      const key=`${itemType}:${id}`;
+      if(seen.has(key))return false;
+      seen.add(key);
+      return true;
+    }).map(item=>({item,date:validDate(item[dateField]||(dateField!=='startsAt'?(item.publishedAt||item.approvedAt):''))}));
+  }
+  function activityModel(data=approved(),now=new Date()){
+    const today=sofiaDay(now);
+    const week=weekBounds(today);
+    const groups=[
+      {key:'listings',label:'Нови обяви и услуги',href:'#obyavi',rows:datedUnique(data.latest,'listing','publishedAt',now)},
+      {key:'publications',label:'Нови публикации',href:'#aktualno',rows:datedUnique(data.publications,'publication','publishedAt',now)},
+      {key:'articles',label:'Нови статии',href:'#statii',rows:datedUnique(data.articles,'article','publishedAt',now)},
+      {key:'events',label:'Събития',href:'#aktualno',rows:datedUnique(data.events,'event','startsAt',now)}
+    ];
+    const metricsFor=period=>groups.map(group=>{
+      const count=group.rows.filter(({date})=>{
+        const day=sofiaDay(date);
+        if(period==='today')return day.key===today.key;
+        const number=localDayNumber(day);
+        return number>=week.start&&number<=week.end;
+      }).length;
+      return {...group,count};
+    }).filter(group=>group.count>0).slice(0,3);
+    const todayMetrics=metricsFor('today');
+    if(todayMetrics.length)return Object.freeze({mode:'today',title:'Днес в Лом',metrics:Object.freeze(todayMetrics)});
+    const weekMetrics=metricsFor('week');
+    if(weekMetrics.length)return Object.freeze({mode:'week',title:'Тази седмица',metrics:Object.freeze(weekMetrics)});
+    return Object.freeze({mode:'useful',title:'Полезно сега',metrics:activityFallback});
+  }
+  function activityMarkup(model=activityModel()){
+    const numbered=model.mode!=='useful';
+    return `<section class="home-activity" aria-labelledby="home-activity-title" data-activity-mode="${esc(model.mode)}"><div class="shell home-activity-inner"><h2 id="home-activity-title">${esc(model.title)}</h2><div class="home-activity-links">${model.metrics.map(metric=>`<a href="${esc(metric.href)}">${numbered?`<strong>${esc(metric.count)}</strong>`:''}<span>${esc(metric.label)}</span></a>`).join('')}</div></div></section>`;
+  }
   function publicRow(item){
     if(!item) return '';
     const href=esc(item.href||'#home');
@@ -51,7 +123,8 @@
     const latest=renderContentSection(data.latest,'Последни обяви и услуги','Последните одобрени местни предложения.','#obyavi',4);
     const firmsCurrent=renderFirmsAndCurrent(data);
     const articles=renderContentSection(data.articles,'Полезни статии','Практични ръководства с местната информация на първо място.','#statii',2);
-    return `<section class="hero hero-compact stage2-home-hero"><div class="shell hero-grid"><div><span class="eyebrow">Лом и региона</span><h1>Намери каквото ти трябва в Лом</h1><p>Услуги, работа, имоти, обяви, местни фирми и проверена полезна информация — на едно разбираемо място.</p><form class="search-box" data-global-search><input name="q" aria-label="Търсене" placeholder="Напр. ВиК, работа, апартамент, автосервиз…"><button>Търси</button></form><div class="hero-actions"><button class="btn primary" type="button" data-open-add>＋ Публикувай</button></div></div></div></section>
+    return `<section class="hero hero-compact stage2-home-hero"><div class="shell hero-grid"><div><span class="eyebrow">Лом и региона</span><h1>Намери каквото ти трябва в Лом</h1><p>Услуги, работа, имоти, обяви, местни фирми и проверена полезна информация — на едно разбираемо място.</p><form class="search-box" data-global-search><input name="q" aria-label="Търсене" placeholder="Напр. ВиК, работа, апартамент, автосервиз…"><button>Търси</button></form><div class="home-task-actions" aria-label="Други действия"><button class="home-task-card home-task-card--publish" type="button" data-open-add><strong>Публикувай</strong><span>Добави обява, предложи услуга или представи фирма, магазин или практика.</span></button><a class="home-task-card home-task-card--ask" href="#add/question"><strong>Попитай</strong><span>Задай местен въпрос, когато не намериш готов отговор.</span></a></div></div></div></section>
+      ${activityMarkup(activityModel(data))}
       <section class="section home-marketplace"><div class="shell"><div class="section-head"><div><h2>Обяви и услуги</h2><p>Започни от това, което искаш да намериш или публикуваш.</p></div><a href="#obyavi">Всички категории →</a></div><div class="home-main-grid">${mainSix}</div><div class="home-priority-shortcuts">${mobileShortcuts}</div><div class="home-secondary-row">${secondary}</div><details class="home-more-categories"><summary>Всички категории</summary><div>${secondary}</div></details></div></section>
       ${latest}
       <section class="section home-info"><div class="shell"><div class="section-head"><div><h2>Инфо Лом</h2><p>Проверена местна информация — отделно от частните профили и обявите.</p></div><a href="#info">Отвори Инфо Лом →</a></div><div class="home-info-grid">${infoEntries.map(([icon,title,id])=>`<a class="info-card home-info-card" href="#detail/info?record=${id}"><span aria-hidden="true">${icon}</span><strong>${esc(title)}</strong><small>Отвори →</small></a>`).join('')}</div></div></section>
@@ -65,5 +138,5 @@
   }
 
   Object.assign(window,{home,hub});
-  window.PopitaiHomeViews=Object.freeze({marketplaceEntries,infoEntries,publicRow,home,hub});
+  window.PopitaiHomeViews=Object.freeze({marketplaceEntries,infoEntries,publicRow,activityModel,activityMarkup,home,hub});
 })();
