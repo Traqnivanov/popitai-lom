@@ -12,3 +12,6 @@
   .results-toolbar{align-items:stretch;flex-direction:column}
   .results-sort{display:grid;gap:6px}
 }
+@media(max-width:640px){
+  .modal-head button{width:44px;height:44px;min-width:44px;min-height:44px;flex:0 0 44px}
+}

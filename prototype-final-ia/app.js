@@ -25,6 +25,18 @@
   }
   function routeState(index){return {...(history.state||{}),[ROUTE_INDEX_KEY]:index};}
 
+  function resultsView(query){
+    const context=query.get('context')||'Обяви и услуги',group=query.get('group')||'Всички',owner=query.get('owner')||'Listings',type=query.get('type')||'',isService=context==='Услуги';
+    const serviceFamily=isService?serviceFamilies.find(f=>f.slice(1).includes(group)||f[0]===group):null;
+    const offerTarget=PopitaiStage2Contracts.contextualAddUrl({context,group,owner,type:isService?'Дава':type});
+    const breadcrumb=isService?`<div class="breadcrumbs"><a href="#uslugi">Услуги</a> · ${serviceFamily?.[0]==='Майстори, ремонти и дом'?'<a href="#maistori">Майстори</a>':serviceFamily?`<a href="#service-group?group=${encodeURIComponent(serviceFamily[0])}">${esc(serviceFamily[0])}</a>`:''} · ${esc(group)}</div>`:'';
+    const head=isService?`<div class="shell page-head">${breadcrumb}<h1>${esc(group)} услуги в Лом</h1><p>Разгледай местните предложения и избери подходящото.</p></div>`:pageHead(group,`Разгледай резултатите в „${context}“.`,'Обяви и услуги');
+    const controls=isService?`<div class="results-toolbar"><details><summary class="btn soft">Филтри</summary><div class="results-filter-panel"><label>Район<select><option>Лом и региона</option></select></label></div></details><label class="results-sort">Сортиране<select><option>Най-нови</option><option>Най-подходящи</option></select></label></div>`:`<div class="results-toolbar"><details><summary class="btn soft">Филтри</summary><div class="results-filter-panel"><label>Район<select><option>Лом и региона</option></select></label><label>Тип<select><option>Всички</option><option>Предлагам</option><option>Търси</option></select></label></div></details><label class="results-sort">Сортиране<select><option>Най-нови</option><option>Най-подходящи</option></select></label></div>`;
+    const empty='<article class="empty-card"><h2>Няма активни предложения</h2><p>В момента няма публикувани активни предложения в този раздел.</p></article>';
+    const actions=isService?`<div class="page-tools"><a class="btn primary" href="${offerTarget}">Предлагам ${esc(group)} услуга</a></div><div class="results-question-fallback"><span>Не намираш необходимото?</span><a href="#add/question">Задай въпрос</a></div>`:`<div class="page-tools"><a class="btn primary" href="${offerTarget}">${owner==='Shops'?'＋ Добави магазин':owner==='Health/Info'?'＋ Добави лекар / практика':'＋ Публикувай'}</a><a class="btn" href="#add/question">Не намираш? Задай въпрос</a></div>`;
+    return `<div class="page results-page">${head}<div class="shell">${controls}<div class="result-list">${stateContent(query,empty)}</div>${actions}</div></div>`;
+  }
+
   function viewFor(path,query){
     if(path==='home') return home();
     if(path==='obyavi') return hub(query);
@@ -44,7 +56,7 @@
     if(path==='aktualno') return current();
     if(path==='statii') return articles();
     if(path==='vaprosi') return questions();
-    if(path==='results') return results(query);
+    if(path==='results') return resultsView(query);
     if(path==='visual-icons') return iconCheckpoint();
     if(path.startsWith('detail/')) return detail(path.split('/')[1],query);
     if(path.startsWith('add/')) return formPage(path.split('/')[1],query);
