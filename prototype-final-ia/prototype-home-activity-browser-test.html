@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Home activity browser test</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="prototype-home.css">
+</head>
+<body>
+  <main class="shell" style="padding:20px 0">
+    <h1>Home activity test</h1>
+    <div class="tabs" aria-label="Тестови случаи">
+      <button class="tab" data-case="today">Днес</button>
+      <button class="tab" data-case="week">Тази седмица</button>
+      <button class="tab" data-case="useful">Полезно сега</button>
+      <button class="tab" data-case="guards">Guards</button>
+    </div>
+    <div id="result"></div>
+    <pre id="evidence"></pre>
+  </main>
+  <script src="prototype-core.js"></script>
+  <script src="prototype-home.js"></script>
+  <script src="prototype-home-activity-browser-test.js"></script>
+</body>
+</html>

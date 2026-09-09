@@ -4,6 +4,22 @@
 .stage2-home-hero .hero-grid{min-height:0}
 .stage2-home-hero h1{max-width:760px}
 .stage2-home-hero .search-box{margin-top:18px}
+.home-task-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px;max-width:980px}
+.home-task-card{min-height:92px;border:1px solid rgba(255,255,255,.42);border-radius:16px;padding:15px 17px;text-align:left;text-decoration:none;display:grid;align-content:center;gap:4px;cursor:pointer;font:inherit}
+.home-task-card strong{font-size:1.05rem;line-height:1.25}
+.home-task-card span{font-size:.88rem;line-height:1.4}
+.home-task-card--publish{background:#fff;color:var(--navy)}
+.home-task-card--publish span{color:#526377}
+.home-task-card--ask{background:rgba(7,27,54,.34);color:#fff}
+.home-task-card--ask span{color:#d8e5f5}
+.home-task-card:hover,.home-task-card:focus-visible{border-color:#f3c13b;outline:3px solid rgba(243,193,59,.32);outline-offset:2px}
+.home-activity{background:#fff;border-bottom:1px solid var(--line)}
+.home-activity-inner{min-height:88px;display:flex;align-items:center;gap:22px;padding-top:13px;padding-bottom:13px}
+.home-activity h2{font-size:1rem;margin:0;white-space:nowrap;color:var(--navy)}
+.home-activity-links{display:flex;align-items:stretch;gap:9px;flex-wrap:wrap}
+.home-activity-links a{min-height:44px;display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;padding:9px 14px;text-decoration:none;color:var(--ink);background:#f8fafc;font-weight:780}
+.home-activity-links a:hover,.home-activity-links a:focus-visible{border-color:#9db9dc;background:#edf4ff;outline:2px solid #c9dcf4;outline-offset:1px}
+.home-activity-links strong{color:var(--blue);font-size:1rem}
 .home-main-grid,.hub-all-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .home-main-grid .category-card,.hub-all-grid .category-card{min-height:0}
 .category-copy p{margin:8px 0 10px}
@@ -30,6 +46,14 @@
   .stage2-home-hero h1{font-size:clamp(1.8rem,9vw,2.35rem);line-height:1.05}
   .stage2-home-hero p{margin-bottom:14px}
   .stage2-home-hero .hero-actions{margin-top:10px}
+  .home-task-actions{grid-template-columns:1fr;gap:9px;margin-top:13px}
+  .home-task-card{min-height:76px;padding:12px 14px}
+  .home-task-card strong{font-size:1rem}
+  .home-task-card span{font-size:.82rem}
+  .home-activity-inner{min-height:0;display:block;padding-top:14px;padding-bottom:14px}
+  .home-activity h2{margin-bottom:9px}
+  .home-activity-links{display:grid;grid-template-columns:1fr;gap:7px}
+  .home-activity-links a{border-radius:12px;padding:10px 12px}
   .home-main-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
   .home-main-card-5,.home-main-card-6{display:none}
   .home-main-grid .category-card{padding:0}
