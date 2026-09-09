@@ -14,13 +14,15 @@
   function detailRecord({id,contentType,title,description='',body='',rows=[],sections=[],actions={},category='',discovery='',icon='services',accent='blue',location='',media={},shareEligible=false}){
     const pageDescription=String(description||body||'').trim();
     const mediaData=freezeMedia(media);
+    const approvedMediaType=mediaData.images.length?'approved-photo':mediaData.logo?'approved-logo':'';
+    const socialMediaAvailable=Boolean(shareEligible&&approvedMediaType);
     return Object.freeze({
       id,contentType,contentRole:contentRoleByType[contentType]||'marketplace',owner:'',pageTitle:title,pageDescription,heading:title,body:String(body||''),
       rows:Object.freeze(rows.filter(row=>Array.isArray(row)&&row.length>=2&&String(row[1]??'').trim())),sections:freezeSections(sections),media:mediaData,
       actions:Object.freeze(actions),special:'',qaNotes:Object.freeze([]),addContext:null,addUrl:'',
       social:Object.freeze({
         contentType,contentRole:contentRoleByType[contentType]||'marketplace',title,description:pageDescription,category,discovery,
-        visualTheme:[category,discovery].filter(Boolean).join(' · '),icon,accent,mediaAvailable:false,mediaType:'',
+        visualTheme:[category,discovery].filter(Boolean).join(' · '),icon,accent,mediaAvailable:socialMediaAvailable,mediaType:socialMediaAvailable?approvedMediaType:'',
         canonicalUrl:`${PROTOTYPE_URL}${detailHref(contentType,id)}`,location,shareEligible:Boolean(shareEligible),
         facebookText:'Текстът над споделения линк се пише от човека, който споделя.',composition:contentType==='article'?'editorial':contentType==='listing'?'marketplace':'profile'
       })
@@ -30,8 +32,8 @@
   const listingTvId='97f0a906-2836-484d-856f-a57bdfba5424';
   const firmIvanovId='d48cae4e-ea29-46fc-8bc0-24ebed828054';
   const articleMasterGuideId='statia.html';
-  const shopDreamColorsId='ca9a5f06-0bac-4844-8a10-30643c69e963';
-  const shopDartonId='9fdd2829-edc2-4c0f-8b1d-703410a60338';
+  const shopDreamColorsId='9fdd2829-edc2-4c0f-8b1d-703410a60338';
+  const shopDartonId='ca9a5f06-0bac-4844-8a10-30643c69e963';
   const shopTanyaId='87fafa9a-7f7d-4d5c-a733-948bd295b964';
 
   const detailRecords=Object.freeze({
