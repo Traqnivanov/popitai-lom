@@ -44,7 +44,28 @@
 | Auto-posting / scraping / import от Facebook | **REJECTED / FORBIDDEN BY CURRENT DIRECTION** | Без скрито auto-posting, произволно публикуване по групи, scraping и внос на реакции/коментари. Бъдещ Meta Page/API вариант изисква ново изрично решение и проверка на разрешенията. | Няма работа сега. |
 | Facebook analytics | **PRODUCTION CHECKPOINT** | Може да измерва source, click, auth gate и завършено действие само по приложимите privacy/analytics правила. | Отделен analytics/privacy checkpoint. |
 
-## 4. Content protection
+### 3.1 Текущи Stage 2 evidence checkpoints
+
+| Област | Статус | Evidence / граница |
+| --- | --- | --- |
+| Runtime consolidation | **ACCEPTED IN PROTOTYPE SCOPE** | Един route/render lifecycle и консолидирани owners от `9dde7e2…`; последващите bounded корекции са върху тази база. |
+| Работа — direct results UX | **ACCEPTED IN PROTOTYPE SCOPE** | `2fe36cfc6b68afdfe201f44639485595b03e77fd`. |
+| Работа — compensation UX | **ACCEPTED IN PROTOTYPE SCOPE / PRODUCTION PERSISTENCE OPEN** | `ba1c00ad64784e261107b902e6f8b8165bba3291`; периодът няма production storage contract. |
+| Favorites detail-only | **PROTOTYPED — FINAL BROWSER ACCEPTANCE PENDING** | Real-route/content-integrity корекции до `2e1e3c95666805d75f8e3c99dd549ec664625af4`; production storage/login/RLS остава отделно OPEN. |
+| Public results integrity | **PROTOTYPED / TARGETED BROWSER QA REPORTED** | Synthetic public records са премахнати; един canonical results owner показва matched approved records или честно empty state в `e423a2c3a8d2f70d28060fb4c37ce38bd5369d5e`. Общият Stage 2 acceptance остава pending. |
+| Целият Stage 2 | **ACCEPTANCE PENDING** | Нужни са content-complete reality pass, пълен desktop/390px audit и owner visual acceptance. |
+
+## 4. Home — последни решения
+
+| Тема | Статус | Решение / граница |
+| --- | --- | --- |
+| Водещо действие | **APPROVED** | Търсенето остава първо. `Намери → Публикувай → Попитай, ако не намериш`. |
+| `Публикувай` и `Попитай` | **APPROVED DIRECTION — COPY OPEN** | Две отделни ясно рамкирани, самостоятелно кликаеми повърхности под търсенето. Не трябва да изглеждат като едно действие. Точните заглавия и подсказки не са заключени. |
+| Activity module | **APPROVED DIRECTION — DATA/VISUAL CONTRACT OPEN** | `Днес в Лом` при реална активност → `Тази седмица` при липса на днешна → полезни актуални входове без числа. Максимум три кликаеми показателя; без нули, fake counts или fake activity. |
+| Activity priority | **APPROVED DIRECTION** | Реални обяви/услуги → публикации/статии → събития. Въпросите не се използват като изкуствен водещ показател. |
+| Newsletter/сутрешен абонамент | **IDEA ONLY — NOT NOW** | Не се добавя като част от текущия Home pass. |
+
+## 5. Content protection
 
 | Тема | Статус | Решение / граница | Следващо действие |
 | --- | --- | --- | --- |
@@ -55,7 +76,7 @@
 | Monitoring и реакция | **PRODUCTION CHECKPOINT** | Логове и alert-и за аномално масово четене, evidence collection и процедура за техническа/правна ескалация. Bot challenge само при доказан подозрителен модел. | Отделен monitoring/operations checkpoint. |
 | Terms, copyright и legal | **OPEN — LEGAL REVIEW REQUIRED** | Нормалното споделяне на линк/кратък откъс се различава от системно scraping/републикуване. Точните Terms, notices и претенции не се приемат без юридически преглед. | Подготовка на draft, после юрист; не се твърди правна защита като готова. |
 
-## 5. Идеи от стратегиите, които НЕ са одобрени автоматично като функции
+## 6. Идеи от стратегиите, които НЕ са одобрени автоматично като функции
 
 Следните примери могат да се разглеждат само в отделен продуктов checkpoint. Документът или mock примерът не са разрешение за реализация:
 
@@ -71,7 +92,7 @@
 
 За всяка такава идея първо се решават owner, данни, moderation, auth, privacy, empty state и production dependency.
 
-## 6. Текущ работен ред
+## 7. Текущ работен ред
 
 1. Stage 2 остава отделен safety prototype; production и Stage 3 не се започват без изрично разрешение.
 2. Обикновеният изпълняващ чат получава една ограничена exact-SHA задача.
@@ -80,7 +101,7 @@
 5. Следваща задача не започва преди Work verdict за текущата.
 6. Всеки handoff разделя: **доказано**, **source-tested**, **browser-tested**, **непроверено/open**.
 
-### 6.1 Техническа готовност и съдържание
+### 7.1 Техническа готовност и съдържание
 
 Основният ред е:
 
@@ -90,7 +111,7 @@
 4. ранното съдържание е проверено реално съдържание — не synthetic/mock запълване, представено като истинско;
 5. този ред не разрешава production write или content import без съответния owner/Work checkpoint.
 
-## 7. Задължително съдържание за довършване
+## 8. Задължително съдържание за довършване
 
 Следните области не са предложения за избор. Те са **MANDATORY CONTENT INVENTORY**, което трябва да бъде проверено, структурирано и довършено преди окончателната content-complete готовност:
 
@@ -106,7 +127,7 @@
 
 Данните, телефоните, цените, статистиката и статутът на обектите се проверяват непосредствено преди публикуване. Твърдение в предоставен работен файл не е достатъчно доказателство.
 
-## 8. Отделен неприоритизиран регистър на кандидатите
+## 9. Отделен неприоритизиран регистър на кандидатите
 
 Следните теми се пазят, за да не бъдат забравени, но **нямат определен приоритет и не са разрешение за код**:
 
@@ -129,7 +150,7 @@
 
 Приоритет на редовете в тази таблица ще се задава само при планиране от собственика и Work след техническия Stage 2 gate. Поредността им тук не означава важност.
 
-## 9. Задължителни връзки към източниците
+## 10. Задължителни връзки към източниците
 
 - продуктова истина и приоритет: `POPITAI_LOM_MASTER_CURRENT.md`;
 - текущ напредък: `PROJECT_PROGRESS.md`;

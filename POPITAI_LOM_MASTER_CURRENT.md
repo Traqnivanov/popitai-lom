@@ -1,9 +1,10 @@
 # Попитай.Лом — CURRENT PRODUCT MASTER
 
 Статус: **КАНОНИЧНА ПРОДУКТОВА ИСТИНА / PUBLIC IA ОДОБРЕНА / STAGE 2 ПРОТОТИПЪТ ОЩЕ НЕ Е ФИНАЛНО ПРИЕТ / НЕ Е PRODUCTION**
-Последна синхронизация: **08.09.2026**
+Последна синхронизация: **09.09.2026**
 Текущ safety branch: `prototype/content-complete-ia-20260904-stage2-safety`
-Consolidated Stage 2 baseline преди ограничените follow-up корекции: `ba1c00ad64784e261107b902e6f8b8165bba3291`
+Последен функционален Stage 2 checkpoint преди docs-only синхронизацията: `e423a2c3a8d2f70d28060fb4c37ce38bd5369d5e`
+Централен decision/backlog регистър: `POPITAI_LOM_DECISION_AND_BACKLOG_REGISTER.md`
 
 ## 0. Защо съществува този файл
 
@@ -39,6 +40,8 @@ Consolidated Stage 2 baseline преди ограничените follow-up ко
 
 Този Master управлява продуктовата посока и конфликтите. Той не е копие на всяка одобрена институция, телефон, лекар, магазин, куриер, форма или database поле. Тези конкретни данни остават при съответния owner/source и се променят само чрез приложимия freshness, correction и moderation flow.
 
+След този Master задължително се чете `POPITAI_LOM_DECISION_AND_BACKLOG_REGISTER.md`. Регистърът показва статуса, evidence границата, задължителното съдържание и неприоритизираните кандидати; той не може да отменя Master или protected/LOCKED договор.
+
 ## 2. Статуси в този Master
 
 - **ЗАПАЗЕНО / LOCKED** — действа и не се променя като страничен ефект;
@@ -53,6 +56,8 @@ Consolidated Stage 2 baseline преди ограничените follow-up ко
 - Public IA и описаните в този Master продуктови решения са **ОДОБРЕНИ**.
 - Stage 2 runtime consolidation е извършена: един route/render lifecycle, ясни owner модули и tests, които не променят runtime.
 - Опростеният UX на `Работа` и prototype-only логиката за възнаграждение са независимо приети като логика и код до checkpoint `ba1c00ad64784e261107b902e6f8b8165bba3291`.
+- Favorites detail-only UX, real-route integrity и content parity са прототипирани до `2e1e3c95666805d75f8e3c99dd549ec664625af4`, но пълната named-route browser acceptance матрица остава част от финалния Stage 2 audit.
+- Public results използват само доказани approved records и честно empty state; synthetic/mock public results са премахнати и canonical results ownership е консолидиран в `e423a2c3a8d2f70d28060fb4c37ce38bd5369d5e`.
 - Това **не е** приемане на целия Stage 2 и **не е** разрешение за production implementation.
 - Owner visual acceptance, финалният content-complete audit и общият desktop/mobile acceptance остават отворени.
 - Stage 3, production `main`, Supabase, schema, RLS/RPC и production migrations остават блокирани до отделно изрично одобрение.
@@ -300,8 +305,11 @@ Hero води с потребителската задача, не с Q&A:
 
 - H1: `Намери каквото ти трябва в Лом` или еквивалентен кратък task-first текст със същия смисъл;
 - голямо общо търсене;
-- secondary CTA `+ Публикувай`;
-- tertiary fallback `Не намираш? Задай въпрос`;
+- под търсенето има две отделни, ясно рамкирани и самостоятелно кликаеми действия: `Публикувай` и `Попитай`;
+- `Публикувай` е второто по важност действие и води към реалните Add owner flows;
+- `Попитай` е fallback, когато търсенето не дава готов отговор;
+- двете действия не изглеждат като един общ бутон и имат конкретни различни подсказки;
+- точният H1 и точните помощни текстове остават отворени за финалния visual/copy pass;
 - слоганът `Попитай. Намери. Препоръчай.` остава част от бранда, но не променя action priority `Намери → Публикувай → Попитай`.
 
 Ред на Home секциите при текущото реално налично съдържание:
@@ -315,6 +323,16 @@ Hero води с потребителската задача, не с Q&A:
 7. `Не намери отговор? Попитай` като последен fallback.
 
 `Актуално в Лом` остава валидна discovery surface за различимите типове `Публикация` и `Събитие`, но Home не показва празен или симулиран блок. Блокът влиза в Home едва когато има реално public/approved текущо съдържание. Това не слива Публикация и Събитие и не отменя отделните им lifecycle owners.
+
+Home може да има компактен модул за реална текуща активност, който създава причина за ежедневно връщане:
+
+- при реална активност днес показва `Днес в Лом`;
+- ако днес няма нищо, преминава към доказана активност `Тази седмица`;
+- ако и такава няма, показва полезни актуални входове без числа;
+- максимум три ясни кликаеми показателя;
+- без нули, fake activity, измислени броячи или обещание за съдържание, което не съществува;
+- приоритетът е реални обяви/услуги, публикации/статии и събития; Въпросите не стават водещ изкуствен показател;
+- точният data/time-window contract и визуалният макет остават за отделен bounded Stage 2 pass.
 
 ### Desktop navigation
 
@@ -577,7 +595,17 @@ Stage 2 демонстрира тази посока, но финалната и
 
 ### 10.2 Любими — ЖЕЛАНО И ПРОТОТИПИРАНО, PRODUCTION CONTRACT OPEN
 
-`Добави в любими` е желана функция на логичното място при приложимото публично съдържание. Текущият Stage 2 вариант е session-only демонстрация и не доказва production storage/login/RLS договор.
+`Добави в любими` е желана функция на логичното място при приложимото публично съдържание. Текущият Stage 2 вариант е detail-only, session-only демонстрация и не доказва production storage/login/RLS договор.
+
+Текущата prototype граница е:
+
+- един вторичен `Запази` / `Запазено` контрол само на допустим public detail;
+- няма Favorites контрол върху Home, result/category cards, Info Lom cards или social preview cards;
+- допустимите prototype типове са Listing/Service, Firm, Shop, Restaurant, Health, Info Lom, Article, Publication и Event;
+- `Question` е изключен;
+- stable identity е `contentType + recordId`, а Profile пази exact internal detail href;
+- blocked/missing/unavailable records не могат да бъдат запазени;
+- logged-out intent/return-to-action е прототипиран, но пълният real-path desktop/390px browser gate остава част от финалния Stage 2 audit.
 
 Преди production трябва отделно да се решат и тестват:
 
@@ -617,12 +645,13 @@ Stage 2 демонстрира тази посока, но финалната и
 Публичната IA вече не е отворено бизнес решение. След docs-only синхронизацията работата продължава в този ред:
 
 1. **Завършено: малък Stage 2 presentation cleanup** — доказаното двойно описание в `staticPage()` е премахнато без taxonomy/owner промяна.
-2. **Следва: Favorites contract checkpoint** — coverage, позиция, login/return-to-action, storage/RLS и states; първо решение и prototype audit, без production migration.
-3. **Icon visual-system checkpoint** — inventory и един професионален desktop/mobile макет; без масова production подмяна преди owner acceptance.
-4. **Content-complete / reality pass** — одобрено реално съдържание от живия сайт се представя вярно; където липсва съдържание има честно empty state, не fake records.
-5. **Финален Stage 2 независим audit** — Home, hub, всички категории, results/detail/Add/edit, actions, forms и states; desktop + 390px; оценка като млад, средна възраст и възрастен потребител, после професионален UX review.
-6. **Owner visual acceptance и freeze на exact SHA** — едва тук Stage 2 може да бъде обявен за приет.
-7. **Отделни production architecture checkpoints** — само след Stage 2 acceptance и по един owner/risk scope наведнъж.
+2. **Завършено като prototype, acceptance остава в общия gate: Favorites detail-only** — coverage, позиция, stable identity, login intent и Profile flow; production storage/RLS остава отделно OPEN.
+3. **Bounded Home action/activity pass** — отделни `Публикувай` и `Попитай` повърхности и честен activity fallback; точният copy/data contract се приема преди код.
+4. **Icon visual-system checkpoint** — inventory и един професионален desktop/mobile макет; без масова production подмяна преди owner acceptance.
+5. **Content-complete / reality pass** — задължителното съдържание от регистъра и одобрено реално съдържание от живия сайт се представят вярно; където липсва съдържание има честно empty state, не fake records.
+6. **Финален Stage 2 независим audit** — Home, hub, всички категории, results/detail/Add/edit, Favorites, Share, actions, forms и states; desktop + 390px; оценка като млад, средна възраст и възрастен потребител, после професионален UX review.
+7. **Owner visual acceptance и freeze на exact SHA** — едва тук Stage 2 може да бъде обявен за приет.
+8. **Отделни production architecture checkpoints** — само след Stage 2 acceptance и по един owner/risk scope наведнъж.
 
 ### 12.1 Production checkpoints след Stage 2, без текущо разрешение за реализация
 
@@ -663,12 +692,13 @@ Stage 2 демонстрира тази посока, но финалната и
 ### Задължителни текущи източници
 
 1. `POPITAI_LOM_MASTER_CURRENT.md` — текуща продуктова истина и отворени решения;
-2. `PROJECT_PROGRESS.md` — кратък оперативен checkpoint и ред на следващите passes; не е втори Master;
-3. `PROJECT_RULES_PROTECTED_CORE.md` — protected business/backend ядро;
-4. `PROJECT_RULES_ADMIN_MODERATOR.md` — точна ролева граница;
-5. `PROJECT_RULES.md` — действащи глобални технически правила;
-6. `PROJECT_RULES_RENDER_OWNERSHIP.md` — render ownership;
-7. task-specific технически договор само когато задачата реално засяга съответния owner.
+2. `POPITAI_LOM_DECISION_AND_BACKLOG_REGISTER.md` — статус/evidence/backlog индекс; не отменя Master или LOCKED contract;
+3. `PROJECT_PROGRESS.md` — кратък оперативен checkpoint и ред на следващите passes; не е втори Master;
+4. `PROJECT_RULES_PROTECTED_CORE.md` — protected business/backend ядро;
+5. `PROJECT_RULES_ADMIN_MODERATOR.md` — точна ролева граница;
+6. `PROJECT_RULES.md` — действащи глобални технически правила;
+7. `PROJECT_RULES_RENDER_OWNERSHIP.md` — render ownership;
+8. task-specific технически договор само когато задачата реално засяга съответния owner.
 
 ### Исторически и supporting документи
 
@@ -726,7 +756,7 @@ Public IA е одобрена. Следващата acceptance граница е
 - всеки rendered root има един prototype renderer owner и не се натрупва V18/V19 слой;
 - prototype review не е автоматично разрешение за production — production code започва след отделно owner acceptance.
 
-### 15.1 Текущо състояние към 08.09.2026
+### 15.1 Текущо състояние към 09.09.2026
 
 - consolidated Stage 2 baseline преди ограничените follow-up корекции: `ba1c00ad64784e261107b902e6f8b8165bba3291`;
 - runtime consolidation: изпълнена;
@@ -736,7 +766,9 @@ Public IA е одобрена. Следващата acceptance граница е
 - production persistence на Work периода: **OPEN**;
 - `staticPage()` duplicate description defect: **ОТСТРАНЕН**;
 - твърдението `Listing формата трябва да има старите 16 категории` е отхвърлено като смесване на public discovery IA с persisted Listing owner taxonomy;
-- Favorites: prototype-only, production contract **OPEN**;
+- Favorites detail-only: прототипирано с real-route/content-integrity remediation; пълният named-route browser acceptance остава в общия Stage 2 gate; production storage/RLS **OPEN**;
+- public results: само matched approved records или честно empty state; synthetic public records са премахнати; canonical results owner е консолидиран в `e423a2c3a8d2f70d28060fb4c37ce38bd5369d5e`;
+- Home action/activity direction: одобрено направление; exact copy/data contract и implementation **OPEN**;
 - icon system: owner visual checkpoint **OPEN**;
 - production OG/social image delivery: **OPEN**;
 - целият Stage 2: **НЕПРИЕТ / owner visual acceptance pending**;

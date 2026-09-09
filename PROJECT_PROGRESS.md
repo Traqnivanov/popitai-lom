@@ -1,17 +1,23 @@
 # Попитай.Лом — CURRENT PROJECT CHECKPOINT
 
-Актуализирано: **08.09.2026**
+Актуализирано: **09.09.2026**
 
 Този файл е кратък оперативен указател. Той **не е втори продуктов Master**.
 Текущите решения, заменените правила и точният ред на работа са в:
 
 `POPITAI_LOM_MASTER_CURRENT.md`
 
+След Master задължително се чете:
+
+`POPITAI_LOM_DECISION_AND_BACKLOG_REGISTER.md`
+
+Регистърът пази statuses, evidence граници, задължително съдържание и неприоритизирани идеи. Той не отменя Master или protected/LOCKED contract.
+
 ## Exact current state
 
 - Repo: `Traqnivanov/popitai-lom`
 - Safety branch: `prototype/content-complete-ia-20260904-stage2-safety`
-- Consolidated Stage 2 baseline преди ограничените follow-up корекции: `ba1c00ad64784e261107b902e6f8b8165bba3291`
+- Последен функционален Stage 2 checkpoint преди docs-only синхронизацията: `e423a2c3a8d2f70d28060fb4c37ce38bd5369d5e`
 - Текущият exact branch HEAD се проверява в Git преди работа; docs-only и bounded follow-up commits не се представят като ново общо Stage 2 acceptance
 - Production `main`: не е променян от тази Stage 2 работа
 - Supabase/schema/RLS/RPC: не са променяни
@@ -26,6 +32,9 @@
 - prototype-only Work compensation logic: optional сума, период при сума и `По договаряне`;
 - Work compensation period не се представя като production-persisted.
 - `staticPage()` показва описанието само веднъж; duplicate presentation defect е отстранен.
+- Favorites detail-only UX, internal real routes и content parity са прототипирани; пълната named-route desktop/390px browser acceptance остава в общия Stage 2 gate.
+- public results използват само доказани approved records или честно empty state; synthetic/mock public results са премахнати и canonical results owner е консолидиран.
+- Facebook distribution/content-protection решенията и production границите са класифицирани в централния регистър.
 
 ## Stage status
 
@@ -37,10 +46,10 @@
 
 ## Точен следващ ред
 
-1. Favorites contract checkpoint;
+1. bounded Home action/activity contract и prototype pass: отделни `Публикувай`/`Попитай` повърхности, без сливане, и честен `Днес → Тази седмица → Полезно сега` fallback;
 2. icon visual-system checkpoint;
-3. content-complete/reality pass;
-4. финален Stage 2 audit на всички основни journeys, forms, actions и states на desktop и 390px;
+3. content-complete/reality pass със задължителното съдържание от централния регистър;
+4. финален Stage 2 audit на всички основни journeys, forms, Favorites, Share, actions и states на desktop и 390px;
 5. owner visual acceptance и freeze на exact SHA;
 6. едва след това — отделни production architecture checkpoints от §12.1 на Master-а.
 
