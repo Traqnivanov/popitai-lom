@@ -646,7 +646,7 @@ Stage 2 демонстрира тази посока, но финалната и
 
 1. **Завършено: малък Stage 2 presentation cleanup** — доказаното двойно описание в `staticPage()` е премахнато без taxonomy/owner промяна.
 2. **Завършено като prototype, acceptance остава в общия gate: Favorites detail-only** — coverage, позиция, stable identity, login intent и Profile flow; production storage/RLS остава отделно OPEN.
-3. **Bounded Home action/activity pass** — отделни `Публикувай` и `Попитай` повърхности и честен activity fallback; точният copy/data contract се приема преди код.
+3. **Завършено като prototype, acceptance остава в общия gate: Home action/activity pass** — отделни `Публикувай` и `Попитай` повърхности и честен `Днес в Лом → Тази седмица → Полезно сега` fallback; exact implementation `84d57cb0024ae9b82534badb3e852bc2e12c60b7`.
 4. **Icon visual-system checkpoint** — inventory и един професионален desktop/mobile макет; без масова production подмяна преди owner acceptance.
 5. **Content-complete / reality pass** — задължителното съдържание от регистъра и одобрено реално съдържание от живия сайт се представят вярно; където липсва съдържание има честно empty state, не fake records.
 6. **Финален Stage 2 независим audit** — Home, hub, всички категории, results/detail/Add/edit, Favorites, Share, actions, forms и states; desktop + 390px; оценка като млад, средна възраст и възрастен потребител, после професионален UX review.
@@ -768,7 +768,7 @@ Public IA е одобрена. Следващата acceptance граница е
 - твърдението `Listing формата трябва да има старите 16 категории` е отхвърлено като смесване на public discovery IA с persisted Listing owner taxonomy;
 - Favorites detail-only: прототипирано с real-route/content-integrity remediation; пълният named-route browser acceptance остава в общия Stage 2 gate; production storage/RLS **OPEN**;
 - public results: само matched approved records или честно empty state; synthetic public records са премахнати; canonical results owner е консолидиран в `e423a2c3a8d2f70d28060fb4c37ce38bd5369d5e`;
-- Home action/activity direction: одобрено направление; exact copy/data contract и implementation **OPEN**;
+- Home action/activity: прототипирано и проверено на desktop/390px в `84d57cb0024ae9b82534badb3e852bc2e12c60b7`; финалното Stage 2 owner acceptance остава **OPEN**;
 - icon system: owner visual checkpoint **OPEN**;
 - production OG/social image delivery: **OPEN**;
 - целият Stage 2: **НЕПРИЕТ / owner visual acceptance pending**;

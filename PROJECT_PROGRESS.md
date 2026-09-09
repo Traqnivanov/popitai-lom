@@ -46,7 +46,7 @@
 
 ## Точен следващ ред
 
-1. bounded Home action/activity contract и prototype pass: отделни `Публикувай`/`Попитай` повърхности, без сливане, и честен `Днес → Тази седмица → Полезно сега` fallback;
+1. **Завършено като prototype:** Home action/activity contract на `84d57cb0024ae9b82534badb3e852bc2e12c60b7` — отделни `Публикувай`/`Попитай` повърхности и честен `Днес → Тази седмица → Полезно сега` fallback; финалното приемане остава в общия Stage 2 gate;
 2. icon visual-system checkpoint;
 3. content-complete/reality pass със задължителното съдържание от централния регистър;
 4. финален Stage 2 audit на всички основни journeys, forms, Favorites, Share, actions и states на desktop и 390px;
