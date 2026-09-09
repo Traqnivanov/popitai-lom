@@ -11,7 +11,7 @@
 
   const favoriteEligible=new Set(['listing','firm','shop','restaurant','health','event','publication','article','info']);
   const favoriteSaved=new Map();
-  const favoriteLabels={listing:'Обяви и услуги',firm:'Фирми',shop:'Магазини',restaurant:'Заведения',health:'Health профили',event:'Събития',publication:'Публикации',article:'Статии',info:'Инфо Лом'};
+  const favoriteLabels={listing:'Обяви и услуги',firm:'Фирми',shop:'Магазини',restaurant:'Заведения',health:'Здраве и лекари',event:'Събития',publication:'Публикации',article:'Статии',info:'Инфо Лом'};
   let favoriteLoggedIn=false,pendingFavoriteIntent=null,favoriteReturnFocusKey='';
 
   function closeMoreMenu(){document.querySelectorAll('.desktop-nav details[open]').forEach(details=>{details.open=false;});}
