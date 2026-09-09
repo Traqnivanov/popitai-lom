@@ -6,6 +6,7 @@
   const favoriteEligible=new Set(['listing','firm','shop','restaurant','health','event','publication','article','info']);
   const favoriteBlockedRecords=new Set(['publication-blocked']);
   const favoriteBlockedStates=new Set(['pending','private','rejected','removed']);
+  function knownRecord(id){return data.detailRecords?.[id]||records.get(id);}
 
   function info(){
     const items=[['⚕️','Здравна информация','info-health'],['🏛️','Институции','info-institutions'],['🚌','Транспорт','info-transport'],['🎓','Образование и култура','info-education'],['🏦','Банки и банкомати','info-banks'],['⚡','Комунални услуги','info-utilities']];
@@ -67,11 +68,11 @@
     return `<div class="detail-action">${primary.length?`<div class="detail-primary-actions">${primary.join('')}</div>`:''}${utility}${trust.length?`<div class="detail-trust-actions">${trust.join('')}</div>`:''}<p class="contact-demo-message" aria-live="polite"></p><p class="action-demo-message help" aria-live="polite"></p></div>`;
   }
   function detailHrefFor(record,{context,group,owner,type,detailType}){
-    if(records.get(record.id))return `#detail/${record.contentType}?record=${encodeURIComponent(record.id)}`;
+    if(knownRecord(record.id))return `#detail/${record.contentType}?record=${encodeURIComponent(record.id)}`;
     const q=new URLSearchParams({context,group,owner,detail:detailType});if(type)q.set('type',type);return `#detail/${record.contentType}?${q}`;
   }
   function stableDetailHref(record,kind,query=new URLSearchParams()){
-    if(record?.id==='article-pension'||records.get(record?.id))return `#detail/${kind}?record=${encodeURIComponent(record.id)}`;
+    if(record?.id==='article-pension'||knownRecord(record?.id))return `#detail/${kind}?record=${encodeURIComponent(record.id)}`;
     const clean=new URLSearchParams();
     for(const key of ['context','group','owner','type']){const value=query.get(key);if(value)clean.set(key,value);}
     const encoded=clean.toString();
@@ -107,9 +108,9 @@
 
   function detail(kind,query=new URLSearchParams()){
     if(kind==='article'&&query.get('record')==='article-pension')return pensionDetail(query);
-    const requested=query.get('record');
-    if(requested&&!records.get(requested))return staticPage('Записът не е намерен','Този публичен запис не съществува или вече не е достъпен.');
-    const record=records.resolve(kind,query),title=PopitaiSocialCardComposer.titleFor(record.social),technicalKeys=new Set(['Canonical подкатегория','Избран контекст']);
+    const requested=query.get('record'),requestedRecord=requested?knownRecord(requested):null;
+    if(requested&&(!requestedRecord||requestedRecord.contentType!==kind))return staticPage('Записът не е намерен','Този публичен запис не съществува или вече не е достъпен.');
+    const record=requestedRecord||records.resolve(kind,query),title=PopitaiSocialCardComposer.titleFor(record.social),technicalKeys=new Set(['Canonical подкатегория','Избран контекст']);
     const visibleRows=record.rows.filter(([key])=>!technicalKeys.has(key)).map(([key,value])=>`<div class="kv"><strong>${esc(key==='Suggested тип'?'Тип':key)}</strong><span>${esc(value)}</span></div>`).join('');
     const technicalRows=record.rows.filter(([key])=>technicalKeys.has(key)),qaNotes=Array.isArray(record.qaNotes)?record.qaNotes:[];
     const rawTechnical=(qaNotes.length||technicalRows.length)?`<details class="qa-adapter qa-only"><summary>Технически данни</summary>${qaNotes.map(note=>`<p>${esc(note)}</p>`).join('')}${technicalRows.map(([key,value])=>`<p><strong>${esc(key)}:</strong> ${esc(value)}</p>`).join('')}</details>`:'';
