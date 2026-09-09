@@ -53,14 +53,24 @@
     if(!save&&!share)return '';
     return `<div class="detail-utility-actions" data-favorite-utility aria-label="Полезни действия">${save}${share}<span class="sr-only" data-favorite-live aria-live="polite"></span></div>`;
   }
+  function actionLink(value,label,className){
+    if(typeof value!=='string'||!value.trim())return '';
+    return `<a class="btn ${className}" href="${esc(value)}">${label}</a>`;
+  }
   function actionBar(record,{detailHref='',query=new URLSearchParams(),includeUtility=true}={}){
     const a=record.actions||{},primary=[],trust=[];let primaryUsed=false;
     const addPrimary=html=>{primary.push(html);primaryUsed=true;};
-    if(a.phone)addPrimary(`<button class="btn ${primaryUsed?'soft':'primary'}" type="button" data-demo-contact>Обади се</button>`);
-    if(a.inquiry)addPrimary(`<button class="btn ${primaryUsed?'soft':'primary'}" type="button" data-demo-inquiry>Запитване</button>`);
+    if(a.phone){
+      const klass=primaryUsed?'soft':'primary';
+      addPrimary(actionLink(a.phone,'Обади се',klass)||`<button class="btn ${klass}" type="button" data-demo-contact>Обади се</button>`);
+    }
+    if(a.inquiry){
+      const klass=primaryUsed?'soft':'primary';
+      addPrimary(actionLink(a.inquiry,'Запитване',klass)||`<button class="btn ${klass}" type="button" data-demo-inquiry>Запитване</button>`);
+    }
     if(a.answer)addPrimary(`<button class="btn ${primaryUsed?'soft':'primary'}" type="button" data-demo-answer>Добави отговор</button>`);
     if(a.official)addPrimary(`<button class="btn ${primaryUsed?'soft':'primary'}" type="button" data-demo-official>Официална страница</button>`);
-    if(a.site)primary.push('<button class="btn soft" type="button" data-demo-site>Сайт</button>');
+    if(a.site)primary.push(actionLink(a.site,'Сайт','soft')||'<button class="btn soft" type="button" data-demo-site>Сайт</button>');
     if(a.report)trust.push('<button class="btn soft" type="button" data-demo-report>Подай сигнал</button>');
     if(a.correction)trust.push(`<button class="btn soft" type="button" data-demo-correction>${esc(a.correctionLabel||'Сигнализирай грешка')}</button>`);
     const utility=includeUtility?utilityRow(record,detailHref,query):'';
@@ -106,18 +116,29 @@
       <div class="notice"><strong>Източник</strong><p>Национален осигурителен институт (НОИ). Условията са за пенсия за осигурителен стаж и възраст по общия ред; при специални случаи правилата и документите могат да бъдат различни.</p></div></div></div>`;
   }
 
+  function detailMedia(record,title){
+    const logo=record?.media?.logo||'',images=Array.isArray(record?.media?.images)?record.media.images:[];
+    const items=[];
+    if(logo)items.push(`<div><img src="${esc(logo)}" alt="Лого на ${esc(title)}" loading="lazy" style="width:100%;height:100%;min-height:110px;object-fit:contain;border-radius:13px;background:#fff"></div>`);
+    for(const [index,url] of images.entries())items.push(`<div><img src="${esc(url)}" alt="Снимка ${index+1} към ${esc(title)}" loading="lazy" style="width:100%;height:100%;min-height:110px;object-fit:cover;border-radius:13px"></div>`);
+    return items.length?`<div class="gallery-demo" aria-label="Снимки">${items.join('')}</div>`:'';
+  }
+  function detailSections(record){
+    const sections=Array.isArray(record?.sections)?record.sections:[];
+    return sections.map(section=>`<section class="content-card article-detail-section"><h2>${esc(section.title)}</h2><p style="white-space:pre-line">${esc(section.body)}</p></section>`).join('');
+  }
   function detail(kind,query=new URLSearchParams()){
     if(kind==='article'&&query.get('record')==='article-pension')return pensionDetail(query);
     const requested=query.get('record'),requestedRecord=requested?knownRecord(requested):null;
     if(requested&&(!requestedRecord||requestedRecord.contentType!==kind))return staticPage('Записът не е намерен','Този публичен запис не съществува или вече не е достъпен.');
     const record=requestedRecord||records.resolve(kind,query),title=PopitaiSocialCardComposer.titleFor(record.social),technicalKeys=new Set(['Canonical подкатегория','Избран контекст']);
-    const visibleRows=record.rows.filter(([key])=>!technicalKeys.has(key)).map(([key,value])=>`<div class="kv"><strong>${esc(key==='Suggested тип'?'Тип':key)}</strong><span>${esc(value)}</span></div>`).join('');
+    const visibleRows=record.rows.filter(([key,value])=>!technicalKeys.has(key)&&String(value??'').trim()).map(([key,value])=>`<div class="kv"><strong>${esc(key==='Suggested тип'?'Тип':key)}</strong><span style="white-space:pre-line">${esc(value)}</span></div>`).join('');
     const technicalRows=record.rows.filter(([key])=>technicalKeys.has(key)),qaNotes=Array.isArray(record.qaNotes)?record.qaNotes:[];
     const rawTechnical=(qaNotes.length||technicalRows.length)?`<details class="qa-adapter qa-only"><summary>Технически данни</summary>${qaNotes.map(note=>`<p>${esc(note)}</p>`).join('')}${technicalRows.map(([key,value])=>`<p><strong>${esc(key)}:</strong> ${esc(value)}</p>`).join('')}</details>`:'';
-    const gallery=record.social.mediaAvailable&&['listing','firm'].includes(record.contentType)?`<div class="gallery-demo"><div>Основна снимка</div><div>Снимка</div><div>Снимка</div></div>`:'';
+    const gallery=detailMedia(record,title),description=String(record.body||'').trim()?`<section><h2 class="detail-section-title">Описание</h2><p style="white-space:pre-line">${esc(record.body)}</p></section>`:'',sections=detailSections(record);
     const special=record.special?`<div class="notice">${esc(record.special)}</div>`:record.contentType==='info'?'<div class="notice ok">Всеки запис показва източник и дата на последна проверка.</div>':'';
     const detailHref=stableDetailHref(record,kind,query),earlyUtility=['article','publication','event'].includes(record.contentType),utility=earlyUtility?utilityRow(record,detailHref,query):'',actions=actionBar(record,{detailHref,query,includeUtility:!earlyUtility});
-    return `<div class="page detail-page">${pageHead(title,record.pageDescription)}${utility?`<div class="shell detail-early-utility">${utility}</div>`:''}<div class="shell detail"><article class="detail-main">${gallery}<h2 class="detail-section-title">Описание</h2><p>${esc(record.body)}</p>${rawTechnical}</article><aside class="detail-side">${visibleRows}${actions}${special}</aside></div></div>`;
+    return `<div class="page detail-page">${pageHead(title,record.pageDescription)}${utility?`<div class="shell detail-early-utility">${utility}</div>`:''}<div class="shell detail"><article class="detail-main">${gallery}${description}${sections}${rawTechnical}</article><aside class="detail-side">${visibleRows}${actions}${special}</aside></div></div>`;
   }
   function iconCheckpoint(){
     const candidates=[['Услуги','briefcase-duotone.svg','services'],['Ремонти','wrench-duotone.svg','repairs'],['Животни','paw-print-duotone.svg','animals'],['Автомобили','car-duotone.svg','cars'],['Здраве','first-aid-kit-duotone.svg','health'],['Комунални услуги','plug-duotone.svg','utilities'],['Статии','article-duotone.svg','articles'],['Публикации','newspaper-duotone.svg','publications']];
