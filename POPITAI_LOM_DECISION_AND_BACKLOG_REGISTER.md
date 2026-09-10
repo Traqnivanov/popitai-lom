@@ -17,6 +17,19 @@
 
 Кодът доказва какво е реализирано, но не превръща автоматично предложение в одобрено продуктово решение.
 
+### 1.1 Work provenance — задължително
+
+- всеки Work чат има постоянен пореден номер;
+- всяко ново решение или промяна на статус записва `Work номер + дата + owner verdict + evidence/SHA`, когато има такова;
+- решение без доказан Work източник не се приписва по памет; отбелязва се като legacy/неуточнен произход до проверка;
+- по-нов Work може да замени старо решение само при изрично owner решение; старият запис остава история с `REPLACED`, а не се изтрива;
+- текущият чат е **Work 2 — 10.09.2026**.
+
+| Work | Дата | Доказан icon scope / evidence |
+| --- | --- | --- |
+| Work 1 | 10.09.2026 | Подготвя пълната начална draft taxonomy/icon карта, конкретните icon proofs и локалния commit `39f442b00885b436339bafee833ecb552eda813d`. |
+| Work 2 | 10.09.2026 | Проверява прекъснатото качване и публикува идентичното дърво като remote review commit `e60655186677722f1e319016c9602857e99aebef`; прави пълния icon audit и записва следващия owner contract. |
+
 ## 2. Допустими статуси
 
 - **APPROVED — NOT IMPLEMENTED** — одобрено продуктово решение, което още не е реализирано;
@@ -64,6 +77,19 @@
 | Activity module | **PROTOTYPED — FINAL STAGE 2 ACCEPTANCE PENDING** | `Днес в Лом` при доказана активност → `Тази седмица` при липса на днешна → `Полезно сега` без числа. Максимум три кликаеми показателя; без нули, fake counts или fake activity. Календарът е по `Europe/Sofia`; невалидни, бъдещи, непублични и неодобрени записи не се броят. Реализация: `84d57cb0024ae9b82534badb3e852bc2e12c60b7`. |
 | Activity priority | **APPROVED DIRECTION** | Реални обяви/услуги → публикации/статии → събития. Въпросите не се използват като изкуствен водещ показател. |
 | Newsletter/сутрешен абонамент | **IDEA ONLY — NOT NOW** | Не се добавя като част от текущия Home pass. |
+
+## 4A. Icon system — owner contract
+
+| Тема | Статус | Work / дата / verdict | Решение / граница | Следващо действие |
+| --- | --- | --- | --- | --- |
+| Icon review scope | **PROTOTYPED — ACCEPTANCE PENDING** | Work 1 → Work 2 · 10.09.2026 · evidence `39f442b…` → `e606551…` | Review branch-ът демонстрира посока, но не е site-wide approval и не разрешава промяна на production, Supabase или Stage 3. | Работи се само в отделния icon checkpoint върху exact review SHA. |
+| Registry coverage model | **OPEN — OWNER REVIEW** | Work 2 · 10.09.2026 · Work proposal, още без финален owner verdict | Всяко taxonomy понятие получава изрично решение `OWN ICON`, `SHARED ICON`, `TEXT ONLY` или `FAMILY FALLBACK`. Не всяка дума изисква отделен SVG. | Owner преглежда картата; после се заключва преди рисуване. |
+| Exact semantic choice | **APPROVED — NOT IMPLEMENTED** | Work 1 · 10.09.2026 · owner-confirmed | Собствен leaf знак е задължителен, когато общият family/category знак е неточен или подвеждащ. Един asset се споделя само при еднакъв визуален смисъл. Текстовият label остава видим. | Нерешен или двусмислен знак остава `OPEN`, без произволна комбинация. |
+| Media/icon fallback | **APPROVED — NOT IMPLEMENTED** | Work 1 · 10.09.2026 · owner-confirmed | `одобрена реална медия → точна одобрена leaf тема → family/category → Lom fallback`. Изборът идва от контролирани record/taxonomy полета, не от AI гадаене по свободен текст. | Един registry управлява site fallback и social template избора. |
+| Controlled performance exception | **APPROVED — NOT IMPLEMENTED / ICONS ONLY** | Work 2 · 10.09.2026 · owner-confirmed | За иконите се допуска умерено по-детайлен или малко по-голям SVG, когато допълнителното качество и разпознаваемост са доказани. Това не разрешава тежки raster assets, embedded изображения, ненужни ефекти или неоптимизирани файлове. | Оптимизация след visual acceptance; сравнение преди/след на desktop, 390 px, 20–24 px и social размер. |
+| Small и large variants | **OPEN — OWNER REVIEW** | Work 2 · 10.09.2026 · technical proposal | Може да има стилово еднакъв small/site и large/social вариант, когато един path не работи добре и в двата размера. Това не са различни визуални езици или отделни лога. | Да се докаже с първата визуална група; после owner verdict. |
+| Acceptance gate | **ACCEPTED** | Work 1 · 10.09.2026 · owner-confirmed | Нито една неодобрена икона не влиза в приетия комплект. Един двусмислен или визуално слаб знак спира приемането на съответната група. | Owner review по логични групи; после пълен desktop/mobile/accessibility/performance audit. |
+| Production wiring | **PRODUCTION CHECKPOINT** | Current Master + Work 1/2 · owner boundary | Няма mass replacement, schema/storage промяна или реално social-image generation преди финален icon inventory, Stage 2 acceptance и отделно owner разрешение. | Няма production работа сега. |
 
 ## 5. Content protection
 
