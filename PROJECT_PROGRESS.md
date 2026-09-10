@@ -47,7 +47,7 @@
 ## Точен следващ ред
 
 1. **Завършено като prototype:** Home action/activity contract на `84d57cb0024ae9b82534badb3e852bc2e12c60b7` — отделни `Публикувай`/`Попитай` повърхности и честен `Днес → Тази седмица → Полезно сега` fallback; финалното приемане остава в общия Stage 2 gate;
-2. **В процес / първа група приета:** icon visual-system checkpoint — owner прие осемте Work 2 semantic assets (`Доставки`, `Товарен транспорт`, `Домашна помощ`, `Автомобилна диагностика`, `Борба с вредители`, `Почистване на дом`, `Монтажи и мебели`, `ВиК`) от review SHA `e17df39be8cd81872101f89d94f4d917ebc85778`, включително desktop, 390 px, 24/48/64 px и social comparison; това не е site-wide approval и не е production wiring;
+2. **В процес / 14 assets owner-approved:** icon visual-system checkpoint — първите осем са приети на `e17df39be8cd81872101f89d94f4d917ebc85778`; `Почистване на дом` е заменено с точния домашен комплект; приети са `Бани и плочки`, `Електро`, коригираният `Покриви`, `Шпакловка / гипсокартон / боядисване`, `Дограма и врати`, `Отопление и климатици`. Интегрираният desktop/390 px/24–64 px/social QA предхожда следващия exact review SHA; това не е site-wide approval и не е production wiring;
 3. content-complete/reality pass със задължителното съдържание от централния регистър;
 4. финален Stage 2 audit на всички основни journeys, forms, Favorites, Share, actions и states на desktop и 390px;
 5. owner visual acceptance и freeze на exact SHA;
