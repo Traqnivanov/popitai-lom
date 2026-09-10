@@ -68,23 +68,46 @@
 .social-blocked{margin-top:18px}
 .social-card-error{margin-top:18px}
 
-/* Phosphor Duotone visual checkpoint only; not a bulk icon replacement. */
-.icon-checkpoint-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin:20px 0}
-.icon-checkpoint-card{--checkpoint-accent:#d7e9f8;padding:16px;border:1px solid #d7e2ef;border-radius:16px;background:#fbfdff;min-width:0}
-.icon-checkpoint-card[data-icon-key="repairs"],.icon-checkpoint-card[data-icon-key="publications"]{--checkpoint-accent:#f2e7c9}
-.icon-checkpoint-card[data-icon-key="animals"]{--checkpoint-accent:#dfeee7}
-.icon-checkpoint-card[data-icon-key="health"],.icon-checkpoint-card[data-icon-key="utilities"]{--checkpoint-accent:#d7f0ef}
-.icon-large{display:grid;place-items:center;width:104px;height:104px;border-radius:22px;background:var(--checkpoint-accent)}
-.icon-large img{width:72px;height:72px}
-.icon-checkpoint-card h3{margin:12px 0}
-.icon-real-size{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:var(--checkpoint-accent);font-weight:800;color:#0b2f56}
-.icon-real-size img{width:28px;height:28px;flex:0 0 28px}
-.icon-checkpoint-card p{margin-bottom:0;color:#66717e}
+/* Icon-system approval checkpoint only; not a bulk site replacement. */
+.icon-system-page{--icon-navy:#082f5b;--icon-blue:#dceafb;--icon-gold:#f5e7bd;--icon-green:#dff0e7;--icon-violet:#e9e4f6;--icon-teal:#dceff0}
+.icon-system-boundary{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:4px 0 28px;padding:16px 18px;border:1px solid #c8d8ea;border-left:5px solid #c89318;border-radius:14px;background:#f8fbff;color:#173b61}
+.icon-system-boundary span{color:#536579}
+.icon-review-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:18px 0 42px}
+.icon-review-card,.icon-social-card{--icon-accent:var(--icon-blue);min-width:0}
+.icon-review-card[data-icon-key="repairs"],.icon-social-card[data-icon-key="repairs"]{--icon-accent:var(--icon-gold)}
+.icon-review-card[data-icon-key="animals"],.icon-social-card[data-icon-key="animals"]{--icon-accent:var(--icon-green)}
+.icon-review-card[data-icon-key="publications"],.icon-social-card[data-icon-key="publications"]{--icon-accent:var(--icon-violet)}
+.icon-review-card[data-icon-key="verified"],.icon-social-card[data-icon-key="verified"]{--icon-accent:var(--icon-teal)}
+.icon-review-card{display:grid;align-content:start;gap:14px;padding:16px;border:1px solid #d6e0eb;border-radius:18px;background:#fff;box-shadow:0 10px 24px rgba(11,47,86,.06)}
+.icon-review-heading{display:grid;gap:13px;align-content:start}
+.icon-review-heading h3{margin:0;font-size:1.05rem;line-height:1.2;color:#0b2440}
+.icon-review-heading p{margin:5px 0 0;color:#5b6b7c;font-size:.92rem;line-height:1.4}
+.icon-review-emblem,.icon-size-24,.icon-social-emblem{display:grid;place-items:center;color:var(--icon-navy);background:var(--icon-accent)}
+.icon-review-card:is([data-icon-key="services"],[data-icon-key="repairs"],[data-icon-key="verified"]) img,.icon-social-card:is([data-icon-key="services"],[data-icon-key="repairs"],[data-icon-key="verified"]) img{filter:brightness(0) saturate(100%) invert(14%) sepia(65%) saturate(1465%) hue-rotate(185deg) brightness(91%) contrast(98%)}
+.icon-review-emblem{width:76px;height:76px;border-radius:19px}
+.icon-review-emblem img{width:50px;height:50px}
+.icon-size-proof{display:flex;align-items:center;gap:10px;min-height:48px;padding:9px 10px;border:1px solid #e0e7ef;border-radius:12px;background:#f9fbfd;color:#123659;font-size:.9rem;font-weight:800}
+.icon-size-24{width:30px;height:30px;flex:0 0 30px;border-radius:9px}
+.icon-size-24 img{width:24px;height:24px}
+.icon-review-card>small{color:#66778a;line-height:1.4}
+.icon-review-card>small strong{color:#304c69}
+.icon-social-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:18px 0 28px}
+.icon-social-card{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) 30%;align-items:center;aspect-ratio:1200/630;overflow:hidden;padding:7%;border-radius:18px;background:linear-gradient(135deg,#071f3b 0%,#0b4778 72%,#0d5b8f 100%);color:#fff;box-shadow:0 14px 30px rgba(6,32,59,.14)}
+.icon-social-card::before{content:"";position:absolute;z-index:-1;right:-10%;top:-26%;width:48%;aspect-ratio:1;border:1px solid rgba(255,255,255,.14);border-radius:50%;box-shadow:0 0 0 35px rgba(255,255,255,.025),0 0 0 70px rgba(255,255,255,.018)}
+.icon-social-copy{display:grid;gap:8px;min-width:0}
+.icon-social-copy span{font-size:clamp(.66rem,1.1vw,.82rem);font-weight:900;letter-spacing:.08em;color:#f2cc67}
+.icon-social-copy strong{max-width:95%;font-size:clamp(1.05rem,2.25vw,1.85rem);line-height:1.06;overflow-wrap:anywhere}
+.icon-social-copy small{font-size:clamp(.7rem,1vw,.86rem);color:#d8e6f3}
+.icon-social-emblem{justify-self:end;width:82%;aspect-ratio:1;border:5px solid rgba(255,255,255,.7);border-radius:23%;box-shadow:0 12px 28px rgba(0,0,0,.22)}
+.icon-social-emblem img{width:68%;height:68%}
+.icon-social-card>b{position:absolute;right:5%;bottom:6%;font-size:clamp(.64rem,1vw,.8rem);letter-spacing:.02em}
+.icon-system-decision{margin:28px 0 4px;padding:18px 20px;border-radius:16px;background:#0a2e54;color:#fff}
+.icon-system-decision p{margin:6px 0 0;color:#d9e5f0;line-height:1.5}
 
 .modal-card:focus{outline:none}
 
 @media(max-width:780px){
-  .icon-checkpoint-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .icon-review-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(max-width:640px){
   .tag-grid{grid-template-columns:1fr 1fr}
@@ -94,13 +117,24 @@
   .social-card-metadata{padding:13px 14px}
 }
 @media(max-width:390px){
-  .grid.cols-4,.grid.cols-3,.grid.cols-2,.icon-checkpoint-grid,.tag-grid{grid-template-columns:minmax(0,1fr)!important}
+  .grid.cols-4,.grid.cols-3,.grid.cols-2,.tag-grid{grid-template-columns:minmax(0,1fr)!important}
   .shell,.detail,.form-wrap,.social-card-preview,.social-card-metadata,.social-card-image{min-width:0;max-width:100%}
   .page-tools,.hero-actions,.social-card-qa-controls,.upload-file-chip{align-items:stretch}
   .page-tools .btn,.hero-actions .btn,.social-card-qa-controls .btn{max-width:100%;white-space:normal}
   .upload-file-chip{flex-direction:column}
   .upload-file-chip .btn{width:100%}
   .social-card-copy{max-width:82%}
+}
+@media(max-width:640px){
+  .icon-system-boundary{align-items:flex-start;flex-direction:column;gap:5px}
+  .icon-review-grid,.icon-social-grid{grid-template-columns:minmax(0,1fr)}
+  .icon-review-card{grid-template-columns:76px minmax(0,1fr);align-items:start}
+  .icon-review-heading{display:contents}
+  .icon-review-emblem{grid-row:1/4}
+  .icon-review-heading>div{grid-column:2}
+  .icon-size-proof{grid-column:2}
+  .icon-review-card>small{grid-column:2}
+  .icon-social-card{border-radius:15px}
 }
 
 /* Independent re-audit remediation overrides. */
