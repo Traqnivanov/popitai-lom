@@ -207,6 +207,8 @@
       {...candidates.find(item=>item.key==='diagnostics'),eyebrow:'АВТОУСЛУГА · ДИАГНОСТИКА',title:'Автомобилна диагностика в Лом'},
       {...candidates.find(item=>item.key==='delivery'),eyebrow:'УСЛУГА · ДОСТАВКИ',title:'Доставка в Лом и региона'},
       {...candidates.find(item=>item.key==='home-cleaning'),eyebrow:'УСЛУГА · ПОЧИСТВАНЕ',title:'Почистване на дом в Лом'},
+      {...candidates.find(item=>item.key==='bathroom-tiles'),eyebrow:'РЕМОНТ · БАНИ И ПЛОЧКИ',title:'Ремонт на баня в Лом'},
+      {...candidates.find(item=>item.key==='electrical'),eyebrow:'УСЛУГА · ЕЛЕКТРО',title:'Електротехник в Лом'},
       {...candidates.find(item=>item.key==='roofing'),eyebrow:'РЕМОНТ · ПОКРИВИ',title:'Ремонт на покрив в Лом'},
       {...candidates.find(item=>item.key==='wall-finishing'),eyebrow:'РЕМОНТ · СТЕНИ',title:'Шпакловка и боядисване в Лом'},
       {...candidates.find(item=>item.key==='joinery'),eyebrow:'РЕМОНТ · ДОГРАМА',title:'Дограма и врати в Лом'},
