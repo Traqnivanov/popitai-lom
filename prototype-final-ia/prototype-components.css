@@ -147,6 +147,53 @@
   .icon-social-card{border-radius:15px}
 }
 
+/* Work 2 raster-source review: isolated proof only, never production wiring. */
+.icon-candidate-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:18px 0 42px}
+.icon-candidate-card{display:grid;align-content:start;gap:14px;min-width:0;padding:16px;border:1px solid #d6e0eb;border-radius:18px;background:#fff;box-shadow:0 10px 24px rgba(11,47,86,.06)}
+.icon-candidate-status{justify-self:start;padding:4px 7px;border-radius:999px;background:#fff4d7;color:#72510a;font-size:.64rem;font-weight:900;letter-spacing:.05em}
+.icon-candidate-head{display:grid;grid-template-columns:82px minmax(0,1fr);align-items:center;gap:12px}
+.icon-candidate-head h3{margin:0;color:#0b2440;font-size:1rem;line-height:1.2}
+.icon-candidate-head p{margin:5px 0 0;color:#5b6b7c;font-size:.84rem;line-height:1.35}
+.icon-candidate-emblem{display:grid;place-items:center;width:82px;height:82px;border:1px solid #dce6f0;border-radius:18px;background:linear-gradient(145deg,#f8fbff,#edf4fb)}
+.icon-candidate-emblem img{display:block;width:72px;height:72px;object-fit:contain}
+.icon-size-ladder{display:flex;align-items:end;gap:9px;min-height:82px;padding:10px;border:1px solid #e0e7ef;border-radius:13px;background:#f9fbfd}
+.icon-pixel-sample{display:grid;place-items:center;flex:0 0 auto;border:1px solid #d8e3ee;border-radius:10px;background:#fff}
+.icon-pixel-sample img{display:block;width:100%;height:100%;object-fit:contain}
+.icon-pixel-sample.sample-64{width:64px;height:64px}
+.icon-pixel-sample.sample-48{width:48px;height:48px}
+.icon-pixel-sample.sample-24{width:24px;height:24px;border-radius:6px}
+.icon-size-ladder small{margin-left:auto;color:#677789;font-size:.67rem;font-weight:800;white-space:nowrap}
+.icon-candidate-card>small{color:#66778a;line-height:1.4}
+.icon-candidate-card>small strong{color:#304c69}
+.icon-mobile-review{margin:0 0 42px}
+.icon-mobile-device{width:min(390px,100%);margin:18px auto 0;overflow:hidden;border:8px solid #0b2340;border-radius:28px;background:#f4f7fb;box-shadow:0 18px 42px rgba(5,30,55,.18)}
+.icon-mobile-toolbar{display:flex;align-items:center;justify-content:space-between;padding:16px 17px;background:#0a315a;color:#fff}
+.icon-mobile-toolbar span{font-size:.72rem;color:#cbd9e7}
+.icon-mobile-list{display:grid;gap:8px;padding:12px}
+.icon-mobile-list article{display:grid;grid-template-columns:56px minmax(0,1fr) 16px;align-items:center;gap:11px;min-width:0;padding:10px;border:1px solid #d7e2ed;border-radius:15px;background:#fff;box-shadow:0 5px 14px rgba(11,47,86,.05)}
+.icon-mobile-list article>div{display:grid;gap:3px;min-width:0}
+.icon-mobile-list article strong{color:#123659;font-size:.9rem;line-height:1.2}
+.icon-mobile-list article span{color:#68788a;font-size:.72rem;line-height:1.25}
+.icon-mobile-list article>b{color:#7890a8;font-size:1.35rem}
+.icon-mobile-emblem{display:grid;place-items:center;width:56px;height:56px;border-radius:13px;background:#eef4fa}
+.icon-mobile-emblem img{display:block;width:52px;height:52px;object-fit:contain}
+.icon-social-card--raster{display:block}
+.icon-social-card--raster .icon-social-copy{position:absolute;z-index:2;left:7%;top:50%;width:58%;transform:translateY(-50%)}
+.icon-social-art{position:absolute;z-index:1;right:3%;top:7%;width:39%;height:80%;object-fit:contain;filter:drop-shadow(0 14px 18px rgba(0,0,0,.2))}
+
+@media(max-width:1050px){.icon-candidate-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){
+  .icon-candidate-grid{grid-template-columns:minmax(0,1fr)}
+  .icon-candidate-card{padding:14px}
+  .icon-candidate-head{grid-template-columns:76px minmax(0,1fr)}
+  .icon-candidate-emblem{width:76px;height:76px}
+  .icon-candidate-emblem img{width:68px;height:68px}
+  .icon-size-ladder{gap:7px}
+  .icon-size-ladder small{font-size:.62rem}
+  .icon-social-card--raster .icon-social-copy{left:6%;width:61%}
+  .icon-social-art{right:1%;width:41%}
+}
+
 /* Independent re-audit remediation overrides. */
 .protected-entry{display:grid;gap:4px;margin:18px 0;padding:16px 18px;border:2px solid #0b2f56;border-radius:16px;background:#f8fbff;color:#0b2f56;text-decoration:none}
 .protected-entry span{font-size:.72rem;font-weight:900;letter-spacing:.06em;color:#6b7280}
