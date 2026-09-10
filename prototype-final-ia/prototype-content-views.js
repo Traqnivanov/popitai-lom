@@ -184,7 +184,7 @@
   }
   function iconCheckpoint(){
     const candidates=[
-      {label:'Услуги',file:'toolbox-duotone.svg',key:'services',reason:'Практическа услуга или помощ',avoid:'не е Работа или Ремонти',eyebrow:'УСЛУГА · ПОЧИСТВАНЕ',title:'Почистване на дом в Лом'},
+      {label:'Услуги',file:'wrench-duotone.svg',key:'services',reason:'Практическа услуга или помощ',avoid:'не е Работа; ремонтите имат отделен чук',eyebrow:'УСЛУГА · ПОЧИСТВАНЕ',title:'Почистване на дом в Лом'},
       {label:'Майстори и ремонти',file:'hammer-duotone.svg',key:'repairs',reason:'Ремонт и строителна работа',avoid:'не е общата категория Услуги',eyebrow:'РЕМОНТ · БАНЯ',title:'Ремонт на баня в Лом'},
       {label:'Животни',file:'paw-print-duotone.svg',key:'animals',reason:'Животно, грижа или изгубен любимец',avoid:'не е ветеринарен здравен профил',eyebrow:'ЖИВОТНИ · ИЗГУБЕНО',title:'Изгубено куче в Лом'},
       {label:'Публикации',file:'newspaper-duotone.svg',key:'publications',reason:'Кратка местна актуализация',avoid:'не е дълга полезна статия',eyebrow:'АКТУАЛНО · ЛОМ',title:'Важна местна актуализация'},

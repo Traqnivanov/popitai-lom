@@ -83,7 +83,7 @@
 .icon-review-heading h3{margin:0;font-size:1.05rem;line-height:1.2;color:#0b2440}
 .icon-review-heading p{margin:5px 0 0;color:#5b6b7c;font-size:.92rem;line-height:1.4}
 .icon-review-emblem,.icon-size-24,.icon-social-emblem{display:grid;place-items:center;color:var(--icon-navy);background:var(--icon-accent)}
-.icon-review-card:is([data-icon-key="services"],[data-icon-key="repairs"],[data-icon-key="verified"]) img,.icon-social-card:is([data-icon-key="services"],[data-icon-key="repairs"],[data-icon-key="verified"]) img{filter:brightness(0) saturate(100%) invert(14%) sepia(65%) saturate(1465%) hue-rotate(185deg) brightness(91%) contrast(98%)}
+.icon-review-card:is([data-icon-key="repairs"],[data-icon-key="verified"]) img,.icon-social-card:is([data-icon-key="repairs"],[data-icon-key="verified"]) img{filter:brightness(0) saturate(100%) invert(14%) sepia(65%) saturate(1465%) hue-rotate(185deg) brightness(91%) contrast(98%)}
 .icon-review-emblem{width:76px;height:76px;border-radius:19px}
 .icon-review-emblem img{width:50px;height:50px}
 .icon-size-proof{display:flex;align-items:center;gap:10px;min-height:48px;padding:9px 10px;border:1px solid #e0e7ef;border-radius:12px;background:#f9fbfd;color:#123659;font-size:.9rem;font-weight:800}
