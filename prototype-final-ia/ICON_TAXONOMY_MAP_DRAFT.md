@@ -45,6 +45,8 @@ Owner посоката от Work 2 е да не се изработват мех
 
 Всички generated checkerboard фонове са технически отстранени чрез background-extraction pass. В review branch се добавят само 128 px lossless site и 512 px quality-86 social WebP производни с реална alpha прозрачност; 1254 px source PNG файловете не се добавят.
 
+Интегрираният checkpoint `bdc2c037b7114394400b97b956609e3e445226bc` е browser-tested: 14/14 site cards, 10 social compositions, нула счупени изображения, desktop без horizontal overflow и реална 390 px проверка. Общото тегло на 14-те site WebP файла е 188,882 bytes; social derivatives са отделен слой и не се зареждат в нормалния category list.
+
 ## Повърхностен договор
 
 | Повърхност | Icon правило |
