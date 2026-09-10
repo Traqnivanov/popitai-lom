@@ -91,6 +91,14 @@
 .icon-size-24 img{width:24px;height:24px}
 .icon-review-card>small{color:#66778a;line-height:1.4}
 .icon-review-card>small strong{color:#304c69}
+.icon-theme-review{margin:0 0 42px}
+.icon-theme-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:18px}
+.icon-theme-card{display:flex;align-items:center;gap:10px;min-width:0;min-height:64px;padding:10px 12px;border:1px solid #d7e2ed;border-radius:14px;background:#fff;color:#163a5e;box-shadow:0 7px 18px rgba(11,47,86,.045)}
+.icon-theme-card strong{font-size:.9rem;line-height:1.25}
+.icon-theme-emblem{display:grid;place-items:center;width:42px;height:42px;flex:0 0 42px;border-radius:12px;background:#e4eef9}
+.icon-theme-card:nth-child(3n+2) .icon-theme-emblem{background:#f5e7bd}
+.icon-theme-card:nth-child(3n+3) .icon-theme-emblem{background:#dff0e7}
+.icon-theme-emblem img{width:29px;height:29px}
 .icon-social-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:18px 0 28px}
 .icon-social-card{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) 30%;align-items:center;aspect-ratio:1200/630;overflow:hidden;padding:7%;border-radius:18px;background:linear-gradient(135deg,#071f3b 0%,#0b4778 72%,#0d5b8f 100%);color:#fff;box-shadow:0 14px 30px rgba(6,32,59,.14)}
 .icon-social-card::before{content:"";position:absolute;z-index:-1;right:-10%;top:-26%;width:48%;aspect-ratio:1;border:1px solid rgba(255,255,255,.14);border-radius:50%;box-shadow:0 0 0 35px rgba(255,255,255,.025),0 0 0 70px rgba(255,255,255,.018)}
@@ -108,6 +116,7 @@
 
 @media(max-width:780px){
   .icon-review-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .icon-theme-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 @media(max-width:640px){
   .tag-grid{grid-template-columns:1fr 1fr}
@@ -128,6 +137,7 @@
 @media(max-width:640px){
   .icon-system-boundary{align-items:flex-start;flex-direction:column;gap:5px}
   .icon-review-grid,.icon-social-grid{grid-template-columns:minmax(0,1fr)}
+  .icon-theme-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .icon-review-card{grid-template-columns:76px minmax(0,1fr);align-items:start}
   .icon-review-heading{display:contents}
   .icon-review-emblem{grid-row:1/4}
