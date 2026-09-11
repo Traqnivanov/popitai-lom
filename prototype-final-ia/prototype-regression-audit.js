@@ -82,7 +82,26 @@ assert(interactions.includes('function afterRender'),'interactions are attached 
 
 // 2. Offer-only service creation, including hostile/legacy input normalization.
 assert.equal(contracts.SERVICE_OFFER_TYPE,'Дава');
-assert.equal(contracts.serviceMappingCoverage,58);
+assert.equal(services.structuredFamilies.reduce((sum,family)=>sum+family.length-1,0),45,'Services exposes exactly 45 consolidated entries');
+assert.equal(services.familyNames.length,9,'Services keeps exactly nine families');
+assert(!services.services().includes('Друга услуга'),'generic other service is not a visible family card');
+assert.equal(contracts.serviceVisibleEntry('Офиси и входове'),'Почистване');
+assert.equal(contracts.serviceVisibleEntry('Преместване'),'Хамали и преместване');
+assert.equal(contracts.serviceVisibleEntry('Домашни помощници'),'Помощ в дома');
+assert.deepEqual(contracts.serviceVariants('Фото и видео'),['Фото','Видео']);
+assert(contracts.serviceCanonicals('ИТ, сайтове и дизайн').includes('Компютърни и технически услуги'));
+assert(contracts.serviceCanonicals('ИТ, сайтове и дизайн').includes('Професионални услуги'));
+assert.equal(services.searchMatch('офиси'),'Офиси и входове','old exact intent remains searchable');
+assert.equal(services.searchMatch('разходка'),'Разходка на кучета','legacy runtime label remains searchable');
+assert(contracts.contextualAddUrl({context:'Услуги',group:'Почистване',owner:'Listings'}).startsWith('#service-entry?'),'merged entry requires exact choice before Add');
+const cleaningChooser=services.serviceEntry(new URLSearchParams(`group=${encodeURIComponent('Почистване')}`));
+assert(cleaningChooser.includes('Почистване на дом')&&cleaningChooser.includes('Офиси и входове'),'merged cleaning entry exposes exact filters');
+assert(cleaningChooser.includes('<h1>Почистване</h1>'),'exact-choice page keeps the selected visible entry as its title');
+const cleaningDiscoveries=[...cleaningChooser.matchAll(/href="([^"]*discovery=[^"]+)"/g)].map(match=>new URLSearchParams(match[1].split('?')[1]).get('discovery'));
+assert.deepEqual(cleaningDiscoveries,['Почистване на дом','Офиси и входове'],'broad merged label is not persisted as an exact service');
+const officeAdd=contracts.contextualAddUrl({context:'Услуги',group:'Офиси и входове',owner:'Listings'});
+assert.equal(new URLSearchParams(officeAdd.split('?')[1]).get('discovery'),'Офиси и входове','exact alias remains visible in Add context');
+assert.equal((services.masters().match(/class="master-chip"/g)||[]).length,10,'Masters exposes the ten approved repair entries');
 const encodedSeek=encodeURIComponent('Търси');
 const encodedOffer=encodeURIComponent('Дава');
 for(const target of [

@@ -2,27 +2,29 @@
 
 (() => {
   const contracts=window.PopitaiStage2Contracts;
-  const masterGroups=Object.freeze(['Цялостни ремонти','Бани и плочки','ВиК','Електро','Покриви','Шпакловка и боядисване','Дограма и врати','Климатици','Друга ремонтна услуга']);
+  const masterGroups=Object.freeze(['Цялостни ремонти','Бани и плочки','ВиК','Електро','Покриви','Шпакловка / гипсокартон / боядисване','Дограма и врати','Отопление и климатици','Монтажи и мебели','Къртене и извозване']);
   const familySource=Object.freeze({
     'Майстори, ремонти и дом':masterGroups,
-    'Почистване и поддръжка':['Почистване на дом','Офиси и входове','Мека мебел и килими','Двор и градина','Озеленяване','Борба с вредители','Домашна помощ'],
+    'Почистване и поддръжка':['Почистване','Пране на мека мебел и килими','Двор, градина и озеленяване','Борба с вредители'],
     'Автомобилни услуги':['Автосервиз','Диагностика','Гуми','Автоелектро и автоклиматици','Автомивка и детайлинг','Пътна помощ'],
-    'Транспорт, преместване и доставки':['Товарен транспорт','Хамали','Преместване','Доставки','Бус и камион'],
-    'Красота и лична грижа':['Фризьор и бръснар','Маникюр и педикюр','Козметични услуги','Грим','Немедицински масаж'],
-    'Грижа за хора и животни':['Детегледачки','Грижа за възрастни','Домашни помощници','Гледане на любимци','Разходка на кучета','Груминг'],
-    'Обучение, уроци и спорт':['Частни уроци','Езици','Шофьорски курсове','Професионално обучение','Компютърни курсове','Спорт и танци'],
-    'Техника, дигитални и професионални услуги':['Компютри и лаптопи','Телефони и електроника','IT и сайтове','Дизайн','Счетоводство','Правни услуги','Преводи'],
-    'Събития и творчески услуги':['Фото','Видео','DJ и музика','Декорация','Кетъринг','Организация на събития']
+    'Транспорт, преместване и доставки':['Товарен транспорт','Хамали и преместване','Доставки'],
+    'Красота и лична грижа':['Фризьор и бръснар','Маникюр и педикюр','Козметика и грим','Немедицински масаж'],
+    'Грижа за хора и животни':['Детегледачки','Грижа за възрастни','Помощ в дома','Гледане и разхождане на домашни любимци','Грижа и подстригване на домашни любимци'],
+    'Обучение, уроци и спорт':['Уроци и курсове','Шофьорски курсове','Спорт и танци'],
+    'Техника, дигитални и професионални услуги':['Ремонт на техника','ИТ, сайтове и дизайн','Счетоводство','Правни услуги','Преводи'],
+    'Събития и творчески услуги':['Фото и видео','DJ и музика','Декорация','Кетъринг','Организация на събития']
   });
   const structuredFamilies=Object.freeze(contracts.serviceFamilyNames.map(name=>Object.freeze([name,...(familySource[name]||[])])));
-  const familyNames=Object.freeze([...contracts.serviceFamilyNames,'Друга услуга']);
+  const familyNames=Object.freeze([...contracts.serviceFamilyNames]);
 
   window.serviceFamilies=structuredFamilies.map(row=>[...row]);
 
   function searchMatch(value=''){
     const q=String(value||'').toLocaleLowerCase('bg-BG').trim();
     if(!q) return '';
-    const concrete=structuredFamilies.flatMap(f=>f.slice(1));
+    const visible=structuredFamilies.flatMap(f=>f.slice(1));
+    const aliases=contracts.serviceSearchAliases;
+    const concrete=[...aliases,...visible];
     return concrete.find(name=>{
       const n=name.toLocaleLowerCase('bg-BG');
       return n.includes(q)||q.includes(n)||q.split(/\s+/).some(part=>part.length>3&&n.includes(part));
@@ -36,7 +38,6 @@
   }
   function familyHref(name){
     if(name==='Майстори, ремонти и дом') return '#maistori';
-    if(name==='Друга услуга') return contracts.contextualAddUrl({context:'Услуги',group:'Друга услуга',owner:'Listings',type:'Дава'});
     return `#service-group?group=${encodeURIComponent(name)}`;
   }
   function familyDesktopCard(name){
@@ -76,7 +77,13 @@
     const family=structuredFamilies.find(f=>f[0]===name);
     if(!family) return staticPage('Услугата не е намерена','Избери друга група услуги.');
     const addMode=query.get('mode')==='add';
-    const items=family.slice(1).map((item,i)=>{
+    const requestedEntry=query.get('entry')||'';
+    const sourceItems=requestedEntry?family.slice(1).filter(item=>item===requestedEntry):family.slice(1);
+    const items=sourceItems.map((item,i)=>{
+      const variants=contracts.serviceVariants(item);
+      if(addMode&&variants.length){
+        return `<article class="family-card family-card-with-variants"><div class="icon">${icons[i%icons.length]}</div><h3>${esc(item)}</h3><p>Избери точната услуга, за да запазим правилния контекст.</p><div class="service-variant-links">${variants.map(variant=>`<a href="${contracts.contextualAddUrl({context:'Услуги',group:variant,owner:'Listings',type:'Дава'})}">${esc(variant)}</a>`).join('')}</div></article>`;
+      }
       const href=addMode?contracts.contextualAddUrl({context:'Услуги',group:item,owner:'Listings',type:'Дава'}):serviceResultsHref(item);
       return `<a class="family-card" href="${href}"><div class="icon">${icons[i%icons.length]}</div><h3>${esc(item)}</h3><p>${addMode?'Избери тази конкретна услуга.':'Разгледай подходящите предложения.'}</p><small>${addMode?'Избери →':'Виж резултатите →'}</small></a>`;
     }).join('');
@@ -84,9 +91,18 @@
     const footer=addMode
       ? `<a class="btn" href="#service-group?group=${encodeURIComponent(name)}">← Към групата</a>`
       : `<a class="btn primary" href="#service-group?group=${encodeURIComponent(name)}&mode=add&type=${encodeURIComponent('Дава')}">Предлагам услуга</a><a class="btn soft" href="#uslugi">← Всички услуги</a>`;
-    return `<div class="page">${pageHead(name,addMode?'Избери конкретната услуга за публикуване.':'Избери конкретната услуга, която търсиш.','Услуги')}<div class="shell">${modeNotice}<div class="grid cols-3">${items}</div><div class="page-tools">${footer}</div></div></div>`;
+    const pageTitle=requestedEntry||name;
+    return `<div class="page">${pageHead(pageTitle,addMode?'Избери точния вид услуга за публикуване.':'Избери конкретната услуга, която търсиш.','Услуги')}<div class="shell">${modeNotice}<div class="grid cols-3">${items}</div><div class="page-tools">${footer}</div></div></div>`;
   }
 
-  Object.assign(window,{services,masters,serviceGroup});
-  window.PopitaiServiceViews=Object.freeze({structuredFamilies,familyNames,masterGroups,searchMatch,services,masters,serviceGroup});
+  function serviceEntry(query){
+    const entry=query.get('group')||'';
+    const visible=contracts.serviceVisibleEntry(entry);
+    const family=structuredFamilies.find(row=>row.slice(1).includes(visible));
+    if(!family||!contracts.serviceVariants(visible).length) return staticPage('Услугата не е намерена','Избери друга група услуги.');
+    return serviceGroup(new URLSearchParams({group:family[0],mode:'add',entry:visible,type:'Дава'}));
+  }
+
+  Object.assign(window,{services,masters,serviceGroup,serviceEntry});
+  window.PopitaiServiceViews=Object.freeze({structuredFamilies,familyNames,masterGroups,searchMatch,services,masters,serviceGroup,serviceEntry});
 })();

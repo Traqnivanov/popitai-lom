@@ -108,8 +108,8 @@
       return Boolean(categoryForGroup)&&category===categoryForGroup;
     }
     if(context==='Услуги'){
-      const canonical=PopitaiStage2Contracts.serviceCanonical(group),subcategory=recordRow(record,'Подкатегория')||recordRow(record,'Подкатегория / вид');
-      return category==='Услуги'&&Boolean(canonical)&&subcategory===canonical;
+      const canonicals=PopitaiStage2Contracts.serviceCanonicals(group),subcategory=recordRow(record,'Подкатегория')||recordRow(record,'Подкатегория / вид');
+      return category==='Услуги'&&canonicals.includes(subcategory);
     }
     if(context==='Имоти')return category==='Имоти'&&record.social?.discovery===group;
     if(context==='Автомобили')return category==='Автомобили и МПС'&&record.social?.discovery===group;
@@ -132,13 +132,16 @@
   }
   function results(query){
     const context=query.get('context')||'Обяви и услуги',group=query.get('group')||'Всички',detailType=query.get('detail')||'listing',owner=query.get('owner')||'Listings',type=query.get('type')||'',isService=context==='Услуги';
-    const serviceFamily=isService?serviceFamilies.find(f=>f.slice(1).includes(group)||f[0]===group):null;
-    const offerTarget=PopitaiStage2Contracts.contextualAddUrl({context,group,owner,type:isService?'Дава':type});
+    const visibleServiceEntry=isService?PopitaiStage2Contracts.serviceVisibleEntry(group):group;
+    const serviceFamily=isService?serviceFamilies.find(f=>f.slice(1).includes(visibleServiceEntry)||f[0]===group):null;
+    const variants=isService?PopitaiStage2Contracts.serviceVariants(group):[];
+    const offerTarget=PopitaiStage2Contracts.contextualAddUrl({context,group:variants.length?visibleServiceEntry:group,owner,type:isService?'Дава':type});
     const matched=approvedResultItems(owner).filter(item=>resultRecordMatches(approvedRecordForItem(item),{context,group,owner,type,detailType}));
     const resultBody=matched.length?matched.map(window.PopitaiHomeViews.publicRow).join(''):'<article class="empty-card"><h2>Няма активни предложения</h2><p>В момента няма публикувани активни предложения в този раздел.</p></article>';
     const breadcrumb=isService?`<div class="breadcrumbs"><a href="#uslugi">Услуги</a> · ${serviceFamily?.[0]==='Майстори, ремонти и дом'?'<a href="#maistori">Майстори</a>':serviceFamily?`<a href="#service-group?group=${encodeURIComponent(serviceFamily[0])}">${esc(serviceFamily[0])}</a>`:''} · ${esc(group)}</div>`:'';
     const head=isService?`<div class="shell page-head">${breadcrumb}<h1>${esc(group)} услуги в Лом</h1><p>Разгледай местните предложения и избери подходящото.</p></div>`:pageHead(group,`Разгледай резултатите в „${context}“.`,'Обяви и услуги');
-    const controls=isService?`<div class="results-toolbar"><details><summary class="btn soft">Филтри</summary><div class="results-filter-panel"><label>Район<select><option>Лом и региона</option></select></label></div></details><label class="results-sort">Сортиране<select><option>Най-нови</option><option>Най-подходящи</option></select></label></div>`:`<div class="results-toolbar"><details><summary class="btn soft">Филтри</summary><div class="results-filter-panel"><label>Район<select><option>Лом и региона</option></select></label><label>Тип<select><option>Всички</option><option>Предлагам</option><option>Търси</option></select></label></div></details><label class="results-sort">Сортиране<select><option>Най-нови</option><option>Най-подходящи</option></select></label></div>`;
+    const variantFilters=variants.length?`<nav class="service-result-variants" aria-label="Точна услуга"><span>Уточни:</span>${variants.map(variant=>`<a href="${serviceResultsHref(variant)}">${esc(variant)}</a>`).join('')}</nav>`:'';
+    const controls=isService?`${variantFilters}<div class="results-toolbar"><details><summary class="btn soft">Филтри</summary><div class="results-filter-panel"><label>Район<select><option>Лом и региона</option></select></label></div></details><label class="results-sort">Сортиране<select><option>Най-нови</option><option>Най-подходящи</option></select></label></div>`:`<div class="results-toolbar"><details><summary class="btn soft">Филтри</summary><div class="results-filter-panel"><label>Район<select><option>Лом и региона</option></select></label><label>Тип<select><option>Всички</option><option>Предлагам</option><option>Търси</option></select></label></div></details><label class="results-sort">Сортиране<select><option>Най-нови</option><option>Най-подходящи</option></select></label></div>`;
     const actions=isService?`<div class="page-tools"><a class="btn primary" href="${offerTarget}">Предлагам ${esc(group)} услуга</a></div><div class="results-question-fallback"><span>Не намираш необходимото?</span><a href="#add/question">Задай въпрос</a></div>`:`<div class="page-tools"><a class="btn primary" href="${offerTarget}">${owner==='Shops'?'＋ Добави магазин':owner==='Health/Info'?'＋ Добави лекар / практика':'＋ Публикувай'}</a><a class="btn" href="#add/question">Не намираш? Задай въпрос</a></div>`;
     return `<div class="page results-page">${head}<div class="shell">${controls}<div class="result-list">${stateContent(query,resultBody)}</div>${actions}</div></div>`;
   }

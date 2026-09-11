@@ -31,6 +31,7 @@
     if(path==='uslugi') return services();
     if(path==='maistori') return masters();
     if(path==='service-group') return serviceGroup(query);
+    if(path==='service-entry') return serviceEntry(query);
     if(path==='rabota') return work(query);
     if(path==='imoti') return properties();
     if(path==='stoki') return goods();
@@ -57,7 +58,7 @@
   function updateNav(path){
     const top=path.split('/')[0];
     document.querySelectorAll('[data-nav]').forEach(link=>{
-      link.classList.toggle('active',link.dataset.nav===top||(link.dataset.nav==='obyavi'&&['uslugi','service-group','maistori','rabota','imoti','stoki','avtomobili','zhivotni','magazini','zavedenia','zdrave'].includes(top)));
+      link.classList.toggle('active',link.dataset.nav===top||(link.dataset.nav==='obyavi'&&['uslugi','service-group','service-entry','maistori','rabota','imoti','stoki','avtomobili','zhivotni','magazini','zavedenia','zdrave'].includes(top)));
     });
   }
   function render(){

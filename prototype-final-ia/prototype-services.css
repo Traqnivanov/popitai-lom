@@ -13,6 +13,11 @@
 .masters-actions{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px}
 .masters-content-block{margin-top:26px}
 .masters-question{margin-top:28px}
+.family-card-with-variants{align-content:start}
+.service-variant-links,.service-result-variants{display:flex;flex-wrap:wrap;gap:8px}
+.service-variant-links a,.service-result-variants a{padding:8px 10px;border:1px solid var(--line,#dbe3ee);border-radius:999px;background:var(--soft,#f4f7fb);color:var(--primary,#0b5fd7);font-size:.82rem;font-weight:750;text-decoration:none}
+.service-result-variants{align-items:center;margin:0 0 14px;padding:12px 14px;border:1px solid var(--line,#dbe3ee);border-radius:14px;background:#fff}
+.service-result-variants span{font-size:.82rem;font-weight:800;color:var(--muted,#667085)}
 
 @media (max-width:720px){
   .service-family-grid{display:none}
