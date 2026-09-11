@@ -2,7 +2,7 @@
 
 Статус: `VISUAL MAPPING DRAFT / НЕ Е SITE-WIDE APPROVAL / НЕ Е PRODUCTION`.
 
-Provenance: `Work 2 · 10.09.2026 · base review SHA e60655186677722f1e319016c9602857e99aebef`. Предходният `Work 1` подготвя началния draft и локалния commit `39f442b00885b436339bafee833ecb552eda813d`; `Work 2` възстановява/качва идентичното дърво като `e606551…` и прави текущия audit. Всички `OWN / SHARED / TEXT / FALLBACK / OPEN` класификации по-долу са **Work 2 proposal за owner review**, освен когато редът изрично сочи вече owner-confirmed правило.
+Provenance: `Work 2 · 10–11.09.2026 · base review SHA e60655186677722f1e319016c9602857e99aebef`. Предходният `Work 1` подготвя началния draft и локалния commit `39f442b00885b436339bafee833ecb552eda813d`; `Work 2` възстановява/качва идентичното дърво като `e606551…`, прави icon audit и получава owner verdict `Ок, приемам` за consolidation до 45 visible Services entries. Визуалният asset verdict остава отделен за всяка нова икона.
 
 ## Задължително правило
 
@@ -34,7 +34,7 @@ Provenance: `Work 2 · 10.09.2026 · base review SHA e60655186677722f1e319016c96
 
 Owner verdict от Work 2 на 10.09.2026 е `приемам` за всичките осем, след desktop и реална 390 px QA на review SHA `e17df39be8cd81872101f89d94f4d917ebc85778`. Това заключва осемте semantic assets и референтната visual direction, но не приема останалата taxonomy, не сменя иконите в сайта и не разрешава production wiring. За proof-а се използват оптимизирани 128 px site и 512 px social WebP производни; оригиналните 1254 px PNG файлове не се добавят в repo-то.
 
-Owner посоката от Work 2 е да не се изработват механично 59 различни картинки. Всички 59 Master leaves остават покрити в registry, но exact asset се създава само когато family знакът би бил неточен; при еднакъв визуален смисъл се използва `SHARED ICON`, а дългите филтри могат да останат `TEXT ONLY`. Exact mapping-ът и всеки визуален asset продължават да изискват отделен owner verdict.
+Owner решението от Work 2 е да не се изработват механично 59 различни картинки. Services запазва деветте families, но показва 45 consolidated discovery entries. Старите 59 понятия остават покрити чрез visible entry, alias, filter, cross-link или form fallback. Exact asset се създава само когато family знакът би бил неточен; при еднакъв визуален смисъл се използва `SHARED ICON`, а дългите филтри остават `TEXT ONLY`. Всеки нов визуален asset продължава да изисква отделен owner verdict.
 
 ### Work 2 — следващи owner-accepted assets
 
@@ -81,7 +81,9 @@ Owner посоката от Work 2 е да не се изработват мех
 | Въпроси | `OWN ICON` | chat-circle-question |
 | Проверена информация | `OWN ICON` | seal-check |
 
-## Услуги — 59 Master discovery leaves
+## Услуги — 45 owner-approved visible discovery entries
+
+Статус: `TAXONOMY CONSOLIDATION APPROVED / PROTOTYPE IMPLEMENTATION PENDING`. Старият 59-leaf presentation модел е `REPLACED` като visible IA, но точните му понятия не се изтриват: те остават aliases/filters/cross-links за търсене и backward compatibility.
 
 | Family | Discovery leaf от Master | Registry решение | Визуален знак / граница |
 | --- | --- | --- | --- |
@@ -95,55 +97,41 @@ Owner посоката от Work 2 е да не се изработват мех
 |  | Отопление и климатици | `OWN ICON` | thermostat / fan; не само snowflake |
 |  | Монтажи и мебели | `OWN ICON` | drill / assembly; armchair самостоятелно е твърде тясно |
 |  | Къртене и извозване | `OPEN` | нужен е един ясен demolition/debris знак; обикновен truck е забранен |
-| Почистване и поддръжка | Почистване на дом | `OWN ICON` | broom |
-|  | Офиси и входове | `SHARED ICON` | broom — същата основна дейност, label-ът уточнява обекта |
+| Почистване и поддръжка | Почистване | `OWN ICON` | приетият cleaning asset; `Дом` и `Офис/вход` са text filters |
 |  | Пране на мека мебел / килими | `OWN ICON` | couch-cleaning / vacuum; broom е неточен |
-|  | Двор и градина | `OWN ICON` | plant |
-|  | Озеленяване | `OWN ICON` | tree / landscape |
+|  | Двор, градина и озеленяване | `OWN ICON` | tree / landscape; старите две понятия са filters |
 |  | Борба с вредители | `OWN ICON` | bug |
-|  | Домашна помощ | `OWN ICON` | hand-heart |
 | Автомобилни услуги | Автосервиз | `OWN ICON` | car-wrench / car-profile with service cue |
 |  | Диагностика | `OWN ICON` | gauge / diagnostic scanner |
 |  | Гуми | `OWN ICON` | tire |
 |  | Автоелектро / автоклиматици | `OWN ICON` | car-battery / automotive electrical cue |
 |  | Автомивка / detailing | `OWN ICON` | car-wash / drop with car cue |
 |  | Пътна помощ | `OPEN` | tow-truck / recovery platform; не обикновен cargo truck |
-| Транспорт, преместване и доставки | Товарен транспорт | `OWN ICON` | truck |
-|  | Хамали | `OWN ICON` | person with box / lifting |
-|  | Преместване | `SHARED ICON` | moving boxes / hamali asset — еднакъв процес, различен label |
+| Транспорт, преместване и доставки | Товарен транспорт | `OWN ICON` | приетият cargo asset; `Бус/камион` е filter/alias |
+|  | Хамали и преместване | `OWN ICON` | person with box / lifting; старите две понятия са filters |
 |  | Доставки | `OWN ICON` | package with motion / delivery |
-|  | Транспорт с бус / камион | `SHARED ICON` | truck / van — общ transport asset при ясно видим label |
 | Красота и лична грижа | Фризьор / бръснар | `OWN ICON` | scissors / hair-comb |
 |  | Маникюр / педикюр | `OWN ICON` | hand / nail |
-|  | Козметични услуги | `OWN ICON` | sparkle / cosmetic-care cue |
-|  | Грим | `OWN ICON` | palette / makeup-brush |
+|  | Козметика и грим | `OWN ICON` | cosmetic-care / makeup cue; старите две понятия са filters |
 |  | Немедицински масаж | `OWN ICON` | massage-hands; не medical cross |
 | Грижа за хора и животни | Детегледачки | `OWN ICON` | baby / child-care |
 |  | Грижа за възрастни | `OWN ICON` | person-heart / elder-care |
-|  | Домашни помощници | `SHARED ICON` | hand-heart — същият смисъл като Домашна помощ |
+|  | Помощ в дома | `OWN ICON` | приетият home-help asset; обединява `Домашна помощ` и `Домашни помощници` |
 |  | Гледане / разхождане на домашни любимци | `OWN ICON` | dog-leash / paw-heart |
-|  | Grooming | `OWN ICON` | paw-sparkle / pet-grooming; обикновени scissors са твърде близо до фризьор |
-| Обучение, уроци и спорт | Уроци | `OWN ICON` | chalkboard-teacher |
-|  | Езици | `OWN ICON` | translate |
+|  | Грижа и подстригване на домашни любимци | `OWN ICON` | paw-sparkle / pet-grooming; обикновени scissors са твърде близо до фризьор |
+| Обучение, уроци и спорт | Уроци и курсове | `OWN ICON` | learning/teacher; `Уроци`, `Езици`, `Професионално обучение`, `Компютърни курсове` са filters |
 |  | Шофьорски курсове | `OWN ICON` | steering-wheel |
-|  | Професионално обучение | `OWN ICON` | certificate |
-|  | Компютърни курсове | `OWN ICON` | laptop with learning cue |
 |  | Спорт и танци | `OWN ICON` | person-arms-spread / activity |
-| Техника, дигитални и професионални услуги | Компютри / лаптопи | `OWN ICON` | laptop |
-|  | Телефони / електроника | `OWN ICON` | device-mobile |
-|  | IT | `OWN ICON` | code / terminal |
-|  | Сайтове | `OWN ICON` | browser |
-|  | Дизайн | `OWN ICON` | pen-nib |
+| Техника, дигитални и професионални услуги | Ремонт на техника | `OWN ICON` | computer/device repair; device types са filters |
+|  | ИТ, сайтове и дизайн | `OWN ICON` | digital-services family; IT/sites/design са filters |
 |  | Счетоводство | `OWN ICON` | calculator |
 |  | Правни услуги | `OWN ICON` | scales |
-|  | Преводи | `SHARED ICON` | translate — еднакъв езиков смисъл с Езици |
-|  | Други професионални услуги | `FAMILY FALLBACK` | professional-services family; не се измисля generic decorative icon |
-| Събития и творчески услуги | Фото | `OWN ICON` | camera |
-|  | Видео | `OWN ICON` | video-camera |
+|  | Преводи | `OWN ICON` | translate; не се слива с езиково обучение |
+| Събития и творчески услуги | Фото и видео | `OWN ICON` | camera/video cue; старите две понятия са filters |
 |  | DJ / музика | `OWN ICON` | music-notes / headphones |
 |  | Декорация | `OWN ICON` | confetti / decoration |
 |  | Кетъринг | `OWN ICON` | fork-knife / serving tray |
-|  | Организация и помощ за събития | `OWN ICON` | calendar-star / event-plan |
+|  | Организация на събития | `OWN ICON` | calendar-star / event-plan |
 
 ## Други discovery таксономии
 
