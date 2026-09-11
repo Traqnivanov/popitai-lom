@@ -82,7 +82,7 @@
     const items=sourceItems.map((item,i)=>{
       const variants=contracts.serviceVariants(item);
       if(addMode&&variants.length){
-        return `<article class="family-card family-card-with-variants"><div class="icon">${icons[i%icons.length]}</div><h3>${esc(item)}</h3><p>Избери точната услуга, за да запазим правилния контекст.</p><div class="service-variant-links">${variants.map(variant=>`<a href="${contracts.contextualAddUrl({context:'Услуги',group:variant,owner:'Listings',type:'Дава'})}">${esc(variant)}</a>`).join('')}</div></article>`;
+        return `<article class="family-card family-card-with-variants"><h3>${esc(item)}</h3><p>Избери точната услуга, за да запазим правилния контекст.</p><div class="service-variant-links">${variants.map(variant=>`<a href="${contracts.contextualAddUrl({context:'Услуги',group:variant,owner:'Listings',type:'Дава'})}">${esc(variant)}</a>`).join('')}</div></article>`;
       }
       const href=addMode?contracts.contextualAddUrl({context:'Услуги',group:item,owner:'Listings',type:'Дава'}):serviceResultsHref(item);
       return `<a class="family-card" href="${href}"><div class="icon">${icons[i%icons.length]}</div><h3>${esc(item)}</h3><p>${addMode?'Избери тази конкретна услуга.':'Разгледай подходящите предложения.'}</p><small>${addMode?'Избери →':'Виж резултатите →'}</small></a>`;

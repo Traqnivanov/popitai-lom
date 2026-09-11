@@ -97,6 +97,7 @@ assert(contracts.contextualAddUrl({context:'Услуги',group:'Почиств�
 const cleaningChooser=services.serviceEntry(new URLSearchParams(`group=${encodeURIComponent('Почистване')}`));
 assert(cleaningChooser.includes('Почистване на дом')&&cleaningChooser.includes('Офиси и входове'),'merged cleaning entry exposes exact filters');
 assert(cleaningChooser.includes('<h1>Почистване</h1>'),'exact-choice page keeps the selected visible entry as its title');
+assert(!cleaningChooser.includes('<div class="icon">'),'exact-choice page does not invent or reuse a misleading unapproved icon');
 const cleaningDiscoveries=[...cleaningChooser.matchAll(/href="([^"]*discovery=[^"]+)"/g)].map(match=>new URLSearchParams(match[1].split('?')[1]).get('discovery'));
 assert.deepEqual(cleaningDiscoveries,['Почистване на дом','Офиси и входове'],'broad merged label is not persisted as an exact service');
 const officeAdd=contracts.contextualAddUrl({context:'Услуги',group:'Офиси и входове',owner:'Listings'});
