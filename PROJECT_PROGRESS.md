@@ -35,7 +35,7 @@
 - Favorites detail-only UX, internal real routes и content parity са прототипирани; пълната named-route desktop/390px browser acceptance остава в общия Stage 2 gate.
 - public results използват само доказани approved records или честно empty state; synthetic/mock public results са премахнати и canonical results owner е консолидиран.
 - Facebook distribution/content-protection решенията и production границите са класифицирани в централния регистър.
-- Services discovery taxonomy е owner-consolidated в Work 2: деветте семейства остават, а 59-те понятия се представят чрез 45 видими входа плюс точни aliases/filters/cross-links; implementation в review prototype още не е извършена.
+- Services discovery taxonomy е owner-consolidated и приложена в review prototype от Work 2: деветте семейства остават, а 59-те понятия се представят чрез 45 видими входа плюс точни aliases/filters/cross-links; implementation `38ef8fb2e48b2e8d538232e64d0e785757f93e96` е source-tested и browser-checked на desktop и реален 390 px viewport.
 
 ## Stage status
 
@@ -48,7 +48,7 @@
 ## Точен следващ ред
 
 1. **Завършено като prototype:** Home action/activity contract на `84d57cb0024ae9b82534badb3e852bc2e12c60b7` — отделни `Публикувай`/`Попитай` повърхности и честен `Днес → Тази седмица → Полезно сега` fallback; финалното приемане остава в общия Stage 2 gate;
-2. **В процес / taxonomy consolidation owner-approved / 14 assets owner-approved и browser-tested:** деветте Services families остават, а 59-те понятия се консолидират до 45 visible discovery entries с backward-compatible aliases/filters/cross-links. Icon checkpoint пази приетите 14 assets и не изработва механично 59 икони. Интегрираният desktop/390 px/24–64 px/social QA е преминат на `bdc2c037b7114394400b97b956609e3e445226bc`; consolidation implementation и следващият browser gate са следващи само в review prototype;
+2. **Завършено като review prototype / owner acceptance на exact SHA предстои:** деветте Services families остават, а 59-те понятия са консолидирани до 45 visible discovery entries с backward-compatible aliases/filters/cross-links. Implementation `38ef8fb2e48b2e8d538232e64d0e785757f93e96` премина source regression и desktop/390 px browser gate; icon checkpoint пази приетите 14 assets и не изработва механично 59 икони;
 3. content-complete/reality pass със задължителното съдържание от централния регистър;
 4. финален Stage 2 audit на всички основни journeys, forms, Favorites, Share, actions и states на desktop и 390px;
 5. owner visual acceptance и freeze на exact SHA;

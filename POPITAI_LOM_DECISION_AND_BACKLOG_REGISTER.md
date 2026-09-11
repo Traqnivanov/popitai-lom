@@ -101,11 +101,11 @@
 | Тема | Статус | Work / дата / verdict | Решение / граница |
 | --- | --- | --- | --- |
 | Девет Services families | **APPROVED** | Work 2 · 11.09.2026 · owner: `Ок, приемам` | Деветте семейства остават. По-нататъшното им сливане би смесило различни потребителски задачи. |
-| Видими discovery entries | **APPROVED — PROTOTYPE IMPLEMENTATION NEXT** | Work 2 · 11.09.2026 · owner приема финалния доклад | 59-те Master понятия се консолидират до 45 видими входа. Точната карта е в Master §5.1.2. |
+| Видими discovery entries | **APPROVED — IMPLEMENTED IN REVIEW PROTOTYPE** | Work 2 · 11.09.2026 · owner приема финалния доклад; implementation `38ef8fb2e48b2e8d538232e64d0e785757f93e96` | 59-те Master понятия са консолидирани до 45 видими входа. Точната карта е в Master §5.1.2; source regression и реална desktop/390 px browser QA са преминати. |
 | Exact intent preservation | **LOCKED WITH CONSOLIDATION** | Work 2 · 11.09.2026 | Старите имена не се губят: остават контролирани aliases, filters и cross-links. Един record продължава да има един lifecycle owner. |
 | `Други професионални услуги` | **APPROVED AS FALLBACK** | Work 2 · 11.09.2026 | Не е отделна visible card. Остава достъпно през form/search fallback. |
 | Data/backend граница | **NO CHANGE / PRODUCTION BLOCKED** | Current Master + Work 2 | Решението не разрешава data migration, Supabase/schema/RLS, owner/form, production route или Stage 3 промяна. |
-| Icon последица | **APPROVED DIRECTION** | Work 2 · 11.09.2026 | Не се правят механично 59 икони. Семействата имат силен знак; deep leaves са text-first; exact asset се добавя само когато family fallback би бил подвеждащ и след owner approval. Всички 14 вече приети assets остават валидни за съответните exact/filter contexts. |
+| Icon последица | **APPROVED DIRECTION** | Work 2 · 11.09.2026 | Не се правят механично 59 икони. Семействата имат силен знак; deep leaves са text-first; exact asset се добавя само когато family fallback би бил подвеждащ и след owner approval. Всички 14 вече приети assets остават валидни за съответните exact/filter contexts. Exact-choice екранът не показва измислен общ знак: подвеждащият inherited wrench е премахнат в `38ef8fb…`. |
 
 ## 5. Content protection
 

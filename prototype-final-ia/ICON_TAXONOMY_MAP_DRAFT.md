@@ -269,14 +269,24 @@ Owner решението от Work 2 е да не се изработват ме
 - [Atlassian iconography](https://atlassian.design/foundations/iconography/) изисква простота, установена метафора и проверка дали текстът не е по-ясен от нова икона.
 - [Material Symbols](https://developers.google.com/fonts/docs/material_symbols) използва optical-size варианти; [Phosphor Core](https://github.com/phosphor-icons/core) предоставя една SVG family система с различни weights. Посоката за review е една family система, с подходящ small и large вариант, а не смесване на библиотеки.
 
-## Текущо доказано покритие на review SHA `e606551…`
+## Pre-consolidation audit snapshot на review SHA `e606551…`
 
 - налични са 19 локални duotone SVG файла;
 - само 10 реда от Services draft имат директно съвпадащ локален asset;
 - визуалният checkpoint показва ограничени примери, не целия registry;
-- текущият runtime Services inventory съдържа 57 позиции и не съвпада с 59-те Master leaves; runtime не се променя в този documentation-only pass;
+- тогавашният runtime Services inventory съдържа 57 позиции и не съвпада с 59-те Master leaves; това разминаване е заменено от owner-approved 45-entry discovery contract;
 - текущият social registry още съдържа старите връзки `Услуги → briefcase` и `Ремонти → wrench`, а конкретни записи за ВиК, Кетъринг и Почистване подават generic `services` key;
 - тези разминавания са доказателство за следваща prototype-only работа, не разрешение за production wiring.
+
+## Work 2 implementation evidence — 11.09.2026
+
+- docs-only owner decision checkpoint: `5b891d4b307ba05057513095eb0303ee45b0a435`;
+- review-prototype implementation: `38ef8fb2e48b2e8d538232e64d0e785757f93e96`;
+- точно 9 families и 45 visible entries; старите точни intent-и остават контролирани aliases/filters/cross-links;
+- merged entry не се записва двусмислено: преди Add се избира exact intent;
+- desktop и реален 390 px browser gate: без horizontal overflow, 9 mobile accordions, точните `Почистване на дом` / `Офиси и входове` choices се пазят до Add context;
+- inherited generic wrench е премахнат от exact-choice екрана, защото не е одобрена и е подвеждаща икона за всички merged услуги;
+- production, Supabase, Stage 3 и safety branch не са променяни.
 
 ## Задължителен ред след приемане на картата
 

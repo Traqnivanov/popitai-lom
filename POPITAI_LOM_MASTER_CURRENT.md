@@ -668,7 +668,7 @@ Stage 2 демонстрира тази посока, но финалната и
 1. **Завършено: малък Stage 2 presentation cleanup** — доказаното двойно описание в `staticPage()` е премахнато без taxonomy/owner промяна.
 2. **Завършено като prototype, acceptance остава в общия gate: Favorites detail-only** — coverage, позиция, stable identity, login intent и Profile flow; production storage/RLS остава отделно OPEN.
 3. **Завършено като prototype, acceptance остава в общия gate: Home action/activity pass** — отделни `Публикувай` и `Попитай` повърхности и честен `Днес в Лом → Тази седмица → Полезно сега` fallback; exact implementation `84d57cb0024ae9b82534badb3e852bc2e12c60b7`.
-4. **Icon visual-system checkpoint** — inventory и един професионален desktop/mobile макет; без масова production подмяна преди owner acceptance.
+4. **Icon visual-system checkpoint** — Services discovery consolidation е приложена в review prototype; inventory и следващите професионални desktop/mobile icon макети продължават без масова production подмяна преди owner acceptance.
 5. **Content-complete / reality pass** — задължителното съдържание от регистъра и одобрено реално съдържание от живия сайт се представят вярно; където липсва съдържание има честно empty state, не fake records.
 6. **Финален Stage 2 независим audit** — Home, hub, всички категории, results/detail/Add/edit, Favorites, Share, actions, forms и states; desktop + 390px; оценка като млад, средна възраст и възрастен потребител, после професионален UX review.
 7. **Owner visual acceptance и freeze на exact SHA** — едва тук Stage 2 може да бъде обявен за приет.
@@ -778,7 +778,7 @@ Public IA е одобрена. Следващата acceptance граница е
 - всеки rendered root има един prototype renderer owner и не се натрупва V18/V19 слой;
 - prototype review не е автоматично разрешение за production — production code започва след отделно owner acceptance.
 
-### 15.1 Текущо състояние към 09.09.2026
+### 15.1 Текущо състояние към 11.09.2026
 
 - consolidated Stage 2 baseline преди ограничените follow-up корекции: `ba1c00ad64784e261107b902e6f8b8165bba3291`;
 - runtime consolidation: изпълнена;
@@ -791,6 +791,7 @@ Public IA е одобрена. Следващата acceptance граница е
 - Favorites detail-only: прототипирано с real-route/content-integrity remediation; пълният named-route browser acceptance остава в общия Stage 2 gate; production storage/RLS **OPEN**;
 - public results: само matched approved records или честно empty state; synthetic public records са премахнати; canonical results owner е консолидиран в `e423a2c3a8d2f70d28060fb4c37ce38bd5369d5e`;
 - Home action/activity: прототипирано и проверено на desktop/390px в `84d57cb0024ae9b82534badb3e852bc2e12c60b7`; финалното Stage 2 owner acceptance остава **OPEN**;
+- Services discovery consolidation: 9 families / 45 visible entries, exact aliases/filters и bounded exact-choice flow са приложени и проверени на desktop/390px в `38ef8fb2e48b2e8d538232e64d0e785757f93e96`; production persistence/migration не е променяна;
 - icon system: owner visual checkpoint **OPEN**;
 - production OG/social image delivery: **OPEN**;
 - целият Stage 2: **НЕПРИЕТ / owner visual acceptance pending**;
