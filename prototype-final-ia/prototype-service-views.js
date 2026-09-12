@@ -2,6 +2,7 @@
 
 (() => {
   const contracts=window.PopitaiStage2Contracts;
+  const iconRegistry=window.PopitaiIconRegistry;
   const masterGroups=Object.freeze(['Цялостни ремонти','Бани и плочки','ВиК','Електро','Покриви','Шпакловка / гипсокартон / боядисване','Дограма и врати','Отопление и климатици','Монтажи и мебели','Къртене и извозване']);
   const familySource=Object.freeze({
     'Майстори, ремонти и дом':masterGroups,
@@ -40,6 +41,13 @@
     if(name==='Майстори, ремонти и дом') return '#maistori';
     return `#service-group?group=${encodeURIComponent(name)}`;
   }
+  function iconAsset(name){
+    return iconRegistry?.site?.(name)||'';
+  }
+  function iconMarkup(name,className='service-entry-icon'){
+    const src=iconAsset(name);
+    return src?`<span class="${className}" aria-hidden="true"><img src="${src}" alt="" width="128" height="128"></span>`:'';
+  }
   function familyDesktopCard(name){
     const subs=familySubs(name).slice(0,4);
     return `<a class="service-family-card" href="${familyHref(name)}"><h3>${esc(name)}</h3>${subs.length?`<p>${subs.map(esc).join(' · ')}</p>`:'<p>Избери конкретната услуга в тази група.</p>'}<small>Разгледай →</small></a>`;
@@ -60,9 +68,13 @@
 
   function masters(){
     const data=window.PopitaiApprovedContent||{};
-    const chips=masterGroups.map(name=>name==='Друга ремонтна услуга'
-      ? `<a class="master-chip" href="${contracts.contextualAddUrl({context:'Услуги',group:name,owner:'Listings',type:'Дава'})}">${esc(name)}</a>`
-      : `<a class="master-chip" href="${serviceResultsHref(name)}">${esc(name)}</a>`).join('');
+    const chips=masterGroups.map(name=>{
+      const href=name==='Друга ремонтна услуга'
+        ? contracts.contextualAddUrl({context:'Услуги',group:name,owner:'Listings',type:'Дава'})
+        : serviceResultsHref(name);
+      const icon=iconMarkup(name,'master-chip-icon');
+      return `<a class="master-chip" href="${href}">${icon}<span>${esc(name)}</span></a>`;
+    }).join('');
     const active=(Array.isArray(data.masterActivity)?data.masterActivity:[]).filter(Boolean).slice(0,3);
     const firms=(Array.isArray(data.masterFirms)?data.masterFirms:[]).filter(Boolean).slice(0,3);
     const publicRow=window.PopitaiHomeViews?.publicRow||(()=> '');
@@ -79,13 +91,14 @@
     const addMode=query.get('mode')==='add';
     const requestedEntry=query.get('entry')||'';
     const sourceItems=requestedEntry?family.slice(1).filter(item=>item===requestedEntry):family.slice(1);
-    const items=sourceItems.map((item,i)=>{
+    const items=sourceItems.map(item=>{
       const variants=contracts.serviceVariants(item);
       if(addMode&&variants.length){
         return `<article class="family-card family-card-with-variants"><h3>${esc(item)}</h3><p>Избери точната услуга, за да запазим правилния контекст.</p><div class="service-variant-links">${variants.map(variant=>`<a href="${contracts.contextualAddUrl({context:'Услуги',group:variant,owner:'Listings',type:'Дава'})}">${esc(variant)}</a>`).join('')}</div></article>`;
       }
       const href=addMode?contracts.contextualAddUrl({context:'Услуги',group:item,owner:'Listings',type:'Дава'}):serviceResultsHref(item);
-      return `<a class="family-card" href="${href}"><div class="icon">${icons[i%icons.length]}</div><h3>${esc(item)}</h3><p>${addMode?'Избери тази конкретна услуга.':'Разгледай подходящите предложения.'}</p><small>${addMode?'Избери →':'Виж резултатите →'}</small></a>`;
+      const icon=addMode?'':iconMarkup(item,'service-card-icon');
+      return `<a class="family-card${icon?' family-card--with-icon':' family-card--text-only'}" href="${href}">${icon}<h3>${esc(item)}</h3><p>${addMode?'Избери тази конкретна услуга.':'Разгледай подходящите предложения.'}</p><small>${addMode?'Избери →':'Виж резултатите →'}</small></a>`;
     }).join('');
     const modeNotice=addMode?`<div class="notice ok"><strong>Избери конкретна услуга</strong><p>След избора ще продължиш като „Предлагам услуга“.</p></div>`:'';
     const footer=addMode
@@ -104,5 +117,5 @@
   }
 
   Object.assign(window,{services,masters,serviceGroup,serviceEntry});
-  window.PopitaiServiceViews=Object.freeze({structuredFamilies,familyNames,masterGroups,searchMatch,services,masters,serviceGroup,serviceEntry});
+  window.PopitaiServiceViews=Object.freeze({structuredFamilies,familyNames,masterGroups,searchMatch,iconAsset,iconMarkup,services,masters,serviceGroup,serviceEntry});
 })();

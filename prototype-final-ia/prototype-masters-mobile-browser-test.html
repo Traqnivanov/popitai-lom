@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Masters wiring — 390px QA</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;padding:20px;background:#111827;font-family:Arial,sans-serif}.qa{width:390px;margin:0 auto 12px;padding:10px 12px;border-radius:10px;background:#fff;color:#111827;font-weight:700;font-size:13px}.qa.pass{background:#dcfce7;color:#14532d}.qa.fail{background:#fee2e2;color:#7f1d1d}.frame{display:block;width:390px;height:844px;margin:auto;border:0;background:#fff;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+  </style>
+</head>
+<body>
+  <div id="qa" class="qa">QA: checking…</div>
+  <iframe id="frame" class="frame" title="Masters wiring at 390 pixels" src="index.html#maistori"></iframe>
+  <script>
+    const frame=document.getElementById('frame');
+    const qa=document.getElementById('qa');
+    frame.addEventListener('load',()=>setTimeout(()=>{
+      try{
+        const d=frame.contentDocument;
+        const chips=[...d.querySelectorAll('.master-chip')];
+        const imgs=[...d.querySelectorAll('.master-chip img')];
+        const broken=imgs.filter(img=>!img.complete||img.naturalWidth===0);
+        const root=d.documentElement;
+        const overflow=root.scrollWidth>root.clientWidth;
+        const pass=chips.length===10&&imgs.length===10&&broken.length===0&&!overflow;
+        qa.className=`qa ${pass?'pass':'fail'}`;
+        qa.textContent=`QA: ${pass?'PASS':'FAIL'} · chips=${chips.length}/10 · images=${imgs.length}/10 · broken=${broken.length} · horizontal-overflow=${overflow?'YES':'NO'}`;
+      }catch(err){
+        qa.className='qa fail';
+        qa.textContent=`QA: FAIL · ${err.message}`;
+      }
+    },500));
+  </script>
+</body>
+</html>
