@@ -17,12 +17,12 @@
 - `SANDBOX HEAD`: **VERIFY DIRECTLY IN GIT AT SESSION START**
 - `CURRENT STAGE`: Stage 2 — Icon system approval
 - `CURRENT PRODUCT TASK`: завършване на първата icon/discovery група `Майстори, ремонти и дом`
-- `CURRENT CONTROL TASK`: **bootstrap verified; TOM control active**
+- `CURRENT CONTROL TASK`: **TOM1-AUDIT-001 complete; OWNER verdict required for the two unresolved semantic mappings before implementation**
 - `LAST TOM DECISION`: `TOM1-D001`
 - `OPEN WR IDs`: `WR-001` — Work review pending
-- `OPEN FOUND-ISSUES`: none recorded at bootstrap verification
-- `BLOCKERS`: none for starting the next audit/proposal step; product/prototype implementation still requires the applicable OWNER verdict
-- `NEXT ALLOWED ACTION`: TOM-1 audit/proposal for the remaining unresolved decisions in `Майстори, ремонти и дом`. No prototype implementation before applicable OWNER approval.
+- `OPEN FOUND-ISSUES`: `FI-001` — generic positional emoji renderer remains in `prototype-service-views.js`
+- `BLOCKERS`: OWNER verdict is required for `Цялостни ремонти` exact semantic mapping and `Къртене и извозване` semantic concept before any new icon implementation
+- `NEXT ALLOWED ACTION`: OWNER review of TOM-1 proposal for the two unresolved entries. No prototype/icon implementation before the applicable OWNER verdict.
 
 > Забележка: SANDBOX HEAD не се hardcode-ва като самореферентна „вечна“ стойност в същия state commit. Всеки TOM/Work го сверява директно от Git и сравнява с `OFFICIAL BASE SHA`.
 
@@ -70,6 +70,31 @@
 - `Guard status`: detector + workflow added. This is **DETECTION LAYER ONLY** until required checks/branch rules are separately enabled and verified.
 - `Known risk`: repository protection is not upgraded by this bootstrap. Do not describe the guard as a guaranteed merge block.
 - `Work verdict`: **PENDING**
+
+---
+
+## TOM1-AUDIT-001 — Първа icon/discovery група `Майстори, ремонти и дом`
+
+- `Дата`: 12.09.2026
+- `Тип`: READ-ONLY AUDIT / NO PRODUCT CHANGE
+- `Scope`: exact current state на 10-те owner-approved visible discovery entries и тяхното icon acceptance състояние.
+- `Доказано приети semantic assets`: `Бани и плочки`, `ВиК`, `Електро`, `Покриви`, `Шпакловка / гипсокартон / боядисване`, `Дограма и врати`, `Отопление и климатици`, `Монтажи и мебели`.
+- `Неотворени повторно`: горните осем assets остават приети; TOM-1 няма основание да ги redesign-ва.
+- `Нерешено 1`: `Цялостни ремонти` е записано в draft registry като `SHARED ICON → hammer`, но exact registry map все още е `EXACT MAP ACCEPTANCE PENDING`; не се счита за нов owner-accepted semantic asset само защото hammer SVG съществува.
+- `Нерешено 2`: `Къртене и извозване` е `OPEN`; договорът изисква ясен demolition/debris знак и изрично забранява обикновен cargo truck.
+- `Asset evidence`: review asset directory съдържа приетите осем assets от тази група; няма отделен owner-accepted `whole renovation` или `demolition/debris` review asset.
+- `Implementation boundary`: няма icon/prototype промяна преди OWNER verdict за двете нерешени точки.
+- `Work review`: PENDING together with sandbox work.
+
+### FI-001 — Generic positional service icons remain
+
+- `Location`: `prototype-final-ia/prototype-service-views.js` → `serviceGroup()`.
+- `Finding`: generic icon се избира чрез `icons[i % icons.length]`, а `prototype-core.js` още държи общ emoji масив.
+- `Risk`: позиционен generic знак може да не съответства на конкретната taxonomy семантика и противоречи на approved deterministic registry direction.
+- `Blocking current OWNER decision`: **NO** — не пречи да се решат двете отворени semantic mappings.
+- `Blocking later implementation`: **YES** — преди окончателно deterministic icon wiring този renderer трябва да бъде заменен/ограничен чрез одобрения registry contract.
+- `RED-ZONE/protected`: NO, но е prototype implementation change и изисква отделен TOM task след приложим OWNER approval.
+- `Status`: RECORDED / NOT FIXED.
 
 ---
 
