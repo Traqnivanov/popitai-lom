@@ -1,73 +1,122 @@
 # Попитай.Лом — CURRENT PROJECT CHECKPOINT
 
-Актуализирано: **11.09.2026**
+Актуализирано: **12.09.2026**
 
 Този файл е кратък оперативен указател. Той **не е втори продуктов Master**.
-Текущите решения, заменените правила и точният ред на работа са в:
 
-`POPITAI_LOM_MASTER_CURRENT.md`
+## ACTIVE CONTROL STATE
 
-След Master задължително се чете:
+- `CONTROL MODE`: **TOM-1**
+- `WORK STATUS`: **UNAVAILABLE / REVIEW PENDING**
+- `OFFICIAL REVIEW PROTOTYPE`: `prototype/stage2-icon-system-approval`
+- `OFFICIAL BASE SHA`: `545ba5a22f2c1ad9d6e33c349e70a4d48eb1291a`
+- `OFFICIAL REVIEW PROTOTYPE`: **FROZEN**
+- `ACTIVE WORKSPACE`: `sandbox/work-gap-review`
+- `CURRENT STAGE`: **Stage 2 — Icon system approval**
+- `CURRENT PRODUCT TASK`: **завършване на първата група `Майстори, ремонти и дом` по Work-established icon order**
+- `CURRENT CONTROL TASK`: **TOM control bootstrap / read-order / RED-ZONE guard verification**
+- `NEXT ALLOWED ACTION`: **само след PASS на control bootstrap — audit/proposal за оставащите unresolved icon решения; без промяна на Official Review Prototype/production**
 
-`POPITAI_LOM_DECISION_AND_BACKLOG_REGISTER.md`
+Текущият sandbox HEAD винаги се проверява директно в Git при започване на нов TOM/Work session. Не се приема стойност от стар чат по памет.
 
-Регистърът пази statuses, evidence граници, задължително съдържание и неприоритизирани идеи. Той не отменя Master или protected/LOCKED contract.
+## Задължителен read order
 
-## Exact current state
+Винаги започни от:
+
+`PROJECT_RULES_00_READ_FIRST.md`
+
+Той води последователно през:
+
+1. `POPITAI_LOM_MASTER_CURRENT.md`
+2. `POPITAI_LOM_DECISION_AND_BACKLOG_REGISTER.md`
+3. `POPITAI_LOM_TOM_CONTROL.md`
+4. `POPITAI_LOM_WORK_REVIEW_QUEUE.md`
+5. този файл
+6. приложимите protected/technical rules.
+
+## Exact project state inherited from Official Review Prototype
 
 - Repo: `Traqnivanov/popitai-lom`
-- Safety branch: `prototype/content-complete-ia-20260904-stage2-safety`
-- Последен функционален Stage 2 checkpoint преди docs-only синхронизацията: `e423a2c3a8d2f70d28060fb4c37ce38bd5369d5e`
-- Текущият exact branch HEAD се проверява в Git преди работа; docs-only и bounded follow-up commits не се представят като ново общо Stage 2 acceptance
-- Production `main`: не е променян от тази Stage 2 работа
-- Supabase/schema/RLS/RPC: не са променяни
+- Production `main`: не е променян от текущата Stage 2/TOM работа
+- Supabase/schema/RLS/RPC: не са променяни от текущата Stage 2/TOM работа
 - Stage 3: не е започван
+- Public IA е owner-approved
+- Services са offer-only: `Предлагам услуга`; legacy `Търси` остава read/edit compatibility
+- Services taxonomy е owner-consolidated: **9 families / 45 visible discovery entries**, с backward-compatible aliases/filters/cross-links
+- implementation `38ef8fb2e48b2e8d538232e64d0e785757f93e96` е source-tested и browser-checked на desktop и реален 390 px viewport
+- последният Official Review Prototype HEAD преди TOM sandbox е `545ba5a22f2c1ad9d6e33c349e70a4d48eb1291a`
 
-## Прието до този checkpoint
+## Icon checkpoint
 
-- public IA и деветте discovery входа;
-- prototype runtime consolidation и един owner на route/render lifecycle;
-- новите Services са offer-only: само `Предлагам услуга`; legacy `Търси` остава read/edit compatibility;
-- опростеният директен results UX на `Работа`;
-- prototype-only Work compensation logic: optional сума, период при сума и `По договаряне`;
-- Work compensation period не се представя като production-persisted.
-- `staticPage()` показва описанието само веднъж; duplicate presentation defect е отстранен.
-- Favorites detail-only UX, internal real routes и content parity са прототипирани; пълната named-route desktop/390px browser acceptance остава в общия Stage 2 gate.
-- public results използват само доказани approved records или честно empty state; synthetic/mock public results са премахнати и canonical results owner е консолидиран.
-- Facebook distribution/content-protection решенията и production границите са класифицирани в централния регистър.
-- Services discovery taxonomy е owner-consolidated и приложена в review prototype от Work 2: деветте семейства остават, а 59-те понятия се представят чрез 45 видими входа плюс точни aliases/filters/cross-links; implementation `38ef8fb2e48b2e8d538232e64d0e785757f93e96` е source-tested и browser-checked на desktop и реален 390 px viewport.
+Icon work остава Stage 2 review работа, не production.
+
+Вече owner-accepted semantic assets не се отварят отново без конкретна причина/OWNER решение.
+
+Work-established редът е:
+
+1. owner review на taxonomy/registry решенията `OWN / SHARED / TEXT / FALLBACK / OPEN`;
+2. един base visual style/tokens;
+3. първо се завършва цялата група `Майстори, ремонти и дом`;
+4. assets се валидират в приложимите small/desktop/390px/social contexts;
+5. OWNER approval по icon/group;
+6. следваща група едва след verdict за текущата;
+7. deterministic registry + regression audit след целия комплект;
+8. production/Supabase/Stage 3 остават отделни checkpoints.
+
+Текущата група съдържа 10 visible entries:
+
+- Цялостни ремонти
+- Бани и плочки
+- ВиК
+- Електро
+- Покриви
+- Шпакловка / гипсокартон / боядисване
+- Дограма и врати
+- Отопление и климатици
+- Монтажи и мебели
+- Къртене и извозване
+
+Приетите assets не се сменят по естетическа преценка на TOM/Execution Chat.
 
 ## Stage status
 
-Отделните Work UX/compensation checkpoints са приети като логика и код.
-
 **Целият Stage 2 остава НЕПРИЕТ.**
 
-Остават owner visual acceptance, content-complete/reality pass и финален desktop/mobile независим audit. Production и Stage 3 остават блокирани.
+Остават owner visual acceptance, content-complete/reality pass и финален desktop/mobile независим audit. Това TOM sandbox не променя.
 
-## Точен следващ ред
+## TOM sandbox rules
 
-1. **Завършено като prototype:** Home action/activity contract на `84d57cb0024ae9b82534badb3e852bc2e12c60b7` — отделни `Публикувай`/`Попитай` повърхности и честен `Днес → Тази седмица → Полезно сега` fallback; финалното приемане остава в общия Stage 2 gate;
-2. **Завършено като review prototype / owner acceptance на exact SHA предстои:** деветте Services families остават, а 59-те понятия са консолидирани до 45 visible discovery entries с backward-compatible aliases/filters/cross-links. Implementation `38ef8fb2e48b2e8d538232e64d0e785757f93e96` премина source regression и desktop/390 px browser gate; icon checkpoint пази приетите 14 assets и не изработва механично 59 икони;
-3. content-complete/reality pass със задължителното съдържание от централния регистър;
-4. финален Stage 2 audit на всички основни journeys, forms, Favorites, Share, actions и states на desktop и 390px;
-5. owner visual acceptance и freeze на exact SHA;
-6. едва след това — отделни production architecture checkpoints от §12.1 на Master-а.
+- Official Review Prototype е frozen.
+- Нов implementation без Work се прави само в `sandbox/work-gap-review`.
+- TOM контролира задачите; Execution Chat не взима продуктови решения.
+- Съществените решения се записват с логиката им.
+- Behavior-preserving локални технически fixes могат да използват lightweight path само в разрешения scope.
+- RED-ZONE/LOCKED, scope expansion, нов UX/visual/product choice или destructive action → STOP и report към TOM.
+- Всичко съществено без Work остава `WORK REVIEW PENDING`.
 
-## Stop conditions
+## Production / protected boundary
 
-Спира се за owner/Work решение само при реален конфликт, който засяга:
+Не са разрешени като част от TOM sandbox работата:
 
-- production schema/RLS/RPC;
-- роли, ownership, moderation или status lifecycle;
-- quotas/media limits;
-- protected Firms/Listings/Masters/Admin логика;
-- нов write owner/form;
-- премахване на одобрена възможност;
-- ново продуктово решение, което не е определено в Master-а.
+- merge/deploy към production `main`;
+- Supabase/schema/RLS/RPC/policy/migration промени;
+- roles/ownership/moderation/quota/direct-publish промени;
+- protected Firms/Listings/Masters/Admin business logic промени;
+- production route/canonical migration;
+- промяна на accepted product/visual direction без OWNER verdict.
 
-Без такъв конфликт безопасните проверки и ограничената текуща задача продължават без междинни отчети.
+## Work return procedure
+
+Когато Work се върне:
+
+1. започва от `PROJECT_RULES_00_READ_FIRST.md`;
+2. чете TOM Control + Work Review Queue;
+3. сверява `OFFICIAL BASE SHA` с реалния sandbox HEAD;
+4. отваря реалния Git diff;
+5. проверява changed files, TOM decisions/tasks, RED-ZONE резултати и QA evidence;
+6. дава `ACCEPTED`, `CORRECTION REQUIRED` или `REOPEN` за pending WR records;
+7. чак след това определя интеграция към Official Review Prototype или следваща работа.
 
 ## Историческа бележка
 
-Предишното съдържание на този файл описваше V6 Recovery и стар четиригрупов marketplace модел. То е заменено и остава достъпно в Git историята. Не управлява нова работа.
+По-стари Progress/V6/Recovery/Stage указания остават Git history/supporting evidence и не управляват текущата работа, ако противоречат на текущия Master/Decision Register/TOM control.
