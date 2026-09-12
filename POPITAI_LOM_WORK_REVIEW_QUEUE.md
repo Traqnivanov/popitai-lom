@@ -17,12 +17,12 @@
 - `SANDBOX HEAD`: **VERIFY DIRECTLY IN GIT AT SESSION START**
 - `CURRENT STAGE`: Stage 2 — Icon system approval
 - `CURRENT PRODUCT TASK`: завършване на първата icon/discovery група `Майстори, ремонти и дом`
-- `CURRENT CONTROL TASK`: TOM control bootstrap + documentation/guard cross-check
+- `CURRENT CONTROL TASK`: **bootstrap verified; TOM control active**
 - `LAST TOM DECISION`: `TOM1-D001`
-- `OPEN WR IDs`: `WR-001`
-- `OPEN FOUND-ISSUES`: none recorded at activation
-- `BLOCKERS`: control bootstrap must pass cross-check before new prototype implementation
-- `NEXT ALLOWED ACTION`: finish TOM control bootstrap and verify one read order / one current task / frozen official prototype. No product/prototype change before that verification.
+- `OPEN WR IDs`: `WR-001` — Work review pending
+- `OPEN FOUND-ISSUES`: none recorded at bootstrap verification
+- `BLOCKERS`: none for starting the next audit/proposal step; product/prototype implementation still requires the applicable OWNER verdict
+- `NEXT ALLOWED ACTION`: TOM-1 audit/proposal for the remaining unresolved decisions in `Майстори, ремонти и дом`. No prototype implementation before applicable OWNER approval.
 
 > Забележка: SANDBOX HEAD не се hardcode-ва като самореферентна „вечна“ стойност в същия state commit. Всеки TOM/Work го сверява директно от Git и сравнява с `OFFICIAL BASE SHA`.
 
@@ -55,15 +55,20 @@
 - `Supabase/backend touched`: **NO**
 - `Prototype UI/UX touched`: **NO**
 - `Protected business logic touched`: **NO**
-- `Control changes expected`:
+- `Changed files verified against base`:
   - `POPITAI_LOM_TOM_CONTROL.md`
   - `POPITAI_LOM_WORK_REVIEW_QUEUE.md`
   - `PROJECT_RULES_00_READ_FIRST.md`
   - `PROJECT_PROGRESS.md`
-  - RED-ZONE detection guard under `.github/`
-- `TOM verification`: PENDING until bootstrap cross-check is completed
+  - `.github/scripts/check_tom_red_zone.py`
+  - `.github/workflows/tom-red-zone-guard.yml`
+- `TOM verification`: **TOM VERIFIED** — compare against official base showed only the six control/guard files above; no prototype UI/UX, Supabase/backend or production file appeared in the diff.
+- `Read-order verification`: **PASS** — `PROJECT_RULES_00_READ_FIRST.md` now has one explicit order: Master → Decision Register → TOM Control → Work Review Queue → Progress → applicable technical rules.
+- `Current-task verification`: **PASS** — Progress and Queue identify Stage 2 Icon system approval and the first current group `Майстори, ремонти и дом`.
+- `Frozen-official verification`: **PASS AT BOOTSTRAP DIFF** — sandbox was created from exact official SHA `545ba5a...`; all bootstrap commits are on `sandbox/work-gap-review`.
 - `RED-ZONE note`: control/guard files are RED ZONE for normal Execution work; this bootstrap is an explicit OWNER-approved control task.
-- `Known risk`: GitHub CI is a detection layer unless required-check/branch protection is separately proven active.
+- `Guard status`: detector + workflow added. This is **DETECTION LAYER ONLY** until required checks/branch rules are separately enabled and verified.
+- `Known risk`: repository protection is not upgraded by this bootstrap. Do not describe the guard as a guaranteed merge block.
 - `Work verdict`: **PENDING**
 
 ---
