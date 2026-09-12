@@ -28,7 +28,7 @@
 
 | Task | Икона | Semantic concept | Current OWNER verdict | Current status | Evidence / asset | Кратка бележка |
 | --- | --- | --- | --- | --- | --- | --- |
-| `TOM1-T001` | Къртене и извозване | Професионален demolition hammer + счупена зидария + малко строителни отломки; без truck | `CORRECTION REQUIRED` | OPEN / correction cycle | първи candidate предоставен в chat; final asset още няма | Концепцията е запазена. Нужно: exact 1024×1024 PNG, true alpha transparency, повтарящ се dark-blue/gold brand language; първият candidate е 1536×1536 RGB без alpha и с доминиращо жълто. |
+| `TOM1-T001` | Къртене и извозване | Професионален demolition hammer + счупена зидария + малко строителни отломки; без truck | `ACCEPTED` | ACCEPTED / MASTER READY | `popitai_lom_kurtene_izvozvane_MASTER_1024.png` — OWNER-accepted chat asset; verified 1024×1024 PNG RGBA with real alpha | Финалната приета визуална посока е тъмносин доминиращ къртач със златисти логични акценти, естествени метал/гума/тухла/бетон. MASTER е технически проверен: true transparent background, transparent corners, no crop, dark cable/rubber preserved, no visible black/white halo. Следващите 128×128 site WebP и 512×512 social WebP са отделна разрешена техническа стъпка по approved derivative pipeline. |
 
 ## Правило за обновяване
 
