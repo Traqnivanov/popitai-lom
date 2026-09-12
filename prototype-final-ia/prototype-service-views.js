@@ -2,6 +2,7 @@
 
 (() => {
   const contracts=window.PopitaiStage2Contracts;
+  const iconRegistry=window.PopitaiIconRegistry;
   const masterGroups=Object.freeze(['Цялостни ремонти','Бани и плочки','ВиК','Електро','Покриви','Шпакловка / гипсокартон / боядисване','Дограма и врати','Отопление и климатици','Монтажи и мебели','Къртене и извозване']);
   const familySource=Object.freeze({
     'Майстори, ремонти и дом':masterGroups,
@@ -40,6 +41,13 @@
     if(name==='Майстори, ремонти и дом') return '#maistori';
     return `#service-group?group=${encodeURIComponent(name)}`;
   }
+  function iconAsset(name){
+    return iconRegistry?.site?.(name)||'';
+  }
+  function iconMarkup(name,className='service-entry-icon'){
+    const src=iconAsset(name);
+    return src?`<span class="${className}" aria-hidden="true"><img src="${src}" alt="" width="128" height="128" loading="lazy"></span>`:'';
+  }
   function familyDesktopCard(name){
     const subs=familySubs(name).slice(0,4);
     return `<a class="service-family-card" href="${familyHref(name)}"><h3>${esc(name)}</h3>${subs.length?`<p>${subs.map(esc).join(' · ')}</p>`:'<p>Избери конкретната услуга в тази група.</p>'}<small>Разгледай →</small></a>`;
@@ -60,16 +68,20 @@
 
   function masters(){
     const data=window.PopitaiApprovedContent||{};
-    const chips=masterGroups.map(name=>name==='Друга ремонтна услуга'
-      ? `<a class="master-chip" href="${contracts.contextualAddUrl({context:'Услуги',group:name,owner:'Listings',type:'Дава'})}">${esc(name)}</a>`
-      : `<a class="master-chip" href="${serviceResultsHref(name)}">${esc(name)}</a>`).join('');
+    const chips=masterGroups.map(name=>{
+      const href=name==='Друга ремонтна услуга'
+        ? contracts.contextualAddUrl({context:'Услуги',group:name,owner:'Listings',type:'Дава'})
+        : serviceResultsHref(name);
+      const icon=iconMarkup(name,'master-entry-icon');
+      return `<a class="master-entry${icon?' master-entry--with-icon':' master-entry--text-only'}" href="${href}">${icon}<span>${esc(name)}</span></a>`;
+    }).join('');
     const active=(Array.isArray(data.masterActivity)?data.masterActivity:[]).filter(Boolean).slice(0,3);
     const firms=(Array.isArray(data.masterFirms)?data.masterFirms:[]).filter(Boolean).slice(0,3);
     const publicRow=window.PopitaiHomeViews?.publicRow||(()=> '');
     const activityContent=active.length?`<div class="result-list">${active.map(publicRow).join('')}</div>`:`<article class="empty-card"><h3>Няма активни предложения за ремонтни услуги</h3><p>В момента няма публикувани активни предложения в този раздел.</p></article>`;
     const firmsContent=firms.length?`<div class="result-list">${firms.map(publicRow).join('')}</div>`:`<article class="empty-card"><p>Разгледай публикуваните местни фирми и майстори.</p><a class="btn soft" href="#firmi">Всички фирми →</a></article>`;
     const offer=contracts.contextualAddUrl({context:'Услуги',group:'Майстори, ремонти и дом',owner:'Listings',type:'Дава'});
-    return `<div class="page stage2-masters">${pageHead('Майстори и ремонти','Намери конкретна ремонтна услуга или публикувай какво предлагаш.','Услуги')}<div class="shell"><form class="search-box masters-search" data-page-search><input name="q" aria-label="Търсене на майстор или ремонт" placeholder="Напр. ВиК, баня, покрив, боядисване…"><button>Търси</button></form><div class="master-chip-grid" aria-label="Подкатегории">${chips}</div><div class="masters-actions"><a class="btn primary" href="${offer}">Предлагам услуга</a></div><section class="masters-content-block"><div class="section-head compact-head"><div><h2>Активни предложения</h2><p>Текущи предложения за ремонтни услуги.</p></div><a href="#obyavi">Виж всички →</a></div>${activityContent}</section><section class="masters-content-block"><div class="section-head compact-head"><div><h2>Местни фирми и майстори</h2><p>Публични местни профили с директен достъп до подробности.</p></div><a href="#firmi">Виж всички →</a></div>${firmsContent}</section><div class="question-fallback-inline masters-question"><span>Не намираш подходящ отговор?</span><a href="#add/question">Задай въпрос</a></div></div></div>`;
+    return `<div class="page stage2-masters">${pageHead('Майстори и ремонти','Намери конкретна ремонтна услуга или публикувай какво предлагаш.','Услуги')}<div class="shell"><form class="search-box masters-search" data-page-search><input name="q" aria-label="Търсене на майстор или ремонт" placeholder="Напр. ВиК, баня, покрив, боядисване…"><button>Търси</button></form><div class="master-entry-grid" aria-label="Подкатегории">${chips}</div><div class="masters-actions"><a class="btn primary" href="${offer}">Предлагам услуга</a></div><section class="masters-content-block"><div class="section-head compact-head"><div><h2>Активни предложения</h2><p>Текущи предложения за ремонтни услуги.</p></div><a href="#obyavi">Виж всички →</a></div>${activityContent}</section><section class="masters-content-block"><div class="section-head compact-head"><div><h2>Местни фирми и майстори</h2><p>Публични местни профили с директен достъп до подробности.</p></div><a href="#firmi">Виж всички →</a></div>${firmsContent}</section><div class="question-fallback-inline masters-question"><span>Не намираш подходящ отговор?</span><a href="#add/question">Задай въпрос</a></div></div></div>`;
   }
 
   function serviceGroup(query){
@@ -79,13 +91,14 @@
     const addMode=query.get('mode')==='add';
     const requestedEntry=query.get('entry')||'';
     const sourceItems=requestedEntry?family.slice(1).filter(item=>item===requestedEntry):family.slice(1);
-    const items=sourceItems.map((item,i)=>{
+    const items=sourceItems.map(item=>{
       const variants=contracts.serviceVariants(item);
       if(addMode&&variants.length){
         return `<article class="family-card family-card-with-variants"><h3>${esc(item)}</h3><p>Избери точната услуга, за да запазим правилния контекст.</p><div class="service-variant-links">${variants.map(variant=>`<a href="${contracts.contextualAddUrl({context:'Услуги',group:variant,owner:'Listings',type:'Дава'})}">${esc(variant)}</a>`).join('')}</div></article>`;
       }
       const href=addMode?contracts.contextualAddUrl({context:'Услуги',group:item,owner:'Listings',type:'Дава'}):serviceResultsHref(item);
-      return `<a class="family-card" href="${href}"><div class="icon">${icons[i%icons.length]}</div><h3>${esc(item)}</h3><p>${addMode?'Избери тази конкретна услуга.':'Разгледай подходящите предложения.'}</p><small>${addMode?'Избери →':'Виж резултатите →'}</small></a>`;
+      const icon=addMode?'':iconMarkup(item,'service-card-icon');
+      return `<a class="family-card${icon?' family-card--with-icon':' family-card--text-only'}" href="${href}">${icon}<h3>${esc(item)}</h3><p>${addMode?'Избери тази конкретна услуга.':'Разгледай подходящите предложения.'}</p><small>${addMode?'Избери →':'Виж резултатите →'}</small></a>`;
     }).join('');
     const modeNotice=addMode?`<div class="notice ok"><strong>Избери конкретна услуга</strong><p>След избора ще продължиш като „Предлагам услуга“.</p></div>`:'';
     const footer=addMode
@@ -104,5 +117,5 @@
   }
 
   Object.assign(window,{services,masters,serviceGroup,serviceEntry});
-  window.PopitaiServiceViews=Object.freeze({structuredFamilies,familyNames,masterGroups,searchMatch,services,masters,serviceGroup,serviceEntry});
+  window.PopitaiServiceViews=Object.freeze({structuredFamilies,familyNames,masterGroups,searchMatch,iconAsset,iconMarkup,services,masters,serviceGroup,serviceEntry});
 })();
