@@ -17,12 +17,12 @@
 - `SANDBOX HEAD`: **VERIFY DIRECTLY IN GIT AT SESSION START**
 - `CURRENT STAGE`: Stage 2 — Icon system approval
 - `CURRENT PRODUCT TASK`: завършване на първата icon/discovery група `Майстори, ремонти и дом`
-- `CURRENT CONTROL TASK`: **strict Icon Execution Contract recorded; unresolved semantic mappings still require OWNER verdict before icon implementation**
-- `LAST TOM DECISION`: `TOM1-D002`
-- `OPEN WR IDs`: `WR-001`, `WR-002` — Work review pending
+- `CURRENT CONTROL TASK`: **TOM1-T001 correction cycle active; icon brand-color contract refined by OWNER**
+- `LAST TOM DECISION`: `TOM1-D003`
+- `OPEN WR IDs`: `WR-001`, `WR-002`, `WR-003` — Work review pending
 - `OPEN FOUND-ISSUES`: `FI-001` — generic positional emoji renderer remains in `prototype-service-views.js`
-- `BLOCKERS`: OWNER verdict is required for `Цялостни ремонти` exact semantic mapping and `Къртене и извозване` semantic concept before any new icon implementation
-- `NEXT ALLOWED ACTION`: OWNER review of TOM-1 proposal for the two unresolved entries. After semantic approval, TOM may issue exactly one icon Execution task under `prototype-final-ia/ICON_EXECUTION_CONTRACT.md`.
+- `BLOCKERS`: `Къртене и извозване` candidate is NOT accepted and must pass corrected 1024×1024 alpha + brand-color requirements; `Цялостни ремонти` exact semantic mapping remains awaiting separate OWNER verdict
+- `NEXT ALLOWED ACTION`: continue only `TOM1-T001` correction for `Къртене и извозване` under the refined `ICON_EXECUTION_CONTRACT.md`; no second icon and no prototype wiring before OWNER verdict.
 
 > Забележка: SANDBOX HEAD не се hardcode-ва като самореферентна „вечна“ стойност в същия state commit. Всеки TOM/Work го сверява директно от Git и сравнява с `OFFICIAL BASE SHA`.
 
@@ -52,7 +52,7 @@
 - `OWNER verdict`: **APPROVED — RECORD**.
 - `Избрано решение`: създаден е task-specific contract `prototype-final-ia/ICON_EXECUTION_CONTRACT.md`; **една Execution задача съдържа точно една нова икона**, а критичните правила се повтарят в самата задача, не се разчита само на линк или памет.
 - `Задължителен review/source output`: PNG 1024×1024, истински alpha transparent фон, без плочка/рамка/badge, един доминиращ обект + максимум два поддържащи детайла, приблизително 68–75% заетост, минимум 12–15% safe margin, нищо изрязано.
-- `Задължителен visual language`: premium 3D, еднакъв мащаб, 3/4 изометрична перспектива, реалистични материали, чисти форми, мека студийна светлина отгоре вляво, естествени цветове; тъмносиньо/златисто само като малки бранд акценти.
+- `Задължителен visual language`: premium 3D, еднакъв мащаб, 3/4 изометрична перспектива, реалистични материали, чисти форми, мека студийна светлина отгоре вляво и последователен brand treatment според актуалния договор.
 - `Забранено`: emoji, cartoon/детска/toy стилистика, лица/усмивки, текст, букви, цифри, марки, лога, водни знаци, измислени етикети, прекомерни детайли и visual clutter.
 - `Достоверност`: всеки предмет трябва да е технически и физически правдоподобен и да остава професионално четим при силно намаляване.
 - `Pre-show gate`: Execution Chat проверява всяко условие преди показване; TOM проверява резултата; QA PASS не е OWNER acceptance.
@@ -61,6 +61,24 @@
 - `Relationship to derivatives`: 1024×1024 PNG е source/review output за бъдещите нови assets. След OWNER acceptance 128 px site / 512 px social или други оптимизирани производни се правят само чрез отделна техническа задача. Production delivery format остава отделен checkpoint.
 - `No implicit permission`: договорът не разрешава mass generation, taxonomy промяна, renderer wiring, production replacement, Supabase/backend или redesign на accepted icon.
 - `Implementation evidence`: `prototype-final-ia/ICON_EXECUTION_CONTRACT.md` added at commit `f3117135d06a870479aca1380d781313317bf047`.
+- `Work review`: **PENDING**.
+
+---
+
+## TOM1-D003 — Brand color language refinement
+
+- `Дата`: 12.09.2026
+- `Тема`: точно описание на тъмносиньо-златистия визуален език на icon серията.
+- `Проблем`: първата формулировка „тъмносиньо и златисто само като малки акценти“ е прекалено ограничителна и не описва реално вече OWNER-accepted серията, в която двата брандови цвята се повтарят по много логични технически и конструктивни детайли.
+- `Evidence`: OWNER изрично посочи, че приетите икони използват синьо и златисто почти навсякъде, където е реалистично — корпусни части, копчета, гайки и други подходящи елементи.
+- `OWNER verdict`: **APPROVED — UPDATE RULE**.
+- `Избрано решение`: тъмносиньото и златистото са постоянен брандов визуален език на серията, а не единични декоративни акценти. Използват се върху всички конструктивно и материално логични оцветими части; естествени материали не се пребоядисват насила.
+- `Тъмносиньо`: основен брандов цвят при реалистично боядисани/полимерни корпусни панели и подходящи конструктивни части.
+- `Златисто`: повтарящ се вторичен брандов цвят за логични акцентни панели, бутони/копчета, пръстени, съединения, гайки и малки технически/конструктивни детайли.
+- `Естествени материали`: тухла, бетон, работна стомана, дърво, гума, стъкло, почва, растения и други естествени материали запазват реалистичния си цвят, освен ако реалният предмет конструктивно допуска боядисване.
+- `Граница`: цветовете никога не трябва да правят предмета физически или професионално неправдоподобен.
+- `Current task effect`: `TOM1-T001` запазва одобрената demolition/debris концепция, но жълто-доминиращият къртач се връща за brand-color correction; concept не се redesign-ва.
+- `Implementation evidence`: `prototype-final-ia/ICON_EXECUTION_CONTRACT.md` updated at commit `eff9305ba1daf92096c042efd8feddfa34578be8`.
 - `Work review`: **PENDING**.
 
 ---
@@ -111,6 +129,23 @@
 
 ---
 
+## WR-003 — Brand color contract refinement + TOM1-T001 first candidate QA
+
+- `Source`: `TOM1-D003` / `TOM1-T001`
+- `OWNER verdict`: APPROVED for rule refinement; **candidate icon NOT ACCEPTED**.
+- `Scope`: icon visual-language contract and current `Къртене и извозване` correction only.
+- `First candidate semantic verdict`: **PASS DIRECTION** — professional demolition hammer + broken masonry + construction debris; no truck; concept remains.
+- `First candidate technical QA`: **FAIL** — supplied PNG is `1536×1536`, not 1024×1024; image mode is RGB with no alpha channel, therefore the black background is real image content rather than transparent alpha.
+- `First candidate visual QA`: **CORRECTION REQUIRED** — yellow dominates the tool and does not match the established repeated dark-blue/gold family treatment.
+- `Required correction`: exact 1024×1024 PNG; true alpha transparency; retain current semantic composition; dark blue as the main realistic painted/polymer body treatment where logical; gold repeated on suitable secondary panels/buttons/connections/small technical details; natural metal/rubber/brick/concrete remain realistic.
+- `No second icon`: **ENFORCED** until OWNER verdict on corrected `TOM1-T001` candidate.
+- `Contract evidence`: `eff9305ba1daf92096c042efd8feddfa34578be8`.
+- `Production touched`: **NO**.
+- `Prototype wiring touched`: **NO**.
+- `Work verdict`: **PENDING**.
+
+---
+
 ## TOM1-AUDIT-001 — Първа icon/discovery група `Майстори, ремонти и дом`
 
 - `Дата`: 12.09.2026
@@ -119,9 +154,9 @@
 - `Доказано приети semantic assets`: `Бани и плочки`, `ВиК`, `Електро`, `Покриви`, `Шпакловка / гипсокартон / боядисване`, `Дограма и врати`, `Отопление и климатици`, `Монтажи и мебели`.
 - `Неотворени повторно`: горните осем assets остават приети; TOM-1 няма основание да ги redesign-ва.
 - `Нерешено 1`: `Цялостни ремонти` е записано в draft registry като `SHARED ICON → hammer`, но exact registry map все още е `EXACT MAP ACCEPTANCE PENDING`; не се счита за нов owner-accepted semantic asset само защото hammer SVG съществува.
-- `Нерешено 2`: `Къртене и извозване` е `OPEN`; договорът изисква ясен demolition/debris знак и изрично забранява обикновен cargo truck.
+- `Нерешено 2`: `Къртене и извозване` е `OPEN`; договорът изисква ясен demolition/debris знак и изрично забранява обикновен cargo truck. OWNER впоследствие разреши изпълнение на exact concept чрез `TOM1-T001`; final asset verdict остава pending.
 - `Asset evidence`: review asset directory съдържа приетите осем assets от тази група; няма отделен owner-accepted `whole renovation` или `demolition/debris` review asset.
-- `Implementation boundary`: няма icon/prototype промяна преди OWNER verdict за двете нерешени точки.
+- `Implementation boundary`: няма prototype wiring преди OWNER acceptance на конкретния asset.
 - `Work review`: PENDING together with sandbox work.
 
 ### FI-001 — Generic positional service icons remain
