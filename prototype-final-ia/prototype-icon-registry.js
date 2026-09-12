@@ -18,7 +18,11 @@
     'Гуми':Object.freeze({site:`${siteBase}tires.webp`,sharedKey:'tires'}),
     'Автоелектро и автоклиматици':Object.freeze({site:`${siteBase}auto-electrical-climate.webp`,sharedKey:'auto-electrical-climate'}),
     'Автомивка и детайлинг':Object.freeze({site:`${siteBase}car-wash-detailing.webp`,sharedKey:'car-wash-detailing'}),
-    'Пътна помощ':Object.freeze({site:`${siteBase}roadside-assistance.webp`,sharedKey:'roadside-assistance'})
+    'Пътна помощ':Object.freeze({site:`${siteBase}roadside-assistance.webp`,sharedKey:'roadside-assistance'}),
+    'Почистване':Object.freeze({site:`${siteBase}home-cleaning.webp`,sharedKey:'home-cleaning'}),
+    'Пране на мека мебел и килими':Object.freeze({site:`${siteBase}upholstery-cleaning.webp`,sharedKey:'upholstery-cleaning'}),
+    'Двор, градина и озеленяване':Object.freeze({site:`${siteBase}garden-landscaping.webp`,sharedKey:'garden-landscaping'}),
+    'Борба с вредители':Object.freeze({site:`${siteBase}pest-control.webp`,sharedKey:'pest-control'})
   });
   const aliases=Object.freeze({
     'Майстори и ремонти':'Цялостни ремонти'

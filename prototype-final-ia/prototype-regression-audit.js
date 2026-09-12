@@ -111,6 +111,13 @@ for(const label of ['Автосервиз','Диагностика','Гуми','
 }
 const automotiveAdd=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Автомобилни услуги')}&mode=add&type=${encodeURIComponent('Дава')}`));
 assert(!automotiveAdd.includes('service-card-icon'),'Automotive Add mode remains text-only');
+const cleaningBrowse=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Почистване и поддръжка')}`));
+assert.equal((cleaningBrowse.match(/class="service-card-icon"/g)||[]).length,4,'Cleaning browse exposes the four owner-approved icons');
+for(const label of ['Почистване','Пране на мека мебел и килими','Двор, градина и озеленяване','Борба с вредители']){
+  assert(services.iconAsset(label),`${label}: exact approved icon mapping`);
+}
+const cleaningAdd=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Почистване и поддръжка')}&mode=add&type=${encodeURIComponent('Дава')}`));
+assert(!cleaningAdd.includes('service-card-icon'),'Cleaning Add mode remains text-only');
 const encodedSeek=encodeURIComponent('Търси');
 const encodedOffer=encodeURIComponent('Дава');
 for(const target of [
