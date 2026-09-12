@@ -16,13 +16,13 @@
 - `SANDBOX BRANCH`: `sandbox/work-gap-review`
 - `SANDBOX HEAD`: **VERIFY DIRECTLY IN GIT AT SESSION START**
 - `CURRENT STAGE`: Stage 2 — Icon system approval
-- `CURRENT PRODUCT TASK`: първата icon/discovery група `Майстори, ремонти и дом` е semantic 10/10; deterministic sandbox wiring checkpoint е имплементиран и чака visual/browser QA + OWNER acceptance after QA
-- `CURRENT CONTROL TASK`: **TOM1-T003 — first-group deterministic icon wiring checkpoint**
+- `CURRENT PRODUCT TASK`: първата icon/discovery група `Майстори, ремонти и дом` е semantic 10/10 и deterministic sandbox wiring checkpoint е **OWNER ACCEPTED AFTER QA**
+- `CURRENT CONTROL TASK`: **TOM1-T003 CLOSED — first-group deterministic icon wiring accepted after QA**
 - `LAST TOM DECISION`: `TOM1-D005`
 - `OPEN WR IDs`: `WR-001`, `WR-002`, `WR-003`, `WR-004`, `WR-005` — Work review pending
-- `OPEN FOUND-ISSUES`: няма отворен FI от first-group renderer; `FI-001` е FIXED IN SANDBOX / WORK REVIEW PENDING
-- `BLOCKERS`: реалната visual/browser QA на wiring-а още не е изпълнена; Browser Connector беше недостъпен. Това не позволява да се обяви OWNER ACCEPTED AFTER QA или official/prod wiring.
-- `NEXT ALLOWED ACTION`: visual/browser QA на текущия sandbox wiring (desktop + 390 px + broken-image/overflow check). Не се прави production wiring и social wiring не се смесва с този checkpoint.
+- `OPEN FOUND-ISSUES`: няма отворен FI от first-group renderer; `FI-001` е FIXED IN SANDBOX / OWNER ACCEPTED AFTER QA / WORK REVIEW PENDING
+- `BLOCKERS`: няма отворен blocker за първата група в sandbox. Work review, official review promotion и production wiring остават отделни неприключени checkpoints.
+- `NEXT ALLOWED ACTION`: read-only audit + конкретно предложение за следващата icon/discovery група `Почистване и поддръжка`. Няма implementation преди OWNER verdict. Production и social wiring не се приемат имплицитно от този checkpoint.
 
 > Забележка: SANDBOX HEAD не се hardcode-ва като самореферентна „вечна“ стойност в същия state commit. Всеки TOM/Work го сверява директно от Git и сравнява с `OFFICIAL BASE SHA`.
 
@@ -58,7 +58,7 @@
 - `Pre-show gate`: Execution Chat проверява всяко условие преди показване; TOM проверява резултата; QA PASS не е OWNER acceptance.
 - `Approval authority`: **само OWNER може да даде окончателен `ACCEPTED` verdict за нова икона**.
 - `Relationship to existing assets`: договорът НЕ отваря повторно вече owner-accepted assets и НЕ променя техния verdict.
-- `Relationship to derivatives`: 1024×1024 PNG е source/review output за бъдещите нови assets; точният след-acceptance derivative pipeline е доуточнен и заключен по-късно в `TOM1-D004`.
+- `Relationship to derivatives`: 1024×1024 PNG е review/source output за бъдещите нови assets; точният след-acceptance derivative pipeline е доуточнен и заключен по-късно в `TOM1-D004`.
 - `No implicit permission`: договорът не разрешава mass generation, taxonomy промяна, renderer wiring, production replacement, Supabase/backend или redesign на accepted icon.
 - `Implementation evidence`: `prototype-final-ia/ICON_EXECUTION_CONTRACT.md` added at commit `f3117135d06a870479aca1380d781313317bf047`.
 - `Work review`: **PENDING**.
@@ -102,7 +102,7 @@
 
 - `Дата`: 12.09.2026
 - `Тема`: deterministic sandbox wiring само за owner-accepted first repair group.
-- `OWNER verdict`: **SANDBOX IMPLEMENTATION APPROVED** — OWNER прие плана и даде „Ок действия“ след изричното уточнение `binary assets → registry → QA`.
+- `OWNER verdict`: **OWNER ACCEPTED AFTER QA** — OWNER първо разреши sandbox implementation, а след реалния desktop + deterministic 390 px browser QA изрично даде verdict „приема се“.
 - `Scope`: първата 10/10 група `Майстори, ремонти и дом`; site 128 px layer само. Social wiring остава отделно.
 - `Последователност`: първо двата липсващи accepted binary assets са добавени физически в repo; след това е създаден exact-name registry; чак след това renderer wiring.
 - `Registry`: `prototype-final-ia/prototype-icon-registry.js`; exact semantic name → exact accepted site asset. `Майстори и ремонти` alias-ва shared `Цялостни ремонти` asset. Няма AI/free-text guessing и няма positional selection.
@@ -110,8 +110,9 @@
 - `Renderer`: `prototype-service-views.js::serviceGroup()` вече не използва `icons[i % icons.length]`; routes/Add logic са запазени. Add-mode/forms остават text-first и не получават декоративни taxonomy icons.
 - `Masters surface`: десетте accepted entries получават exact icon+text; 64 px desktop / 56 px mobile.
 - `Static QA`: PASS за 10/10 registry paths existing in repo; PASS за physical presence на `full-renovation.webp` и `demolition-debris.webp`; PASS за removal на positional renderer от service surface; PASS за unchanged `href` construction in compared code; PASS за text-only behavior when mapping липсва; PASS за scoped Git diff.
-- `Visual/browser QA`: **PENDING** — не е симулиран PASS. Browser Connector е недостъпен в текущата сесия, затова 390 px/desktop overflow/broken-image visual check остава следващият gate.
-- `No overclaim`: static QA/TOM verification не е OWNER acceptance after QA, Work acceptance, official review approval или production approval.
+- `Browser correction`: при първия 390 px iframe QA иконите не се визуализираха надеждно заради `loading="lazy"` върху малки navigation icons. След изричен OWNER „да“ lazy loading е премахнат само от semantic navigation icon markup в commit `7347e90ae5a5d61b3f246b37fc839d2fea3bbdaa`.
+- `Visual/browser QA`: **PASS** — desktop render в Opera показва semantic icons без счупване/overflow; deterministic 390 px harness в commit `39918fa46aaa63ae5d74fa81cbbf29dda68102f8` отчете `chips=10/10`, `images=10/10`, `broken=0`, `horizontal-overflow=NO`.
+- `No overclaim`: OWNER acceptance е за този sandbox wiring checkpoint. Това НЕ е Work acceptance, official review prototype promotion, production approval или social wiring approval.
 - `Production touched`: **NO**.
 - `Supabase/backend touched`: **NO**.
 - `Social wiring touched`: **NO**.
@@ -200,17 +201,18 @@
 ## WR-005 — First repair-group deterministic site wiring
 
 - `Source`: `TOM1-D005`.
-- `OWNER verdict`: **SANDBOX IMPLEMENTATION APPROVED; OWNER ACCEPTANCE AFTER QA PENDING**.
+- `OWNER verdict`: **OWNER ACCEPTED AFTER QA; WORK REVIEW PENDING**.
 - `Scope`: site icon wiring for accepted first repair group only.
 - `Binary dependency evidence`: commit `a1d385e7948ded913b8136e94f191124363b9dad` adds `icon-review-assets/site/full-renovation.webp` and `icon-review-assets/site/demolition-debris.webp` before registry wiring.
 - `Registry evidence`: commit `76df87799bc53b51739dd14ceb7e9ca014059851` adds `prototype-icon-registry.js`; `a04b5fe5a8880124ae95486641379a1f16e625d5` loads it before service views.
-- `Renderer/styles evidence`: deterministic wiring and compatibility/style passes culminate at sandbox HEAD `b18c7c7777647caafb276ed2670806bca786212e` before this queue record; live HEAD must still be re-fetched.
+- `Renderer/styles evidence`: deterministic wiring and compatibility/style passes culminated before browser QA; final accepted browser-QA evidence is at `39918fa46aaa63ae5d74fa81cbbf29dda68102f8` before this acceptance-record commit.
 - `Static dependency QA`: 10/10 first-group registry file names exist physically under `icon-review-assets/site/`; new binary blob SHAs are `3a119a53...` (full renovation) and `bf9fbd61...` (demolition).
 - `Renderer QA`: `serviceGroup()` no longer uses `icons[i % icons.length]`; unmapped entries have no semantic image and remain text-only; Add routes keep existing construction.
 - `Masters QA`: exact 10 `master-chip` selectors are preserved for regression compatibility; icon+text layout uses 64 px desktop and 56 px mobile.
-- `Git scope QA`: compare from pre-wiring `980c9aa398e6b0840640c1053b59476db0ea0b70` to wiring HEAD `b18c7c7777647caafb276ed2670806bca786212e` changes only six files: two site WebP assets, `index.html`, new registry, `prototype-service-views.js`, `prototype-services.css`.
-- `Known untouched legacy`: generic emoji array remains in `prototype-core.js`; it was not deleted without a separate usage audit. The approved service renderer no longer consumes it positionally.
-- `Visual/browser QA`: **PENDING** — Browser Connector unavailable; no claim of real desktop/390 px rendering PASS yet.
+- `Browser correction evidence`: commit `7347e90ae5a5d61b3f246b37fc839d2fea3bbdaa` removes `loading="lazy"` only from the semantic navigation icon markup after OWNER authorization.
+- `Visual/browser QA`: **PASS** — Opera desktop render visually shows the semantic icons; deterministic 390 px harness at `39918fa46aaa63ae5d74fa81cbbf29dda68102f8` reports `chips=10/10`, `images=10/10`, `broken=0`, `horizontal-overflow=NO`.
+- `Git scope note`: compared with the earlier six-file wiring delta, browser QA adds one scoped test file `prototype-final-ia/prototype-masters-mobile-browser-test.html` and a behavior-preserving lazy-load correction in the already-scoped renderer file.
+- `Known untouched legacy`: generic emoji array remains in `prototype-core.js`; it was not deleted without a separate usage audit. The accepted service renderer no longer consumes it positionally.
 - `Production touched`: **NO**.
 - `Supabase/backend touched`: **NO**.
 - `Social wiring touched`: **NO**.
@@ -235,7 +237,7 @@
 - `Risk`: позиционен generic знак може да не съответства на конкретната taxonomy семантика и противоречи на deterministic registry direction.
 - `Resolution`: **FIXED IN SANDBOX** по `TOM1-D005` — service renderer използва exact-name registry; при липса на approved mapping показва text only.
 - `Legacy note`: общият emoji масив в `prototype-core.js` не е изтрит без usage audit; FI-001 се отнася до positional service renderer, който вече не го използва.
-- `Status`: FIXED IN SANDBOX / WORK REVIEW PENDING / VISUAL QA PENDING.
+- `Status`: FIXED IN SANDBOX / OWNER ACCEPTED AFTER QA / WORK REVIEW PENDING.
 
 ---
 
