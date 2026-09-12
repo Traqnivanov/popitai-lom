@@ -12,7 +12,13 @@
     'Дограма и врати':Object.freeze({site:`${siteBase}joinery.webp`,sharedKey:'joinery'}),
     'Отопление и климатици':Object.freeze({site:`${siteBase}heating-cooling.webp`,sharedKey:'heating-cooling'}),
     'Монтажи и мебели':Object.freeze({site:`${siteBase}furniture-assembly.webp`,sharedKey:'furniture-assembly'}),
-    'Къртене и извозване':Object.freeze({site:`${siteBase}demolition-debris.webp`,sharedKey:'demolition-debris'})
+    'Къртене и извозване':Object.freeze({site:`${siteBase}demolition-debris.webp`,sharedKey:'demolition-debris'}),
+    'Автосервиз':Object.freeze({site:`${siteBase}auto-service.webp`,sharedKey:'auto-service'}),
+    'Диагностика':Object.freeze({site:`${siteBase}auto-diagnostics.webp`,sharedKey:'auto-diagnostics'}),
+    'Гуми':Object.freeze({site:`${siteBase}tires.webp`,sharedKey:'tires'}),
+    'Автоелектро и автоклиматици':Object.freeze({site:`${siteBase}auto-electrical-climate.webp`,sharedKey:'auto-electrical-climate'}),
+    'Автомивка и детайлинг':Object.freeze({site:`${siteBase}car-wash-detailing.webp`,sharedKey:'car-wash-detailing'}),
+    'Пътна помощ':Object.freeze({site:`${siteBase}roadside-assistance.webp`,sharedKey:'roadside-assistance'})
   });
   const aliases=Object.freeze({
     'Майстори и ремонти':'Цялостни ремонти'

@@ -19,6 +19,7 @@ for(const file of [
   'prototype-stage2-contracts.js',
   'prototype-core.js',
   'prototype-content-data.js',
+  'prototype-icon-registry.js',
   'prototype-service-views.js',
   'prototype-marketplace-views.js',
   'prototype-home.js',
@@ -41,7 +42,7 @@ const records=read('prototype-records.js');
 const social=read('prototype-social-card-composer.js');
 const runtimeJs=[
   'prototype-stage2-contracts.js','prototype-core.js','prototype-records.js','prototype-content-data.js',
-  'prototype-social-card-composer.js','prototype-service-views.js','prototype-marketplace-views.js',
+  'prototype-social-card-composer.js','prototype-icon-registry.js','prototype-service-views.js','prototype-marketplace-views.js',
   'prototype-home.js','prototype-forms.js','prototype-content-views.js','prototype-validators.js',
   'prototype-interactions.js','app.js'
 ];
@@ -103,6 +104,13 @@ assert.deepEqual(cleaningDiscoveries,['Почистване на дом','Офи
 const officeAdd=contracts.contextualAddUrl({context:'Услуги',group:'Офиси и входове',owner:'Listings'});
 assert.equal(new URLSearchParams(officeAdd.split('?')[1]).get('discovery'),'Офиси и входове','exact alias remains visible in Add context');
 assert.equal((services.masters().match(/class="master-chip"/g)||[]).length,10,'Masters exposes the ten approved repair entries');
+const automotiveBrowse=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Автомобилни услуги')}`));
+assert.equal((automotiveBrowse.match(/class="service-card-icon"/g)||[]).length,6,'Automotive browse exposes the six owner-approved icons');
+for(const label of ['Автосервиз','Диагностика','Гуми','Автоелектро и автоклиматици','Автомивка и детайлинг','Пътна помощ']){
+  assert(services.iconAsset(label),`${label}: exact approved icon mapping`);
+}
+const automotiveAdd=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Автомобилни услуги')}&mode=add&type=${encodeURIComponent('Дава')}`));
+assert(!automotiveAdd.includes('service-card-icon'),'Automotive Add mode remains text-only');
 const encodedSeek=encodeURIComponent('Търси');
 const encodedOffer=encodeURIComponent('Дава');
 for(const target of [
