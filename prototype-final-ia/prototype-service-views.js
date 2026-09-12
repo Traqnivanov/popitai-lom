@@ -72,8 +72,8 @@
       const href=name==='Друга ремонтна услуга'
         ? contracts.contextualAddUrl({context:'Услуги',group:name,owner:'Listings',type:'Дава'})
         : serviceResultsHref(name);
-      const icon=iconMarkup(name,'master-entry-icon');
-      return `<a class="master-entry${icon?' master-entry--with-icon':' master-entry--text-only'}" href="${href}">${icon}<span>${esc(name)}</span></a>`;
+      const icon=iconMarkup(name,'master-chip-icon');
+      return `<a class="master-chip" href="${href}">${icon}<span>${esc(name)}</span></a>`;
     }).join('');
     const active=(Array.isArray(data.masterActivity)?data.masterActivity:[]).filter(Boolean).slice(0,3);
     const firms=(Array.isArray(data.masterFirms)?data.masterFirms:[]).filter(Boolean).slice(0,3);
@@ -81,7 +81,7 @@
     const activityContent=active.length?`<div class="result-list">${active.map(publicRow).join('')}</div>`:`<article class="empty-card"><h3>Няма активни предложения за ремонтни услуги</h3><p>В момента няма публикувани активни предложения в този раздел.</p></article>`;
     const firmsContent=firms.length?`<div class="result-list">${firms.map(publicRow).join('')}</div>`:`<article class="empty-card"><p>Разгледай публикуваните местни фирми и майстори.</p><a class="btn soft" href="#firmi">Всички фирми →</a></article>`;
     const offer=contracts.contextualAddUrl({context:'Услуги',group:'Майстори, ремонти и дом',owner:'Listings',type:'Дава'});
-    return `<div class="page stage2-masters">${pageHead('Майстори и ремонти','Намери конкретна ремонтна услуга или публикувай какво предлагаш.','Услуги')}<div class="shell"><form class="search-box masters-search" data-page-search><input name="q" aria-label="Търсене на майстор или ремонт" placeholder="Напр. ВиК, баня, покрив, боядисване…"><button>Търси</button></form><div class="master-entry-grid" aria-label="Подкатегории">${chips}</div><div class="masters-actions"><a class="btn primary" href="${offer}">Предлагам услуга</a></div><section class="masters-content-block"><div class="section-head compact-head"><div><h2>Активни предложения</h2><p>Текущи предложения за ремонтни услуги.</p></div><a href="#obyavi">Виж всички →</a></div>${activityContent}</section><section class="masters-content-block"><div class="section-head compact-head"><div><h2>Местни фирми и майстори</h2><p>Публични местни профили с директен достъп до подробности.</p></div><a href="#firmi">Виж всички →</a></div>${firmsContent}</section><div class="question-fallback-inline masters-question"><span>Не намираш подходящ отговор?</span><a href="#add/question">Задай въпрос</a></div></div></div>`;
+    return `<div class="page stage2-masters">${pageHead('Майстори и ремонти','Намери конкретна ремонтна услуга или публикувай какво предлагаш.','Услуги')}<div class="shell"><form class="search-box masters-search" data-page-search><input name="q" aria-label="Търсене на майстор или ремонт" placeholder="Напр. ВиК, баня, покрив, боядисване…"><button>Търси</button></form><div class="master-chip-grid" aria-label="Подкатегории">${chips}</div><div class="masters-actions"><a class="btn primary" href="${offer}">Предлагам услуга</a></div><section class="masters-content-block"><div class="section-head compact-head"><div><h2>Активни предложения</h2><p>Текущи предложения за ремонтни услуги.</p></div><a href="#obyavi">Виж всички →</a></div>${activityContent}</section><section class="masters-content-block"><div class="section-head compact-head"><div><h2>Местни фирми и майстори</h2><p>Публични местни профили с директен достъп до подробности.</p></div><a href="#firmi">Виж всички →</a></div>${firmsContent}</section><div class="question-fallback-inline masters-question"><span>Не намираш подходящ отговор?</span><a href="#add/question">Задай въпрос</a></div></div></div>`;
   }
 
   function serviceGroup(query){
