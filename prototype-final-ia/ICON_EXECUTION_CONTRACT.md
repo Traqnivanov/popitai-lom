@@ -266,3 +266,20 @@ Execution Chat и TOM нямат право да превръщат собств
 Не се пази ненужен подробен дневник на всяка междинна генерация. Запазва се **current truth + достатъчно evidence за възстановяване и Work review**.
 
 Този оптимизиран модел е приложение на `PROCESS OPTIMIZATION SIGNAL` от `POPITAI_LOM_TOM_CONTROL.md` и не намалява OWNER approval gate: всяка нова икона продължава да се приема единствено от OWNER.
+
+## 16. OWNER-approved derivative и surface pipeline
+
+След OWNER `ACCEPTED` verdict за конкретния 1024×1024 PNG master се използва **същият приет master**, без визуално прерисуване, за техническите производни.
+
+Заключеният базов pipeline е:
+
+1. **MASTER / REVIEW SOURCE** — PNG, 1024×1024, true alpha transparency;
+2. **SITE DERIVATIVE** — оптимизиран WebP, 128×128 px;
+3. **SOCIAL DERIVATIVE** — отделен оптимизиран WebP, 512×512 px;
+4. **SOCIAL CARD OUTPUT** — 512 px social derivative се използва като тематичен asset вътре в отделната 1200×630 social/OG композиция; 1200×630 картата не е просто уголемена site икона.
+
+Този модел следва вече доказания Work visual proof: site и social производните са отделни слоеве и се проверяват при 20–24 px semantic readability, desktop/card context, реален 390 px mobile context и 1200×630 social composition според приложимата задача.
+
+Допълнителен **256 px** derivative **НЕ е част от базовия договор** и не се създава превантивно. Той може да бъде предложен по-късно само ако реална browser/performance/quality QA докаже необходимост и TOM/OWNER разрешат отделната техническа промяна.
+
+Този pipeline не разрешава автоматично prototype или production wiring. Производните се създават едва след OWNER acceptance на master-а и чрез отделна разрешена техническа задача.
