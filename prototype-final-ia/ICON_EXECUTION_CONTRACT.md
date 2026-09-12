@@ -248,3 +248,21 @@ Execution Chat и TOM нямат право да превръщат собств
 - промяна на social generation architecture.
 
 Всички такива действия остават отделни TOM/OWNER/Work checkpoints според приложимия контролен договор.
+
+## 15. Оптимизиран запис на icon review
+
+Каноничният оперативен запис за индивидуалните икони е:
+
+`prototype-final-ia/ICON_REVIEW_LOG.md`
+
+Правилото е:
+
+- **една икона = един ред**;
+- при корекции се обновява същият ред, вместо да се създава нов тежък decision record;
+- записва се текущият semantic concept, последният OWNER verdict, текущият status, evidence/asset reference и кратка бележка;
+- нормално `CORRECTION REQUIRED`, повторен render или `ACCEPTED` не създават сами по себе си отделен TOM decision + WR;
+- пълен TOM/WR се създава само при ново общо правило, semantic спор/промяна, изключение от договора, control failure, RED-ZONE/LOCKED риск или решение с по-широк ефект от конкретната икона.
+
+Не се пази ненужен подробен дневник на всяка междинна генерация. Запазва се **current truth + достатъчно evidence за възстановяване и Work review**.
+
+Този оптимизиран модел е приложение на `PROCESS OPTIMIZATION SIGNAL` от `POPITAI_LOM_TOM_CONTROL.md` и не намалява OWNER approval gate: всяка нова икона продължава да се приема единствено от OWNER.
