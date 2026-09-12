@@ -10,6 +10,14 @@
 .question-fallback-inline a{font-weight:700}
 .master-chip-grid{display:flex;flex-wrap:wrap;gap:10px;margin:4px 0 18px}
 .master-chip{display:inline-flex;align-items:center;min-height:42px;padding:9px 13px;border:1px solid var(--line,#dbe3ee);border-radius:999px;background:#fff;text-decoration:none;color:inherit;font-weight:650}
+.master-entry-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:4px 0 18px}
+.master-entry{display:grid;grid-template-columns:64px minmax(0,1fr);align-items:center;gap:12px;min-height:86px;padding:10px 12px;border:1px solid var(--line,#dbe3ee);border-radius:16px;background:#fff;text-decoration:none;color:inherit;font-weight:700;line-height:1.25}
+.master-entry:hover,.master-entry:focus-visible{border-color:var(--primary,#0b5fd7);box-shadow:0 8px 22px rgba(15,23,42,.08)}
+.master-entry-icon,.service-card-icon{display:grid;place-items:center;width:64px;height:64px;flex:0 0 auto}
+.master-entry-icon img,.service-card-icon img{display:block;width:64px;height:64px;object-fit:contain}
+.master-entry--text-only{grid-template-columns:1fr;min-height:64px}
+.family-card--with-icon{align-content:start}
+.service-card-icon{margin-bottom:2px}
 .masters-actions{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px}
 .masters-content-block{margin-top:26px}
 .masters-question{margin-top:28px}
@@ -30,6 +38,11 @@
   .service-family-direct{display:inline-block;font-weight:700}
   .master-chip-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
   .master-chip{justify-content:center;text-align:center;border-radius:12px;padding:9px 8px;font-size:.86rem}
+  .master-entry-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .master-entry{grid-template-columns:56px minmax(0,1fr);gap:8px;min-height:76px;padding:8px;border-radius:14px;font-size:.84rem}
+  .master-entry-icon,.service-card-icon{width:56px;height:56px}
+  .master-entry-icon img,.service-card-icon img{width:56px;height:56px}
+  .master-entry--text-only{grid-template-columns:1fr;min-height:56px;text-align:center}
   .masters-actions{display:grid;grid-template-columns:1fr;gap:8px}
   .masters-actions .btn{text-align:center}
   .question-fallback-inline{display:grid;gap:8px;padding:12px 0}
