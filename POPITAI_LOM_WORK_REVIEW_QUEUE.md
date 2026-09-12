@@ -17,12 +17,12 @@
 - `SANDBOX HEAD`: **VERIFY DIRECTLY IN GIT AT SESSION START**
 - `CURRENT STAGE`: Stage 2 — Icon system approval
 - `CURRENT PRODUCT TASK`: завършване на първата icon/discovery група `Майстори, ремонти и дом`
-- `CURRENT CONTROL TASK`: **TOM1-AUDIT-001 complete; OWNER verdict required for the two unresolved semantic mappings before implementation**
-- `LAST TOM DECISION`: `TOM1-D001`
-- `OPEN WR IDs`: `WR-001` — Work review pending
+- `CURRENT CONTROL TASK`: **strict Icon Execution Contract recorded; unresolved semantic mappings still require OWNER verdict before icon implementation**
+- `LAST TOM DECISION`: `TOM1-D002`
+- `OPEN WR IDs`: `WR-001`, `WR-002` — Work review pending
 - `OPEN FOUND-ISSUES`: `FI-001` — generic positional emoji renderer remains in `prototype-service-views.js`
 - `BLOCKERS`: OWNER verdict is required for `Цялостни ремонти` exact semantic mapping and `Къртене и извозване` semantic concept before any new icon implementation
-- `NEXT ALLOWED ACTION`: OWNER review of TOM-1 proposal for the two unresolved entries. No prototype/icon implementation before the applicable OWNER verdict.
+- `NEXT ALLOWED ACTION`: OWNER review of TOM-1 proposal for the two unresolved entries. After semantic approval, TOM may issue exactly one icon Execution task under `prototype-final-ia/ICON_EXECUTION_CONTRACT.md`.
 
 > Забележка: SANDBOX HEAD не се hardcode-ва като самореферентна „вечна“ стойност в същия state commit. Всеки TOM/Work го сверява директно от Git и сравнява с `OFFICIAL BASE SHA`.
 
@@ -41,6 +41,27 @@
 - `Разрешен scope за bootstrap`: control docs + RED-ZONE detection guard само в sandbox.
 - `Забранен scope`: prototype UI/UX, accepted icons, taxonomy, production `main`, Supabase, schema/RLS/RPC, protected business logic.
 - `Work review`: **PENDING**
+
+---
+
+## TOM1-D002 — Strict Icon Execution Contract
+
+- `Дата`: 12.09.2026
+- `Тема`: постоянен строг договор за създаване на всяка следваща нова икона.
+- `Проблем`: visual style и техническите изисквания вече са установени, но ако Execution Chat получава само кратка инструкция или пакет от много икони, има риск от drift в стил, размер, прозрачност, семантика и качество, както и от погрешно self-approval.
+- `OWNER verdict`: **APPROVED — RECORD**.
+- `Избрано решение`: създаден е task-specific contract `prototype-final-ia/ICON_EXECUTION_CONTRACT.md`; **една Execution задача съдържа точно една нова икона**, а критичните правила се повтарят в самата задача, не се разчита само на линк или памет.
+- `Задължителен review/source output`: PNG 1024×1024, истински alpha transparent фон, без плочка/рамка/badge, един доминиращ обект + максимум два поддържащи детайла, приблизително 68–75% заетост, минимум 12–15% safe margin, нищо изрязано.
+- `Задължителен visual language`: premium 3D, еднакъв мащаб, 3/4 изометрична перспектива, реалистични материали, чисти форми, мека студийна светлина отгоре вляво, естествени цветове; тъмносиньо/златисто само като малки бранд акценти.
+- `Забранено`: emoji, cartoon/детска/toy стилистика, лица/усмивки, текст, букви, цифри, марки, лога, водни знаци, измислени етикети, прекомерни детайли и visual clutter.
+- `Достоверност`: всеки предмет трябва да е технически и физически правдоподобен и да остава професионално четим при силно намаляване.
+- `Pre-show gate`: Execution Chat проверява всяко условие преди показване; TOM проверява резултата; QA PASS не е OWNER acceptance.
+- `Approval authority`: **само OWNER може да даде окончателен `ACCEPTED` verdict за нова икона**.
+- `Relationship to existing assets`: договорът НЕ отваря повторно вече owner-accepted assets и НЕ променя техния verdict.
+- `Relationship to derivatives`: 1024×1024 PNG е source/review output за бъдещите нови assets. След OWNER acceptance 128 px site / 512 px social или други оптимизирани производни се правят само чрез отделна техническа задача. Production delivery format остава отделен checkpoint.
+- `No implicit permission`: договорът не разрешава mass generation, taxonomy промяна, renderer wiring, production replacement, Supabase/backend или redesign на accepted icon.
+- `Implementation evidence`: `prototype-final-ia/ICON_EXECUTION_CONTRACT.md` added at commit `f3117135d06a870479aca1380d781313317bf047`.
+- `Work review`: **PENDING**.
 
 ---
 
@@ -69,6 +90,23 @@
 - `RED-ZONE note`: control/guard files are RED ZONE for normal Execution work; this bootstrap is an explicit OWNER-approved control task.
 - `Guard status`: detector + workflow added. This is **DETECTION LAYER ONLY** until required checks/branch rules are separately enabled and verified.
 - `Known risk`: repository protection is not upgraded by this bootstrap. Do not describe the guard as a guaranteed merge block.
+- `Work verdict`: **PENDING**
+
+---
+
+## WR-002 — Strict Icon Execution Contract
+
+- `Source`: `TOM1-D002`
+- `OWNER verdict`: APPROVED
+- `Scope`: task-specific icon generation/review control only
+- `Contract`: `prototype-final-ia/ICON_EXECUTION_CONTRACT.md`
+- `Evidence commit`: `f3117135d06a870479aca1380d781313317bf047`
+- `Production touched`: **NO**
+- `Supabase/backend touched`: **NO**
+- `Existing accepted icons changed`: **NO**
+- `Taxonomy changed`: **NO**
+- `Rule enforced`: one Execution task = one icon; full critical visual/output rules repeated in each task; only OWNER approves.
+- `Known boundary`: 1024×1024 PNG is review/source output, not automatic production delivery format.
 - `Work verdict`: **PENDING**
 
 ---
