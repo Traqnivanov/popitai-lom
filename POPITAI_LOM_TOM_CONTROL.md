@@ -245,7 +245,44 @@ OWNER acceptance никога не се изфабрикува или предп
 
 Текущият sandbox HEAD се сверява директно с Git при всяка нова сесия; не се hardcode-ва като „вечна“ стойност в същия commit, защото това би създало self-reference.
 
-При TOM-1 → TOM-2 се записва handoff, но TOM-2 не вярва само на текста.
+**При всяка смяна `TOM-X → TOM-Y` handoff е задължителен, дори когато няма извършена продуктова работа.** Видът на handoff-а се определя според реалното състояние:
+
+### CLEAN TRANSFER HANDOFF
+Използва се само когато след активирането на текущия TOM няма нови продуктови решения, Execution tasks, implementation commits, FOUND-ISSUE или blockers, които трябва да бъдат предадени.
+
+Минимално съдържа:
+- `FROM: TOM-X`;
+- `TO: TOM-Y`;
+- `STATUS: clean transfer — no new product implementation`;
+- `OFFICIAL BASE BRANCH` и `BASE SHA`;
+- `SANDBOX BRANCH`;
+- реалния sandbox HEAD към момента на handoff-а;
+- OPEN WR IDs;
+- потвърждение за OPEN FOUND-ISSUES / BLOCKERS или `none`;
+- `NEXT ALLOWED ACTION`;
+- `TOM-X CONTROL ENDS HERE`.
+
+### FULL HANDOFF
+Използва се когато има поне едно ново решение, task, commit, QA резултат, FOUND-ISSUE, blocker, незавършена работа или друг state, който следващият TOM трябва да наследи.
+
+Съдържа минимум:
+- current TOM state;
+- exact BASE SHA и sandbox HEAD;
+- последен Decision ID и Task ID;
+- OWNER-approved state;
+- implementation commits;
+- TOM VERIFIED items;
+- pending QA;
+- open WR IDs;
+- FOUND-ISSUE;
+- blockers;
+- забранени области, когато са релевантни;
+- exact NEXT ALLOWED ACTION;
+- `TOM-X CONTROL ENDS HERE`.
+
+Handoff-ът сам по себе си **не прехвърля окончателно контрола**. Старият TOM приключва активната си контролна роля с handoff-а, но новият TOM става `CURRENT TOM` и може да започне нов implementation само след успешен `STATE RECOVERY CHECK` по §19. Ако recovery check открие несъответствие, контролът преминава в `STATE MISMATCH / RECOVERY` и нова implementation работа е забранена до изясняване.
+
+Новият TOM не вярва само на handoff текста.
 
 ## 19. STATE RECOVERY CHECK
 
