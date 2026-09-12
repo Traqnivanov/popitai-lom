@@ -46,7 +46,7 @@
   }
   function iconMarkup(name,className='service-entry-icon'){
     const src=iconAsset(name);
-    return src?`<span class="${className}" aria-hidden="true"><img src="${src}" alt="" width="128" height="128" loading="lazy"></span>`:'';
+    return src?`<span class="${className}" aria-hidden="true"><img src="${src}" alt="" width="128" height="128"></span>`:'';
   }
   function familyDesktopCard(name){
     const subs=familySubs(name).slice(0,4);
