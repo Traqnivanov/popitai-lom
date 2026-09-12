@@ -16,13 +16,13 @@
 - `SANDBOX BRANCH`: `sandbox/work-gap-review`
 - `SANDBOX HEAD`: **VERIFY DIRECTLY IN GIT AT SESSION START**
 - `CURRENT STAGE`: Stage 2 — Icon system approval
-- `CURRENT PRODUCT TASK`: завършване на първата icon/discovery група `Майстори, ремонти и дом`
-- `CURRENT CONTROL TASK`: **TOM1-T001 correction cycle active; icon master→site/social derivative pipeline locked by OWNER**
-- `LAST TOM DECISION`: `TOM1-D004`
-- `OPEN WR IDs`: `WR-001`, `WR-002`, `WR-003`, `WR-004` — Work review pending
-- `OPEN FOUND-ISSUES`: `FI-001` — generic positional emoji renderer remains in `prototype-service-views.js`
-- `BLOCKERS`: `Къртене и извозване` candidate is NOT accepted and must pass corrected 1024×1024 alpha + brand-color requirements; `Цялостни ремонти` exact semantic mapping remains awaiting separate OWNER verdict
-- `NEXT ALLOWED ACTION`: continue only `TOM1-T001` correction for `Къртене и извозване` under the refined `ICON_EXECUTION_CONTRACT.md`; no second icon and no prototype wiring before OWNER verdict.
+- `CURRENT PRODUCT TASK`: първата icon/discovery група `Майстори, ремонти и дом` е semantic 10/10; deterministic sandbox wiring checkpoint е имплементиран и чака visual/browser QA + OWNER acceptance after QA
+- `CURRENT CONTROL TASK`: **TOM1-T003 — first-group deterministic icon wiring checkpoint**
+- `LAST TOM DECISION`: `TOM1-D005`
+- `OPEN WR IDs`: `WR-001`, `WR-002`, `WR-003`, `WR-004`, `WR-005` — Work review pending
+- `OPEN FOUND-ISSUES`: няма отворен FI от first-group renderer; `FI-001` е FIXED IN SANDBOX / WORK REVIEW PENDING
+- `BLOCKERS`: реалната visual/browser QA на wiring-а още не е изпълнена; Browser Connector беше недостъпен. Това не позволява да се обяви OWNER ACCEPTED AFTER QA или official/prod wiring.
+- `NEXT ALLOWED ACTION`: visual/browser QA на текущия sandbox wiring (desktop + 390 px + broken-image/overflow check). Не се прави production wiring и social wiring не се смесва с този checkpoint.
 
 > Забележка: SANDBOX HEAD не се hardcode-ва като самореферентна „вечна“ стойност в същия state commit. Всеки TOM/Work го сверява директно от Git и сравнява с `OFFICIAL BASE SHA`.
 
@@ -98,6 +98,27 @@
 
 ---
 
+## TOM1-D005 — First-group deterministic icon wiring checkpoint
+
+- `Дата`: 12.09.2026
+- `Тема`: deterministic sandbox wiring само за owner-accepted first repair group.
+- `OWNER verdict`: **SANDBOX IMPLEMENTATION APPROVED** — OWNER прие плана и даде „Ок действия“ след изричното уточнение `binary assets → registry → QA`.
+- `Scope`: първата 10/10 група `Майстори, ремонти и дом`; site 128 px layer само. Social wiring остава отделно.
+- `Последователност`: първо двата липсващи accepted binary assets са добавени физически в repo; след това е създаден exact-name registry; чак след това renderer wiring.
+- `Registry`: `prototype-final-ia/prototype-icon-registry.js`; exact semantic name → exact accepted site asset. `Майстори и ремонти` alias-ва shared `Цялостни ремонти` asset. Няма AI/free-text guessing и няма positional selection.
+- `Fallback`: липса на owner-approved registry mapping → **text only**. Generic emoji не се показва като semantic fallback на service cards.
+- `Renderer`: `prototype-service-views.js::serviceGroup()` вече не използва `icons[i % icons.length]`; routes/Add logic са запазени. Add-mode/forms остават text-first и не получават декоративни taxonomy icons.
+- `Masters surface`: десетте accepted entries получават exact icon+text; 64 px desktop / 56 px mobile.
+- `Static QA`: PASS за 10/10 registry paths existing in repo; PASS за physical presence на `full-renovation.webp` и `demolition-debris.webp`; PASS за removal на positional renderer от service surface; PASS за unchanged `href` construction in compared code; PASS за text-only behavior when mapping липсва; PASS за scoped Git diff.
+- `Visual/browser QA`: **PENDING** — не е симулиран PASS. Browser Connector е недостъпен в текущата сесия, затова 390 px/desktop overflow/broken-image visual check остава следващият gate.
+- `No overclaim`: static QA/TOM verification не е OWNER acceptance after QA, Work acceptance, official review approval или production approval.
+- `Production touched`: **NO**.
+- `Supabase/backend touched`: **NO**.
+- `Social wiring touched`: **NO**.
+- `Work review`: **PENDING**.
+
+---
+
 ## WR-001 — TOM control bootstrap
 
 - `Source`: `TOM1-D001`
@@ -147,16 +168,12 @@
 ## WR-003 — Brand color contract refinement + TOM1-T001 first candidate QA
 
 - `Source`: `TOM1-D003` / `TOM1-T001`
-- `OWNER verdict`: APPROVED for rule refinement; **candidate icon NOT ACCEPTED**.
-- `Scope`: icon visual-language contract and current `Къртене и извозване` correction only.
-- `First candidate semantic verdict`: **PASS DIRECTION** — professional demolition hammer + broken masonry + construction debris; no truck; concept remains.
-- `First candidate technical QA`: **FAIL** — supplied PNG is `1536×1536`, not 1024×1024; image mode is RGB with no alpha channel, therefore the black background is real image content rather than transparent alpha.
-- `First candidate visual QA`: **CORRECTION REQUIRED** — yellow dominates the tool and does not match the established repeated dark-blue/gold family treatment.
-- `Required correction`: exact 1024×1024 PNG; true alpha transparency; retain current semantic composition; dark blue as the main realistic painted/polymer body treatment where logical; gold repeated on suitable secondary panels/buttons/connections/small technical details; natural metal/rubber/brick/concrete remain realistic.
-- `No second icon`: **ENFORCED** until OWNER verdict on corrected `TOM1-T001` candidate.
+- `OWNER verdict`: APPROVED for rule refinement; първият candidate е superseded от по-късно OWNER-accepted master.
+- `Scope`: icon visual-language contract and `Къртене и извозване` correction cycle.
+- `Historical first candidate QA`: semantic direction PASS; technical FAIL (1536×1536 RGB/no alpha) + color correction required.
+- `Current outcome`: `Къртене и извозване` впоследствие е OWNER ACCEPTED като 1024×1024 PNG RGBA master с accepted 128 site + 512 social derivatives; индивидуалният current status се пази в `ICON_REVIEW_LOG.md`.
 - `Contract evidence`: `eff9305ba1daf92096c042efd8feddfa34578be8`.
 - `Production touched`: **NO**.
-- `Prototype wiring touched`: **NO**.
 - `Work verdict`: **PENDING**.
 
 ---
@@ -174,8 +191,29 @@
 - `256 px`: not part of the baseline; future evidence + separate approval required.
 - `Contract evidence commit`: `3201937fcd061f66ac9c6e29b14bccae7bd98b99`.
 - `Production touched`: **NO**.
-- `Prototype wiring touched`: **NO**.
+- `Prototype wiring touched`: **NO** by this decision itself.
 - `Supabase/backend touched`: **NO**.
+- `Work verdict`: **PENDING**.
+
+---
+
+## WR-005 — First repair-group deterministic site wiring
+
+- `Source`: `TOM1-D005`.
+- `OWNER verdict`: **SANDBOX IMPLEMENTATION APPROVED; OWNER ACCEPTANCE AFTER QA PENDING**.
+- `Scope`: site icon wiring for accepted first repair group only.
+- `Binary dependency evidence`: commit `a1d385e7948ded913b8136e94f191124363b9dad` adds `icon-review-assets/site/full-renovation.webp` and `icon-review-assets/site/demolition-debris.webp` before registry wiring.
+- `Registry evidence`: commit `76df87799bc53b51739dd14ceb7e9ca014059851` adds `prototype-icon-registry.js`; `a04b5fe5a8880124ae95486641379a1f16e625d5` loads it before service views.
+- `Renderer/styles evidence`: deterministic wiring and compatibility/style passes culminate at sandbox HEAD `b18c7c7777647caafb276ed2670806bca786212e` before this queue record; live HEAD must still be re-fetched.
+- `Static dependency QA`: 10/10 first-group registry file names exist physically under `icon-review-assets/site/`; new binary blob SHAs are `3a119a53...` (full renovation) and `bf9fbd61...` (demolition).
+- `Renderer QA`: `serviceGroup()` no longer uses `icons[i % icons.length]`; unmapped entries have no semantic image and remain text-only; Add routes keep existing construction.
+- `Masters QA`: exact 10 `master-chip` selectors are preserved for regression compatibility; icon+text layout uses 64 px desktop and 56 px mobile.
+- `Git scope QA`: compare from pre-wiring `980c9aa398e6b0840640c1053b59476db0ea0b70` to wiring HEAD `b18c7c7777647caafb276ed2670806bca786212e` changes only six files: two site WebP assets, `index.html`, new registry, `prototype-service-views.js`, `prototype-services.css`.
+- `Known untouched legacy`: generic emoji array remains in `prototype-core.js`; it was not deleted without a separate usage audit. The approved service renderer no longer consumes it positionally.
+- `Visual/browser QA`: **PENDING** — Browser Connector unavailable; no claim of real desktop/390 px rendering PASS yet.
+- `Production touched`: **NO**.
+- `Supabase/backend touched`: **NO**.
+- `Social wiring touched`: **NO**.
 - `Work verdict`: **PENDING**.
 
 ---
@@ -184,24 +222,20 @@
 
 - `Дата`: 12.09.2026
 - `Тип`: READ-ONLY AUDIT / NO PRODUCT CHANGE
-- `Scope`: exact current state на 10-те owner-approved visible discovery entries и тяхното icon acceptance състояние.
-- `Доказано приети semantic assets`: `Бани и плочки`, `ВиК`, `Електро`, `Покриви`, `Шпакловка / гипсокартон / боядисване`, `Дограма и врати`, `Отопление и климатици`, `Монтажи и мебели`.
-- `Неотворени повторно`: горните осем assets остават приети; TOM-1 няма основание да ги redesign-ва.
-- `Нерешено 1`: `Цялостни ремонти` е записано в draft registry като `SHARED ICON → hammer`, но exact registry map все още е `EXACT MAP ACCEPTANCE PENDING`; не се счита за нов owner-accepted semantic asset само защото hammer SVG съществува.
-- `Нерешено 2`: `Къртене и извозване` е `OPEN`; договорът изисква ясен demolition/debris знак и изрично забранява обикновен cargo truck. OWNER впоследствие разреши изпълнение на exact concept чрез `TOM1-T001`; final asset verdict остава pending.
-- `Asset evidence`: review asset directory съдържа приетите осем assets от тази група; няма отделен owner-accepted `whole renovation` или `demolition/debris` review asset.
-- `Implementation boundary`: няма prototype wiring преди OWNER acceptance на конкретния asset.
+- `Scope`: exact state на 10-те owner-approved visible discovery entries и тяхното icon acceptance състояние в момента на първоначалния audit.
+- `Доказано приети тогава`: `Бани и плочки`, `ВиК`, `Електро`, `Покриви`, `Шпакловка / гипсокартон / боядисване`, `Дограма и врати`, `Отопление и климатици`, `Монтажи и мебели`.
+- `Исторически нерешени тогава`: `Цялостни ремонти` и `Къртене и извозване`; и двете впоследствие са OWNER ACCEPTED и имат точни derivatives по contract.
+- `Implementation boundary`: audit-ът сам не разрешава wiring; wiring е разрешен по-късно с `TOM1-D005`.
 - `Work review`: PENDING together with sandbox work.
 
-### FI-001 — Generic positional service icons remain
+### FI-001 — Generic positional service icons
 
 - `Location`: `prototype-final-ia/prototype-service-views.js` → `serviceGroup()`.
-- `Finding`: generic icon се избира чрез `icons[i % icons.length]`, а `prototype-core.js` още държи общ emoji масив.
-- `Risk`: позиционен generic знак може да не съответства на конкретната taxonomy семантика и противоречи на approved deterministic registry direction.
-- `Blocking current OWNER decision`: **NO** — не пречи да се решат двете отворени semantic mappings.
-- `Blocking later implementation`: **YES** — преди окончателно deterministic icon wiring този renderer трябва да бъде заменен/ограничен чрез одобрения registry contract.
-- `RED-ZONE/protected`: NO, но е prototype implementation change и изисква отделен TOM task след приложим OWNER approval.
-- `Status`: RECORDED / NOT FIXED.
+- `Original finding`: generic icon се избираше чрез `icons[i % icons.length]`, а `prototype-core.js` държи общ emoji масив.
+- `Risk`: позиционен generic знак може да не съответства на конкретната taxonomy семантика и противоречи на deterministic registry direction.
+- `Resolution`: **FIXED IN SANDBOX** по `TOM1-D005` — service renderer използва exact-name registry; при липса на approved mapping показва text only.
+- `Legacy note`: общият emoji масив в `prototype-core.js` не е изтрит без usage audit; FI-001 се отнася до positional service renderer, който вече не го използва.
+- `Status`: FIXED IN SANDBOX / WORK REVIEW PENDING / VISUAL QA PENDING.
 
 ---
 
