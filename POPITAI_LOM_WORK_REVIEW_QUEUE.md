@@ -17,9 +17,9 @@
 - `SANDBOX HEAD`: **VERIFY DIRECTLY IN GIT AT SESSION START**
 - `CURRENT STAGE`: Stage 2 — Icon system approval
 - `CURRENT PRODUCT TASK`: завършване на първата icon/discovery група `Майстори, ремонти и дом`
-- `CURRENT CONTROL TASK`: **TOM1-T001 correction cycle active; icon brand-color contract refined by OWNER**
-- `LAST TOM DECISION`: `TOM1-D003`
-- `OPEN WR IDs`: `WR-001`, `WR-002`, `WR-003` — Work review pending
+- `CURRENT CONTROL TASK`: **TOM1-T001 correction cycle active; icon master→site/social derivative pipeline locked by OWNER**
+- `LAST TOM DECISION`: `TOM1-D004`
+- `OPEN WR IDs`: `WR-001`, `WR-002`, `WR-003`, `WR-004` — Work review pending
 - `OPEN FOUND-ISSUES`: `FI-001` — generic positional emoji renderer remains in `prototype-service-views.js`
 - `BLOCKERS`: `Къртене и извозване` candidate is NOT accepted and must pass corrected 1024×1024 alpha + brand-color requirements; `Цялостни ремонти` exact semantic mapping remains awaiting separate OWNER verdict
 - `NEXT ALLOWED ACTION`: continue only `TOM1-T001` correction for `Къртене и извозване` under the refined `ICON_EXECUTION_CONTRACT.md`; no second icon and no prototype wiring before OWNER verdict.
@@ -58,7 +58,7 @@
 - `Pre-show gate`: Execution Chat проверява всяко условие преди показване; TOM проверява резултата; QA PASS не е OWNER acceptance.
 - `Approval authority`: **само OWNER може да даде окончателен `ACCEPTED` verdict за нова икона**.
 - `Relationship to existing assets`: договорът НЕ отваря повторно вече owner-accepted assets и НЕ променя техния verdict.
-- `Relationship to derivatives`: 1024×1024 PNG е source/review output за бъдещите нови assets. След OWNER acceptance 128 px site / 512 px social или други оптимизирани производни се правят само чрез отделна техническа задача. Production delivery format остава отделен checkpoint.
+- `Relationship to derivatives`: 1024×1024 PNG е source/review output за бъдещите нови assets; точният след-acceptance derivative pipeline е доуточнен и заключен по-късно в `TOM1-D004`.
 - `No implicit permission`: договорът не разрешава mass generation, taxonomy промяна, renderer wiring, production replacement, Supabase/backend или redesign на accepted icon.
 - `Implementation evidence`: `prototype-final-ia/ICON_EXECUTION_CONTRACT.md` added at commit `f3117135d06a870479aca1380d781313317bf047`.
 - `Work review`: **PENDING**.
@@ -79,6 +79,21 @@
 - `Граница`: цветовете никога не трябва да правят предмета физически или професионално неправдоподобен.
 - `Current task effect`: `TOM1-T001` запазва одобрената demolition/debris концепция, но жълто-доминиращият къртач се връща за brand-color correction; concept не се redesign-ва.
 - `Implementation evidence`: `prototype-final-ia/ICON_EXECUTION_CONTRACT.md` updated at commit `eff9305ba1daf92096c042efd8feddfa34578be8`.
+- `Work review`: **PENDING**.
+
+---
+
+## TOM1-D004 — Master → site/social derivative pipeline
+
+- `Дата`: 12.09.2026
+- `Тема`: точният технически pipeline след OWNER acceptance на нов icon master.
+- `Evidence`: Work proof-ът вече използва отделни 128 px site и 512 px social WebP производни, валидирани при 20–24 px, desktop/card, реален 390 px mobile и 1200×630 social composition. Social Card layer използва отделна 1200×630 композиция, а не просто уголемена site икона.
+- `OWNER verdict`: **APPROVED — LOCK THIS MODEL**.
+- `Избрано решение`: приетият 1024×1024 PNG с true alpha остава master/review source. След `ACCEPTED` се произвеждат от същия master: 128×128 WebP за site и отделен 512×512 WebP за social. 512 px asset-ът се използва вътре в 1200×630 social/OG композицията.
+- `No redraw`: след OWNER acceptance не се прерисува концепцията за site/social; производните са технически derivatives на същия приет master.
+- `256 px`: не е част от базовия pipeline и не се създава превантивно. Може да се добави само ако бъде доказана реална browser/performance/quality нужда и има отделно TOM/OWNER разрешение.
+- `Boundary`: решението не разрешава prototype wiring, production wiring, renderer промяна, taxonomy промяна или Supabase/backend работа.
+- `Implementation evidence`: `prototype-final-ia/ICON_EXECUTION_CONTRACT.md` section 16 added at commit `3201937fcd061f66ac9c6e29b14bccae7bd98b99`.
 - `Work review`: **PENDING**.
 
 ---
@@ -124,7 +139,7 @@
 - `Existing accepted icons changed`: **NO**
 - `Taxonomy changed`: **NO**
 - `Rule enforced`: one Execution task = one icon; full critical visual/output rules repeated in each task; only OWNER approves.
-- `Known boundary`: 1024×1024 PNG is review/source output, not automatic production delivery format.
+- `Known boundary`: 1024×1024 PNG е review/source output; точният derivative pipeline е заключен в `TOM1-D004` / `WR-004`.
 - `Work verdict`: **PENDING**
 
 ---
@@ -142,6 +157,25 @@
 - `Contract evidence`: `eff9305ba1daf92096c042efd8feddfa34578be8`.
 - `Production touched`: **NO**.
 - `Prototype wiring touched`: **NO**.
+- `Work verdict`: **PENDING**.
+
+---
+
+## WR-004 — Owner-approved icon derivative pipeline
+
+- `Source`: `TOM1-D004`
+- `OWNER verdict`: **APPROVED**.
+- `Scope`: post-acceptance icon derivative/output contract only.
+- `Master`: 1024×1024 PNG with true alpha.
+- `Site derivative`: 128×128 optimized WebP.
+- `Social derivative`: 512×512 optimized WebP.
+- `Social output`: 512 px derivative is an input to the separate 1200×630 social/OG composition; social output is not a scaled site card.
+- `No redraw`: derivatives come from the same accepted master.
+- `256 px`: not part of the baseline; future evidence + separate approval required.
+- `Contract evidence commit`: `3201937fcd061f66ac9c6e29b14bccae7bd98b99`.
+- `Production touched`: **NO**.
+- `Prototype wiring touched`: **NO**.
+- `Supabase/backend touched`: **NO**.
 - `Work verdict`: **PENDING**.
 
 ---
