@@ -1,0 +1,53 @@
+name: TOM red-zone guard
+
+on:
+  pull_request:
+    branches:
+      - 'prototype/stage2-icon-system-approval'
+  workflow_dispatch:
+    inputs:
+      base:
+        description: 'Base Git ref/SHA'
+        required: true
+        default: 'prototype/stage2-icon-system-approval'
+      head:
+        description: 'Head Git ref/SHA'
+        required: true
+        default: 'sandbox/work-gap-review'
+
+permissions:
+  contents: read
+
+jobs:
+  red-zone-detection:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve refs for pull request
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "BASE=${{ github.event.pull_request.base.sha }}" >> "$GITHUB_ENV"
+          echo "HEAD=${{ github.event.pull_request.head.sha }}" >> "$GITHUB_ENV"
+
+      - name: Resolve refs for manual run
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          echo "BASE=${{ inputs.base }}" >> "$GITHUB_ENV"
+          echo "HEAD=${{ inputs.head }}" >> "$GITHUB_ENV"
+
+      - name: Fetch named refs for manual run
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          git fetch origin "${BASE}" "${HEAD}" || true
+
+      - name: Detect TOM RED-ZONE changes
+        run: python .github/scripts/check_tom_red_zone.py "$BASE" "$HEAD"
+
+      - name: Enforcement note
+        if: always()
+        run: |
+          echo 'This workflow is a detection layer.'
+          echo 'It is not a guaranteed merge block unless GitHub required checks / branch rules are separately enabled and verified.'
