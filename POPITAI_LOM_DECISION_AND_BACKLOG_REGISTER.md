@@ -23,7 +23,7 @@
 - всяко ново решение или промяна на статус записва `Work номер + дата + owner verdict + evidence/SHA`, когато има такова;
 - решение без доказан Work източник не се приписва по памет; отбелязва се като legacy/неуточнен произход до проверка;
 - по-нов Work може да замени старо решение само при изрично owner решение; старият запис остава история с `REPLACED`, а не се изтрива;
-- текущият чат е **Work 2 — 10–11.09.2026**.
+- текущият чат е **Work 2 — 10–13.09.2026**.
 
 | Work | Дата | Доказан icon scope / evidence |
 | --- | --- | --- |
@@ -31,6 +31,7 @@
 | Work 2 | 10.09.2026 | Проверява прекъснатото качване и публикува идентичното дърво като remote review commit `e60655186677722f1e319016c9602857e99aebef`; прави пълния icon audit и записва следващия owner contract. |
 | Work 2 | 11.09.2026 | Owner приема consolidation доклада: 9 Services families и 45 visible discovery entries вместо 59 отделни видими leaves; старите точни понятия остават aliases/filters/cross-links, без промяна на owner/data/schema. |
 | Work 2 | 13.09.2026 | Owner добавя `Пътнически превоз` като отделен четвърти вход в транспортната група за обяви на превозвачи, включително пътувания в чужбина; общо 46 visible entries, без промяна на owner/data/schema и без дублиране на проверената информация в Info Лом. |
+| Work 2 | 13.09.2026 | Owner приема цялата visual група `Красота и лична грижа`: един family знак и точни leaf знаци за `Фризьор и бръснар`, `Маникюр и педикюр`, `Козметика и грим` и `Немедицински масаж`; техническата review интеграция не разрешава production wiring. |
 
 ## 2. Допустими статуси
 
@@ -95,7 +96,8 @@
 | Home cleaning replacement | **ACCEPTED IN ICON REVIEW SCOPE** | Work 2 · 10.09.2026 · owner verdict `ok така`; evidence `bdc2c037b7114394400b97b956609e3e445226bc` | `Почистване на дом` вече е кофа + моп + един препарат + микрофибърна кърпа. Приетата по-рано прахосмукачка е заменена, защото е твърде тясна; голямата професионална количка остава семантично подходяща за `Офиси и входове`, не за дома. | Прието в текущия review scope; production wiring остава blocked. |
 | Second group — repair essentials | **ACCEPTED IN ICON REVIEW SCOPE** | Work 2 · 10.09.2026 · owner verdicts `да ок са` и `това ми се струва много по-подходящо`; evidence `bdc2c037b7114394400b97b956609e3e445226bc` | Приети са `Бани и плочки`, `Електро` и коригираният `Покриви`: мистрията е отхвърлена като неточна и заменена с отделна червена керемида. Desktop/390 px/24–64 px/social QA е преминат. | Следващата група не наследява автоматично approval. |
 | Third group — home systems | **ACCEPTED IN ICON REVIEW SCOPE** | Work 2 · 10.09.2026 · owner verdict `приемам`; evidence `bdc2c037b7114394400b97b956609e3e445226bc` | Приети са `Шпакловка / гипсокартон / боядисване`, `Дограма и врати`, `Отопление и климатици`. Комбинираните знаци покриват целия Master leaf; desktop/390 px/24–64 px/social QA е преминат. | Следващата група не наследява автоматично approval. |
-| Transport group | **OWNER VISUALLY ACCEPTED — REVIEW INTEGRATION IN PROGRESS** | Work 2 · 13.09.2026 · owner verdicts за товарен транспорт, хамали, доставки и коригирания пътнически превоз; final evidence SHA се записва след атомичното review качване | Четирите отделни смисъла използват точни assets: товарен автомобил, хамали с мебели, доставка и пътнически бус с хора и багаж. Site и social вариантите следват един source concept. | Desktop/390 px browser QA и exact review SHA преди финално приемане на интеграцията. |
+| Transport group | **ACCEPTED IN ICON REVIEW SCOPE** | Work 2 · 13.09.2026 · owner verdicts за товарен транспорт, хамали, доставки и коригирания пътнически превоз; evidence `30e722ad5ab9de755acadf34974cf0ddc9eea3fc` | Четирите отделни смисъла използват точни assets: товарен автомобил, хамали с мебели, доставка и пътнически бус с хора и багаж. Site и social вариантите следват един source concept; desktop/390 px browser QA е преминат. | Следващата група не наследява автоматично approval. |
+| Beauty and personal care group | **OWNER VISUALLY ACCEPTED — REVIEW INTEGRATION IN PROGRESS** | Work 2 · 13.09.2026 · owner приема общия family знак и четирите exact leaf знака; final evidence SHA се записва след атомичното review качване | Family знакът е комбиниран beauty комплект. Exact знаците са отделни за `Фризьор и бръснар`, `Маникюр и педикюр`, `Козметика и грим` и `Немедицински масаж`; site и social вариантите идват от един и същ source concept. | Source regression, desktop/390 px browser QA и exact review SHA преди финално приемане на интеграцията. |
 | Production wiring | **PRODUCTION CHECKPOINT** | Current Master + Work 1/2 · owner boundary | Няма mass replacement, schema/storage промяна или реално social-image generation преди финален icon inventory, Stage 2 acceptance и отделно owner разрешение. | Няма production работа сега. |
 
 ## 4B. Services discovery consolidation — owner verdict

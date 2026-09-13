@@ -26,7 +26,12 @@
     'Товарен транспорт':Object.freeze({site:`${siteBase}cargo-transport.webp`,sharedKey:'cargo-transport'}),
     'Хамали и преместване':Object.freeze({site:`${siteBase}movers.webp`,sharedKey:'movers'}),
     'Доставки':Object.freeze({site:`${siteBase}delivery.webp`,sharedKey:'delivery'}),
-    'Пътнически превоз':Object.freeze({site:`${siteBase}passenger-transport.webp`,sharedKey:'passenger-transport'})
+    'Пътнически превоз':Object.freeze({site:`${siteBase}passenger-transport.webp`,sharedKey:'passenger-transport'}),
+    'Красота и лична грижа':Object.freeze({site:`${siteBase}beauty-personal-care.webp`,sharedKey:'beauty-personal-care'}),
+    'Фризьор и бръснар':Object.freeze({site:`${siteBase}hair-barber.webp`,sharedKey:'hair-barber'}),
+    'Маникюр и педикюр':Object.freeze({site:`${siteBase}manicure-pedicure.webp`,sharedKey:'manicure-pedicure'}),
+    'Козметика и грим':Object.freeze({site:`${siteBase}cosmetics-makeup.webp`,sharedKey:'cosmetics-makeup'}),
+    'Немедицински масаж':Object.freeze({site:`${siteBase}nonmedical-massage.webp`,sharedKey:'nonmedical-massage'})
   });
   const aliases=Object.freeze({
     'Майстори и ремонти':'Цялостни ремонти'

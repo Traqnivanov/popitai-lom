@@ -125,6 +125,13 @@ for(const label of ['Товарен транспорт','Хамали и пре�
 }
 const transportAdd=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Транспорт, преместване и доставки')}&mode=add&type=${encodeURIComponent('Дава')}`));
 assert(!transportAdd.includes('service-card-icon'),'Transport Add mode remains text-only');
+const beautyBrowse=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Красота и лична грижа')}`));
+assert.equal((beautyBrowse.match(/class="service-card-icon"/g)||[]).length,4,'Beauty browse exposes the four owner-approved leaf icons');
+for(const label of ['Красота и лична грижа','Фризьор и бръснар','Маникюр и педикюр','Козметика и грим','Немедицински масаж']){
+  assert(services.iconAsset(label),`${label}: exact approved icon mapping`);
+}
+const beautyAdd=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Красота и лична грижа')}&mode=add&type=${encodeURIComponent('Дава')}`));
+assert(!beautyAdd.includes('service-card-icon'),'Beauty Add mode remains text-only');
 const encodedSeek=encodeURIComponent('Търси');
 const encodedOffer=encodeURIComponent('Дава');
 for(const target of [
