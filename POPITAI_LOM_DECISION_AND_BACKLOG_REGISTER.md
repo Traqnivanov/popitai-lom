@@ -30,6 +30,7 @@
 | Work 1 | 10.09.2026 | Подготвя пълната начална draft taxonomy/icon карта, конкретните icon proofs и локалния commit `39f442b00885b436339bafee833ecb552eda813d`. |
 | Work 2 | 10.09.2026 | Проверява прекъснатото качване и публикува идентичното дърво като remote review commit `e60655186677722f1e319016c9602857e99aebef`; прави пълния icon audit и записва следващия owner contract. |
 | Work 2 | 11.09.2026 | Owner приема consolidation доклада: 9 Services families и 45 visible discovery entries вместо 59 отделни видими leaves; старите точни понятия остават aliases/filters/cross-links, без промяна на owner/data/schema. |
+| Work 2 | 13.09.2026 | Owner добавя `Пътнически превоз` като отделен четвърти вход в транспортната група за обяви на превозвачи, включително пътувания в чужбина; общо 46 visible entries, без промяна на owner/data/schema и без дублиране на проверената информация в Info Лом. |
 
 ## 2. Допустими статуси
 
@@ -94,6 +95,7 @@
 | Home cleaning replacement | **ACCEPTED IN ICON REVIEW SCOPE** | Work 2 · 10.09.2026 · owner verdict `ok така`; evidence `bdc2c037b7114394400b97b956609e3e445226bc` | `Почистване на дом` вече е кофа + моп + един препарат + микрофибърна кърпа. Приетата по-рано прахосмукачка е заменена, защото е твърде тясна; голямата професионална количка остава семантично подходяща за `Офиси и входове`, не за дома. | Прието в текущия review scope; production wiring остава blocked. |
 | Second group — repair essentials | **ACCEPTED IN ICON REVIEW SCOPE** | Work 2 · 10.09.2026 · owner verdicts `да ок са` и `това ми се струва много по-подходящо`; evidence `bdc2c037b7114394400b97b956609e3e445226bc` | Приети са `Бани и плочки`, `Електро` и коригираният `Покриви`: мистрията е отхвърлена като неточна и заменена с отделна червена керемида. Desktop/390 px/24–64 px/social QA е преминат. | Следващата група не наследява автоматично approval. |
 | Third group — home systems | **ACCEPTED IN ICON REVIEW SCOPE** | Work 2 · 10.09.2026 · owner verdict `приемам`; evidence `bdc2c037b7114394400b97b956609e3e445226bc` | Приети са `Шпакловка / гипсокартон / боядисване`, `Дограма и врати`, `Отопление и климатици`. Комбинираните знаци покриват целия Master leaf; desktop/390 px/24–64 px/social QA е преминат. | Следващата група не наследява автоматично approval. |
+| Transport group | **OWNER VISUALLY ACCEPTED — REVIEW INTEGRATION IN PROGRESS** | Work 2 · 13.09.2026 · owner verdicts за товарен транспорт, хамали, доставки и коригирания пътнически превоз; final evidence SHA се записва след атомичното review качване | Четирите отделни смисъла използват точни assets: товарен автомобил, хамали с мебели, доставка и пътнически бус с хора и багаж. Site и social вариантите следват един source concept. | Desktop/390 px browser QA и exact review SHA преди финално приемане на интеграцията. |
 | Production wiring | **PRODUCTION CHECKPOINT** | Current Master + Work 1/2 · owner boundary | Няма mass replacement, schema/storage промяна или реално social-image generation преди финален icon inventory, Stage 2 acceptance и отделно owner разрешение. | Няма production работа сега. |
 
 ## 4B. Services discovery consolidation — owner verdict
@@ -101,7 +103,7 @@
 | Тема | Статус | Work / дата / verdict | Решение / граница |
 | --- | --- | --- | --- |
 | Девет Services families | **APPROVED** | Work 2 · 11.09.2026 · owner: `Ок, приемам` | Деветте семейства остават. По-нататъшното им сливане би смесило различни потребителски задачи. |
-| Видими discovery entries | **APPROVED — IMPLEMENTED IN REVIEW PROTOTYPE** | Work 2 · 11.09.2026 · owner приема финалния доклад; implementation `38ef8fb2e48b2e8d538232e64d0e785757f93e96` | 59-те Master понятия са консолидирани до 45 видими входа. Точната карта е в Master §5.1.2; source regression и реална desktop/390 px browser QA са преминати. |
+| Видими discovery entries | **APPROVED — REVIEW PROTOTYPE UPDATE IN PROGRESS** | Work 2 · 11.09.2026: 45 входа; Work 2 · 13.09.2026: owner добавя `Пътнически превоз` | Текущо са 46 видими входа. Точната карта е в Master §5.1.2. Допълнението е само discovery/alias слой, без data migration или нов owner. |
 | Exact intent preservation | **LOCKED WITH CONSOLIDATION** | Work 2 · 11.09.2026 | Старите имена не се губят: остават контролирани aliases, filters и cross-links. Един record продължава да има един lifecycle owner. |
 | `Други професионални услуги` | **APPROVED AS FALLBACK** | Work 2 · 11.09.2026 | Не е отделна visible card. Остава достъпно през form/search fallback. |
 | Data/backend граница | **NO CHANGE / PRODUCTION BLOCKED** | Current Master + Work 2 | Решението не разрешава data migration, Supabase/schema/RLS, owner/form, production route или Stage 3 промяна. |

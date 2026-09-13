@@ -83,7 +83,7 @@ assert(interactions.includes('function afterRender'),'interactions are attached 
 
 // 2. Offer-only service creation, including hostile/legacy input normalization.
 assert.equal(contracts.SERVICE_OFFER_TYPE,'Дава');
-assert.equal(services.structuredFamilies.reduce((sum,family)=>sum+family.length-1,0),45,'Services exposes exactly 45 consolidated entries');
+assert.equal(services.structuredFamilies.reduce((sum,family)=>sum+family.length-1,0),46,'Services exposes exactly 46 consolidated entries');
 assert.equal(services.familyNames.length,9,'Services keeps exactly nine families');
 assert(!services.services().includes('Друга услуга'),'generic other service is not a visible family card');
 assert.equal(contracts.serviceVisibleEntry('Офиси и входове'),'Почистване');
@@ -118,6 +118,13 @@ for(const label of ['Почистване','Пране на мека мебел 
 }
 const cleaningAdd=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Почистване и поддръжка')}&mode=add&type=${encodeURIComponent('Дава')}`));
 assert(!cleaningAdd.includes('service-card-icon'),'Cleaning Add mode remains text-only');
+const transportBrowse=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Транспорт, преместване и доставки')}`));
+assert.equal((transportBrowse.match(/class="service-card-icon"/g)||[]).length,4,'Transport browse exposes the four owner-approved icons');
+for(const label of ['Товарен транспорт','Хамали и преместване','Доставки','Пътнически превоз']){
+  assert(services.iconAsset(label),`${label}: exact approved icon mapping`);
+}
+const transportAdd=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Транспорт, преместване и доставки')}&mode=add&type=${encodeURIComponent('Дава')}`));
+assert(!transportAdd.includes('service-card-icon'),'Transport Add mode remains text-only');
 const encodedSeek=encodeURIComponent('Търси');
 const encodedOffer=encodeURIComponent('Дава');
 for(const target of [

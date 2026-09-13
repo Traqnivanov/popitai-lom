@@ -22,7 +22,11 @@
     'Почистване':Object.freeze({site:`${siteBase}home-cleaning.webp`,sharedKey:'home-cleaning'}),
     'Пране на мека мебел и килими':Object.freeze({site:`${siteBase}upholstery-cleaning.webp`,sharedKey:'upholstery-cleaning'}),
     'Двор, градина и озеленяване':Object.freeze({site:`${siteBase}garden-landscaping.webp`,sharedKey:'garden-landscaping'}),
-    'Борба с вредители':Object.freeze({site:`${siteBase}pest-control.webp`,sharedKey:'pest-control'})
+    'Борба с вредители':Object.freeze({site:`${siteBase}pest-control.webp`,sharedKey:'pest-control'}),
+    'Товарен транспорт':Object.freeze({site:`${siteBase}cargo-transport.webp`,sharedKey:'cargo-transport'}),
+    'Хамали и преместване':Object.freeze({site:`${siteBase}movers.webp`,sharedKey:'movers'}),
+    'Доставки':Object.freeze({site:`${siteBase}delivery.webp`,sharedKey:'delivery'}),
+    'Пътнически превоз':Object.freeze({site:`${siteBase}passenger-transport.webp`,sharedKey:'passenger-transport'})
   });
   const aliases=Object.freeze({
     'Майстори и ремонти':'Цялостни ремонти'
