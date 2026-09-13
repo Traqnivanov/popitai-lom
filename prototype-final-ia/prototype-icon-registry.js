@@ -31,10 +31,16 @@
     'Фризьор и бръснар':Object.freeze({site:`${siteBase}hair-barber.webp`,sharedKey:'hair-barber'}),
     'Маникюр и педикюр':Object.freeze({site:`${siteBase}manicure-pedicure.webp`,sharedKey:'manicure-pedicure'}),
     'Козметика и грим':Object.freeze({site:`${siteBase}cosmetics-makeup.webp`,sharedKey:'cosmetics-makeup'}),
-    'Немедицински масаж':Object.freeze({site:`${siteBase}nonmedical-massage.webp`,sharedKey:'nonmedical-massage'})
+    'Немедицински масаж':Object.freeze({site:`${siteBase}nonmedical-massage.webp`,sharedKey:'nonmedical-massage'}),
+    'Детегледачки':Object.freeze({site:`${siteBase}babysitting.webp`,sharedKey:'babysitting'}),
+    'Грижа за възрастни':Object.freeze({site:`${siteBase}elder-care.webp`,sharedKey:'elder-care'}),
+    'Помощ в дома':Object.freeze({site:`${siteBase}home-help.webp`,sharedKey:'home-help'}),
+    'Гледане и разхождане на домашни любимци':Object.freeze({site:`${siteBase}pet-walking.webp`,sharedKey:'pet-walking'}),
+    'Грижа и подстригване на домашни любимци':Object.freeze({site:`${siteBase}pet-grooming.webp`,sharedKey:'pet-grooming'})
   });
   const aliases=Object.freeze({
-    'Майстори и ремонти':'Цялостни ремонти'
+    'Майстори и ремонти':'Цялостни ремонти',
+    'Домашна помощ':'Помощ в дома'
   });
 
   function resolve(name=''){

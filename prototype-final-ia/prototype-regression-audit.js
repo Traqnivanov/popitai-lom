@@ -132,6 +132,20 @@ for(const label of ['Красота и лична грижа','Фризьор и
 }
 const beautyAdd=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Красота и лична грижа')}&mode=add&type=${encodeURIComponent('Дава')}`));
 assert(!beautyAdd.includes('service-card-icon'),'Beauty Add mode remains text-only');
+const careBrowse=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Грижа за хора и животни')}`));
+assert.equal((careBrowse.match(/class="service-card-icon"/g)||[]).length,5,'Care browse exposes the five owner-approved leaf icons');
+for(const label of ['Детегледачки','Грижа за възрастни','Помощ в дома','Гледане и разхождане на домашни любимци','Грижа и подстригване на домашни любимци']){
+  assert(services.iconAsset(label),`${label}: exact approved icon mapping`);
+}
+assert.equal(services.iconAsset('Домашна помощ'),services.iconAsset('Помощ в дома'),'legacy home-help alias resolves to the consolidated leaf');
+const careAdd=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Грижа за хора и животни')}&mode=add&type=${encodeURIComponent('Дава')}`));
+assert(!careAdd.includes('service-card-icon'),'Care Add mode remains text-only');
+for(const key of ['babysitting','elder-care','home-help','pet-walking','pet-grooming']){
+  assert(exists(`icon-review-assets/site/${key}.webp`),`${key}: optimized site asset exists`);
+  assert(exists(`icon-review-assets/social/${key}.webp`),`${key}: optimized social asset exists`);
+}
+assert(exists('prototype-care-mobile-browser-test.html'),'Care 390px QA page exists');
+assert(!index.includes('prototype-care-mobile-browser-test.html'),'Care QA page must not load in runtime');
 const encodedSeek=encodeURIComponent('Търси');
 const encodedOffer=encodeURIComponent('Дава');
 for(const target of [
