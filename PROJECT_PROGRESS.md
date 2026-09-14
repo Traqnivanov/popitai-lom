@@ -1,6 +1,6 @@
 # Попитай.Лом — CURRENT PROJECT CHECKPOINT
 
-Актуализирано: **11.09.2026**
+Актуализирано: **14.09.2026**
 
 Този файл е кратък оперативен указател. Той **не е втори продуктов Master**.
 Текущите решения, заменените правила и точният ред на работа са в:
@@ -17,6 +17,9 @@
 
 - Repo: `Traqnivanov/popitai-lom`
 - Safety branch: `prototype/content-complete-ia-20260904-stage2-safety`
+- LOCKED safety HEAD: `997d97504251f4cbae0693dc0cffa24d1d04da79` — не се мести преди отделно owner approval
+- Icon review branch: `prototype/stage2-icon-system-approval`
+- База на owner-approved Work 2 реда: `6d7ce692a9fc01759df21e406bde386c7c3a3859`
 - Последен функционален Stage 2 checkpoint преди docs-only синхронизацията: `e423a2c3a8d2f70d28060fb4c37ce38bd5369d5e`
 - Текущият exact branch HEAD се проверява в Git преди работа; docs-only и bounded follow-up commits не се представят като ново общо Stage 2 acceptance
 - Production `main`: не е променян от тази Stage 2 работа
@@ -35,7 +38,9 @@
 - Favorites detail-only UX, internal real routes и content parity са прототипирани; пълната named-route desktop/390px browser acceptance остава в общия Stage 2 gate.
 - public results използват само доказани approved records или честно empty state; synthetic/mock public results са премахнати и canonical results owner е консолидиран.
 - Facebook distribution/content-protection решенията и production границите са класифицирани в централния регистър.
-- Services discovery taxonomy е owner-consolidated и приложена в review prototype от Work 2: деветте семейства остават, а 59-те понятия се представят чрез 45 видими входа плюс точни aliases/filters/cross-links; implementation `38ef8fb2e48b2e8d538232e64d0e785757f93e96` е source-tested и browser-checked на desktop и реален 390 px viewport.
+- Services discovery taxonomy е owner-consolidated и приложена в review prototype от Work 2: деветте семейства остават, а 59-те понятия се представят чрез 46 видими входа, включително owner-approved `Пътнически превоз`, плюс точни aliases/filters/cross-links. Exact `Пътнически превоз` contract mapping остава потвърден prototype gap за bounded remediation.
+- Icon review branch съдържа 34 site WebP assets на 128×128 и 32 social WebP assets на 512×512. Approval е само по конкретните приети групи; масовата leaf експанзия е спряна като критичен път. Одобрена е хибридна посока: лека site SVG система + family/text-first discovery + подробни 3D social/large thematic assets.
+- Repo audit потвърждава риск от несъответствие между DELETE grants/permissive staff policies и LOCKED Admin-only permanent delete. Реалното live Supabase състояние е непроверено и не се променя без отделно owner разрешение за read-only audit и последващ отделен security checkpoint.
 
 ## Stage status
 
@@ -45,14 +50,18 @@
 
 Остават owner visual acceptance, content-complete/reality pass и финален desktop/mobile независим audit. Production и Stage 3 остават блокирани.
 
-## Точен следващ ред
+## Точен следващ ред — owner-approved Work 2 · 14.09.2026
 
-1. **Завършено като prototype:** Home action/activity contract на `84d57cb0024ae9b82534badb3e852bc2e12c60b7` — отделни `Публикувай`/`Попитай` повърхности и честен `Днес → Тази седмица → Полезно сега` fallback; финалното приемане остава в общия Stage 2 gate;
-2. **Завършено като review prototype / owner acceptance на exact SHA предстои:** деветте Services families остават, а 59-те понятия са консолидирани до 45 visible discovery entries с backward-compatible aliases/filters/cross-links. Implementation `38ef8fb2e48b2e8d538232e64d0e785757f93e96` премина source regression и desktop/390 px browser gate; icon checkpoint пази приетите 14 assets и не изработва механично 59 икони;
-3. content-complete/reality pass със задължителното съдържание от централния регистър;
-4. финален Stage 2 audit на всички основни journeys, forms, Favorites, Share, actions и states на desktop и 390px;
-5. owner visual acceptance и freeze на exact SHA;
-6. едва след това — отделни production architecture checkpoints от §12.1 на Master-а.
+1. **Текущ docs-only checkpoint:** синхронизиране на Master, регистър, Progress и `PROJECT_RULES_00_READ_FIRST.md` върху exact review base `6d7ce692a9fc01759df21e406bde386c7c3a3859`;
+2. **Pre-implementation control pack, без production writes:** една изпълнима migration matrix по Master §12.2, включително 14-те production checkpoints, 46 Services entries, `Пътнически превоз`, всички owner/form/moderation зависимости, protected `Иванов Ремонти`, Admin-only permanent delete, domain/auth/SEO/OG и rollback;
+3. **Отделен security gate:** само след ново owner разрешение — read-only live Supabase grants/RLS/RPC/role audit; при потвърден LOCKED дефект останалата работа спира за тесен emergency patch plan, backup/rollback и четириролев QA;
+4. **Един хибриден icon comparison:** desktop, реален 390 px, 16–24 px, 56–64 px и social 1200×630; без масово leaf производство преди owner verdict;
+5. **Content-complete/reality Stage 2 pass:** задължителното съдържание и bounded prototype contract/mapping remediation;
+6. **Финален Stage 2 audit:** всички journeys, forms, Favorites, Share, actions и states на desktop/390 px, accessibility, performance и protected regressions;
+7. **Owner acceptance и freeze на exact Stage 2 SHA;**
+8. **Stage 3 само owner-by-owner и matrix-row-by-matrix-row;**
+9. **Контролиран domain/auth/SEO/OG cutover;**
+10. **Launch gate, soft launch и owner verdict.**
 
 ## Stop conditions
 
@@ -62,9 +71,12 @@
 - роли, ownership, moderation или status lifecycle;
 - quotas/media limits;
 - protected Firms/Listings/Masters/Admin логика;
+- Admin-only permanent delete или друго доказано security противоречие;
 - нов write owner/form;
 - премахване на одобрена възможност;
 - ново продуктово решение, което не е определено в Master-а.
+
+Repo evidence не се представя като доказателство за текущото live Supabase състояние. Security, production, domain cutover и Stage 3 чакат отделното им owner approval.
 
 Без такъв конфликт безопасните проверки и ограничената текуща задача продължават без междинни отчети.
 

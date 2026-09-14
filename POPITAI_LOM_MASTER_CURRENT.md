@@ -1,8 +1,11 @@
 # Попитай.Лом — CURRENT PRODUCT MASTER
 
 Статус: **КАНОНИЧНА ПРОДУКТОВА ИСТИНА / PUBLIC IA ОДОБРЕНА / STAGE 2 ПРОТОТИПЪТ ОЩЕ НЕ Е ФИНАЛНО ПРИЕТ / НЕ Е PRODUCTION**
-Последна синхронизация: **11.09.2026**
+Последна синхронизация: **14.09.2026**
 Текущ safety branch: `prototype/content-complete-ia-20260904-stage2-safety`
+LOCKED safety HEAD: `997d97504251f4cbae0693dc0cffa24d1d04da79` — не се мести преди отделно owner approval
+Текущ icon review branch: `prototype/stage2-icon-system-approval`
+База на owner-approved Work 2 реда от 14.09.2026: `6d7ce692a9fc01759df21e406bde386c7c3a3859`
 Последен функционален Stage 2 checkpoint преди docs-only синхронизацията: `e423a2c3a8d2f70d28060fb4c37ce38bd5369d5e`
 Централен decision/backlog регистър: `POPITAI_LOM_DECISION_AND_BACKLOG_REGISTER.md`
 
@@ -615,6 +618,20 @@ Stage 2 демонстрира тази посока, но финалната и
 - ограничените SVG примери в Stage 2 са visual direction, не автоматично финален site-wide избор;
 - масова production подмяна не се прави преди отделен icon inventory, desktop/mobile визуален макет и owner acceptance.
 
+#### 10.1.1 Work 2 · 14.09.2026 — ОДОБРЕНА хибридна система и стоп на масовото производство
+
+След цялостния Work 2 audit собственикът одобри следната корекция на реда:
+
+- масовото изработване на подробни leaf икони се спира като критичен път; не се продължава серия по серия само за да се покрият механично всички 46 discovery входа;
+- всички вече приети assets се запазват като валиден review материал за точните им приети контексти; те не се изтриват и не се включват автоматично в production;
+- малките навигационни/action икони на 16–24 px използват една лека, последователна SVG система; подробни 3D сцени не се свиват механично до този размер;
+- Services family/category входовете използват един силен общ знак; deep leaf редовете остават text-first;
+- точен leaf asset се използва само когато family знакът би бил неточен или подвеждащ и когато знакът е доказано четим в реалния му site размер;
+- подробните 3D assets са предназначени основно за social 1200×630 композиции и големи тематични карти; site и social не са един и същ файл, размер или композиция, но пазят един и същ одобрен визуален смисъл;
+- остава задължителната йерархия `одобрена реална медия → точна одобрена leaf тема → family/category → Lom fallback`, без AI гадаене по свободен текст;
+- преди каквато и да е следваща icon експанзия се прави точно един сравнителен хибриден checkpoint: desktop, реален 390 px mobile, 16–24 px navigation/action, 56–64 px thematic card и social 1200×630;
+- ако сравнението не доказва едновременно професионална визия, ясна семантика, консистентност и приемлива тежест, icon работата не продължава и не блокира content-complete Stage 2.
+
 ### 10.2 Любими — ЖЕЛАНО И ПРОТОТИПИРАНО, PRODUCTION CONTRACT OPEN
 
 `Добави в любими` е желана функция на логичното място при приложимото публично съдържание. Текущият Stage 2 вариант е detail-only, session-only демонстрация и не доказва production storage/login/RLS договор.
@@ -662,18 +679,22 @@ Stage 2 демонстрира тази посока, но финалната и
 
 Тези решения и прототипи се пазят като история и evidence, но не се използват за нова реализация.
 
-## 12. Точен ред на работа от текущия checkpoint
+## 12. Точен ред на работа от текущия checkpoint — OWNER APPROVED, Work 2 · 14.09.2026
 
-Публичната IA вече не е отворено бизнес решение. След docs-only синхронизацията работата продължава в този ред:
+Публичната IA вече не е отворено бизнес решение. Масовата icon експанзия вече не е критичният път. След този docs-only checkpoint работата продължава стриктно в следния ред:
 
-1. **Завършено: малък Stage 2 presentation cleanup** — доказаното двойно описание в `staticPage()` е премахнато без taxonomy/owner промяна.
-2. **Завършено като prototype, acceptance остава в общия gate: Favorites detail-only** — coverage, позиция, stable identity, login intent и Profile flow; production storage/RLS остава отделно OPEN.
-3. **Завършено като prototype, acceptance остава в общия gate: Home action/activity pass** — отделни `Публикувай` и `Попитай` повърхности и честен `Днес в Лом → Тази седмица → Полезно сега` fallback; exact implementation `84d57cb0024ae9b82534badb3e852bc2e12c60b7`.
-4. **Icon visual-system checkpoint** — Services discovery consolidation е приложена в review prototype; inventory и следващите професионални desktop/mobile icon макети продължават без масова production подмяна преди owner acceptance.
-5. **Content-complete / reality pass** — задължителното съдържание от регистъра и одобрено реално съдържание от живия сайт се представят вярно; където липсва съдържание има честно empty state, не fake records.
-6. **Финален Stage 2 независим audit** — Home, hub, всички категории, results/detail/Add/edit, Favorites, Share, actions, forms и states; desktop + 390px; оценка като млад, средна възраст и възрастен потребител, после професионален UX review.
-7. **Owner visual acceptance и freeze на exact SHA** — едва тук Stage 2 може да бъде обявен за приет.
-8. **Отделни production architecture checkpoints** — само след Stage 2 acceptance и по един owner/risk scope наведнъж.
+1. **Запис и синхронизация на решението** — Master, централен регистър, Progress и `PROJECT_RULES_00_READ_FIRST.md` трябва да сочат към един и същ ред, без втори конкурентен Master.
+2. **Pre-implementation control pack, без production writes** — създава се изпълнима migration matrix по §12.2; в нея изрично се включват всички 14 production checkpoints, 46-те Services входа, `Пътнически превоз`, form/owner/moderation връзките, protected `Иванов Ремонти`, Admin-only permanent delete, auth redirect зависимостите, SEO/OG и rollback тестовете. Паралелно се избира и резервира финалният домейн; DNS/production cutover още не се прави.
+3. **Отделен security verification gate** — след отделно owner разрешение се прави read-only одит на реалните Supabase grants, RLS policies, RPC и role behavior. Repo анализът е evidence, но не доказва сам live базата. Ако се потвърди нарушение на LOCKED Admin-only permanent delete, останалата работа спира и се предлага тесен emergency security patch с backup/rollback и guest/user/moderator/admin QA. Това е отделен security checkpoint, не общо разрешение за Stage 3 или Supabase промени.
+4. **Един хибриден icon comparison checkpoint** — сравняват се леката site система, family/text-first моделът и подробната social композиция на desktop, 390 px и реалните малки размери. Няма нова масова серия преди owner verdict.
+5. **Content-complete / reality pass на Stage 2** — задължителното съдържание от регистъра и одобреното реално съдържание се представят вярно; при липса има честно empty state, не fake records. Потвърдените mapping/contract пропуски се отстраняват само в prototype scope.
+6. **Финален независим Stage 2 audit** — Home, hub, всички категории, results/detail/Add/edit, Favorites, Share, actions, forms и states; desktop + 390 px; млад, средна възраст и възрастен потребител; след това професионален UX, accessibility, performance и protected-regression review.
+7. **Owner visual acceptance и freeze на exact Stage 2 SHA** — едва тук Stage 2 може да бъде обявен за приет. Safety HEAD не се мести преди това отделно owner решение.
+8. **Stage 3 / production integration по owner и risk scope** — не се копира прототипът наведнъж. Изпълнява се по един matrix ред: shell/routes → discovery mappings → lists/details → Add/edit/auth → moderation → protected relevance → Favorites → Articles/Publications → Share/OG → SEO. Всеки ред има собствен approval, tests и rollback.
+9. **Контролиран domain/auth/SEO cutover** — след готовите production owners се променят GitHub Pages/DNS/HTTPS, canonical/redirect/robots/sitemap/structured data, crawler-readable OG, Supabase `Site URL` и точните allowed redirect URL-и, confirmation/reset шаблоните и return-to-action flows. Custom Supabase API domain не е необходим за първия launch и остава отделно optional решение.
+10. **Launch gate и soft launch** — backup/recovery доказателство, role matrix, auth, media, search, old/new URL, unavailable content, OG, accessibility и performance; първо ограничен soft launch, после общо отваряне.
+
+Нито една следваща точка не се започва само защото предходната има написан код. Нужни са посоченото evidence, Work verdict и owner approval там, където границата е LOCKED или production.
 
 ### 12.1 Production checkpoints след Stage 2, без текущо разрешение за реализация
 
@@ -694,7 +715,27 @@ Stage 2 демонстрира тази посока, но финалната и
 
 Нито една точка не разрешава промяна на Admin/Moderator, RLS, quotas, protected Firms/Listings/Masters semantics или production data без съответното отделно разрешение.
 
-### 12.2 Регистър на важните заменени решения
+Списъкът по-горе е inventory, не самостоятелен ред за изпълнение. Приоритетът и зависимостите се определят само чрез matrix-а по §12.2 и одобрения ред в §12.
+
+### 12.2 Задължителна изпълнима migration matrix преди Stage 3
+
+Преди production implementation се създава една контролна таблица. Всеки ред съдържа:
+
+`public screen/task → canonical route → текущ production owner → form/Add/Edit owner → Supabase table/RPC → RLS/role boundary → moderation/status lifecycle → SEO/canonical/OG → точна migration action → test evidence → rollback → Work verdict → owner approval → status`.
+
+Задължителни отделни gate редове са:
+
+- Admin-only permanent delete — UI, JavaScript, RPC, grants и RLS трябва да налагат една и съща граница; live състоянието остава `UNVERIFIED`, докато няма отделно разрешен read-only Supabase audit;
+- protected relevance/`Иванов Ремонти` — запазва се след релевантността във всички приложими search/results пътища и има отделен regression test преди и след migration;
+- Services — 9 families / 46 visible entries, backward-compatible aliases и exact discovery-leaf persistence/reconstruction; `Пътнически превоз` не остава само visual prototype entry, а получава изричен contract/mapping verdict;
+- всеки публичен Add/Edit вход — точен lifecycle owner, форма, auth gate, status, moderation, error и recovery път; не се създава паралелен owner по удобство;
+- domain/auth/SEO cutover — old/new URL redirects, canonical, robots, sitemap, structured data, crawler-readable OG, Supabase `Site URL`, allowed redirect URL-и, confirmation/reset links и return-to-action;
+- Favorites, Articles, Publications, Events и social image delivery — отделни owner/security/storage/cache решения, не общ bundle;
+- launch recovery — backup/export, restore/rollback, единствен Admin и защитената собственост на `Иванов Ремонти`.
+
+Matrix-ът е документ за контрол и доказателства. Той не дава разрешение сам да се изпълни production промяна.
+
+### 12.3 Регистър на важните заменени решения
 
 | Тема | Текущо решение | Заменено/история |
 |---|---|---|

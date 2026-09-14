@@ -3,6 +3,7 @@
 Статус: **КАНОНИЧЕН ИНДЕКС КЪМ CURRENT PRODUCT MASTER / НЕ Е РАЗРЕШЕНИЕ ЗА PRODUCTION ПРОМЕНИ**  
 Създаден: **09.09.2026**  
 База: `e423a2c3a8d2f70d28060fb4c37ce38bd5369d5e`
+Текущ Work 2 decision base: `6d7ce692a9fc01759df21e406bde386c7c3a3859` на `prototype/stage2-icon-system-approval`
 
 ## 1. Как се използва регистърът
 
@@ -23,9 +24,9 @@
 - всяко ново решение или промяна на статус записва `Work номер + дата + owner verdict + evidence/SHA`, когато има такова;
 - решение без доказан Work източник не се приписва по памет; отбелязва се като legacy/неуточнен произход до проверка;
 - по-нов Work може да замени старо решение само при изрично owner решение; старият запис остава история с `REPLACED`, а не се изтрива;
-- текущият чат е **Work 2 — 10–13.09.2026**.
+- текущият чат е **Work 2 — 10–14.09.2026**.
 
-| Work | Дата | Доказан icon scope / evidence |
+| Work | Дата | Доказано решение / evidence |
 | --- | --- | --- |
 | Work 1 | 10.09.2026 | Подготвя пълната начална draft taxonomy/icon карта, конкретните icon proofs и локалния commit `39f442b00885b436339bafee833ecb552eda813d`. |
 | Work 2 | 10.09.2026 | Проверява прекъснатото качване и публикува идентичното дърво като remote review commit `e60655186677722f1e319016c9602857e99aebef`; прави пълния icon audit и записва следващия owner contract. |
@@ -33,6 +34,7 @@
 | Work 2 | 13.09.2026 | Owner добавя `Пътнически превоз` като отделен четвърти вход в транспортната група за обяви на превозвачи, включително пътувания в чужбина; общо 46 visible entries, без промяна на owner/data/schema и без дублиране на проверената информация в Info Лом. |
 | Work 2 | 13.09.2026 | Owner приема цялата visual група `Красота и лична грижа`: един family знак и точни leaf знаци за `Фризьор и бръснар`, `Маникюр и педикюр`, `Козметика и грим` и `Немедицински масаж`; техническата review интеграция не разрешава production wiring. |
 | Work 2 | 13.09.2026 | Owner приема цялата visual група `Грижа за хора и животни`: точни leaf знаци за `Детегледачки`, `Грижа за възрастни`, `Помощ в дома`, `Гледане и разхождане на домашни любимци` и `Грижа и подстригване на домашни любимци`; техническата review интеграция не разрешава production wiring. |
+| Work 2 | 14.09.2026 | Owner приема цялостния одит и новия строг ред: масовото производство на leaf икони спира като критичен път; приетите assets се пазят; следват migration matrix, отделен security verification gate, един хибриден icon comparison, content-complete Stage 2, финален audit/freeze, owner-by-owner Stage 3, контролиран domain/auth/SEO cutover и soft launch. База на решението: `6d7ce692a9fc01759df21e406bde386c7c3a3859`; няма разрешение за production, Supabase или Stage 3 промяна. |
 
 ## 2. Допустими статуси
 
@@ -41,6 +43,8 @@
 - **ACCEPTED** — независимо проверено и прието в посочената граница;
 - **OPEN — OWNER DECISION** — необходимо е продуктово решение преди код;
 - **PRODUCTION CHECKPOINT** — изисква отделно разрешение за production/backend/schema/RLS;
+- **PAUSED AS CRITICAL PATH** — запазва приетото evidence, но забранява продължаване на същата серия преди посочения нов gate;
+- **VERIFIED IN REPO / LIVE UNVERIFIED** — доказано е какво позволява versioned кодът, но не се твърди, че реалната база/production конфигурация съвпада без отделна read-only проверка;
 - **IDEA ONLY** — предложение без одобрение за функция;
 - **REJECTED / REPLACED** — не управлява бъдеща работа;
 - **STALE CLAIM** — исторически факт или дефект, който вече не описва текущото състояние.
@@ -86,12 +90,13 @@
 
 | Тема | Статус | Work / дата / verdict | Решение / граница | Следващо действие |
 | --- | --- | --- | --- | --- |
-| Icon review scope | **PARTIALLY ACCEPTED — GROUP WORK CONTINUES** | Work 1 → Work 2 · 10.09.2026 · evidence `39f442b…` → `e606551…` → `e17df39be8cd81872101f89d94f4d917ebc85778` → `a899a8c852e9f78f8d5451eba7552d988a81943b` → `bdc2c037b7114394400b97b956609e3e445226bc` | Owner прие 14 semantic assets на контролирани групи; интегрираният desktop/390 px/24–64 px/social checkpoint е browser-tested. Това не е site-wide approval и не разрешава промяна на production, Supabase или Stage 3. | Следващите знаци се валидират на малки групи върху отделния icon review branch. |
+| Icon review scope | **PARTIALLY ACCEPTED — MASS EXPANSION PAUSED** | Work 1 → Work 2 · 10–14.09.2026 · current review base `6d7ce692a9fc01759df21e406bde386c7c3a3859` | Review branch съдържа 34 site WebP assets на 128×128 и 32 social WebP assets на 512×512; approval е само по конкретните групи и verdict редове по-долу, не site-wide. Това не разрешава production, Supabase или Stage 3 wiring. | Няма следваща масова серия. Прави се само един хибриден comparison checkpoint по приетия Work 2 ред. |
+| Hybrid site/social system | **APPROVED DIRECTION — COMPARISON PENDING** | Work 2 · 14.09.2026 · owner verdict `Ок приемам` | 16–24 px navigation/action използва лека единна SVG система; Services families имат силен общ знак; deep leaves са text-first; exact leaf asset се използва само ако family fallback подвежда и е четим в реалния site размер; подробните 3D assets са основно за social 1200×630 и големи тематични карти. Приетите assets се пазят. | Един desktop + 390 px + 16–24 px + 56–64 px + social 1200×630 сравним макет; след него owner verdict. |
 | Registry coverage model | **APPROVED DIRECTION — EXACT MAP ACCEPTANCE PENDING** | Work 2 · 10.09.2026 · owner: `направи го` след предложението да не се изработват механично 59 различни картинки | Всяко taxonomy понятие получава изрично решение `OWN ICON`, `SHARED ICON`, `TEXT ONLY` или `FAMILY FALLBACK`. Собствен leaf знак е нужен само когато family знакът би бил неточен; 59 Master leaves не означават 59 задължително различни assets. | Текущата карта се валидира по групи; exact споделянията и всеки собствен знак остават за owner acceptance. |
 | Exact semantic choice | **APPROVED — NOT IMPLEMENTED** | Work 1 · 10.09.2026 · owner-confirmed | Собствен leaf знак е задължителен, когато общият family/category знак е неточен или подвеждащ. Един asset се споделя само при еднакъв визуален смисъл. Текстовият label остава видим. | Нерешен или двусмислен знак остава `OPEN`, без произволна комбинация. |
 | Media/icon fallback | **APPROVED — NOT IMPLEMENTED** | Work 1 · 10.09.2026 · owner-confirmed | `одобрена реална медия → точна одобрена leaf тема → family/category → Lom fallback`. Изборът идва от контролирани record/taxonomy полета, не от AI гадаене по свободен текст. | Един registry управлява site fallback и social template избора. |
 | Controlled performance exception | **APPROVED — NOT IMPLEMENTED / ICONS ONLY** | Work 2 · 10.09.2026 · owner-confirmed | За иконите се допуска умерено по-детайлен или малко по-голям SVG, когато допълнителното качество и разпознаваемост са доказани. Това не разрешава тежки raster assets, embedded изображения, ненужни ефекти или неоптимизирани файлове. | Оптимизация след visual acceptance; сравнение преди/след на desktop, 390 px, 20–24 px и social размер. |
-| Small и large variants | **ACCEPTED FOR FIRST 14 REVIEW ASSETS / PRODUCTION FORMAT OPEN** | Work 2 · 10.09.2026 · owner verdicts по групи; evidence `e17df39be8cd81872101f89d94f4d917ebc85778` и `bdc2c037b7114394400b97b956609e3e445226bc` | Owner прие модела с отделен оптимизиран 128 px site файл и 512 px social файл от един и същ source concept за първите 14 assets. Това не са различни визуални езици, не е финален production формат и не разрешава raster wiring в сайта. | Същият size-comparison gate се прилага към всяка следваща група; финалната production оптимизация остава отделна. |
+| Small и large variants | **ACCEPTED FOR FIRST 14 REVIEW ASSETS / PRODUCTION FORMAT OPEN** | Work 2 · 10.09.2026 · owner verdicts по групи; evidence `e17df39be8cd81872101f89d94f4d917ebc85778` и `bdc2c037b7114394400b97b956609e3e445226bc` | Owner прие модела с отделен оптимизиран 128 px site файл и 512 px social файл от един и същ source concept за първите 14 assets. Това не са различни визуални езици, не е финален production формат и не разрешава raster wiring в сайта. | Исторически first-batch verdict. Нови серии не наследяват този ред; текущият следващ gate е единствено хибридното сравнение от 14.09.2026. |
 | Acceptance gate | **ACCEPTED** | Work 1 · 10.09.2026 · owner-confirmed | Нито една неодобрена икона не влиза в приетия комплект. Един двусмислен или визуално слаб знак спира приемането на съответната група. | Owner review по логични групи; после пълен desktop/mobile/accessibility/performance audit. |
 | First 8 generated 3D semantic assets | **ACCEPTED IN ICON REVIEW SCOPE** | Work 2 · 10.09.2026 · owner verdict `приемам`; evidence `e17df39be8cd81872101f89d94f4d917ebc85778` | Поотделно са приети: `Доставки`, `Товарен транспорт`, `Домашна помощ`, `Автомобилна диагностика`, `Борба с вредители`, `Почистване на дом`, `Монтажи и мебели`, `ВиК`, включително показаните desktop, 390 px, 24/48/64 px и social варианти. Това заключва референтната visual direction за следващите групи, но не приема целия icon комплект. | Следващата група се прави по същия visual/semantic gate; нито един нов знак не наследява автоматично approval. |
 | Home cleaning replacement | **ACCEPTED IN ICON REVIEW SCOPE** | Work 2 · 10.09.2026 · owner verdict `ok така`; evidence `bdc2c037b7114394400b97b956609e3e445226bc` | `Почистване на дом` вече е кофа + моп + един препарат + микрофибърна кърпа. Приетата по-рано прахосмукачка е заменена, защото е твърде тясна; голямата професионална количка остава семантично подходяща за `Офиси и входове`, не за дома. | Прието в текущия review scope; production wiring остава blocked. |
@@ -111,7 +116,22 @@
 | Exact intent preservation | **LOCKED WITH CONSOLIDATION** | Work 2 · 11.09.2026 | Старите имена не се губят: остават контролирани aliases, filters и cross-links. Един record продължава да има един lifecycle owner. |
 | `Други професионални услуги` | **APPROVED AS FALLBACK** | Work 2 · 11.09.2026 | Не е отделна visible card. Остава достъпно през form/search fallback. |
 | Data/backend граница | **NO CHANGE / PRODUCTION BLOCKED** | Current Master + Work 2 | Решението не разрешава data migration, Supabase/schema/RLS, owner/form, production route или Stage 3 промяна. |
-| Icon последица | **APPROVED DIRECTION** | Work 2 · 11.09.2026 | Не се правят механично 59 икони. Семействата имат силен знак; deep leaves са text-first; exact asset се добавя само когато family fallback би бил подвеждащ и след owner approval. Всички 14 вече приети assets остават валидни за съответните exact/filter contexts. Exact-choice екранът не показва измислен общ знак: подвеждащият inherited wrench е премахнат в `38ef8fb…`. |
+| Icon последица | **APPROVED DIRECTION — UPDATED 14.09.2026** | Work 2 · 11–14.09.2026 | Не се правят механично 59 икони. Семействата имат силен знак; deep leaves са text-first; exact asset се добавя само когато family fallback би бил подвеждащ и след owner approval. Всички assets, изрично приети в verdict редовете по-горе, остават валидни за съответните exact/filter contexts. Exact-choice екранът не показва измислен общ знак: подвеждащият inherited wrench е премахнат в `38ef8fb…`. |
+
+## 4C. Work 2 system audit и нов ред — OWNER APPROVED · 14.09.2026
+
+| Тема | Статус | Доказано / граница | Строго следващо действие |
+| --- | --- | --- | --- |
+| Масова icon работа | **PAUSED AS CRITICAL PATH** | Петдневната icon работа създава schedule риск, смесен визуален език и слаба четимост при малки размери. Приетите assets не се губят. | Само хибридният comparison gate от §4A; без нова масова серия. |
+| Permanent delete | **LOCKED RISK CONFIRMED IN REPO / LIVE UNVERIFIED** | Repo SQL дава `authenticated` DELETE grants, а permissive `FOR ALL` staff policies използват общ `is_staff()` за Admin и Moderator. Това е несъвместимо с Admin-only LOCKED правилото, ако live базата съвпада с repo. Frontend скриване или допълнителна permissive Admin policy сами по себе си не са достатъчна поправка. | Само след отделно owner разрешение: read-only live grants/RLS/RPC/role audit. При потвърждение — тесен emergency security plan с backup, rollback и четириролев QA; без промяна преди approval. |
+| `Пътнически превоз` contract | **PROTOTYPE GAP CONFIRMED** | Entry съществува във visual/service views и audit, но липсва в `prototype-stage2-contracts.js` mapping. Не е production дефект и не разрешава data migration. | Bounded Stage 2 mapping remediation след control pack; source + desktop/390 regression. |
+| Protected `Иванов Ремонти` | **LOCKED / PRODUCTION EXISTS / MIGRATION GATE MISSING** | Production има специалния relevance/priority behavior; prototype migration task list не го доказва като отделен gate. | Задължителен migration matrix ред и regression test преди/след всеки засегнат search/results integration. |
+| Migration path | **APPROVED REQUIREMENT — NOT YET BUILT** | Master има 14 production checkpoints, но няма една ordered owner/timing/test/rollback matrix. | Един изпълним matrix по Master §12.2 преди Stage 3. |
+| TOM/guard process | **OPEN — NOT CANONICAL** | Sandbox TOM control и guard съществуват, но guard не е в intended base branch и не е автоматично активен. Sandbox документът не е част от текущия mandatory read order. | Отделен owner verdict дали процесът се приема; ако да, guard се поставя в реалния base path с тест. Не се приема мълчаливо. |
+| Domain и SEO | **PLANNED / PRODUCTION CUTOVER BLOCKED** | Repo няма пълен robots/sitemap/canonical/OG coverage. Изборът и резервирането на домейн могат да станат рано; DNS, canonical, redirects, auth и production metadata не се сменят сега. | Domain decision в control pack; технически cutover след готовите production owners, с old/new URL и auth regression. |
+| Stage 2 | **ACCEPTANCE PENDING** | Public IA е одобрена; content reality, общият desktop/390 audit и owner visual acceptance остават незавършени. | Content-complete pass → финален audit → owner freeze на exact SHA. |
+| Stage 3 | **BLOCKED** | Не се копира prototype наведнъж и не се започва преди Stage 2 freeze. | След freeze: един migration matrix ред / owner / risk scope наведнъж. |
+| Launch | **FUTURE GATE** | Няма одобрение за domain/auth/SEO cutover или public launch. | Backup/recovery → role/auth/media/search/URL/OG/accessibility/performance QA → soft launch → owner verdict. |
 
 ## 5. Content protection
 
@@ -140,14 +160,17 @@
 
 За всяка такава идея първо се решават owner, данни, moderation, auth, privacy, empty state и production dependency.
 
-## 7. Текущ работен ред
+## 7. Текущ работен ред — заменен с owner verdict от 14.09.2026
 
-1. Stage 2 остава отделен safety prototype; production и Stage 3 не се започват без изрично разрешение.
-2. Обикновеният изпълняващ чат получава една ограничена exact-SHA задача.
-3. Work чатът взема продуктови решения и прави независимия audit/acceptance.
-4. Изпълняващият чат поправя сам доказани технически дефекти вътре в разрешения scope; при product/LOCKED конфликт спира.
-5. Следваща задача не започва преди Work verdict за текущата.
-6. Всеки handoff разделя: **доказано**, **source-tested**, **browser-tested**, **непроверено/open**.
+1. Stage 2 остава отделен prototype; production, Supabase writes и Stage 3 не се започват без отделно изрично разрешение.
+2. Първо се завършва pre-implementation control pack: migration matrix, security evidence boundary, protected priority gate, domain decision и точните dependencies.
+3. Read-only live Supabase security audit се прави само след отделно owner разрешение; потвърден LOCKED security дефект спира останалата работа и минава през тесен emergency checkpoint.
+4. Icon посоката получава един хибриден comparison checkpoint; масовото leaf производство е спряно и не блокира Stage 2.
+5. Следват content-complete/reality pass, финален независим desktop/390 audit и owner freeze на exact Stage 2 SHA.
+6. Stage 3 се изпълнява owner-by-owner и matrix-row-by-matrix-row, с exact tests и rollback; не се копира prototype wholesale.
+7. Domain/auth/SEO/OG cutover се прави контролирано след готовите production owners; след него има пълен launch gate и soft launch.
+8. Обикновеният изпълняващ чат получава една ограничена exact-SHA задача. Work взема продуктовите решения, проверява diff/evidence и дава verdict.
+9. Следваща задача не започва преди Work verdict за текущата. Всеки handoff разделя: **доказано**, **source-tested**, **browser-tested**, **непроверено/open**, **rollback**.
 
 ### 7.1 Техническа готовност и съдържание
 
