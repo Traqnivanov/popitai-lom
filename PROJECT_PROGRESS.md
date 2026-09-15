@@ -57,8 +57,8 @@
 1. **Завършено:** docs-only синхронизация в `6e4b75276c64b41ffdc534384064a2a3b60b7685`;
 2. **Завършено и owner accepted:** `POPITAI_LOM_PRODUCTION_MIGRATION_MATRIX.md`;
 3. **Завършен read-only gate:** live Moderator hard-delete conflict не е потвърден; evidence и отделните hardening точки са в `POPITAI_LOM_LIVE_SECURITY_AND_DOMAIN_AUDIT_20260915.md`; Supabase не е променян;
-4. **Текущо следва:** docs-only correction е подготвена; след нейното owner review се коригира отхвърленият `8faa2f7…` checkpoint: само SVG в site/mobile и отделен 3D social 1200×630 пример; без масово leaf производство;
-5. **Content-complete/reality Stage 2 pass:** задължителното съдържание и bounded prototype contract/mapping remediation;
+4. **Завършено без acceptance / PAUSED:** и `8faa2f7…`, и коригираният `cbe64de…` icon checkpoint са отхвърлени; няма одобрени site SVG и няма нова icon серия;
+5. **Текущ checkpoint — Content-complete/reality Stage 2 pass:** `Пътнически превоз` вече има exact prototype mapping, всичките 46 Services входа са покрити с regression contract, а отхвърлените raster site икони са unwired в полза на text-first cards; desktop/390 review QA предстои;
 6. **Финален Stage 2 audit:** всички journeys, forms, Favorites, Share, actions и states на desktop/390 px, accessibility, performance и protected regressions;
 7. **Owner acceptance и freeze на exact Stage 2 SHA;**
 8. **Stage 3 само owner-by-owner и matrix-row-by-matrix-row;**

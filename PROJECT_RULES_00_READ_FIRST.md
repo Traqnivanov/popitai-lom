@@ -85,7 +85,7 @@
 - Фирми, Магазини, Заведения, Health и Събития запазват съществуващите си owner правила според Master-а.
 - Публикациите имат одобрена отделна editorial owner посока с Admin-only authoring при launch, но реалният backend/schema/RLS още не е разрешен за implementation.
 - Статии, Публикации, Q&A, Facebook/share и SEO се следват според текущия Master, а не според отменен prototype или стар handoff.
-- Икони: site/mobile/navigation/family/exact leaf използват само оптимизирани SVG; подробните одобрени 3D assets са само за social/Facebook 1200×630 при липса на одобрена собствена снимка. Няма 3D WebP/raster site изключение.
+- Икони: site/mobile/navigation/family/exact leaf могат да използват само оптимизирани SVG; подробните одобрени 3D assets са само за social/Facebook 1200×630 при липса на одобрена собствена снимка. Няма 3D WebP/raster site изключение. Към 15.09.2026 няма одобрен site SVG: `cbe64de…` е REJECTED, icon работата е PAUSED и не блокира текущия content-complete/reality pass.
 - Последният приет prototype code baseline е записан в `PROJECT_PROGRESS.md`; целият Stage 2 остава неприет и Stage 3/production са блокирани.
 
 ## 6. Текущо разрешение за работа

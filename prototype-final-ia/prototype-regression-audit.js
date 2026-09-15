@@ -89,6 +89,11 @@ assert(!services.services().includes('Друга услуга'),'generic other s
 assert.equal(contracts.serviceVisibleEntry('Офиси и входове'),'Почистване');
 assert.equal(contracts.serviceVisibleEntry('Преместване'),'Хамали и преместване');
 assert.equal(contracts.serviceVisibleEntry('Домашни помощници'),'Помощ в дома');
+assert.equal(contracts.serviceCanonical('Пътнически превоз'),'Транспорт, преместване и доставки');
+assert.deepEqual(contracts.serviceCanonicals('Пътнически превоз'),['Транспорт, преместване и доставки']);
+const passengerAdd=new URLSearchParams(contracts.contextualAddUrl({context:'Услуги',group:'Пътнически превоз',owner:'Listings'}).split('?')[1]);
+assert.equal(passengerAdd.get('subcategory'),'Транспорт, преместване и доставки');
+assert.equal(passengerAdd.get('discovery'),'Пътнически превоз');
 assert.deepEqual(contracts.serviceVariants('Фото и видео'),['Фото','Видео']);
 assert(contracts.serviceCanonicals('ИТ, сайтове и дизайн').includes('Компютърни и технически услуги'));
 assert(contracts.serviceCanonicals('ИТ, сайтове и дизайн').includes('Професионални услуги'));
@@ -104,42 +109,16 @@ assert.deepEqual(cleaningDiscoveries,['Почистване на дом','Офи
 const officeAdd=contracts.contextualAddUrl({context:'Услуги',group:'Офиси и входове',owner:'Listings'});
 assert.equal(new URLSearchParams(officeAdd.split('?')[1]).get('discovery'),'Офиси и входове','exact alias remains visible in Add context');
 assert.equal((services.masters().match(/class="master-chip"/g)||[]).length,10,'Masters exposes the ten approved repair entries');
-const automotiveBrowse=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Автомобилни услуги')}`));
-assert.equal((automotiveBrowse.match(/class="service-card-icon"/g)||[]).length,6,'Automotive browse exposes the six owner-approved icons');
-for(const label of ['Автосервиз','Диагностика','Гуми','Автоелектро и автоклиматици','Автомивка и детайлинг','Пътна помощ']){
-  assert(services.iconAsset(label),`${label}: exact approved icon mapping`);
+for(const family of services.familyNames){
+  const browse=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent(family)}`));
+  const add=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent(family)}&mode=add&type=${encodeURIComponent('Дава')}`));
+  assert(!browse.includes('service-card-icon'),`${family}: rejected raster site icons remain unwired`);
+  assert(!add.includes('service-card-icon'),`${family}: Add mode remains text-only`);
 }
-const automotiveAdd=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Автомобилни услуги')}&mode=add&type=${encodeURIComponent('Дава')}`));
-assert(!automotiveAdd.includes('service-card-icon'),'Automotive Add mode remains text-only');
-const cleaningBrowse=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Почистване и поддръжка')}`));
-assert.equal((cleaningBrowse.match(/class="service-card-icon"/g)||[]).length,4,'Cleaning browse exposes the four owner-approved icons');
-for(const label of ['Почистване','Пране на мека мебел и килими','Двор, градина и озеленяване','Борба с вредители']){
-  assert(services.iconAsset(label),`${label}: exact approved icon mapping`);
+for(const label of services.structuredFamilies.flatMap(family=>family.slice(1))){
+  assert(contracts.serviceCanonicals(label).length>0,`${label}: visible service entry has a canonical persistence mapping`);
 }
-const cleaningAdd=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Почистване и поддръжка')}&mode=add&type=${encodeURIComponent('Дава')}`));
-assert(!cleaningAdd.includes('service-card-icon'),'Cleaning Add mode remains text-only');
-const transportBrowse=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Транспорт, преместване и доставки')}`));
-assert.equal((transportBrowse.match(/class="service-card-icon"/g)||[]).length,4,'Transport browse exposes the four owner-approved icons');
-for(const label of ['Товарен транспорт','Хамали и преместване','Доставки','Пътнически превоз']){
-  assert(services.iconAsset(label),`${label}: exact approved icon mapping`);
-}
-const transportAdd=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Транспорт, преместване и доставки')}&mode=add&type=${encodeURIComponent('Дава')}`));
-assert(!transportAdd.includes('service-card-icon'),'Transport Add mode remains text-only');
-const beautyBrowse=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Красота и лична грижа')}`));
-assert.equal((beautyBrowse.match(/class="service-card-icon"/g)||[]).length,4,'Beauty browse exposes the four owner-approved leaf icons');
-for(const label of ['Красота и лична грижа','Фризьор и бръснар','Маникюр и педикюр','Козметика и грим','Немедицински масаж']){
-  assert(services.iconAsset(label),`${label}: exact approved icon mapping`);
-}
-const beautyAdd=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Красота и лична грижа')}&mode=add&type=${encodeURIComponent('Дава')}`));
-assert(!beautyAdd.includes('service-card-icon'),'Beauty Add mode remains text-only');
-const careBrowse=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Грижа за хора и животни')}`));
-assert.equal((careBrowse.match(/class="service-card-icon"/g)||[]).length,5,'Care browse exposes the five owner-approved leaf icons');
-for(const label of ['Детегледачки','Грижа за възрастни','Помощ в дома','Гледане и разхождане на домашни любимци','Грижа и подстригване на домашни любимци']){
-  assert(services.iconAsset(label),`${label}: exact approved icon mapping`);
-}
-assert.equal(services.iconAsset('Домашна помощ'),services.iconAsset('Помощ в дома'),'legacy home-help alias resolves to the consolidated leaf');
-const careAdd=services.serviceGroup(new URLSearchParams(`group=${encodeURIComponent('Грижа за хора и животни')}&mode=add&type=${encodeURIComponent('Дава')}`));
-assert(!careAdd.includes('service-card-icon'),'Care Add mode remains text-only');
+assert.equal(services.iconAsset('Покриви'),'','rejected site icon direction is not rendered');
 for(const key of ['babysitting','elder-care','home-help','pet-walking','pet-grooming']){
   assert(exists(`icon-review-assets/site/${key}.webp`),`${key}: optimized site asset exists`);
   assert(exists(`icon-review-assets/social/${key}.webp`),`${key}: optimized social asset exists`);

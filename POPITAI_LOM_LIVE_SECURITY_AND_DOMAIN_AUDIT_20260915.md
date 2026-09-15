@@ -75,8 +75,8 @@ Supabase Security Advisor отчете:
 
 1. Owner проверява `popitai-lom.bg` в checkout на избран `.bg` регистратор и решава: физическо/юридическо лице, защитен/незащитен домейн, регистратор и срок.
 2. Ако owner иска покупка, дава отделно изрично разрешение; покупката, данните на регистранта и КЕП не са част от този Work checkpoint.
-3. Историческият следващ ред беше един хибриден icon comparison. Owner correction от Work 2 · 15.09.2026 го заменя с checkpoint, в който site/mobile са само оптимизирани SVG, а подробният 3D asset е само за social/Facebook 1200×630 без одобрена собствена снимка.
-4. След icon verdict: content-complete/reality pass и bounded prototype mapping remediation, включително `Пътнически превоз`.
+3. Историческият следващ ред беше един хибриден icon comparison. Owner correction от Work 2 · 15.09.2026 го замени с checkpoint, в който site/mobile са само оптимизирани SVG, а подробният 3D asset е само за social/Facebook 1200×630 без одобрена собствена снимка. Коригираният `cbe64de…` checkpoint впоследствие е отхвърлен; icon работата е PAUSED и текущият ред е content-complete/reality.
+4. Текущо: content-complete/reality pass и bounded prototype mapping remediation, включително `Пътнически превоз`.
 5. След това: финален независим desktop + 390 px Stage 2 audit и owner freeze на exact SHA.
 6. Supabase hardening findings се превръщат в отделен pre-launch security matrix ред; няма механичен revoke или Auth промяна.
 

@@ -630,7 +630,7 @@ Stage 2 демонстрира тази посока, но финалната и
 - остава задължителната йерархия `одобрена реална медия → точна одобрена leaf тема → family/category → Lom fallback`, без AI гадаене по свободен текст;
 - йерархията не означава един и същ файл: site leaf/family вариантът е SVG, а social тематичният вариант може да използва одобрения 3D asset;
 - каченият Work 2 comparison `8faa2f757b3af88ed137a7b49a64be5cf36b326a` е **REJECTED / НЕ Е ЗА OWNER APPROVAL**, защото показва `roofing.webp` като site/mobile exact leaf и по този начин избира недопустима страна на предишната двусмислена формулировка;
-- следващият ограничен icon checkpoint сравнява само site/mobile SVG системата с отделната 3D social 1200×630 композиция; няма 3D site изключение и няма нова масова серия;
+- коригираният ограничен comparison `cbe64de…` е отхвърлен; няма одобрен site SVG и няма нов icon checkpoint сега. Професионалната site visual система остава OPEN, без 3D site изключение и без да блокира content-complete/reality;
 - ако сравнението не доказва едновременно професионална визия, ясна семантика, консистентност и приемлива тежест, icon работата не продължава и не блокира content-complete Stage 2.
 
 ### 10.2 Любими — ЖЕЛАНО И ПРОТОТИПИРАНО, PRODUCTION CONTRACT OPEN
@@ -687,7 +687,7 @@ Stage 2 демонстрира тази посока, но финалната и
 1. **Запис и синхронизация на решението** — Master, централен регистър, Progress и `PROJECT_RULES_00_READ_FIRST.md` трябва да сочат към един и същ ред, без втори конкурентен Master.
 2. **Pre-implementation control pack, без production writes** — създава се изпълнима migration matrix по §12.2; в нея изрично се включват всички 14 production checkpoints, 46-те Services входа, `Пътнически превоз`, form/owner/moderation връзките, protected `Иванов Ремонти`, Admin-only permanent delete, auth redirect зависимостите, SEO/OG и rollback тестовете. Паралелно се избира и резервира финалният домейн; DNS/production cutover още не се прави.
 3. **Отделен security verification gate** — след отделно owner разрешение се прави read-only одит на реалните Supabase grants, RLS policies, RPC и role behavior. Repo анализът е evidence, но не доказва сам live базата. Ако се потвърди нарушение на LOCKED Admin-only permanent delete, останалата работа спира и се предлага тесен emergency security patch с backup/rollback и guest/user/moderator/admin QA. Това е отделен security checkpoint, не общо разрешение за Stage 3 или Supabase промени.
-4. **Един коригиран site/social icon checkpoint** — site/mobile показват само оптимизирани SVG и text-first leaves; подробната 3D композиция е само social/Facebook 1200×630 при липса на одобрена снимка. `8faa2f7…` е отхвърлен и не е acceptance evidence. Няма нова масова серия преди owner verdict.
+4. **Завършено без acceptance / PAUSED: site/social icon checkpoint** — и `8faa2f7…`, и коригираният `cbe64de…` са отхвърлени. Site/mobile технически остават SVG/text-first, подробната 3D композиция е само social/Facebook 1200×630 при липса на одобрена снимка, но няма одобрен site SVG и няма нова icon серия сега.
 5. **Content-complete / reality pass на Stage 2** — задължителното съдържание от регистъра и одобреното реално съдържание се представят вярно; при липса има честно empty state, не fake records. Потвърдените mapping/contract пропуски се отстраняват само в prototype scope.
 6. **Финален независим Stage 2 audit** — Home, hub, всички категории, results/detail/Add/edit, Favorites, Share, actions, forms и states; desktop + 390 px; млад, средна възраст и възрастен потребител; след това професионален UX, accessibility, performance и protected-regression review.
 7. **Owner visual acceptance и freeze на exact Stage 2 SHA** — едва тук Stage 2 може да бъде обявен за приет. Safety HEAD не се мести преди това отделно owner решение.
@@ -714,13 +714,15 @@ Stage 2 демонстрира тази посока, но финалната и
 - emergency security STOP не се задейства; Admin-only границата остава LOCKED и изисква четириролев UI/JS/RPC/RLS regression преди launch;
 - Security Advisor hardening findings остават отделен pre-launch checkpoint: function search paths, RPC least privilege, `listing_monthly_quotas` policy contract и leaked-password protection; няма разрешение да се променят;
 - `popitai-lom.bg` остава предпочитан домейн, но availability е `UNVERIFIED`: проверени са условията/публикуваната цена, без покупка, DNS или Auth промяна; owner трябва да потвърди наличността в checkout и да реши registrant/protection/registrar/term;
-- докато domain purchase/cutover остава отделен owner action, непосредственият безопасен Stage 2 ред продължава с т. 4 — един ограничен site-SVG/social-3D comparison checkpoint, не нова масова icon серия.
+- докато domain purchase/cutover остава отделен owner action, icon checkpoint-ът вече е приключил без acceptance; непосредственият безопасен Stage 2 ред продължава с content-complete/reality pass, не с нова icon серия.
 
 ### 12.0.3 Work 2 · 15.09.2026 — owner correction след discrepancy audit
 
 - owner потвърди строгата граница: site и mobile използват само оптимизирани SVG икони; одобрените подробни 3D изображения се пазят само за social/Facebook карти без собствена одобрена снимка;
 - предишната формулировка `основно за social` плюс неуточнен `exact leaf asset` е заменена, защото допускаше недоказано 3D WebP site изключение;
 - comparison commit `8faa2f757b3af88ed137a7b49a64be5cf36b326a` остава history/evidence за грешното тълкуване и е блокиран за acceptance;
+- коригираният SVG-site/social-3D comparison `cbe64de3096c4094ab1142cf7a811ec4907adea0` също е **REJECTED / PAUSED** с owner verdict от 15.09.2026: site SVG посоката е оценена като обща и детска; нито един показан SVG не получава site approval;
+- icon работата не се доразвива с нови проби и не блокира Stage 2; одобрените 3D теми се пазят само като бъдещ social материал, а финалната професионална site система остава `OPEN` за готов комплект или дизайнерски checkpoint;
 - външните audit находки за измерими icon прагове, неактивен TOM guard, неслята пенсионна статия, `events/reports is_blocked`, твърдо записан Admin UID и незабавна pre-launch SEO хигиена се връщат в централния регистър като `OPEN`; това не разрешава implementation;
 - production, Supabase, DNS, Stage 3 и LOCKED safety HEAD не са променяни.
 

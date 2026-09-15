@@ -48,8 +48,11 @@
     const canonical=aliases[exact]||exact;
     return accepted[canonical]||null;
   }
-  function site(name=''){
-    return resolve(name)?.site||'';
+  // The raster set is retained only as historical review/social-theme evidence.
+  // Owner rejected its use in site/mobile; site remains text-first until a
+  // professional SVG system receives a separate explicit approval.
+  function site(){
+    return '';
   }
   function has(name=''){
     return Boolean(resolve(name));
