@@ -25,7 +25,8 @@
 - Production `main`: не е променян от тази Stage 2 работа
 - Supabase/schema/RLS/RPC: не са променяни
 - Stage 3: не е започван
-- Pre-implementation control pack: създаден като `POPITAI_LOM_PRODUCTION_MIGRATION_MATRIX.md` върху exact review base `6e4b75276c64b41ffdc534384064a2a3b60b7685`; owner acceptance и domain decision са pending
+- Pre-implementation control pack: owner accepted; live read-only security/domain evidence е в `POPITAI_LOM_LIVE_SECURITY_AND_DOMAIN_AUDIT_20260915.md`
+- Domain: `popitai-lom.bg` е предпочитан; условията са проверени, availability/purchase остават owner checkout action; няма DNS/Auth промяна
 
 ## Прието до този checkpoint
 
@@ -41,7 +42,7 @@
 - Facebook distribution/content-protection решенията и production границите са класифицирани в централния регистър.
 - Services discovery taxonomy е owner-consolidated и приложена в review prototype от Work 2: деветте семейства остават, а 59-те понятия се представят чрез 46 видими входа, включително owner-approved `Пътнически превоз`, плюс точни aliases/filters/cross-links. Exact `Пътнически превоз` contract mapping остава потвърден prototype gap за bounded remediation.
 - Icon review branch съдържа 34 site WebP assets на 128×128 и 32 social WebP assets на 512×512. Approval е само по конкретните приети групи; масовата leaf експанзия е спряна като критичен път. Одобрена е хибридна посока: лека site SVG система + family/text-first discovery + подробни 3D social/large thematic assets.
-- Repo audit потвърждава риск от несъответствие между DELETE grants/permissive staff policies и LOCKED Admin-only permanent delete. Реалното live Supabase състояние е непроверено и не се променя без отделно owner разрешение за read-only audit и последващ отделен security checkpoint.
+- Work 2 read-only live audit не потвърждава Moderator hard-delete path: core RLS е включен, Admin delete policies са Admin-only, а Moderator delete-capable RPC/Storage bypass не е открит. Repo SQL evidence е старо/конфликтно спрямо live. Security Advisor hardening findings остават отделен pre-launch checkpoint; Supabase не е променян.
 
 ## Stage status
 
@@ -54,9 +55,9 @@
 ## Точен следващ ред — owner-approved Work 2 · 14.09.2026
 
 1. **Завършено:** docs-only синхронизация в `6e4b75276c64b41ffdc534384064a2a3b60b7685`;
-2. **Изграден / owner acceptance pending:** `POPITAI_LOM_PRODUCTION_MIGRATION_MATRIX.md` върху exact base `6e4b752…`; съдържа 14 checkpoints, 46 Services entries, `Пътнически превоз`, owner/form/moderation dependencies, `Иванов Ремонти`, Admin-only permanent delete, domain/auth/SEO/OG и rollback. Owner избира/резервира финалния domain; DNS не се пипа;
-3. **Следващ отделен security gate:** само след ново owner разрешение — read-only live Supabase grants/RLS/RPC/role audit; при потвърден LOCKED дефект останалата работа спира за тесен emergency patch plan, backup/rollback и четириролев QA;
-4. **Един хибриден icon comparison:** desktop, реален 390 px, 16–24 px, 56–64 px и social 1200×630; без масово leaf производство преди owner verdict;
+2. **Завършено и owner accepted:** `POPITAI_LOM_PRODUCTION_MIGRATION_MATRIX.md`;
+3. **Завършен read-only gate:** live Moderator hard-delete conflict не е потвърден; evidence и отделните hardening точки са в `POPITAI_LOM_LIVE_SECURITY_AND_DOMAIN_AUDIT_20260915.md`; Supabase не е променян;
+4. **Текущо следва:** един хибриден icon comparison — desktop, реален 390 px, 16–24 px, 56–64 px и social 1200×630; без масово leaf производство преди owner verdict;
 5. **Content-complete/reality Stage 2 pass:** задължителното съдържание и bounded prototype contract/mapping remediation;
 6. **Финален Stage 2 audit:** всички journeys, forms, Favorites, Share, actions и states на desktop/390 px, accessibility, performance и protected regressions;
 7. **Owner acceptance и freeze на exact Stage 2 SHA;**
@@ -77,7 +78,7 @@
 - премахване на одобрена възможност;
 - ново продуктово решение, което не е определено в Master-а.
 
-Repo evidence не се представя като доказателство за текущото live Supabase състояние. Security, production, domain cutover и Stage 3 чакат отделното им owner approval.
+Repo evidence не се представя като доказателство за текущото live Supabase състояние. Domain availability/purchase, security writes, production, domain cutover и Stage 3 чакат отделното им owner approval.
 
 Без такъв конфликт безопасните проверки и ограничената текуща задача продължават без междинни отчети.
 

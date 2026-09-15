@@ -14,7 +14,8 @@
 6. `PROJECT_RULES.md` — действащите глобални технически правила.
 7. `PROJECT_RULES_RENDER_OWNERSHIP.md` — render ownership.
 8. При migration, production, security, domain, auth, SEO/OG или launch задача: `POPITAI_LOM_PRODUCTION_MIGRATION_MATRIX.md` — текущият изпълним control pack; той не дава implementation permission.
-9. Task-specific технически договор се чете само когато задачата реално засяга съответния owner/module.
+9. При live security/domain задача: `POPITAI_LOM_LIVE_SECURITY_AND_DOMAIN_AUDIT_20260915.md` — последното read-only live evidence, отделните hardening точки и domain availability границата; не дава write/purchase/DNS permission.
+10. Task-specific технически договор се чете само когато задачата реално засяга съответния owner/module.
 
 Не се започва от стар prototype, handoff, checkpoint или V/B/Stage документ.
 

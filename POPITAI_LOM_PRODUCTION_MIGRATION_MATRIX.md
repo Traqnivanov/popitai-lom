@@ -223,7 +223,18 @@ Required sequence:
 5. test guest/user/Moderator/Admin at UI, JS, RPC/grant and RLS levels;
 6. deploy only the narrow security patch with rollback SQL and post-deploy verification.
 
-Current status: **`REPO CONFLICT PROVEN / LIVE UNVERIFIED / NO WRITE AUTHORIZATION`**.
+Live audit checkpoint (Work 2 · 15.09.2026):
+
+- owner разреши read-only проверка; изпълнени са само catalog `SELECT` и Security Advisor reads;
+- live RLS е включен за проверените core таблици;
+- административните `DELETE`/`ALL` policies са ограничени с `is_admin()`/точна Admin role проверка;
+- Moderator има read/update moderation policies, но не е открит hard-delete policy, Storage path или delete-capable RPC bypass;
+- user own-delete/media-cleanup flows не са Moderator moderation права и изрично блокират Moderator/Staff според owner контекста;
+- repo SQL evidence е по-старо/конфликтно спрямо live и не управлява само по себе си production state.
+
+Current status: **`LIVE LOCKED DELETE CONFLICT NOT CONFIRMED / EMERGENCY STOP NOT TRIGGERED / NO WRITE AUTHORIZATION`**.
+
+Отделни pre-launch hardening findings са записани в `POPITAI_LOM_LIVE_SECURITY_AND_DOMAIN_AUDIT_20260915.md`: mutable function search paths, executable `SECURITY DEFINER` least-privilege review, `listing_monthly_quotas` RLS-without-policy contract и disabled leaked-password protection. Те не се поправят механично и изискват отделен owner-approved security checkpoint.
 
 ### 6.2 Protected `Иванов Ремонти` / relevance
 
@@ -272,7 +283,7 @@ Custom Supabase API domain is optional and not a launch dependency.
 ## 8. Stage / launch dependency order
 
 1. This control pack is reviewed and accepted as the planning source.
-2. Separate read-only live Supabase security audit permission; confirmed delete conflict triggers `STOP`.
+2. Separate read-only live Supabase security audit — completed 15.09.2026; delete conflict not confirmed, emergency `STOP` not triggered.
 3. One hybrid icon comparison; no mass leaf series.
 4. Stage 2 content-complete/reality pass, including bounded `Пътнически превоз` contract mapping remediation.
 5. Independent full desktop/390/accessibility/performance/protected audit.
@@ -302,9 +313,9 @@ The control pack is complete as a planning artifact when:
 - all 14 checkpoints are present with owner, action, test, rollback, approval and status;
 - all 46 Services entries are accounted for exactly once;
 - every current/future public Add/Edit owner is classified;
-- live Supabase claims remain `LIVE UNVERIFIED` until separately checked;
+- broad live behavior remains unverified outside the separately completed delete/security catalog scope;
 - permanent delete and protected relevance are explicit gates;
 - route, domain, auth, SEO, OG and recovery dependencies are ordered;
 - no line is interpreted as production permission.
 
-The next executable task after acceptance is **not Stage 3**. It is the separately authorized read-only live Supabase security audit from Master §12 step 3.
+The next executable task after the completed read-only security gate is **not Stage 3**. It is the single hybrid icon comparison from Master §12 step 4; domain purchase and every Supabase/DNS write remain separately blocked.

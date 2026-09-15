@@ -702,8 +702,18 @@ Stage 2 демонстрира тази посока, но финалната и
 - изпълнимият planning artifact от т. 2 е създаден като `POPITAI_LOM_PRODUCTION_MIGRATION_MATRIX.md` върху exact base `6e4b75276c64b41ffdc534384064a2a3b60b7685`;
 - той съдържа 14-те production checkpoints, 46-те Services входа, route/form/owner/lifecycle картата, delete и protected relevance gate-овете, domain/auth/SEO/OG dependencies и rollback/launch recovery;
 - това е docs-only Work verdict и **не е** Stage 2 acceptance или разрешение за production, Supabase, DNS, safety HEAD или Stage 3 промяна;
-- т. 2 остава `OWNER ACCEPTANCE / DOMAIN DECISION PENDING`, докато собственикът не приеме control pack-а и не избере/резервира финалния домейн;
-- т. 3 не започва без отделно owner разрешение за read-only live Supabase audit.
+- към момента на този checkpoint т. 2 е била `OWNER ACCEPTANCE / DOMAIN DECISION PENDING`; по-късният verdict е в §12.0.2;
+- към момента на този checkpoint т. 3 не е започвала без отделно owner разрешение; разрешението и резултатът са записани в §12.0.2.
+
+### 12.0.2 Work 2 · 15.09.2026 — owner-approved read-only security/domain checkpoint
+
+- owner прие control pack-а и разреши само read-only live Supabase grants/RLS/RPC/role audit;
+- одитът е записан в `POPITAI_LOM_LIVE_SECURITY_AND_DOMAIN_AUDIT_20260915.md`; няма SQL write, migration, role impersonation или извличане на лични профилни данни;
+- live RLS и delete-capable policy/RPC/Storage paths **не потвърждават** repo риска за Moderator hard delete: административното окончателно изтриване е ограничено с `is_admin()`/точна Admin role проверка, а Moderator е блокиран от owner cleanup flows;
+- emergency security STOP не се задейства; Admin-only границата остава LOCKED и изисква четириролев UI/JS/RPC/RLS regression преди launch;
+- Security Advisor hardening findings остават отделен pre-launch checkpoint: function search paths, RPC least privilege, `listing_monthly_quotas` policy contract и leaked-password protection; няма разрешение да се променят;
+- `popitai-lom.bg` остава предпочитан домейн, но availability е `UNVERIFIED`: проверени са условията/публикуваната цена, без покупка, DNS или Auth промяна; owner трябва да потвърди наличността в checkout и да реши registrant/protection/registrar/term;
+- докато domain purchase/cutover остава отделен owner action, непосредственият безопасен Stage 2 ред продължава с т. 4 — един хибриден icon comparison checkpoint, не нова масова icon серия.
 
 ### 12.1 Production checkpoints след Stage 2, без текущо разрешение за реализация
 
@@ -734,7 +744,7 @@ Stage 2 демонстрира тази посока, но финалната и
 
 Задължителни отделни gate редове са:
 
-- Admin-only permanent delete — UI, JavaScript, RPC, grants и RLS трябва да налагат една и съща граница; live състоянието остава `UNVERIFIED`, докато няма отделно разрешен read-only Supabase audit;
+- Admin-only permanent delete — UI, JavaScript, RPC, grants и RLS трябва да налагат една и съща граница; Work 2 read-only audit от 15.09.2026 не потвърждава Moderator hard-delete path, но четириролев UI/JS/RPC/RLS regression остава задължителен преди launch;
 - protected relevance/`Иванов Ремонти` — запазва се след релевантността във всички приложими search/results пътища и има отделен regression test преди и след migration;
 - Services — 9 families / 46 visible entries, backward-compatible aliases и exact discovery-leaf persistence/reconstruction; `Пътнически превоз` не остава само visual prototype entry, а получава изричен contract/mapping verdict;
 - всеки публичен Add/Edit вход — точен lifecycle owner, форма, auth gate, status, moderation, error и recovery път; не се създава паралелен owner по удобство;
