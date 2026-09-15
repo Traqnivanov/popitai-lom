@@ -24,7 +24,7 @@
 - всяко ново решение или промяна на статус записва `Work номер + дата + owner verdict + evidence/SHA`, когато има такова;
 - решение без доказан Work източник не се приписва по памет; отбелязва се като legacy/неуточнен произход до проверка;
 - по-нов Work може да замени старо решение само при изрично owner решение; старият запис остава история с `REPLACED`, а не се изтрива;
-- текущият чат е **Work 2 — 10–14.09.2026**.
+- текущият чат е **Work 2 — 10–15.09.2026**.
 
 | Work | Дата | Доказано решение / evidence |
 | --- | --- | --- |
@@ -35,6 +35,7 @@
 | Work 2 | 13.09.2026 | Owner приема цялата visual група `Красота и лична грижа`: един family знак и точни leaf знаци за `Фризьор и бръснар`, `Маникюр и педикюр`, `Козметика и грим` и `Немедицински масаж`; техническата review интеграция не разрешава production wiring. |
 | Work 2 | 13.09.2026 | Owner приема цялата visual група `Грижа за хора и животни`: точни leaf знаци за `Детегледачки`, `Грижа за възрастни`, `Помощ в дома`, `Гледане и разхождане на домашни любимци` и `Грижа и подстригване на домашни любимци`; техническата review интеграция не разрешава production wiring. |
 | Work 2 | 14.09.2026 | Owner приема цялостния одит и новия строг ред: масовото производство на leaf икони спира като критичен път; приетите assets се пазят; следват migration matrix, отделен security verification gate, един хибриден icon comparison, content-complete Stage 2, финален audit/freeze, owner-by-owner Stage 3, контролиран domain/auth/SEO cutover и soft launch. База на решението: `6d7ce692a9fc01759df21e406bde386c7c3a3859`; няма разрешение за production, Supabase или Stage 3 промяна. |
+| Work 2 | 15.09.2026 | Върху exact review base `6e4b75276c64b41ffdc534384064a2a3b60b7685` е изграден docs-only `POPITAI_LOM_PRODUCTION_MIGRATION_MATRIX.md`: 14 production checkpoints, 9/46 Services карта, route/form/owner/lifecycle inventory, Admin-only delete и `Иванов Ремонти` gate, domain/auth/SEO/OG dependencies и rollback/launch recovery. Control pack acceptance, финалният домейн и отделното разрешение за read-only live Supabase audit остават owner actions; няма production/Supabase/Stage 3 permission. |
 
 ## 2. Допустими статуси
 
@@ -126,7 +127,7 @@
 | Permanent delete | **LOCKED RISK CONFIRMED IN REPO / LIVE UNVERIFIED** | Repo SQL дава `authenticated` DELETE grants, а permissive `FOR ALL` staff policies използват общ `is_staff()` за Admin и Moderator. Това е несъвместимо с Admin-only LOCKED правилото, ако live базата съвпада с repo. Frontend скриване или допълнителна permissive Admin policy сами по себе си не са достатъчна поправка. | Само след отделно owner разрешение: read-only live grants/RLS/RPC/role audit. При потвърждение — тесен emergency security plan с backup, rollback и четириролев QA; без промяна преди approval. |
 | `Пътнически превоз` contract | **PROTOTYPE GAP CONFIRMED** | Entry съществува във visual/service views и audit, но липсва в `prototype-stage2-contracts.js` mapping. Не е production дефект и не разрешава data migration. | Bounded Stage 2 mapping remediation след control pack; source + desktop/390 regression. |
 | Protected `Иванов Ремонти` | **LOCKED / PRODUCTION EXISTS / MIGRATION GATE MISSING** | Production има специалния relevance/priority behavior; prototype migration task list не го доказва като отделен gate. | Задължителен migration matrix ред и regression test преди/след всеки засегнат search/results integration. |
-| Migration path | **APPROVED REQUIREMENT — NOT YET BUILT** | Master има 14 production checkpoints, но няма една ordered owner/timing/test/rollback matrix. | Един изпълним matrix по Master §12.2 преди Stage 3. |
+| Migration path | **CONTROL PACK BUILT — OWNER ACCEPTANCE PENDING** | `POPITAI_LOM_PRODUCTION_MIGRATION_MATRIX.md` покрива 14-те checkpoints, 46 Services entries, routes/forms/owners, protected/security gates, domain/auth/SEO/OG и rollback върху base `6e4b752…`. Това е planning evidence, не production permission. | Owner приема pack-а и избира/резервира domain; след това отделно разрешава или отказва read-only live Supabase security audit. |
 | TOM/guard process | **OPEN — NOT CANONICAL** | Sandbox TOM control и guard съществуват, но guard не е в intended base branch и не е автоматично активен. Sandbox документът не е част от текущия mandatory read order. | Отделен owner verdict дали процесът се приема; ако да, guard се поставя в реалния base path с тест. Не се приема мълчаливо. |
 | Domain и SEO | **PLANNED / PRODUCTION CUTOVER BLOCKED** | Repo няма пълен robots/sitemap/canonical/OG coverage. Изборът и резервирането на домейн могат да станат рано; DNS, canonical, redirects, auth и production metadata не се сменят сега. | Domain decision в control pack; технически cutover след готовите production owners, с old/new URL и auth regression. |
 | Stage 2 | **ACCEPTANCE PENDING** | Public IA е одобрена; content reality, общият desktop/390 audit и owner visual acceptance остават незавършени. | Content-complete pass → финален audit → owner freeze на exact SHA. |
@@ -225,6 +226,7 @@
 
 - продуктова истина и приоритет: `POPITAI_LOM_MASTER_CURRENT.md`;
 - текущ напредък: `PROJECT_PROGRESS.md`;
+- migration/production/security/domain/auth/SEO/OG/launch контрол: `POPITAI_LOM_PRODUCTION_MIGRATION_MATRIX.md`;
 - Facebook bridge technical/product contract: `PUBLIC_PRODUCT_V6_B7_FACEBOOK_BRIDGE_TECHNICAL_PRODUCT_CONTRACT.md`;
 - входни стратегически документи от 07.09.2026: Facebook Hooks Strategy V2 и Content Protection Strategy;
 - protected/LOCKED правила: приложимите `PROJECT_RULES*` документи.

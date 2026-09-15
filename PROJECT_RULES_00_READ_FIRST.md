@@ -13,7 +13,8 @@
 5. `PROJECT_RULES_ADMIN_MODERATOR.md` — точната граница Admin/Moderator.
 6. `PROJECT_RULES.md` — действащите глобални технически правила.
 7. `PROJECT_RULES_RENDER_OWNERSHIP.md` — render ownership.
-8. Task-specific технически договор се чете само когато задачата реално засяга съответния owner/module.
+8. При migration, production, security, domain, auth, SEO/OG или launch задача: `POPITAI_LOM_PRODUCTION_MIGRATION_MATRIX.md` — текущият изпълним control pack; той не дава implementation permission.
+9. Task-specific технически договор се чете само когато задачата реално засяга съответния owner/module.
 
 Не се започва от стар prototype, handoff, checkpoint или V/B/Stage документ.
 

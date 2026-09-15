@@ -696,6 +696,15 @@ Stage 2 демонстрира тази посока, но финалната и
 
 Нито една следваща точка не се започва само защото предходната има написан код. Нужни са посоченото evidence, Work verdict и owner approval там, където границата е LOCKED или production.
 
+### 12.0.1 Work 2 · 15.09.2026 — control-pack checkpoint
+
+- docs synchronization от т. 1 е завършена в `6e4b75276c64b41ffdc534384064a2a3b60b7685`;
+- изпълнимият planning artifact от т. 2 е създаден като `POPITAI_LOM_PRODUCTION_MIGRATION_MATRIX.md` върху exact base `6e4b75276c64b41ffdc534384064a2a3b60b7685`;
+- той съдържа 14-те production checkpoints, 46-те Services входа, route/form/owner/lifecycle картата, delete и protected relevance gate-овете, domain/auth/SEO/OG dependencies и rollback/launch recovery;
+- това е docs-only Work verdict и **не е** Stage 2 acceptance или разрешение за production, Supabase, DNS, safety HEAD или Stage 3 промяна;
+- т. 2 остава `OWNER ACCEPTANCE / DOMAIN DECISION PENDING`, докато собственикът не приеме control pack-а и не избере/резервира финалния домейн;
+- т. 3 не започва без отделно owner разрешение за read-only live Supabase audit.
+
 ### 12.1 Production checkpoints след Stage 2, без текущо разрешение за реализация
 
 1. exact Service discovery-leaf persistence/reconstruction и backward-compatible taxonomy mapping;
@@ -762,7 +771,8 @@ Matrix-ът е документ за контрол и доказателств�
 5. `PROJECT_RULES_ADMIN_MODERATOR.md` — точна ролева граница;
 6. `PROJECT_RULES.md` — действащи глобални технически правила;
 7. `PROJECT_RULES_RENDER_OWNERSHIP.md` — render ownership;
-8. task-specific технически договор само когато задачата реално засяга съответния owner.
+8. `POPITAI_LOM_PRODUCTION_MIGRATION_MATRIX.md` — задължителен контролен pack при migration, production, security, domain, auth, SEO/OG или launch задача; не дава implementation permission;
+9. task-specific технически договор само когато задачата реално засяга съответния owner.
 
 ### Исторически и supporting документи
 

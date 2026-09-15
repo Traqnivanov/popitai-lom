@@ -1,6 +1,6 @@
 # Попитай.Лом — CURRENT PROJECT CHECKPOINT
 
-Актуализирано: **14.09.2026**
+Актуализирано: **15.09.2026**
 
 Този файл е кратък оперативен указател. Той **не е втори продуктов Master**.
 Текущите решения, заменените правила и точният ред на работа са в:
@@ -25,6 +25,7 @@
 - Production `main`: не е променян от тази Stage 2 работа
 - Supabase/schema/RLS/RPC: не са променяни
 - Stage 3: не е започван
+- Pre-implementation control pack: създаден като `POPITAI_LOM_PRODUCTION_MIGRATION_MATRIX.md` върху exact review base `6e4b75276c64b41ffdc534384064a2a3b60b7685`; owner acceptance и domain decision са pending
 
 ## Прието до този checkpoint
 
@@ -52,9 +53,9 @@
 
 ## Точен следващ ред — owner-approved Work 2 · 14.09.2026
 
-1. **Текущ docs-only checkpoint:** синхронизиране на Master, регистър, Progress и `PROJECT_RULES_00_READ_FIRST.md` върху exact review base `6d7ce692a9fc01759df21e406bde386c7c3a3859`;
-2. **Pre-implementation control pack, без production writes:** една изпълнима migration matrix по Master §12.2, включително 14-те production checkpoints, 46 Services entries, `Пътнически превоз`, всички owner/form/moderation зависимости, protected `Иванов Ремонти`, Admin-only permanent delete, domain/auth/SEO/OG и rollback;
-3. **Отделен security gate:** само след ново owner разрешение — read-only live Supabase grants/RLS/RPC/role audit; при потвърден LOCKED дефект останалата работа спира за тесен emergency patch plan, backup/rollback и четириролев QA;
+1. **Завършено:** docs-only синхронизация в `6e4b75276c64b41ffdc534384064a2a3b60b7685`;
+2. **Изграден / owner acceptance pending:** `POPITAI_LOM_PRODUCTION_MIGRATION_MATRIX.md` върху exact base `6e4b752…`; съдържа 14 checkpoints, 46 Services entries, `Пътнически превоз`, owner/form/moderation dependencies, `Иванов Ремонти`, Admin-only permanent delete, domain/auth/SEO/OG и rollback. Owner избира/резервира финалния domain; DNS не се пипа;
+3. **Следващ отделен security gate:** само след ново owner разрешение — read-only live Supabase grants/RLS/RPC/role audit; при потвърден LOCKED дефект останалата работа спира за тесен emergency patch plan, backup/rollback и четириролев QA;
 4. **Един хибриден icon comparison:** desktop, реален 390 px, 16–24 px, 56–64 px и social 1200×630; без масово leaf производство преди owner verdict;
 5. **Content-complete/reality Stage 2 pass:** задължителното съдържание и bounded prototype contract/mapping remediation;
 6. **Финален Stage 2 audit:** всички journeys, forms, Favorites, Share, actions и states на desktop/390 px, accessibility, performance и protected regressions;
