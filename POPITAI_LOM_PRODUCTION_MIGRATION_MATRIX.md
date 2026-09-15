@@ -284,7 +284,7 @@ Custom Supabase API domain is optional and not a launch dependency.
 
 1. This control pack is reviewed and accepted as the planning source.
 2. Separate read-only live Supabase security audit — completed 15.09.2026; delete conflict not confirmed, emergency `STOP` not triggered.
-3. One hybrid icon comparison; no mass leaf series.
+3. One corrected icon comparison: optimized SVG only in site/mobile, separate approved 3D asset only in social/Facebook 1200×630 when no approved own image exists; no mass leaf series.
 4. Stage 2 content-complete/reality pass, including bounded `Пътнически превоз` contract mapping remediation.
 5. Independent full desktop/390/accessibility/performance/protected audit.
 6. Owner visual acceptance and freeze of exact Stage 2 SHA.
@@ -318,4 +318,4 @@ The control pack is complete as a planning artifact when:
 - route, domain, auth, SEO, OG and recovery dependencies are ordered;
 - no line is interpreted as production permission.
 
-The next executable task after the completed read-only security gate is **not Stage 3**. It is the single hybrid icon comparison from Master §12 step 4; domain purchase and every Supabase/DNS write remain separately blocked.
+The next executable task after the completed read-only security gate is **not Stage 3**. After the owner correction from Work 2 · 15.09.2026, it is the single SVG-site/3D-social comparison from Master §12 step 4; domain purchase and every Supabase/DNS write remain separately blocked.

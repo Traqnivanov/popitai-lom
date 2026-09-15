@@ -41,7 +41,7 @@
 - public results използват само доказани approved records или честно empty state; synthetic/mock public results са премахнати и canonical results owner е консолидиран.
 - Facebook distribution/content-protection решенията и production границите са класифицирани в централния регистър.
 - Services discovery taxonomy е owner-consolidated и приложена в review prototype от Work 2: деветте семейства остават, а 59-те понятия се представят чрез 46 видими входа, включително owner-approved `Пътнически превоз`, плюс точни aliases/filters/cross-links. Exact `Пътнически превоз` contract mapping остава потвърден prototype gap за bounded remediation.
-- Icon review branch съдържа 34 site WebP assets на 128×128 и 32 social WebP assets на 512×512. Approval е само по конкретните приети групи; масовата leaf експанзия е спряна като критичен път. Одобрена е хибридна посока: лека site SVG система + family/text-first discovery + подробни 3D social/large thematic assets.
+- Icon review branch съдържа исторически 128 px site WebP и 512 px social WebP варианти. След owner correction от Work 2 · 15.09.2026 site/mobile използват само оптимизирани SVG и text-first leaves; подробните одобрени 3D assets са само за social/Facebook 1200×630 без собствена одобрена снимка. Масовата leaf експанзия остава спряна.
 - Work 2 read-only live audit не потвърждава Moderator hard-delete path: core RLS е включен, Admin delete policies са Admin-only, а Moderator delete-capable RPC/Storage bypass не е открит. Repo SQL evidence е старо/конфликтно спрямо live. Security Advisor hardening findings остават отделен pre-launch checkpoint; Supabase не е променян.
 
 ## Stage status
@@ -57,7 +57,7 @@
 1. **Завършено:** docs-only синхронизация в `6e4b75276c64b41ffdc534384064a2a3b60b7685`;
 2. **Завършено и owner accepted:** `POPITAI_LOM_PRODUCTION_MIGRATION_MATRIX.md`;
 3. **Завършен read-only gate:** live Moderator hard-delete conflict не е потвърден; evidence и отделните hardening точки са в `POPITAI_LOM_LIVE_SECURITY_AND_DOMAIN_AUDIT_20260915.md`; Supabase не е променян;
-4. **Текущо следва:** един хибриден icon comparison — desktop, реален 390 px, 16–24 px, 56–64 px и social 1200×630; без масово leaf производство преди owner verdict;
+4. **Текущо следва:** docs-only correction е подготвена; след нейното owner review се коригира отхвърленият `8faa2f7…` checkpoint: само SVG в site/mobile и отделен 3D social 1200×630 пример; без масово leaf производство;
 5. **Content-complete/reality Stage 2 pass:** задължителното съдържание и bounded prototype contract/mapping remediation;
 6. **Финален Stage 2 audit:** всички journeys, forms, Favorites, Share, actions и states на desktop/390 px, accessibility, performance и protected regressions;
 7. **Owner acceptance и freeze на exact Stage 2 SHA;**

@@ -618,18 +618,19 @@ Stage 2 демонстрира тази посока, но финалната и
 - ограничените SVG примери в Stage 2 са visual direction, не автоматично финален site-wide избор;
 - масова production подмяна не се прави преди отделен icon inventory, desktop/mobile визуален макет и owner acceptance.
 
-#### 10.1.1 Work 2 · 14.09.2026 — ОДОБРЕНА хибридна система и стоп на масовото производство
+#### 10.1.1 Work 2 · 14–15.09.2026 — ОДОБРЕНА строга site/social граница и стоп на масовото производство
 
 След цялостния Work 2 audit собственикът одобри следната корекция на реда:
 
 - масовото изработване на подробни leaf икони се спира като критичен път; не се продължава серия по серия само за да се покрият механично всички 46 discovery входа;
-- всички вече приети assets се запазват като валиден review материал за точните им приети контексти; те не се изтриват и не се включват автоматично в production;
+- всички вече приети 3D assets се запазват като валиден social visual материал за точните им приети теми; историческите 128 px site варианти не дават право за site wiring;
 - малките навигационни/action икони на 16–24 px използват една лека, последователна SVG система; подробни 3D сцени не се свиват механично до този размер;
-- Services family/category входовете използват един силен общ знак; deep leaf редовете остават text-first;
-- точен leaf asset се използва само когато family знакът би бил неточен или подвеждащ и когато знакът е доказано четим в реалния му site размер;
-- подробните 3D assets са предназначени основно за social 1200×630 композиции и големи тематични карти; site и social не са един и същ файл, размер или композиция, но пазят един и същ одобрен визуален смисъл;
+- site и mobile използват само оптимизирани SVG икони; Services family/category входовете имат един силен SVG знак, deep leaf редовете остават text-first, а при доказано подвеждащ family знак може да има отделен точен leaf SVG след owner approval;
+- подробните одобрени 3D assets са само за social/Facebook 1200×630 композиции, когато записът няма одобрена собствена снимка; не се използват като WebP/raster икони в site/mobile категории, списъци, резултати или cards;
 - остава задължителната йерархия `одобрена реална медия → точна одобрена leaf тема → family/category → Lom fallback`, без AI гадаене по свободен текст;
-- преди каквато и да е следваща icon експанзия се прави точно един сравнителен хибриден checkpoint: desktop, реален 390 px mobile, 16–24 px navigation/action, 56–64 px thematic card и social 1200×630;
+- йерархията не означава един и същ файл: site leaf/family вариантът е SVG, а social тематичният вариант може да използва одобрения 3D asset;
+- каченият Work 2 comparison `8faa2f757b3af88ed137a7b49a64be5cf36b326a` е **REJECTED / НЕ Е ЗА OWNER APPROVAL**, защото показва `roofing.webp` като site/mobile exact leaf и по този начин избира недопустима страна на предишната двусмислена формулировка;
+- следващият ограничен icon checkpoint сравнява само site/mobile SVG системата с отделната 3D social 1200×630 композиция; няма 3D site изключение и няма нова масова серия;
 - ако сравнението не доказва едновременно професионална визия, ясна семантика, консистентност и приемлива тежест, icon работата не продължава и не блокира content-complete Stage 2.
 
 ### 10.2 Любими — ЖЕЛАНО И ПРОТОТИПИРАНО, PRODUCTION CONTRACT OPEN
@@ -686,7 +687,7 @@ Stage 2 демонстрира тази посока, но финалната и
 1. **Запис и синхронизация на решението** — Master, централен регистър, Progress и `PROJECT_RULES_00_READ_FIRST.md` трябва да сочат към един и същ ред, без втори конкурентен Master.
 2. **Pre-implementation control pack, без production writes** — създава се изпълнима migration matrix по §12.2; в нея изрично се включват всички 14 production checkpoints, 46-те Services входа, `Пътнически превоз`, form/owner/moderation връзките, protected `Иванов Ремонти`, Admin-only permanent delete, auth redirect зависимостите, SEO/OG и rollback тестовете. Паралелно се избира и резервира финалният домейн; DNS/production cutover още не се прави.
 3. **Отделен security verification gate** — след отделно owner разрешение се прави read-only одит на реалните Supabase grants, RLS policies, RPC и role behavior. Repo анализът е evidence, но не доказва сам live базата. Ако се потвърди нарушение на LOCKED Admin-only permanent delete, останалата работа спира и се предлага тесен emergency security patch с backup/rollback и guest/user/moderator/admin QA. Това е отделен security checkpoint, не общо разрешение за Stage 3 или Supabase промени.
-4. **Един хибриден icon comparison checkpoint** — сравняват се леката site система, family/text-first моделът и подробната social композиция на desktop, 390 px и реалните малки размери. Няма нова масова серия преди owner verdict.
+4. **Един коригиран site/social icon checkpoint** — site/mobile показват само оптимизирани SVG и text-first leaves; подробната 3D композиция е само social/Facebook 1200×630 при липса на одобрена снимка. `8faa2f7…` е отхвърлен и не е acceptance evidence. Няма нова масова серия преди owner verdict.
 5. **Content-complete / reality pass на Stage 2** — задължителното съдържание от регистъра и одобреното реално съдържание се представят вярно; при липса има честно empty state, не fake records. Потвърдените mapping/contract пропуски се отстраняват само в prototype scope.
 6. **Финален независим Stage 2 audit** — Home, hub, всички категории, results/detail/Add/edit, Favorites, Share, actions, forms и states; desktop + 390 px; млад, средна възраст и възрастен потребител; след това професионален UX, accessibility, performance и protected-regression review.
 7. **Owner visual acceptance и freeze на exact Stage 2 SHA** — едва тук Stage 2 може да бъде обявен за приет. Safety HEAD не се мести преди това отделно owner решение.
@@ -713,7 +714,15 @@ Stage 2 демонстрира тази посока, но финалната и
 - emergency security STOP не се задейства; Admin-only границата остава LOCKED и изисква четириролев UI/JS/RPC/RLS regression преди launch;
 - Security Advisor hardening findings остават отделен pre-launch checkpoint: function search paths, RPC least privilege, `listing_monthly_quotas` policy contract и leaked-password protection; няма разрешение да се променят;
 - `popitai-lom.bg` остава предпочитан домейн, но availability е `UNVERIFIED`: проверени са условията/публикуваната цена, без покупка, DNS или Auth промяна; owner трябва да потвърди наличността в checkout и да реши registrant/protection/registrar/term;
-- докато domain purchase/cutover остава отделен owner action, непосредственият безопасен Stage 2 ред продължава с т. 4 — един хибриден icon comparison checkpoint, не нова масова icon серия.
+- докато domain purchase/cutover остава отделен owner action, непосредственият безопасен Stage 2 ред продължава с т. 4 — един ограничен site-SVG/social-3D comparison checkpoint, не нова масова icon серия.
+
+### 12.0.3 Work 2 · 15.09.2026 — owner correction след discrepancy audit
+
+- owner потвърди строгата граница: site и mobile използват само оптимизирани SVG икони; одобрените подробни 3D изображения се пазят само за social/Facebook карти без собствена одобрена снимка;
+- предишната формулировка `основно за social` плюс неуточнен `exact leaf asset` е заменена, защото допускаше недоказано 3D WebP site изключение;
+- comparison commit `8faa2f757b3af88ed137a7b49a64be5cf36b326a` остава history/evidence за грешното тълкуване и е блокиран за acceptance;
+- външните audit находки за измерими icon прагове, неактивен TOM guard, неслята пенсионна статия, `events/reports is_blocked`, твърдо записан Admin UID и незабавна pre-launch SEO хигиена се връщат в централния регистър като `OPEN`; това не разрешава implementation;
+- production, Supabase, DNS, Stage 3 и LOCKED safety HEAD не са променяни.
 
 ### 12.1 Production checkpoints след Stage 2, без текущо разрешение за реализация
 
