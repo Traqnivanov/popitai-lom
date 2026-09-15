@@ -223,7 +223,7 @@
 .hybrid-exact-label{justify-self:start;padding:5px 8px;border-radius:999px;background:#fff0c9}
 .hybrid-exact-main{display:grid;grid-template-columns:86px minmax(0,1fr);align-items:center;gap:16px}
 .hybrid-exact-emblem{display:grid;place-items:center;width:80px;height:80px;border:1px solid #d7e2ed;border-radius:18px;background:#eef4fa}
-.hybrid-exact-emblem img{width:68px;height:68px;object-fit:contain}
+.hybrid-exact-emblem img{width:64px;height:64px;object-fit:contain}
 .hybrid-exact-card>a{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 13px;border-radius:11px;background:var(--hybrid-navy);color:#fff;text-decoration:none;font-weight:850}
 .hybrid-exact-card>a svg{color:#fff}
 .hybrid-phone{width:min(390px,100%);margin:0 auto;overflow:hidden;border:7px solid #092742;border-radius:28px;background:#f3f6fa;box-shadow:0 20px 44px rgba(5,31,57,.18)}
