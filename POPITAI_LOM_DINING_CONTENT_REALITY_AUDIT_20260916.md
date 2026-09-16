@@ -64,3 +64,11 @@ Work provenance: **Work 2**
 5. Едва след това bounded adapter proposal, desktop + 390 px QA и отделно implementation approval.
 
 Няма промяна на prototype runtime, production, Supabase, schema/RLS/RPC, Stage 3 или LOCKED safety HEAD.
+
+## 7. Разширен verification pass
+
+След този начален audit е извършен по-широк discovery/verification pass. Пълният research handoff, 20+ текущи/вероятно активни кандидата, identity конфликтите, inactive/excluded записите и bounded следващият пакет са записани в:
+
+`POPITAI_LOM_DINING_VERIFICATION_PASS_20260916.md`
+
+Този pass не променя source границата: каталогът е discovery evidence, не automatic import или official field source.

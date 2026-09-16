@@ -764,6 +764,16 @@ Owner разрешава създаването на единен pre-production
 
 Точният договор, schema, records и validator са в `content-inventory/README.md`, `schema.v1.json`, `records.v1.json` и `validate_inventory.py`.
 
+### 12.0.7 Work 2 · 16.09.2026 — разширен dining verification pass
+
+Широкият dining discovery pass доказва, че първоначалните 9 обекта са само част от реалното местно съдържание. Намерени са 20+ силни текущи/вероятно активни кандидата и още приблизително 8–10 research/conflict кандидата, но local index числото `27` не се приема като 27 уникални действащи заведения: в него има стари, затворени и вероятно дублирани записи.
+
+Текущият owner и публична граница не се променят: dining остава Firms / `businesses` / `Заведения`, без втори datastore. Трите вече officially verified записа остават единствените `verified_for_bounded_prototype` dining records до owner review. Новите каталожни кандидати не се импортират автоматично и не получават official полета без direct first-party evidence.
+
+Следващият ограничен пакет е identity/dedupe resolution за `Friends/Valentino`, `Дунавски вълни/При Маца`, `Чановете`, `NARODEN`, `Kastelo` и `Каприз/При Финци`, след което се проверяват direct official fields на най-силните недублирани кандидати. Пълната класификация `READY / NEEDS FIELD VERIFICATION / CONFLICT / RESEARCH-ONLY / INACTIVE` е в `POPITAI_LOM_DINING_VERIFICATION_PASS_20260916.md`.
+
+Това е research/control checkpoint. Не разрешава runtime adapter, prototype UI промяна, production import, Supabase/schema/RLS/RPC, Stage 3 или промяна на LOCKED safety HEAD.
+
 ### 12.1 Production checkpoints след Stage 2, без текущо разрешение за реализация
 
 1. exact Service discovery-leaf persistence/reconstruction и backward-compatible taxonomy mapping;

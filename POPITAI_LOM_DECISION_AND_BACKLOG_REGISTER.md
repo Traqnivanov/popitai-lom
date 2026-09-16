@@ -44,6 +44,7 @@
 | Work 2 | 16.09.2026 | Owner разрешава `content-inventory/` като единен pre-production control layer. Създадени са V1 schema, 7 начални evidence records и deterministic validator. Статусът е CONTROL CONTRACT / OWNER REVIEW PENDING; няма runtime adapter, production import, Supabase, Stage 3 или промяна на LOCKED safety HEAD. |
 | Work 2 | 16.09.2026 | Dining reality/gap/duplicate audit е завършен read-only. Доказани са 3 силни кандидата (`Ресторант Дъгата`, `Пицария При Финци`, `Пица на пещ Тербаяно`) и 2 research-only кандидата; inventory е 12 records. Открит е OPEN production gate: хотел-ресторантите изискват един canonical Firms record с accommodation+dining discovery facets, защото текущият `businesses.category` е единичен text value. Няма runtime/schema/Supabase промяна. |
 | Work 2 | 16.09.2026 | Local owner потвърждава `Ресторант Бохеми` като съществуващ. Добавен е като owner-confirmed partial record №13; телефонът и часовете от directory signal остават secondary, докато няма direct official verification. |
+| Work 2 | 16.09.2026 | Разширеният dining verification pass намира 20+ силни текущи/вероятно активни кандидата и още 8–10 research/conflict кандидата, но отхвърля автоматичното приемане на local index `27` като 27 уникални активни обекта. Новите записи са класифицирани в `POPITAI_LOM_DINING_VERIFICATION_PASS_20260916.md`; следва identity/dedupe пакет, без automatic import, runtime, production или Supabase промяна. |
 
 ## 2. Допустими статуси
 
