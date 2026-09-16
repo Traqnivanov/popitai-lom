@@ -95,6 +95,10 @@ Icon работата остава PAUSED. Site/mobile остават text-first
 | Подаване на сигнал | legacy planned draft | exact institution/channel mapping |
 | Лом за един ден | **FUTURE ARTICLE BACKLOG / NOT CURRENT TASK** | по-широка проверена местна база → включване в програма от поне 10 статии → 5–7 visit-ready места, logical route, source inventory и отделно owner approval |
 
+## 9.1 Dining audit checkpoint · Work 2 · 16.09.2026
+
+Тесният dining content reality/gap/duplicate audit е записан в `POPITAI_LOM_DINING_CONTENT_REALITY_AUDIT_20260916.md`. Той добавя 5 research/control records в `content-inventory/` (общо 12), без да ги избира за публично показване. `Ресторант Дъгата` е силен official-source кандидат; останалите 4 са research-only. Комбинираните hotel+restaurant профили остават един canonical Firms record и изискват отделен production facet contract; не се създава duplicate.
+
 ## 10. Следващ разрешен ред
 
 1. **Завършено като control layer / owner review pending:** `content-inventory/` V1 договор, schema, 7 начални evidence records и deterministic validation; без runtime/UI/Supabase.

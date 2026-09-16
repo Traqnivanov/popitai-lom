@@ -67,7 +67,7 @@
 2. **Завършено и owner accepted:** `POPITAI_LOM_PRODUCTION_MIGRATION_MATRIX.md`;
 3. **Завършен read-only gate:** live Moderator hard-delete conflict не е потвърден; evidence и отделните hardening точки са в `POPITAI_LOM_LIVE_SECURITY_AND_DOMAIN_AUDIT_20260915.md`; Supabase не е променян;
 4. **Завършено без acceptance / PAUSED:** и `8faa2f7…`, и коригираният `cbe64de…` icon checkpoint са отхвърлени; няма одобрени site SVG и няма нова icon серия;
-5. **Текущ checkpoint — Content-complete/reality Stage 2 pass:** `content-inventory/` V1 control layer е създаден и валидиран; точните записи и видими полета чакат owner review. Следва content reality/gap/duplicate audit на заведенията върху съществуващия Firms owner, паралелно с official-source checklist за настаняване/горива/организации. После идва bounded adapter proposal. Няма runtime adapter, import, schema или production промяна преди отделно approval;
+5. **Текущ checkpoint — Content-complete/reality Stage 2 pass:** `content-inventory/` V1 е валидиран с 12 records. Dining reality/gap/duplicate audit е завършен: `Ресторант Дъгата` е силен bounded кандидат, 4 заведения са research-only, а hotel+restaurant cross-discovery е OPEN production facet gate без duplicate. Следва direct verification на research-only кандидатите и duplicate check; няма runtime adapter, import, schema или production промяна преди отделно approval;
 6. **Финален Stage 2 audit:** всички journeys, forms, Favorites, Share, actions и states на desktop/390 px, accessibility, performance и protected regressions;
 7. **Owner acceptance и freeze на exact Stage 2 SHA;**
 8. **Stage 3 само owner-by-owner и matrix-row-by-matrix-row;**

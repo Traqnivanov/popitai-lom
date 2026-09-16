@@ -78,7 +78,7 @@
       "required": ["id", "type", "checked_at", "note"],
       "properties": {
         "id": { "type": "string", "minLength": 1 },
-        "type": { "enum": ["official_registry", "official_operator", "official_site", "municipality", "institution", "owner_confirmation", "secondary", "local_signal"] },
+        "type": { "enum": ["official_registry", "official_operator", "official_site", "official_social", "municipality", "institution", "owner_confirmation", "secondary", "local_signal"] },
         "url": { "type": "string", "format": "uri" },
         "checked_at": { "type": "string", "format": "date" },
         "note": { "type": "string" }
@@ -105,4 +105,3 @@
     }
   }
 }
-

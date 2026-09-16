@@ -18,8 +18,8 @@ ENTITY_TYPES = {"accommodation", "fuel_station", "dining", "organization", "visi
 EVIDENCE_STATUSES = {"officially_verified", "owner_confirmed_partial", "conflict", "candidate_unverified"}
 READINESS = {"verified_for_bounded_prototype", "research_only", "blocked"}
 FIELD_STATUSES = {"official", "owner_confirmed", "secondary_signal", "local_signal", "unverified", "conflict"}
-SOURCE_TYPES = {"official_registry", "official_operator", "official_site", "municipality", "institution", "owner_confirmation", "secondary", "local_signal"}
-OFFICIAL_SOURCE_TYPES = {"official_registry", "official_operator", "official_site", "municipality", "institution"}
+SOURCE_TYPES = {"official_registry", "official_operator", "official_site", "official_social", "municipality", "institution", "owner_confirmation", "secondary", "local_signal"}
+OFFICIAL_SOURCE_TYPES = {"official_registry", "official_operator", "official_site", "official_social", "municipality", "institution"}
 ID_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 FORBIDDEN_DYNAMIC_KEYS = {"price", "prices", "availability", "цена", "цени", "наличност"}
 

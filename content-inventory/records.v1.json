@@ -143,7 +143,103 @@
       "open_fields": ["accommodation_active", "exact_address", "official_contact", "ntr_official_name", "ntr_type", "ntr_category", "ntr_registration_number", "ntr_current_status", "claim_status", "approved_media"],
       "prototype": { "eligible": false, "selected": false, "purpose": "Research only until current accommodation activity and official identity are verified." },
       "production": { "write_allowed": false, "gate": "Current activity proof + NTR match + owner approval + Firms migration row." }
+    },
+    {
+      "id": "dining-restorant-dagata",
+      "entity_type": "dining",
+      "public_name": "Ресторант Дъгата",
+      "canonical_owner": { "system": "firms", "collection": "businesses", "category": "Заведения", "canonical_record_id": null },
+      "evidence_status": "officially_verified",
+      "publication_readiness": "verified_for_bounded_prototype",
+      "owner_confirmed": false,
+      "fields": {
+        "address": { "value": "гр. Лом, ул. Славянска 21", "status": "official", "source_ids": ["dagata-site"] },
+        "phone": { "value": "+359 895 788 911", "status": "official", "source_ids": ["dagata-site"] },
+        "hours": { "value": "Понеделник–Събота 08:00–23:00", "status": "official", "source_ids": ["dagata-site"] },
+        "delivery": { "value": true, "status": "official", "source_ids": ["dagata-site"] }
+      },
+      "sources": [
+        { "id": "dagata-site", "type": "official_site", "url": "https://dagatalom.com/", "checked_at": "2026-09-16", "note": "Active official site with online ordering and direct contact data." },
+        { "id": "dagata-facebook", "type": "official_social", "url": "https://www.facebook.com/dagatalom/", "checked_at": "2026-09-16", "note": "Recent activity signal; exact public fields remain sourced from the official site." }
+      ],
+      "open_fields": ["canonical_production_record_id", "claim_status", "approved_media", "last_verified_policy"],
+      "prototype": { "eligible": true, "selected": false, "purpose": "Strong candidate for bounded dining review after owner selection." },
+      "production": { "write_allowed": false, "gate": "Duplicate check against existing businesses + owner approval + Firms migration row." }
+    },
+    {
+      "id": "dining-pizzeria-pri-fintsi",
+      "entity_type": "dining",
+      "public_name": "Пицария При Финци",
+      "canonical_owner": { "system": "firms", "collection": "businesses", "category": "Заведения", "canonical_record_id": null },
+      "evidence_status": "candidate_unverified",
+      "publication_readiness": "research_only",
+      "owner_confirmed": false,
+      "fields": {
+        "address": { "value": "гр. Лом, ул. Дунавска 34А", "status": "secondary_signal", "source_ids": ["pri-fintsi-facebook"] },
+        "phone": { "value": "+359 89 671 6639", "status": "secondary_signal", "source_ids": ["pri-fintsi-facebook"] }
+      },
+      "sources": [
+        { "id": "pri-fintsi-facebook", "type": "official_social", "url": "https://www.facebook.com/pri.finci/", "checked_at": "2026-09-16", "note": "Business page found; recent activity and exact current fields still require direct verification." }
+      ],
+      "open_fields": ["current_active_status", "current_address", "current_phone", "hours", "canonical_production_record_id", "claim_status", "approved_media"],
+      "prototype": { "eligible": false, "selected": false, "purpose": "Research only until current activity is directly verified." },
+      "production": { "write_allowed": false, "gate": "Current direct business signal + duplicate check + owner approval + Firms migration row." }
+    },
+    {
+      "id": "dining-pizzeria-palma",
+      "entity_type": "dining",
+      "public_name": "Пицария Палма",
+      "canonical_owner": { "system": "firms", "collection": "businesses", "category": "Заведения", "canonical_record_id": null },
+      "evidence_status": "candidate_unverified",
+      "publication_readiness": "research_only",
+      "owner_confirmed": false,
+      "fields": {
+        "phone": { "value": "0887 855 699", "status": "secondary_signal", "source_ids": ["palma-facebook"] }
+      },
+      "sources": [
+        { "id": "palma-facebook", "type": "official_social", "url": "https://www.facebook.com/pizariaPalma/", "checked_at": "2026-09-16", "note": "Business page found; exact current address, hours and active status require direct verification." }
+      ],
+      "open_fields": ["current_active_status", "address", "current_phone", "hours", "canonical_production_record_id", "claim_status", "approved_media"],
+      "prototype": { "eligible": false, "selected": false, "purpose": "Research only until current activity and address are directly verified." },
+      "production": { "write_allowed": false, "gate": "Current direct business signal + duplicate check + owner approval + Firms migration row." }
+    },
+    {
+      "id": "dining-pizza-terbayano",
+      "entity_type": "dining",
+      "public_name": "Пица на пещ Тербаяно",
+      "canonical_owner": { "system": "firms", "collection": "businesses", "category": "Заведения", "canonical_record_id": null },
+      "evidence_status": "candidate_unverified",
+      "publication_readiness": "research_only",
+      "owner_confirmed": false,
+      "fields": {
+        "city": { "value": "Лом", "status": "secondary_signal", "source_ids": ["terbayano-facebook"] }
+      },
+      "sources": [
+        { "id": "terbayano-facebook", "type": "official_social", "url": "https://www.facebook.com/p/%D0%9F%D0%B8%D1%86%D0%B0-%D0%BD%D0%B0-%D0%BF%D0%B5%D1%89-%D0%A2%D0%B5%D1%80%D0%B1%D0%B0%D1%8F%D0%BD%D0%BE-%D0%B3%D1%80%D0%9B%D0%BE%D0%BC-61574675399555/", "checked_at": "2026-09-16", "note": "Lom business page and delivery posts found; address, phone and current operating status remain open." }
+      ],
+      "open_fields": ["current_active_status", "address", "phone", "hours", "canonical_production_record_id", "claim_status", "approved_media"],
+      "prototype": { "eligible": false, "selected": false, "purpose": "Research only until current contact and location are directly verified." },
+      "production": { "write_allowed": false, "gate": "Current direct business signal + duplicate check + owner approval + Firms migration row." }
+    },
+    {
+      "id": "dining-kapriz-2025",
+      "entity_type": "dining",
+      "public_name": "Каприз 2025",
+      "canonical_owner": { "system": "firms", "collection": "businesses", "category": "Заведения", "canonical_record_id": null },
+      "evidence_status": "candidate_unverified",
+      "publication_readiness": "research_only",
+      "owner_confirmed": false,
+      "fields": {
+        "address": { "value": "гр. Лом, ул. Дунавска 34", "status": "secondary_signal", "source_ids": ["kapriz-facebook"] },
+        "phone": { "value": "0894 448 023", "status": "secondary_signal", "source_ids": ["kapriz-facebook"] },
+        "hours": { "value": "Понеделник–Събота 07:00–19:00; Неделя почивен ден", "status": "secondary_signal", "source_ids": ["kapriz-facebook"] }
+      },
+      "sources": [
+        { "id": "kapriz-facebook", "type": "official_social", "url": "https://www.facebook.com/p/%D0%9A%D0%B0%D0%BF%D1%80%D0%B8%D0%B7-2025-61580477320764/", "checked_at": "2026-09-16", "note": "Business page found; current status and the near-address relationship with При Финци require direct verification." }
+      ],
+      "open_fields": ["current_active_status", "address_relationship_with_pri_fintsi", "canonical_production_record_id", "claim_status", "approved_media"],
+      "prototype": { "eligible": false, "selected": false, "purpose": "Research only until current activity and address identity are directly verified." },
+      "production": { "write_allowed": false, "gate": "Current direct business signal + address/duplicate resolution + owner approval + Firms migration row." }
     }
   ]
 }
-
