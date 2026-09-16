@@ -1,6 +1,6 @@
 # Попитай.Лом — CURRENT PROJECT CHECKPOINT
 
-Актуализирано: **15.09.2026**
+Актуализирано: **16.09.2026**
 
 Този файл е кратък оперативен указател. Той **не е втори продуктов Master**.
 Текущите решения, заменените правила и точният ред на работа са в:
@@ -40,7 +40,7 @@
 - Favorites detail-only UX, internal real routes и content parity са прототипирани; пълната named-route desktop/390px browser acceptance остава в общия Stage 2 gate.
 - public results използват само доказани approved records или честно empty state; synthetic/mock public results са премахнати и canonical results owner е консолидиран.
 - Facebook distribution/content-protection решенията и production границите са класифицирани в централния регистър.
-- Services discovery taxonomy е owner-consolidated и приложена в review prototype от Work 2: деветте семейства остават, а 59-те понятия се представят чрез 46 видими входа, включително owner-approved `Пътнически превоз`, плюс точни aliases/filters/cross-links. Exact `Пътнически превоз` contract mapping остава потвърден prototype gap за bounded remediation.
+- Services discovery taxonomy е owner-consolidated и приложена в review prototype от Work 2: деветте семейства остават, а 59-те понятия се представят чрез 46 видими входа, включително owner-approved `Пътнически превоз`, плюс точни aliases/filters/cross-links. Exact mapping и targeted desktop/390 px QA за `Пътнически превоз` са преминати на `e092eb38c53efd8ca3ca0582a44a562ae34b764c`.
 - Icon review branch съдържа исторически 128 px site WebP и 512 px social WebP варианти. След owner correction от Work 2 · 15.09.2026 site/mobile използват само оптимизирани SVG и text-first leaves; подробните одобрени 3D assets са само за social/Facebook 1200×630 без собствена одобрена снимка. Масовата leaf експанзия остава спряна.
 - Work 2 read-only live audit не потвърждава Moderator hard-delete path: core RLS е включен, Admin delete policies са Admin-only, а Moderator delete-capable RPC/Storage bypass не е открит. Repo SQL evidence е старо/конфликтно спрямо live. Security Advisor hardening findings остават отделен pre-launch checkpoint; Supabase не е променян.
 
@@ -58,7 +58,7 @@
 2. **Завършено и owner accepted:** `POPITAI_LOM_PRODUCTION_MIGRATION_MATRIX.md`;
 3. **Завършен read-only gate:** live Moderator hard-delete conflict не е потвърден; evidence и отделните hardening точки са в `POPITAI_LOM_LIVE_SECURITY_AND_DOMAIN_AUDIT_20260915.md`; Supabase не е променян;
 4. **Завършено без acceptance / PAUSED:** и `8faa2f7…`, и коригираният `cbe64de…` icon checkpoint са отхвърлени; няма одобрени site SVG и няма нова icon серия;
-5. **Текущ checkpoint — Content-complete/reality Stage 2 pass:** `Пътнически превоз` вече има exact prototype mapping, всичките 46 Services входа са покрити с regression contract, а отхвърлените raster site икони са unwired в полза на text-first cards; desktop/390 review QA предстои;
+5. **Текущ checkpoint — Content-complete/reality Stage 2 pass:** targeted desktop/390 QA за `Пътнически превоз` е завършен; Work 2 audit от 16.09.2026 доказва owner-contract gaps за настаняване, бензиностанции, организации/НПО и забележителности. Точната препоръчана матрица е в `POPITAI_LOM_STAGE2_CONTENT_REALITY_AUDIT_20260916.md`; UI/owner промени чакат четирите изрични owner решения;
 6. **Финален Stage 2 audit:** всички journeys, forms, Favorites, Share, actions и states на desktop/390 px, accessibility, performance и protected regressions;
 7. **Owner acceptance и freeze на exact Stage 2 SHA;**
 8. **Stage 3 само owner-by-owner и matrix-row-by-matrix-row;**
