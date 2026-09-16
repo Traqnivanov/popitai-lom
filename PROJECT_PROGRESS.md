@@ -27,10 +27,15 @@
 - Stage 3: не е започван
 - Pre-implementation control pack: owner accepted; live read-only security/domain evidence е в `POPITAI_LOM_LIVE_SECURITY_AND_DOMAIN_AUDIT_20260915.md`
 - Domain: `popitai-lom.bg` е предпочитан; условията са проверени, availability/purchase остават owner checkout action; няма DNS/Auth промяна
+- Content placement verdict: owner-approved на 16.09.2026; документационен sync only, без UI/code/Supabase
 
 ## Прието до този checkpoint
 
 - public IA и деветте discovery входа;
+- `За гости в Лом` е приет като вторичен Info discovery блок: `Къде да отседнеш` → Firms/`Настаняване`, `Лом за един ден` → Article, плюс link към `Транспорт`;
+- `Бензиностанции` е Info Lom/Комунални owner без Firm duplicate;
+- НПО/сдружения са отделен тип `Организация`; техническият owner/schema lifecycle остава production checkpoint;
+- няма отделен landmarks directory или седма Info карта; точни Info records се пазят само за полезни променливи факти;
 - prototype runtime consolidation и един owner на route/render lifecycle;
 - новите Services са offer-only: само `Предлагам услуга`; legacy `Търси` остава read/edit compatibility;
 - опростеният директен results UX на `Работа`;
@@ -58,7 +63,7 @@
 2. **Завършено и owner accepted:** `POPITAI_LOM_PRODUCTION_MIGRATION_MATRIX.md`;
 3. **Завършен read-only gate:** live Moderator hard-delete conflict не е потвърден; evidence и отделните hardening точки са в `POPITAI_LOM_LIVE_SECURITY_AND_DOMAIN_AUDIT_20260915.md`; Supabase не е променян;
 4. **Завършено без acceptance / PAUSED:** и `8faa2f7…`, и коригираният `cbe64de…` icon checkpoint са отхвърлени; няма одобрени site SVG и няма нова icon серия;
-5. **Текущ checkpoint — Content-complete/reality Stage 2 pass:** targeted desktop/390 QA за `Пътнически превоз` е завършен; Work 2 audit от 16.09.2026 доказва owner-contract gaps за настаняване, бензиностанции, организации/НПО и забележителности. Точната препоръчана матрица е в `POPITAI_LOM_STAGE2_CONTENT_REALITY_AUDIT_20260916.md`; UI/owner промени чакат четирите изрични owner решения;
+5. **Текущ checkpoint — Content-complete/reality Stage 2 pass:** placement verdict е owner-approved и синхронизиран. Следва record-by-record official-source checklist за настаняване, бензиностанции, организации и 5–7 visit-ready места; после bounded Stage 2 proposal. Няма code/import/schema промяна преди отделно approval;
 6. **Финален Stage 2 audit:** всички journeys, forms, Favorites, Share, actions и states на desktop/390 px, accessibility, performance и protected regressions;
 7. **Owner acceptance и freeze на exact Stage 2 SHA;**
 8. **Stage 3 само owner-by-owner и matrix-row-by-matrix-row;**

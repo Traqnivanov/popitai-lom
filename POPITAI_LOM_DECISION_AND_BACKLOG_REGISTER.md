@@ -3,7 +3,7 @@
 Статус: **КАНОНИЧЕН ИНДЕКС КЪМ CURRENT PRODUCT MASTER / НЕ Е РАЗРЕШЕНИЕ ЗА PRODUCTION ПРОМЕНИ**  
 Създаден: **09.09.2026**  
 База: `e423a2c3a8d2f70d28060fb4c37ce38bd5369d5e`
-Текущ Work 2 decision base: `6d7ce692a9fc01759df21e406bde386c7c3a3859` на `prototype/stage2-icon-system-approval`
+Проверена review база преди owner verdict sync: `24590df5d441e7ac3f9712f1eccfe84cfc8bcc4b` на `prototype/stage2-icon-system-approval`
 
 ## 1. Как се използва регистърът
 
@@ -39,7 +39,7 @@
 | Work 2 | 15.09.2026 | Owner-approved read-only live audit не потвърждава Moderator hard-delete path; emergency STOP не се задейства. Security Advisor hardening points и непотвърдената availability на предпочитания `popitai-lom.bg` са записани в `POPITAI_LOM_LIVE_SECURITY_AND_DOMAIN_AUDIT_20260915.md`. Няма Supabase write, покупка или DNS/Auth промяна. |
 | Work 2 | 15.09.2026 | След discrepancy audit owner потвърждава: site/mobile използват само оптимизирани SVG; подробните одобрени 3D assets са само за social/Facebook 1200×630 без собствена одобрена снимка. Двусмисленото правило от 14.09 е заменено; `8faa2f757b3af88ed137a7b49a64be5cf36b326a` е REJECTED review evidence, не owner-approved checkpoint. Пропуснатите външни audit находки са върнати като OPEN, без implementation permission. |
 | Work 2 | 15.09.2026 | Owner отхвърля и коригирания SVG checkpoint `cbe64de3096c4094ab1142cf7a811ec4907adea0` като общ и детски. Нито един показан site SVG не е приет. Icon работата се PAUSE-ва и не блокира Stage 2; следва content-complete/reality pass. Одобрените 3D теми се пазят само за бъдещи social карти. |
-| Work 2 | 16.09.2026 | Content-reality audit върху exact review SHA `e092eb38c53efd8ca3ca0582a44a562ae34b764c` доказва, че задължителните области `настаняване`, `бензиностанции`, `сдружения/НПО` и `забележителности` нямат завършен безопасен route/owner contract. Няма UI промяна по предположение. Точната препоръчана матрица и четирите owner решения са записани в `POPITAI_LOM_STAGE2_CONTENT_REALITY_AUDIT_20260916.md`. |
+| Work 2 | 16.09.2026 | Content-reality audit доказва липсващи безопасни owner contracts; owner след това приема точния placement модел: accommodation е Firms-owned и се открива през вторичен `За гости в Лом`; fuel е само в Info Lom/Комунални; НПО е отделен тип `Организация`; landmarks не е directory, а `Лом за един ден` плюс точни Info записи само при полезни променливи факти. Старите препоръки са REPLACED. Няма UI, production или Supabase промяна. |
 
 ## 2. Допустими статуси
 
@@ -217,7 +217,16 @@
 
 Данните, телефоните, цените, статистиката и статутът на обектите се проверяват непосредствено преди публикуване. Твърдение в предоставен работен файл не е достатъчно доказателство.
 
-Work 2 audit от 16.09.2026: четирите структурни owner решения за настаняване, бензиностанции, организации/НПО и забележителности са описани в `POPITAI_LOM_STAGE2_CONTENT_REALITY_AUDIT_20260916.md`. Докато owner не ги одобри, няма промяна на protected Firms categories, Info структура, форми или навигация.
+Work 2 owner verdict от 16.09.2026 е **APPROVED — NOT IMPLEMENTED** и е описан подробно в `POPITAI_LOM_STAGE2_CONTENT_REALITY_AUDIT_20260916.md`.
+
+| Област | Прието продуктово място | Какво остава OPEN преди реализация |
+| --- | --- | --- |
+| Настаняване | Firms owner, exact category `Настаняване`; discovery през `Info Lom → За гости в Лом → Къде да отседнеш` | source/`last_verified`/claim status contract, verified seed inventory и duplicate-safe claim lifecycle |
+| Бензиностанции | `Info Lom → Комунални и ежедневни услуги → Бензиностанции`; без Firm duplicate | record inventory, freshness и correction mapping |
+| Сдружения и НПО | отделен семантичен тип `Организация`, не фирма и не институция | exact owner/schema/form/moderation lifecycle като production checkpoint |
+| Забележителности | без отделен directory; `Лом за един ден` + точни Info records само при полезни променливи факти | 5–7 visit-ready места, official sources и editorial/source inventory |
+
+Това решение не разрешава code, protected route/form/schema промяна или import. Следва record-by-record source checklist, после bounded Stage 2 proposal и отделно implementation approval.
 
 ## 9. Отделен неприоритизиран регистър на кандидатите
 

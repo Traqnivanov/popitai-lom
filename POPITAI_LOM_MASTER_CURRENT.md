@@ -1,7 +1,7 @@
 # Попитай.Лом — CURRENT PRODUCT MASTER
 
 Статус: **КАНОНИЧНА ПРОДУКТОВА ИСТИНА / PUBLIC IA ОДОБРЕНА / STAGE 2 ПРОТОТИПЪТ ОЩЕ НЕ Е ФИНАЛНО ПРИЕТ / НЕ Е PRODUCTION**
-Последна синхронизация: **14.09.2026**
+Последна синхронизация: **16.09.2026**
 Текущ safety branch: `prototype/content-complete-ia-20260904-stage2-safety`
 LOCKED safety HEAD: `997d97504251f4cbae0693dc0cffa24d1d04da79` — не се мести преди отделно owner approval
 Текущ icon review branch: `prototype/stage2-icon-system-approval`
@@ -725,6 +725,19 @@ Stage 2 демонстрира тази посока, но финалната и
 - icon работата не се доразвива с нови проби и не блокира Stage 2; одобрените 3D теми се пазят само като бъдещ social материал, а финалната професионална site система остава `OPEN` за готов комплект или дизайнерски checkpoint;
 - външните audit находки за измерими icon прагове, неактивен TOM guard, неслята пенсионна статия, `events/reports is_blocked`, твърдо записан Admin UID и незабавна pre-launch SEO хигиена се връщат в централния регистър като `OPEN`; това не разрешава implementation;
 - production, Supabase, DNS, Stage 3 и LOCKED safety HEAD не са променяни.
+
+### 12.0.4 Work 2 · 16.09.2026 — owner-approved content placement verdict
+
+След content-reality audit owner приема следния точен модел. Това е продуктово решение **APPROVED — NOT IMPLEMENTED**, а не разрешение за production, Supabase/schema/RLS, Stage 3 или автоматичен import:
+
+- **Настаняване:** authoritative lifecycle owner е `Firms`, с точна категория `Настаняване`. Discovery се показва като компактен вторичен блок `За гости в Лом` в Info Lom, след шестте основни семейства, с вход `Къде да отседнеш`, който води към canonical Firms резултати. Първоначалният каталог не остава празен: Work/Admin може да подготви проверени **непотвърдени от собственика** профили само от Националния туристически регистър плюс официален сайт/контакт на обекта. Публичният статус е `Проверено по публични данни · непотвърдено от собственика`; собственикът по-късно claim-ва и допълва същия запис, без дубликат. Не се копират динамични цени или наличности. Минималният договор е: име, вид, официално потвърдена категория, адрес, телефон, официален сайт/страница, удобства от официален source, source, `last_verified`, claim status и approved media. Production изисква отделно одобрени полета/lifecycle за source, freshness и claim.
+- **Бензиностанции:** authoritative owner и публично място са `Info Lom → Комунални и ежедневни услуги → Бензиностанции`. Не се създава дублиращ Firm профил.
+- **Сдружения и НПО:** приемат се като отделен публичен семантичен тип `Организация` — нито фирма, нито институция. Нужни са контролиран profile/correction lifecycle и отделен production owner/schema verdict; Stage 2 може само да симулира след точен contract.
+- **Забележителности:** не се създава отделен directory и не се добавя седма основна Info карта. Полезните съществуващи записи, например Исторически музей, остават в `Образование и култура`. Editorial owner създава един силен local-first материал `Лом за един ден` с 5–7 реално посещаеми места и логичен маршрут. Отделен Info запис има само място с полезни променливи факти като работно време, телефон, вход и official page.
+- **`За гости в Лом`:** съдържа точно три входа: `Къде да отседнеш` → canonical Firms accommodation profiles; `Лом за един ден` → Article; връзка към съществуващия `Транспорт`.
+- **Статии:** authoritative owner е Article/editorial. Променливите местни контакти и режими принадлежат на Info owner; статията може да ги показва, но не поддържа независимо остаряващо копие. Пенсионният материал остава за пълна официална повторна проверка.
+
+Заменени решения: hospitality преименуване на `#zavedenia`, Firms-owned fuel filter, Firms-like organization route и отделен landmarks directory са **REPLACED / HISTORY ONLY**. Следващият разрешен ред е record-by-record source checklist → точен bounded Stage 2 proposal → отделно implementation approval → desktop + 390 px QA. Icon работата остава PAUSED и не участва в този checkpoint.
 
 ### 12.1 Production checkpoints след Stage 2, без текущо разрешение за реализация
 
