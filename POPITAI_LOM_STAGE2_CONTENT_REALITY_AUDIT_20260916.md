@@ -18,6 +18,8 @@ Icon работата остава PAUSED. Site/mobile остават text-first
 - Firms има текущи основни категории Майстори, Здраве, Автомобили, Магазини, Заведения и Услуги.
 - Articles има работещ editorial surface, но променливите местни контакти не трябва да се поддържат като независимо копие в статии.
 - Настаняване, бензиностанции, организации/НПО и visitor-ready местата не са завършени като проверен record inventory.
+- Съществуващите Info Lom области `Транспорт`, `Магазини`, `Здраве`, `Институции` и `Образование` не са нови missing sections и не се изграждат повторно; работи се само по конкретни доказани gaps/corrections.
+- Следващият missing-content pass е за заведенията за хранене: existing inventory, gaps, duplicate ownership и source reality.
 
 ## 3. Owner-approved placement model
 
@@ -31,7 +33,7 @@ Icon работата остава PAUSED. Site/mobile остават text-first
 
 ## 4. Точен договор за `За гости в Лом`
 
-Това е компактен вторичен discovery блок след шестте основни Info семейства, не ново седмо семейство. Съдържа точно:
+Това е одобреният бъдещ договор за компактен вторичен discovery блок след шестте основни Info семейства, не ново седмо семейство. Той не разрешава placeholder, link или article implementation преди отделната content готовност. Когато бъде реализиран след approval, съдържа точно:
 
 1. `Къде да отседнеш` → canonical Firms profiles с категория `Настаняване`;
 2. `Лом за един ден` → editorial Article;
@@ -51,9 +53,18 @@ Icon работата остава PAUSED. Site/mobile остават text-first
 
 - Не се прави пълен каталог само защото официален списък съществува.
 - Съществуващи полезни entities, например Исторически музей, остават в `Образование и култура`.
-- `Лом за един ден` съдържа 5–7 действително visit-ready места и логичен маршрут.
+- `Лом за един ден` е FUTURE ARTICLE BACKLOG. Когато по-късно бъде подготвен след по-широката местна база, материалът трябва да подбере 5–7 действително visit-ready места и логичен маршрут; сега не се пише или имплементира.
 - Отделен Info record има само място с полезни променливи факти: работно време, телефон, вход, достъп или official page.
 - Променливите факти се поддържат в Info owner; Article ги показва чрез този договор и не ги копира като независима истина.
+
+### 6.1 Owner-confirmed локални обекти · evidence boundary
+
+- хотел `Москва` — съществува;
+- парк хотел `Ривър` — съществува;
+- хотел/ресторант `Дунав` — съществува; старият secondary сигнал за окончателно затваряне е отхвърлен като final факт;
+- бензиностанция `Кристал В` — съществува на ул. `Людовико Миланези`.
+
+Това затваря само въпроса за реалното съществуване. NTR полетата на хотелите, активното accommodation предлагане на `Дунав`, адресният конфликт на `Ривър`, точният номер и identity mapping на `Кристал В` остават OPEN.
 
 ## 7. Проверени source класове
 
@@ -82,15 +93,19 @@ Icon работата остава PAUSED. Site/mobile остават text-first
 | Пенсиониране в Лом | съдържа променливи условия и местни контакти | пълна официална повторна проверка |
 | Подмяна на лична карта в Лом | legacy planned draft | official-source audit + Info owner за местните факти |
 | Подаване на сигнал | legacy planned draft | exact institution/channel mapping |
-| Лом за един ден | owner-approved concept | 5–7 visit-ready места, logical route и source inventory |
+| Лом за един ден | **FUTURE ARTICLE BACKLOG / NOT CURRENT TASK** | по-широка проверена местна база → включване в програма от поне 10 статии → 5–7 visit-ready места, logical route, source inventory и отделно owner approval |
 
 ## 10. Следващ разрешен ред
 
-1. Record-by-record official-source checklist.
-2. Exact data/owner/freshness/claim mapping.
-3. Bounded Stage 2 prototype proposal без production writes.
-4. Отделно owner approval за implementation.
-5. Desktop + 390 px browser QA.
-6. Финален Stage 2 content/route/owner audit и freeze.
+1. Документационен sync на последните owner уточнения — без UI/code/Supabase.
+2. Content reality/gap/duplicate audit на заведенията за хранене върху съществуващите owners.
+3. Продължаване на record-by-record official-source checklist за настаняване, бензиностанции и организации; owner-confirmed existence се пази отделно от официалните полета.
+4. Exact data/owner/freshness/claim mapping.
+5. Bounded Stage 2 prototype proposal без production writes.
+6. Отделно owner approval за implementation.
+7. Desktop + 390 px browser QA.
+8. Финален Stage 2 content/route/owner audit и freeze.
+
+Article drafting, включително `Лом за един ден`, не е част от текущия pass. Бъдещата програма е поне 10 материала и изисква отделен source/review checkpoint за всеки.
 
 Документационният verdict не променя UI, production, Supabase, Stage 3 или LOCKED safety HEAD.

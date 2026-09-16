@@ -36,6 +36,9 @@
 - `Бензиностанции` е Info Lom/Комунални owner без Firm duplicate;
 - НПО/сдружения са отделен тип `Организация`; техническият owner/schema lifecycle остава production checkpoint;
 - няма отделен landmarks directory или седма Info карта; точни Info records се пазят само за полезни променливи факти;
+- `Лом за един ден` е бъдеща article задача, не текущо писане или implementation; планира се серия от поне 10 материала с отделен source/review gate за всеки;
+- хотел `Москва`, парк хотел `Ривър`, хотел/ресторант `Дунав` и бензиностанция `Кристал В` са owner-confirmed като съществуващи; непроверените официални полета остават OPEN;
+- съществуващите Info Lom области `Транспорт`, `Магазини`, `Здраве`, `Институции` и `Образование` не се изграждат повторно;
 - prototype runtime consolidation и един owner на route/render lifecycle;
 - новите Services са offer-only: само `Предлагам услуга`; legacy `Търси` остава read/edit compatibility;
 - опростеният директен results UX на `Работа`;
@@ -63,7 +66,7 @@
 2. **Завършено и owner accepted:** `POPITAI_LOM_PRODUCTION_MIGRATION_MATRIX.md`;
 3. **Завършен read-only gate:** live Moderator hard-delete conflict не е потвърден; evidence и отделните hardening точки са в `POPITAI_LOM_LIVE_SECURITY_AND_DOMAIN_AUDIT_20260915.md`; Supabase не е променян;
 4. **Завършено без acceptance / PAUSED:** и `8faa2f7…`, и коригираният `cbe64de…` icon checkpoint са отхвърлени; няма одобрени site SVG и няма нова icon серия;
-5. **Текущ checkpoint — Content-complete/reality Stage 2 pass:** placement verdict е owner-approved и синхронизиран. Следва record-by-record official-source checklist за настаняване, бензиностанции, организации и 5–7 visit-ready места; после bounded Stage 2 proposal. Няма code/import/schema промяна преди отделно approval;
+5. **Текущ checkpoint — Content-complete/reality Stage 2 pass:** placement verdict е owner-approved. Последното owner уточнение оставя `Лом за един ден` и article програмата за бъдещ отделен pass; текущо следва content reality/gap/duplicate audit на заведенията за хранене, паралелно с довършване на официалните полета за owner-confirmed настаняване/горива и direct registry checks за организациите. После идва bounded Stage 2 proposal. Няма code/import/schema промяна преди отделно approval;
 6. **Финален Stage 2 audit:** всички journeys, forms, Favorites, Share, actions и states на desktop/390 px, accessibility, performance и protected regressions;
 7. **Owner acceptance и freeze на exact Stage 2 SHA;**
 8. **Stage 3 само owner-by-owner и matrix-row-by-matrix-row;**

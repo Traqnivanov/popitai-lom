@@ -739,6 +739,19 @@ Stage 2 демонстрира тази посока, но финалната и
 
 Заменени решения: hospitality преименуване на `#zavedenia`, Firms-owned fuel filter, Firms-like organization route и отделен landmarks directory са **REPLACED / HISTORY ONLY**. Следващият разрешен ред е record-by-record source checklist → точен bounded Stage 2 proposal → отделно implementation approval → desktop + 390 px QA. Icon работата остава PAUSED и не участва в този checkpoint.
 
+### 12.0.5 Work 2 · 16.09.2026 — content sequence и owner-confirmed локални факти
+
+Owner уточнява след placement verdict-а:
+
+- `Лом за един ден` остава **FUTURE ARTICLE BACKLOG**, не текуща задача за писане, prototype implementation или публикуване. Преди нея се събира по-широка проверена местна база; материалът не се пише преждевременно само по наличните 5–7 кандидата.
+- Планира се бъдеща серия от **поне 10 местни статии/практични ръководства**. Това е content direction; точните заглавия, редът и текстовете остават OPEN до отделен article-by-article source/review checkpoint.
+- Следващият тесен content pass е **одит на заведенията за хранене**: какво вече съществува, какво липсва, кои записи/owners биха се дублирали и кои факти имат надежден source. Това не разрешава нова структура или import.
+- Съществуващите Info Lom области `Транспорт`, `Магазини`, `Здраве`, `Институции` и `Образование` не се изграждат повторно. Те се засягат само при конкретно доказана липса, грешка или freshness/correction задача.
+- Owner потвърждава реалното съществуване на хотел `Москва`, парк хотел `Ривър`, хотел/ресторант `Дунав` и бензиностанция `Кристал В` на ул. `Людовико Миланези`. Това owner-confirmed evidence забранява да бъдат представяни като несъществуващи или окончателно затворени.
+- Owner-confirmed съществуване не замества официалните полета: NTR име/вид/категория/регистрационен номер/status за настаняването, активното accommodation предлагане на `Дунав`, точния адресен номер и юридическото identity mapping `Кристал В` ↔ `Кристал ойл` остават OPEN.
+
+Това уточнение променя **приоритета и evidence статуса**, не приетите owner/placement граници. Няма UI, code, Supabase, production или Stage 3 разрешение.
+
 ### 12.1 Production checkpoints след Stage 2, без текущо разрешение за реализация
 
 1. exact Service discovery-leaf persistence/reconstruction и backward-compatible taxonomy mapping;
