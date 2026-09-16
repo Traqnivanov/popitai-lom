@@ -38,6 +38,7 @@
 - няма отделен landmarks directory или седма Info карта; точни Info records се пазят само за полезни променливи факти;
 - `Лом за един ден` е бъдеща article задача, не текущо писане или implementation; планира се серия от поне 10 материала с отделен source/review gate за всеки;
 - хотел `Москва`, парк хотел `Ривър`, хотел/ресторант `Дунав` и бензиностанция `Кристал В` са owner-confirmed като съществуващи; непроверените официални полета остават OPEN;
+- `content-inventory/` V1 е създаден като единен pre-production control layer с schema, 7 начални field-evidence records и validator; точните записи са owner-review pending, runtime/production writes са забранени;
 - съществуващите Info Lom области `Транспорт`, `Магазини`, `Здраве`, `Институции` и `Образование` не се изграждат повторно;
 - prototype runtime consolidation и един owner на route/render lifecycle;
 - новите Services са offer-only: само `Предлагам услуга`; legacy `Търси` остава read/edit compatibility;
@@ -66,7 +67,7 @@
 2. **Завършено и owner accepted:** `POPITAI_LOM_PRODUCTION_MIGRATION_MATRIX.md`;
 3. **Завършен read-only gate:** live Moderator hard-delete conflict не е потвърден; evidence и отделните hardening точки са в `POPITAI_LOM_LIVE_SECURITY_AND_DOMAIN_AUDIT_20260915.md`; Supabase не е променян;
 4. **Завършено без acceptance / PAUSED:** и `8faa2f7…`, и коригираният `cbe64de…` icon checkpoint са отхвърлени; няма одобрени site SVG и няма нова icon серия;
-5. **Текущ checkpoint — Content-complete/reality Stage 2 pass:** placement verdict е owner-approved. Последното owner уточнение оставя `Лом за един ден` и article програмата за бъдещ отделен pass; текущо следва content reality/gap/duplicate audit на заведенията за хранене, паралелно с довършване на официалните полета за owner-confirmed настаняване/горива и direct registry checks за организациите. После идва bounded Stage 2 proposal. Няма code/import/schema промяна преди отделно approval;
+5. **Текущ checkpoint — Content-complete/reality Stage 2 pass:** `content-inventory/` V1 control layer е създаден и валидиран; точните записи и видими полета чакат owner review. Следва content reality/gap/duplicate audit на заведенията върху съществуващия Firms owner, паралелно с official-source checklist за настаняване/горива/организации. После идва bounded adapter proposal. Няма runtime adapter, import, schema или production промяна преди отделно approval;
 6. **Финален Stage 2 audit:** всички journeys, forms, Favorites, Share, actions и states на desktop/390 px, accessibility, performance и protected regressions;
 7. **Owner acceptance и freeze на exact Stage 2 SHA;**
 8. **Stage 3 само owner-by-owner и matrix-row-by-matrix-row;**

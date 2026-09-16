@@ -1,0 +1,149 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-09-16",
+  "source_of_truth": "preproduction_inventory",
+  "records": [
+    {
+      "id": "fuel-lukoil-b046",
+      "entity_type": "fuel_station",
+      "public_name": "LUKOIL B046",
+      "canonical_owner": { "system": "info_lom", "collection": "info_entries", "category": "komunalni", "subcategory": "benzinostantsii", "canonical_record_id": null },
+      "evidence_status": "officially_verified",
+      "publication_readiness": "verified_for_bounded_prototype",
+      "owner_confirmed": true,
+      "fields": {
+        "station_number": { "value": "B046", "status": "official", "source_ids": ["lukoil-b046"] },
+        "address": { "value": "Лом, кв. Младенова, ул. Софийска 4", "status": "official", "source_ids": ["lukoil-b046"], "note": "Официалният оператор е source of truth; spelling вариантите се решават при следваща проверка." },
+        "hours": { "value": "24 часа", "status": "official", "source_ids": ["lukoil-b046"] }
+      },
+      "sources": [
+        { "id": "lukoil-b046", "type": "official_operator", "url": "https://club.lukoil.bg/gas-station/046", "checked_at": "2026-09-16", "note": "Официална страница на обекта." },
+        { "id": "owner-fuel-count", "type": "owner_confirmation", "checked_at": "2026-09-16", "note": "Owner confirms that two LUKOIL stations exist in Lom." }
+      ],
+      "open_fields": ["station_phone", "approved_media", "last_verified_policy"],
+      "prototype": { "eligible": true, "selected": false, "purpose": "Bounded content review after owner selects exact visible fields." },
+      "production": { "write_allowed": false, "gate": "Owner approval + existing Info owner/freshness/correction mapping + migration row." }
+    },
+    {
+      "id": "fuel-lukoil-b165",
+      "entity_type": "fuel_station",
+      "public_name": "LUKOIL B165",
+      "canonical_owner": { "system": "info_lom", "collection": "info_entries", "category": "komunalni", "subcategory": "benzinostantsii", "canonical_record_id": null },
+      "evidence_status": "officially_verified",
+      "publication_readiness": "verified_for_bounded_prototype",
+      "owner_confirmed": true,
+      "fields": {
+        "station_number": { "value": "B165", "status": "official", "source_ids": ["lukoil-b165"] },
+        "address": { "value": "Лом, ул. Белоградчишко шосе 11", "status": "official", "source_ids": ["lukoil-b165"] },
+        "hours": { "value": "24 часа", "status": "official", "source_ids": ["lukoil-b165"] }
+      },
+      "sources": [
+        { "id": "lukoil-b165", "type": "official_operator", "url": "https://club.lukoil.bg/gas-station/165", "checked_at": "2026-09-16", "note": "Официална страница на обекта." },
+        { "id": "owner-fuel-count", "type": "owner_confirmation", "checked_at": "2026-09-16", "note": "Owner confirms that two LUKOIL stations exist in Lom." }
+      ],
+      "open_fields": ["station_phone", "approved_media", "last_verified_policy"],
+      "prototype": { "eligible": true, "selected": false, "purpose": "Bounded content review after owner selects exact visible fields." },
+      "production": { "write_allowed": false, "gate": "Owner approval + existing Info owner/freshness/correction mapping + migration row." }
+    },
+    {
+      "id": "fuel-petrol-3313",
+      "entity_type": "fuel_station",
+      "public_name": "Petrol 3313",
+      "canonical_owner": { "system": "info_lom", "collection": "info_entries", "category": "komunalni", "subcategory": "benzinostantsii", "canonical_record_id": null },
+      "evidence_status": "owner_confirmed_partial",
+      "publication_readiness": "research_only",
+      "owner_confirmed": true,
+      "fields": {
+        "station_number": { "value": "3313", "status": "official", "source_ids": ["petrol-a95-list"] },
+        "address": { "value": "Лом, м-ст Бахчите, ул. Ал. Стамболийски", "status": "official", "source_ids": ["petrol-a95-list"] }
+      },
+      "sources": [
+        { "id": "petrol-a95-list", "type": "official_operator", "url": "https://www.petrol.bg/wp-content/uploads/2024/04/A95.pdf", "checked_at": "2026-09-16", "note": "Официален operator PDF; current station-specific status still needs a direct locator/contact check." },
+        { "id": "owner-petrol", "type": "owner_confirmation", "checked_at": "2026-09-16", "note": "Owner confirms that a Petrol station exists in Lom." }
+      ],
+      "open_fields": ["current_operator_status", "station_phone", "hours", "approved_media", "last_verified_policy"],
+      "prototype": { "eligible": false, "selected": false, "purpose": "Research only until direct current operator evidence is recorded." },
+      "production": { "write_allowed": false, "gate": "Direct current operator verification + owner approval + Info migration row." }
+    },
+    {
+      "id": "fuel-crystal-v-ludoviko-milanesi",
+      "entity_type": "fuel_station",
+      "public_name": "Кристал В",
+      "canonical_owner": { "system": "info_lom", "collection": "info_entries", "category": "komunalni", "subcategory": "benzinostantsii", "canonical_record_id": null },
+      "evidence_status": "owner_confirmed_partial",
+      "publication_readiness": "research_only",
+      "owner_confirmed": true,
+      "fields": {
+        "street": { "value": "ул. Людовико Миланези", "status": "owner_confirmed", "source_ids": ["owner-crystal-v"] },
+        "existence": { "value": true, "status": "owner_confirmed", "source_ids": ["owner-crystal-v"] }
+      },
+      "sources": [
+        { "id": "owner-crystal-v", "type": "owner_confirmation", "checked_at": "2026-09-16", "note": "Owner confirms the station exists on ул. Людовико Миланези and will verify it locally." }
+      ],
+      "open_fields": ["exact_address_number", "legal_operator_identity", "object_number", "official_contact", "hours", "approved_media"],
+      "prototype": { "eligible": false, "selected": false, "purpose": "Do not display until identity and exact address mapping are resolved." },
+      "production": { "write_allowed": false, "gate": "Local verification + official identity mapping + owner approval + Info migration row." }
+    },
+    {
+      "id": "accommodation-hotel-moskva",
+      "entity_type": "accommodation",
+      "public_name": "Хотел Москва",
+      "canonical_owner": { "system": "firms", "collection": "businesses", "category": "Настаняване", "canonical_record_id": null },
+      "evidence_status": "owner_confirmed_partial",
+      "publication_readiness": "research_only",
+      "owner_confirmed": true,
+      "fields": {
+        "address": { "value": "гр. Лом 3600, ул. Дунавска №14", "status": "official", "source_ids": ["hotel-moskva-site"] },
+        "phone": { "value": "+359 879 124 710", "status": "official", "source_ids": ["hotel-moskva-site"] },
+        "existence": { "value": true, "status": "owner_confirmed", "source_ids": ["owner-moskva"] }
+      },
+      "sources": [
+        { "id": "hotel-moskva-site", "type": "official_site", "url": "https://www.moskva-bg.com/", "checked_at": "2026-09-16", "note": "Official site evidence for address and phone; NTR match remains separate." },
+        { "id": "owner-moskva", "type": "owner_confirmation", "checked_at": "2026-09-16", "note": "Owner confirms the hotel exists." }
+      ],
+      "open_fields": ["ntr_official_name", "ntr_type", "ntr_category", "ntr_registration_number", "ntr_current_status", "claim_status", "approved_media"],
+      "prototype": { "eligible": false, "selected": false, "purpose": "Research only until record-level NTR verification." },
+      "production": { "write_allowed": false, "gate": "NTR match + source/freshness/claim contract + owner approval + Firms migration row." }
+    },
+    {
+      "id": "accommodation-park-hotel-river",
+      "entity_type": "accommodation",
+      "public_name": "Парк хотел Ривър",
+      "canonical_owner": { "system": "firms", "collection": "businesses", "category": "Настаняване", "canonical_record_id": null },
+      "evidence_status": "conflict",
+      "publication_readiness": "blocked",
+      "owner_confirmed": true,
+      "fields": {
+        "existence": { "value": true, "status": "owner_confirmed", "source_ids": ["owner-river"] },
+        "address": { "value": "пл. Нечаев №1 / №6", "status": "conflict", "source_ids": ["river-secondary"], "note": "Secondary sources disagree; no public address is selected." }
+      },
+      "sources": [
+        { "id": "owner-river", "type": "owner_confirmation", "checked_at": "2026-09-16", "note": "Owner confirms the hotel exists." },
+        { "id": "river-secondary", "type": "secondary", "checked_at": "2026-09-16", "note": "Conflicting public signals for пл. Нечаев №1 and №6; neither is accepted as final." }
+      ],
+      "open_fields": ["exact_address", "ntr_official_name", "ntr_type", "ntr_category", "ntr_registration_number", "ntr_current_status", "official_contact", "claim_status", "approved_media"],
+      "prototype": { "eligible": false, "selected": false, "purpose": "Blocked until address and NTR identity are resolved." },
+      "production": { "write_allowed": false, "gate": "Address conflict resolution + NTR match + owner approval + Firms migration row." }
+    },
+    {
+      "id": "accommodation-hotel-restaurant-dunav",
+      "entity_type": "accommodation",
+      "public_name": "Хотел/ресторант Дунав",
+      "canonical_owner": { "system": "firms", "collection": "businesses", "category": "Настаняване", "canonical_record_id": null },
+      "evidence_status": "owner_confirmed_partial",
+      "publication_readiness": "research_only",
+      "owner_confirmed": true,
+      "fields": {
+        "existence": { "value": true, "status": "owner_confirmed", "source_ids": ["owner-dunav"] },
+        "accommodation_active": { "value": null, "status": "unverified", "source_ids": [], "note": "The venue exists, but current accommodation activity is not yet verified." }
+      },
+      "sources": [
+        { "id": "owner-dunav", "type": "owner_confirmation", "checked_at": "2026-09-16", "note": "Owner confirms the hotel/restaurant exists; a secondary permanent-closure signal is not accepted as final." }
+      ],
+      "open_fields": ["accommodation_active", "exact_address", "official_contact", "ntr_official_name", "ntr_type", "ntr_category", "ntr_registration_number", "ntr_current_status", "claim_status", "approved_media"],
+      "prototype": { "eligible": false, "selected": false, "purpose": "Research only until current accommodation activity and official identity are verified." },
+      "production": { "write_allowed": false, "gate": "Current activity proof + NTR match + owner approval + Firms migration row." }
+    }
+  ]
+}
+

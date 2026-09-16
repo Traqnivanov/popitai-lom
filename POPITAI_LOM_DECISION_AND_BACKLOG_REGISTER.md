@@ -41,6 +41,7 @@
 | Work 2 | 15.09.2026 | Owner отхвърля и коригирания SVG checkpoint `cbe64de3096c4094ab1142cf7a811ec4907adea0` като общ и детски. Нито един показан site SVG не е приет. Icon работата се PAUSE-ва и не блокира Stage 2; следва content-complete/reality pass. Одобрените 3D теми се пазят само за бъдещи social карти. |
 | Work 2 | 16.09.2026 | Content-reality audit доказва липсващи безопасни owner contracts; owner след това приема точния placement модел: accommodation е Firms-owned и се открива през вторичен `За гости в Лом`; fuel е само в Info Lom/Комунални; НПО е отделен тип `Организация`; landmarks не е directory, а `Лом за един ден` плюс точни Info записи само при полезни променливи факти. Старите препоръки са REPLACED. Няма UI, production или Supabase промяна. |
 | Work 2 | 16.09.2026 | Owner уточнява content реда: `Лом за един ден` е FUTURE ARTICLE BACKLOG, не текуща задача; първо се събира по-широка местна база и се одитира съществуващото съдържание за заведения. Бъдещата article програма е поне 10 материала, с отделно одобрение на всеки. `Транспорт`, `Магазини`, `Здраве`, `Институции` и `Образование` не се изграждат повторно. Owner-confirmed като съществуващи са хотел `Москва`, парк хотел `Ривър`, хотел/ресторант `Дунав` и бензиностанция `Кристал В`; точните официални полета остават OPEN. Няма UI/code/Supabase промяна. |
+| Work 2 | 16.09.2026 | Owner разрешава `content-inventory/` като единен pre-production control layer. Създадени са V1 schema, 7 начални evidence records и deterministic validator. Статусът е CONTROL CONTRACT / OWNER REVIEW PENDING; няма runtime adapter, production import, Supabase, Stage 3 или промяна на LOCKED safety HEAD. |
 
 ## 2. Допустими статуси
 
@@ -220,6 +221,8 @@
 Данните, телефоните, цените, статистиката и статутът на обектите се проверяват непосредствено преди публикуване. Твърдение в предоставен работен файл не е достатъчно доказателство.
 
 Work 2 owner verdict от 16.09.2026 е **APPROVED — NOT IMPLEMENTED** и е описан подробно в `POPITAI_LOM_STAGE2_CONTENT_REALITY_AUDIT_20260916.md`.
+
+`content-inventory/` е приет като контролна форма за този mandatory inventory, но точните V1 записи са **OWNER REVIEW PENDING**. Файловете не са публичен owner, не се зареждат от runtime и не разрешават import. Всеки следващ record се добавя само с canonical owner, field-level evidence, OPEN полета и отделен production gate.
 
 | Област | Прието продуктово място | Какво остава OPEN преди реализация |
 | --- | --- | --- |

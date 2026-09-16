@@ -97,14 +97,15 @@ Icon работата остава PAUSED. Site/mobile остават text-first
 
 ## 10. Следващ разрешен ред
 
-1. Документационен sync на последните owner уточнения — без UI/code/Supabase.
-2. Content reality/gap/duplicate audit на заведенията за хранене върху съществуващите owners.
-3. Продължаване на record-by-record official-source checklist за настаняване, бензиностанции и организации; owner-confirmed existence се пази отделно от официалните полета.
-4. Exact data/owner/freshness/claim mapping.
-5. Bounded Stage 2 prototype proposal без production writes.
-6. Отделно owner approval за implementation.
-7. Desktop + 390 px browser QA.
-8. Финален Stage 2 content/route/owner audit и freeze.
+1. **Завършено като control layer / owner review pending:** `content-inventory/` V1 договор, schema, 7 начални evidence records и deterministic validation; без runtime/UI/Supabase.
+2. Owner review на точните видими полета и evidence граници в началните записи; само одобрените могат по-късно да станат `prototype.selected=true`.
+3. Content reality/gap/duplicate audit на заведенията за хранене върху съществуващия Firms owner; новите доказани записи се водят в същия inventory договор.
+4. Продължаване на record-by-record official-source checklist за настаняване, бензиностанции и организации; owner-confirmed existence се пази отделно от официалните полета.
+5. Exact data/owner/freshness/claim mapping.
+6. Bounded Stage 2 adapter proposal без production writes и без втори datastore.
+7. Отделно owner approval за implementation.
+8. Desktop + 390 px browser QA.
+9. Финален Stage 2 content/route/owner audit и freeze.
 
 Article drafting, включително `Лом за един ден`, не е част от текущия pass. Бъдещата програма е поне 10 материала и изисква отделен source/review checkpoint за всеки.
 

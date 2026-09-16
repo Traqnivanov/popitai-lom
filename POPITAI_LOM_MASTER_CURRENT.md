@@ -752,6 +752,18 @@ Owner уточнява след placement verdict-а:
 
 Това уточнение променя **приоритета и evidence статуса**, не приетите owner/placement граници. Няма UI, code, Supabase, production или Stage 3 разрешение.
 
+### 12.0.6 Work 2 · 16.09.2026 — Content Inventory V1 control layer
+
+Owner разрешава създаването на единен pre-production control layer в `content-inventory/`. Той е **CONTROL CONTRACT / OWNER REVIEW PENDING**, а не нов runtime datastore и не е разрешение за prototype adapter, production import, Supabase, schema/RLS/RPC или Stage 3.
+
+- Един реален обект има един inventory `id` и един каноничен owner; съществуващ production запис не се дублира.
+- Evidence се пази поле по поле; owner-confirmed existence остава отделно от official verification и conflict status.
+- Началният V1 опис съдържа 7 контролни записа: LUKOIL B046, LUKOIL B165, Petrol 3313, Кристал В, хотел Москва, парк хотел Ривър и хотел/ресторант Дунав.
+- Всички production writes са машинно заключени на `false`; няма auto-import и няма автоматично четене от прототипа.
+- Следващата продуктова стъпка остава owner review на inventory полетата, след което content reality/gap/duplicate audit на заведенията и bounded adapter proposal само при отделно approval.
+
+Точният договор, schema, records и validator са в `content-inventory/README.md`, `schema.v1.json`, `records.v1.json` и `validate_inventory.py`.
+
 ### 12.1 Production checkpoints след Stage 2, без текущо разрешение за реализация
 
 1. exact Service discovery-leaf persistence/reconstruction и backward-compatible taxonomy mapping;

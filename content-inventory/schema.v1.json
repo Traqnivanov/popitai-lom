@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://popitai-lom.bg/contracts/content-inventory.schema.v1.json",
+  "title": "Popitai.Lom Content Inventory V1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "updated_at", "source_of_truth", "records"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "updated_at": { "type": "string", "format": "date" },
+    "source_of_truth": { "const": "preproduction_inventory" },
+    "records": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/record" }
+    }
+  },
+  "$defs": {
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "entity_type", "public_name", "canonical_owner", "evidence_status", "publication_readiness", "owner_confirmed", "fields", "sources", "open_fields", "prototype", "production"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "entity_type": { "enum": ["accommodation", "fuel_station", "dining", "organization", "visitor_place", "article"] },
+        "public_name": { "type": "string", "minLength": 1 },
+        "canonical_owner": { "$ref": "#/$defs/owner" },
+        "evidence_status": { "enum": ["officially_verified", "owner_confirmed_partial", "conflict", "candidate_unverified"] },
+        "publication_readiness": { "enum": ["verified_for_bounded_prototype", "research_only", "blocked"] },
+        "owner_confirmed": { "type": "boolean" },
+        "fields": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/evidencedField" }
+        },
+        "sources": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/source" }
+        },
+        "open_fields": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "prototype": { "$ref": "#/$defs/prototype" },
+        "production": { "$ref": "#/$defs/production" },
+        "notes": { "type": "string" }
+      }
+    },
+    "owner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["system", "collection", "category", "canonical_record_id"],
+      "properties": {
+        "system": { "enum": ["firms", "info_lom", "articles", "organizations"] },
+        "collection": { "type": "string", "minLength": 1 },
+        "category": { "type": "string", "minLength": 1 },
+        "subcategory": { "type": "string", "minLength": 1 },
+        "canonical_record_id": { "type": ["string", "null"] }
+      }
+    },
+    "evidencedField": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "status", "source_ids"],
+      "properties": {
+        "value": { "type": ["string", "number", "boolean", "array", "object", "null"] },
+        "status": { "enum": ["official", "owner_confirmed", "secondary_signal", "local_signal", "unverified", "conflict"] },
+        "source_ids": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        },
+        "note": { "type": "string" }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "checked_at", "note"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "type": { "enum": ["official_registry", "official_operator", "official_site", "municipality", "institution", "owner_confirmation", "secondary", "local_signal"] },
+        "url": { "type": "string", "format": "uri" },
+        "checked_at": { "type": "string", "format": "date" },
+        "note": { "type": "string" }
+      }
+    },
+    "prototype": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["eligible", "selected", "purpose"],
+      "properties": {
+        "eligible": { "type": "boolean" },
+        "selected": { "type": "boolean" },
+        "purpose": { "type": "string" }
+      }
+    },
+    "production": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["write_allowed", "gate"],
+      "properties": {
+        "write_allowed": { "const": false },
+        "gate": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}
+
