@@ -41,7 +41,13 @@ Work provenance: **Work 2**
 | Пицария Палма | official Facebook page и телефонен сигнал | current address/hours/activity, duplicate check |
 | Каприз 2025 | official social page с адрес/телефон/часове | current activity и relationship с близкия адрес на При Финци |
 
-Старите directory сигнали за `Валентино`, `Дунавски вълни`, `Бохеми`, `Friends`, `Милано` и други не са достатъчни за public seed без direct current signal. Те остават кандидати за следващ verification pass, не се представят като активни.
+### Owner-confirmed existence
+
+| Обект | Сигурен факт | OPEN official fields |
+| --- | --- | --- |
+| Ресторант Бохеми | Local owner потвърждава, че обектът съществува и трябва да присъства в inventory | official page, exact address, direct phone/hours confirmation, duplicate check |
+
+Старите directory сигнали за `Валентино`, `Дунавски вълни`, `Friends`, `Милано` и други не са достатъчни за public seed без direct current signal. Те остават кандидати за следващ verification pass, не се представят като активни. `Бохеми` е изваден от тази обща група, защото existence е изрично потвърден от местния owner, но контактните му полета още не са official.
 
 ## 5. Source boundary
 
@@ -51,7 +57,7 @@ Work provenance: **Work 2**
 
 ## 6. Следващ точен ред
 
-1. Direct current verification на оставащите два research-only кандидата: Пицария Палма и Каприз 2025.
+1. Direct current verification на Пицария Палма, Каприз 2025 и official fields на Бохеми.
 2. Read-only duplicate check срещу съществуващите `businesses` records преди какъвто и да е seed proposal.
 3. Отделен owner verdict за трите eligible dining records: `Ресторант Дъгата`, `Пицария При Финци`, `Пица на пещ Тербаяно`.
 4. Production checkpoint за един canonical Firms record с accommodation+dining discovery facets.

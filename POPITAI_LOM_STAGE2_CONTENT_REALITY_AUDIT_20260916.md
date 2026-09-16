@@ -97,7 +97,7 @@ Icon работата остава PAUSED. Site/mobile остават text-first
 
 ## 9.1 Dining audit checkpoint · Work 2 · 16.09.2026
 
-Тесният dining content reality/gap/duplicate audit е записан в `POPITAI_LOM_DINING_CONTENT_REALITY_AUDIT_20260916.md`. Той добавя 5 research/control records в `content-inventory/` (общо 12), без да ги избира за публично показване. `Ресторант Дъгата`, `Пицария При Финци` и `Пица на пещ Тербаяно` са силни official-source кандидати; `Пицария Палма` и `Каприз 2025` остават research-only. Комбинираните hotel+restaurant профили остават един canonical Firms record и изискват отделен production facet contract; не се създава duplicate.
+Тесният dining content reality/gap/duplicate audit е записан в `POPITAI_LOM_DINING_CONTENT_REALITY_AUDIT_20260916.md`. Той добавя 6 research/control records в `content-inventory/` (общо 13), без да ги избира за публично показване. `Ресторант Бохеми` е owner-confirmed като съществуващ, но direct official контактните му полета остават OPEN. `Ресторант Дъгата`, `Пицария При Финци` и `Пица на пещ Тербаяно` са силни official-source кандидати; `Пицария Палма` и `Каприз 2025` остават research-only. Комбинираните hotel+restaurant профили остават един canonical Firms record и изискват отделен production facet contract; не се създава duplicate.
 
 ## 10. Следващ разрешен ред
 
