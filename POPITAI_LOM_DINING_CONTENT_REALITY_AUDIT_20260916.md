@@ -26,19 +26,19 @@ Work provenance: **Work 2**
 
 ## 4. Начален dining inventory
 
-### Силен кандидат
+### Силни кандидати
 
 | Обект | Evidence | Статус |
 | --- | --- | --- |
 | Ресторант Дъгата | активен официален сайт, online ordering, адрес, телефон, работно време; recent official Facebook signal | `officially_verified` за посочените полета; eligible за bounded prototype review, но не е selected |
+| Пицария При Финци | official business page с адрес/телефон и dated operating post за 21.01.2026 | `officially_verified` за посочените полета; hours остават OPEN; eligible, not selected |
+| Пица на пещ Тербаяно | official business post от 19.07.2026 с Lom адрес, телефон и delivery signal | `officially_verified` за посочените полета; hours остават OPEN; eligible, not selected |
 
 ### Research-only кандидати
 
 | Обект | Наличен сигнал | OPEN преди показване |
 | --- | --- | --- |
-| Пицария При Финци | official Facebook page, публични адрес/телефон сигнали | recent direct activity, current address/phone/hours, duplicate check |
 | Пицария Палма | official Facebook page и телефонен сигнал | current address/hours/activity, duplicate check |
-| Пица на пещ Тербаяно | Lom official social page и delivery публикации | current address/phone/hours/activity |
 | Каприз 2025 | official social page с адрес/телефон/часове | current activity и relationship с близкия адрес на При Финци |
 
 Старите directory сигнали за `Валентино`, `Дунавски вълни`, `Бохеми`, `Friends`, `Милано` и други не са достатъчни за public seed без direct current signal. Те остават кандидати за следващ verification pass, не се представят като активни.
@@ -51,9 +51,9 @@ Work provenance: **Work 2**
 
 ## 6. Следващ точен ред
 
-1. Direct current verification на четирите research-only кандидата.
+1. Direct current verification на оставащите два research-only кандидата: Пицария Палма и Каприз 2025.
 2. Read-only duplicate check срещу съществуващите `businesses` records преди какъвто и да е seed proposal.
-3. Отделен owner verdict за `Ресторант Дъгата` като първи bounded prototype record.
+3. Отделен owner verdict за трите eligible dining records: `Ресторант Дъгата`, `Пицария При Финци`, `Пица на пещ Тербаяно`.
 4. Production checkpoint за един canonical Firms record с accommodation+dining discovery facets.
 5. Едва след това bounded adapter proposal, desktop + 390 px QA и отделно implementation approval.
 

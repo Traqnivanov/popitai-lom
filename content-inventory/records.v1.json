@@ -171,18 +171,19 @@
       "entity_type": "dining",
       "public_name": "Пицария При Финци",
       "canonical_owner": { "system": "firms", "collection": "businesses", "category": "Заведения", "canonical_record_id": null },
-      "evidence_status": "candidate_unverified",
-      "publication_readiness": "research_only",
+      "evidence_status": "officially_verified",
+      "publication_readiness": "verified_for_bounded_prototype",
       "owner_confirmed": false,
       "fields": {
-        "address": { "value": "гр. Лом, ул. Дунавска 34А", "status": "secondary_signal", "source_ids": ["pri-fintsi-facebook"] },
-        "phone": { "value": "+359 89 671 6639", "status": "secondary_signal", "source_ids": ["pri-fintsi-facebook"] }
+        "address": { "value": "гр. Лом, ул. Дунавска 34А", "status": "official", "source_ids": ["pri-fintsi-facebook"] },
+        "phone": { "value": "+359 89 671 6639", "status": "official", "source_ids": ["pri-fintsi-facebook"] },
+        "active_signal": { "value": "Публикация за работа на 21.01.2026 г.", "status": "official", "source_ids": ["pri-fintsi-facebook"] }
       },
       "sources": [
-        { "id": "pri-fintsi-facebook", "type": "official_social", "url": "https://www.facebook.com/pri.finci/", "checked_at": "2026-09-16", "note": "Business page found; recent activity and exact current fields still require direct verification." }
+        { "id": "pri-fintsi-facebook", "type": "official_social", "url": "https://www.facebook.com/pri.finci/", "checked_at": "2026-09-16", "note": "Managed business page with address, phone and a dated 21.01.2026 operating post." }
       ],
-      "open_fields": ["current_active_status", "current_address", "current_phone", "hours", "canonical_production_record_id", "claim_status", "approved_media"],
-      "prototype": { "eligible": false, "selected": false, "purpose": "Research only until current activity is directly verified." },
+      "open_fields": ["current_hours", "canonical_production_record_id", "claim_status", "approved_media", "last_verified_policy"],
+      "prototype": { "eligible": true, "selected": false, "purpose": "Candidate for bounded dining review after owner selection." },
       "production": { "write_allowed": false, "gate": "Current direct business signal + duplicate check + owner approval + Firms migration row." }
     },
     {
@@ -208,17 +209,20 @@
       "entity_type": "dining",
       "public_name": "Пица на пещ Тербаяно",
       "canonical_owner": { "system": "firms", "collection": "businesses", "category": "Заведения", "canonical_record_id": null },
-      "evidence_status": "candidate_unverified",
-      "publication_readiness": "research_only",
+      "evidence_status": "officially_verified",
+      "publication_readiness": "verified_for_bounded_prototype",
       "owner_confirmed": false,
       "fields": {
-        "city": { "value": "Лом", "status": "secondary_signal", "source_ids": ["terbayano-facebook"] }
+        "address": { "value": "гр. Лом, ул. Крум Пастърмаджиев 7", "status": "official", "source_ids": ["terbayano-facebook"] },
+        "phone": { "value": "087 669 5902", "status": "official", "source_ids": ["terbayano-facebook"] },
+        "delivery": { "value": true, "status": "official", "source_ids": ["terbayano-facebook"] },
+        "active_signal": { "value": "Публикация от 19.07.2026 г.", "status": "official", "source_ids": ["terbayano-facebook"] }
       },
       "sources": [
-        { "id": "terbayano-facebook", "type": "official_social", "url": "https://www.facebook.com/p/%D0%9F%D0%B8%D1%86%D0%B0-%D0%BD%D0%B0-%D0%BF%D0%B5%D1%89-%D0%A2%D0%B5%D1%80%D0%B1%D0%B0%D1%8F%D0%BD%D0%BE-%D0%B3%D1%80%D0%9B%D0%BE%D0%BC-61574675399555/", "checked_at": "2026-09-16", "note": "Lom business page and delivery posts found; address, phone and current operating status remain open." }
+        { "id": "terbayano-facebook", "type": "official_social", "url": "https://www.facebook.com/p/%D0%9F%D0%B8%D1%86%D0%B0-%D0%BD%D0%B0-%D0%BF%D0%B5%D1%89-%D0%A2%D0%B5%D1%80%D0%B1%D0%B0%D1%8F%D0%BD%D0%BE-%D0%B3%D1%80%D0%9B%D0%BE%D0%BC-61574675399555/", "checked_at": "2026-09-16", "note": "Managed business page; dated 19.07.2026 post gives the Lom address and direct order phone." }
       ],
-      "open_fields": ["current_active_status", "address", "phone", "hours", "canonical_production_record_id", "claim_status", "approved_media"],
-      "prototype": { "eligible": false, "selected": false, "purpose": "Research only until current contact and location are directly verified." },
+      "open_fields": ["current_hours", "canonical_production_record_id", "claim_status", "approved_media", "last_verified_policy"],
+      "prototype": { "eligible": true, "selected": false, "purpose": "Candidate for bounded dining review after owner selection." },
       "production": { "write_allowed": false, "gate": "Current direct business signal + duplicate check + owner approval + Firms migration row." }
     },
     {
