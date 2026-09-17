@@ -49,19 +49,74 @@
 - `research_only` — остава само в inventory/research;
 - `blocked` — не се показва, докато описаният конфликт/gate не бъде затворен.
 
+## OWNER local-check workflow — подозрителни обекти
+
+OWNER verdict: **APPROVED — 17.09.2026**.
+
+Този workflow важи за хотели/настаняване, заведения, магазини и всеки друг местен обект, при който online evidence е старо, противоречиво, недостатъчно или има надежден местен сигнал, че реалният статус може да е различен.
+
+### Кога обект влиза за местна проверка
+
+Обектът се маркира за OWNER local check, когато има поне един от следните случаи:
+
+- online directory/Maps запис съществува, но няма достатъчно доказана текуща активност;
+- официална/управлявана страница е стара или не доказва текущо състояние;
+- адрес, телефон, име, ownership или activity signal си противоречат между източници;
+- има вероятност за затваряне, преместване, преименуване или duplicate/same-business identity;
+- OWNER дава местен сигнал, който противоречи на остарял online listing.
+
+### Как се третира преди проверката
+
+- Не се маркира автоматично `active`.
+- Не се маркира автоматично `closed` само по слаб или стар online сигнал.
+- Не се изтрива от research history.
+- Не се допуска като public-ready/active record, докато конфликтът за статуса е отворен.
+- Съществуващите отделни полета се оценяват независимо; доказан телефон не доказва работно време, доказан адрес не доказва active status и т.н.
+- Когато текущата V1 schema няма отделно status поле за този workflow, използват се съществуващите `evidence_status`, `publication_readiness`, `open_fields`, field evidence/status и `notes`, без schema промяна по предположение.
+
+### OWNER local verification
+
+След местна проверка OWNER може да потвърди само реално установения operational/identity статус:
+
+- `active`;
+- `closed`;
+- `moved`;
+- `renamed`;
+- `duplicate/same business`;
+- `unresolved`.
+
+OWNER local verification на existence/status **не доказва автоматично** телефон, работно време, exact address, category, website/social URL, лиценз или други независими полета. Те продължават да изискват приложимото field-level evidence.
+
+### Как се записва резултатът
+
+За всяка местна проверка се пазят минимум:
+
+- дата на проверката;
+- какво точно е потвърдено от OWNER;
+- кои полета/identity въпроси остават OPEN;
+- наличното online evidence и конфликтите му;
+- publication readiness след проверката;
+- ако е приложимо — връзката към canonical/duplicate record вместо създаване на втори реален обект.
+
+Не се заличава предишната evidence история. При промяна на реалния статус новото потвърждение се добавя като по-нов evidence layer, а старото остава проследимо.
+
+### Списък за OWNER обход/проверка
+
+Всички обекти с този workflow трябва да могат да бъдат изведени като един общ списък за местна проверка, независимо дали са заведения, хотели, магазини или друг тип. Списъкът е контролен/research output, не публичен каталог и не разрешава production write.
+
 ## Правилен ред
 
 1. Official-source / owner evidence се вписва поле по поле.
-2. `validate_inventory.py` трябва да мине без грешка.
-3. Owner review одобрява точните записи и видими полета.
-4. Отделен bounded prototype adapter може да чете само `prototype.selected=true`; самият V1 не включва такъв adapter.
-5. Desktop + 390 px QA и content/owner audit.
-6. Отделно Stage 3 решение по production owner и migration matrix row.
-7. Контролиран import/update на малък batch с rollback; никога масов автоматичен import.
+2. При съмнителен current/identity status се прилага OWNER local-check workflow преди public-ready класификация.
+3. `validate_inventory.py` трябва да мине без грешка след всяка промяна на machine-readable records.
+4. Owner review одобрява точните записи и видими полета.
+5. Отделен bounded prototype adapter може да чете само `prototype.selected=true`; самият V1 не включва такъв adapter.
+6. Desktop + 390 px QA и content/owner audit.
+7. Отделно Stage 3 решение по production owner и migration matrix row.
+8. Контролиран import/update на малък batch с rollback; никога масов автоматичен import.
 
 ## Файлове
 
 - `schema.v1.json` — машинно четим договор;
 - `records.v1.json` — началният record inventory;
 - `validate_inventory.py` — deterministic validation без външни зависимости.
-
