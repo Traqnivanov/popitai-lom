@@ -19,13 +19,13 @@
 - `CURRENT HEAD`: **VERIFY DIRECTLY IN GIT AT SESSION START**
 - `CURRENT STAGE`: Stage 2 — content-complete/reality pass
 - `CURRENT PRODUCT TASK`: bounded dining identity/dedupe + current-activity verification; no automatic import and no production write
-- `CURRENT CONTROL TASK`: establish one recoverable Work/TOM chronology before continuing product research
+- `CURRENT CONTROL TASK`: continuity bootstrap verified; maintain this queue for every subsequent interim task/decision/handoff
 - `LAST OWNER VERDICT`: **17.09.2026 — approve minimal docs-only continuity mechanism; Work review pending; no technical guard activation**
 - `LAST COMPLETED PRODUCT WORK`: six dining conflict pairs reviewed read-only; `Kastelo` and `Valentino` additionally rechecked for current activity and remain unsuitable for `active` status without stronger current evidence
 - `OPEN WR IDs`: `WR-20260917-001`
 - `OPEN FOUND-ISSUES`: `FI-20260917-001`, `FI-20260917-002`, `FI-20260917-003`
 - `BLOCKERS`: Work review of the interim control mechanism; old TOM guard remains non-canonical and is not relied upon
-- `NEXT ALLOWED ACTION`: after this control checkpoint is verified, resume the bounded dining/content-reality pass; record the owner-approved local-check workflow for suspicious entities and then continue direct official-field verification. No production/Supabase/prototype implementation.
+- `NEXT ALLOWED ACTION`: record the owner-approved local-check workflow for suspicious entities in the content-inventory control documentation, then continue bounded dining/direct-official-field verification. No production/Supabase/prototype implementation.
 
 > `CURRENT HEAD` is never trusted from memory. Every new Work/TOM/control session verifies Git directly and compares it with `OFFICIAL BASE SHA`.
 
@@ -53,8 +53,9 @@
 - `Work branch`: `control/work-review-continuity-20260917`
 - `Required changed files`: control contract, Work Review Queue and minimal read-order pointer only.
 - `Must NOT change`: Master, product code, prototype, content inventory data, production, Supabase, protected rules, workflows/guards.
-- `Verification required`: compare exact BASE → HEAD; inspect changed files; confirm no RED-ZONE paths; confirm review branch and LOCKED safety HEAD were not moved before final owner-approved promotion decision.
-- `Status`: **IN PROGRESS / WORK REVIEW PENDING**
+- `Verification evidence`: BASE `998dd878...` → verification checkpoint `466b0e632f56c81b05e6b978550c2482c3251fc9` was `ahead_by: 3`, `behind_by: 0`; exactly three files changed: `POPITAI_LOM_TOM_CONTROL.md` added, `POPITAI_LOM_WORK_REVIEW_QUEUE.md` added, `PROJECT_RULES_00_READ_FIRST.md` minimally updated. No production/backend/prototype/guard/protected file changed. Official review branch remained at `998dd878...` during verification and LOCKED safety HEAD was not moved.
+- `Verification`: **PASS — bounded docs-only diff**
+- `Status`: **INTERIM VERIFIED / WORK REVIEW PENDING**
 
 ---
 
@@ -63,7 +64,7 @@
 - `Decision`: `INTERIM-D001`
 - `Task`: `INTERIM-T001`
 - `OWNER verdict`: approved as interim docs-only continuity control
-- `Expected evidence`: exact Git diff from base `998dd878...`, changed-files list, no production/backend/protected changes
+- `Evidence`: verified BASE→checkpoint diff contains only the three intended docs/control files; no production/backend/prototype/protected/guard changes
 - `Known risk`: treating the mechanism as Work-accepted or technical-guard-enforced before Work actually reviews it
 - `Required Work verdict`: `ACCEPTED` / `CORRECTION REQUIRED` / `REOPEN`
 - `Work status`: **PENDING**
@@ -109,8 +110,7 @@ OWNER decision from 17.09.2026:
 
 `NEXT ALLOWED ACTION` is deliberately narrow:
 
-1. verify `INTERIM-T001` diff and changed files;
-2. if clean, record the suspicious-entity local-check workflow in `content-inventory/README.md` without changing production/schema;
-3. record concrete suspicious records only with evidence and non-active readiness until owner verification;
-4. continue dining direct-official-field verification from the existing identity/dedupe pass;
-5. keep every new task/decision/issue appended chronologically here so returning Work can reconstruct the full chain without asking OWNER to remember it.
+1. record the suspicious-entity local-check workflow in `content-inventory/README.md` without changing production/schema;
+2. record concrete suspicious records only with evidence and non-active readiness until owner verification;
+3. continue dining direct-official-field verification from the existing identity/dedupe pass;
+4. keep every new task/decision/issue appended chronologically here so returning Work can reconstruct the full chain without asking OWNER to remember it.
