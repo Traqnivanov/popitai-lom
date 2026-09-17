@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-09-16",
+  "updated_at": "2026-09-17",
   "source_of_truth": "preproduction_inventory",
   "records": [
     {
@@ -265,6 +265,34 @@
       "open_fields": ["official_business_page", "exact_address", "official_phone", "official_hours", "canonical_production_record_id", "claim_status", "approved_media"],
       "prototype": { "eligible": false, "selected": false, "purpose": "Existence is confirmed; public fields remain research-only until direct verification." },
       "production": { "write_allowed": false, "gate": "Direct business verification + duplicate check + owner approval + Firms migration row." }
+    },
+    {
+      "id": "dining-doner-lab",
+      "entity_type": "dining",
+      "public_name": "Дюнер Lab",
+      "canonical_owner": { "system": "firms", "collection": "businesses", "category": "Заведения", "canonical_record_id": null },
+      "evidence_status": "candidate_unverified",
+      "publication_readiness": "research_only",
+      "owner_confirmed": false,
+      "fields": {
+        "address": { "value": "гр. Лом, ул. Дунавска 22", "status": "official", "source_ids": ["doner-lab-site"] },
+        "hours": {
+          "value": {
+            "official_site": "Понеделник–Петък 11:00–18:00; Събота и Неделя затворено",
+            "secondary_current_signal": "делнични дни приблизително 09:30–15:30"
+          },
+          "status": "conflict",
+          "source_ids": ["doner-lab-site", "doner-lab-maps-signal"],
+          "note": "First-party and current secondary hours conflict; no silent reconciliation."
+        }
+      },
+      "sources": [
+        { "id": "doner-lab-site", "type": "official_site", "url": "https://www.doner-lab.com/", "checked_at": "2026-09-17", "note": "Own site identifying Doner Lab in Lom; source for address and published hours." },
+        { "id": "doner-lab-maps-signal", "type": "secondary", "checked_at": "2026-09-17", "note": "Current Maps/business signal at the same address with conflicting weekday hours; activity/conflict evidence only." }
+      ],
+      "open_fields": ["current_active_status", "current_hours_resolution", "official_phone", "canonical_production_record_id", "duplicate_check", "claim_status", "approved_media", "last_verified_policy"],
+      "prototype": { "eligible": false, "selected": false, "purpose": "Research only until current activity/hours conflict and duplicate mapping are explicitly resolved." },
+      "production": { "write_allowed": false, "gate": "Current activity verification + hours conflict resolution + duplicate check against existing Firms records + OWNER approval + Firms migration row." }
     }
   ]
 }
