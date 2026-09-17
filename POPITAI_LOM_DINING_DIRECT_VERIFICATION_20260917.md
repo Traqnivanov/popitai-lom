@@ -201,12 +201,106 @@ Batch B също **не променя `content-inventory/records.v1.json`**.
 
 Причина: нито един от петте кандидата не получи достатъчно clean first-party evidence за exact persistent record proposal; при `Versus` има и конкретен phone conflict.
 
-## 11. Следващ bounded пакет
+## 11. Batch C — GO GRILL / Paloma / ВИП СИМЕРС / Рибката / Чайка beach
+
+### 11.1 GO GRILL — DIRECT BRAND/OPERATOR, LOCAL BRANCH STILL SECONDARY
+
+Намерено direct evidence от официалния оператор:
+
+- `gogrill.bg` е активният официален сайт на GO GRILL;
+- сайтът доказва самата марка/оператор, националната мрежа и наличието на собствен раздел `Заведения`;
+- официалният сайт е текущ и съдържа 2026 activity content.
+
+За конкретния обект в Лом current Maps/Oink signal сочи:
+
+- `Пристанищен Комплекс, ул. Георги Димитров 41а`;
+- телефон `089 558 2093`;
+- local business listing като `GO GRILL`.
+
+Границата е важна: dynamic official venue locator не даде статично извличаемо `Лом`/точен адрес в този pass, затова local branch address/phone не се повишават автоматично до `official` само защото са свързани с официалния brand site.
+
+### Verdict
+
+**DIRECT BRAND CONFIRMED / LOCAL BRANCH RESEARCH-ONLY UNTIL OPERATOR-LEVEL LOCATION PROOF.**
+
+Не се прави automatic inventory record от secondary branch fields.
+
+### 11.2 Paloma — MAPS-ONLY LOCAL SIGNAL
+
+Current Maps/business entity показва `Paloma` като coffee shop на `ул. Добруджа 23`, Лом.
+
+Не беше намерен надежден direct first-party site/social/operator source за този exact Lom object в bounded pass-а.
+
+### Verdict
+
+**RESEARCH-ONLY / DIRECT SOURCE OPEN.**
+
+Нулевият/слаб review footprint не се използва нито като доказателство за active, нито за closed status.
+
+### 11.3 „ВИП СИМЕРС ГРУП“ — DINING CATEGORY CONTAMINATION RISK
+
+Намерено direct evidence от `vipsimersgroup.bg`:
+
+- `ВИП-СИМЕРС ГРУП ООД` в Лом се представя като производител на захарни изделия и хлебозавод;
+- официалният адрес е `ул. Белоградчишко шосе 21`;
+- официалният сайт описва производство/дистрибуция на хлебни и захарни изделия, а не конкретно заведение/кафе за посетители.
+
+### Verdict
+
+**DO NOT TREAT THE COMPANY ITSELF AS A DINING VENUE FROM CURRENT EVIDENCE.**
+
+Текущият dining/cafe сигнал се маркира като **category contamination / identity unresolved**. Ако съществува отделен техен retail/cafe object, той трябва да бъде доказан като отделна физическа business identity, а не да се създава dining record за юридическото/производственото дружество по каталог.
+
+### 11.4 Бистро „Рибката“ — STRONG 2026 SECONDARY ACTIVITY + TEMPORARY-CLOSED CONFLICT
+
+Current 2026 secondary evidence:
+
+- Oink показва `Бистро "Рибката"` в Лом, `ул. Радецки 14`, с голям current Google review footprint;
+- Орли Гастрономи има 2026 profile/scanning signal за същия адрес;
+- RestaurantGuru обаче показва `Temporarily closed` при 2026 update.
+
+Не е намерен first-party source, който да реши конфликта.
+
+### Verdict
+
+**SUSPICIOUS / OWNER LOCAL CHECK REQUIRED / NO ACTIVE OR CLOSED FINAL VERDICT.**
+
+Не се приема нито `active`, нито `closed` от secondary sources. Обектът влиза в локалния OWNER-check list с exact въпрос: `работи ли реално в момента на Радецки 14 и под същото име?`.
+
+### 11.5 Чайка beach — RECENT 2026 ACTIVITY SIGNAL + CONFLICTING CLOSED/OPEN DIRECTORY STATES
+
+Намерени secondary signals:
+
+- Oink има current profile и конкретен потребителски отзив от **юни 2026**, описващ реално посещение и обслужване;
+- current directory/Google-derived pages продължават да показват restaurant activity/review footprint;
+- RestaurantGuru има по-стар 2026 `Temporarily closed` signal, докато по-нова индексна версия показва текущо отворено състояние/актуализиран profile.
+
+Не е намерен clean first-party business source в този pass.
+
+### Verdict
+
+**STRONG RECENT SECONDARY ACTIVITY, BUT STATUS CONFLICT REMAINS / OWNER LOCAL CHECK.**
+
+Не се финализира `active` само по каталожни/review signals, но юни 2026 visit signal е достатъчен старият `temporary closed` marker да не се приема като current truth без местна проверка.
+
+## 12. Machine-readable inventory decision after Batch C
+
+Batch C **не променя `content-inventory/records.v1.json`**.
+
+Причини:
+
+1. GO GRILL има direct brand/operator proof, но конкретният Lom branch още няма извлечено operator-level location proof;
+2. Paloma остава Maps-only;
+3. `ВИП СИМЕРС ГРУП` има direct доказателство за производствена identity, което по-скоро разкрива dining-category contamination, а не dining record;
+4. `Рибката` и `Чайка beach` имат конфликтни current-status signals и трябва да минат през OWNER local check;
+5. никой secondary conflict не се превръща механично в persistent active/closed state.
+
+## 13. Следващ bounded пакет
 
 Следващото безопасно действие е:
 
-1. direct verification на следващи силни 2026 candidates без затворен first-party source;
-2. отделен exact inventory proposal за `Дюнер Lab` само след source-currentness + duplicate check;
-3. `Versus`, `Фреш`, `Сакура`, `Арена`, `Боруна`, `При Маца`, `Food Station`, `КРИСИ`, `Дунавски вълни`, `ДЮНЕР KING` остават research/local-check candidates;
-4. `Versus` влиза и в suspicious/conflict list заради несъвместими phone signals;
-5. няма automatic public seed, prototype selection или production write.
+1. продължаване на `INTERIM-T004` с още малък пакет силни 2026 dining candidates без first-party proof;
+2. отделен exact inventory proposal за `Дюнер Lab` остава допустим само след source-currentness + duplicate check;
+3. `Рибката`, `Чайка beach`, `Versus`, `Kastelo`, `Valentino` влизат в cross-category/local OWNER-check accumulation като status/identity conflict candidates;
+4. `ВИП СИМЕРС ГРУП` не се третира като dining record без доказателство за отделен retail/cafe object;
+5. няма automatic import, public seed, prototype selection или production write.
