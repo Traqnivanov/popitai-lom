@@ -295,12 +295,94 @@ Batch C **не променя `content-inventory/records.v1.json`**.
 4. `Рибката` и `Чайка beach` имат конфликтни current-status signals и трябва да минат през OWNER local check;
 5. никой secondary conflict не се превръща механично в persistent active/closed state.
 
-## 13. Следващ bounded пакет
+## 13. Batch D — Завалиите / При близнаците / Алф / Регал / Boutique Bar
+
+### 13.1 Механа Завалиите — CURRENT MAPS/OINK ONLY
+
+Current local business evidence показва `Механа Завалиите` на `ул. Дунавска 25`, Лом, с телефонен и hours signal.
+
+Не е намерен clean first-party site/social/operator source за exact business identity и current fields.
+
+### Verdict
+
+**RESEARCH-ONLY / DIRECT SOURCE OPEN.**
+
+Maps/Oink presence не се повишава до official fields без first-party proof.
+
+### 13.2 Кафе „При близнаците“ — CAFE + SHOP OVERLAP / IDENTITY OPEN
+
+Oink/Орли 2026 показват `Кафе "При близнаците"` като кафене в Лом, а описанието изрично споменава и магазин.
+
+Current Maps/business result за близка identity `Близнаците в Калето` е категоризиран като store. Това може да е един и същ mixed-use object, свързан object или отделна naming variation.
+
+Не е намерен direct first-party source, който да реши relation-а.
+
+### Verdict
+
+**IDENTITY/CATEGORY OVERLAP — RESEARCH-ONLY / OWNER LOCAL CHECK USEFUL.**
+
+Не се създават два записа и не се избира категория по предположение.
+
+### 13.3 Сладкарска къща „Алф“ — CURRENT BUSINESS + LEGAL IDENTITY, RETAIL OBJECT STILL NOT FIRST-PARTY VERIFIED
+
+Намерено:
+
+- current Oink/Maps signal за `Сладкарска къща "Алф"` в Лом;
+- фирмена/registry-derived identity `СЛАДКАРСКА КЪЩА АЛФ` с ЕИК `203692100`, актуализирана през 2026 в business-registry mirrors;
+- исторически локален institution/community signal от МИГ-Лом за участие на `Сладкарска къща Алф` през 2023;
+- business activity на legal entity включва производство/търговия със сладкарски изделия и експлоатация на заведения.
+
+Граница:
+
+- legal-company existence/activity не доказва автоматично exact current retail address, phone, hours или че конкретният customer-facing object е действащ днес;
+- не е намерен current managed first-party site/social page за exact retail object.
+
+### Verdict
+
+**STRONG IDENTITY SUPPORT / RETAIL OBJECT RESEARCH-ONLY UNTIL DIRECT OR OWNER LOCAL VERIFICATION.**
+
+### 13.4 Регал — CURRENT SECONDARY ONLY
+
+Oink/Cybo-type current signals показват `Регал` като бар в Лом с substantial review footprint и phone/address signals.
+
+Не е намерен direct first-party site/social/operator source в bounded pass-а.
+
+### Verdict
+
+**RESEARCH-ONLY / DIRECT SOURCE OPEN.**
+
+Не се приема current status или exact fields само по directory presence.
+
+### 13.5 Boutique Bar — CURRENT MAPS/OINK + SOCIAL LINK SIGNAL, NO VERIFIED FIRST-PARTY PAGE
+
+Current Maps/Oink показват `Boutique Bar` в Лом с телефон и hours signal; Oink индексира и Facebook social link.
+
+Search не даде надеждно извлечена managed first-party страница за exact Lom object; едноименни чужди `Boutique Bar` резултати са изключени като contamination.
+
+### Verdict
+
+**RESEARCH-ONLY / DIRECT SOCIAL PAGE STILL NEEDS VERIFICATION.**
+
+Наличието на social-link label в secondary directory не е достатъчно само по себе си да се приеме страницата или полетата за official.
+
+## 14. Machine-readable inventory decision after Batch D
+
+Batch D **не променя `content-inventory/records.v1.json`**.
+
+Причини:
+
+1. няма clean first-party current field package за нито един от петте;
+2. `При близнаците` има category/identity overlap, който не трябва да се решава по име;
+3. `Алф` има по-силна legal identity support, но exact customer-facing retail object остава отделен verification въпрос;
+4. `Регал`, `Boutique Bar`, `Завалиите` остават secondary-only;
+5. няма automatic import, merge или active classification.
+
+## 15. Следващ bounded пакет
 
 Следващото безопасно действие е:
 
-1. продължаване на `INTERIM-T004` с още малък пакет силни 2026 dining candidates без first-party proof;
-2. отделен exact inventory proposal за `Дюнер Lab` остава допустим само след source-currentness + duplicate check;
-3. `Рибката`, `Чайка beach`, `Versus`, `Kastelo`, `Valentino` влизат в cross-category/local OWNER-check accumulation като status/identity conflict candidates;
-4. `ВИП СИМЕРС ГРУП` не се третира като dining record без доказателство за отделен retail/cafe object;
+1. продължаване на `INTERIM-T004` с още един малък dining пакет, ако remaining high-signal candidates оправдават direct check;
+2. ако следващите кандидати са само слаб directory noise, спира се broadening и се преминава към exact inventory proposal за единствения силен direct candidate (`Дюнер Lab`) след source-currentness + duplicate check;
+3. local-check accumulation вече включва `Рибката`, `Чайка beach`, `Versus`, `Kastelo`, `Valentino`, `При близнаците` и други identity/status conflicts;
+4. `ВИП СИМЕРС ГРУП` не се третира като dining venue без доказан отделен retail/cafe object;
 5. няма automatic import, public seed, prototype selection или production write.
