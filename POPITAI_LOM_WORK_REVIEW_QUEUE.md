@@ -21,11 +21,11 @@
 - `CURRENT PRODUCT TASK`: bounded dining direct/current verification; no automatic import and no production write
 - `CURRENT CONTROL TASK`: enforce exact chronology and strict Execution Chat contracts; no vague delegated task is permitted
 - `LAST OWNER VERDICT`: **17.09.2026 — process starts now; every Execution Chat task must be uncompromisingly exact, bounded and non-interpretive; no self-invented scope**
-- `LAST COMPLETED PRODUCT WORK`: dining direct-verification Batch B appended to `POPITAI_LOM_DINING_DIRECT_VERIFICATION_20260917.md` at `1f6685484fec451b52ea2bd9d2eb8e5c8c6dbc8d`; no machine-readable import
+- `LAST COMPLETED PRODUCT WORK`: dining direct-verification Batch D appended to `POPITAI_LOM_DINING_DIRECT_VERIFICATION_20260917.md` at `07462c5546165e973f192dae735b1730aefd1541`; no machine-readable import
 - `OPEN WR IDs`: `WR-20260917-001`, `WR-20260917-002`, `WR-20260917-003`, `WR-20260917-004`
-- `OPEN FOUND-ISSUES`: `FI-20260917-001`, `FI-20260917-002`, `FI-20260917-003`, `FI-20260917-004`, `FI-20260917-005`, `FI-20260917-006`, `FI-20260917-007`
+- `OPEN FOUND-ISSUES`: `FI-20260917-001` through `FI-20260917-011`
 - `BLOCKERS`: Work review of interim control remains pending; old TOM technical guard remains non-canonical and is not relied upon. No blocker for bounded read-only/content-inventory work inside the recorded scope.
-- `NEXT ALLOWED ACTION`: continue `INTERIM-T004` only with the next small direct-verification batch; prioritize strong 2026 candidates that still lack first-party proof. Do not add records until exact evidence supports an explicit inventory proposal. No production/Supabase/prototype implementation.
+- `NEXT ALLOWED ACTION`: continue `INTERIM-T004` with one final high-signal dining batch only (`Пицария Палма`, `Ресторант Бохеми`, `Китайски ресторант`, `Скарата на Дядо Кольо`, `При Лазар 1`). After that, decide whether broad direct verification has reached diminishing returns and whether the next bounded action should be an exact `Дюнер Lab` inventory proposal. No production/Supabase/prototype implementation.
 
 > `CURRENT HEAD` is never trusted from memory. Every new Work/TOM/control session verifies Git directly and compares it with `OFFICIAL BASE SHA`.
 
@@ -123,17 +123,18 @@
 ## INTERIM-T004 — Continue dining direct verification
 
 - `Date`: 17.09.2026
-- `Status`: **IN PROGRESS — BATCH A + B RECORDED**
+- `Status`: **IN PROGRESS — BATCH A + B + C + D RECORDED**
 - `Goal`: continue direct current-activity / official-field verification for unresolved dining candidates and conflict identities.
 - `Sources`: official operator/site/social first; Maps/current business evidence as activity/discovery support; reliable secondary/local sources only with explicit classification.
 - `Rule`: empty/open is better than assumption; no automatic import/merge.
-- `Report`: `POPITAI_LOM_DINING_DIRECT_VERIFICATION_20260917.md`; Batch A initial commit `861247be77981ceb8369cd84aee4143cc30060dc`, Batch B append `1f6685484fec451b52ea2bd9d2eb8e5c8c6dbc8d`.
-- `Batch A direct finding`: `Дюнер Lab` has a direct own site (`doner-lab.com`) identifying the Lom business and `ул. Дунавска 22`; official site hours conflict with current Maps hours, so hours are not silently reconciled.
-- `Batch A unresolved`: `При Маца`, `Food Station by NARODEN`, `Закусвалня КРИСИ`, `Дунавски вълни`, `ДЮНЕР KING Лом` still lack sufficient direct first-party evidence and remain research/local-check candidates.
-- `Batch B`: `Versus`, `Кафе-Сладкарница Фреш`, `Сакура`, `Caffe-Club Арена`, `Механа Боруна` checked.
-- `Batch B result`: no clean first-party source found for the five candidates. `Versus` has a concrete secondary phone conflict; `Фреш`, `Сакура`, `Арена`, `Боруна` remain directory/Google-signal research candidates.
-- `Machine-readable decision`: no `records.v1.json` change from Batch A or B; exact persistent record proposals wait for sufficient direct evidence/identity closure.
-- `Next`: another small direct-verification batch only; do not broaden into hotels/shops before dining checkpoint is coherent.
+- `Report`: `POPITAI_LOM_DINING_DIRECT_VERIFICATION_20260917.md`; Batch A initial `861247be77981ceb8369cd84aee4143cc30060dc`; Batch B `1f6685484fec451b52ea2bd9d2eb8e5c8c6dbc8d`; Batch C `633e8c6ed534434f2544f9f40be29692077bb740`; Batch D `07462c5546165e973f192dae735b1730aefd1541`.
+- `Strong direct candidate`: `Дюнер Lab` has a direct own site (`doner-lab.com`) identifying the Lom business and `ул. Дунавска 22`; official site hours conflict with current Maps hours, so hours are not silently reconciled.
+- `Status/identity conflicts accumulated`: `Versus` phone conflict; `Рибката` temporary-closed/current-activity conflict; `Чайка beach` closed/open/current-visit conflict; `При близнаците` cafe/store overlap; `Kastelo` and `Valentino` remain local-check status candidates from prior verification.
+- `Category contamination`: direct operator evidence shows `ВИП СИМЕРС ГРУП` as a producer/bakery company; no dining record is created without proof of a distinct customer-facing cafe/retail object.
+- `Secondary-only candidates`: `При Маца`, `Food Station by NARODEN`, `КРИСИ`, `Дунавски вълни`, `ДЮНЕР KING`, `Фреш`, `Сакура`, `Арена`, `Боруна`, `Paloma`, `Завалиите`, `Регал`, `Boutique Bar` remain research/local-check or direct-source-open.
+- `Алф`: stronger legal-identity support exists, but exact current retail object remains first-party/local-check open.
+- `Machine-readable decision`: no `records.v1.json` change through Batch D; persistent record proposals wait for sufficient direct evidence/identity closure.
+- `Next`: one final high-signal batch only, then determine whether broad search should stop and move to exact proposal/local-check consolidation.
 
 ## INTERIM-T005 — Build cross-category OWNER local-check list
 
@@ -174,8 +175,8 @@
 ## WR-20260917-004 — T003/T004 bounded content verification
 
 - `Tasks`: `INTERIM-T003`, `INTERIM-T004`
-- `Evidence`: current V1 schema/validator + Work 2 dining handoff; direct-verification report through Batch B at `1f6685484fec451b52ea2bd9d2eb8e5c8c6dbc8d`
-- `Result so far`: T003 completed with no data write; T004 Batch A+B recorded; `Дюнер Lab` is a strong direct candidate with hours conflict, while the other checked candidates remain research/conflict/local-check entries
+- `Evidence`: current V1 schema/validator + Work 2 dining handoff; direct-verification report through Batch D at `07462c5546165e973f192dae735b1730aefd1541`
+- `Result so far`: T003 completed with no data write; T004 batches A–D recorded; `Дюнер Lab` is the only clean strong direct candidate so far, with hours conflict preserved; other candidates remain research/conflict/local-check or category-contamination cases
 - `Boundary`: no automatic inventory import, no prototype/production/Supabase change
 - `Required Work verdict`: `ACCEPTED` / `CORRECTION REQUIRED` / `REOPEN`
 - `Work status`: **PENDING**
@@ -233,6 +234,34 @@
 - `Blocking`: **NO for bounded interim docs/research work because READ_FIRST requires the later Queue; YES for claiming the Register itself is fully synchronized**.
 - `Action`: do not mechanically rewrite the large canonical Register during interim work solely to patch one process row. Returning Work should review `WR-20260917-001` and then synchronize the Register verdict safely. Until then: interim docs control = OWNER-approved / WORK REVIEW PENDING; technical guard = non-canonical/inactive.
 
+## FI-20260917-008 — Бистро „Рибката“ current-status conflict
+
+- `Finding`: strong 2026 Oink/Орли activity signals coexist with a RestaurantGuru `Temporarily closed` status.
+- `Risk`: stale/seasonal directory status causing false active or closed classification.
+- `Blocking`: **YES for final operational status**.
+- `Action`: OWNER local check; no final active/closed verdict before that.
+
+## FI-20260917-009 — Чайка beach closed/open conflict
+
+- `Finding`: recent June 2026 visit/activity evidence conflicts with older 2026 `Temporarily closed` directory status and newer open/current signals.
+- `Risk`: seasonal/stale status misclassification.
+- `Blocking`: **YES for final operational status**.
+- `Action`: OWNER local check; do not treat old temporary-closed marker as current truth.
+
+## FI-20260917-010 — ВИП СИМЕРС dining-category contamination
+
+- `Finding`: direct operator site identifies `ВИП СИМЕРС ГРУП` as a manufacturer/bakery company; no distinct dining/cafe object was proven.
+- `Risk`: creating a false dining record from a directory category assigned to the legal/production company.
+- `Blocking`: **YES for dining record creation**.
+- `Action`: require proof of a distinct customer-facing retail/cafe object before any dining identity is created.
+
+## FI-20260917-011 — При близнаците cafe/store overlap
+
+- `Finding`: Oink/Орли present `Кафе "При близнаците"` as cafe while current Maps evidence also surfaces a `Близнаците в Калето` store identity; relation is not proven.
+- `Risk`: duplicate records or wrong category from naming overlap.
+- `Blocking`: **YES for duplicate/category resolution; NO for research tracking**.
+- `Action`: OWNER local/direct identity check before persistent record decision.
+
 ---
 
 ## OWNER-APPROVED CONTENT WORKFLOW — suspicious entities
@@ -251,11 +280,11 @@ Recorded in `content-inventory/README.md` at `7ec17d20d62edd97aec3e49a01a2212000
 
 `NEXT ALLOWED ACTION` is deliberately narrow:
 
-1. continue `INTERIM-T004` with one additional small dining batch only;
+1. execute one final `INTERIM-T004` high-signal dining batch: `Пицария Палма`, `Ресторант Бохеми`, `Китайски ресторант`, `Скарата на Дядо Кольо`, `При Лазар 1`;
 2. seek direct first-party/current evidence before proposing exact persistent records;
-3. do not convert 2026 directory presence alone into official fields or active status;
-4. do not create a `Дюнер Lab` machine-readable record until an exact record proposal closes duplicate/source-currentness questions;
-5. do not execute `INTERIM-T005` until enough categories have been audited to make the OWNER-check list useful;
+3. after that batch, determine whether additional broad dining search would add real control value or only directory noise;
+4. if diminishing returns are reached, prepare a separate exact inventory proposal for `Дюнер Lab` and/or move to accumulated OWNER local-check consolidation rather than continuing endless search;
+5. do not convert 2026 directory presence alone into official fields or active status;
 6. every delegated Execution Chat task must satisfy `INTERIM-D002` in full;
 7. do not claim central Register synchronization until Work reviews `WR-20260917-001` and resolves `FI-20260917-007`;
 8. append every new task/decision/found issue chronologically here so returning Work can reconstruct the complete chain without asking OWNER to remember it.
