@@ -8,14 +8,18 @@
 
 1. `POPITAI_LOM_MASTER_CURRENT.md` — **единствената текуща продуктова истина**, включително кое е ОДОБРЕНО, ЗАПАЗЕНО/LOCKED, ОТВОРЕНО, ОТХВЪРЛЕНО и ИСТОРИЯ.
 2. `POPITAI_LOM_DECISION_AND_BACKLOG_REGISTER.md` — централният статус/evidence/backlog индекс, Work provenance, заменени решения и OPEN/LOCKED граници; не отменя Master.
-3. `PROJECT_PROGRESS.md` — кратък текущ checkpoint, exact SHA и ред на следващите passes; не е втори Master.
-4. `PROJECT_RULES_PROTECTED_CORE.md` — защитеното business/backend ядро.
-5. `PROJECT_RULES_ADMIN_MODERATOR.md` — точната граница Admin/Moderator.
-6. `PROJECT_RULES.md` — действащите глобални технически правила.
-7. `PROJECT_RULES_RENDER_OWNERSHIP.md` — render ownership.
-8. При migration, production, security, domain, auth, SEO/OG или launch задача: `POPITAI_LOM_PRODUCTION_MIGRATION_MATRIX.md` — текущият изпълним control pack; той не дава implementation permission.
-9. При live security/domain задача: `POPITAI_LOM_LIVE_SECURITY_AND_DOMAIN_AUDIT_20260915.md` — последното read-only live evidence, отделните hardening точки и domain availability границата; не дава write/purchase/DNS permission.
-10. Task-specific технически договор се чете само когато задачата реално засяга съответния owner/module.
+3. При активен OWNER-approved interim control и недостъпен Work: `POPITAI_LOM_TOM_CONTROL.md` — временният control contract; не отменя Master/Register и остава `WORK REVIEW PENDING`, докато Work не даде verdict.
+4. При активен OWNER-approved interim control и недостъпен Work: `POPITAI_LOM_WORK_REVIEW_QUEUE.md` — living operational ledger с exact BASE SHA, текущ task, decisions, blockers, found issues и `NEXT ALLOWED ACTION`.
+5. `PROJECT_PROGRESS.md` — кратък текущ checkpoint, exact SHA и ред на следващите passes; не е втори Master.
+6. `PROJECT_RULES_PROTECTED_CORE.md` — защитеното business/backend ядро.
+7. `PROJECT_RULES_ADMIN_MODERATOR.md` — точната граница Admin/Moderator.
+8. `PROJECT_RULES.md` — действащите глобални технически правила.
+9. `PROJECT_RULES_RENDER_OWNERSHIP.md` — render ownership.
+10. При migration, production, security, domain, auth, SEO/OG или launch задача: `POPITAI_LOM_PRODUCTION_MIGRATION_MATRIX.md` — текущият изпълним control pack; той не дава implementation permission.
+11. При live security/domain задача: `POPITAI_LOM_LIVE_SECURITY_AND_DOMAIN_AUDIT_20260915.md` — последното read-only live evidence, отделните hardening точки и domain availability границата; не дава write/purchase/DNS permission.
+12. Task-specific технически договор се чете само когато задачата реално засяга съответния owner/module.
+
+Ако interim control файловете липсват, са изрично неактивни или няма доказан OWNER activation, те се пропускат. Стар sandbox TOM/handoff файл не се активира механично като заместител.
 
 Не се започва от стар prototype, handoff, checkpoint или V/B/Stage документ.
 
@@ -114,4 +118,4 @@
 
 Не карай собственика да възстановява проекта от паметта си.
 
-Първо прочети `POPITAI_LOM_MASTER_CURRENT.md`, запази вече одобреното и protected ядро. Следващата продуктова acceptance граница е **content-complete prototype**, не ново преразглеждане на вече одобрената IA. Старите документи използвай само като доказателство при конкретна нужда. Ако излезе истински нов бизнес избор, спри само за него; техническите и UX решения в рамките на одобрения Master се изпълняват автономно.
+Първо прочети `POPITAI_LOM_MASTER_CURRENT.md`, запази вече одобреното и protected ядро. Ако `POPITAI_LOM_TOM_CONTROL.md` е активен OWNER-approved interim control, прочети и `POPITAI_LOM_WORK_REVIEW_QUEUE.md`, механично възстанови Git state и продължи само от записаното `NEXT ALLOWED ACTION`. Следващата продуктова acceptance граница е **content-complete prototype**, не ново преразглеждане на вече одобрената IA. Старите документи използвай само като доказателство при конкретна нужда. Ако излезе истински нов бизнес избор, спри само за него; техническите и UX решения в рамките на одобрения Master се изпълняват автономно.
