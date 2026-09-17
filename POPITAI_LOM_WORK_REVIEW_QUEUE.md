@@ -18,14 +18,14 @@
 - `INTERIM CONTROL BRANCH`: `control/work-review-continuity-20260917`
 - `CURRENT HEAD`: **VERIFY DIRECTLY IN GIT AT SESSION START**
 - `CURRENT STAGE`: Stage 2 — content-complete/reality pass
-- `CURRENT PRODUCT TASK`: suspicious-entity classification + bounded dining current-activity/direct-official-field verification; no automatic import and no production write
+- `CURRENT PRODUCT TASK`: bounded dining direct/current verification; no automatic import and no production write
 - `CURRENT CONTROL TASK`: enforce exact chronology and strict Execution Chat contracts; no vague delegated task is permitted
 - `LAST OWNER VERDICT`: **17.09.2026 — process starts now; every Execution Chat task must be uncompromisingly exact, bounded and non-interpretive; no self-invented scope**
-- `LAST COMPLETED PRODUCT WORK`: OWNER local-check workflow for suspicious entities recorded in `content-inventory/README.md` at commit `7ec17d20d62edd97aec3e49a01a22120008f2b17`
-- `OPEN WR IDs`: `WR-20260917-001`, `WR-20260917-002`, `WR-20260917-003`
-- `OPEN FOUND-ISSUES`: `FI-20260917-001`, `FI-20260917-002`, `FI-20260917-003`, `FI-20260917-004`
+- `LAST COMPLETED PRODUCT WORK`: first bounded dining direct-verification package recorded in `POPITAI_LOM_DINING_DIRECT_VERIFICATION_20260917.md` at `861247be77981ceb8369cd84aee4143cc30060dc`; no machine-readable import
+- `OPEN WR IDs`: `WR-20260917-001`, `WR-20260917-002`, `WR-20260917-003`, `WR-20260917-004`
+- `OPEN FOUND-ISSUES`: `FI-20260917-001`, `FI-20260917-002`, `FI-20260917-003`, `FI-20260917-004`, `FI-20260917-005`
 - `BLOCKERS`: Work review of interim control remains pending; old TOM guard remains non-canonical and is not relied upon. No blocker for bounded read-only/content-inventory work inside the recorded scope.
-- `NEXT ALLOWED ACTION`: inspect existing `content-inventory/records.v1.json` and dining verification evidence; classify only already-supported suspicious/conflict records using the existing V1 schema and non-active readiness, without inventing a new schema/status. Then continue direct official-field/current-activity verification. No production/Supabase/prototype implementation.
+- `NEXT ALLOWED ACTION`: continue `INTERIM-T004` with the next small direct-verification batch (`Versus`, `Кафе-Сладкарница Фреш`, `Сакура`, `Caffe-Club Арена`, `Механа Боруна`); do not add records until exact evidence supports an explicit inventory proposal. No production/Supabase/prototype implementation.
 
 > `CURRENT HEAD` is never trusted from memory. Every new Work/TOM/control session verifies Git directly and compares it with `OFFICIAL BASE SHA`.
 
@@ -35,7 +35,7 @@
 
 - `Date`: 17.09.2026
 - `Topic`: persistent chronology and recoverable state while Work is unavailable
-- `Problem`: the old TOM-1 control mechanism exists only in historical sandbox evidence and the current canonical Register marks the TOM/guard process `OPEN — CONTROL GAP / NOT CANONICAL`; without a new bounded continuity layer, a new TOM or returning Work can lose exact task chronology.
+- `Problem`: the old TOM-1 control mechanism exists only in historical sandbox evidence and the pre-17.09 canonical Register marked the TOM/guard process `OPEN — CONTROL GAP / NOT CANONICAL`; without a new bounded continuity layer, a new TOM or returning Work can lose exact task chronology.
 - `Evidence`: review branch was verified at activation base `998dd878a8ddb5076261f8dd4e2dfcb8d4ddec4a`; `POPITAI_LOM_TOM_CONTROL.md` and `POPITAI_LOM_WORK_REVIEW_QUEUE.md` were absent from that review state; old TOM-1 queue is stale and icon-specific.
 - `OWNER verdict`: **APPROVED — MINIMAL DOCS-ONLY INTERIM CONTROL / WORK REVIEW PENDING**
 - `Decision`: establish a concise root-level control contract and one living queue; do not copy the old TOM-1 current state; do not assume TOM-2 numbering; keep the technical guard inactive/non-canonical; Work later performs independent review.
@@ -111,20 +111,27 @@
 ## INTERIM-T003 — Classify existing suspicious records
 
 - `Date`: 17.09.2026
-- `Status`: **NEXT / NOT STARTED**
 - `Goal`: inspect current machine-readable records and existing dining evidence; update only records that already have sufficient evidence for a suspicious/conflict/non-active classification.
-- `Rule`: use the existing V1 schema only. Do not invent a new `active/closed` schema field or new enum without a separate audit/proposal/OWNER verdict.
-- `Required first check`: exact current review HEAD, `records.v1.json`, `schema.v1.json`, validator, dining verification report and current Queue.
-- `Expected first subjects`: `Kastelo`, `Valentino`, and any already-recorded conflict candidates supported by existing evidence.
-- `Forbidden`: final `closed` verdict without OWNER local confirmation or direct authoritative evidence; automatic merging; production writes; prototype selection; schema changes.
-- `After change`: run/verify deterministic inventory validation and inspect the exact diff before commit.
+- `Required evidence checked`: current `records.v1.json`, `schema.v1.json`, `validate_inventory.py`, Work 2 dining verification report and current Queue.
+- `Finding 1`: `Kastelo` and `Valentino` are not current machine-readable inventory records; Work 2 explicitly says new candidates are not automatically added without direct field evidence and identity resolution.
+- `Finding 2`: `Каприз 2025` is already `candidate_unverified` + `research_only`, with `current_active_status` and the relationship with `При Финци` explicitly OPEN.
+- `Finding 3`: V1 schema allows evidence/readiness/open-field representation but has no separate final operational-status enum `active/closed/moved/...`; no new enum/field is invented.
+- `Validator boundary`: permitted evidence/readiness enums are fixed and `production.write_allowed` must remain false.
+- `Result`: **NO MACHINE-READABLE DATA CHANGE REQUIRED OR AUTHORIZED**. No empty/no-op commit was created.
+- `Status`: **COMPLETED — NO DATA WRITE / WORK REVIEW PENDING**
 
 ## INTERIM-T004 — Continue dining direct verification
 
-- `Status`: **QUEUED AFTER T003**
+- `Date`: 17.09.2026
+- `Status`: **IN PROGRESS — BATCH A RECORDED**
 - `Goal`: continue direct current-activity / official-field verification for unresolved dining candidates and conflict identities.
 - `Sources`: official operator/site/social first; Maps/current business evidence as activity/discovery support; reliable secondary/local sources only with explicit classification.
 - `Rule`: empty/open is better than assumption; no automatic import/merge.
+- `Batch A report`: `POPITAI_LOM_DINING_DIRECT_VERIFICATION_20260917.md` at commit `861247be77981ceb8369cd84aee4143cc30060dc`.
+- `Batch A direct finding`: `Дюнер Lab` has a direct own site (`doner-lab.com`) identifying the Lom business and `ул. Дунавска 22`; official site hours conflict with current Maps hours, so hours are not silently reconciled.
+- `Batch A unresolved`: `При Маца`, `Food Station by NARODEN`, `Закусвалня КРИСИ`, `Дунавски вълни`, `ДЮНЕР KING Лом` still lack sufficient direct first-party evidence in this pass and remain research/local-check candidates.
+- `Machine-readable decision`: no `records.v1.json` change from Batch A; an exact `Дюнер Lab` record proposal is deferred until source-currentness and duplicate check are explicitly closed.
+- `Next Batch B`: `Versus`, `Кафе-Сладкарница Фреш`, `Сакура`, `Caffe-Club Арена`, `Механа Боруна`.
 
 ## INTERIM-T005 — Build cross-category OWNER local-check list
 
@@ -162,6 +169,15 @@
 - `Required Work verdict`: `ACCEPTED` / `CORRECTION REQUIRED` / `REOPEN`
 - `Work status`: **PENDING**
 
+## WR-20260917-004 — T003/T004 bounded content verification
+
+- `Tasks`: `INTERIM-T003`, `INTERIM-T004`
+- `Evidence`: current V1 schema/validator + Work 2 dining handoff; Batch A report `861247be77981ceb8369cd84aee4143cc30060dc`
+- `Result so far`: T003 completed with no data write; T004 Batch A recorded with one strong direct candidate (`Дюнер Lab`) and unresolved direct-source candidates preserved as research-only
+- `Boundary`: no automatic inventory import, no prototype/production/Supabase change
+- `Required Work verdict`: `ACCEPTED` / `CORRECTION REQUIRED` / `REOPEN`
+- `Work status`: **PENDING**
+
 ---
 
 ## FI-20260917-001 — Technical TOM guard is not canonical
@@ -193,6 +209,13 @@
 - `Blocking`: **NO**.
 - `Action`: ignore as non-authoritative evidence branch. The current connector does not expose branch deletion; do not move or use it as current state. Authoritative interim state is recovered from the official review branch + this queue.
 
+## FI-20260917-005 — Дюнер Lab hours conflict
+
+- `Finding`: direct own site publishes `Понеделник–Петък 11:00–18:00; Събота/Неделя затворено`, while current Maps/business evidence shows different weekday hours around `09:30–15:30`.
+- `Risk`: silently selecting a secondary value over an official value or treating one source as fresher without proof.
+- `Blocking`: **NO for identity/address candidate status; YES for claiming exact current hours without qualification**.
+- `Action`: preserve the conflict and verify operational currentness before exact inventory proposal.
+
 ---
 
 ## OWNER-APPROVED CONTENT WORKFLOW — suspicious entities
@@ -211,9 +234,10 @@ Recorded in `content-inventory/README.md` at `7ec17d20d62edd97aec3e49a01a2212000
 
 `NEXT ALLOWED ACTION` is deliberately narrow:
 
-1. execute `INTERIM-T003`: inspect current records/schema/evidence and classify only sufficiently supported suspicious records using existing fields/statuses;
-2. validate any machine-readable record change before commit and inspect exact diff;
-3. execute `INTERIM-T004`: continue direct official/current-activity dining verification;
-4. do not execute `INTERIM-T005` until enough categories have been audited to make the OWNER-check list useful;
-5. every delegated Execution Chat task must satisfy `INTERIM-D002` in full;
-6. append every new task/decision/found issue chronologically here so returning Work can reconstruct the complete chain without asking OWNER to remember it.
+1. continue `INTERIM-T004` with Batch B only: `Versus`, `Кафе-Сладкарница Фреш`, `Сакура`, `Caffe-Club Арена`, `Механа Боруна`;
+2. seek direct first-party/current evidence before proposing exact persistent records;
+3. do not convert 2026 directory presence alone into official fields or active status;
+4. do not create a `Дюнер Lab` machine-readable record until an exact record proposal closes duplicate/source-currentness questions;
+5. do not execute `INTERIM-T005` until enough categories have been audited to make the OWNER-check list useful;
+6. every delegated Execution Chat task must satisfy `INTERIM-D002` in full;
+7. append every new task/decision/found issue chronologically here so returning Work can reconstruct the complete chain without asking OWNER to remember it.
