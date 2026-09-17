@@ -116,9 +116,9 @@ Current restaurant directories продължават да показват dini
 
 **KEEP RESEARCH-ONLY / DIRECT VERIFICATION OPEN.**
 
-## 8. Machine-readable inventory decision
+## 8. Machine-readable inventory decision after Batch A
 
-Този pass **не променя `content-inventory/records.v1.json`**.
+Batch A **не променя `content-inventory/records.v1.json`**.
 
 Причини:
 
@@ -127,11 +127,86 @@ Current restaurant directories продължават да показват dini
 3. V1 schema няма отделен final operational-status enum `active/closed/moved/...`; такъв не се измисля в този pass.
 4. За `Дюнер Lab` има силен direct source, но hours conflict трябва да бъде записан коректно при отделно exact record proposal, вместо да се прави прибързан import.
 
-## 9. Следващ bounded пакет
+## 9. Batch B — Versus / Фреш / Сакура / Арена / Боруна
+
+### 9.1 Versus Lom — SECONDARY CURRENT SIGNAL + PHONE CONFLICT
+
+Намерени secondary/current signals:
+
+- RestaurantGuru показва `Versus Lom` на `ул. Пристанищна 11`;
+- 2026 update/activity presence;
+- публикувани часове `09:00–17:00`;
+- historical Facebook-rating/review data.
+
+Проблем:
+
+- различни езикови/индексни версии на RestaurantGuru показват **различни телефони** за същия обект (`+359 88 202 2407` срещу `+359 88 819 6886`).
+- видимите Facebook reviews в индекса са на 8–9 години и не са direct current business evidence.
+
+### Verdict
+
+**CONFLICT / RESEARCH-ONLY / DIRECT SOURCE REQUIRED.**
+
+Не се избира телефон по каталог и не се приема current activity само защото directory page е updated през 2026.
+
+### 9.2 Кафе-Сладкарница „Фреш“ — 2026 SECONDARY ONLY
+
+Намерено:
+
+- Орли 2026 profile;
+- address signal: `ул. Дунавска 33`;
+- описан cafe/pastry/fresh-bar context.
+
+Не е намерен direct first-party source в този bounded pass.
+
+### Verdict
+
+**RESEARCH-ONLY / DIRECT SOURCE OPEN.**
+
+### 9.3 Сакура — 2026 DIRECTORY SIGNAL ONLY
+
+Орли Гастрономи 2026 показва `Сакура - кафе, сандвичи и салати` като local dining candidate.
+
+Не е намерен надежден direct first-party source за exact address/phone/hours/current activity в този pass. Search results с едноименно `Sakura` извън Лом са изключени като contamination.
+
+### Verdict
+
+**RESEARCH-ONLY / IDENTITY + DIRECT SOURCE OPEN.**
+
+### 9.4 Caffe-Club „Арена“ — 2026 DIRECTORY SIGNAL ONLY
+
+Орли Гастрономи 2026 показва `Caffe - Club "Арена"` като local candidate.
+
+Не е намерен direct first-party source за exact address/phone/hours/current activity в този pass.
+
+### Verdict
+
+**RESEARCH-ONLY / DIRECT SOURCE OPEN.**
+
+### 9.5 Механа Боруна — CURRENT GOOGLE SIGNAL, NO DIRECT SOURCE
+
+Намерено:
+
+- Google/Travel local-nearby evidence показва `Механа Боруна` като ресторант в Лом с current listing/review signal.
+
+Search е силно замърсен от резултати за квартал `Боруна`, свлачища, инфраструктура и други несвързани entities. Не е намерен direct first-party business source.
+
+### Verdict
+
+**RESEARCH-ONLY / EXACT IDENTITY + DIRECT SOURCE OPEN.**
+
+## 10. Machine-readable inventory decision after Batch B
+
+Batch B също **не променя `content-inventory/records.v1.json`**.
+
+Причина: нито един от петте кандидата не получи достатъчно clean first-party evidence за exact persistent record proposal; при `Versus` има и конкретен phone conflict.
+
+## 11. Следващ bounded пакет
 
 Следващото безопасно действие е:
 
-1. direct verification за още силни кандидати с 2026 signals: `Versus`, `Кафе-Сладкарница Фреш`, `Сакура`, `Caffe-Club Арена`, `Механа Боруна`;
-2. отделен exact inventory proposal за `Дюнер Lab` само след source/currentness check и duplicate check;
-3. `При Маца`, `Food Station`, `КРИСИ`, `Дунавски вълни`, `ДЮНЕР KING` остават research/local-check candidates, докато direct evidence липсва;
-4. няма automatic public seed или production write.
+1. direct verification на следващи силни 2026 candidates без затворен first-party source;
+2. отделен exact inventory proposal за `Дюнер Lab` само след source-currentness + duplicate check;
+3. `Versus`, `Фреш`, `Сакура`, `Арена`, `Боруна`, `При Маца`, `Food Station`, `КРИСИ`, `Дунавски вълни`, `ДЮНЕР KING` остават research/local-check candidates;
+4. `Versus` влиза и в suspicious/conflict list заради несъвместими phone signals;
+5. няма automatic public seed, prototype selection или production write.
