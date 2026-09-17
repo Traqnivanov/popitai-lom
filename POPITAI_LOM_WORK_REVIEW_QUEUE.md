@@ -18,14 +18,14 @@
 - `INTERIM CONTROL BRANCH`: `control/work-review-continuity-20260917`
 - `CURRENT HEAD`: **VERIFY DIRECTLY IN GIT AT SESSION START**
 - `CURRENT STAGE`: Stage 2 — content-complete/reality pass
-- `CURRENT PRODUCT TASK`: bounded dining direct/current verification; no automatic import and no production write
-- `CURRENT CONTROL TASK`: enforce exact chronology and strict Execution Chat contracts; no vague delegated task is permitted
-- `LAST OWNER VERDICT`: **17.09.2026 — process starts now; every Execution Chat task must be uncompromisingly exact, bounded and non-interpretive; no self-invented scope**
-- `LAST COMPLETED PRODUCT WORK`: dining direct-verification Batch D appended to `POPITAI_LOM_DINING_DIRECT_VERIFICATION_20260917.md` at `07462c5546165e973f192dae735b1730aefd1541`; no machine-readable import
-- `OPEN WR IDs`: `WR-20260917-001`, `WR-20260917-002`, `WR-20260917-003`, `WR-20260917-004`
-- `OPEN FOUND-ISSUES`: `FI-20260917-001` through `FI-20260917-011`
-- `BLOCKERS`: Work review of interim control remains pending; old TOM technical guard remains non-canonical and is not relied upon. No blocker for bounded read-only/content-inventory work inside the recorded scope.
-- `NEXT ALLOWED ACTION`: continue `INTERIM-T004` with one final high-signal dining batch only (`Пицария Палма`, `Ресторант Бохеми`, `Китайски ресторант`, `Скарата на Дядо Кольо`, `При Лазар 1`). After that, decide whether broad direct verification has reached diminishing returns and whether the next bounded action should be an exact `Дюнер Lab` inventory proposal. No production/Supabase/prototype implementation.
+- `CURRENT PRODUCT TASK`: exact inventory proposal for `Дюнер Lab`; proposal only, no machine-readable data write
+- `CURRENT CONTROL TASK`: use short atomic tasks; after each bounded task, write a durable checkpoint before starting the next task
+- `LAST OWNER VERDICT`: **17.09.2026 — because connection interruptions can cut long tasks, work must proceed as short atomic tasks with a Git checkpoint after each completed bounded unit; never restart completed work from scratch**
+- `LAST COMPLETED PRODUCT WORK`: `INTERIM-T004` dining direct verification completed through Batch E at commit `7f9d1c2c45b13cd190565d8301b78f74cd1d1738`; broad dining search stopped at diminishing returns; no machine-readable import
+- `OPEN WR IDs`: `WR-20260917-001`, `WR-20260917-002`, `WR-20260917-003`, `WR-20260917-004`, `WR-20260917-005`
+- `OPEN FOUND-ISSUES`: `FI-20260917-001` through `FI-20260917-012`
+- `BLOCKERS`: Work review of interim control remains pending; old TOM technical guard remains non-canonical and is not relied upon. No blocker for bounded proposal/research work inside the recorded scope.
+- `NEXT ALLOWED ACTION`: execute only `INTERIM-T006` — prepare an exact inventory proposal for `Дюнер Lab` from already collected evidence. Do not write `content-inventory/records.v1.json`; do not resume broad dining search; do not execute T005 yet; no production/Supabase/prototype implementation.
 
 > `CURRENT HEAD` is never trusted from memory. Every new Work/TOM/control session verifies Git directly and compares it with `OFFICIAL BASE SHA`.
 
@@ -84,6 +84,22 @@
 
 ---
 
+## INTERIM-D003 — Atomic task + checkpoint discipline
+
+- `Date`: 17.09.2026
+- `OWNER verdict`: **APPROVED — SHORT TASKS / DURABLE CHECKPOINT AFTER EACH**
+- `Reason`: repeated connection interruptions can cut a long research/control sequence after useful work has already been done.
+- `Decision`: every new interim task is split into the smallest coherent bounded unit that can be independently verified and recorded.
+- `Rule 1`: complete one bounded unit only.
+- `Rule 2`: write/commit the evidence or checkpoint immediately after that unit.
+- `Rule 3`: update this Queue before starting a materially different next unit.
+- `Rule 4`: after interruption, recover from Git/Queue and continue from the first incomplete unit; never redo completed units from scratch unless verification proves corruption or mismatch.
+- `Rule 5`: do not combine research + proposal + machine-readable write + implementation in one long task.
+- `Rule 6`: if a task would require many searches or a long write, split it into named batches with a checkpoint between batches.
+- `Work status`: **PENDING**
+
+---
+
 ## INTERIM-T001 — Bootstrap current continuity state
 
 - `Date`: 17.09.2026
@@ -123,25 +139,38 @@
 ## INTERIM-T004 — Continue dining direct verification
 
 - `Date`: 17.09.2026
-- `Status`: **IN PROGRESS — BATCH A + B + C + D RECORDED**
-- `Goal`: continue direct current-activity / official-field verification for unresolved dining candidates and conflict identities.
+- `Status`: **COMPLETED — BATCH A–E / DIMINISHING RETURNS REACHED / WORK REVIEW PENDING**
+- `Goal`: direct current-activity / official-field verification for unresolved dining candidates and conflict identities.
 - `Sources`: official operator/site/social first; Maps/current business evidence as activity/discovery support; reliable secondary/local sources only with explicit classification.
 - `Rule`: empty/open is better than assumption; no automatic import/merge.
-- `Report`: `POPITAI_LOM_DINING_DIRECT_VERIFICATION_20260917.md`; Batch A initial `861247be77981ceb8369cd84aee4143cc30060dc`; Batch B `1f6685484fec451b52ea2bd9d2eb8e5c8c6dbc8d`; Batch C `633e8c6ed534434f2544f9f40be29692077bb740`; Batch D `07462c5546165e973f192dae735b1730aefd1541`.
+- `Batch A–D report`: `POPITAI_LOM_DINING_DIRECT_VERIFICATION_20260917.md`; Batch A initial `861247be77981ceb8369cd84aee4143cc30060dc`; Batch B `1f6685484fec451b52ea2bd9d2eb8e5c8c6dbc8d`; Batch C `633e8c6ed534434f2544f9f40be29692077bb740`; Batch D `07462c5546165e973f192dae735b1730aefd1541`.
+- `Batch E report`: `POPITAI_LOM_DINING_DIRECT_VERIFICATION_BATCH_E_20260917.md` at `7f9d1c2c45b13cd190565d8301b78f74cd1d1738`.
 - `Strong direct candidate`: `Дюнер Lab` has a direct own site (`doner-lab.com`) identifying the Lom business and `ул. Дунавска 22`; official site hours conflict with current Maps hours, so hours are not silently reconciled.
-- `Status/identity conflicts accumulated`: `Versus` phone conflict; `Рибката` temporary-closed/current-activity conflict; `Чайка beach` closed/open/current-visit conflict; `При близнаците` cafe/store overlap; `Kastelo` and `Valentino` remain local-check status candidates from prior verification.
+- `Status/identity conflicts accumulated`: `Versus` phone conflict; `Рибката` temporary-closed/current-activity conflict; `Чайка beach` closed/open/current-visit conflict; `При близнаците` cafe/store overlap; `Kastelo` and `Valentino` local-check status candidates; `Китайски ресторант` same-phone/address conflict.
 - `Category contamination`: direct operator evidence shows `ВИП СИМЕРС ГРУП` as a producer/bakery company; no dining record is created without proof of a distinct customer-facing cafe/retail object.
-- `Secondary-only candidates`: `При Маца`, `Food Station by NARODEN`, `КРИСИ`, `Дунавски вълни`, `ДЮНЕР KING`, `Фреш`, `Сакура`, `Арена`, `Боруна`, `Paloma`, `Завалиите`, `Регал`, `Boutique Bar` remain research/local-check or direct-source-open.
-- `Алф`: stronger legal-identity support exists, but exact current retail object remains first-party/local-check open.
-- `Machine-readable decision`: no `records.v1.json` change through Batch D; persistent record proposals wait for sufficient direct evidence/identity closure.
-- `Next`: one final high-signal batch only, then determine whether broad search should stop and move to exact proposal/local-check consolidation.
+- `Secondary-only/direct-source-open candidates`: `При Маца`, `Food Station by NARODEN`, `КРИСИ`, `Дунавски вълни`, `ДЮНЕР KING`, `Фреш`, `Сакура`, `Арена`, `Боруна`, `Paloma`, `Завалиите`, `Регал`, `Boutique Bar`, `Скарата на Дядо Кольо`, `При Лазар 1` and others remain research/local-check candidates.
+- `Existing records`: `Палма` remains `candidate_unverified / research_only`; `Бохеми` remains owner-confirmed partial/research-only because exact fields lack direct proof.
+- `Machine-readable decision`: no `records.v1.json` change through Batch E.
+- `Closure verdict`: broad dining search now yields mainly directory conflicts/noise rather than new clean first-party records; stop broadening and move to one exact proposal at a time.
 
 ## INTERIM-T005 — Build cross-category OWNER local-check list
 
-- `Status`: **QUEUED, NOT YET EXECUTED**
+- `Status`: **QUEUED / DEFERRED UNTIL AFTER T006**
 - `Goal`: after enough content areas are audited, generate one OWNER-check list across suspicious hotels/accommodation, dining, shops and other local entities.
 - `Output`: research/control list grouped by category with reason for suspicion, conflicting evidence, exact item OWNER should check, and current non-public readiness.
 - `Boundary`: this is not a production/public directory and does not itself change record status.
+
+## INTERIM-T006 — Exact inventory proposal for Дюнер Lab
+
+- `Date`: 17.09.2026
+- `Status`: **NEXT / NOT STARTED**
+- `Goal`: prepare one exact proposal for how `Дюнер Lab` would be represented under the existing V1 inventory contract, without writing the record yet.
+- `Evidence to use`: existing Batch A direct-source finding, current `schema.v1.json`, current `records.v1.json` patterns and validator rules.
+- `Proposal must specify`: canonical owner mapping; exact candidate `id`; exact `public_name`; `evidence_status`; `publication_readiness`; `owner_confirmed`; official vs secondary/conflict fields; source IDs + checked date; `open_fields`; prototype eligibility/selection; production gate; duplicate/currentness questions still OPEN.
+- `Hours rule`: do not resolve official-site vs Maps conflict by guessing; proposal must preserve the conflict explicitly using only existing V1 field/source status semantics.
+- `Allowed output`: proposal/research document only.
+- `Forbidden`: `records.v1.json` write, schema change, validator change, prototype selection, production, Supabase, Stage 3.
+- `After completion`: checkpoint immediately and update Queue before any record write or next task.
 
 ---
 
@@ -175,9 +204,18 @@
 ## WR-20260917-004 — T003/T004 bounded content verification
 
 - `Tasks`: `INTERIM-T003`, `INTERIM-T004`
-- `Evidence`: current V1 schema/validator + Work 2 dining handoff; direct-verification report through Batch D at `07462c5546165e973f192dae735b1730aefd1541`
-- `Result so far`: T003 completed with no data write; T004 batches A–D recorded; `Дюнер Lab` is the only clean strong direct candidate so far, with hours conflict preserved; other candidates remain research/conflict/local-check or category-contamination cases
+- `Evidence`: current V1 schema/validator + Work 2 dining handoff; direct-verification Batch A–D report through `07462c5546165e973f192dae735b1730aefd1541`; final Batch E report `7f9d1c2c45b13cd190565d8301b78f74cd1d1738`
+- `Result`: T003 completed with no data write; T004 completed after Batch A–E; `Дюнер Lab` is the clean strong direct candidate with hours conflict preserved; other checked candidates remain research/conflict/local-check/category-contamination cases; broad search stopped at diminishing returns.
 - `Boundary`: no automatic inventory import, no prototype/production/Supabase change
+- `Required Work verdict`: `ACCEPTED` / `CORRECTION REQUIRED` / `REOPEN`
+- `Work status`: **PENDING**
+
+## WR-20260917-005 — Atomic task/checkpoint discipline
+
+- `Decision`: `INTERIM-D003`
+- `OWNER verdict`: short tasks + durable checkpoint after each completed unit; after interruption continue from Git state, never restart completed work blindly
+- `Reason`: connection interruptions repeatedly cut long tasks
+- `Boundary`: process/control discipline only; no product or production permission
 - `Required Work verdict`: `ACCEPTED` / `CORRECTION REQUIRED` / `REOPEN`
 - `Work status`: **PENDING**
 
@@ -262,6 +300,13 @@
 - `Blocking`: **YES for duplicate/category resolution; NO for research tracking**.
 - `Action`: OWNER local/direct identity check before persistent record decision.
 
+## FI-20260917-012 — Китайски ресторант address conflict
+
+- `Finding`: secondary Lom records expose the same phone `0894 451 212` but conflicting addresses `ул. Дунавска 38` and `ул. Цар Симеон 3`.
+- `Risk`: stale address, moved business or duplicate identity being converted into a false persistent record.
+- `Blocking`: **YES for exact address/current identity**.
+- `Action`: OWNER local/direct check; no address selected until resolved.
+
 ---
 
 ## OWNER-APPROVED CONTENT WORKFLOW — suspicious entities
@@ -278,13 +323,13 @@ Recorded in `content-inventory/README.md` at `7ec17d20d62edd97aec3e49a01a2212000
 
 ## NEXT TASK CONTRACT
 
-`NEXT ALLOWED ACTION` is deliberately narrow:
+`NEXT ALLOWED ACTION` is deliberately atomic:
 
-1. execute one final `INTERIM-T004` high-signal dining batch: `Пицария Палма`, `Ресторант Бохеми`, `Китайски ресторант`, `Скарата на Дядо Кольо`, `При Лазар 1`;
-2. seek direct first-party/current evidence before proposing exact persistent records;
-3. after that batch, determine whether additional broad dining search would add real control value or only directory noise;
-4. if diminishing returns are reached, prepare a separate exact inventory proposal for `Дюнер Lab` and/or move to accumulated OWNER local-check consolidation rather than continuing endless search;
-5. do not convert 2026 directory presence alone into official fields or active status;
+1. execute only `INTERIM-T006` — exact inventory **proposal** for `Дюнер Lab`;
+2. use only already-collected direct/secondary evidence plus current V1 schema/record patterns; do not reopen broad dining discovery;
+3. write one proposal document and checkpoint it immediately;
+4. do **not** write `content-inventory/records.v1.json` in T006;
+5. after T006 checkpoint, update this Queue before deciding on any record write or T005 local-check consolidation;
 6. every delegated Execution Chat task must satisfy `INTERIM-D002` in full;
 7. do not claim central Register synchronization until Work reviews `WR-20260917-001` and resolves `FI-20260917-007`;
-8. append every new task/decision/found issue chronologically here so returning Work can reconstruct the complete chain without asking OWNER to remember it.
+8. after any interruption, recover from Git/Queue and continue from the first incomplete atomic unit only.
