@@ -18,14 +18,14 @@
 - `INTERIM CONTROL BRANCH`: `control/work-review-continuity-20260917`
 - `CURRENT HEAD`: **VERIFY DIRECTLY IN GIT AT SESSION START**
 - `CURRENT STAGE`: Stage 2 — content-complete/reality pass
-- `CURRENT PRODUCT TASK`: exact inventory proposal for `Дюнер Lab`; proposal only, no machine-readable data write
+- `CURRENT PRODUCT TASK`: audit the exact `Дюнер Lab` inventory proposal against existing V1 contract/records; no machine-readable write
 - `CURRENT CONTROL TASK`: use short atomic tasks; after each bounded task, write a durable checkpoint before starting the next task
 - `LAST OWNER VERDICT`: **17.09.2026 — because connection interruptions can cut long tasks, work must proceed as short atomic tasks with a Git checkpoint after each completed bounded unit; never restart completed work from scratch**
-- `LAST COMPLETED PRODUCT WORK`: `INTERIM-T004` dining direct verification completed through Batch E at commit `7f9d1c2c45b13cd190565d8301b78f74cd1d1738`; broad dining search stopped at diminishing returns; no machine-readable import
-- `OPEN WR IDs`: `WR-20260917-001`, `WR-20260917-002`, `WR-20260917-003`, `WR-20260917-004`, `WR-20260917-005`
+- `LAST COMPLETED PRODUCT WORK`: `INTERIM-T006` exact proposal for `Дюнер Lab` recorded in `POPITAI_LOM_DONER_LAB_INVENTORY_PROPOSAL_20260917.md` at commit `2dbc7cb569d472daa4eb7cba13f89735fb79ee47`; no `records.v1.json` write
+- `OPEN WR IDs`: `WR-20260917-001`, `WR-20260917-002`, `WR-20260917-003`, `WR-20260917-004`, `WR-20260917-005`, `WR-20260917-006`
 - `OPEN FOUND-ISSUES`: `FI-20260917-001` through `FI-20260917-012`
-- `BLOCKERS`: Work review of interim control remains pending; old TOM technical guard remains non-canonical and is not relied upon. No blocker for bounded proposal/research work inside the recorded scope.
-- `NEXT ALLOWED ACTION`: execute only `INTERIM-T006` — prepare an exact inventory proposal for `Дюнер Lab` from already collected evidence. Do not write `content-inventory/records.v1.json`; do not resume broad dining search; do not execute T005 yet; no production/Supabase/prototype implementation.
+- `BLOCKERS`: Work review of interim control remains pending; old TOM technical guard remains non-canonical and is not relied upon. No blocker for bounded proposal/audit work inside the recorded scope.
+- `NEXT ALLOWED ACTION`: execute only `INTERIM-T007` — audit the `Дюнер Lab` proposal against current V1 schema/validator semantics and existing `records.v1.json` for id/identity/owner collision. Do not write the record; do not resume broad dining search; do not execute T005 yet; no production/Supabase/prototype implementation.
 
 > `CURRENT HEAD` is never trusted from memory. Every new Work/TOM/control session verifies Git directly and compares it with `OFFICIAL BASE SHA`.
 
@@ -155,7 +155,7 @@
 
 ## INTERIM-T005 — Build cross-category OWNER local-check list
 
-- `Status`: **QUEUED / DEFERRED UNTIL AFTER T006**
+- `Status`: **QUEUED / DEFERRED UNTIL AFTER T007**
 - `Goal`: after enough content areas are audited, generate one OWNER-check list across suspicious hotels/accommodation, dining, shops and other local entities.
 - `Output`: research/control list grouped by category with reason for suspicion, conflicting evidence, exact item OWNER should check, and current non-public readiness.
 - `Boundary`: this is not a production/public directory and does not itself change record status.
@@ -163,14 +163,24 @@
 ## INTERIM-T006 — Exact inventory proposal for Дюнер Lab
 
 - `Date`: 17.09.2026
+- `Status`: **COMPLETED — PROPOSAL ONLY / NO DATA WRITE / WORK REVIEW PENDING**
+- `Goal`: prepare one exact proposal for how `Дюнер Lab` would be represented under the existing V1 inventory contract, without writing the record.
+- `Evidence used`: existing Batch A direct-source finding + current `schema.v1.json` contract.
+- `Proposal`: `POPITAI_LOM_DONER_LAB_INVENTORY_PROPOSAL_20260917.md`.
+- `Commit`: `2dbc7cb569d472daa4eb7cba13f89735fb79ee47`.
+- `Proposed identity`: `dining-doner-lab` / `Дюнер Lab` / Firms → `businesses` → `Заведения`.
+- `Proposed record-level state`: `candidate_unverified` + `research_only`; address stays official from own site; hours conflict is preserved explicitly; current activity, duplicate mapping and exact current hours remain OPEN.
+- `Boundary`: no `records.v1.json`, schema, validator, prototype, production or Supabase write.
+
+## INTERIM-T007 — Audit Дюнер Lab proposal against V1 + current records
+
+- `Date`: 17.09.2026
 - `Status`: **NEXT / NOT STARTED**
-- `Goal`: prepare one exact proposal for how `Дюнер Lab` would be represented under the existing V1 inventory contract, without writing the record yet.
-- `Evidence to use`: existing Batch A direct-source finding, current `schema.v1.json`, current `records.v1.json` patterns and validator rules.
-- `Proposal must specify`: canonical owner mapping; exact candidate `id`; exact `public_name`; `evidence_status`; `publication_readiness`; `owner_confirmed`; official vs secondary/conflict fields; source IDs + checked date; `open_fields`; prototype eligibility/selection; production gate; duplicate/currentness questions still OPEN.
-- `Hours rule`: do not resolve official-site vs Maps conflict by guessing; proposal must preserve the conflict explicitly using only existing V1 field/source status semantics.
-- `Allowed output`: proposal/research document only.
-- `Forbidden`: `records.v1.json` write, schema change, validator change, prototype selection, production, Supabase, Stage 3.
-- `After completion`: checkpoint immediately and update Queue before any record write or next task.
+- `Goal`: audit only the T006 proposed V1 shape for schema/validator compatibility and collision against current `records.v1.json`.
+- `Required checks`: proposed id syntax/uniqueness; dining owner mapping; evidence/readiness enums; field/source semantics; `open_fields`; prototype constraints; `production.write_allowed=false`; duplicate/name/address collision against existing inventory records.
+- `Allowed output`: audit/checkpoint document or no-change verdict only.
+- `Forbidden`: writing `records.v1.json`, changing schema/validator, broad web research, prototype selection, production, Supabase, Stage 3.
+- `After completion`: checkpoint immediately; only then decide whether a separate record-write task is even eligible for OWNER consideration.
 
 ---
 
@@ -216,6 +226,15 @@
 - `OWNER verdict`: short tasks + durable checkpoint after each completed unit; after interruption continue from Git state, never restart completed work blindly
 - `Reason`: connection interruptions repeatedly cut long tasks
 - `Boundary`: process/control discipline only; no product or production permission
+- `Required Work verdict`: `ACCEPTED` / `CORRECTION REQUIRED` / `REOPEN`
+- `Work status`: **PENDING**
+
+## WR-20260917-006 — Дюнер Lab exact proposal
+
+- `Task`: `INTERIM-T006`
+- `Evidence`: `POPITAI_LOM_DONER_LAB_INVENTORY_PROPOSAL_20260917.md` at `2dbc7cb569d472daa4eb7cba13f89735fb79ee47`
+- `Result`: exact V1-shaped proposal only; no machine-readable record write; hours conflict/currentness/duplicate mapping remain explicit gates
+- `Boundary`: no `records.v1.json`, schema, validator, prototype, production or Supabase change
 - `Required Work verdict`: `ACCEPTED` / `CORRECTION REQUIRED` / `REOPEN`
 - `Work status`: **PENDING**
 
@@ -325,11 +344,12 @@ Recorded in `content-inventory/README.md` at `7ec17d20d62edd97aec3e49a01a2212000
 
 `NEXT ALLOWED ACTION` is deliberately atomic:
 
-1. execute only `INTERIM-T006` — exact inventory **proposal** for `Дюнер Lab`;
-2. use only already-collected direct/secondary evidence plus current V1 schema/record patterns; do not reopen broad dining discovery;
-3. write one proposal document and checkpoint it immediately;
-4. do **not** write `content-inventory/records.v1.json` in T006;
-5. after T006 checkpoint, update this Queue before deciding on any record write or T005 local-check consolidation;
-6. every delegated Execution Chat task must satisfy `INTERIM-D002` in full;
-7. do not claim central Register synchronization until Work reviews `WR-20260917-001` and resolves `FI-20260917-007`;
-8. after any interruption, recover from Git/Queue and continue from the first incomplete atomic unit only.
+1. execute only `INTERIM-T007` — audit the committed `Дюнер Lab` proposal against current V1 schema/validator semantics and existing records;
+2. use only repo evidence already present; do not reopen broad dining discovery;
+3. check id/name/address collisions, owner mapping, enum/field/source compatibility, open-fields/prototype/production constraints;
+4. write/checkpoint the audit result immediately;
+5. do **not** write `content-inventory/records.v1.json` in T007;
+6. after T007 checkpoint, update this Queue before deciding whether any record write is eligible for OWNER consideration or whether T005 should run first;
+7. every delegated Execution Chat task must satisfy `INTERIM-D002` in full;
+8. do not claim central Register synchronization until Work reviews `WR-20260917-001` and resolves `FI-20260917-007`;
+9. after any interruption, recover from Git/Queue and continue from the first incomplete atomic unit only.
