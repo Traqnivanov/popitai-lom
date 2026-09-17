@@ -19,11 +19,11 @@
 - `CURRENT HEAD`: **VERIFY DIRECTLY IN GIT AT SESSION START**
 - `CURRENT STAGE`: Stage 2 — content-complete/reality pass
 - `CURRENT PRODUCT TASK`: bounded dining identity/dedupe + current-activity verification; no automatic import and no production write
-- `CURRENT CONTROL TASK`: continuity bootstrap verified; maintain this queue for every subsequent interim task/decision/handoff
+- `CURRENT CONTROL TASK`: continuity bootstrap verified and promoted docs-only to the official review branch; maintain this queue for every subsequent interim task/decision/handoff
 - `LAST OWNER VERDICT`: **17.09.2026 — approve minimal docs-only continuity mechanism; Work review pending; no technical guard activation**
 - `LAST COMPLETED PRODUCT WORK`: six dining conflict pairs reviewed read-only; `Kastelo` and `Valentino` additionally rechecked for current activity and remain unsuitable for `active` status without stronger current evidence
 - `OPEN WR IDs`: `WR-20260917-001`
-- `OPEN FOUND-ISSUES`: `FI-20260917-001`, `FI-20260917-002`, `FI-20260917-003`
+- `OPEN FOUND-ISSUES`: `FI-20260917-001`, `FI-20260917-002`, `FI-20260917-003`, `FI-20260917-004`
 - `BLOCKERS`: Work review of the interim control mechanism; old TOM guard remains non-canonical and is not relied upon
 - `NEXT ALLOWED ACTION`: record the owner-approved local-check workflow for suspicious entities in the content-inventory control documentation, then continue bounded dining/direct-official-field verification. No production/Supabase/prototype implementation.
 
@@ -54,6 +54,7 @@
 - `Required changed files`: control contract, Work Review Queue and minimal read-order pointer only.
 - `Must NOT change`: Master, product code, prototype, content inventory data, production, Supabase, protected rules, workflows/guards.
 - `Verification evidence`: BASE `998dd878...` → verification checkpoint `466b0e632f56c81b05e6b978550c2482c3251fc9` was `ahead_by: 3`, `behind_by: 0`; exactly three files changed: `POPITAI_LOM_TOM_CONTROL.md` added, `POPITAI_LOM_WORK_REVIEW_QUEUE.md` added, `PROJECT_RULES_00_READ_FIRST.md` minimally updated. No production/backend/prototype/guard/protected file changed. Official review branch remained at `998dd878...` during verification and LOCKED safety HEAD was not moved.
+- `Promotion evidence`: after OWNER-approved bounded verification, `prototype/stage2-icon-system-approval` was fast-forwarded **without force** to `c1df4d76b72cc2a973d472351be548bb281777fb`. Post-promotion compare from `998dd878...` remained `ahead`, with the same three intended files only. Production `main`, Supabase and LOCKED safety branch were not touched.
 - `Verification`: **PASS — bounded docs-only diff**
 - `Status`: **INTERIM VERIFIED / WORK REVIEW PENDING**
 
@@ -64,7 +65,7 @@
 - `Decision`: `INTERIM-D001`
 - `Task`: `INTERIM-T001`
 - `OWNER verdict`: approved as interim docs-only continuity control
-- `Evidence`: verified BASE→checkpoint diff contains only the three intended docs/control files; no production/backend/prototype/protected/guard changes
+- `Evidence`: verified BASE→checkpoint diff contains only the three intended docs/control files; official review promotion was fast-forward-only and post-promotion compare preserved the same bounded file set
 - `Known risk`: treating the mechanism as Work-accepted or technical-guard-enforced before Work actually reviews it
 - `Required Work verdict`: `ACCEPTED` / `CORRECTION REQUIRED` / `REOPEN`
 - `Work status`: **PENDING**
@@ -91,6 +92,14 @@
 - `Risk`: stale hours/listing data being treated as proof of an active venue.
 - `Blocking`: **YES for active/public-ready classification; NO for research inventory**.
 - `Action`: place in the owner local-check/suspicious-entity workflow before final status.
+
+## FI-20260917-004 — Redundant empty check branch
+
+- `Finding`: during the initial control setup a redundant branch `control/work-review-continuity-20260917-check` was created accidentally at the original base SHA `998dd878a8ddb5076261f8dd4e2dfcb8d4ddec4a`.
+- `Evidence`: the branch was created directly from the base before any control-file commit; it contains no unique implementation or content changes.
+- `Risk`: possible future branch-list confusion if seen without context.
+- `Blocking`: **NO**.
+- `Action`: ignore as non-authoritative evidence branch. The current connector does not expose branch deletion; do not move or use it as current state. Authoritative interim state is recovered from the official review branch + this queue.
 
 ---
 
