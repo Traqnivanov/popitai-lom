@@ -16,14 +16,14 @@
 - `OFFICIAL BASE SHA`: `998dd878a8ddb5076261f8dd4e2dfcb8d4ddec4a`
 - `LOCKED SAFETY HEAD`: `997d97504251f4cbae0693dc0cffa24d1d04da79` — **DO NOT MOVE**
 - `CURRENT STAGE`: Stage 2 — content-complete/reality pass
-- `CURRENT PRODUCT TASK`: build a bounded `Магазини` OWNER local-check shortlist from T012 concrete legacy identity/location/currentness risks; no broad rediscovery
+- `CURRENT PRODUCT TASK`: direct-source verification of a very small Shops batch that should be resolvable online without OWNER local travel; one batch only
 - `CURRENT CONTROL TASK`: short atomic task → durable checkpoint → Queue update → next task
 - `LAST OWNER VERDICT`: **17.09.2026 — short atomic tasks with Git checkpoint after each completed bounded unit; after interruption continue from Git, never restart completed work blindly**
-- `LAST COMPLETED PRODUCT WORK`: `INTERIM-T012` repo-only Shops legacy seed audit recorded in `POPITAI_LOM_SHOPS_LEGACY_SEED_AUDIT_20260919.md` at commit `3c73169ffe94bd0c97c0e378b4a7240228ffaaa1`; 37 legacy seed rows identified as migration-approved without record-by-record current verification; no data/status write
-- `OPEN WR IDs`: `WR-20260917-001` through `WR-20260917-012`
+- `LAST COMPLETED PRODUCT WORK`: `INTERIM-T013` Shops OWNER local-check shortlist recorded in `POPITAI_LOM_SHOPS_OWNER_LOCAL_CHECK_LIST_20260919.md` at commit `1c74ac9325c2e5f900ae709f858dd0a48132adc2`; 14 bounded checks only; no data/status write
+- `OPEN WR IDs`: `WR-20260917-001` through `WR-20260919-013`
 - `OPEN FOUND-ISSUES`: `FI-20260917-001` through `FI-20260919-013`
 - `BLOCKERS`: Work review of interim control remains pending; technical TOM guard remains non-canonical/inactive.
-- `NEXT ALLOWED ACTION`: execute only `INTERIM-T013` — build a Shops OWNER local-check shortlist from T012 concrete alias/location/currentness risks. No broad web rediscovery, no data/status write, no prototype/production/Supabase/Stage 3.
+- `NEXT ALLOWED ACTION`: execute only `INTERIM-T014` — one small direct-source Shops verification batch for records that can be checked from official operator/site sources without OWNER local travel. No city-wide discovery, no Supabase/data/status write, no prototype/production/Stage 3.
 
 > `CURRENT HEAD` must always be verified directly in Git at session start.
 
@@ -97,11 +97,19 @@
 
 ### INTERIM-T013 — Shops OWNER local-check shortlist
 - `Date`: 19.09.2026
+- **COMPLETED — NO DATA/STATUS WRITE**.
+- Output: `POPITAI_LOM_SHOPS_OWNER_LOCAL_CHECK_LIST_20260919.md`.
+- Commit: `1c74ac9325c2e5f900ae709f858dd0a48132adc2`.
+- Result: 14 bounded OWNER checks only, prioritized by identity/location/currentness value; all 37 legacy seed rows were intentionally NOT pushed to OWNER.
+- National/easily official-verifiable chains were excluded from local travel unless a concrete local conflict exists.
+
+### INTERIM-T014 — Small official-source Shops verification batch
+- `Date`: 19.09.2026
 - **NEXT / NOT STARTED**.
-- Goal: create a short OWNER-check list only from T012 concrete identity/location/currentness risks.
-- Do not add all 37 automatically.
-- No broad web discovery; no data/status write; no merge/delete.
-- Output must state the exact question OWNER should verify and what remains unproven until then.
+- Goal: verify a very small batch of legacy Shops records that should have direct official operator/site evidence, reducing unnecessary OWNER local checks.
+- Batch must stay bounded; no city-wide rediscovery.
+- Read/research only; no Supabase, record/status, prototype or production write.
+- Preserve conflicts rather than selecting a value by guess.
 
 ---
 
@@ -119,6 +127,7 @@
 - `WR-010` accommodation local-check list — **PENDING**.
 - `WR-011` fuel local-check list — **PENDING**.
 - `WR-012` Shops legacy seed audit — **PENDING**.
+- `WR-013` Shops OWNER local-check shortlist — **PENDING**.
 
 ---
 
@@ -151,12 +160,12 @@
 
 ## NEXT TASK CONTRACT
 
-1. execute only `INTERIM-T013` — bounded Shops OWNER local-check shortlist;
-2. use only concrete T012 findings; do not restart city-wide discovery;
-3. include only records/groups where OWNER local observation can resolve identity/location/currentness;
-4. do not auto-mark active/closed and do not merge/delete;
+1. execute only `INTERIM-T014` — one small official-source Shops verification batch;
+2. choose only records where direct operator/site evidence should resolve current identity/location without OWNER travel;
+3. no broad rediscovery and no more than one bounded batch;
+4. preserve any conflict as conflict; do not guess;
 5. no record/data/status write;
-6. checkpoint the shortlist immediately;
+6. checkpoint findings immediately;
 7. Execution Chat delegation, if any, must satisfy `INTERIM-D002`;
 8. central Register is not claimed synchronized until Work resolves `FI-007`;
 9. after interruption continue from first incomplete atomic unit only.
