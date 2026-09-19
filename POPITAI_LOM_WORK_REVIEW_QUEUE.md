@@ -16,14 +16,14 @@
 - `OFFICIAL BASE SHA`: `998dd878a8ddb5076261f8dd4e2dfcb8d4ddec4a`
 - `LOCKED SAFETY HEAD`: `997d97504251f4cbae0693dc0cffa24d1d04da79` — **DO NOT MOVE**
 - `CURRENT STAGE`: Stage 2 — content-complete/reality pass
-- `CURRENT PRODUCT TASK`: read-only audit of existing `Магазини` content to identify only concrete stale/duplicate/status/identity problems; no broad rediscovery
+- `CURRENT PRODUCT TASK`: build a bounded `Магазини` OWNER local-check shortlist from T012 concrete legacy identity/location/currentness risks; no broad rediscovery
 - `CURRENT CONTROL TASK`: short atomic task → durable checkpoint → Queue update → next task
 - `LAST OWNER VERDICT`: **17.09.2026 — short atomic tasks with Git checkpoint after each completed bounded unit; after interruption continue from Git, never restart completed work blindly**
-- `LAST COMPLETED PRODUCT WORK`: `INTERIM-T011` fuel/Info Lom OWNER local-check list recorded in `POPITAI_LOM_FUEL_OWNER_LOCAL_CHECK_LIST_20260917.md` at commit `15d881379606590d5790947efdfd772a6cc14bce`; no status/data write
-- `OPEN WR IDs`: `WR-20260917-001` through `WR-20260917-011`
-- `OPEN FOUND-ISSUES`: `FI-20260917-001` through `FI-20260917-012`
+- `LAST COMPLETED PRODUCT WORK`: `INTERIM-T012` repo-only Shops legacy seed audit recorded in `POPITAI_LOM_SHOPS_LEGACY_SEED_AUDIT_20260919.md` at commit `3c73169ffe94bd0c97c0e378b4a7240228ffaaa1`; 37 legacy seed rows identified as migration-approved without record-by-record current verification; no data/status write
+- `OPEN WR IDs`: `WR-20260917-001` through `WR-20260917-012`
+- `OPEN FOUND-ISSUES`: `FI-20260917-001` through `FI-20260919-013`
 - `BLOCKERS`: Work review of interim control remains pending; technical TOM guard remains non-canonical/inactive.
-- `NEXT ALLOWED ACTION`: execute only `INTERIM-T012` — repository/current-content audit of existing `Магазини` records/fixtures/content for concrete stale/duplicate/status/identity gaps. Start read-only; no new broad web discovery, no data write, no prototype/production/Supabase/Stage 3.
+- `NEXT ALLOWED ACTION`: execute only `INTERIM-T013` — build a Shops OWNER local-check shortlist from T012 concrete alias/location/currentness risks. No broad web rediscovery, no data/status write, no prototype/production/Supabase/Stage 3.
 
 > `CURRENT HEAD` must always be verified directly in Git at session start.
 
@@ -86,12 +86,22 @@
 - LUKOIL B046/B165 are not local-check priorities because official operator evidence already closes identity/address/hours and no conflict is recorded.
 
 ### INTERIM-T012 — Existing `Магазини` content audit
-- `Date`: 17.09.2026
+- `Date`: 19.09.2026
+- **COMPLETED — REPO-ONLY / NO DATA WRITE**.
+- Report: `POPITAI_LOM_SHOPS_LEGACY_SEED_AUDIT_20260919.md`.
+- Commit: `3c73169ffe94bd0c97c0e378b4a7240228ffaaa1`.
+- Result: V2 contained 37 static records (12 food / 8 construction / 4 tech / 3 furniture / 4 clothes / 6 home); migration seeded them into `public.shops` as `approved` with generic public/migration provenance, not record-by-record current verification.
+- Current V3 reads only `shops.status='approved'`; therefore legacy migration approval must not be interpreted as proof of current identity/address/phone/hours.
+- Concrete internal risks recorded: multi-location brand groups, composite/alias names, vague/generic identities, shared-address candidate, and dynamic-field currentness debt.
+- No record was declared active/closed; no Supabase read/write; no taxonomy/UI/prototype change.
+
+### INTERIM-T013 — Shops OWNER local-check shortlist
+- `Date`: 19.09.2026
 - **NEXT / NOT STARTED**.
-- Goal: inspect already-existing shop/store content in repo/current content layer and identify only concrete stale/duplicate/status/identity issues.
-- First phase is read-only repository/content audit; do not rediscover the whole city from scratch.
-- If a named shop has an exact unresolved current-status question, record it as a candidate for OWNER local check; do not auto-close/delete.
-- Forbidden: production/Supabase/prototype implementation, category redesign, schema change, mass import.
+- Goal: create a short OWNER-check list only from T012 concrete identity/location/currentness risks.
+- Do not add all 37 automatically.
+- No broad web discovery; no data/status write; no merge/delete.
+- Output must state the exact question OWNER should verify and what remains unproven until then.
 
 ---
 
@@ -108,6 +118,7 @@
 - `WR-009` dining local-check list — **PENDING**.
 - `WR-010` accommodation local-check list — **PENDING**.
 - `WR-011` fuel local-check list — **PENDING**.
+- `WR-012` Shops legacy seed audit — **PENDING**.
 
 ---
 
@@ -125,6 +136,7 @@
 - `FI-010` ВИП СИМЕРС dining-category contamination.
 - `FI-011` При близнаците cafe/store overlap.
 - `FI-012` Китайски ресторант address conflict.
+- `FI-013` Shops legacy migration approval is not record-by-record current verification; 37 seed rows require controlled re-verification before `approved` is treated as content truth.
 
 ---
 
@@ -139,12 +151,12 @@
 
 ## NEXT TASK CONTRACT
 
-1. execute only `INTERIM-T012` — read-only audit of existing `Магазини` content;
-2. start from repo/current content, not a new city-wide web search;
-3. identify concrete stale/duplicate/status/identity gaps only;
-4. no record/data/status write in first phase;
-5. checkpoint findings immediately;
-6. update Queue before any shop local-check list or external direct verification;
+1. execute only `INTERIM-T013` — bounded Shops OWNER local-check shortlist;
+2. use only concrete T012 findings; do not restart city-wide discovery;
+3. include only records/groups where OWNER local observation can resolve identity/location/currentness;
+4. do not auto-mark active/closed and do not merge/delete;
+5. no record/data/status write;
+6. checkpoint the shortlist immediately;
 7. Execution Chat delegation, if any, must satisfy `INTERIM-D002`;
 8. central Register is not claimed synchronized until Work resolves `FI-007`;
 9. after interruption continue from first incomplete atomic unit only.
