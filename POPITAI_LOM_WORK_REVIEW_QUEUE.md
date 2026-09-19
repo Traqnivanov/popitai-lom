@@ -16,14 +16,14 @@
 - `OFFICIAL BASE SHA`: `998dd878a8ddb5076261f8dd4e2dfcb8d4ddec4a`
 - `LOCKED SAFETY HEAD`: `997d97504251f4cbae0693dc0cffa24d1d04da79` — **DO NOT MOVE**
 - `CURRENT STAGE`: Stage 2 — content-complete/reality pass
-- `CURRENT PRODUCT TASK`: second very small official-source Shops verification batch; reduce OWNER local-check burden only where direct evidence exists
+- `CURRENT PRODUCT TASK`: bounded Shops verification stop/continue review after two official-source batches; decide whether further direct-source work is still efficient
 - `CURRENT CONTROL TASK`: short atomic task → durable checkpoint → Queue update → next task
 - `LAST OWNER VERDICT`: **17.09.2026 — short atomic tasks with Git checkpoint after each completed bounded unit; after interruption continue from Git, never restart completed work blindly**
-- `LAST COMPLETED PRODUCT WORK`: `INTERIM-T014` Shops official-source Batch A recorded in `POPITAI_LOM_SHOPS_OFFICIAL_VERIFICATION_BATCH_A_20260919.md` at commit `1db89fa4bf5a6c854db28bc56da96b3cb4d1800e`; Lidl/T MARKET/Pepco checked; no data/status write
-- `OPEN WR IDs`: `WR-20260917-001` through `WR-20260919-014`
+- `LAST COMPLETED PRODUCT WORK`: `INTERIM-T015` Shops official-source Batch B recorded in `POPITAI_LOM_SHOPS_OFFICIAL_VERIFICATION_BATCH_B_20260919.md` at commit `dc87f73ad97e698b2879801b663b3d4d82efed76`; TechnoArena + Mura Slavyanska directly confirmed; Mura Han Asparuh remains local-check/open; no data/status write
+- `OPEN WR IDs`: `WR-20260917-001` through `WR-20260919-015`
 - `OPEN FOUND-ISSUES`: `FI-20260917-001` through `FI-20260919-013`
 - `BLOCKERS`: Work review of interim control remains pending; technical TOM guard remains non-canonical/inactive.
-- `NEXT ALLOWED ACTION`: execute only `INTERIM-T015` — one second small official-source Shops verification batch, maximum 3 legacy records, chosen only where direct operator/site evidence is likely. No broad discovery, no Supabase/data/status write, no prototype/production/Stage 3.
+- `NEXT ALLOWED ACTION`: execute only `INTERIM-T016` — short read-only stop/continue review of Shops verification after T014–T015. Use existing evidence only. Decide whether another official-source batch has clear value or whether Shops should pause and wait for OWNER local checks. No web expansion, no data/status write.
 
 > `CURRENT HEAD` must always be verified directly in Git at session start.
 
@@ -115,11 +115,21 @@
 
 ### INTERIM-T015 — Small official-source Shops verification batch B
 - `Date`: 19.09.2026
+- **COMPLETED — 3 RECORDS / NO DATA WRITE**.
+- Output: `POPITAI_LOM_SHOPS_OFFICIAL_VERIFICATION_BATCH_B_20260919.md`.
+- Commit: `dc87f73ad97e698b2879801b663b3d4d82efed76`.
+- `TechnoArena Лом`: direct official store page confirms address, phone and hours; no OWNER trip required for these fields.
+- `Мура – Славянска 66`: direct Mura official evidence confirms identity/address/phone/hours; no OWNER trip required.
+- `Мура – Хан Аспарух 6`: current Mura first-party pages checked do not confirm the second Lom location while a current furniture-manufacturer partner page still lists it; keep OPEN/local-check, do not close or merge.
+- No Supabase/data/status/prototype/production write.
+
+### INTERIM-T016 — Shops verification stop/continue review
+- `Date`: 19.09.2026
 - **NEXT / NOT STARTED**.
-- Maximum 3 legacy records.
-- Choose only records with likely direct operator/site evidence.
-- Goal: remove unnecessary OWNER local checks where online official evidence can safely resolve identity/location/currentness.
-- No broad discovery; no data/status write; preserve conflicts/open fields.
+- Read-only, existing evidence only.
+- Goal: decide whether another official-source Shops batch has clear value or whether further web work is now diminishing-return and Shops should pause for OWNER local checks.
+- No new web expansion in T016 itself.
+- No data/status write.
 
 ---
 
@@ -139,6 +149,7 @@
 - `WR-012` Shops legacy seed audit — **PENDING**.
 - `WR-013` Shops OWNER local-check shortlist — **PENDING**.
 - `WR-014` Shops official-source Batch A — **PENDING**.
+- `WR-015` Shops official-source Batch B — **PENDING**.
 
 ---
 
@@ -171,12 +182,11 @@
 
 ## NEXT TASK CONTRACT
 
-1. execute only `INTERIM-T015` — second small official-source Shops verification batch;
-2. maximum 3 legacy records with likely direct operator/site evidence;
-3. no broad rediscovery;
-4. preserve any conflict/open field; do not guess;
-5. no record/data/status write;
-6. checkpoint findings immediately;
+1. execute only `INTERIM-T016` — read-only Shops verification stop/continue review;
+2. use only T012–T015 evidence; no new web expansion;
+3. determine whether another bounded official-source batch has clear value or whether to pause Shops;
+4. no data/status write;
+5. checkpoint the decision immediately;
 7. Execution Chat delegation, if any, must satisfy `INTERIM-D002`;
 8. central Register is not claimed synchronized until Work resolves `FI-007`;
 9. after interruption continue from first incomplete atomic unit only.
