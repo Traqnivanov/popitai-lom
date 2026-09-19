@@ -16,14 +16,14 @@
 - `OFFICIAL BASE SHA`: `998dd878a8ddb5076261f8dd4e2dfcb8d4ddec4a`
 - `LOCKED SAFETY HEAD`: `997d97504251f4cbae0693dc0cffa24d1d04da79` — **DO NOT MOVE**
 - `CURRENT STAGE`: Stage 2 — content-complete/reality pass
-- `CURRENT PRODUCT TASK`: bounded Shops verification stop/continue review after two official-source batches; decide whether further direct-source work is still efficient
+- `CURRENT PRODUCT TASK`: consolidate existing OWNER local-check lists across dining, accommodation, fuel and shops; no new factual verification
 - `CURRENT CONTROL TASK`: short atomic task → durable checkpoint → Queue update → next task
 - `LAST OWNER VERDICT`: **17.09.2026 — short atomic tasks with Git checkpoint after each completed bounded unit; after interruption continue from Git, never restart completed work blindly**
-- `LAST COMPLETED PRODUCT WORK`: `INTERIM-T015` Shops official-source Batch B recorded in `POPITAI_LOM_SHOPS_OFFICIAL_VERIFICATION_BATCH_B_20260919.md` at commit `dc87f73ad97e698b2879801b663b3d4d82efed76`; TechnoArena + Mura Slavyanska directly confirmed; Mura Han Asparuh remains local-check/open; no data/status write
-- `OPEN WR IDs`: `WR-20260917-001` through `WR-20260919-015`
+- `LAST COMPLETED PRODUCT WORK`: `INTERIM-T016` Shops stop/continue review recorded in `POPITAI_LOM_SHOPS_VERIFICATION_STOP_REVIEW_20260919.md` at commit `ed73ee5b09accb1fdb517c8b65850228ba3ec4e5`; further Shops web verification paused at diminishing returns; no data/status write
+- `OPEN WR IDs`: `WR-20260917-001` through `WR-20260919-016`
 - `OPEN FOUND-ISSUES`: `FI-20260917-001` through `FI-20260919-013`
 - `BLOCKERS`: Work review of interim control remains pending; technical TOM guard remains non-canonical/inactive.
-- `NEXT ALLOWED ACTION`: execute only `INTERIM-T016` — short read-only stop/continue review of Shops verification after T014–T015. Use existing evidence only. Decide whether another official-source batch has clear value or whether Shops should pause and wait for OWNER local checks. No web expansion, no data/status write.
+- `NEXT ALLOWED ACTION`: execute only `INTERIM-T005` — consolidate the existing dining, accommodation, fuel and shops OWNER local-check lists into one master OWNER checklist. Use existing evidence only; no new web search, no data/status write, no new verdicts.
 
 > `CURRENT HEAD` must always be verified directly in Git at session start.
 
@@ -125,11 +125,20 @@
 
 ### INTERIM-T016 — Shops verification stop/continue review
 - `Date`: 19.09.2026
+- **COMPLETED — SHOPS WEB VERIFICATION PAUSED / NO DATA WRITE**.
+- Output: `POPITAI_LOM_SHOPS_VERIFICATION_STOP_REVIEW_20260919.md`.
+- Commit: `ed73ee5b09accb1fdb517c8b65850228ba3ec4e5`.
+- Decision: after two bounded official-source batches, further Shops web verification is paused at diminishing returns.
+- Reason: remaining highest-value unresolved issues are primarily local identity/location/currentness questions already captured in T013.
+- This does not declare remaining legacy rows correct; targeted direct-source follow-up remains allowed after OWNER local findings.
+
+### INTERIM-T005 — Cross-category OWNER local-check master list
+- `Date`: 19.09.2026
 - **NEXT / NOT STARTED**.
-- Read-only, existing evidence only.
-- Goal: decide whether another official-source Shops batch has clear value or whether further web work is now diminishing-return and Shops should pause for OWNER local checks.
-- No new web expansion in T016 itself.
-- No data/status write.
+- Goal: consolidate existing category-specific OWNER local-check lists for dining, accommodation, fuel and shops into one master checklist.
+- Existing evidence only; do not create new status/identity verdicts.
+- Preserve original category/list provenance for every item.
+- No web search, no data/status write.
 
 ---
 
@@ -150,6 +159,7 @@
 - `WR-013` Shops OWNER local-check shortlist — **PENDING**.
 - `WR-014` Shops official-source Batch A — **PENDING**.
 - `WR-015` Shops official-source Batch B — **PENDING**.
+- `WR-016` Shops stop/continue review — **PENDING**.
 
 ---
 
@@ -182,11 +192,11 @@
 
 ## NEXT TASK CONTRACT
 
-1. execute only `INTERIM-T016` — read-only Shops verification stop/continue review;
-2. use only T012–T015 evidence; no new web expansion;
-3. determine whether another bounded official-source batch has clear value or whether to pause Shops;
-4. no data/status write;
-5. checkpoint the decision immediately;
+1. execute only `INTERIM-T005` — cross-category OWNER local-check master list;
+2. use only the existing dining, accommodation, fuel and shops local-check documents;
+3. preserve provenance and do not invent new factual verdicts;
+4. no web search and no data/status write;
+5. checkpoint the consolidated list immediately;
 7. Execution Chat delegation, if any, must satisfy `INTERIM-D002`;
 8. central Register is not claimed synchronized until Work resolves `FI-007`;
 9. after interruption continue from first incomplete atomic unit only.
